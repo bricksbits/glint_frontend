@@ -12,10 +12,13 @@ class NotificationScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
+          // app bar
           const SliverGlintCustomAppBar(
             title: 'Notifications',
             subtitle: 'Never miss a moment that matters.',
           ),
+
+          // banner
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -25,6 +28,14 @@ class NotificationScreen extends StatelessWidget {
               child: _buildNotificationScreenBanner(),
             ),
           ),
+
+          // empty state (if no notifications)
+          // SliverFillRemaining(
+          //   hasScrollBody: false,
+          //   child: _buildNotificationEmptyState(),
+          // ),
+
+          //notifications
           SliverList(
             delegate: SliverChildListDelegate(
               [
@@ -104,6 +115,7 @@ class NotificationScreen extends StatelessWidget {
               ],
             ),
           ),
+          const SliverGap(16.0), // bottom padding basically
         ],
       ),
     );
@@ -169,6 +181,31 @@ class NotificationScreen extends StatelessWidget {
           ...notifications,
         ],
       ),
+    );
+  }
+
+  Widget _buildNotificationEmptyState() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+          'lib/assets/icons/bell_icon.svg',
+          alignment: Alignment.center,
+        ),
+        const Gap(16.0),
+        Text(
+          'No updates yet',
+          style: AppTheme.simpleBodyText.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const Gap(4.0),
+        const Text(
+          'Check out the latest events happening near you!',
+          style: AppTheme.simpleText,
+        ),
+      ],
     );
   }
 }
