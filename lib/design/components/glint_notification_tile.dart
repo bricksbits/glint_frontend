@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 enum NotificationTileIconState {
@@ -29,7 +30,7 @@ class GlintNotificationTile extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       minLeadingWidth: 52.0,
-      minVerticalPadding: 0,
+      minVerticalPadding: 12.0,
       leading: Container(
         width: 52.0,
         height: 52.0,
@@ -40,6 +41,7 @@ class GlintNotificationTile extends StatelessWidget {
           image: imageUrl != null
               ? DecorationImage(
                   image: NetworkImage(imageUrl!),
+                  fit: BoxFit.cover,
                 )
               : null,
           borderRadius: const BorderRadius.all(
@@ -50,7 +52,7 @@ class GlintNotificationTile extends StatelessWidget {
         // showing icon if no imageUrl
         child: imageUrl == null && iconState != null
             ? SvgPicture.asset(
-                _getSvgAsset(iconState!),
+                _getSvgAssetPath(iconState!),
                 width:
                     iconState == NotificationTileIconState.stat ? 16.0 : 20.0,
                 height:
@@ -72,16 +74,22 @@ class GlintNotificationTile extends StatelessWidget {
         subtitle,
         style: AppTheme.simpleText,
       ),
-      trailing: Text(
-        _formatDate(date),
-        textAlign: TextAlign.end,
-        style: AppTheme.simpleText,
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Gap(6.0),
+          Text(
+            _formatDate(date),
+            textAlign: TextAlign.end,
+            style: AppTheme.simpleText,
+          ),
+        ],
       ),
     );
   }
 
   // mapping svg asset path to diff icon state
-  String _getSvgAsset(NotificationTileIconState state) {
+  String _getSvgAssetPath(NotificationTileIconState state) {
     switch (state) {
       case NotificationTileIconState.event:
         return 'lib/assets/icons/event_icon.svg';

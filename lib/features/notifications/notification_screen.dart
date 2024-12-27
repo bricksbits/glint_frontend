@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
@@ -8,52 +8,103 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notification = [];
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const GlintCustomAppBar(
-        title: 'Notifications',
-        subtitle: 'Never miss a moment that matters.',
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 18.0,
-        ),
-        child: Column(
-          children: [
-            _buildNotificationScreenBanner(),
-            // empty state
-            // if (notification.isEmpty)
-            //   Expanded(
-            //     child: _buildNotificationEmptyState(),
-            //   ),
-            GlintNotificationTile(
-              title: 'Your Profile Stands Out!',
-              subtitle: 'You’ve received 20+ views today.',
-              iconState: NotificationTileIconState.event,
-              date: DateTime.now(),
+      body: CustomScrollView(
+        slivers: [
+          const SliverGlintCustomAppBar(
+            title: 'Notifications',
+            subtitle: 'Never miss a moment that matters.',
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 24.0,
+              ),
+              child: _buildNotificationScreenBanner(),
             ),
-            GlintNotificationTile(
-              title: 'Your Profile Stands Out!',
-              subtitle: 'You’ve received 20+ views today.',
-              iconState: NotificationTileIconState.stat,
-              date: DateTime.now(),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                _buildLabelWiseNotifications(
+                  label: 'Today',
+                  notifications: [
+                    GlintNotificationTile(
+                      title: 'New Matches Await!',
+                      subtitle: 'Check out users in your town.',
+                      iconState: NotificationTileIconState.match,
+                      date: DateTime.now(),
+                    ),
+                    GlintNotificationTile(
+                      title: 'Your Profile Stands Out!',
+                      subtitle: 'You’ve received 20+ views today.',
+                      iconState: NotificationTileIconState.stat,
+                      date: DateTime.now(),
+                    ),
+                    GlintNotificationTile(
+                      title: 'Got a match with Swati',
+                      subtitle: 'Message to know more about her',
+                      imageUrl:
+                          'https://avatars.githubusercontent.com/u/70279771?v=4',
+                      date: DateTime.now(),
+                    ),
+                  ],
+                ),
+                const Gap(20.0),
+                _buildLabelWiseNotifications(
+                  label: 'Yesterday',
+                  notifications: [
+                    GlintNotificationTile(
+                      title: 'Event Near You!',
+                      subtitle: 'Meet like-minded people IRL.',
+                      iconState: NotificationTileIconState.event,
+                      date: DateTime.now(),
+                    ),
+                    GlintNotificationTile(
+                      title: 'New Matches Await!',
+                      subtitle: 'Check out users in your town.',
+                      iconState: NotificationTileIconState.match,
+                      date: DateTime.now(),
+                    ),
+                    GlintNotificationTile(
+                      title: 'Your Profile Stands Out!',
+                      subtitle: 'You’ve received 20+ views today.',
+                      iconState: NotificationTileIconState.stat,
+                      date: DateTime.now(),
+                    ),
+                  ],
+                ),
+                const Gap(20.0),
+                _buildLabelWiseNotifications(
+                  label: 'This Week',
+                  notifications: [
+                    GlintNotificationTile(
+                      title: 'Got a match with Swati',
+                      subtitle: 'Message to know more about her',
+                      imageUrl:
+                          'https://avatars.githubusercontent.com/u/70279771?v=4',
+                      date: DateTime.now(),
+                    ),
+                    GlintNotificationTile(
+                      title: 'New Matches Await!',
+                      subtitle: 'Check out users in your town.',
+                      iconState: NotificationTileIconState.match,
+                      date: DateTime.now(),
+                    ),
+                    GlintNotificationTile(
+                      title: 'Your Profile Stands Out!',
+                      subtitle: 'You’ve received 20+ views today.',
+                      iconState: NotificationTileIconState.stat,
+                      date: DateTime.now(),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            GlintNotificationTile(
-              title: 'Your Profile Stands Out!',
-              subtitle: 'You’ve received 20+ views today.',
-              iconState: NotificationTileIconState.event,
-              date: DateTime.now(),
-            ),
-            GlintNotificationTile(
-              title: 'Your Profile Stands Out!',
-              subtitle: 'You’ve received 20+ views today.',
-              iconState: NotificationTileIconState.match,
-              date: DateTime.now(),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -99,28 +150,25 @@ class NotificationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNotificationEmptyState() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SvgPicture.asset(
-          'lib/assets/icons/bell_icon.svg',
-          alignment: Alignment.center,
-        ),
-        const Gap(16.0),
-        Text(
-          'No updates yet',
-          style: AppTheme.simpleBodyText.copyWith(
-            fontWeight: FontWeight.w700,
+  Widget _buildLabelWiseNotifications({
+    required String label,
+    required List<GlintNotificationTile> notifications,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20.0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: AppTheme.simpleBodyText,
           ),
-        ),
-        const Gap(4.0),
-        const Text(
-          'Check out the latest events happening near you!',
-          style: AppTheme.simpleText,
-        ),
-      ],
+          const Gap(20.0),
+          ...notifications,
+        ],
+      ),
     );
   }
 }
