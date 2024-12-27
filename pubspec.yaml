@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   go_router: ^14.6.2
+  flutter_svg: ^2.0.16
 
 dev_dependencies:
   flutter_test:
@@ -22,7 +23,7 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    - lib/assets/images/high_five_make_female.svg
+    - lib/assets/images/
 
   fonts:
     - family: AlbertSans
