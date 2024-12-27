@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
 import 'package:go_router/go_router.dart';
 
@@ -56,7 +57,7 @@ class GlintCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 style: AppTheme.headingTwo,
               ),
               if (subtitle != null) ...[
-                const SizedBox(height: 4),
+                const Gap(4.0),
                 Text(
                   subtitle!,
                   style: AppTheme.simpleText,
@@ -64,7 +65,7 @@ class GlintCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
 
               // bottom spacing
-              const SizedBox(height: 24),
+              const Gap(24.0),
             ],
           ),
         ),

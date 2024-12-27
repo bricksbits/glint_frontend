@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -52,7 +53,7 @@ class NotificationScreen extends StatelessWidget {
                   fontStyle: FontStyle.normal,
                 ),
               ),
-              const SizedBox(height: 8.0),
+              const Gap(8.0),
               Text(
                 'Keep your profile\nupdated and active!',
                 style: AppTheme.simpleText.copyWith(
