@@ -21,7 +21,7 @@ class SliverGlintCustomAppBar extends StatelessWidget {
       scrolledUnderElevation: 0,
       floating: true,
       pinned: true,
-      expandedHeight: 144.0,
+      expandedHeight: subtitle == null ? 120.0 : 144.0,
       // go back button
       leading: IconButton(
         icon: const Icon(
