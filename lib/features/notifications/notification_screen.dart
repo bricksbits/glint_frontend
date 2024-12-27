@@ -23,10 +23,35 @@ class NotificationScreen extends StatelessWidget {
         child: Column(
           children: [
             _buildNotificationScreenBanner(),
-            if (notification.isEmpty)
-              Expanded(
-                child: _buildNotificationEmptyState(),
-              ),
+            // empty state
+            // if (notification.isEmpty)
+            //   Expanded(
+            //     child: _buildNotificationEmptyState(),
+            //   ),
+            GlintNotificationTile(
+              title: 'Your Profile Stands Out!',
+              subtitle: 'You’ve received 20+ views today.',
+              iconState: NotificationTileIconState.event,
+              date: DateTime.now(),
+            ),
+            GlintNotificationTile(
+              title: 'Your Profile Stands Out!',
+              subtitle: 'You’ve received 20+ views today.',
+              iconState: NotificationTileIconState.stat,
+              date: DateTime.now(),
+            ),
+            GlintNotificationTile(
+              title: 'Your Profile Stands Out!',
+              subtitle: 'You’ve received 20+ views today.',
+              iconState: NotificationTileIconState.event,
+              date: DateTime.now(),
+            ),
+            GlintNotificationTile(
+              title: 'Your Profile Stands Out!',
+              subtitle: 'You’ve received 20+ views today.',
+              iconState: NotificationTileIconState.match,
+              date: DateTime.now(),
+            )
           ],
         ),
       ),
