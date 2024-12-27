@@ -25,6 +25,7 @@ flutter:
   generate: true
   assets:
     - lib/assets/images/
+    - lib/assets/icons/
 
   fonts:
     - family: AlbertSans

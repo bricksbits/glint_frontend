@@ -8,6 +8,7 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final notification = [];
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const GlintCustomAppBar(
@@ -22,6 +23,10 @@ class NotificationScreen extends StatelessWidget {
         child: Column(
           children: [
             _buildNotificationScreenBanner(),
+            if (notification.isEmpty)
+              Expanded(
+                child: _buildNotificationEmptyState(),
+              ),
           ],
         ),
       ),
@@ -64,6 +69,31 @@ class NotificationScreen extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNotificationEmptyState() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+          'lib/assets/icons/bell_icon.svg',
+          alignment: Alignment.center,
+        ),
+        const Gap(16.0),
+        Text(
+          'No updates yet',
+          style: AppTheme.simpleBodyText.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const Gap(4.0),
+        const Text(
+          'Check out the latest events happening near you!',
+          style: AppTheme.simpleText,
         ),
       ],
     );
