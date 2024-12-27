@@ -18,6 +18,7 @@ class SliverGlintCustomAppBar extends StatelessWidget {
     return SliverAppBar(
       backgroundColor: Colors.white,
       elevation: 0,
+      scrolledUnderElevation: 0,
       floating: true,
       pinned: true,
       expandedHeight: 144.0,
