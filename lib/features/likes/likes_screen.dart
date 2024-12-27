@@ -24,6 +24,38 @@ class LikesScreen extends StatelessWidget {
             ),
             child: _buildLikeScreenBanner(),
           )),
+
+          SliverToBoxAdapter(
+            child: _buildTopProfiles(
+              topProfiles: [
+                const GlintTopProfileContainer(
+                  imageUrl:
+                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                  name: 'Ashima',
+                  viewCount: 200,
+                ),
+                const GlintTopProfileContainer(
+                  imageUrl:
+                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                  name: 'Swati',
+                  viewCount: 340,
+                ),
+                const GlintTopProfileContainer(
+                  imageUrl:
+                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                  name: 'Swati',
+                  viewCount: 110,
+                ),
+                const GlintTopProfileContainer(
+                  imageUrl:
+                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                  name: 'Swati',
+                  viewCount: 420,
+                ),
+              ],
+            ),
+          ),
+
           // empty state
           // SliverFillRemaining(
           //   hasScrollBody: false,
@@ -74,12 +106,43 @@ class LikesScreen extends StatelessWidget {
               foregroundColor: Colors.white,
               backgroundColor: AppColours.primaryBlue,
               onPressed: () {
-                print('hello');
+                debugPrint('clicked see profiles');
+                //todo - add see profiles functionality
               },
             )
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildTopProfiles(
+      {required List<GlintTopProfileContainer> topProfiles}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
+          ),
+          child: Text(
+            'Top Profiles',
+            style: AppTheme.simpleBodyText.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        const Gap(20.0),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              const Gap(20.0), // for design replication purpose
+              ...topProfiles,
+            ],
+          ),
+        )
+      ],
     );
   }
 }
