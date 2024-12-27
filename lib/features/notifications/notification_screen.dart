@@ -5,9 +5,11 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-          'Will show all the upto last week notifications, and respective events navigation logic'),
+    return const Scaffold(
+      body: Center(
+        child: Text(
+            'Will show all the upto last week notifications, and respective events navigation logic'),
+      ),
     );
   }
 }
