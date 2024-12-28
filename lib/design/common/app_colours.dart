@@ -5,6 +5,8 @@ class AppColours {
   static const primaryBlue = Color(0xFF5158BB);
   static const pink = Color(0xFFFC6F6E);
   static const backgroundShade = Color(0xFFF2F3FF);
+  static const scaffoldBackgroundColor = Color(0xFFFFFFFF);
+  static const purpleShade = Color(0xFF9475D2);
 
   // Neutral Colors
   static const Color neutral50 = Color(0xFFF9FAFB);
@@ -74,8 +76,8 @@ class AppColours {
 
   static const Gradient textLinearGradient = LinearGradient(
     colors: <Color>[
-      Color(0xFF5158BB),
-      Color(0xFF9475D2),
+      primaryBlue,
+      purpleShade,
     ],
   );
 }

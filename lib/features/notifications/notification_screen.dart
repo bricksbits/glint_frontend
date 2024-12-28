@@ -9,7 +9,7 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColours.scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
           // app bar

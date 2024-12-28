@@ -107,7 +107,7 @@ class GlintTopProfileContainer extends StatelessWidget {
                 child: RichText(
                   text: TextSpan(
                     text: '$viewCount',
-                    style: AppTheme.simpleText.copyWith(
+                    style: AppTheme.simpleBodyText.copyWith(
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                       fontSize: 12.0,

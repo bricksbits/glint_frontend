@@ -8,7 +8,7 @@ class LikesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColours.scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
           // app bar
@@ -56,6 +56,12 @@ class LikesScreen extends StatelessWidget {
             ),
           ),
 
+          const SliverGap(28.0),
+
+          SliverToBoxAdapter(
+            child: _buildProfileLikedYou(),
+          ),
+
           // empty state
           // SliverFillRemaining(
           //   hasScrollBody: false,
@@ -79,7 +85,7 @@ class LikesScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20.0,
-          vertical: 28.0,
+          vertical: 24.0,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +106,7 @@ class LikesScreen extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            const Gap(32.0),
+            const Gap(24.0),
             GlintElevatedButton(
               label: 'See profiles',
               foregroundColor: Colors.white,
@@ -143,6 +149,54 @@ class LikesScreen extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  Widget _buildProfileLikedYou() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20.0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            'People liked your profile',
+            style: AppTheme.simpleBodyText.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Text(
+            'Act fast to get a match',
+            style: AppTheme.simpleText.copyWith(
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          GridView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.only(
+              top: 20.0,
+            ),
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 20.0,
+              mainAxisSpacing: 20.0,
+            ),
+            itemCount: 10,
+            itemBuilder: (context, index) {
+              return const GlintLikedYouProfileContainer(
+                imageUrl:
+                    'https://avatars.githubusercontent.com/u/70279771?v=4',
+                name: 'Swati',
+                age: 24,
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 
