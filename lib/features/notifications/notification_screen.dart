@@ -184,28 +184,12 @@ class NotificationScreen extends StatelessWidget {
     );
   }
 
+  // empty state
   Widget _buildNotificationEmptyState() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SvgPicture.asset(
-          'lib/assets/icons/bell_icon.svg',
-          alignment: Alignment.center,
-        ),
-        const Gap(16.0),
-        Text(
-          'No updates yet',
-          style: AppTheme.simpleBodyText.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const Gap(4.0),
-        const Text(
-          'Check out the latest events happening near you!',
-          style: AppTheme.simpleText,
-        ),
-      ],
+    return const GlintEmptyState(
+      svgPath: 'lib/assets/icons/bell_icon.svg',
+      title: 'No updates yet',
+      subtitle: 'Check out the latest events happening near you!',
     );
   }
 }

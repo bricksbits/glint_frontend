@@ -59,11 +59,11 @@ class LikesScreen extends StatelessWidget {
           // empty state
           // SliverFillRemaining(
           //   hasScrollBody: false,
-          //   child: Center(
-          //     child:
-          //         Text('Show case all the profiles which are liked by others'),
-          //   ),
+          //   child: _buildLikeScreenEmptyState(),
           // ),
+
+          //bottom padding basically
+          const SliverGap(16.0),
         ],
       ),
     );
@@ -143,6 +143,15 @@ class LikesScreen extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  //empty state
+  Widget _buildLikeScreenEmptyState() {
+    return const GlintEmptyState(
+      svgPath: 'lib/assets/icons/like_icon.svg',
+      title: 'No likes yet',
+      subtitle: 'Start liking profiles to get discovered.',
     );
   }
 }
