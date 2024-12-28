@@ -71,4 +71,11 @@ class AppColours {
       Color(0xFF336699),
     ],
   );
+
+  static const Gradient textLinearGradient = LinearGradient(
+    colors: <Color>[
+      Color(0xFF5158BB),
+      Color(0xFF9475D2),
+    ],
+  );
 }
