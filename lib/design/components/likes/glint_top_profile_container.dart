@@ -26,7 +26,7 @@ class GlintTopProfileContainer extends StatelessWidget {
           imageBuilder: (context, imageProvider) {
             return Container(
               height: 165.0,
-              width: 144.0,
+              width: 132.0,
               margin: const EdgeInsets.only(
                 right: 12.0,
               ),
@@ -49,7 +49,7 @@ class GlintTopProfileContainer extends StatelessWidget {
         Positioned.fill(
           child: Container(
             height: 165.0,
-            width: 144.0,
+            width: 132.0,
             margin: const EdgeInsets.only(
               right: 12.0,
             ),
@@ -76,7 +76,7 @@ class GlintTopProfileContainer extends StatelessWidget {
         // overlay main content
         Container(
           height: 165.0,
-          width: 144.0,
+          width: 132.0,
           padding: const EdgeInsets.symmetric(
             horizontal: 16.0,
             vertical: 14.0,
