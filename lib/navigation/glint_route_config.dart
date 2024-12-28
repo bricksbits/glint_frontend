@@ -21,85 +21,85 @@ import '../features/chat/chat_screen.dart';
 import '../features/home/home_screen.dart';
 
 final glintMainRoutes = GoRouter(
-  initialLocation: '/${GlintMainRoutes.auth.name}',
+  initialLocation: '/${GlintMainRoutes.home.name}',
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
-      path: GlintMainRoutes.auth.name,
+      path: '/${GlintMainRoutes.auth.name}',
       builder: (context, state) => const AuthenticationScreen(),
     ),
     GoRoute(
-      path: GlintMainRoutes.home.name,
+      path: '/${GlintMainRoutes.home.name}',
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
-      path: GlintMainRoutes.chat.name,
+      path: '/${GlintMainRoutes.chat.name}',
       builder: (context, state) => const ChatScreen(),
       routes: [
         GoRoute(
-          path: GlintChatRoutes.chatWith.name,
+          path: '/${GlintChatRoutes.chatWith.name}',
           builder: (context, state) => const ChatWithScreen(),
         ),
         GoRoute(
-          path: GlintChatRoutes.videoCall.name,
+          path: '/${GlintChatRoutes.videoCall.name}',
           builder: (context, state) => const ChatWithVideoCallScreen(),
         ),
         GoRoute(
-          path: GlintChatRoutes.tickets.name,
+          path: '/${GlintChatRoutes.tickets.name}',
           builder: (context, state) => const ChatEventTicketsScreen(),
         )
       ],
     ),
     GoRoute(
-      path: GlintMainRoutes.service.name,
+      path: '/${GlintMainRoutes.service.name}',
       builder: (context, state) => const ServiceScreen(),
     ),
     GoRoute(
-      path: GlintMainRoutes.people.name,
+      path: '/${GlintMainRoutes.people.name}',
       builder: (context, state) => const PeopleScreen(),
     ),
     GoRoute(
-      path: GlintMainRoutes.event.name,
+      path: '/${GlintMainRoutes.event.name}',
       builder: (context, state) => const EventMainScreen(),
       routes: [
         GoRoute(
-          path: GlintEventRoutes.eventDetails.name,
+          path: '/${GlintEventRoutes.eventDetails.name}',
           builder: (context, state) => const EventDetailScreen(),
         ),
         GoRoute(
-          path: GlintEventRoutes.peopleInterested.name,
+          path: '/${GlintEventRoutes.peopleInterested.name}',
           builder: (context, state) => const EventPeopleScreen(),
         ),
       ],
     ),
     GoRoute(
-      path: GlintMainRoutes.profile.name,
+      path: '/${GlintMainRoutes.profile.name}',
       builder: (context, state) => const ProfileScreen(),
       routes: [
         GoRoute(
-          path: GlintProfileRoutes.profilePreview.name,
+          path: '/${GlintProfileRoutes.profilePreview.name}',
           builder: (context, state) => const ProfilePreviewScreen(),
         ),
         GoRoute(
-          path: GlintProfileRoutes.ticketHistory.name,
+          path: '/${GlintProfileRoutes.ticketHistory.name}',
           builder: (context, state) => const ProfileHistoryTicketsScreen(),
         ),
         GoRoute(
-          path: GlintProfileRoutes.transactionHistory.name,
+          path: '/${GlintProfileRoutes.transactionHistory.name}',
           builder: (context, state) => const ProfileHistoryTransactionsScreen(),
         ),
       ],
     ),
     GoRoute(
-      path: GlintMainRoutes.notifications.name,
+      path: '/${GlintMainRoutes.notifications.name}',
       builder: (context, state) => const NotificationScreen(),
     ),
     GoRoute(
-      path: GlintMainRoutes.filter.name,
+      path: '/${GlintMainRoutes.filter.name}',
       builder: (context, state) => const FilterPreferenceScreen(),
     ),
     GoRoute(
-      path: GlintMainRoutes.likes.name,
+      path: '/${GlintMainRoutes.likes.name}',
       builder: (context, state) => const LikesScreen(),
     ),
   ],
