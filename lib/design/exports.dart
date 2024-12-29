@@ -2,6 +2,7 @@ export 'common/app_colours.dart';
 export 'common/app_theme.dart';
 export 'components/filter/glint_age_distance_card.dart';
 export 'components/filter/glint_filter_prefs_card.dart';
+export 'components/glint_app_bar.dart';
 export 'components/glint_check_icon.dart';
 export 'components/glint_custom_app_bar.dart';
 export 'components/glint_elevated_button.dart';

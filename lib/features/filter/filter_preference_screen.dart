@@ -8,9 +8,7 @@ class FilterPreferenceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColours.white,
-      appBar: AppBar(
-        backgroundColor: AppColours.white, // Matches the screen background
-      ),
+      appBar: GlintAppBar(),
       body: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         child: GlintFilterPrefsCard(),
