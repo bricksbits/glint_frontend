@@ -33,10 +33,23 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
 
           const SliverGap(20.0),
 
+          // who you want to see banner
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: _buildWhoYouWantToSeeBanner(),
+            ),
+          ),
+
+          const SliverGap(20.0),
+
+          // age and distance range selector
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: GlintAgeDistanceCard(
+                hasBorders: true,
+              ),
             ),
           ),
         ],
@@ -45,6 +58,10 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
   }
 
   Widget _buildWhoYouWantToSeeBanner() {
+    const defaultBorder = BorderSide(
+      color: AppColours.primaryBlue,
+      width: 1.0,
+    );
     return Stack(
       children: [
         SizedBox(
@@ -55,74 +72,80 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
             fit: BoxFit.cover,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24.0,
-            vertical: 24.0,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: RichText(
-                  text: TextSpan(
-                    text: 'Who You ',
-                    style: AppTheme.simpleBodyText.copyWith(
-                      fontWeight: FontWeight.w400,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'Want to See',
-                        style: AppTheme.simpleBodyText.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+        Positioned.fill(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 24.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Who You ',
+                      style: AppTheme.simpleBodyText.copyWith(
+                        fontWeight: FontWeight.w400,
                       ),
-                    ],
+                      children: [
+                        TextSpan(
+                          text: 'Want to See',
+                          style: AppTheme.simpleBodyText.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: _options.map((option) {
-                  final bool isSelected = _selected == option['id'];
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        _selected = option['id']!;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color:
-                            isSelected ? const Color(0xFFE8F1FF) : Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                        border: Border.all(
+                Wrap(
+                  spacing: 12.0,
+                  runSpacing: 12.0,
+                  children: _options.map((option) {
+                    final bool isSelected = _selected == option['id'];
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selected = option['id']!;
+                        });
+                        // print('Selected $_selected');
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0,
+                          vertical: 8.0,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50.0),
                           color: isSelected
-                              ? const Color(0xFFE8F1FF)
-                              : Colors.grey.withOpacity(0.2),
+                              ? AppColours.backgroundShade
+                              : AppColours.white,
+                          border: isSelected
+                              ? const Border(
+                                  bottom: BorderSide(
+                                    color: AppColours.primaryBlue,
+                                    width: 2.0,
+                                  ),
+                                  top: defaultBorder,
+                                  left: defaultBorder,
+                                  right: defaultBorder,
+                                )
+                              : null,
+                        ),
+                        child: Text(
+                          option['label']!,
+                          style: AppTheme.simpleText,
                         ),
                       ),
-                      child: Text(
-                        option['label']!,
-                        style: TextStyle(
-                          color: isSelected
-                              ? const Color(0xFF2563EB)
-                              : Colors.grey[700],
-                          fontWeight:
-                              isSelected ? FontWeight.w500 : FontWeight.normal,
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
           ),
         ),
       ],

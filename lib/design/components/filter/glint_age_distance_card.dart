@@ -8,7 +8,10 @@ import 'package:glint_frontend/design/exports.dart';
 class GlintAgeDistanceCard extends StatefulWidget {
   const GlintAgeDistanceCard({
     super.key,
+    this.hasBorders = false,
   });
+
+  final bool hasBorders;
 
   @override
   State<GlintAgeDistanceCard> createState() => _GlintAgeDistanceCardState();
@@ -33,6 +36,12 @@ class _GlintAgeDistanceCardState extends State<GlintAgeDistanceCard> {
       decoration: BoxDecoration(
         color: AppColours.white,
         borderRadius: BorderRadius.circular(20.0),
+        border: widget.hasBorders
+            ? Border.all(
+                width: 0.5,
+                color: AppColours.primaryBlue.withAlpha(140),
+              )
+            : null,
       ),
       child: Column(
         children: [
@@ -212,29 +221,37 @@ class _GlintAgeDistanceCardState extends State<GlintAgeDistanceCard> {
 
           // further profiles checkbox
           if (isLocationEnabled)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      showFurtherProfiles = !showFurtherProfiles;
-                    });
-                  },
-                  child: SvgPicture.asset(
-                    'lib/assets/icons/glint_checkbox.svg',
-                    height: 16.0,
-                    width: 16.0,
-                  ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 28.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showFurtherProfiles = !showFurtherProfiles;
+                        });
+                      },
+                      child: SvgPicture.asset(
+                        showFurtherProfiles
+                            ? 'lib/assets/icons/glint_checkbox_checked.svg'
+                            : 'lib/assets/icons/glint_checkbox_unchecked.svg',
+                        height: 20.0,
+                        width: 20.0,
+                      ),
+                    ),
+                    const Gap(8.0),
+                    Text(
+                      'Show further profiles when run out ',
+                      style: AppTheme.smallBodyText.copyWith(
+                        fontWeight: FontWeight.w300,
+                      ),
+                    )
+                  ],
                 ),
-                const Gap(8.0),
-                Text(
-                  'Show further profiles when run out ',
-                  style: AppTheme.smallBodyText.copyWith(
-                    fontWeight: FontWeight.w300,
-                  ),
-                )
-              ],
+              ),
             )
         ],
       ),
