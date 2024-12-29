@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
@@ -22,6 +23,7 @@ class _GlintAgeDistanceCardState extends State<GlintAgeDistanceCard> {
   double distance = 10;
 
   bool isLocationEnabled = false;
+  bool showFurtherProfiles = false;
 
   @override
   Widget build(BuildContext context) {
@@ -170,42 +172,70 @@ class _GlintAgeDistanceCardState extends State<GlintAgeDistanceCard> {
           const Gap(20.0),
 
           // location enabler rich text
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                isLocationEnabled ? Icons.location_on : Icons.location_off,
-                size: 16.0,
-                color: AppColours.gray,
-              ),
-              const Gap(6.0),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Give Location Permission',
-                      style: AppTheme.smallBodyText.copyWith(
-                        fontWeight: FontWeight.w600,
-                        decoration: TextDecoration.underline,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          // todo - open location permission screen
-                          setState(() {
-                            isLocationEnabled = !isLocationEnabled;
-                          });
-                        },
-                    ),
-                    const TextSpan(
-                      text: ' to adjust distance',
-                      style: AppTheme.smallBodyText,
-                    ),
-                  ],
+          if (!isLocationEnabled)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  isLocationEnabled ? Icons.location_on : Icons.location_off,
+                  size: 16.0,
+                  color: AppColours.gray,
                 ),
-              ),
-            ],
-          )
+                const Gap(6.0),
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Give Location Permission',
+                        style: AppTheme.smallBodyText.copyWith(
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            // todo - open location permission screen
+                            setState(() {
+                              isLocationEnabled = true;
+                            });
+                          },
+                      ),
+                      const TextSpan(
+                        text: ' to adjust distance',
+                        style: AppTheme.smallBodyText,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+          // further profiles checkbox
+          if (isLocationEnabled)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      showFurtherProfiles = !showFurtherProfiles;
+                    });
+                  },
+                  child: SvgPicture.asset(
+                    'lib/assets/icons/glint_checkbox.svg',
+                    height: 16.0,
+                    width: 16.0,
+                  ),
+                ),
+                const Gap(8.0),
+                Text(
+                  'Show further profiles when run out ',
+                  style: AppTheme.smallBodyText.copyWith(
+                    fontWeight: FontWeight.w300,
+                  ),
+                )
+              ],
+            )
         ],
       ),
     );

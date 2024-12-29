@@ -6,14 +6,17 @@ class FilterPreferenceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: AppColours.white,
       appBar: GlintAppBar(),
-      body: const Padding(
+      body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         child: GlintFilterPrefsCard(),
       ),
-      bottomNavigationBar: const SizedBox(height: 120.0),
+      bottomNavigationBar: SizedBox(
+        height:
+            107.0, // for design replication purpose, app bar will come here.
+      ),
     );
   }
 }
