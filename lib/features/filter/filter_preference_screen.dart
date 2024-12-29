@@ -52,6 +52,29 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
               ),
             ),
           ),
+
+          const SliverGap(20.0),
+
+          // filter interests
+          SliverToBoxAdapter(
+            child: _buildFilterInterests(),
+          ),
+
+          const SliverGap(44.0),
+
+          // filter distance
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+              ).copyWith(bottom: 24.0),
+              child: GlintElevatedButton(
+                isPrimary: true,
+                onPressed: () {},
+                label: 'Apply Changes',
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -149,6 +172,25 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildFilterInterests() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Filter Interests',
+            style: AppTheme.simpleBodyText.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const Gap(16.0),
+          const GlintInterestsSelection(),
+        ],
+      ),
     );
   }
 }

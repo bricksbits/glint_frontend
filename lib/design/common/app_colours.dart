@@ -8,6 +8,7 @@ class AppColours {
   static const white = Color(0xFFFFFFFF);
   static const purpleShade = Color(0xFF9475D2);
   static const gray = Color(0xFFAAAAAA);
+  static const chipBackgroundShade = Color(0xFFE9EAF7);
 
   // with opacity shades
   static final primaryBlue60 = primaryBlue.withAlpha(153);
