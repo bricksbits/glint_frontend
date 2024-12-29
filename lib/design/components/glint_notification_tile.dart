@@ -92,11 +92,11 @@ class GlintNotificationTile extends StatelessWidget {
   String _getSvgAssetPath(NotificationTileIconState state) {
     switch (state) {
       case NotificationTileIconState.event:
-        return 'lib/assets/icons/event_icon.svg';
+        return 'lib/assets/icons/notification_event_icon.svg';
       case NotificationTileIconState.match:
-        return 'lib/assets/icons/match_icon.svg';
+        return 'lib/assets/icons/notification_match_icon.svg';
       case NotificationTileIconState.stat:
-        return 'lib/assets/icons/stat_icon.svg';
+        return 'lib/assets/icons/notification_stat_icon.svg';
     }
   }
 

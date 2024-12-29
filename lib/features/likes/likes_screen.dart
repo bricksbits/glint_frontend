@@ -8,7 +8,7 @@ class LikesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColours.white,
       body: CustomScrollView(
         slivers: [
           // app bar
@@ -56,14 +56,20 @@ class LikesScreen extends StatelessWidget {
             ),
           ),
 
+          const SliverGap(28.0),
+
+          SliverToBoxAdapter(
+            child: _buildProfileLikedYou(),
+          ),
+
           // empty state
           // SliverFillRemaining(
           //   hasScrollBody: false,
-          //   child: Center(
-          //     child:
-          //         Text('Show case all the profiles which are liked by others'),
-          //   ),
+          //   child: _buildLikeScreenEmptyState(),
           // ),
+
+          //bottom padding basically
+          const SliverGap(16.0),
         ],
       ),
     );
@@ -72,14 +78,22 @@ class LikesScreen extends StatelessWidget {
   Widget _buildLikeScreenBanner() {
     return Container(
       decoration: const BoxDecoration(
-          color: AppColours.backgroundShade,
-          borderRadius: BorderRadius.all(
-            Radius.circular(20.0),
-          )),
+        color: AppColours.backgroundShade,
+        borderRadius: BorderRadius.all(
+          Radius.circular(20.0),
+        ),
+        image: DecorationImage(
+          image: AssetImage(
+            'lib/assets/images/blurred_noticed_profiles.png',
+          ),
+          fit: BoxFit.fitHeight,
+          alignment: Alignment.centerRight,
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20.0,
-          vertical: 28.0,
+          vertical: 24.0,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +114,7 @@ class LikesScreen extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            const Gap(32.0),
+            const Gap(24.0),
             GlintElevatedButton(
               label: 'See profiles',
               foregroundColor: Colors.white,
@@ -143,6 +157,63 @@ class LikesScreen extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  Widget _buildProfileLikedYou() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20.0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            'People liked your profile',
+            style: AppTheme.simpleBodyText.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Text(
+            'Act fast to get a match',
+            style: AppTheme.simpleText.copyWith(
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          GridView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.only(
+              top: 20.0,
+            ),
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 20.0,
+              mainAxisSpacing: 20.0,
+            ),
+            itemCount: 10,
+            itemBuilder: (context, index) {
+              return const GlintLikedYouProfileContainer(
+                imageUrl:
+                    'https://avatars.githubusercontent.com/u/70279771?v=4',
+                name: 'Swati',
+                age: 24,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  //empty state
+  Widget _buildLikeScreenEmptyState() {
+    return const GlintEmptyState(
+      svgPath: 'lib/assets/icons/empty_state_like_icon.svg',
+      title: 'No likes yet',
+      subtitle: 'Start liking profiles to get discovered.',
     );
   }
 }
