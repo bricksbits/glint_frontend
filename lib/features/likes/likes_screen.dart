@@ -78,10 +78,18 @@ class LikesScreen extends StatelessWidget {
   Widget _buildLikeScreenBanner() {
     return Container(
       decoration: const BoxDecoration(
-          color: AppColours.backgroundShade,
-          borderRadius: BorderRadius.all(
-            Radius.circular(20.0),
-          )),
+        color: AppColours.backgroundShade,
+        borderRadius: BorderRadius.all(
+          Radius.circular(20.0),
+        ),
+        image: DecorationImage(
+          image: AssetImage(
+            'lib/assets/images/blurred_noticed_profiles.png',
+          ),
+          fit: BoxFit.fitHeight,
+          alignment: Alignment.centerRight,
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20.0,
