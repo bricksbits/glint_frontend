@@ -203,7 +203,7 @@ class LikesScreen extends StatelessWidget {
   //empty state
   Widget _buildLikeScreenEmptyState() {
     return const GlintEmptyState(
-      svgPath: 'lib/assets/icons/like_icon.svg',
+      svgPath: 'lib/assets/icons/empty_state_like_icon.svg',
       title: 'No likes yet',
       subtitle: 'Start liking profiles to get discovered.',
     );

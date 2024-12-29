@@ -115,7 +115,8 @@ class NotificationScreen extends StatelessWidget {
               ],
             ),
           ),
-          const SliverGap(16.0), // bottom padding basically
+          const SliverGap(16.0),
+          // bottom padding basically
         ],
       ),
     );
@@ -187,7 +188,7 @@ class NotificationScreen extends StatelessWidget {
   // empty state
   Widget _buildNotificationEmptyState() {
     return const GlintEmptyState(
-      svgPath: 'lib/assets/icons/bell_icon.svg',
+      svgPath: 'lib/assets/icons/empty_state_bell_icon.svg',
       title: 'No updates yet',
       subtitle: 'Check out the latest events happening near you!',
     );

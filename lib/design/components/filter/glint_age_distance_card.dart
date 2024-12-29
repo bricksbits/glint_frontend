@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:gap/gap.dart';
@@ -19,6 +20,8 @@ class _GlintAgeDistanceCardState extends State<GlintAgeDistanceCard> {
 
   //distance variable
   double distance = 10;
+
+  bool isLocationEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +132,7 @@ class _GlintAgeDistanceCardState extends State<GlintAgeDistanceCard> {
                 const Gap(16.0),
                 // age range slider
                 FlutterSlider(
+                  disabled: !isLocationEnabled,
                   // initial val
                   values: [distance],
                   min: 5,
@@ -150,22 +154,57 @@ class _GlintAgeDistanceCardState extends State<GlintAgeDistanceCard> {
                   handlerHeight: 16.0,
                   handlerWidth: 16.0,
                   handler: FlutterSliderHandler(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColours.primaryBlue,
-                    ),
-                    child: const SizedBox.shrink(),
-                  ),
-                  rightHandler: FlutterSliderHandler(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColours.primaryBlue,
+                      color: isLocationEnabled
+                          ? AppColours.primaryBlue
+                          : AppColours.gray,
                     ),
                     child: const SizedBox.shrink(),
                   ),
                 )
               ],
             ),
+          ),
+
+          const Gap(20.0),
+
+          // location enabler rich text
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                isLocationEnabled ? Icons.location_on : Icons.location_off,
+                size: 16.0,
+                color: AppColours.gray,
+              ),
+              const Gap(6.0),
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Give Location Permission',
+                      style: AppTheme.smallBodyText.copyWith(
+                        fontWeight: FontWeight.w600,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          // todo - open location permission screen
+                          setState(() {
+                            isLocationEnabled = !isLocationEnabled;
+                          });
+                        },
+                    ),
+                    const TextSpan(
+                      text: ' to adjust distance',
+                      style: AppTheme.smallBodyText,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           )
         ],
       ),
