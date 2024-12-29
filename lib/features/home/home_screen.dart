@@ -1,13 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:glint_frontend/design/common/app_colours.dart';
+import 'package:glint_frontend/features/chat/chat_screen.dart';
+import 'package:glint_frontend/features/event/event_main_screen.dart';
+import 'package:glint_frontend/features/people/people_screen.dart';
+import 'package:glint_frontend/features/profile/profile_screen.dart';
+import 'package:glint_frontend/features/service/service_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 2;
+  static const bottomNavScreens = [
+    ProfileScreen(),
+    EventMainScreen(),
+    PeopleScreen(),
+    ServiceScreen(),
+    ChatScreen(),
+  ];
+
+  @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-          'Home Screen, will work as the host, and contains various screens via Bottom Nav Bar'),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add Glint Logo and the Respective Actions here'),
+      ),
+      body: bottomNavScreens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        backgroundColor: AppColours.backgroundShade,
+        elevation: 16,
+        selectedIconTheme: const IconThemeData(color: AppColours.pink),
+        selectedItemColor: AppColours.success600,
+        unselectedIconTheme: const IconThemeData(
+          color: Colors.deepOrangeAccent,
+        ),
+        unselectedItemColor: Colors.deepOrangeAccent,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        currentIndex: _selectedIndex,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event),
+            label: 'Events',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'People',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.handshake),
+            label: 'Rent',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            label: 'Chat',
+          ),
+        ],
+      ),
     );
   }
 }
