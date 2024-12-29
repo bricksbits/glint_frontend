@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glint_frontend/design/common/app_colours.dart';
+import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
 import 'package:glint_frontend/features/event/event_main_screen.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
@@ -26,50 +26,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Glint Logo and the Respective Actions here'),
-      ),
-      body: bottomNavScreens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        backgroundColor: AppColours.backgroundShade,
-        elevation: 16,
-        selectedIconTheme: const IconThemeData(color: AppColours.pink),
-        selectedItemColor: AppColours.success600,
-        unselectedIconTheme: const IconThemeData(
-          color: Colors.deepOrangeAccent,
-        ),
-        unselectedItemColor: Colors.deepOrangeAccent,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        currentIndex: _selectedIndex,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event),
-            label: 'Events',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'People',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.handshake),
-            label: 'Rent',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Chat',
-          ),
-        ],
-      ),
-    );
+        backgroundColor: AppColours.white,
+        appBar: const GlintAppBar(),
+        body: bottomNavScreens[_selectedIndex],
+        bottomNavigationBar: GlintBottomNavbar(
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          currentIndex: _selectedIndex,
+        ));
   }
 }
