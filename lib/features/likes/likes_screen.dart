@@ -8,7 +8,7 @@ class LikesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColours.scaffoldBackgroundColor,
+      backgroundColor: AppColours.white,
       body: CustomScrollView(
         slivers: [
           // app bar

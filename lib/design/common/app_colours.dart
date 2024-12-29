@@ -5,8 +5,13 @@ class AppColours {
   static const primaryBlue = Color(0xFF5158BB);
   static const pink = Color(0xFFFC6F6E);
   static const backgroundShade = Color(0xFFF2F3FF);
-  static const scaffoldBackgroundColor = Color(0xFFFFFFFF);
+  static const white = Color(0xFFFFFFFF);
   static const purpleShade = Color(0xFF9475D2);
+  static const gray = Color(0xFFAAAAAA);
+
+  // with opacity shades
+  static final primaryBlue60 = primaryBlue.withAlpha(153);
+  static final gray60 = const Color(0xFFAAAAAA).withAlpha(153);
 
   // Neutral Colors
   static const Color neutral50 = Color(0xFFF9FAFB);
