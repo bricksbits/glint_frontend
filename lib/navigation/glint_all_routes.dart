@@ -27,7 +27,10 @@ enum GlintEventRoutes {
   explore,
 }
 
-enum GlintOnBoardingRoutes {
+enum GlintProfileRoutes {
+  profilePreview,
+  ticketHistory,
+  transactionHistory,
   name,
   dob,
   gender,
@@ -36,10 +39,4 @@ enum GlintOnBoardingRoutes {
   pronouns,
   interests,
   bio,
-}
-
-enum GlintProfileRoutes {
-  profilePreview,
-  ticketHistory,
-  transactionHistory,
 }
