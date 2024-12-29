@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:glint_frontend/design/common/app_theme.dart';
+import 'package:glint_frontend/design/exports.dart';
 import 'package:go_router/go_router.dart';
 
 class SliverGlintCustomAppBar extends StatelessWidget {
@@ -16,7 +16,7 @@ class SliverGlintCustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColours.white,
       elevation: 0,
       scrolledUnderElevation: 0,
       floating: true,
