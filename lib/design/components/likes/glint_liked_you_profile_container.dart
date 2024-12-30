@@ -28,14 +28,16 @@ class GlintLikedYouProfileContainer extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: BoxFit.contain,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                ),
-                errorWidget: (context, url, error) => const Center(
-                  child: Icon(Icons.error),
+              Positioned.fill(
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                  errorWidget: (context, url, error) => const Center(
+                    child: Icon(Icons.error),
+                  ),
                 ),
               ),
               BackdropFilter(
@@ -44,6 +46,7 @@ class GlintLikedYouProfileContainer extends StatelessWidget {
                   sigmaY: isBlur ? 10.0 : 0,
                 ),
                 child: Container(
+                  width: double.infinity,
                   color: Colors.white.withAlpha(0),
                 ),
               ),
@@ -52,24 +55,22 @@ class GlintLikedYouProfileContainer extends StatelessWidget {
         ),
 
         // dark overlay
-        Positioned.fill(
-          child: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  20.0,
-                ),
+        Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                20.0,
               ),
-              gradient: LinearGradient(
-                colors: [
-                  Colors.transparent,
-                  Colors.transparent,
-                  Colors.black38,
-                  Colors.black54,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+            ),
+            gradient: LinearGradient(
+              colors: [
+                Colors.transparent,
+                Colors.transparent,
+                Colors.black38,
+                Colors.black54,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
           ),
         ),

@@ -197,7 +197,7 @@ class LikesScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return const GlintLikedYouProfileContainer(
                 imageUrl:
-                    'https://cdn.pixabay.com/photo/2023/05/12/10/47/ai-generated-7988262_640.jpg',
+                    'https://cdn-prod.medicalnewstoday.com/content/images/articles/326/326898/a-female-wondering-about-her-anatomy.jpg',
                 name: 'Swati',
                 age: 24,
               );
