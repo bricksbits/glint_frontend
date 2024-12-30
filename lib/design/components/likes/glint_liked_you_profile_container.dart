@@ -22,34 +22,32 @@ class GlintLikedYouProfileContainer extends StatelessWidget {
     return Stack(
       children: [
         // Blurred Background Image
-        Positioned.fill(
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(20.0),
-            ),
-            child: Stack(
-              children: [
-                CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  ),
-                  errorWidget: (context, url, error) => const Center(
-                    child: Icon(Icons.error),
-                  ),
+        ClipRRect(
+          borderRadius: const BorderRadius.all(
+            Radius.circular(20.0),
+          ),
+          child: Stack(
+            children: [
+              CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.contain,
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator.adaptive(),
                 ),
-                BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: isBlur ? 10.0 : 0,
-                    sigmaY: isBlur ? 10.0 : 0,
-                  ),
-                  child: Container(
-                    color: Colors.white.withAlpha(0),
-                  ),
+                errorWidget: (context, url, error) => const Center(
+                  child: Icon(Icons.error),
                 ),
-              ],
-            ),
+              ),
+              BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: isBlur ? 10.0 : 0,
+                  sigmaY: isBlur ? 10.0 : 0,
+                ),
+                child: Container(
+                  color: Colors.white.withAlpha(0),
+                ),
+              ),
+            ],
           ),
         ),
 
