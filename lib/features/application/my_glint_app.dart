@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
-import 'package:glint_frontend/features/exports.dart';
+import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 
 class MyGlintApp extends StatelessWidget {
   const MyGlintApp({super.key});
@@ -11,7 +11,7 @@ class MyGlintApp extends StatelessWidget {
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const NotificationScreen(),
+      home: const FilterPreferenceScreen(),
       // routerConfig: glintMainRoutes,
     );
   }
