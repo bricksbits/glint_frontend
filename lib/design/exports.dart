@@ -15,3 +15,4 @@ export 'components/glint_notification_tile.dart';
 export 'components/glint_profile_image_selector.dart';
 export 'components/likes/glint_liked_you_profile_container.dart';
 export 'components/likes/glint_top_profile_container.dart';
+export 'components/onboarding/glint_custom_icon_chip.dart';
