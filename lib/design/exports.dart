@@ -4,7 +4,6 @@ export 'components/filter/glint_age_distance_card.dart';
 export 'components/filter/glint_filter_prefs_card.dart';
 export 'components/filter/glint_interests_selection.dart';
 export 'components/glint_app_bar.dart';
-export 'components/glint_bottom_navbar.dart';
 export 'components/glint_check_icon.dart';
 export 'components/glint_custom_app_bar.dart';
 export 'components/glint_elevated_button.dart';
