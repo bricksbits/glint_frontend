@@ -4,12 +4,12 @@ import 'package:glint_frontend/design/exports.dart';
 class OnboardingSafeAreaContainer extends StatelessWidget {
   const OnboardingSafeAreaContainer({
     super.key,
-    required this.child,
     required this.assetPath,
+    required this.child,
   });
 
-  final Widget child;
   final String assetPath;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +29,9 @@ class OnboardingSafeAreaContainer extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30.0),
             color: AppColours.backgroundShade,
-            image: const DecorationImage(
+            image: DecorationImage(
               image: AssetImage(
-                'lib/assets/images/onboarding/hand_holding_eye_illustration.png',
+                assetPath,
               ),
               fit: BoxFit.fill,
             ),

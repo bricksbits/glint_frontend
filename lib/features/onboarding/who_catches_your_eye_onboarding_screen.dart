@@ -17,7 +17,8 @@ class _OnboardingScreenState extends State<WhoCatchesYourEyeOnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: OnboardingSafeAreaContainer(
-        assetPath: 'hello',
+        assetPath:
+            'lib/assets/images/onboarding/hand_holding_eye_illustration.png',
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
