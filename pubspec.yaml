@@ -28,6 +28,7 @@ flutter:
   assets:
     - lib/assets/images/
     - lib/assets/icons/
+    - lib/assets/images/onboarding/
 
   fonts:
     - family: AlbertSans

@@ -33,7 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               color: AppColours.backgroundShade,
               image: const DecorationImage(
                 image: AssetImage(
-                  'lib/assets/images/hand_holding_eye_illustration.png',
+                  'lib/assets/images/onboarding/hand_holding_eye_illustration.png',
                 ),
                 fit: BoxFit.fill,
               ),
