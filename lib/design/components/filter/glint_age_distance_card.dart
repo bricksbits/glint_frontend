@@ -182,41 +182,49 @@ class _GlintAgeDistanceCardState extends State<GlintAgeDistanceCard> {
 
           // location enabler rich text
           if (!isLocationEnabled)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  isLocationEnabled ? Icons.location_on : Icons.location_off,
-                  size: 16.0,
-                  color: AppColours.gray,
-                ),
-                const Gap(6.0),
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Give Location Permission',
-                        style: AppTheme.smallBodyText.copyWith(
-                          fontWeight: FontWeight.w600,
-                          decoration: TextDecoration.underline,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            // todo - open location permission screen
-                            setState(() {
-                              isLocationEnabled = true;
-                            });
-                          },
-                      ),
-                      const TextSpan(
-                        text: ' to adjust distance',
-                        style: AppTheme.smallBodyText,
-                      ),
-                    ],
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    isLocationEnabled ? Icons.location_on : Icons.location_off,
+                    size: 16.0,
+                    color: AppColours.gray,
                   ),
-                ),
-              ],
+                  const Gap(6.0),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Give Location Permission',
+                          style: AppTheme.smallBodyText.copyWith(
+                            overflow: TextOverflow.clip,
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              // todo - open location permission screen
+                              setState(() {
+                                isLocationEnabled = true;
+                              });
+                            },
+                        ),
+                        TextSpan(
+                          text: ' to adjust distance',
+                          style: AppTheme.smallBodyText.copyWith(
+                            overflow: TextOverflow.clip,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
 
           // further profiles checkbox

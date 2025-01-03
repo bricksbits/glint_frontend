@@ -26,16 +26,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColours.white,
-        appBar: const GlintAppBar(),
-        body: bottomNavScreens[_selectedIndex],
-        bottomNavigationBar: GlintBottomNavbar(
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-          currentIndex: _selectedIndex,
-        ));
+      backgroundColor: AppColours.white,
+      appBar: const GlintAppBar(),
+      body: bottomNavScreens[_selectedIndex],
+      bottomNavigationBar: GlintBottomNavbar(
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        currentIndex: _selectedIndex,
+      ),
+    );
   }
 }

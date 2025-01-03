@@ -49,6 +49,7 @@ class GlintFilterPrefsCard extends StatelessWidget {
           const Gap(32.0),
           SizedBox(
             width: double.infinity,
+            height: 44.0,
             child: GlintElevatedButton(
               label: 'Apply Changes',
               isPrimary: true,

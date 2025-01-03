@@ -22,14 +22,14 @@ class GlintLikedYouProfileContainer extends StatelessWidget {
     return Stack(
       children: [
         // Blurred Background Image
-        Positioned.fill(
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(20.0),
-            ),
-            child: Stack(
-              children: [
-                CachedNetworkImage(
+        ClipRRect(
+          borderRadius: const BorderRadius.all(
+            Radius.circular(20.0),
+          ),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: CachedNetworkImage(
                   imageUrl: imageUrl,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => const Center(
@@ -39,39 +39,38 @@ class GlintLikedYouProfileContainer extends StatelessWidget {
                     child: Icon(Icons.error),
                   ),
                 ),
-                BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: isBlur ? 10.0 : 0,
-                    sigmaY: isBlur ? 10.0 : 0,
-                  ),
-                  child: Container(
-                    color: Colors.white.withAlpha(0),
-                  ),
+              ),
+              BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: isBlur ? 10.0 : 0,
+                  sigmaY: isBlur ? 10.0 : 0,
                 ),
-              ],
-            ),
+                child: Container(
+                  width: double.infinity,
+                  color: Colors.white.withAlpha(0),
+                ),
+              ),
+            ],
           ),
         ),
 
         // dark overlay
-        Positioned.fill(
-          child: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  20.0,
-                ),
+        Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                20.0,
               ),
-              gradient: LinearGradient(
-                colors: [
-                  Colors.transparent,
-                  Colors.transparent,
-                  Colors.black38,
-                  Colors.black54,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+            ),
+            gradient: LinearGradient(
+              colors: [
+                Colors.transparent,
+                Colors.transparent,
+                Colors.black38,
+                Colors.black54,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
           ),
         ),
