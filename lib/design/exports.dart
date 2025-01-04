@@ -17,3 +17,4 @@ export 'components/likes/glint_liked_you_profile_container.dart';
 export 'components/likes/glint_top_profile_container.dart';
 export 'components/onboarding/glint_custom_icon_chip.dart';
 export 'components/onboarding/onboarding_safe_area_container.dart';
+export 'functions/extensions.dart';
