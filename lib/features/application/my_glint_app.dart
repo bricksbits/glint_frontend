@@ -11,7 +11,7 @@ class MyGlintApp extends StatelessWidget {
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const DateOfBirthOnboardingScreen(),
+      home: const IdentifyYourselfOnboardingScreen(),
       // routerConfig: glintMainRoutes,
     );
   }
