@@ -53,7 +53,7 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                     // First container is for DP
                     imageFile: _images.length > index ? _images[index] : null,
                     // Pass the image if available
-                    onImagePick: _pickImages, // On tap pick multiple images
+                    onImagePick: _pickImages,
                   ),
                 ),
               );
@@ -73,7 +73,7 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                   imageFile: _images.length > containerIndex
                       ? _images[containerIndex]
                       : null,
-                  onImagePick: _pickImages, // Same function for all containers
+                  onImagePick: _pickImages,
                 ),
               ),
             );
@@ -93,8 +93,7 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                     imageFile: _images.length > containerIndex
                         ? _images[containerIndex]
                         : null,
-                    onImagePick:
-                        _pickImages, // Same function for all containers
+                    onImagePick: _pickImages,
                   ),
                 ),
               );
