@@ -10,7 +10,7 @@ extension SnackbarExtensions on BuildContext {
         content: Text(message),
         duration: duration,
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(16),
+        margin: const EdgeInsets.all(20.0),
       ),
     );
   }
@@ -30,7 +30,9 @@ extension BottomSheetExtensions on BuildContext {
       backgroundColor: backgroundColor,
       elevation: elevation,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20.0),
+        ),
       ),
       builder: (BuildContext context) {
         return builder(context);
