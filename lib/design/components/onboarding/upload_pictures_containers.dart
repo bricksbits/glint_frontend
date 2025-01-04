@@ -18,7 +18,7 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImages() async {
-    final List<XFile> pickedFiles = await _picker.pickMultiImage();
+    final List<XFile> pickedFiles = await _picker.pickMultiImage(limit: 9);
 
     if (pickedFiles.isNotEmpty) {
       setState(() {
@@ -41,7 +41,7 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
       children: [
         // First Row
         Transform.translate(
-          offset: const Offset(0, 8),
+          offset: const Offset(0, 4),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: List.generate(3, (index) {
@@ -81,7 +81,7 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
         ),
         // Third Row
         Transform.translate(
-          offset: const Offset(0, -8),
+          offset: const Offset(0, -4),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: List.generate(3, (index) {
