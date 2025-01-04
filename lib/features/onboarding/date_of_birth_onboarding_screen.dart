@@ -59,7 +59,11 @@ class _DateOfBirthOnboardingScreenState
       pickerTextStyle: AppTheme.simpleText.copyWith(
         fontSize: 16.0,
       ),
-      maxDateTime: DateTime(DateTime.now().year),
+      maxDateTime: DateTime(
+        DateTime.now().year - 18,
+        DateTime.now().month,
+        DateTime.now().day,
+      ),
       onSubmit: (date) {
         setState(() {
           _selectedDate = date;
@@ -69,7 +73,7 @@ class _DateOfBirthOnboardingScreenState
       displayCloseIcon: false,
       bottomPickerTheme: BottomPickerTheme.plumPlate,
       pickerTitle: const SizedBox.shrink(),
-      buttonWidth: MediaQuery.of(context).size.width * 0.6,
+      buttonWidth: 200.0,
       gradientColors: const [
         AppColours.primaryBlue,
         AppColours.purpleShade,

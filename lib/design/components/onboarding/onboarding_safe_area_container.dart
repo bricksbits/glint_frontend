@@ -13,6 +13,7 @@ class OnboardingSafeAreaContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -33,7 +34,7 @@ class OnboardingSafeAreaContainer extends StatelessWidget {
               image: AssetImage(
                 assetPath,
               ),
-              fit: BoxFit.fill,
+              fit: screenSize.width > 560 ? BoxFit.fitWidth : BoxFit.fill,
             ),
           ),
           child: child,
