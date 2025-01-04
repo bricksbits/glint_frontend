@@ -17,6 +17,7 @@ dependencies:
   cached_network_image: ^3.4.1
   flutter_xlider: ^3.5.0
   bottom_picker: ^2.9.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

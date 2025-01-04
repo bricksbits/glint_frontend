@@ -7,4 +7,5 @@ export 'onboarding/date_of_birth_onboarding_screen.dart';
 export 'onboarding/enter_name_onboarding_screen.dart';
 export 'onboarding/identify_yourself_onboarding_screen.dart';
 export 'onboarding/setup_glint_onboarding_screen.dart';
+export 'onboarding/upload_photos_onboarding_screen.dart';
 export 'onboarding/who_catches_your_eye_onboarding_screen.dart';
