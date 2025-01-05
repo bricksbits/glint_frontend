@@ -6,6 +6,7 @@ class AppColours {
   static const pink = Color(0xFFFC6F6E);
   static const backgroundShade = Color(0xFFF2F3FF);
   static const white = Color(0xFFFFFFFF);
+  static const black = Color(0xFF000000);
   static const purpleShade = Color(0xFF9475D2);
   static const gray = Color(0xFFAAAAAA);
   static const chipBackgroundShade = Color(0xFFE9EAF7);

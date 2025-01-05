@@ -30,25 +30,25 @@ class LikesScreen extends StatelessWidget {
               topProfiles: [
                 const GlintTopProfileContainer(
                   imageUrl:
-                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                      'https://cdn.pixabay.com/photo/2023/05/12/10/47/ai-generated-7988262_640.jpg',
                   name: 'Ashima',
                   viewCount: 200,
                 ),
                 const GlintTopProfileContainer(
                   imageUrl:
-                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                      'https://cdn.pixabay.com/photo/2023/05/12/10/47/ai-generated-7988262_640.jpg',
                   name: 'Swati',
                   viewCount: 340,
                 ),
                 const GlintTopProfileContainer(
                   imageUrl:
-                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                      'https://cdn.pixabay.com/photo/2023/05/12/10/47/ai-generated-7988262_640.jpg',
                   name: 'Swati',
                   viewCount: 110,
                 ),
                 const GlintTopProfileContainer(
                   imageUrl:
-                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                      'https://cdn.pixabay.com/photo/2023/05/12/10/47/ai-generated-7988262_640.jpg',
                   name: 'Swati',
                   viewCount: 420,
                 ),
@@ -197,7 +197,7 @@ class LikesScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return const GlintLikedYouProfileContainer(
                 imageUrl:
-                    'https://avatars.githubusercontent.com/u/70279771?v=4',
+                    'https://cdn-prod.medicalnewstoday.com/content/images/articles/326/326898/a-female-wondering-about-her-anatomy.jpg',
                 name: 'Swati',
                 age: 24,
               );

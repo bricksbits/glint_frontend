@@ -17,6 +17,7 @@ dependencies:
   cached_network_image: ^3.4.1
   flutter_xlider: ^3.5.0
   flutter_card_swiper: ^7.0.2
+  bottom_picker: ^2.9.0
 
 dev_dependencies:
   flutter_test:
@@ -29,6 +30,7 @@ flutter:
   assets:
     - lib/assets/images/
     - lib/assets/icons/
+    - lib/assets/images/onboarding/
 
   fonts:
     - family: AlbertSans

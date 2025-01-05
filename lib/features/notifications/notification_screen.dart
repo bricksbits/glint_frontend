@@ -125,11 +125,17 @@ class NotificationScreen extends StatelessWidget {
   Widget _buildNotificationScreenBanner() {
     return Stack(
       children: [
-        SvgPicture.asset(
-          'lib/assets/images/notification_container_illustration.svg',
-          alignment: Alignment.center,
+        SizedBox(
           width: double.infinity,
-          height: 120.0,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20.0),
+            ),
+            child: SvgPicture.asset(
+              'lib/assets/images/notification_container_illustration.svg',
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(

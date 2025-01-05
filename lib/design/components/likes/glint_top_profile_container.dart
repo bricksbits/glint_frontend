@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
-import '../../common/app_theme.dart';
+import 'package:glint_frontend/design/exports.dart';
 
 class GlintTopProfileContainer extends StatelessWidget {
   const GlintTopProfileContainer({

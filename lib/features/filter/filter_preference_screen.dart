@@ -67,7 +67,7 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20.0,
-              ).copyWith(bottom: 24.0),
+              ),
               child: GlintElevatedButton(
                 isPrimary: true,
                 onPressed: () {},
@@ -89,10 +89,15 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
       children: [
         SizedBox(
           width: double.infinity,
-          child: SvgPicture.asset(
-            'lib/assets/images/filter_prefs_banner_illustration.svg',
-            alignment: Alignment.center,
-            fit: BoxFit.cover,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20.0),
+            ),
+            child: SvgPicture.asset(
+              'lib/assets/images/filter_prefs_banner_illustration.svg',
+              alignment: Alignment.center,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         Positioned.fill(
