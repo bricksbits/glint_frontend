@@ -6,13 +6,13 @@ class GlintCustomIconChip extends StatelessWidget {
   const GlintCustomIconChip({
     super.key,
     required this.label,
-    required this.assetPath,
+    this.assetPath,
     required this.isSelected,
     required this.onTap,
   });
 
   final String label;
-  final String assetPath;
+  final String? assetPath;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -44,10 +44,12 @@ class GlintCustomIconChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(
-              assetPath,
-            ),
-            const Spacer(),
+            if (assetPath != null) ...[
+              SvgPicture.asset(
+                assetPath!,
+              ),
+              const Spacer(),
+            ],
             Text(
               label,
               style: AppTheme.simpleText,

@@ -4,6 +4,7 @@ export 'filter/glint_interests_selection.dart';
 export 'glint_app_bar.dart';
 export 'glint_check_icon.dart';
 export 'glint_custom_app_bar.dart';
+export 'glint_custom_label_chip.dart';
 export 'glint_elevated_button.dart';
 export 'glint_empty_state.dart';
 export 'glint_form_field.dart';
