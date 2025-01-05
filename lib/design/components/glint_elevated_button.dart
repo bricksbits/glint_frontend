@@ -42,6 +42,7 @@ class GlintElevatedButton extends StatelessWidget {
 
   Color _getBackgroundColor() {
     if (backgroundColor != null) return backgroundColor!;
+    if (isCancel) return AppColours.white;
     if (onPressed == null) return AppColours.neutral50;
     if (isPrimary) return AppColours.primaryBlue;
     if (!isPrimary) return AppColours.pink;
@@ -50,6 +51,7 @@ class GlintElevatedButton extends StatelessWidget {
 
   Color _getForegroundColor() {
     if (foregroundColor != null) return foregroundColor!;
+    if (isCancel) return AppColours.error500;
     if (onPressed == null) return Colors.white;
     if (isPrimary) return AppColours.white;
     if (!isPrimary) return isCancel ? Colors.red[600]! : Colors.blue[800]!;

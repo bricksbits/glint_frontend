@@ -17,6 +17,8 @@ class _DateOfBirthOnboardingScreenState
     extends State<DateOfBirthOnboardingScreen> {
   late DateTime _selectedDate;
 
+  String userName = 'Abhishek';
+
   @override
   void initState() {
     super.initState();
@@ -27,6 +29,81 @@ class _DateOfBirthOnboardingScreenState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       showBottomDatePicker();
     });
+  }
+
+  String calculateAge() {
+    final now = DateTime.now();
+    return (now.difference(_selectedDate).inDays ~/ 365).toString();
+  }
+
+  void showAgeConfirmationSheet(BuildContext context) {
+    context.showBottomSheet(
+      isDismissible: false,
+      enableDrag: false,
+      (context) {
+        return SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0).copyWith(
+              bottom: 60.0,
+              top: 24.0,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: calculateAge(),
+                    style: AppTheme.headingOne.copyWith(
+                      fontSize: 48.0,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: ' years',
+                        style: AppTheme.headingOne.copyWith(
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(32.0),
+                Text(
+                  'Hey $userName, your age is ${calculateAge()} years\nThis will be shown in your profile.',
+                  style: AppTheme.simpleText,
+                ),
+                const Gap(32.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: GlintElevatedButton(
+                    label: 'Confirm Age',
+                    foregroundColor: Colors.white,
+                    backgroundColor: AppColours.primaryBlue,
+                    onPressed: () {
+                      // TODO: Handle navigation or next step
+                    },
+                  ),
+                ),
+                const Gap(12.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: GlintElevatedButton(
+                    label: 'Change DOB',
+                    isCancel: true,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      showBottomDatePicker();
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   String get formattedDay => _selectedDate.day.toString().padLeft(2, '0');
@@ -141,7 +218,7 @@ class _DateOfBirthOnboardingScreenState
                 foregroundColor: Colors.white,
                 backgroundColor: AppColours.primaryBlue,
                 onPressed: () {
-                  // TODO: Handle navigation or next step
+                  showAgeConfirmationSheet(context);
                 },
               ),
             ),
