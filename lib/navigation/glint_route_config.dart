@@ -72,7 +72,7 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintMainRoutes.people.name}',
       name: GlintMainRoutes.people.name,
-      builder: (context, state) => const PeopleScreen(),
+      builder: (context, state) => PeopleScreen(),
     ),
     GoRoute(
       path: '/${GlintMainRoutes.event.name}',

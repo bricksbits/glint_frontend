@@ -16,13 +16,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 2;
-
-  static const List<Widget> _bottomNavScreens = [
-    ProfileScreen(),
-    EventMainScreen(),
+  static final List<Widget> _bottomNavScreens = [
+    const ProfileScreen(),
+    const EventMainScreen(),
     PeopleScreen(),
-    ServiceScreen(),
-    ChatScreen(),
+    const ServiceScreen(),
+    const ChatScreen(),
   ];
 
   static const List<String> _navIcons = [
