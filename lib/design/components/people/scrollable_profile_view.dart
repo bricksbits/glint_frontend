@@ -14,7 +14,7 @@ import 'package:glint_frontend/design/components/people/share_profile_icon_butto
 //TODO(Nike): Use SliverDelegates to build the UI for performance improvements
 //TODO(Nike): Use SliverRemaining to build the Footer performant
 //TODO(Nike): Use proper Exports
-class ScrollableProfileView extends StatefulWidget {
+class ScrollableProfileView extends StatelessWidget {
   final Map<String, dynamic> profileData;
 
   ScrollableProfileView({
@@ -37,11 +37,6 @@ class ScrollableProfileView extends StatefulWidget {
           ]
         };
 
-  @override
-  State<ScrollableProfileView> createState() => _ScrollableProfileViewState();
-}
-
-class _ScrollableProfileViewState extends State<ScrollableProfileView> {
   final Queue<Widget>? additionalWidgetsQueue = Queue.from([
     const SliverToBoxAdapter(
       child: ProfileCardAboutBox(
@@ -86,17 +81,17 @@ class _ScrollableProfileViewState extends State<ScrollableProfileView> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    final List<String> images = widget.profileData["images"] ?? [];
-    final String name = widget.profileData["name"] ?? "Name not available";
-    final String bio = widget.profileData["bio"] ?? "";
+    final List<String> images = profileData["images"] ?? [];
+    final String name = profileData["name"] ?? "Name not available";
+    final String bio = profileData["bio"] ?? "";
     final String location =
-        widget.profileData["location"] ?? "Location not specified";
-    final List<String> interests = widget.profileData["interests"] ?? [];
+        profileData["location"] ?? "Location not specified";
+    final List<String> interests = profileData["interests"] ?? [];
 
     return CustomScrollView(
       scrollDirection: Axis.vertical,
       slivers: _dynamicProfileComponents(
-        widget.profileData,
+        profileData,
         additionalWidgetsQueue,
         screenHeight,
         screenWidth,

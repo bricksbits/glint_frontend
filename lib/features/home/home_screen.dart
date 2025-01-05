@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 2;
-  static List<Widget> bottomNavScreens = [
+  static final List<Widget> _bottomNavScreens = [
     const ProfileScreen(),
     const EventMainScreen(),
     PeopleScreen(),
