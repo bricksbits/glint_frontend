@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:glint_frontend/features/auth/authentication_screen.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 

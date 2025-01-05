@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/components/glint_custom_app_bar.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class UploadPhotosOnboardingScreen extends StatefulWidget {
   const UploadPhotosOnboardingScreen({super.key});
@@ -88,7 +91,9 @@ class _UploadPhotosOnboardingScreenState
                   foregroundColor: Colors.white,
                   backgroundColor: AppColours.primaryBlue,
                   onPressed: () {
-                    // TODO: Handle navigation or next step
+                    context.goNamed(
+                      GlintProfileRoutes.pronouns.name
+                    );
                   },
                 ),
               ),

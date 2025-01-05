@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/components/glint_custom_app_bar.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class EnterNameOnboardingScreen extends StatefulWidget {
   const EnterNameOnboardingScreen({super.key});
@@ -135,7 +138,9 @@ class _EnterNameOnboardingScreenState extends State<EnterNameOnboardingScreen> {
                   backgroundColor: AppColours.primaryBlue,
                   onPressed: _allowSubmit
                       ? () {
-                          //todo - Handle navigation or next step
+                          context.goNamed(
+                            GlintProfileRoutes.dob.name
+                          );
                         }
                       : null),
             ),

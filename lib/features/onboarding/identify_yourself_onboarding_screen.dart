@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/components/glint_custom_app_bar.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class IdentifyYourselfOnboardingScreen extends StatefulWidget {
   const IdentifyYourselfOnboardingScreen({super.key});
@@ -69,7 +72,8 @@ class _IdentifyYourselfOnboardingScreenState
                 backgroundColor: AppColours.primaryBlue,
                 onPressed: selectedIdentity != null
                     ? () {
-                        //todo - Handle navigation or next step
+                        context
+                            .goNamed(GlintProfileRoutes.interestedGender.name);
                       }
                     : null,
               ),

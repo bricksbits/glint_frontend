@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/components/glint_custom_app_bar.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class WhoCatchesYourEyeOnboardingScreen extends StatefulWidget {
   const WhoCatchesYourEyeOnboardingScreen({super.key});
@@ -68,7 +71,9 @@ class _OnboardingScreenState extends State<WhoCatchesYourEyeOnboardingScreen> {
                 backgroundColor: AppColours.primaryBlue,
                 onPressed: selectedGender != null
                     ? () {
-                        //todo - Handle navigation or next step
+                        context.goNamed(
+                          GlintProfileRoutes.media.name
+                        );
                       }
                     : null,
               ),

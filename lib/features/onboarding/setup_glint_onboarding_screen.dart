@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/components/glint_custom_app_bar.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class SetupGlintOnboardingScreen extends StatelessWidget {
   const SetupGlintOnboardingScreen({super.key});
@@ -53,7 +56,9 @@ class SetupGlintOnboardingScreen extends StatelessWidget {
                 foregroundColor: Colors.white,
                 backgroundColor: AppColours.primaryBlue,
                 onPressed: () {
-                  //todo - Handle navigation or next step
+                  context.goNamed(
+                      GlintMainRoutes.home.name
+                  );
                 },
               ),
             ),
