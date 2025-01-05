@@ -3,17 +3,20 @@ import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
 
 class GlintTextInputField extends StatelessWidget {
-  const GlintTextInputField(
-      {super.key,
-      required this.controller,
-      this.hintText,
-      this.isCenter = false,
-      this.onChanged});
+  const GlintTextInputField({
+    super.key,
+    required this.controller,
+    this.hintText,
+    this.isCenter = false,
+    this.onChanged,
+    this.suffix,
+  });
 
   final TextEditingController controller;
   final String? hintText;
   final bool? isCenter;
   final ValueChanged<String>? onChanged;
+  final Widget? suffix;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +50,7 @@ class GlintTextInputField extends StatelessWidget {
           color: AppColours.black,
         ),
         decoration: InputDecoration(
+          suffixIcon: suffix,
           counterText: '',
           // no counter
           border: InputBorder.none,

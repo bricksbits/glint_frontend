@@ -10,6 +10,7 @@ class AppColours {
   static const purpleShade = Color(0xFF9475D2);
   static const gray = Color(0xFFAAAAAA);
   static const darkGray = Color(0xFF5B5B5B);
+  static const lightGray = Color(0xFFF7F7F7);
   static const chipBackgroundShade = Color(0xFFE9EAF7);
 
   // with opacity shades
