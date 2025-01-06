@@ -21,73 +21,8 @@ class _OneLastStepOnboardingScreenState
     super.dispose();
   }
 
-  // occupation
-  void showOccupationBottomSheet(BuildContext context) {
-    context.showBottomSheet(
-      isDismissible: false,
-      (context) {
-        return const SizedBox(
-          width: double.infinity,
-          height: 240.0,
-        );
-      },
-    );
-  }
-
-  // education
-  void showEducationBottomSheet(BuildContext context) {
-    context.showBottomSheet(
-      isDismissible: false,
-      (context) {
-        return const SizedBox(
-          width: double.infinity,
-          height: 240.0,
-        );
-      },
-    );
-  }
-
-  // height
-  void showHeightBottomSheet(BuildContext context) {
-    context.showBottomSheet(
-      isDismissible: false,
-      (context) {
-        return const SizedBox(
-          width: double.infinity,
-          height: 240.0,
-        );
-      },
-    );
-  }
-
-  // workout
-  void showWorkoutBottomSheet(BuildContext context) {
-    context.showBottomSheet(
-      isDismissible: false,
-      (context) {
-        return const SizedBox(
-          width: double.infinity,
-          height: 240.0,
-        );
-      },
-    );
-  }
-
-  // drinking
-  void showDrinkingBottomSheet(BuildContext context) {
-    context.showBottomSheet(
-      isDismissible: false,
-      (context) {
-        return const SizedBox(
-          width: double.infinity,
-          height: 240.0,
-        );
-      },
-    );
-  }
-
-  // smoking
-  void showSmokingBottomSheet(BuildContext context) {
+  // generic bottom sheet function
+  void _showBottomSheet(BuildContext context) {
     context.showBottomSheet(
       isDismissible: false,
       (context) {
@@ -134,7 +69,7 @@ class _OneLastStepOnboardingScreenState
               ),
               const Gap(44.0),
 
-              //bio field label
+              // Bio field label
               const Text(
                 'Enter your Bio',
                 style: AppTheme.headingThree,
@@ -142,14 +77,14 @@ class _OneLastStepOnboardingScreenState
               const Gap(8.0),
               _buildBioField(),
 
-              //additional info
+              // Additional info
               const Gap(24.0),
               _buildAdditionalInfoContainer(),
 
-              //spacer
+              // Spacer
               const Spacer(),
 
-              // submit button
+              // Submit button
               SizedBox(
                 width: double.infinity,
                 child: GlintElevatedButton(
@@ -198,16 +133,7 @@ class _OneLastStepOnboardingScreenState
           color: AppColours.black,
         ),
         onChanged: (value) {
-          if (value.trim().isEmpty) {
-            setState(() {
-              _bioController.text = '';
-            });
-          }
-          if (value.trim().isNotEmpty) {
-            setState(() {
-              _bioController.text = value;
-            });
-          }
+          setState(() {});
         },
         decoration: InputDecoration(
           counter: Padding(
@@ -222,7 +148,7 @@ class _OneLastStepOnboardingScreenState
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Text(
-                '${_bioController.text.length}/200',
+                '${_bioController.text.length} / 200',
                 style: AppTheme.simpleText.copyWith(
                   fontWeight: FontWeight.w700,
                   color: AppColours.white,
@@ -231,7 +157,6 @@ class _OneLastStepOnboardingScreenState
               ),
             ),
           ),
-          // no counter
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16.0,
@@ -249,181 +174,87 @@ class _OneLastStepOnboardingScreenState
         color: AppColours.backgroundShade,
         borderRadius: BorderRadius.circular(20.0),
       ),
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          // important info
-          ListTile(
-            dense: true,
-            horizontalTitleGap: 12.0,
-            onTap: () => showOccupationBottomSheet(context),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 24.0,
-              vertical: 0.0,
-            ),
-            leading: const Icon(
-              Icons.work_outline,
-              size: 20.0,
-            ),
-            title: Text(
-              'Occupation',
-              style: AppTheme.lightText.copyWith(
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-            trailing: Text(
-              '+ Add'.toUpperCase(),
-              style: AppTheme.simpleText.copyWith(
-                fontWeight: FontWeight.w400,
-                color: AppColours.primaryBlue,
-              ),
-            ),
+          _buildAdditionalInfoItem(
+            context,
+            icon: Icons.work_outline,
+            label: 'Occupation',
+            onTap: () => _showBottomSheet(context),
           ),
-          ListTile(
-            dense: true,
-            horizontalTitleGap: 12.0,
-            onTap: () => showEducationBottomSheet(context),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 24.0,
-              vertical: 0.0,
-            ),
-            leading: const Icon(
-              Icons.school_outlined,
-              size: 22.0,
-            ),
-            title: Text(
-              'Education',
-              style: AppTheme.lightText.copyWith(
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-            trailing: Text(
-              '+ Add'.toUpperCase(),
-              style: AppTheme.simpleText.copyWith(
-                fontWeight: FontWeight.w400,
-                color: AppColours.primaryBlue,
-              ),
-            ),
+          _buildAdditionalInfoItem(
+            context,
+            icon: Icons.school_outlined,
+            label: 'Education',
+            onTap: () => _showBottomSheet(context),
           ),
-
           const Gap(8.0),
-          // divider
           const DottedLine(
             lineThickness: 0.5,
             dashColor: AppColours.primaryBlue,
           ),
           const Gap(8.0),
-
-          // other info
-          ListTile(
-            dense: true,
-            horizontalTitleGap: 12.0,
-            onTap: () => showHeightBottomSheet(context),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 24.0,
-              vertical: 0.0,
-            ),
-            leading: const Icon(
-              Icons.straighten,
-              size: 20.0,
-            ),
-            title: Text(
-              'Height',
-              style: AppTheme.lightText.copyWith(
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-            trailing: Text(
-              '+ Add'.toUpperCase(),
-              style: AppTheme.simpleText.copyWith(
-                fontWeight: FontWeight.w400,
-                color: AppColours.primaryBlue,
-              ),
-            ),
+          _buildAdditionalInfoItem(
+            context,
+            icon: Icons.straighten,
+            label: 'Height',
+            onTap: () => _showBottomSheet(context),
           ),
-          ListTile(
-            dense: true,
-            horizontalTitleGap: 12.0,
-            onTap: () => showWorkoutBottomSheet(context),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 24.0,
-              vertical: 0.0,
-            ),
-            leading: const Icon(
-              Icons.fitness_center,
-              size: 22.0,
-            ),
-            title: Text(
-              'Workout',
-              style: AppTheme.lightText.copyWith(
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-            trailing: Text(
-              '+ Add'.toUpperCase(),
-              style: AppTheme.simpleText.copyWith(
-                fontWeight: FontWeight.w400,
-                color: AppColours.primaryBlue,
-              ),
-            ),
+          _buildAdditionalInfoItem(
+            context,
+            icon: Icons.fitness_center,
+            label: 'Workout',
+            onTap: () => _showBottomSheet(context),
           ),
-          ListTile(
-            dense: true,
-            horizontalTitleGap: 12.0,
-            onTap: () => showDrinkingBottomSheet(context),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 24.0,
-              vertical: 0.0,
-            ),
-            leading: const Icon(
-              Icons.local_bar,
-              size: 22.0,
-            ),
-            title: Text(
-              'Drinking',
-              style: AppTheme.lightText.copyWith(
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-            trailing: Text(
-              '+ Add'.toUpperCase(),
-              style: AppTheme.simpleText.copyWith(
-                fontWeight: FontWeight.w400,
-                color: AppColours.primaryBlue,
-              ),
-            ),
+          _buildAdditionalInfoItem(
+            context,
+            icon: Icons.local_bar,
+            label: 'Drinking',
+            onTap: () => _showBottomSheet(context),
           ),
-          ListTile(
-            dense: true,
-            horizontalTitleGap: 12.0,
-            onTap: () => showSmokingBottomSheet(context),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 24.0,
-              vertical: 0.0,
-            ),
-            leading: const Icon(
-              Icons.smoking_rooms,
-              size: 22.0,
-            ),
-            title: Text(
-              'Smoking',
-              style: AppTheme.lightText.copyWith(
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-            trailing: Text(
-              '+ Add'.toUpperCase(),
-              style: AppTheme.simpleText.copyWith(
-                fontWeight: FontWeight.w400,
-                color: AppColours.primaryBlue,
-              ),
-            ),
+          _buildAdditionalInfoItem(
+            context,
+            icon: Icons.smoking_rooms,
+            label: 'Smoking',
+            onTap: () => _showBottomSheet(context),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildAdditionalInfoItem(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      dense: true,
+      horizontalTitleGap: 12.0,
+      onTap: onTap,
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 24.0,
+        vertical: 0.0,
+      ),
+      leading: Icon(
+        icon,
+        size: 22.0,
+      ),
+      title: Text(
+        label,
+        style: AppTheme.lightText.copyWith(
+          fontWeight: FontWeight.w300,
+        ),
+      ),
+      trailing: Text(
+        '+ Add'.toUpperCase(),
+        style: AppTheme.simpleText.copyWith(
+          fontWeight: FontWeight.w400,
+          color: AppColours.primaryBlue,
+        ),
       ),
     );
   }
