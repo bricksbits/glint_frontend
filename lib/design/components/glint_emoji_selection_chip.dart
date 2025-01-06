@@ -18,6 +18,10 @@ class GlintEmojiSelectionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final defaultBorder = BorderSide(
+      color: isSelected ? AppColours.primaryBlue : AppColours.lightGray,
+      width: 1.0,
+    );
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(
@@ -33,8 +37,11 @@ class GlintEmojiSelectionChip extends StatelessWidget {
           borderRadius: BorderRadius.circular(
             50.0,
           ),
-          border: Border.all(
-            color: AppColours.chipBackgroundShade,
+          border: Border(
+            top: defaultBorder,
+            left: defaultBorder,
+            right: defaultBorder,
+            bottom: defaultBorder.copyWith(width: 2.0),
           ),
         ),
         child: Row(
