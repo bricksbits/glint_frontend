@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:glint_frontend/design/components/glint_custom_app_bar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -129,31 +129,36 @@ class _GetSetGlintOnboardingScreenState
               ),
               const Gap(60.0),
 
-              _buildLookingForCard(),
+              _buildLookingForCard(context),
 
               const Gap(16.0),
 
               // pronouns card
               _buildPronounsWidget(),
+              const Spacer(),
 
-              const Spacer(
-                flex: 12,
-              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    'lib/assets/images/onboarding/high_five_couple.svg',
+                    fit: BoxFit.cover,
+                  ),
 
-              // submit button
-              SizedBox(
-                width: double.infinity,
-                child: GlintElevatedButton(
-                  label: 'Next',
-                  foregroundColor: Colors.white,
-                  backgroundColor: AppColours.primaryBlue,
-                  onPressed: () {
-                    context.goNamed(
-                      GlintProfileRoutes.interests.name
-                    );
-                  },
-                ),
-              ),
+                  // submit button
+                  SizedBox(
+                    width: double.infinity,
+                    child: GlintElevatedButton(
+                      label: 'Next',
+                      foregroundColor: Colors.white,
+                      backgroundColor: AppColours.primaryBlue,
+                      onPressed: () {
+                        context.goNamed(GlintProfileRoutes.interests.name);
+                      },
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),
@@ -162,19 +167,22 @@ class _GetSetGlintOnboardingScreenState
   }
 
   // im looking for card
-  Widget _buildLookingForCard() {
+  Widget _buildLookingForCard(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 20.0),
       decoration: BoxDecoration(
         color: AppColours.backgroundShade,
         borderRadius: BorderRadius.circular(20.0),
-        image: const DecorationImage(
-          image: AssetImage(
-            'lib/assets/images/onboarding/get_set_glint_illustration.png',
-          ),
-          fit: BoxFit.cover,
-        ),
+        image: screenSize.width > 600
+            ? null
+            : const DecorationImage(
+                image: AssetImage(
+                  'lib/assets/images/onboarding/get_set_glint_illustration.png',
+                ),
+                fit: BoxFit.cover,
+              ),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
