@@ -17,6 +17,13 @@ class AppTheme {
     color: Colors.black87,
   );
 
+  static const TextStyle smallBodyText = TextStyle(
+    fontFamily: 'AlbertSans',
+    fontSize: 12.0,
+    fontWeight: FontWeight.normal,
+    color: Colors.black,
+  );
+
   static const TextStyle headingOne = TextStyle(
     fontFamily: 'Cambon',
     fontSize: 28,

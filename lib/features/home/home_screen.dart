@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:glint_frontend/design/common/app_colours.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
 import 'package:glint_frontend/features/event/event_main_screen.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
@@ -15,60 +16,76 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 2;
-  static const bottomNavScreens = [
-    ProfileScreen(),
-    EventMainScreen(),
+  static final List<Widget> _bottomNavScreens = [
+    const ProfileScreen(),
+    const EventMainScreen(),
     PeopleScreen(),
-    ServiceScreen(),
-    ChatScreen(),
+    const ServiceScreen(),
+    const ChatScreen(),
   ];
+
+  static const List<String> _navIcons = [
+    'lib/assets/icons/user_icon.svg',
+    'lib/assets/icons/event_icon.svg',
+    'lib/assets/icons/logo_icon.svg',
+    'lib/assets/icons/handshake_icon.svg',
+    'lib/assets/icons/chat_icon.svg',
+  ];
+
+  void _onNavItemTap(int index) {
+    setState(() => _selectedIndex = index);
+  }
+
+  Widget _buildNavItem(int index) {
+    return GestureDetector(
+      onTap: () => _onNavItemTap(index),
+      child: Container(
+        padding: const EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+          color: _selectedIndex == index
+              ? AppColours.backgroundShade
+              : Colors.transparent,
+          shape: BoxShape.circle,
+        ),
+        child: SvgPicture.asset(
+          _navIcons[index],
+          colorFilter: ColorFilter.mode(
+            _selectedIndex == index
+                ? AppColours.primaryBlue
+                : index == 2 // glint logo will always be primary blue
+                    ? AppColours.primaryBlue
+                    : AppColours.black,
+            BlendMode.srcIn,
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Glint Logo and the Respective Actions here'),
-      ),
-      body: bottomNavScreens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        backgroundColor: AppColours.backgroundShade,
-        elevation: 16,
-        selectedIconTheme: const IconThemeData(color: AppColours.pink),
-        selectedItemColor: AppColours.success600,
-        unselectedIconTheme: const IconThemeData(
-          color: Colors.deepOrangeAccent,
+      backgroundColor: AppColours.white,
+      appBar: const GlintAppBar(),
+      body: _bottomNavScreens[_selectedIndex],
+      bottomNavigationBar: Container(
+        width: double.infinity,
+        margin:
+            const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: 24.0),
+        decoration: BoxDecoration(
+          color: AppColours.white,
+          borderRadius: BorderRadius.circular(50.0),
+          border: Border.all(
+            color: AppColours.gray.withAlpha(92),
+            width: 1.25,
+          ),
         ),
-        unselectedItemColor: Colors.deepOrangeAccent,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        currentIndex: _selectedIndex,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event),
-            label: 'Events',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'People',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.handshake),
-            label: 'Rent',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Chat',
-          ),
-        ],
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: List.generate(_navIcons.length, _buildNavItem),
+        ),
       ),
     );
   }

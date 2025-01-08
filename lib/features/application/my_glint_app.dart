@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glint_frontend/design/common/app_theme.dart';
+import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_route_config.dart';
 
 class MyGlintApp extends StatelessWidget {
@@ -12,6 +12,7 @@ class MyGlintApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
       routerConfig: glintMainRoutes,
+      // routerConfig: glintMainRoutes,
     );
   }
 }

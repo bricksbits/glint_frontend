@@ -5,6 +5,17 @@ class AppColours {
   static const primaryBlue = Color(0xFF5158BB);
   static const pink = Color(0xFFFC6F6E);
   static const backgroundShade = Color(0xFFF2F3FF);
+  static const white = Color(0xFFFFFFFF);
+  static const black = Color(0xFF000000);
+  static const purpleShade = Color(0xFF9475D2);
+  static const gray = Color(0xFFAAAAAA);
+  static const darkGray = Color(0xFF5B5B5B);
+  static const lightGray = Color(0xFFF7F7F7);
+  static const chipBackgroundShade = Color(0xFFE9EAF7);
+
+  // with opacity shades
+  static final primaryBlue60 = primaryBlue.withAlpha(153);
+  static final gray60 = const Color(0xFFAAAAAA).withAlpha(153);
 
   // Neutral Colors
   static const Color neutral50 = Color(0xFFF9FAFB);
@@ -69,6 +80,13 @@ class AppColours {
     colors: [
       Color(0xFF000000),
       Color(0xFF336699),
+    ],
+  );
+
+  static const Gradient textLinearGradient = LinearGradient(
+    colors: <Color>[
+      primaryBlue,
+      purpleShade,
     ],
   );
 }

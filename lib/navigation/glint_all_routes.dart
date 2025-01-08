@@ -27,6 +27,7 @@ enum GlintEventRoutes {
   explore,
 }
 
+//Todo(Nike): Divide this into onBoarding and Profile Screens
 enum GlintProfileRoutes {
   profilePreview,
   ticketHistory,
