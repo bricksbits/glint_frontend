@@ -1,15 +1,11 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:glint_frontend/design/common/app_colours.dart';
-import 'package:glint_frontend/design/components/people/last_profile_status_chips.dart';
-import 'package:glint_frontend/design/components/people/profile_action_button.dart';
 import 'package:glint_frontend/design/components/people/profile_card.dart';
+import 'package:glint_frontend/design/components/people/top_profile_card.dart';
 import 'package:glint_frontend/design/components/people/profile_card_about_box.dart';
 import 'package:glint_frontend/design/components/people/profile_card_bio_box.dart';
-import 'package:glint_frontend/design/components/people/profile_designation_gradient_label.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_footer.dart';
-import 'package:glint_frontend/design/components/people/share_profile_icon_button.dart';
 
 //TODO(Nike): Use SliverDelegates to build the UI for performance improvements
 //TODO(Nike): Use SliverRemaining to build the Footer performant
@@ -84,8 +80,7 @@ class ScrollableProfileView extends StatelessWidget {
     final List<String> images = profileData["images"] ?? [];
     final String name = profileData["name"] ?? "Name not available";
     final String bio = profileData["bio"] ?? "";
-    final String location =
-        profileData["location"] ?? "Location not specified";
+    final String location = profileData["location"] ?? "Location not specified";
     final List<String> interests = profileData["interests"] ?? [];
 
     return CustomScrollView(
@@ -113,35 +108,22 @@ List<Widget> _dynamicProfileComponents(
   for (int i = 0; i < images.length; i++) {
     if (i == 0 && images.isNotEmpty) {
       // Add the Sliver App Bar for First Image
-      profileComponents.add(SliverAppBar(
-        expandedHeight: screenHeight,
-        flexibleSpace: FlexibleSpaceBar(
-          background: ProfileCard(
-            imageUrl: '',
-            recentlyActive:
-                const LastProfileStatusChips(text: 'Recently Active'),
-            shareButton: ShareProfileIconButton(onPressed: () {}),
-            gradientLabel:
-                const ProfileDesignationGradientLabel(text: 'Doctor'),
-            actionButtons: [
-              ProfileActionButton(
-                icon: Icons.mail,
-                color: AppColours.white,
-                onPressed: () {},
-              ),
-              ProfileActionButton(
-                icon: Icons.mail,
-                color: AppColours.white,
-                onPressed: () {},
-              ),
-            ],
-            errorImagePlaceHolderAsset:
-                'lib/assets/images/place_holder_profile.png',
-            isMainCard: true,
+      profileComponents.add(
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: screenHeight,
+            width: screenWidth,
+            child: TopProfileCard(
+              imageUrl: '',
+              recentActive: "New",
+              shareProfile: () {},
+              designation: "Fashion Designer",
+              sendMessage: () {},
+              sendSuperLike: () {},
+            ),
           ),
         ),
-        pinned: false,
-      ));
+      );
 
       if (additionalWidgets != null && additionalWidgets.isNotEmpty) {
         profileComponents.add(additionalWidgets.removeFirst());
@@ -154,29 +136,12 @@ List<Widget> _dynamicProfileComponents(
           width: screenWidth,
           child: ProfileCard(
             imageUrl: '',
-            recentlyActive:
-                const LastProfileStatusChips(text: 'Recently Active'),
-            shareButton: ShareProfileIconButton(onPressed: () {}),
-            gradientLabel:
-                const ProfileDesignationGradientLabel(text: 'Doctor'),
-            actionButtons: [
-              ProfileActionButton(
-                icon: Icons.mail,
-                color: AppColours.white,
-                onPressed: () {},
-              ),
-              ProfileActionButton(
-                icon: Icons.mail,
-                color: AppColours.white,
-                onPressed: () {},
-              ),
-            ],
-            errorImagePlaceHolderAsset:
-                'lib/assets/images/place_holder_profile.png',
-            isMainCard: false,
+            sendMessage: () {},
+            sendSuperLike: () {},
           ),
         ),
       ));
+
       if (additionalWidgets != null && additionalWidgets.isNotEmpty) {
         profileComponents.add(additionalWidgets.removeFirst());
       }

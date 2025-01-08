@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfileActionButton extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final Color color;
   final VoidCallback onPressed;
 
@@ -20,7 +20,10 @@ class ProfileActionButton extends StatelessWidget {
         shape: const CircleBorder(),
         padding: const EdgeInsets.all(16),
       ),
-      child: Icon(icon, color: Colors.white),
+      child: ImageIcon(
+        AssetImage(icon),
+        color: Colors.white,
+      ),
     );
   }
 }

@@ -29,7 +29,7 @@ import '../features/chat/chat_screen.dart';
 import '../features/home/home_screen.dart';
 
 final glintMainRoutes = GoRouter(
-  initialLocation: '/${GlintMainRoutes.auth.name}',
+  initialLocation: '/${GlintMainRoutes.home.name}',
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
