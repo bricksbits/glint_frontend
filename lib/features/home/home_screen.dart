@@ -66,7 +66,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColours.white,
-      appBar: const GlintAppBar(),
+      appBar: GlintAppBar(
+        isProfileScreen: _selectedIndex == 0
+            ? true // show custom app bar for profile screen.
+            : false,
+      ),
       body: _bottomNavScreens[_selectedIndex],
       bottomNavigationBar: Container(
         width: double.infinity,

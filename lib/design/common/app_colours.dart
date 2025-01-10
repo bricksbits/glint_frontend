@@ -83,6 +83,15 @@ class AppColours {
     ],
   );
 
+  static const Gradient circularProgressGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: <Color>[
+      Color(0xFF5158BB),
+      Color(0xFF4AC8B1),
+    ],
+  );
+
   static const Gradient textLinearGradient = LinearGradient(
     colors: <Color>[
       primaryBlue,
