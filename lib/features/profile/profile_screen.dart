@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/design/exports.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
