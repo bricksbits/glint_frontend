@@ -33,44 +33,32 @@ class ScrollableProfileView extends StatelessWidget {
           ]
         };
 
-  final Queue<Widget>? additionalWidgetsQueue = Queue.from([
-    const SliverToBoxAdapter(
-      child: ProfileCardAboutBox(
-        title: 'About',
-        tags: [
-          {'icon': Icons.school, 'text': 'Graduate'},
-          {'icon': Icons.person, 'text': 'She / Her'},
-          {'icon': Icons.height, 'text': "5' 7"},
-          {'icon': Icons.fitness_center, 'text': 'Gym freak'},
-          {'icon': Icons.local_bar, 'text': 'Never'},
-          {'icon': Icons.smoking_rooms, 'text': 'Never'},
-        ],
+  final Queue<Widget>? additionalWidgetsQueue = Queue.from(
+    [
+      const SliverToBoxAdapter(
+        child: ProfileCardAboutBox(
+          title: 'About',
+          tags: [
+            {'icon': Icons.school, 'text': 'Graduate'},
+            {'icon': Icons.person, 'text': 'She / Her'},
+            {'icon': Icons.height, 'text': "5' 7"},
+            {'icon': Icons.fitness_center, 'text': 'Gym freak'},
+            {'icon': Icons.local_bar, 'text': 'Never'},
+            {'icon': Icons.smoking_rooms, 'text': 'Never'},
+          ],
+        ),
       ),
-    ),
-    const SliverToBoxAdapter(
-      child: ProfileCardBioBox(content: 'Hey there, just a chill person here'),
-    ),
-    const SliverToBoxAdapter(
-      child: ProfileCardAboutBox(
-        title: 'About',
-        tags: [
-          {'icon': Icons.school, 'text': 'Graduate'},
-          {'icon': Icons.person, 'text': 'She / Her'},
-          {'icon': Icons.height, 'text': "5' 7"},
-          {'icon': Icons.fitness_center, 'text': 'Gym freak'},
-          {'icon': Icons.local_bar, 'text': 'Never'},
-          {'icon': Icons.smoking_rooms, 'text': 'Never'},
-        ],
+      const SliverToBoxAdapter(
+        child:
+            ProfileCardBioBox(content: 'Hey there, just a chill person here'),
       ),
-    ),
-    const SliverToBoxAdapter(
-      child: ProfileCardBioBox(content: 'Hey there, just a chill person here'),
-    ),
-    const SliverFillRemaining(
-      fillOverscroll: true,
-      child: ScrollableProfileFooter(),
-    ),
-  ]);
+      const SliverToBoxAdapter(
+        child:
+            ProfileCardBioBox(content: 'Hey there, just a chill person here'),
+      ),
+      const SliverToBoxAdapter(child: ScrollableProfileFooter()),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -110,17 +98,15 @@ List<Widget> _dynamicProfileComponents(
       // Add the Sliver App Bar for First Image
       profileComponents.add(
         SliverToBoxAdapter(
-          child: SizedBox(
-            height: screenHeight,
-            width: screenWidth,
-            child: TopProfileCard(
-              imageUrl: '',
-              recentActive: "New",
-              shareProfile: () {},
-              designation: "Fashion Designer",
-              sendMessage: () {},
-              sendSuperLike: () {},
-            ),
+          child: TopProfileCard(
+            screenWidth: screenWidth,
+            screenHeight: screenHeight,
+            imageUrl: '',
+            recentActive: "New",
+            shareProfile: () {},
+            designation: "Fashion Designer",
+            sendMessage: () {},
+            sendSuperLike: () {},
           ),
         ),
       );
@@ -135,6 +121,8 @@ List<Widget> _dynamicProfileComponents(
           height: screenHeight,
           width: screenWidth,
           child: ProfileCard(
+            screenHeight: screenHeight,
+            screenWidth: screenWidth,
             imageUrl: '',
             sendMessage: () {},
             sendSuperLike: () {},
