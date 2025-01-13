@@ -1,8 +1,5 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
-import 'package:glint_frontend/design/exports.dart';
+import 'exports.dart';
 
 class ProfileSubscriptionColumn extends StatelessWidget {
   const ProfileSubscriptionColumn({super.key});

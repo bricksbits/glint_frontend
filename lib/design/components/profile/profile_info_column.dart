@@ -18,7 +18,7 @@ class ProfileInfoColumn extends StatelessWidget {
 
     return Column(
       children: [
-        const Gap(8.0),
+        const Gap(20.0),
 
         // Profile picture
         Stack(
