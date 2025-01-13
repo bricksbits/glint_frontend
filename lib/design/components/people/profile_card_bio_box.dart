@@ -32,6 +32,9 @@ class ProfileCardBioBox extends StatelessWidget {
               SvgPicture.asset(
                 'lib/assets/icons/quote_icon.svg',
               ),
+              const SizedBox(
+                height: 15,
+              ),
               Text(
                 content,
                 style: const TextStyle(
