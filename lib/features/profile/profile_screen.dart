@@ -19,7 +19,9 @@ class ProfileScreen extends StatelessWidget {
             Gap(12.0),
 
             // subscription cards
-            ProfileSubscriptionColumn(),
+            Expanded(
+              child: ProfileSubscriptionColumn(),
+            ),
           ],
         ),
       ),
