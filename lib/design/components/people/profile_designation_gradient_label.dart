@@ -13,8 +13,9 @@ class ProfileDesignationGradientLabel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Colors.purple, Colors.pink],
+        gradient: const RadialGradient(
+          radius: 2.5,
+          colors: [Colors.white, Colors.black12],
         ),
         borderRadius: BorderRadius.circular(8),
       ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:glint_frontend/design/common/app_colours.dart';
+import 'package:glint_frontend/design/components/people/profile_section_header.dart';
 
 class ProfileCardAboutBox extends StatelessWidget {
   final String title;
@@ -12,14 +14,7 @@ class ProfileCardAboutBox extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.italic,
-          ),
-        ),
+        ProfileSectionHeader(title: title),
         const SizedBox(height: 10),
         Wrap(
           spacing: 10,
@@ -50,8 +45,8 @@ class ProfileCardAboutBoxTag extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.blue.shade50,
-        borderRadius: BorderRadius.circular(20),
+        color: AppColours.chipBackgroundShade,
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -59,14 +54,16 @@ class ProfileCardAboutBoxTag extends StatelessWidget {
           Icon(
             icon,
             size: 16,
-            color: Colors.blue,
+            color: AppColours.purpleShade,
           ),
           const SizedBox(width: 8),
           Text(
             text,
             style: const TextStyle(
               fontSize: 14,
+              fontFamily: 'AlbertSans',
               color: Colors.black,
+              fontWeight: FontWeight.w400
             ),
           ),
         ],

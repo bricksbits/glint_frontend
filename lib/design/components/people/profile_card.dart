@@ -11,12 +11,16 @@ class ProfileCard extends StatelessWidget {
   final String imageUrl;
   final VoidCallback sendMessage;
   final VoidCallback sendSuperLike;
+  final double screenHeight;
+  final double screenWidth;
 
   const ProfileCard({
     super.key,
     required this.imageUrl,
     required this.sendMessage,
     required this.sendSuperLike,
+    required this.screenHeight,
+    required this.screenWidth,
   });
 
   @override
@@ -26,36 +30,40 @@ class ProfileCard extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(16),
           child: Image.network(
+            height: screenHeight,
+            width: screenWidth,
             imageUrl,
             fit: BoxFit.cover,
             errorBuilder: (context, error, stack) {
               return Image.asset(
-                fit: BoxFit.fill,
-                'lib/assets/images/place_holder_profile.png',
+                height: screenHeight,
+                width: screenWidth,
+                fit: BoxFit.cover,
+                'lib/assets/images/temp_place_holder.png',
               );
             },
           ),
         ),
-        // Positioned(
-        //   bottom: 16,
-        //   left: 16,
-        //   right: 16,
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       ProfileActionButton(
-        //         icon: 'lib/assets/icons/direct_msg.svg',
-        //         color: AppColours.white,
-        //         onPressed: sendMessage,
-        //       ),
-        //       ProfileActionButton(
-        //         icon: 'lib/assets/icons/super_like.svg',
-        //         color: AppColours.white,
-        //         onPressed: sendSuperLike,
-        //       ),
-        //     ],
-        //   ),
-        // ),
+        Positioned(
+          bottom: 16,
+          left: 16,
+          right: 16,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ProfileActionButton(
+                icon: 'lib/assets/icons/direct_msg.svg',
+                color: AppColours.white,
+                onPressed: sendMessage,
+              ),
+              ProfileActionButton(
+                icon: 'lib/assets/icons/super_like.svg',
+                color: AppColours.white,
+                onPressed: sendSuperLike,
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
