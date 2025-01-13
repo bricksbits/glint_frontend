@@ -75,6 +75,9 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
               ),
             ),
           ),
+
+          // bottom gap
+          const SliverGap(20.0),
         ],
       ),
     );
