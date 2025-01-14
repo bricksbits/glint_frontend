@@ -50,6 +50,7 @@ class ProfileInfoColumn extends StatelessWidget {
 
         // Profile name and age
         Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             RichText(
