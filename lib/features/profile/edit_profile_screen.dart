@@ -11,6 +11,7 @@ class EditProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColours.white,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         backgroundColor: AppColours.white,
         actions: [
           // save icon
@@ -53,6 +54,7 @@ class EditProfileScreen extends StatelessWidget {
         ),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Gap(12.0),
               // images container
@@ -75,10 +77,41 @@ class EditProfileScreen extends StatelessWidget {
 
               // pronouns card
               const YourPronounsCard(),
+
+              const Gap(20.0),
+
+              // Interests and Vibe
+              _buildInterestsAndVibeSections(),
+
+              const Gap(20.0),
+
+              // enter bio
+              const EnterYourBio(),
+
+              // Additional info
+              const Gap(24.0),
+              const AdditionalInfoContainer(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  // Interest and Vibe Selection
+  Widget _buildInterestsAndVibeSections() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Interests & Vibe',
+          style: AppTheme.headingThree.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const Gap(16.0),
+        const GlintInterestsSelection(),
+      ],
     );
   }
 }
