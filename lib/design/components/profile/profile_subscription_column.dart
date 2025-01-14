@@ -96,7 +96,6 @@ class ProfileSubscriptionColumn extends StatelessWidget {
     required Gradient gradient,
     required LinearGradient textGradient,
     required bool isGoldPlan,
-    required VoidCallback? onTap,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -105,13 +104,7 @@ class ProfileSubscriptionColumn extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: gradient,
-          border: Border.all(
-            color: const Color(0xFFF1F1F1),
-            width: 1,
-          ),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(20.0),
-          ),
+          borderRadius: const BorderRadius.all(Radius.circular(20.0)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,6 +171,22 @@ class ProfileSubscriptionColumn extends StatelessWidget {
                         fontStyle: FontStyle.normal,
                       ),
                     ),
+                    Text(
+                      'per month',
+                      style: AppTheme.smallBodyText.copyWith(
+                        fontStyle: FontStyle.italic,
+                        color: isGoldPlan ? AppColours.black : AppColours.white,
+                      ),
+                    ),
+                  ],
+                ),
+                const Gap(24.0),
+                // Upgrade button
+                Expanded(
+                  child: GlintGradientElevatedButton(
+                    label: 'Upgrade Plan',
+                    gradient: textGradient,
+                    onPressed: () {},
                     Text(
                       'per month',
                       style: AppTheme.smallBodyText.copyWith(
