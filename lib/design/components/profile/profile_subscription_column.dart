@@ -30,7 +30,9 @@ class ProfileSubscriptionColumn extends StatelessWidget {
         width: double.infinity,
         decoration: const BoxDecoration(
           color: AppColours.primaryBlue,
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          ),
         ),
         child: const Center(
           child: Text(

@@ -139,7 +139,8 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintProfileRoutes.interestedGender.name}',
           name: GlintProfileRoutes.interestedGender.name,
-          builder: (context, state) => const WhoCatchesYourEyeOnboardingScreen(),
+          builder: (context, state) =>
+              const WhoCatchesYourEyeOnboardingScreen(),
         ),
         GoRoute(
           path: '/${GlintProfileRoutes.interests.name}',
