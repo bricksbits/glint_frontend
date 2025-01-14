@@ -13,7 +13,7 @@ class FeaturesLeftCountContainer extends StatelessWidget {
         //superlikes
         Expanded(
           child: _buildPremiumFeaturesCountContainer(
-            iconPath: 'lib/assets/icons/profile/superlike_icon.svg',
+            iconPath: 'lib/assets/icons/super_like.svg',
             count: 3,
             label: 'Superlikes',
           ),
@@ -35,7 +35,7 @@ class FeaturesLeftCountContainer extends StatelessWidget {
         //superDM
         Expanded(
           child: _buildPremiumFeaturesCountContainer(
-            iconPath: 'lib/assets/icons/profile/super_dm_icon.svg',
+            iconPath: 'lib/assets/icons/direct_msg.svg',
             count: 6,
             label: 'SuperDM',
           ),

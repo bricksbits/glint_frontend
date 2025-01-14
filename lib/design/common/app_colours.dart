@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class AppColours {
   static const primaryBlue = Color(0xFF5158BB);
@@ -97,5 +96,14 @@ class AppColours {
       primaryBlue,
       purpleShade,
     ],
+  );
+
+  static final LinearGradient goldSubscriptionCardBackground = LinearGradient(
+    colors: [
+      const Color(0xFFFBEAC5),
+      Colors.black.withAlpha(170),
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
   );
 }

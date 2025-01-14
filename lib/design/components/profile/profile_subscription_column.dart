@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class ProfileSubscriptionColumn extends StatelessWidget {
@@ -27,20 +28,36 @@ class ProfileSubscriptionColumn extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Container(
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          color: AppColours.primaryBlue,
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
+          padding: const EdgeInsets.symmetric(
+            vertical: 20.0,
+            horizontal: 20.0,
           ),
-        ),
-        child: const Center(
-          child: Text(
-            'Subscription Card',
-            style: TextStyle(color: Colors.white, fontSize: 18.0),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: AppColours.goldSubscriptionCardBackground,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20.0),
+            ),
           ),
-        ),
-      ),
+          child: Column(
+            children: [
+              // heading 1
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Gold plan",
+                    style: AppTheme.headingThree.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontStyle: FontStyle.normal,
+                    ),
+                  ),
+                  SvgPicture.asset(
+                      'lib/assets/icons/profile/gold_card_glint_logo.svg')
+                ],
+              )
+            ],
+          )),
     );
   }
 }
