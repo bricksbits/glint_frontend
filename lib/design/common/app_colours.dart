@@ -98,6 +98,7 @@ class AppColours {
     ],
   );
 
+  // GOLD SUBSCRIPTION CARD
   static final LinearGradient goldSubscriptionCardBackground = LinearGradient(
     colors: [
       const Color(0xFFFBEAC5),
@@ -105,5 +106,43 @@ class AppColours {
     ],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
+  );
+
+  static const goldSubscriptionTextGradient = LinearGradient(
+    begin: Alignment(-1.0, 0.0),
+    end: Alignment(1.0, 0.0),
+    colors: [
+      Color(0xFFEAA74A),
+      Color(0xFFFFD0C0),
+    ],
+    stops: [
+      -0.0409,
+      0.9964,
+    ],
+  );
+
+  // PLATINUM SUBSCRIPTION CARD
+  static const LinearGradient platinumSubscriptionCardBackground =
+      LinearGradient(
+    begin: Alignment(-0.2, -0.4),
+    end: Alignment(0.4, 2.45),
+    colors: [
+      Color(0xFF333556),
+      Color(0x66333556),
+    ],
+    stops: [0.1643, 1],
+  );
+
+  static const LinearGradient platinumSubscriptionTextGradient = LinearGradient(
+    colors: [
+      Color(0xFFB1B3D9),
+      Color(0xFFFDFDFF),
+    ],
+    begin: Alignment(-1.0, 0.1),
+    end: Alignment(1.0, -0.1),
+    stops: [
+      0.0,
+      0.4148,
+    ],
   );
 }
