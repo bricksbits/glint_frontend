@@ -20,7 +20,11 @@ class ProfileSubscriptionColumn extends StatelessWidget {
           Expanded(
             child: CarouselSlider(
               items: [
+                // Platinum card
                 _buildSubscriptionCard(
+                  onTap: () {
+                    debugPrint('Platinum card tapped');
+                  },
                   title: "Platinum plan",
                   logoPath:
                       'lib/assets/icons/profile/platinum_card_glint_logo.svg',
@@ -37,12 +41,17 @@ class ProfileSubscriptionColumn extends StatelessWidget {
                     'Message First',
                     'Hide Ads',
                   ],
-                  price: '₹ 249',
+                  price: '₹ 349',
                   gradient: AppColours.platinumSubscriptionCardBackground,
                   textGradient: AppColours.platinumSubscriptionTextGradient,
                   isGoldPlan: false,
                 ),
+
+                // Gold card
                 _buildSubscriptionCard(
+                  onTap: () {
+                    debugPrint('Gold card tapped');
+                  },
                   title: "Gold plan",
                   logoPath: 'lib/assets/icons/profile/gold_card_glint_logo.svg',
                   leftFeatures: [
@@ -88,6 +97,7 @@ class ProfileSubscriptionColumn extends StatelessWidget {
     required Gradient gradient,
     required LinearGradient textGradient,
     required bool isGoldPlan,
+    required VoidCallback? onTap,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -178,7 +188,7 @@ class ProfileSubscriptionColumn extends StatelessWidget {
                   child: GlintGradientElevatedButton(
                     label: 'Upgrade Plan',
                     gradient: textGradient,
-                    onPressed: () {},
+                    onPressed: onTap,
                   ),
                 ),
               ],
