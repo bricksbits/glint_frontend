@@ -49,7 +49,7 @@ class EditProfileScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0).copyWith(
-          bottom: 16.0,
+          bottom: 20.0,
         ),
         child: SingleChildScrollView(
           child: Column(
@@ -59,12 +59,22 @@ class EditProfileScreen extends StatelessWidget {
               const UploadPicturesContainers(),
 
               //get verified
-              const Gap(20.0),
+              const Gap(32.0),
               GetVerifiedWidget(
                 name: 'Shubham',
                 age: 21,
                 onTap: () {},
               ),
+
+              const Gap(32.0),
+
+              //im looking for card
+              const ImLookingForCard(),
+
+              const Gap(16.0),
+
+              // pronouns card
+              const YourPronounsCard(),
             ],
           ),
         ),
