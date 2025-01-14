@@ -11,13 +11,11 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: AppColours.white,
       body: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.max,
           children: [
             //profile info
             ProfileInfoColumn(),
 
-            Gap(12.0),
-
+            Gap(4.0),
             // subscription cards
             Expanded(
               child: ProfileSubscriptionColumn(),
