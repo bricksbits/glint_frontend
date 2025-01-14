@@ -106,7 +106,13 @@ class ProfileSubscriptionColumn extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: gradient,
-          borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+          border: Border.all(
+            color: const Color(0xFFF1F1F1),
+            width: 1,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(20.0),
+          ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

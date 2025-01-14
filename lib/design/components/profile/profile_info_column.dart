@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gradient_circular_progress_indicator/gradient_circular_progress_indicator.dart';
 
 class ProfileInfoColumn extends StatelessWidget {
@@ -44,7 +46,10 @@ class ProfileInfoColumn extends StatelessWidget {
         const Gap(18.0),
 
         // Profile edit button
-        _buildProfileEditButton(progress),
+        _buildProfileEditButton(
+          progress,
+          context,
+        ),
 
         const Gap(18.0),
 
@@ -102,53 +107,61 @@ class ProfileInfoColumn extends StatelessWidget {
 
   Widget _buildProfileEditButton(
     double progress,
+    BuildContext context,
   ) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12.0,
-        vertical: 8.0,
-      ).copyWith(right: 8.0),
-      decoration: BoxDecoration(
-        color: AppColours.black,
-        borderRadius: BorderRadius.circular(30.0),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.edit,
-            size: 16.0,
-            color: AppColours.white,
-          ),
-          const Gap(12.0),
-          Text(
-            'Edit Profile',
-            style: AppTheme.simpleText.copyWith(
-              fontWeight: FontWeight.w700,
+    return GestureDetector(
+      onTap: () {
+        context.pushNamed(
+          GlintProfileRoutes.editProfile.name,
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12.0,
+          vertical: 8.0,
+        ).copyWith(right: 8.0),
+        decoration: BoxDecoration(
+          color: AppColours.black,
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.edit,
+              size: 16.0,
               color: AppColours.white,
             ),
-          ),
-          const Gap(12.0),
-
-          //indicator text
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 4.0,
-            ),
-            decoration: BoxDecoration(
-              color: AppColours.white,
-              borderRadius: BorderRadius.circular(40.0),
-            ),
-            child: Text(
-              '${(progress * 100).toInt()}%',
+            const Gap(12.0),
+            Text(
+              'Edit Profile',
               style: AppTheme.simpleText.copyWith(
                 fontWeight: FontWeight.w700,
-                color: AppColours.black,
+                color: AppColours.white,
               ),
             ),
-          )
-        ],
+            const Gap(12.0),
+
+            //indicator text
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 4.0,
+              ),
+              decoration: BoxDecoration(
+                color: AppColours.white,
+                borderRadius: BorderRadius.circular(40.0),
+              ),
+              child: Text(
+                '${(progress * 100).toInt()}%',
+                style: AppTheme.simpleText.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: AppColours.black,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/exports.dart';
+import 'package:glint_frontend/navigation/glint_route_config.dart';
 
 class MyGlintApp extends StatelessWidget {
   const MyGlintApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const EditProfileScreen(),
-      // routerConfig: glintMainRoutes,
+      routerConfig: glintMainRoutes,
       // routerConfig: glintMainRoutes,
     );
   }

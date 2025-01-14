@@ -102,7 +102,7 @@ class AppColours {
   static final LinearGradient goldSubscriptionCardBackground = LinearGradient(
     colors: [
       const Color(0xFFFBEAC5),
-      Colors.black.withAlpha(170),
+      const Color(0xFFFFF4DB).withAlpha(0),
     ],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -122,15 +122,14 @@ class AppColours {
   );
 
   // PLATINUM SUBSCRIPTION CARD
-  static const LinearGradient platinumSubscriptionCardBackground =
+  static final LinearGradient platinumSubscriptionCardBackground =
       LinearGradient(
-    begin: Alignment(-0.2, -0.4),
-    end: Alignment(0.4, 2.45),
+    begin: Alignment.topCenter,
+    end: Alignment.bottomRight,
     colors: [
-      Color(0xFF333556),
-      Color(0x66333556),
+      const Color(0xFF333556),
+      const Color(0xFF333556).withAlpha(202),
     ],
-    stops: [0.1643, 1],
   );
 
   static const LinearGradient platinumSubscriptionTextGradient = LinearGradient(
