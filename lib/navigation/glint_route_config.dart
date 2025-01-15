@@ -16,6 +16,7 @@ import 'package:glint_frontend/features/onboarding/setup_glint_onboarding_screen
 import 'package:glint_frontend/features/onboarding/upload_photos_onboarding_screen.dart';
 import 'package:glint_frontend/features/onboarding/who_catches_your_eye_onboarding_screen.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
+import 'package:glint_frontend/features/profile/edit_profile_screen.dart';
 import 'package:glint_frontend/features/profile/profile_history_tickets_screen.dart';
 import 'package:glint_frontend/features/profile/profile_history_transactions_screen.dart';
 import 'package:glint_frontend/features/profile/profile_preview_screen.dart';
@@ -102,6 +103,11 @@ final glintMainRoutes = GoRouter(
           builder: (context, state) => const ProfilePreviewScreen(),
         ),
         GoRoute(
+          path: '/${GlintProfileRoutes.editProfile.name}',
+          name: GlintProfileRoutes.editProfile.name,
+          builder: (context, state) => const EditProfileScreen(),
+        ),
+        GoRoute(
           path: '/${GlintProfileRoutes.ticketHistory.name}',
           name: GlintProfileRoutes.ticketHistory.name,
           builder: (context, state) => const ProfileHistoryTicketsScreen(),
@@ -139,7 +145,8 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintProfileRoutes.interestedGender.name}',
           name: GlintProfileRoutes.interestedGender.name,
-          builder: (context, state) => const WhoCatchesYourEyeOnboardingScreen(),
+          builder: (context, state) =>
+              const WhoCatchesYourEyeOnboardingScreen(),
         ),
         GoRoute(
           path: '/${GlintProfileRoutes.interests.name}',

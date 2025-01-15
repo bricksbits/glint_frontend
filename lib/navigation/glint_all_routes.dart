@@ -32,6 +32,7 @@ enum GlintProfileRoutes {
   profilePreview,
   ticketHistory,
   transactionHistory,
+  editProfile,
   name,
   dob,
   gender,

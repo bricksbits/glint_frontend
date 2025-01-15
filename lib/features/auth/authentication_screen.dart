@@ -9,10 +9,8 @@ class AuthenticationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: (){
-          context.goNamed(
-            GlintMainRoutes.profile.name
-          );
+        onPressed: () {
+          context.goNamed(GlintProfileRoutes.name.name);
         },
         child: const Text(
             'Auth Screen using Firebase Auth for Google and Apple SignIn, we have to work with Access Tokens and Refresh tokens, If User is already signed in we have to save the users data to locally, and delete the data once the user is logged out'),

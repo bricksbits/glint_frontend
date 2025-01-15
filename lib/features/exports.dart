@@ -4,3 +4,4 @@ export 'home/home_screen.dart';
 export 'likes/likes_screen.dart';
 export 'notifications/notification_screen.dart';
 export 'onboarding/exports.dart';
+export 'profile/exports.dart';
