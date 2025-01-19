@@ -1,3 +1,4 @@
+export 'event/exports.dart';
 export 'filter/exports.dart';
 export 'glint_app_bar.dart';
 export 'glint_check_icon.dart';

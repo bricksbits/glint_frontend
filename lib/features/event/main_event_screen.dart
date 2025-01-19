@@ -42,11 +42,40 @@ class _MainEventScreenState extends State<MainEventScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // event banner
           _buildEventBanner(),
           const Gap(20.0),
+
+          // filter chips
           _buildFilterChips(),
+          const Gap(24.0),
+
+          // hot events
+          _buildHotEvents(),
+
+          // hot events
         ],
       ),
+    );
+  }
+
+  Widget _buildHotEvents() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Hot Events',
+          style: AppTheme.headingOne.copyWith(
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        const Gap(16.0),
+        const Column(
+          children: [
+            HotEvent(),
+          ],
+        )
+      ],
     );
   }
 
@@ -71,7 +100,7 @@ class _MainEventScreenState extends State<MainEventScreen> {
               shape: const StadiumBorder(
                 side: BorderSide(
                   color: AppColours.backgroundShade,
-                  width: 1.0,
+                  width: 1.4,
                 ),
               ),
               label: Text(
@@ -83,7 +112,7 @@ class _MainEventScreenState extends State<MainEventScreen> {
               ),
               backgroundColor: isSelected
                   ? AppColours.chipBackgroundShade
-                  : AppColours.lightGray,
+                  : AppColours.white,
             ),
           );
         },
