@@ -62,14 +62,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  GlintAppBarActions appBarAction(int index) {
+    switch (index) {
+      case 0:
+        return GlintAppBarActions.profile;
+      case 1:
+        return GlintAppBarActions.event;
+      default:
+        return GlintAppBarActions.defaultActions;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColours.white,
       appBar: GlintAppBar(
-        isProfileScreen: _selectedIndex == 0
-            ? true // show custom app bar for profile screen.
-            : false,
+        appBarAction: appBarAction(_selectedIndex),
       ),
       body: _bottomNavScreens[_selectedIndex],
       bottomNavigationBar: Container(
