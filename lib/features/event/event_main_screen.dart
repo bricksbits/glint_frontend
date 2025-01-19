@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
 
+import 'main_event_screen.dart';
+
 class EventMainScreen extends StatefulWidget {
   const EventMainScreen({super.key});
 
@@ -56,9 +58,9 @@ class _EventMainScreenState extends State<EventMainScreen> {
           // body
           body: const TabBarView(
             children: [
-              Center(
-                child: Text('This will show case all the events active'),
-              ),
+              // main event screen
+              MainEventScreen(),
+
               Center(
                 child: Text('This will show case all the explore active'),
               ),
