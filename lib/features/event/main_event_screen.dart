@@ -78,7 +78,7 @@ class _MainEventScreenState extends State<MainEventScreen> {
                 chipLabel,
                 style: const TextStyle(
                   color: AppColours.black,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               backgroundColor: isSelected
