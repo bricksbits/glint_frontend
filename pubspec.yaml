@@ -36,6 +36,7 @@ flutter:
     - lib/assets/icons/
     - lib/assets/images/onboarding/
     - lib/assets/icons/profile/
+    - lib/assets/images/event/
 
   fonts:
     - family: AlbertSans
