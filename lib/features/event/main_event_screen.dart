@@ -50,9 +50,10 @@ class _MainEventScreenState extends State<MainEventScreen> {
             const Gap(24.0),
 
             // hot events
-            _buildHotEvents(),
+            // _buildHotEvents(),
 
-            // hot events
+            // nearby events
+            _buildNearbyEvents(),
 
             //end padding bottom
             const Gap(16.0),
@@ -62,12 +63,12 @@ class _MainEventScreenState extends State<MainEventScreen> {
     );
   }
 
-  Widget _buildHotEvents() {
+  Widget _buildNearbyEvents() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Hot Events',
+          'Events Nearby',
           style: AppTheme.headingOne.copyWith(
             fontWeight: FontWeight.w900,
           ),
@@ -75,18 +76,44 @@ class _MainEventScreenState extends State<MainEventScreen> {
         const Gap(16.0),
         const Column(
           children: [
-            HotEvent(),
-            const Gap(16.0),
-            HotEvent(),
-            const Gap(16.0),
-            HotEvent(),
-            const Gap(16.0),
-            HotEvent(),
+            NearbyEventCard(),
+            Gap(16.0),
+            NearbyEventCard(),
+            Gap(16.0),
+            NearbyEventCard(),
+            Gap(16.0),
+            NearbyEventCard(),
           ],
         )
       ],
     );
   }
+
+  // Widget _buildHotEvents() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         'Hot Events',
+  //         style: AppTheme.headingOne.copyWith(
+  //           fontWeight: FontWeight.w900,
+  //         ),
+  //       ),
+  //       const Gap(16.0),
+  //       const Column(
+  //         children: [
+  //           HotEvent(),
+  //           const Gap(16.0),
+  //           HotEvent(),
+  //           const Gap(16.0),
+  //           HotEvent(),
+  //           const Gap(16.0),
+  //           HotEvent(),
+  //         ],
+  //       )
+  //     ],
+  //   );
+  // }
 
   Widget _buildFilterChips() {
     return Wrap(

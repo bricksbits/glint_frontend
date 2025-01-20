@@ -22,50 +22,47 @@ class _EventMainScreenState extends State<EventMainScreen> {
           backgroundColor: AppColours.white,
           titleSpacing: 0,
           scrolledUnderElevation: 0,
-          title: SizedBox(
-            height: 56.0,
-            child: TabBar(
-              dividerColor: AppColours.tabBarBorder,
-              dividerHeight: 1.2,
-              indicator: const BoxDecoration(
-                color: AppColours.backgroundShade,
-                border: Border(
-                  left: BorderSide(
-                    color: AppColours.tabBarBorder,
-                    width: 1.2,
-                  ),
-                  right: BorderSide(
-                    color: AppColours.tabBarBorder,
-                    width: 1.2,
-                  ),
-                  bottom: BorderSide(
-                    color: AppColours.primaryBlue,
-                    width: 2.4,
-                  ),
+          title: TabBar(
+            dividerColor: AppColours.tabBarBorder,
+            dividerHeight: 1.2,
+            indicator: const BoxDecoration(
+              color: AppColours.backgroundShade,
+              border: Border(
+                left: BorderSide(
+                  color: AppColours.tabBarBorder,
+                  width: 1.2,
+                ),
+                right: BorderSide(
+                  color: AppColours.tabBarBorder,
+                  width: 1.2,
+                ),
+                bottom: BorderSide(
+                  color: AppColours.primaryBlue,
+                  width: 2.4,
                 ),
               ),
-              overlayColor: const WidgetStatePropertyAll<Color>(
-                AppColours.backgroundShade,
-              ),
-              labelPadding: const EdgeInsets.symmetric(
-                vertical: 18.0,
-              ),
-              indicatorSize: TabBarIndicatorSize.tab,
-              labelStyle: AppTheme.simpleBodyText.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-              unselectedLabelStyle: AppTheme.simpleBodyText.copyWith(
-                fontWeight: FontWeight.w400,
-              ),
-              tabs: const [
-                Text(
-                  'Events',
-                ),
-                Text(
-                  'Explore',
-                ),
-              ],
             ),
+            overlayColor: const WidgetStatePropertyAll<Color>(
+              AppColours.backgroundShade,
+            ),
+            labelPadding: const EdgeInsets.symmetric(
+              vertical: 18.0,
+            ),
+            indicatorSize: TabBarIndicatorSize.tab,
+            labelStyle: AppTheme.simpleBodyText.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+            unselectedLabelStyle: AppTheme.simpleBodyText.copyWith(
+              fontWeight: FontWeight.w400,
+            ),
+            tabs: const [
+              Text(
+                'Events',
+              ),
+              Text(
+                'Explore',
+              ),
+            ],
           ),
         ),
 
