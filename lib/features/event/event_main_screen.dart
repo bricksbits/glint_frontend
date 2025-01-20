@@ -30,6 +30,14 @@ class _EventMainScreenState extends State<EventMainScreen> {
               indicator: const BoxDecoration(
                 color: AppColours.backgroundShade,
                 border: Border(
+                  left: BorderSide(
+                    color: AppColours.tabBarBorder,
+                    width: 1.2,
+                  ),
+                  right: BorderSide(
+                    color: AppColours.tabBarBorder,
+                    width: 1.2,
+                  ),
                   bottom: BorderSide(
                     color: AppColours.primaryBlue,
                     width: 2.4,
