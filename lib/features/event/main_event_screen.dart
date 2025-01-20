@@ -35,26 +35,29 @@ class _MainEventScreenState extends State<MainEventScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20.0,
-        vertical: 30.0,
-      ).copyWith(
-        bottom: 20.0,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // event banner
-          _buildEventBanner(),
-          const Gap(20.0),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Gap(30.0),
+            // event banner
+            _buildEventBanner(),
+            const Gap(20.0),
 
-          // filter chips
-          _buildFilterChips(),
-          const Gap(24.0),
+            // filter chips
+            _buildFilterChips(),
+            const Gap(24.0),
 
-          // hot events
-          _buildHotEvents(),
+            // hot events
+            _buildHotEvents(),
 
-          // hot events
-        ],
+            // hot events
+
+            //end padding bottom
+            const Gap(16.0),
+          ],
+        ),
       ),
     );
   }
@@ -72,6 +75,12 @@ class _MainEventScreenState extends State<MainEventScreen> {
         const Gap(16.0),
         const Column(
           children: [
+            HotEvent(),
+            const Gap(16.0),
+            HotEvent(),
+            const Gap(16.0),
+            HotEvent(),
+            const Gap(16.0),
             HotEvent(),
           ],
         )

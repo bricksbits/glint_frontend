@@ -57,7 +57,7 @@ class HotEvent extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              Gap(45.0),
+              const Gap(45.0),
             ],
           ),
         ),

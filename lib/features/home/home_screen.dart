@@ -76,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // extendBody: true,
       backgroundColor: AppColours.white,
       appBar: GlintAppBar(
         appBarAction: appBarAction(_selectedIndex),
