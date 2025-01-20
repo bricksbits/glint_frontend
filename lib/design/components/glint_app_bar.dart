@@ -100,6 +100,16 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           'lib/assets/icons/glint_logo.svg',
         ),
       ),
+      //bottom border for event screen
+      bottom: appBarAction == GlintAppBarActions.event
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(4.0),
+              child: Container(
+                color: AppColours.tabBarBorder,
+                height: 1.2,
+              ),
+            )
+          : null,
       actions: getAppBarActions(context),
     );
   }
