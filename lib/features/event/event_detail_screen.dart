@@ -17,6 +17,11 @@ class EventDetailScreen extends StatelessWidget {
     const eventLocation = 'New Delhi, India';
     const imageUrl =
         'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cmVzdGF1cmFudHxlbnwwfHwwfHx8MA%3D%3D';
+    const interactedUsers = [
+      'https://avatars.githubusercontent.com/u/70279771?v=4',
+      'https://avatars.githubusercontent.com/u/70279771?v=4',
+      'https://avatars.githubusercontent.com/u/70279771?v=4',
+    ];
 
     return Scaffold(
       backgroundColor: AppColours.white,
@@ -56,6 +61,13 @@ class EventDetailScreen extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+
+            Gap(32.0),
+
+            // interested profiles
+            _BuildInterestedProfiles(
+              interestedProfiles: interactedUsers,
             ),
           ],
         ),
@@ -209,6 +221,56 @@ class _EventPricing extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _BuildInterestedProfiles extends StatelessWidget {
+  const _BuildInterestedProfiles({
+    super.key,
+    required this.interestedProfiles,
+  });
+
+  final List<String> interestedProfiles;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+      decoration: const BoxDecoration(
+        color: AppColours.black,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ...interestedProfiles.map(
+            (userImage) => Align(
+              widthFactor: 0.5,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 6),
+                child: CircleAvatar(
+                  radius: 10.0,
+                  backgroundImage: NetworkImage(userImage),
+                ),
+              ),
+            ),
+          ),
+          const Gap(20.0),
+          Text(
+            'See interested profiles',
+            style: AppTheme.simpleText.copyWith(
+              fontWeight: FontWeight.w500,
+              color: AppColours.white,
+            ),
+          ),
+          const Gap(2.0),
+          const Icon(
+            Icons.chevron_right,
+            color: AppColours.warning300,
+          ),
+        ],
+      ),
     );
   }
 }
