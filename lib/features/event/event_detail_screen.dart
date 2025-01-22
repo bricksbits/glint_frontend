@@ -22,6 +22,13 @@ class EventDetailScreen extends StatelessWidget {
       'https://avatars.githubusercontent.com/u/70279771?v=4',
       'https://avatars.githubusercontent.com/u/70279771?v=4',
     ];
+    const eventDescription =
+        """Get ready to experience the most delicius and diverse flavors at the Local Food Fest! This is the ultimate event for food lovers in Raipur!\n
+Join us on 4th Jan at Shriram Business Park to enjoy mouth-watering street foods, regional spacialities, and exotic dishes from across India. From spicy chaats to sweet jalebis, there's something for every foodie's taste buds.
+
+With live music, fun activites, and cooking workshops, this fest promises a memorable day for families, friends, and food enthusiasts. Don't miss out on the chance to discover new favourites and meet local food heros.
+
+Mark your calender, bring your appetite, and let’s make this fest a celebration to remember!""";
 
     return Scaffold(
       backgroundColor: AppColours.white,
@@ -69,6 +76,16 @@ class EventDetailScreen extends StatelessWidget {
             _BuildInterestedProfiles(
               interestedProfiles: interactedUsers,
             ),
+
+            Gap(32.0),
+
+            // about event
+            _AboutEvent(
+              eventDescription: eventDescription,
+            ),
+
+            // end of the page gap for design replication purpose
+            Gap(20.0),
           ],
         ),
       ),
@@ -268,6 +285,38 @@ class _BuildInterestedProfiles extends StatelessWidget {
           const Icon(
             Icons.chevron_right,
             color: AppColours.warning300,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AboutEvent extends StatelessWidget {
+  const _AboutEvent({
+    super.key,
+    required this.eventDescription,
+  });
+
+  final String eventDescription;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'About Event',
+            style: AppTheme.simpleBodyText.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const Gap(6.0),
+          Text(
+            eventDescription,
+            style: AppTheme.simpleText,
           ),
         ],
       ),
