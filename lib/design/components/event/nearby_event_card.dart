@@ -45,9 +45,12 @@ class NearbyEventCard extends StatelessWidget {
 
               const Gap(16.0),
 
-              const GlintIconLabel(
+              GlintIconLabel(
                 iconPath: 'lib/assets/icons/calendar_icon.svg',
                 label: eventDate,
+                style: AppTheme.simpleText.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
               ),
 
               const Gap(8.0),
@@ -55,6 +58,7 @@ class NearbyEventCard extends StatelessWidget {
               const GlintIconLabel(
                 iconPath: 'lib/assets/icons/location_icon.svg',
                 label: eventLocation,
+                style: AppTheme.simpleText,
               )
             ],
           ),
@@ -108,6 +112,7 @@ class NearbyEventCard extends StatelessWidget {
                 '$daysLeft days left',
                 style: AppTheme.simpleBodyText.copyWith(
                   color: AppColours.white,
+                  fontSize: 12.0,
                 ),
               ),
             ),

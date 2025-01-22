@@ -20,7 +20,7 @@ class GlintIconLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SvgPicture.asset(
           iconPath,
@@ -34,7 +34,7 @@ class GlintIconLabel extends StatelessWidget {
         const Gap(10.0),
         Text(
           label,
-          style: style ?? AppTheme.smallBodyText,
+          style: style ?? AppTheme.simpleBodyText,
         ),
       ],
     );
