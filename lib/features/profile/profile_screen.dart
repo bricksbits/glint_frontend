@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -13,9 +12,9 @@ class ProfileScreen extends StatelessWidget {
         child: Column(
           children: [
             //profile info
-            ProfileInfoColumn(),
-
-            Gap(4.0),
+            Expanded(
+              child: ProfileInfoColumn(),
+            ),
             // subscription cards
             Expanded(
               child: ProfileSubscriptionColumn(),

@@ -13,6 +13,7 @@ class NearbyEventCard extends StatelessWidget {
     const eventLocation = 'New Delhi, India';
     const imageUrl =
         'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cmVzdGF1cmFudHxlbnwwfHwwfHx8MA%3D%3D';
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 24.0,
@@ -33,7 +34,7 @@ class NearbyEventCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //name
+              // Event name
               Text(
                 eventName,
                 style: AppTheme.headingThree.copyWith(
@@ -48,7 +49,9 @@ class NearbyEventCard extends StatelessWidget {
                 iconPath: 'lib/assets/icons/calendar_icon.svg',
                 label: eventDate,
               ),
+
               const Gap(8.0),
+
               const GlintIconLabel(
                 iconPath: 'lib/assets/icons/location_icon.svg',
                 label: eventLocation,
@@ -56,11 +59,13 @@ class NearbyEventCard extends StatelessWidget {
             ],
           ),
 
-          // image
+          const Spacer(),
+
+          // Event image
           _buildImage(
             imageUrl: imageUrl,
             daysLeft: daysLeft,
-          )
+          ),
         ],
       ),
     );
@@ -103,7 +108,6 @@ class NearbyEventCard extends StatelessWidget {
                 '$daysLeft days left',
                 style: AppTheme.simpleBodyText.copyWith(
                   color: AppColours.white,
-                  fontSize: 12.0,
                 ),
               ),
             ),

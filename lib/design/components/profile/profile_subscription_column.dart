@@ -6,83 +6,81 @@ class ProfileSubscriptionColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20.0,
-      ),
-      child: Column(
-        children: [
-          // Displays the remaining features count
-          const FeaturesLeftCountContainer(),
+    return Column(
+      children: [
+        // Displays the remaining features count
+        const Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: const FeaturesLeftCountContainer(),
+        ),
 
-          // Carousel for subscription cards
-          Expanded(
-            child: CarouselSlider(
-              items: [
-                // Platinum card
-                _buildSubscriptionCard(
-                  onTap: () {
-                    debugPrint('Platinum card tapped');
-                  },
-                  title: "Platinum plan",
-                  logoPath:
-                      'lib/assets/icons/profile/platinum_card_glint_logo.svg',
-                  leftFeatures: [
-                    '8 Superlikes',
-                    '7 SuperDM',
-                    '7 Rewinds',
-                    'Unlimited Likes',
-                    'See Who Likes You',
-                  ],
-                  rightFeatures: [
-                    'Profile Boost',
-                    '15 AI Chat Suggestion',
-                    'Message First',
-                    'Hide Ads',
-                  ],
-                  price: '₹ 349',
-                  gradient: AppColours.platinumSubscriptionCardBackground,
-                  textGradient: AppColours.platinumSubscriptionTextGradient,
-                  isGoldPlan: false,
-                ),
-
-                // Gold card
-                _buildSubscriptionCard(
-                  onTap: () {
-                    debugPrint('Gold card tapped');
-                  },
-                  title: "Gold plan",
-                  logoPath: 'lib/assets/icons/profile/gold_card_glint_logo.svg',
-                  leftFeatures: [
-                    '5 Superlikes',
-                    '3 SuperDM',
-                    '3 Rewinds',
-                    'Unlimited Likes',
-                    'See Who Likes You',
-                  ],
-                  rightFeatures: [
-                    '7 AI Chat Suggestion',
-                    'Hide Ads',
-                    'Message First',
-                  ],
-                  price: '₹ 249',
-                  gradient: AppColours.goldSubscriptionCardBackground,
-                  textGradient: AppColours.goldSubscriptionTextGradient,
-                  isGoldPlan: true,
-                ),
-              ],
-              options: CarouselOptions(
-                height: double.infinity,
-                viewportFraction: 1.0,
-                enableInfiniteScroll: true,
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 3),
-                enlargeCenterPage: true,
+        // Carousel for subscription cards
+        Expanded(
+          child: CarouselSlider(
+            items: [
+              // Platinum card
+              _buildSubscriptionCard(
+                onTap: () {
+                  debugPrint('Platinum card tapped');
+                },
+                title: "Platinum plan",
+                logoPath:
+                    'lib/assets/icons/profile/platinum_card_glint_logo.svg',
+                leftFeatures: [
+                  '8 Superlikes',
+                  '7 SuperDM',
+                  '7 Rewinds',
+                  'Unlimited Likes',
+                  'See Who Likes You',
+                ],
+                rightFeatures: [
+                  'Profile Boost',
+                  '15 AI Chat Suggestion',
+                  'Message First',
+                  'Hide Ads',
+                ],
+                price: '₹ 349',
+                gradient: AppColours.platinumSubscriptionCardBackground,
+                textGradient: AppColours.platinumSubscriptionTextGradient,
+                isGoldPlan: false,
               ),
+
+              // Gold card
+              _buildSubscriptionCard(
+                onTap: () {
+                  debugPrint('Gold card tapped');
+                },
+                title: "Gold plan",
+                logoPath: 'lib/assets/icons/profile/gold_card_glint_logo.svg',
+                leftFeatures: [
+                  '5 Superlikes',
+                  '3 SuperDM',
+                  '3 Rewinds',
+                  'Unlimited Likes',
+                  'See Who Likes You',
+                ],
+                rightFeatures: [
+                  '7 AI Chat Suggestion',
+                  'Hide Ads',
+                  'Message First',
+                ],
+                price: '₹ 249',
+                gradient: AppColours.goldSubscriptionCardBackground,
+                textGradient: AppColours.goldSubscriptionTextGradient,
+                isGoldPlan: true,
+              ),
+            ],
+            options: CarouselOptions(
+              height: double.infinity,
+              viewportFraction: 1.0,
+              enableInfiniteScroll: true,
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 3),
+              enlargeCenterPage: true,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -99,9 +97,9 @@ class ProfileSubscriptionColumn extends StatelessWidget {
     required VoidCallback? onTap,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 18.0),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 18.0),
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: gradient,
@@ -214,9 +212,10 @@ class ProfileSubscriptionColumn extends StatelessWidget {
           color: isGoldPlan ? const Color(0xFFEAA74A) : AppColours.white,
           size: 18,
         ),
-        const Gap(8.0),
+        const Gap(4.0),
         Text(
           text,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: isGoldPlan ? AppColours.black : AppColours.white,
             fontSize: 14,

@@ -50,7 +50,8 @@ class _MainEventScreenState extends State<MainEventScreen> {
             const Gap(24.0),
 
             // hot events
-            // _buildHotEvents(),
+            _buildHotEvents(),
+            const Gap(24.0),
 
             // nearby events
             _buildNearbyEvents(),
@@ -79,41 +80,33 @@ class _MainEventScreenState extends State<MainEventScreen> {
             NearbyEventCard(),
             Gap(16.0),
             NearbyEventCard(),
-            Gap(16.0),
-            NearbyEventCard(),
-            Gap(16.0),
-            NearbyEventCard(),
           ],
         )
       ],
     );
   }
 
-  // Widget _buildHotEvents() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(
-  //         'Hot Events',
-  //         style: AppTheme.headingOne.copyWith(
-  //           fontWeight: FontWeight.w900,
-  //         ),
-  //       ),
-  //       const Gap(16.0),
-  //       const Column(
-  //         children: [
-  //           HotEvent(),
-  //           const Gap(16.0),
-  //           HotEvent(),
-  //           const Gap(16.0),
-  //           HotEvent(),
-  //           const Gap(16.0),
-  //           HotEvent(),
-  //         ],
-  //       )
-  //     ],
-  //   );
-  // }
+  Widget _buildHotEvents() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Hot Events',
+          style: AppTheme.headingOne.copyWith(
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        const Gap(16.0),
+        const Column(
+          children: [
+            HotEvent(),
+            Gap(16.0),
+            HotEvent(),
+          ],
+        )
+      ],
+    );
+  }
 
   Widget _buildFilterChips() {
     return Wrap(
