@@ -20,6 +20,8 @@ dependencies:
   bottom_picker: ^2.9.0
   dotted_line: ^3.2.3
   image_picker: ^1.1.2
+  gradient_circular_progress_indicator: ^0.0.4
+  carousel_slider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +35,7 @@ flutter:
     - lib/assets/images/
     - lib/assets/icons/
     - lib/assets/images/onboarding/
+    - lib/assets/icons/profile/
 
   fonts:
     - family: AlbertSans
