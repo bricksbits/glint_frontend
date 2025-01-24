@@ -11,6 +11,7 @@ class AppColours {
   static const darkGray = Color(0xFF5B5B5B);
   static const lightGray = Color(0xFFF7F7F7);
   static const chipBackgroundShade = Color(0xFFE9EAF7);
+  static const tabBarBorder = Color(0xFFEEEEEE);
 
   // with opacity shades
   static final primaryBlue60 = primaryBlue.withAlpha(153);

@@ -18,8 +18,7 @@ class ProfileInfoColumn extends StatelessWidget {
 
     return Column(
       children: [
-        const Gap(8.0),
-
+        const Spacer(),
         // Profile picture
         Stack(
           alignment: Alignment.center,
@@ -51,7 +50,7 @@ class ProfileInfoColumn extends StatelessWidget {
           context,
         ),
 
-        const Gap(18.0),
+        const Spacer(),
 
         // Profile name and age
         Row(
