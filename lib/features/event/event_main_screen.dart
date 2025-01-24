@@ -71,7 +71,6 @@ class _EventMainScreenState extends State<EventMainScreen> {
           children: [
             // main event screen
             MainEventScreen(),
-
             MainExploreScreen(),
           ],
         ),
