@@ -1,4 +1,5 @@
 export 'application/my_glint_app.dart';
+export 'event/exports.dart';
 export 'filter/filter_preference_screen.dart';
 export 'home/home_screen.dart';
 export 'likes/likes_screen.dart';

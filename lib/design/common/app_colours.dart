@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class AppColours {
   static const primaryBlue = Color(0xFF5158BB);
@@ -12,6 +11,7 @@ class AppColours {
   static const darkGray = Color(0xFF5B5B5B);
   static const lightGray = Color(0xFFF7F7F7);
   static const chipBackgroundShade = Color(0xFFE9EAF7);
+  static const tabBarBorder = Color(0xFFEEEEEE);
 
   // with opacity shades
   static final primaryBlue60 = primaryBlue.withAlpha(153);
@@ -83,10 +83,66 @@ class AppColours {
     ],
   );
 
+  static const Gradient circularProgressGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: <Color>[
+      Color(0xFF5158BB),
+      Color(0xFF4AC8B1),
+    ],
+  );
+
   static const Gradient textLinearGradient = LinearGradient(
     colors: <Color>[
       primaryBlue,
       purpleShade,
+    ],
+  );
+
+  // GOLD SUBSCRIPTION CARD
+  static final LinearGradient goldSubscriptionCardBackground = LinearGradient(
+    colors: [
+      const Color(0xFFFBEAC5),
+      const Color(0xFFFFF4DB).withAlpha(0),
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static const goldSubscriptionTextGradient = LinearGradient(
+    begin: Alignment(-1.0, 0.0),
+    end: Alignment(1.0, 0.0),
+    colors: [
+      Color(0xFFEAA74A),
+      Color(0xFFFFD0C0),
+    ],
+    stops: [
+      -0.0409,
+      0.9964,
+    ],
+  );
+
+  // PLATINUM SUBSCRIPTION CARD
+  static final LinearGradient platinumSubscriptionCardBackground =
+      LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomRight,
+    colors: [
+      const Color(0xFF333556),
+      const Color(0xFF333556).withAlpha(202),
+    ],
+  );
+
+  static const LinearGradient platinumSubscriptionTextGradient = LinearGradient(
+    colors: [
+      Color(0xFFB1B3D9),
+      Color(0xFFFDFDFF),
+    ],
+    begin: Alignment(-1.0, 0.1),
+    end: Alignment(1.0, -0.1),
+    stops: [
+      0.0,
+      0.4148,
     ],
   );
 }

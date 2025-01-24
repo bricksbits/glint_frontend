@@ -2,9 +2,90 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
+
+enum GlintAppBarActions {
+  defaultActions,
+  profile,
+  event,
+}
 
 class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const GlintAppBar({super.key});
+  const GlintAppBar({
+    super.key,
+    this.appBarAction = GlintAppBarActions.defaultActions,
+  });
+
+  final GlintAppBarActions appBarAction;
+
+  List<Widget> getAppBarActions(BuildContext context) {
+    switch (appBarAction) {
+      case GlintAppBarActions.profile:
+        return [
+          GestureDetector(
+            onTap: () {
+              // todo - add settings clicked functionality
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/settings_icon.svg',
+            ),
+          ),
+          const Gap(20.0),
+        ];
+      case GlintAppBarActions.event:
+        return [
+          GestureDetector(
+            onTap: () {
+              context.pushNamed(GlintMainRoutes.filter.name);
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/glint_filter.svg',
+            ),
+          ),
+          const Gap(20.0),
+        ];
+      case GlintAppBarActions.defaultActions:
+        return [
+          GestureDetector(
+            onTap: () {
+              // Replace with rollback functionality
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/glint_rollback.svg',
+            ),
+          ),
+          const Gap(18.0),
+          GestureDetector(
+            onTap: () {
+              context.pushNamed(GlintMainRoutes.likes.name);
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/glint_heart.svg',
+            ),
+          ),
+          const Gap(18.0),
+          GestureDetector(
+            onTap: () {
+              context.pushNamed(GlintMainRoutes.notifications.name);
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/glint_bell.svg',
+            ),
+          ),
+          const Gap(18.0),
+          GestureDetector(
+            onTap: () {
+              context.pushNamed(GlintMainRoutes.filter.name);
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/glint_filter.svg',
+            ),
+          ),
+          const Gap(20.0),
+        ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,55 +100,20 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           'lib/assets/icons/glint_logo.svg',
         ),
       ),
-      actions: [
-        GestureDetector(
-          onTap: () {
-            //todo - rollback functionality
-          },
-          child: SvgPicture.asset(
-            'lib/assets/icons/glint_rollback.svg',
-          ),
-        ),
-
-        const Gap(18.0),
-
-        GestureDetector(
-          onTap: () {
-            //todo - navigate to like screen
-          },
-          child: SvgPicture.asset(
-            'lib/assets/icons/glint_heart.svg',
-          ),
-        ),
-
-        const Gap(18.0),
-
-        GestureDetector(
-          onTap: () {
-            //todo - navigate to notifications screen
-          },
-          child: SvgPicture.asset(
-            'lib/assets/icons/glint_bell.svg',
-          ),
-        ),
-
-        const Gap(18.0),
-
-        GestureDetector(
-          onTap: () {
-            //todo - navigate to filter screen
-          },
-          child: SvgPicture.asset(
-            'lib/assets/icons/glint_filter.svg',
-          ),
-        ),
-
-        const Gap(20.0), // for design replication purpose
-      ],
+      //bottom border for event screen
+      bottom: appBarAction == GlintAppBarActions.event
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(1.2),
+              child: Container(
+                color: AppColours.tabBarBorder,
+                height: 1.2,
+              ),
+            )
+          : null,
+      actions: getAppBarActions(context),
     );
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

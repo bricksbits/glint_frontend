@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/components/people/profile_card.dart';
 import 'package:glint_frontend/design/components/people/top_profile_card.dart';
@@ -7,8 +5,6 @@ import 'package:glint_frontend/design/components/people/profile_card_about_box.d
 import 'package:glint_frontend/design/components/people/profile_card_bio_box.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_footer.dart';
 
-//TODO(Nike): Use SliverDelegates to build the UI for performance improvements
-//TODO(Nike): Use SliverRemaining to build the Footer performant
 //TODO(Nike): Use proper Exports
 class ScrollableProfileView extends StatelessWidget {
   final Map<String, dynamic> profileData;
@@ -33,44 +29,21 @@ class ScrollableProfileView extends StatelessWidget {
           ]
         };
 
-  final Queue<Widget>? additionalWidgetsQueue = Queue.from([
-    const SliverToBoxAdapter(
-      child: ProfileCardAboutBox(
-        title: 'About',
-        tags: [
-          {'icon': Icons.school, 'text': 'Graduate'},
-          {'icon': Icons.person, 'text': 'She / Her'},
-          {'icon': Icons.height, 'text': "5' 7"},
-          {'icon': Icons.fitness_center, 'text': 'Gym freak'},
-          {'icon': Icons.local_bar, 'text': 'Never'},
-          {'icon': Icons.smoking_rooms, 'text': 'Never'},
-        ],
-      ),
+  final List<Widget> additionalWidgetsList = [
+    const ProfileCardAboutBox(
+      title: 'About',
+      tags: [
+        {'icon': Icons.school, 'text': 'Graduate'},
+        {'icon': Icons.person, 'text': 'She / Her'},
+        {'icon': Icons.height, 'text': "5' 7"},
+        {'icon': Icons.fitness_center, 'text': 'Gym freak'},
+        {'icon': Icons.local_bar, 'text': 'Never'},
+        {'icon': Icons.smoking_rooms, 'text': 'Never'},
+      ],
     ),
-    const SliverToBoxAdapter(
-      child: ProfileCardBioBox(content: 'Hey there, just a chill person here'),
-    ),
-    const SliverToBoxAdapter(
-      child: ProfileCardAboutBox(
-        title: 'About',
-        tags: [
-          {'icon': Icons.school, 'text': 'Graduate'},
-          {'icon': Icons.person, 'text': 'She / Her'},
-          {'icon': Icons.height, 'text': "5' 7"},
-          {'icon': Icons.fitness_center, 'text': 'Gym freak'},
-          {'icon': Icons.local_bar, 'text': 'Never'},
-          {'icon': Icons.smoking_rooms, 'text': 'Never'},
-        ],
-      ),
-    ),
-    const SliverToBoxAdapter(
-      child: ProfileCardBioBox(content: 'Hey there, just a chill person here'),
-    ),
-    const SliverFillRemaining(
-      fillOverscroll: true,
-      child: ScrollableProfileFooter(),
-    ),
-  ]);
+    const ProfileCardBioBox(content: 'Hey there, just a chill person here'),
+    const ProfileCardBioBox(content: 'Hey there, just a chill person here'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -83,79 +56,50 @@ class ScrollableProfileView extends StatelessWidget {
     final String location = profileData["location"] ?? "Location not specified";
     final List<String> interests = profileData["interests"] ?? [];
 
-    return CustomScrollView(
+    final int totalItems =
+        (images.length - 1) + additionalWidgetsList.length + 2;
+    return ListView.builder(
       scrollDirection: Axis.vertical,
-      slivers: _dynamicProfileComponents(
-        profileData,
-        additionalWidgetsQueue,
-        screenHeight,
-        screenWidth,
-      ),
-    );
-  }
-}
-
-List<Widget> _dynamicProfileComponents(
-  Map<String, dynamic> profileData,
-  Queue<Widget>? additionalWidgets,
-  double screenHeight,
-  double screenWidth,
-) {
-  List<Widget> profileComponents = [];
-  final List<String> images = profileData["images"] ?? [];
-
-  // Various Checks are needed here
-  for (int i = 0; i < images.length; i++) {
-    if (i == 0 && images.isNotEmpty) {
-      // Add the Sliver App Bar for First Image
-      profileComponents.add(
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: screenHeight,
-            width: screenWidth,
-            child: TopProfileCard(
-              imageUrl: '',
-              recentActive: "New",
-              shareProfile: () {},
-              designation: "Fashion Designer",
-              sendMessage: () {},
-              sendSuperLike: () {},
-            ),
-          ),
-        ),
-      );
-
-      if (additionalWidgets != null && additionalWidgets.isNotEmpty) {
-        profileComponents.add(additionalWidgets.removeFirst());
-      }
-    } else {
-      // Add the Other Profile Images if available or the components
-      profileComponents.add(SliverToBoxAdapter(
-        child: SizedBox(
-          height: screenHeight,
-          width: screenWidth,
-          child: ProfileCard(
+      itemCount: totalItems,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          // 🔥 First Image with Detailed Info
+          return TopProfileCard(
+            screenWidth: screenWidth,
+            screenHeight: screenHeight,
             imageUrl: '',
+            recentActive: "New",
+            shareProfile: () {},
+            designation: "Fashion Designer",
             sendMessage: () {},
             sendSuperLike: () {},
-          ),
-        ),
-      ));
-
-      if (additionalWidgets != null && additionalWidgets.isNotEmpty) {
-        profileComponents.add(additionalWidgets.removeFirst());
-      }
-    }
+          );
+        } else if (index == totalItems - 1) {
+          // 🔥 Footer at the End
+          return const ScrollableProfileFooter();
+        } else {
+          int adjustedIndex = index - 1; // Adjust for first image
+          // 🔄 Alternate between Images and Sections
+          if (adjustedIndex.isOdd) {
+            int sectionIndex = adjustedIndex ~/ 2;
+            if (sectionIndex < additionalWidgetsList.length) {
+              return additionalWidgetsList[sectionIndex];
+            }
+          } else {
+            int imageIndex = (adjustedIndex ~/ 2) + 1;
+            if (imageIndex < images.length) {
+              return ProfileCard(
+                imageUrl: '',
+                sendMessage: () {},
+                sendSuperLike: () {},
+                screenHeight: screenHeight,
+                screenWidth: screenWidth,
+              );
+            }
+          }
+          return const SizedBox.shrink();
+        }
+      },
+    );
   }
-
-  /**
-   * This will handle the edge case when there is more components
-   * rather than Images
-   */
-  if (additionalWidgets != null && additionalWidgets.isNotEmpty) {
-    while (additionalWidgets.isNotEmpty) {
-      profileComponents.add(additionalWidgets.removeFirst());
-    }
-  }
-  return profileComponents;
 }

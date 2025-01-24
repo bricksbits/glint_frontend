@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:glint_frontend/design/common/app_colours.dart';
+
+import 'profile_section_header.dart';
 
 class ProfileCardBioBox extends StatelessWidget {
   final String content;
@@ -7,20 +11,42 @@ class ProfileCardBioBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.blue.shade50,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        content,
-        style: const TextStyle(
-          fontSize: 16,
-          fontStyle: FontStyle.italic,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const ProfileSectionHeader(title: 'Bio'),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColours.chipBackgroundShade,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                'lib/assets/icons/quote_icon.svg',
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                content,
+                style: const TextStyle(
+                  fontFamily: 'AlbertSans',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

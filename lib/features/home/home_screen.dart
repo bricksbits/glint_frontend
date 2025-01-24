@@ -62,11 +62,25 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  GlintAppBarActions appBarAction(int index) {
+    switch (index) {
+      case 0:
+        return GlintAppBarActions.profile;
+      case 1:
+        return GlintAppBarActions.event;
+      default:
+        return GlintAppBarActions.defaultActions;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // extendBody: true,
       backgroundColor: AppColours.white,
-      appBar: const GlintAppBar(),
+      appBar: GlintAppBar(
+        appBarAction: appBarAction(_selectedIndex),
+      ),
       body: _bottomNavScreens[_selectedIndex],
       bottomNavigationBar: Container(
         width: double.infinity,
