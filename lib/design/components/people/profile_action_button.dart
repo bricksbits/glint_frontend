@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfileActionButton extends StatelessWidget {
   final String icon;
@@ -18,11 +19,13 @@ class ProfileActionButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
-        padding: const EdgeInsets.all(16),
+        fixedSize: const Size(54, 54),
       ),
-      child: ImageIcon(
-        AssetImage(icon),
-        color: Colors.white,
+      child: SvgPicture.asset(
+        icon,
+        width: 28,
+        height: 28,
+        alignment: Alignment.center,
       ),
     );
   }

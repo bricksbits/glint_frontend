@@ -10,6 +10,7 @@ class ProfileSectionHeader extends StatelessWidget {
     return Text(
       title,
       style: const TextStyle(
+        fontFamily: 'Cambon',
         fontSize: 18,
         fontWeight: FontWeight.bold,
         fontStyle: FontStyle.italic,
