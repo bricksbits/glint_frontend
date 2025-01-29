@@ -4,4 +4,8 @@ abstract class AuthenticationRepo {
   Future<NetworkResponse<void>> login();
 
   Future<NetworkResponse<void>> createAccount();
+
+  Future<NetworkResponse<void>> setAuthToken();
+
+  Future<NetworkResponse<void>> logout();
 }
