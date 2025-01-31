@@ -3,6 +3,7 @@ export 'filter/exports.dart';
 export 'glint_app_bar.dart';
 export 'glint_check_icon.dart';
 export 'glint_custom_app_bar.dart';
+export 'glint_custom_bordered_elevated_button.dart';
 export 'glint_custom_label_chip.dart';
 export 'glint_elevated_button.dart';
 export 'glint_emoji_selection_chip.dart';
