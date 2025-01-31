@@ -85,7 +85,7 @@ class _AuthHeader extends StatelessWidget {
   }
 }
 
-/// Authentication buttons container
+// Authentication buttons container
 class _AuthButtons extends StatelessWidget {
   const _AuthButtons();
 
@@ -120,6 +120,7 @@ class _AuthButtons extends StatelessWidget {
               customTextStyle: AppTheme.simpleBodyText,
               onPressed: () {
                 // TODO - add create account functionality
+                debugPrint('Create account button pressed');
               },
             ),
           ),
@@ -132,6 +133,10 @@ class _AuthButtons extends StatelessWidget {
             customTextStyle: AppTheme.simpleBodyText.copyWith(
               color: AppColours.white,
             ),
+            onPressed: () {
+              // todo - add login functionality
+              debugPrint('Login button pressed');
+            },
           ),
           const Gap(24.0),
           const _AuthTerms(),
@@ -141,7 +146,7 @@ class _AuthButtons extends StatelessWidget {
   }
 }
 
-/// Terms and conditions + privacy policy section
+// Terms and conditions + privacy policy section
 class _AuthTerms extends StatelessWidget {
   const _AuthTerms();
 
