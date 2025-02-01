@@ -28,13 +28,11 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
     const defaultBorder = BorderSide(
       color: AppColours.primaryBlue,
       width: 1.0,
     );
     return SizedBox(
-      width: screenSize.width * 0.85,
       height: 56.0,
       child: Container(
         decoration: BoxDecoration(
@@ -82,6 +80,7 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
             ),
             Expanded(
               child: TextField(
+                controller: widget.controller,
                 onTap: () {
                   debugPrint('Text field tapped');
                   setState(() {
@@ -94,11 +93,11 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
                     isTextFieldFocused = false;
                   });
                 },
-                decoration: const InputDecoration(
-                  hintText: 'Enter Email',
-                  hintStyle: TextStyle(color: Colors.grey),
+                decoration: InputDecoration(
+                  hintText: widget.hintText,
+                  hintStyle: const TextStyle(color: Colors.grey),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
+                  contentPadding: const EdgeInsets.symmetric(
                     horizontal: 12.0,
                   ),
                 ),
