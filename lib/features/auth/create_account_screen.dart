@@ -13,99 +13,105 @@ class CreateAccountScreen extends StatefulWidget {
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(),
       body: Stack(
         children: [
           Positioned.fill(
-            child: Column(
-              children: [
-                // create account heading
-                Center(
-                  child: SvgPicture.asset(
-                    'lib/assets/images/auth/glint_create_account.svg',
-                  ),
-                ),
-
-                const Gap(40.0),
-
-                // text fields
-                AuthIconTextField(
-                  controller: _emailController,
-                  type: IconTextFieldType.email,
-                  hintText: 'Enter Email',
-                ),
-
-                const Gap(20.0),
-
-                AuthIconTextField(
-                  controller: _emailController,
-                  type: IconTextFieldType.password,
-                  hintText: 'Create Password',
-                ),
-
-                const Gap(20.0),
-
-                AuthIconTextField(
-                  controller: _emailController,
-                  type: IconTextFieldType.password,
-                  hintText: 'Retype Password',
-                ),
-
-                const Gap(60.0),
-
-                // create account button
-                SizedBox(
-                  width: screenSize.width * 0.85,
-                  child: GlintElevatedButton(
-                    label: 'Sign Up',
-                    customBorderRadius: 10.0,
-                    customTextStyle: AppTheme.simpleBodyText.copyWith(
-                      color: AppColours.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              child: Column(
+                children: [
+                  // create account heading
+                  Center(
+                    child: SvgPicture.asset(
+                      'lib/assets/images/auth/glint_create_account.svg',
                     ),
-                    onPressed: () {
-                      // TODO - add create account functionality
-                      debugPrint('Create account button pressed');
-                    },
                   ),
-                ),
 
-                const Gap(16.0),
+                  const Gap(40.0),
 
-                // login button
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: AppTheme.simpleText,
-                    children: [
-                      const TextSpan(
-                        text: "Already have an account? ",
+                  // text fields
+                  AuthIconTextField(
+                    controller: _emailController,
+                    type: IconTextFieldType.email,
+                    hintText: 'Enter Email',
+                  ),
+
+                  const Gap(20.0),
+
+                  AuthIconTextField(
+                    controller: _passwordController,
+                    type: IconTextFieldType.password,
+                    hintText: 'Create Password',
+                  ),
+
+                  const Gap(20.0),
+
+                  AuthIconTextField(
+                    controller: _confirmPasswordController,
+                    type: IconTextFieldType.password,
+                    hintText: 'Retype Password',
+                  ),
+
+                  const Gap(60.0),
+
+                  // create account button
+                  SizedBox(
+                    width: double.infinity,
+                    child: GlintElevatedButton(
+                      label: 'Sign Up',
+                      customBorderRadius: 10.0,
+                      customTextStyle: AppTheme.simpleBodyText.copyWith(
+                        color: AppColours.white,
                       ),
-                      TextSpan(
-                        text: "Login now",
-                        style: const TextStyle(
-                          color: AppColours.primaryBlue,
-                          decoration: TextDecoration.underline,
+                      onPressed: () {
+                        // TODO - add create account functionality
+                        debugPrint('Create account button pressed');
+                      },
+                    ),
+                  ),
+
+                  const Gap(16.0),
+
+                  // login button
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: AppTheme.simpleText,
+                      children: [
+                        const TextSpan(
+                          text: "Already have an account? ",
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            // TODO - Handle Privacy Policy tap
-                          },
-                      ),
-                    ],
+                        TextSpan(
+                          text: "Login now",
+                          style: const TextStyle(
+                            color: AppColours.primaryBlue,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              // TODO - Handle Privacy Policy tap
+                            },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
