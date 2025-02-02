@@ -14,6 +14,7 @@ class EnterOtpScreen extends StatefulWidget {
 
 class _EnterOtpScreenState extends State<EnterOtpScreen> {
   final _codeController = TextEditingController();
+  bool buttonDisabled = true;
 
   @override
   void dispose() {
@@ -42,6 +43,7 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
               width: double.infinity,
               child: Pinput(
                 length: 4,
+                separatorBuilder: (_) => const Gap(12.0),
                 preFilledWidget: const Text(
                   '-',
                   style: AppTheme.simpleText,
@@ -53,18 +55,18 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
                 defaultPinTheme: defaultPinTheme,
                 focusedPinTheme: focusedPinTheme,
                 submittedPinTheme: submittedPinTheme,
-                // onChanged: (pin) => {
-                //   setState(() {
-                //     if (pin.length != 6) {
-                //       buttonDisabled = true;
-                //     }
-                //   })
-                // },
-                // onCompleted: (pin) => {
-                //   setState(() {
-                //     buttonDisabled = false;
-                //   })
-                // },
+                onChanged: (pin) => {
+                  setState(() {
+                    if (pin.length != 6) {
+                      buttonDisabled = true;
+                    }
+                  })
+                },
+                onCompleted: (pin) => {
+                  setState(() {
+                    buttonDisabled = false;
+                  })
+                },
               ),
             ),
 
@@ -79,10 +81,12 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
                 customTextStyle: AppTheme.simpleBodyText.copyWith(
                   color: AppColours.white,
                 ),
-                onPressed: () {
-                  // TODO - add confirm otp functionality
-                  debugPrint('confirm otp button pressed');
-                },
+                onPressed: buttonDisabled
+                    ? null
+                    : () {
+                        // TODO - add confirm otp functionality
+                        debugPrint('confirm otp button pressed');
+                      },
               ),
             ),
 
