@@ -27,107 +27,92 @@ class _LoginScreenState extends State<LoginScreen> {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0),
-              child: Column(
+      body: AuthStackedIllustrationScreen(
+        body: Column(
+          children: [
+            // create account heading
+            Center(
+              child: SvgPicture.asset(
+                'lib/assets/images/auth/glint_login.svg',
+              ),
+            ),
+
+            const Gap(40.0),
+
+            // text fields
+            AuthIconTextField(
+              controller: _emailController,
+              type: IconTextFieldType.email,
+              hintText: 'Enter Email',
+            ),
+
+            const Gap(20.0),
+
+            AuthIconTextField(
+              controller: _passwordController,
+              type: IconTextFieldType.password,
+              hintText: 'Enter Password',
+            ),
+
+            const Gap(12.0),
+
+            // forgot your password button
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'Forgot your password?',
+                style: AppTheme.simpleText.copyWith(
+                  color: AppColours.primaryBlue,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+
+            const Gap(60.0),
+
+            // create account button
+            SizedBox(
+              width: screenSize.width * 0.85,
+              child: GlintElevatedButton(
+                label: 'Login',
+                customBorderRadius: 10.0,
+                customTextStyle: AppTheme.simpleBodyText.copyWith(
+                  color: AppColours.white,
+                ),
+                onPressed: () {
+                  // TODO - add create account functionality
+                  debugPrint('Login button pressed');
+                },
+              ),
+            ),
+
+            const Gap(16.0),
+
+            // login button
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: AppTheme.simpleText,
                 children: [
-                  // create account heading
-                  Center(
-                    child: SvgPicture.asset(
-                      'lib/assets/images/auth/glint_login.svg',
+                  const TextSpan(
+                    text: "Don't have an account? ",
+                  ),
+                  TextSpan(
+                    text: "Create now",
+                    style: const TextStyle(
+                      color: AppColours.primaryBlue,
+                      decoration: TextDecoration.underline,
                     ),
-                  ),
-
-                  const Gap(40.0),
-
-                  // text fields
-                  AuthIconTextField(
-                    controller: _emailController,
-                    type: IconTextFieldType.email,
-                    hintText: 'Enter Email',
-                  ),
-
-                  const Gap(20.0),
-
-                  AuthIconTextField(
-                    controller: _passwordController,
-                    type: IconTextFieldType.password,
-                    hintText: 'Enter Password',
-                  ),
-
-                  const Gap(12.0),
-
-                  // forgot your password button
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'Forgot your password?',
-                      style: AppTheme.simpleText.copyWith(
-                        color: AppColours.primaryBlue,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-
-                  const Gap(60.0),
-
-                  // create account button
-                  SizedBox(
-                    width: screenSize.width * 0.85,
-                    child: GlintElevatedButton(
-                      label: 'Login',
-                      customBorderRadius: 10.0,
-                      customTextStyle: AppTheme.simpleBodyText.copyWith(
-                        color: AppColours.white,
-                      ),
-                      onPressed: () {
-                        // TODO - add create account functionality
-                        debugPrint('Login button pressed');
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // TODO - Handle Privacy Policy tap
                       },
-                    ),
-                  ),
-
-                  const Gap(16.0),
-
-                  // login button
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: AppTheme.simpleText,
-                      children: [
-                        const TextSpan(
-                          text: "Don't have an account? ",
-                        ),
-                        TextSpan(
-                          text: "Create now",
-                          style: const TextStyle(
-                            color: AppColours.primaryBlue,
-                            decoration: TextDecoration.underline,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // TODO - Handle Privacy Policy tap
-                            },
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),
             ),
-          ),
-
-          // bottom glint logo illustration
-          Positioned(
-            bottom: 0,
-            child: SvgPicture.asset(
-              'lib/assets/images/auth/auth_glint_logo_illustration.svg',
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
