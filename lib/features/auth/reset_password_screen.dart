@@ -13,10 +13,13 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final _emailController = TextEditingController();
 
+  final _emailFocusNode = FocusNode();
+
   @override
   void dispose() {
     // TODO: implement dispose
     _emailController.dispose();
+    _emailFocusNode.dispose();
     super.dispose();
   }
 
@@ -40,7 +43,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             AuthIconTextField(
               controller: _emailController,
               type: IconTextFieldType.email,
+              focusNode: _emailFocusNode,
               hintText: 'Enter Email',
+              isTextFieldFocused: _emailFocusNode.hasFocus,
+              onTap: () {
+                setState(() {
+                  _emailFocusNode.requestFocus();
+                });
+              },
             ),
 
             const Gap(50.0),

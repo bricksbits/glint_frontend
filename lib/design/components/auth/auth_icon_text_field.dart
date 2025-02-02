@@ -13,19 +13,23 @@ class AuthIconTextField extends StatefulWidget {
     required this.controller,
     required this.type,
     required this.hintText,
+    required this.isTextFieldFocused,
+    required this.onTap,
+    this.focusNode,
   });
 
   final TextEditingController controller;
   final IconTextFieldType type;
   final String hintText;
+  final bool isTextFieldFocused;
+  final VoidCallback? onTap;
+  final FocusNode? focusNode;
 
   @override
   State<AuthIconTextField> createState() => _AuthIconTextFieldState();
 }
 
 class _AuthIconTextFieldState extends State<AuthIconTextField> {
-  bool isTextFieldFocused = false;
-
   @override
   Widget build(BuildContext context) {
     const defaultBorder = BorderSide(
@@ -36,7 +40,7 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
       height: 56.0,
       child: Container(
         decoration: BoxDecoration(
-          border: isTextFieldFocused
+          border: widget.isTextFieldFocused
               ? Border(
                   top: defaultBorder,
                   right: defaultBorder,
@@ -62,7 +66,7 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
                 decoration: BoxDecoration(
                   border: Border(
                     right: BorderSide(
-                      color: isTextFieldFocused
+                      color: widget.isTextFieldFocused
                           ? AppColours.primaryBlue
                           : AppColours.gray60,
                       width: 1.0,
@@ -81,18 +85,8 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
             Expanded(
               child: TextField(
                 controller: widget.controller,
-                onTap: () {
-                  debugPrint('Text field tapped');
-                  setState(() {
-                    isTextFieldFocused = true;
-                  });
-                },
-                onTapOutside: (_) {
-                  debugPrint('Text field outside tapped');
-                  setState(() {
-                    isTextFieldFocused = false;
-                  });
-                },
+                onTap: widget.onTap,
+                focusNode: widget.focusNode,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
                   hintStyle: const TextStyle(color: Colors.grey),

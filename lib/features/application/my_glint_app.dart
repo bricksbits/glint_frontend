@@ -8,12 +8,12 @@ class MyGlintApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Glint People App",
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.theme,
-        home: const CreateAccountScreen()
-        // routerConfig: glintMainRoutes,
-        // routerConfig: glintMainRoutes,
-        );
+      title: "Glint People App",
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.theme,
+      home: const ResetPasswordScreen(),
+      // routerConfig: glintMainRoutes,
+      // routerConfig: glintMainRoutes,
+    );
   }
 }

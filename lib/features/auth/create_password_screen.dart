@@ -14,11 +14,16 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  final _passwordFocusNode = FocusNode();
+  final _confirmPasswordFocusNode = FocusNode();
+
   @override
   void dispose() {
     // TODO: implement dispose
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
     super.dispose();
   }
 
@@ -42,7 +47,14 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
             AuthIconTextField(
               controller: _passwordController,
               type: IconTextFieldType.password,
+              focusNode: _passwordFocusNode,
               hintText: 'Create Password',
+              isTextFieldFocused: _passwordFocusNode.hasFocus,
+              onTap: () {
+                setState(() {
+                  _passwordFocusNode.requestFocus();
+                });
+              },
             ),
 
             const Gap(20.0),
@@ -50,7 +62,14 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
             AuthIconTextField(
               controller: _confirmPasswordController,
               type: IconTextFieldType.password,
+              focusNode: _confirmPasswordFocusNode,
               hintText: 'Retype Password',
+              isTextFieldFocused: _confirmPasswordFocusNode.hasFocus,
+              onTap: () {
+                setState(() {
+                  _confirmPasswordFocusNode.requestFocus();
+                });
+              },
             ),
 
             const Gap(50.0),

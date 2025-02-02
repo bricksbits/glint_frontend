@@ -16,11 +16,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+  final _confirmPasswordFocusNode = FocusNode();
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
     super.dispose();
   }
 
@@ -44,7 +51,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             AuthIconTextField(
               controller: _emailController,
               type: IconTextFieldType.email,
+              focusNode: _emailFocusNode,
               hintText: 'Enter Email',
+              isTextFieldFocused: _emailFocusNode.hasFocus,
+              onTap: () {
+                setState(() {
+                  _emailFocusNode.requestFocus();
+                });
+              },
             ),
 
             const Gap(20.0),
@@ -52,7 +66,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             AuthIconTextField(
               controller: _passwordController,
               type: IconTextFieldType.password,
+              focusNode: _passwordFocusNode,
               hintText: 'Create Password',
+              isTextFieldFocused: _passwordFocusNode.hasFocus,
+              onTap: () {
+                setState(() {
+                  _passwordFocusNode.requestFocus();
+                });
+              },
             ),
 
             const Gap(20.0),
@@ -60,7 +81,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             AuthIconTextField(
               controller: _confirmPasswordController,
               type: IconTextFieldType.password,
+              focusNode: _confirmPasswordFocusNode,
               hintText: 'Retype Password',
+              isTextFieldFocused: _confirmPasswordFocusNode.hasFocus,
+              onTap: () {
+                setState(() {
+                  _confirmPasswordFocusNode.requestFocus();
+                });
+              },
             ),
 
             const Gap(60.0),

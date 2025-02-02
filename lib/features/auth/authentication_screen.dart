@@ -15,6 +15,7 @@ class AuthenticationScreen extends StatelessWidget {
         child: Column(
           children: [
             // picture asset here
+            // todo - glint (fix this image rendering)
             SvgPicture.asset(
               'lib/assets/images/auth/auth-screen-grouped.svg',
             ),

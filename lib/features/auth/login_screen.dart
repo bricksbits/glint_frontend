@@ -14,11 +14,15 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -43,7 +47,14 @@ class _LoginScreenState extends State<LoginScreen> {
             AuthIconTextField(
               controller: _emailController,
               type: IconTextFieldType.email,
+              focusNode: _emailFocusNode,
               hintText: 'Enter Email',
+              isTextFieldFocused: _emailFocusNode.hasFocus,
+              onTap: () {
+                setState(() {
+                  _emailFocusNode.requestFocus();
+                });
+              },
             ),
 
             const Gap(20.0),
@@ -51,7 +62,14 @@ class _LoginScreenState extends State<LoginScreen> {
             AuthIconTextField(
               controller: _passwordController,
               type: IconTextFieldType.password,
+              focusNode: _passwordFocusNode,
               hintText: 'Enter Password',
+              isTextFieldFocused: _passwordFocusNode.hasFocus,
+              onTap: () {
+                setState(() {
+                  _passwordFocusNode.requestFocus();
+                });
+              },
             ),
 
             const Gap(12.0),
