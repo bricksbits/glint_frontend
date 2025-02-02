@@ -11,7 +11,7 @@ class MyGlintApp extends StatelessWidget {
         title: "Glint People App",
         debugShowCheckedModeBanner: false,
         theme: AppTheme.theme,
-        home: const ResetPassword()
+        home: const CreatePasswordScreen()
         // routerConfig: glintMainRoutes,
         // routerConfig: glintMainRoutes,
         );
