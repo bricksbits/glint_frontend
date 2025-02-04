@@ -5,10 +5,16 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class HotEvent extends StatelessWidget {
-  const HotEvent({super.key});
+  const HotEvent({
+    super.key,
+    this.showDiscount = true,
+  });
+
+  final bool showDiscount;
 
   @override
   Widget build(BuildContext context) {
+    final cardHeight = showDiscount ? 220.0 : 128.0;
     final screenSize = MediaQuery.of(context).size;
     const eventName = 'The Local Food Fest';
     const eventDate = '20 Feb 2023';
@@ -28,7 +34,7 @@ class HotEvent extends StatelessWidget {
         // Blurred background image
         Container(
           width: double.infinity,
-          height: 220.0,
+          height: cardHeight,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
             image: const DecorationImage(
@@ -89,99 +95,107 @@ class HotEvent extends StatelessWidget {
                       ],
                     ),
 
-                    // old price and new price and days left
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '₹ ',
-                              style: AppTheme.simpleText.copyWith(
-                                color: AppColours.white,
-                              ),
-                            ),
-                            Text(
-                              eventOldPrice.toString(),
-                              style: AppTheme.simpleText.copyWith(
-                                decoration: TextDecoration.lineThrough,
-                                decorationColor: AppColours.white,
-                                color: AppColours.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            RichText(
-                              text: TextSpan(
+                    // pricing and interested profiles
+                    if (showDiscount)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // old price and new price and days left
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
                                 children: [
-                                  TextSpan(
-                                    text: '₹ $eventNewPrice',
-                                    style: AppTheme.heavyBodyText.copyWith(
-                                      color: AppColours.vibrantYellow,
+                                  Text(
+                                    '₹ ',
+                                    style: AppTheme.simpleText.copyWith(
+                                      color: AppColours.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    eventOldPrice.toString(),
+                                    style: AppTheme.simpleText.copyWith(
+                                      decoration: TextDecoration.lineThrough,
+                                      decorationColor: AppColours.white,
+                                      color: AppColours.white,
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            const Gap(8.0),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: AppColours.black,
-                                borderRadius: BorderRadius.circular(50.0),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: '₹ $eventNewPrice',
+                                          style:
+                                              AppTheme.heavyBodyText.copyWith(
+                                            color: AppColours.vibrantYellow,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Gap(8.0),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColours.black,
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0,
+                                      vertical: 3.0,
+                                    ),
+                                    child: const Text(
+                                      '$eventDiscountDaysLeft days left',
+                                      style: TextStyle(
+                                        fontFamily: 'AlbertSans',
+                                        fontSize: 10.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColours.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0,
-                                vertical: 3.0,
+                            ],
+                          ),
+
+                          // see profiles widget
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ...interactedUsers.map(
+                                (userImage) => Align(
+                                  widthFactor: 0.5,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 6),
+                                    child: CircleAvatar(
+                                      radius: 10.0,
+                                      backgroundImage: NetworkImage(userImage),
+                                    ),
+                                  ),
+                                ),
                               ),
-                              child: const Text(
-                                '$eventDiscountDaysLeft days left',
-                                style: TextStyle(
-                                  fontFamily: 'AlbertSans',
-                                  fontSize: 10.0,
+                              const Gap(20.0),
+                              Text(
+                                'See profiles',
+                                style: AppTheme.simpleText.copyWith(
                                   fontWeight: FontWeight.w500,
                                   color: AppColours.white,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    // see profiles widget
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ...interactedUsers.map(
-                          (userImage) => Align(
-                            widthFactor: 0.5,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 6),
-                              child: CircleAvatar(
-                                radius: 10.0,
-                                backgroundImage: NetworkImage(userImage),
+                              const Gap(2.0),
+                              const Icon(
+                                Icons.chevron_right,
+                                color: AppColours.vibrantYellow,
                               ),
-                            ),
+                            ],
                           ),
-                        ),
-                        const Gap(20.0),
-                        Text(
-                          'See profiles',
-                          style: AppTheme.simpleText.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: AppColours.white,
-                          ),
-                        ),
-                        const Gap(2.0),
-                        const Icon(
-                          Icons.chevron_right,
-                          color: AppColours.vibrantYellow,
-                        ),
-                      ],
-                    ),
+                        ],
+                      )
                   ],
                 ),
               ),
@@ -204,7 +218,7 @@ class HotEvent extends StatelessWidget {
           right: 0,
           child: Container(
             width: screenSize.width * 0.35,
-            height: 220.0,
+            height: cardHeight,
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage(eventImage),
