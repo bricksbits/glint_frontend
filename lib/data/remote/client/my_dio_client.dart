@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/remote/client/glint_api_constants.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class MyDioClient {
   final Dio dioHttpClient;
 
