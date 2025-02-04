@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
@@ -132,6 +133,15 @@ class HotEvent extends StatelessWidget {
                 bottomRight: Radius.circular(20.0),
               ),
             ),
+          ),
+        ),
+
+        // info icon button
+        Positioned(
+          top: 12.0,
+          right: 14.0,
+          child: SvgPicture.asset(
+            'lib/assets/icons/info_icon.svg',
           ),
         ),
       ],
