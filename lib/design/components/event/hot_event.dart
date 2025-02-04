@@ -97,121 +97,18 @@ class HotEvent extends StatelessWidget {
 
                     // pricing and interested profiles
                     if (showDiscount)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // old price and new price and days left
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    '₹ ',
-                                    style: AppTheme.simpleText.copyWith(
-                                      color: AppColours.white,
-                                    ),
-                                  ),
-                                  Text(
-                                    eventOldPrice.toString(),
-                                    style: AppTheme.simpleText.copyWith(
-                                      decoration: TextDecoration.lineThrough,
-                                      decorationColor: AppColours.white,
-                                      color: AppColours.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: '₹ $eventNewPrice',
-                                          style:
-                                              AppTheme.heavyBodyText.copyWith(
-                                            color: AppColours.vibrantYellow,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Gap(8.0),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: AppColours.black,
-                                      borderRadius: BorderRadius.circular(50.0),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0,
-                                      vertical: 3.0,
-                                    ),
-                                    child: const Text(
-                                      '$eventDiscountDaysLeft days left',
-                                      style: TextStyle(
-                                        fontFamily: 'AlbertSans',
-                                        fontSize: 10.0,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColours.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-
-                          // see profiles widget
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              ...interactedUsers.map(
-                                (userImage) => Align(
-                                  widthFactor: 0.5,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 6),
-                                    child: CircleAvatar(
-                                      radius: 10.0,
-                                      backgroundImage: NetworkImage(userImage),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const Gap(20.0),
-                              Text(
-                                'See profiles',
-                                style: AppTheme.simpleText.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColours.white,
-                                ),
-                              ),
-                              const Gap(2.0),
-                              const Icon(
-                                Icons.chevron_right,
-                                color: AppColours.vibrantYellow,
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
+                      const _HotEventDiscountAndInterestedProfiles(
+                        eventOldPrice: eventOldPrice,
+                        eventNewPrice: eventNewPrice,
+                        eventDiscountDaysLeft: eventDiscountDaysLeft,
+                        interactedUsers: interactedUsers,
+                      ),
                   ],
                 ),
               ),
             ),
           ),
         ),
-
-        // Text content
-        // Positioned(
-        //   top: 20,
-        //   left: 24,
-        //   child: SizedBox(
-        //     height: 200.0,
-        //     child:
-        //   ),
-        // ),
 
         // event image overlay container
         Positioned(
@@ -236,6 +133,124 @@ class HotEvent extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HotEventDiscountAndInterestedProfiles extends StatelessWidget {
+  const _HotEventDiscountAndInterestedProfiles({
+    required this.eventOldPrice,
+    required this.eventNewPrice,
+    required this.eventDiscountDaysLeft,
+    required this.interactedUsers,
+  });
+
+  final int eventOldPrice;
+  final int eventNewPrice;
+  final int eventDiscountDaysLeft;
+  final List<String> interactedUsers;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // old price and new price and days left
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  '₹ ',
+                  style: AppTheme.simpleText.copyWith(
+                    color: AppColours.white,
+                  ),
+                ),
+                Text(
+                  eventOldPrice.toString(),
+                  style: AppTheme.simpleText.copyWith(
+                    decoration: TextDecoration.lineThrough,
+                    decorationColor: AppColours.white,
+                    color: AppColours.white,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '₹ $eventNewPrice',
+                        style: AppTheme.heavyBodyText.copyWith(
+                          color: AppColours.vibrantYellow,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(8.0),
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColours.black,
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 3.0,
+                  ),
+                  child: Text(
+                    '$eventDiscountDaysLeft days left',
+                    style: const TextStyle(
+                      fontFamily: 'AlbertSans',
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.w500,
+                      color: AppColours.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        const Gap(16.0),
+
+        // see profiles widget
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ...interactedUsers.map(
+              (userImage) => Align(
+                widthFactor: 0.5,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 6),
+                  child: CircleAvatar(
+                    radius: 10.0,
+                    backgroundImage: NetworkImage(userImage),
+                  ),
+                ),
+              ),
+            ),
+            const Gap(20.0),
+            Text(
+              'See profiles',
+              style: AppTheme.simpleText.copyWith(
+                fontWeight: FontWeight.w500,
+                color: AppColours.white,
+              ),
+            ),
+            const Gap(2.0),
+            const Icon(
+              Icons.chevron_right,
+              color: AppColours.vibrantYellow,
+            ),
+          ],
         ),
       ],
     );
