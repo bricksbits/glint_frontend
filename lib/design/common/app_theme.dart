@@ -16,6 +16,14 @@ class AppTheme {
     fontWeight: FontWeight.bold,
     color: Colors.black87,
   );
+
+  static const TextStyle heavyBodyText = TextStyle(
+    fontFamily: 'AlbertSans',
+    fontSize: 18.0,
+    fontWeight: FontWeight.w700,
+    color: Colors.black87,
+  );
+
   static const TextStyle logoHeadingText = TextStyle(
     fontFamily: 'AlbertSans',
     fontSize: 24.0,
