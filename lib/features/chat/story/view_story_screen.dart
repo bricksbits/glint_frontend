@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/app_colours.dart';
+import 'package:glint_frontend/design/components/chat/story_comment_like.dart';
+import 'package:glint_frontend/design/components/glint_text_input_field.dart';
 import 'package:glint_frontend/features/chat/story/model/story_model.dart';
 import 'package:story/story_image.dart';
 import 'package:story/story_page_view.dart';
@@ -20,8 +24,7 @@ final sampleUsers = [
         "https://images.unsplash.com/photo-1609439547168-c973842210e1?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4Nnx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"),
   ], "Glint Two",
       "https://images.unsplash.com/photo-1601758125946-6ec2ef64daf8?ixid=MXwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwzMjN8fHxlbnwwfHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"),
-  UserModel(
-      [
+  UserModel([
     StoryModel(
         "https://images.unsplash.com/photo-1609421139394-8def18a165df?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMDl8fHxlbnwwfHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"),
     StoryModel(
@@ -41,6 +44,7 @@ class ViewStoryScreen extends StatefulWidget {
 
 class _ViewStoryScreenState extends State<ViewStoryScreen> {
   late ValueNotifier<IndicatorAnimationCommand> indicatorAnimationController;
+  final customPronounsController = TextEditingController();
 
   @override
   void initState() {
@@ -67,13 +71,14 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
               Positioned.fill(
                 child: Container(color: Colors.black),
               ),
+              // TODO(GO): Put the Error Builder here
               Positioned.fill(
                 child: StoryImage(
                   key: ValueKey(story.imageUrl),
                   imageProvider: NetworkImage(
                     story.imageUrl,
                   ),
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.cover,
                 ),
               ),
               Padding(
@@ -97,11 +102,40 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                     Text(
                       user.userName,
                       style: const TextStyle(
-                        fontSize: 17,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                          fontSize: 17,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "AlbertSans"),
                     ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: AppColours.primaryBlue,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            color: Colors.white,
+                            icon: const Icon(Icons.bolt),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          const Gap(4),
+                          const Text(
+                            "3",
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "AlbertSans",
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -109,49 +143,32 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
           );
         },
         gestureItemBuilder: (context, pageIndex, storyIndex) {
-          return Stack(children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 32),
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  color: Colors.white,
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ),
-            if (pageIndex == 0)
-              Center(
-                child: ElevatedButton(
-                  child: const Text('show modal bottom sheet'),
-                  onPressed: () async {
-                    indicatorAnimationController.value =
-                        IndicatorAnimationCommand.pause;
-                    await showModalBottomSheet(
-                      context: context,
-                      builder: (context) => SizedBox(
-                        height: MediaQuery.of(context).size.height / 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(24),
-                          child: Text(
-                            'Look! The indicator is now paused\n\n'
-                            'It will be coutinued after closing the modal bottom sheet.',
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    );
-                    indicatorAnimationController.value =
-                        IndicatorAnimationCommand.resume;
-                  },
-                ),
-              ),
-          ]);
+          return LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return Stack(
+                children: [
+                  Positioned(
+                    left: 32,
+                    top: 32,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      color: Colors.white,
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const Positioned(
+                    bottom: 24,
+                    left: 24,
+                    right: 24,
+                    child: StoryCommentTextInput(),
+                  ),
+                ],
+              );
+            },
+          );
         },
         indicatorAnimationController: indicatorAnimationController,
         initialStoryIndex: (pageIndex) {

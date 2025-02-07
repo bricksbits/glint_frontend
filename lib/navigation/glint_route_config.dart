@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:glint_frontend/features/chat/chat_event_tickets_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
