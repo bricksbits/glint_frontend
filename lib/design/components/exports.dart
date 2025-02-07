@@ -1,3 +1,4 @@
+export 'admin/exports.dart';
 export 'auth/exports.dart';
 export 'event/exports.dart';
 export 'filter/exports.dart';

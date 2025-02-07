@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
@@ -32,13 +31,7 @@ class _AdminCreateAccountScreenState extends State<AdminCreateAccountScreen> {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppColours.white,
-      appBar: AppBar(
-        centerTitle: false,
-        backgroundColor: AppColours.white,
-        title: SvgPicture.asset(
-          'lib/assets/images/admin/glint_event_management_logo.svg',
-        ),
-      ),
+      appBar: const GlintEventAuthAppbar(),
       body: Column(
         children: [
           SizedBox(
