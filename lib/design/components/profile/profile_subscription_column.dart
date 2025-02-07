@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+
 import '../../exports.dart';
 
 class ProfileSubscriptionColumn extends StatelessWidget {
@@ -123,7 +124,7 @@ class ProfileSubscriptionColumn extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTheme.headingThree.copyWith(
+                  style: AppTheme.headingFour.copyWith(
                     fontWeight: FontWeight.w700,
                     fontStyle: FontStyle.normal,
                     color: isGoldPlan ? AppColours.black : AppColours.white,

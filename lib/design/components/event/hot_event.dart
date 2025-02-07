@@ -63,7 +63,7 @@ class HotEvent extends StatelessWidget {
                     // event name
                     Text(
                       eventName,
-                      style: AppTheme.headingThree.copyWith(
+                      style: AppTheme.headingFour.copyWith(
                         fontStyle: FontStyle.normal,
                         color: AppColours.white,
                         fontWeight: FontWeight.w900,

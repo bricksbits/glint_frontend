@@ -104,7 +104,7 @@ class _YourPronounsCardState extends State<YourPronounsCard> {
             children: [
               Text(
                 'Your Pronouns',
-                style: AppTheme.headingThree.copyWith(
+                style: AppTheme.headingFour.copyWith(
                   fontWeight: FontWeight.w700,
                   fontStyle: FontStyle.italic,
                 ),

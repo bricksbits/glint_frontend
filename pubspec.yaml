@@ -51,6 +51,7 @@ flutter:
     - lib/assets/icons/profile/
     - lib/assets/images/event/
     - lib/assets/images/auth/
+    - lib/assets/images/admin/
 
   fonts:
     - family: AlbertSans
