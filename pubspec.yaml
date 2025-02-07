@@ -23,11 +23,24 @@ dependencies:
   gradient_circular_progress_indicator: ^0.0.4
   carousel_slider: ^5.0.0
   story: ^1.1.0
+  pinput: ^5.0.1
+  dio: ^5.8.0+1
+  encrypt_shared_preferences: ^0.8.6
+  floor: ^1.5.0
+  path_provider: ^2.1.0
+  get_it: ^8.0.3
+  injectable: ^2.5.0
+  rxdart: ^0.28.0
+  logging: ^1.3.0
+  floor_generator: ^1.5.0
+  flutter_secure_storage: ^4.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  build_runner: ^2.4.13
+  injectable_generator: ^2.6.2
 
 flutter:
   uses-material-design: true
@@ -38,6 +51,7 @@ flutter:
     - lib/assets/images/onboarding/
     - lib/assets/icons/profile/
     - lib/assets/images/event/
+    - lib/assets/images/auth/
 
   fonts:
     - family: AlbertSans

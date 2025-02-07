@@ -101,7 +101,9 @@ class _MainEventScreenState extends State<MainEventScreen> {
           children: [
             HotEvent(),
             Gap(16.0),
-            HotEvent(),
+            HotEvent(
+              showDiscount: false,
+            ),
           ],
         )
       ],
