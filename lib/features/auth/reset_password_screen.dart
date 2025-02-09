@@ -11,6 +11,8 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+  final bool isAdmin = false;
+
   final _emailController = TextEditingController();
 
   final _emailFocusNode = FocusNode();
@@ -26,16 +28,31 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: AppColours.white,
+      appBar: isAdmin
+          ? const GlintEventAuthAppbar()
+          : AppBar(
+              backgroundColor: AppColours.white,
+            ),
       body: AuthStackedIllustrationScreen(
+        isAdmin: isAdmin,
         body: Column(
           children: [
             // create account heading
-            Center(
-              child: SvgPicture.asset(
-                'lib/assets/images/auth/glint_reset_password.svg',
+            if (isAdmin) const Spacer(),
+            if (!isAdmin)
+              Center(
+                child: SvgPicture.asset(
+                  'lib/assets/images/auth/glint_reset_password.svg',
+                ),
               ),
-            ),
+            if (isAdmin)
+              Text(
+                'Reset Password',
+                style: AppTheme.headingThree.copyWith(
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
 
             const Gap(40.0),
 
@@ -56,19 +73,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             const Gap(50.0),
 
             // create account button
-            SizedBox(
-              width: double.infinity,
-              child: GlintElevatedButton(
-                label: 'Get OTP',
-                customBorderRadius: 10.0,
-                customTextStyle: AppTheme.simpleBodyText.copyWith(
-                  color: AppColours.white,
-                ),
-                onPressed: () {
-                  // TODO - add get otp functionality
-                  debugPrint('Get otp button pressed');
-                },
-              ),
+            GlintAuthActionButton(
+              label: 'Get OTP',
+              onPressed: () {
+                // TODO - add get otp functionality
+                debugPrint('Get otp button pressed');
+              },
+            ),
+            const Spacer(
+              flex: 5,
             ),
           ],
         ),
