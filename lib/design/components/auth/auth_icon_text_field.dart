@@ -5,6 +5,7 @@ import 'package:glint_frontend/design/common/app_colours.dart';
 enum IconTextFieldType {
   email,
   password,
+  organization,
 }
 
 class AuthIconTextField extends StatefulWidget {
@@ -30,6 +31,17 @@ class AuthIconTextField extends StatefulWidget {
 }
 
 class _AuthIconTextFieldState extends State<AuthIconTextField> {
+  String getIcon(IconTextFieldType type) {
+    switch (type) {
+      case IconTextFieldType.email:
+        return 'lib/assets/icons/email_icon.svg';
+      case IconTextFieldType.password:
+        return 'lib/assets/icons/lock_icon.svg';
+      case IconTextFieldType.organization:
+        return 'lib/assets/icons/organization_icon.svg';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const defaultBorder = BorderSide(
@@ -73,13 +85,9 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
                     ),
                   ),
                 ),
-                child: widget.type == IconTextFieldType.email
-                    ? SvgPicture.asset(
-                        'lib/assets/icons/email_icon.svg',
-                      )
-                    : SvgPicture.asset(
-                        'lib/assets/icons/lock_icon.svg',
-                      ),
+                child: SvgPicture.asset(
+                  getIcon(widget.type),
+                ),
               ),
             ),
             Expanded(
