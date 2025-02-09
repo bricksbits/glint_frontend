@@ -12,7 +12,7 @@ class CreateAccountScreen extends StatefulWidget {
 }
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
-  final bool isAdmin = false;
+  final bool isAdmin = true;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
