@@ -3,6 +3,7 @@ export 'auth/exports.dart';
 export 'event/exports.dart';
 export 'filter/exports.dart';
 export 'glint_app_bar.dart';
+export 'glint_auth_action_button.dart';
 export 'glint_check_icon.dart';
 export 'glint_custom_app_bar.dart';
 export 'glint_custom_bordered_elevated_button.dart';

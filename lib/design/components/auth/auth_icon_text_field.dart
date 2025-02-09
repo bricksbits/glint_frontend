@@ -38,7 +38,7 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
       case IconTextFieldType.password:
         return 'lib/assets/icons/lock_icon.svg';
       case IconTextFieldType.organization:
-        return 'lib/assets/icons/organization_icon.svg';
+        return 'lib/assets/icons/organization.svg';
     }
   }
 
@@ -85,8 +85,12 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
                     ),
                   ),
                 ),
-                child: SvgPicture.asset(
-                  getIcon(widget.type),
+                child: SizedBox(
+                  width: 20.0,
+                  height: 20.0,
+                  child: SvgPicture.asset(
+                    getIcon(widget.type),
+                  ),
                 ),
               ),
             ),
@@ -97,7 +101,11 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
                 focusNode: widget.focusNode,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
-                  hintStyle: const TextStyle(color: Colors.grey),
+                  hintStyle: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w300,
+                  ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 12.0,
