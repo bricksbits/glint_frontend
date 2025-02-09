@@ -12,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final bool isAdmin = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _emailFocusNode = FocusNode();
@@ -26,109 +27,136 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  Widget _buildAuthFields() {
+    return Column(
+      children: [
+        AuthIconTextField(
+          controller: _emailController,
+          type: IconTextFieldType.email,
+          focusNode: _emailFocusNode,
+          hintText: 'Enter Email',
+          isTextFieldFocused: _emailFocusNode.hasFocus,
+          onTap: () => setState(() => _emailFocusNode.requestFocus()),
+        ),
+        const Gap(20.0),
+        AuthIconTextField(
+          controller: _passwordController,
+          type: IconTextFieldType.password,
+          focusNode: _passwordFocusNode,
+          hintText: 'Enter Password',
+          isTextFieldFocused: _passwordFocusNode.hasFocus,
+          onTap: () => setState(() => _passwordFocusNode.requestFocus()),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildForgotPassword() {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {}, // TODO - Handle Forget Password tap
+      child: Align(
+        alignment: isAdmin ? Alignment.center : Alignment.centerRight,
+        child: Text(
+          'Forgot your password?',
+          style: AppTheme.simpleText.copyWith(
+            color: AppColours.primaryBlue,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(String label, VoidCallback onPressed) {
+    return SizedBox(
+      width: double.infinity,
+      child: GlintElevatedButton(
+        label: label,
+        customBorderRadius: 10.0,
+        customTextStyle: AppTheme.simpleBodyText.copyWith(
+          color: AppColours.white,
+        ),
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  Widget _buildRegisterText() {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        style: AppTheme.simpleText,
+        children: [
+          const TextSpan(text: "Don't have an account? "),
+          TextSpan(
+            text: isAdmin ? "Register now" : "Create now",
+            style: const TextStyle(
+              color: AppColours.primaryBlue,
+              decoration: TextDecoration.underline,
+              fontWeight: FontWeight.w600,
+            ),
+            recognizer: TapGestureRecognizer()..onTap = () {},
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: AppColours.white,
+      appBar: isAdmin
+          ? const GlintEventAuthAppbar()
+          : AppBar(
+              backgroundColor: AppColours.white,
+            ),
       body: AuthStackedIllustrationScreen(
+        isAdmin: isAdmin,
         body: Column(
           children: [
-            // create account heading
-            Center(
-              child: SvgPicture.asset(
-                'lib/assets/images/auth/glint_login.svg',
+            if (!isAdmin)
+              Center(
+                child:
+                    SvgPicture.asset('lib/assets/images/auth/glint_login.svg'),
               ),
-            ),
-
             const Gap(40.0),
-
-            // text fields
-            AuthIconTextField(
-              controller: _emailController,
-              type: IconTextFieldType.email,
-              focusNode: _emailFocusNode,
-              hintText: 'Enter Email',
-              isTextFieldFocused: _emailFocusNode.hasFocus,
-              onTap: () {
-                setState(() {
-                  _emailFocusNode.requestFocus();
-                });
-              },
-            ),
-
-            const Gap(20.0),
-
-            AuthIconTextField(
-              controller: _passwordController,
-              type: IconTextFieldType.password,
-              focusNode: _passwordFocusNode,
-              hintText: 'Enter Password',
-              isTextFieldFocused: _passwordFocusNode.hasFocus,
-              onTap: () {
-                setState(() {
-                  _passwordFocusNode.requestFocus();
-                });
-              },
-            ),
-
-            const Gap(12.0),
-
-            // forgot your password button
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Forgot your password?',
-                style: AppTheme.simpleText.copyWith(
-                  color: AppColours.primaryBlue,
-                  decoration: TextDecoration.underline,
+            if (isAdmin)
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 40.0),
+                  child: Column(
+                    children: [
+                      const Spacer(),
+                      Text(
+                        'Login',
+                        style: AppTheme.headingThree
+                            .copyWith(fontStyle: FontStyle.normal),
+                      ),
+                      const Gap(32.0),
+                      _buildAuthFields(),
+                      const Gap(60.0),
+                      _buildActionButton(
+                          'Log In', () => debugPrint('Login button pressed')),
+                      const Gap(16.0),
+                      _buildForgotPassword(),
+                      const Spacer(flex: 4),
+                      _buildRegisterText(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-
-            const Gap(60.0),
-
-            // create account button
-            SizedBox(
-              width: screenSize.width * 0.85,
-              child: GlintElevatedButton(
-                label: 'Login',
-                customBorderRadius: 10.0,
-                customTextStyle: AppTheme.simpleBodyText.copyWith(
-                  color: AppColours.white,
-                ),
-                onPressed: () {
-                  // TODO - add create account functionality
-                  debugPrint('Login button pressed');
-                },
-              ),
-            ),
-
-            const Gap(16.0),
-
-            // login button
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: AppTheme.simpleText,
-                children: [
-                  const TextSpan(
-                    text: "Don't have an account? ",
-                  ),
-                  TextSpan(
-                    text: "Create now",
-                    style: const TextStyle(
-                      color: AppColours.primaryBlue,
-                      decoration: TextDecoration.underline,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        // TODO - Handle Privacy Policy tap
-                      },
-                  ),
-                ],
-              ),
-            ),
+            if (!isAdmin) ...[
+              _buildAuthFields(),
+              const Gap(12.0),
+              _buildForgotPassword(),
+              const Gap(60.0),
+              _buildActionButton(
+                  'Login', () => debugPrint('Login button pressed')),
+              const Gap(16.0),
+              _buildRegisterText(),
+            ],
           ],
         ),
       ),

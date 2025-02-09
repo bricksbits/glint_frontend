@@ -5,9 +5,11 @@ class AuthStackedIllustrationScreen extends StatelessWidget {
   const AuthStackedIllustrationScreen({
     super.key,
     required this.body,
+    this.isAdmin = false,
   });
 
   final Widget body;
+  final bool? isAdmin;
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +20,14 @@ class AuthStackedIllustrationScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 40.0),
               child: body),
         ),
-
-        // bottom glint logo illustration
-        Positioned(
-          bottom: 0,
-          child: SvgPicture.asset(
-            'lib/assets/images/auth/auth_glint_logo_illustration.svg',
+        if (isAdmin == false)
+          // bottom glint logo illustration
+          Positioned(
+            bottom: 0,
+            child: SvgPicture.asset(
+              'lib/assets/images/auth/auth_glint_logo_illustration.svg',
+            ),
           ),
-        ),
       ],
     );
   }
