@@ -62,3 +62,5 @@ flutter:
         - asset: lib/assets/fonts/Cambon-Light.ttf
         - asset: lib/assets/fonts/Cambon-MediumItalic.ttf
         - asset: lib/assets/fonts/Cambon-SemiBoldItalic.ttf
+        - asset: lib/assets/fonts/Cambon-Bold.ttf
+          weight: 700
