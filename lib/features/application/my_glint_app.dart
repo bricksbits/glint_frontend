@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/auth/enter_otp_screen.dart';
+import 'package:glint_frontend/features/auth/password_change_confirmation_screen.dart';
 // import 'package:glint_frontend/navigation/glint_route_config.dart';
 
 class MyGlintApp extends StatelessWidget {
@@ -12,7 +12,7 @@ class MyGlintApp extends StatelessWidget {
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const EnterOtpScreen(),
+      home: const PasswordChangeConfirmationScreen(),
       // routerConfig: glintMainRoutes,
       // routerConfig: glintMainRoutes,
     );
