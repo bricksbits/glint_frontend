@@ -11,6 +11,8 @@ class CreatePasswordScreen extends StatefulWidget {
 }
 
 class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
+  final bool isAdmin = true;
+
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
@@ -30,18 +32,37 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: AppColours.white,
+      appBar: isAdmin
+          ? const GlintEventAuthAppbar()
+          : AppBar(
+              backgroundColor: AppColours.white,
+            ),
       body: AuthStackedIllustrationScreen(
+        isAdmin: isAdmin,
         body: Column(
           children: [
-            // create account heading
-            Center(
-              child: SvgPicture.asset(
-                'lib/assets/images/auth/glint_create_password.svg',
+            if (!isAdmin) ...[
+              // create account heading
+              Center(
+                child: SvgPicture.asset(
+                  'lib/assets/images/auth/glint_create_password.svg',
+                ),
               ),
-            ),
 
-            const Gap(40.0),
+              const Gap(40.0),
+            ],
+
+            if (isAdmin) ...[
+              const Spacer(),
+              Text(
+                'Re-Create Password',
+                style: AppTheme.headingThree.copyWith(
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
+              const Gap(32.0),
+            ],
 
             // text fields
             AuthIconTextField(
@@ -78,7 +99,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
             SizedBox(
               width: double.infinity,
               child: GlintElevatedButton(
-                label: 'Login',
+                label: isAdmin ? 'Confirm' : 'Login',
                 customBorderRadius: 10.0,
                 customTextStyle: AppTheme.simpleBodyText.copyWith(
                   color: AppColours.white,
@@ -89,6 +110,8 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                 },
               ),
             ),
+
+            if (isAdmin) const Spacer(flex: 4),
           ],
         ),
       ),
