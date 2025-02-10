@@ -14,11 +14,15 @@ class CreateAccountScreen extends StatefulWidget {
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final bool isAdmin = true;
 
+  final _nameController = TextEditingController();
+  final _contactController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _organizationController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  final _nameFocusNode = FocusNode();
+  final _contactFocusNode = FocusNode();
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _organizationFocusNode = FocusNode();
@@ -113,6 +117,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       ),
                       const Gap(32.0),
                       _buildTextField(
+                        controller: _nameController,
+                        type: IconTextFieldType.user,
+                        focusNode: _nameFocusNode,
+                        hintText: 'Enter Your Name',
+                      ),
+                      const Gap(20.0),
+                      _buildTextField(
                         controller: _emailController,
                         type: IconTextFieldType.email,
                         focusNode: _emailFocusNode,
@@ -127,21 +138,30 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       ),
                       const Gap(20.0),
                       _buildTextField(
+                        controller: _contactController,
+                        type: IconTextFieldType.contact,
+                        focusNode: _contactFocusNode,
+                        hintText: 'Contact Number',
+                      ),
+                      const Gap(20.0),
+                      _buildTextField(
                         controller: _passwordController,
                         type: IconTextFieldType.password,
                         focusNode: _passwordFocusNode,
                         hintText: 'Create Password',
                       ),
-                      const Spacer(
-                        flex: 5,
-                      ),
+                      const Gap(48.0),
                       GlintAuthActionButton(
-                        label: 'Create Account',
-                        onPressed: () =>
-                            debugPrint('Create account button pressed'),
+                        label: 'Register',
+                        onPressed: () => debugPrint(
+                          'register button pressed',
+                        ),
                       ),
                       const Gap(16.0),
                       _buildLoginText(),
+                      const Spacer(
+                        flex: 4,
+                      )
                     ],
                   ),
                 ),

@@ -6,6 +6,8 @@ enum IconTextFieldType {
   email,
   password,
   organization,
+  user,
+  contact,
 }
 
 class AuthIconTextField extends StatefulWidget {
@@ -39,6 +41,10 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
         return 'lib/assets/icons/lock_icon.svg';
       case IconTextFieldType.organization:
         return 'lib/assets/icons/organization.svg';
+      case IconTextFieldType.contact:
+        return 'lib/assets/icons/contact_icon.svg';
+      case IconTextFieldType.user:
+        return 'lib/assets/icons/user_icon.svg';
     }
   }
 
