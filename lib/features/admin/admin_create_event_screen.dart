@@ -3,6 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
+enum EventType { hot, normal }
+
 class AdminCreateEventScreen extends StatefulWidget {
   const AdminCreateEventScreen({super.key});
 
@@ -11,6 +13,23 @@ class AdminCreateEventScreen extends StatefulWidget {
 }
 
 class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
+  EventType _selectedChip = EventType.hot;
+  final List<Map<EventType, String>> eventTypeOptions = [
+    {
+      EventType.hot: '🔥 Hot Event',
+    },
+    {
+      EventType.normal: 'Normal',
+    },
+  ];
+  final _eventNameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _eventNameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +87,131 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
           const Gap(32.0),
         ],
       ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 28.0).copyWith(
+          bottom: 28.0,
+        ),
+        child: SingleChildScrollView(
+          child: SizedBox(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Gap(20.0),
+                // event name text input field
+                _buildEventNameTextField(),
+
+                const Gap(24.0),
+
+                // event type selector
+                _buildEventTypeSelector(),
+
+                const Gap(20.0),
+                // no. of person selector
+                _builtNumberOfPersonSelector(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEventNameTextField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // label
+        RichText(
+          text: TextSpan(
+            children: [
+              const TextSpan(
+                text: 'Event Name',
+                style: AppTheme.smallBodyText,
+              ),
+              TextSpan(
+                text: ' (Not Editable)',
+                style: AppTheme.smallBodyText.copyWith(
+                  color: AppColours.gray60,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Gap(10.0),
+        // input field
+        GlintTextInputField(
+          controller: _eventNameController,
+          borderRadius: 10.0,
+          hintText: 'The Indian Food Festival',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEventTypeSelector() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Event Type:',
+          style: AppTheme.smallBodyText,
+        ),
+        const Gap(16.0),
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 8.0,
+          children: eventTypeOptions.map(
+            (option) {
+              final chipEnum = option.keys.first;
+              final chipLabel = option.values.first;
+              final isSelected = _selectedChip == chipEnum;
+
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedChip = chipEnum;
+                  });
+                  print(_selectedChip);
+                },
+                child: Chip(
+                  shape: const StadiumBorder(
+                    side: BorderSide(
+                      color: AppColours.backgroundShade,
+                      width: 1.4,
+                    ),
+                  ),
+                  label: Text(
+                    chipLabel,
+                    style: AppTheme.smallBodyText.copyWith(
+                        fontSize: 12.0,
+                        color: isSelected
+                            ? AppColours.primaryBlue
+                            : AppColours.black),
+                  ),
+                  backgroundColor: isSelected
+                      ? AppColours.chipBackgroundShade
+                      : AppColours.white,
+                ),
+              );
+            },
+          ).toList(),
+        )
+      ],
+    );
+  }
+
+  Widget _builtNumberOfPersonSelector() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Select Number of Persons:',
+          style: AppTheme.smallBodyText,
+        ),
+        const Gap(10.0),
+        NumberOfPersonSelector()
+      ],
     );
   }
 }

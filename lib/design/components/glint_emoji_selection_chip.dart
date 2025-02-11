@@ -4,14 +4,14 @@ import 'package:glint_frontend/design/exports.dart';
 
 class GlintEmojiSelectionChip extends StatelessWidget {
   final String label;
-  final String icon;
+  final String? icon;
   final bool isSelected;
   final VoidCallback onTap;
 
   const GlintEmojiSelectionChip({
     super.key,
     required this.label,
-    required this.icon,
+    this.icon,
     required this.isSelected,
     required this.onTap,
   });
@@ -47,10 +47,12 @@ class GlintEmojiSelectionChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              icon,
-            ),
-            const Gap(10.0),
+            if (icon != null) ...[
+              Text(
+                icon!,
+              ),
+              const Gap(10.0),
+            ],
             Text(
               label,
               style: AppTheme.simpleText.copyWith(

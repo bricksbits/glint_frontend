@@ -10,6 +10,7 @@ class GlintTextInputField extends StatelessWidget {
     this.isCenter = false,
     this.onChanged,
     this.suffix,
+    this.borderRadius,
   });
 
   final TextEditingController controller;
@@ -17,6 +18,7 @@ class GlintTextInputField extends StatelessWidget {
   final bool? isCenter;
   final ValueChanged<String>? onChanged;
   final Widget? suffix;
+  final double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class GlintTextInputField extends StatelessWidget {
       height: 52.0,
       decoration: BoxDecoration(
         color: AppColours.white,
-        borderRadius: BorderRadius.circular(38.0),
+        borderRadius: BorderRadius.circular(borderRadius ?? 38.0),
         border: Border(
           top: defaultBorder,
           left: defaultBorder.copyWith(width: 3.0),
@@ -55,7 +57,7 @@ class GlintTextInputField extends StatelessWidget {
           // no counter
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 28.0,
+            horizontal: 24.0,
             vertical: 8.0,
           ),
           hintText: hintText,
