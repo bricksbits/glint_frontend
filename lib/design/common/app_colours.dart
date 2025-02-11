@@ -14,6 +14,9 @@ class AppColours {
   static const tabBarBorder = Color(0xFFEEEEEE);
   static const vibrantYellow = Color(0xFFFAFF7F);
 
+  static const lightRed = Color(0xFFFFF6F5);
+  static const red = Colors.red;
+
   // with opacity shades
   static final primaryBlue60 = primaryBlue.withAlpha(153);
   static final gray60 = const Color(0xFFAAAAAA).withAlpha(153);
