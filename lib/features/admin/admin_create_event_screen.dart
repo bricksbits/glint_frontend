@@ -1,7 +1,11 @@
+import 'package:bottom_picker/bottom_picker.dart';
+import 'package:bottom_picker/resources/arrays.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:intl/intl.dart';
 
 enum EventType { hot, normal }
 
@@ -13,7 +17,16 @@ class AdminCreateEventScreen extends StatefulWidget {
 }
 
 class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
+  // data we need from manager
+  final _eventNameController = TextEditingController();
   EventType _selectedChip = EventType.hot;
+  int _selectedNumberOfPerson = 10;
+  final _actualPriceController = TextEditingController();
+  final _discountPriceController = TextEditingController();
+  String? _selectedDate;
+  String? _selectedTime;
+
+// functions or static vars
   final List<Map<EventType, String>> eventTypeOptions = [
     {
       EventType.hot: '🔥 Hot Event',
@@ -22,11 +35,67 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
       EventType.normal: 'Normal',
     },
   ];
-  final _eventNameController = TextEditingController();
 
-  int _selectedNumberOfPerson = 10;
-  final _actualPriceController = TextEditingController();
-  final _discountPriceController = TextEditingController();
+  void showBottomTimePicker() {
+    BottomPicker.time(
+      use24hFormat: false,
+      onSubmit: (time) {
+        String formattedTime = DateFormat('hh:mm a').format(time);
+        setState(() {
+          _selectedTime = formattedTime;
+        });
+      },
+      dismissable: true,
+      displayCloseIcon: false,
+      bottomPickerTheme: BottomPickerTheme.plumPlate,
+      pickerTitle: const SizedBox.shrink(),
+      buttonWidth: 200.0,
+      gradientColors: const [
+        AppColours.primaryBlue,
+        AppColours.purpleShade,
+      ],
+      initialTime: Time.now(),
+    ).show(context);
+  }
+
+  void showBottomDatePicker() {
+    BottomPicker.date(
+      dateOrder: DatePickerDateOrder.dmy,
+      initialDateTime: DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day + 1,
+      ),
+      pickerTextStyle: AppTheme.simpleText.copyWith(
+        fontSize: 16.0,
+      ),
+      maxDateTime: DateTime(
+        DateTime.now().year + 10,
+        DateTime.now().month,
+        DateTime.now().day,
+      ),
+      minDateTime: DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day - 1,
+      ),
+      onSubmit: (date) {
+        String formattedDate = DateFormat('dd/MMM/yyyy').format(date);
+        setState(() {
+          _selectedDate = formattedDate;
+        });
+      },
+      dismissable: true,
+      displayCloseIcon: false,
+      bottomPickerTheme: BottomPickerTheme.plumPlate,
+      pickerTitle: const SizedBox.shrink(),
+      buttonWidth: 200.0,
+      gradientColors: const [
+        AppColours.primaryBlue,
+        AppColours.purpleShade,
+      ],
+    ).show(context);
+  }
 
   @override
   void dispose() {
@@ -121,8 +190,15 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
 
                 const Gap(12.0),
 
-                //discout price
+                //discount price
                 _buildDiscountPriceField(),
+
+                const Gap(24.0),
+                // event date picker
+                _buildEventDatePicker(),
+
+                const Gap(12.0),
+                _buildEventTimePicker(),
               ],
             ),
           ),
@@ -186,7 +262,6 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                   setState(() {
                     _selectedChip = chipEnum;
                   });
-                  print(_selectedChip);
                 },
                 child: Chip(
                   shape: const StadiumBorder(
@@ -286,6 +361,52 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         const Gap(10.0),
         PriceInputField(
           controller: _discountPriceController,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEventDatePicker() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Select Event Date*',
+          style: AppTheme.smallBodyText,
+        ),
+        const Gap(10.0),
+        CreateEventSuffixIconField(
+          onPressed: showBottomDatePicker,
+          assetPath: 'lib/assets/icons/calendar_icon.svg',
+          child: _selectedDate == null
+              ? const SizedBox.shrink()
+              : Text(
+                  _selectedDate!,
+                  style: AppTheme.simpleText,
+                ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEventTimePicker() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Select Event Time*',
+          style: AppTheme.smallBodyText,
+        ),
+        const Gap(10.0),
+        CreateEventSuffixIconField(
+          onPressed: showBottomTimePicker,
+          icon: Icons.timelapse_rounded,
+          child: _selectedTime == null
+              ? const SizedBox.shrink()
+              : Text(
+                  _selectedTime!,
+                  style: AppTheme.simpleText,
+                ),
         ),
       ],
     );
