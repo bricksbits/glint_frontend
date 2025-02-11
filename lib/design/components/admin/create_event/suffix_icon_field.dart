@@ -8,13 +8,13 @@ class CreateEventSuffixIconField extends StatelessWidget {
     required this.child,
     this.assetPath,
     this.icon,
-    required this.onPressed,
+    this.onPressed,
   });
 
   final Widget child;
   final String? assetPath;
   final IconData? icon;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {

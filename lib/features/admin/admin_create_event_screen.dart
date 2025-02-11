@@ -25,6 +25,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
   final _discountPriceController = TextEditingController();
   String? _selectedDate;
   String? _selectedTime;
+  final _locationController = TextEditingController();
 
 // functions or static vars
   final List<Map<EventType, String>> eventTypeOptions = [
@@ -109,6 +110,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
       backgroundColor: AppColours.white,
       appBar: AppBar(
         titleSpacing: 32.0,
+        scrolledUnderElevation: 0,
         title: const Text(
           'Create Event',
           style: AppTheme.heavyBodyText,
@@ -160,11 +162,11 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
           const Gap(32.0),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28.0).copyWith(
-          bottom: 28.0,
-        ),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28.0).copyWith(
+            bottom: 28.0,
+          ),
           child: SizedBox(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -198,7 +200,12 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                 _buildEventDatePicker(),
 
                 const Gap(12.0),
+                //event time picker
                 _buildEventTimePicker(),
+
+                const Gap(12.0),
+                //event location picker
+                _buildEventLocationField(),
               ],
             ),
           ),
@@ -407,6 +414,30 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                   _selectedTime!,
                   style: AppTheme.simpleText,
                 ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEventLocationField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Select Event Location*',
+          style: AppTheme.smallBodyText,
+        ),
+        const Gap(10.0),
+        CreateEventSuffixIconField(
+          icon: Icons.location_on_outlined,
+          child: TextField(
+            maxLength: 70, // todo - check if needs change
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              counter: SizedBox.shrink(),
+            ),
+            controller: _locationController,
+          ),
         ),
       ],
     );
