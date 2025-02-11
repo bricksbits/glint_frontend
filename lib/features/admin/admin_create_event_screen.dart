@@ -24,6 +24,10 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
   ];
   final _eventNameController = TextEditingController();
 
+  int _selectedNumberOfPerson = 10;
+  final _actualPriceController = TextEditingController();
+  final _discountPriceController = TextEditingController();
+
   @override
   void dispose() {
     _eventNameController.dispose();
@@ -109,6 +113,16 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                 const Gap(20.0),
                 // no. of person selector
                 _builtNumberOfPersonSelector(),
+
+                const Gap(24.0),
+
+                //actual price
+                _buildActualPriceField(),
+
+                const Gap(12.0),
+
+                //discout price
+                _buildDiscountPriceField(),
               ],
             ),
           ),
@@ -210,7 +224,69 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
           style: AppTheme.smallBodyText,
         ),
         const Gap(10.0),
-        NumberOfPersonSelector()
+        NumberOfPersonSelector(
+          initialValue: _selectedNumberOfPerson,
+          onChanged: (int selected) {
+            setState(() {
+              _selectedNumberOfPerson = selected;
+            });
+            debugPrint('Selected number : $selected');
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _buildActualPriceField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Actual Price',
+                style: AppTheme.smallBodyText
+                    .copyWith(fontWeight: FontWeight.w700),
+              ),
+              const TextSpan(
+                text: ' of ticket per person',
+                style: AppTheme.smallBodyText,
+              ),
+            ],
+          ),
+        ),
+        const Gap(10.0),
+        PriceInputField(
+          controller: _actualPriceController,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDiscountPriceField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Discount Price',
+                style: AppTheme.smallBodyText
+                    .copyWith(fontWeight: FontWeight.w700),
+              ),
+              const TextSpan(
+                text: ' (This amount will be charged)',
+                style: AppTheme.smallBodyText,
+              ),
+            ],
+          ),
+        ),
+        const Gap(10.0),
+        PriceInputField(
+          controller: _discountPriceController,
+        ),
       ],
     );
   }

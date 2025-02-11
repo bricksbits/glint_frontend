@@ -105,8 +105,12 @@ class _NumberOfPersonSelectorState extends State<NumberOfPersonSelector> {
           child: Container(
             height: 44.0,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(8.0),
+              border: Border.all(
+                color: Colors.grey.shade300,
+              ),
+              borderRadius: BorderRadius.circular(
+                8.0,
+              ),
             ),
             child: TextField(
               controller: _controller,
@@ -118,8 +122,10 @@ class _NumberOfPersonSelectorState extends State<NumberOfPersonSelector> {
               ],
               decoration: const InputDecoration(
                 border: InputBorder.none,
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 12.0,
+                ),
               ),
               style: AppTheme.simpleText,
               onSubmitted: _handleSubmitted,
