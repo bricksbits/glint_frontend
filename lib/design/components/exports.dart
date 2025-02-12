@@ -14,6 +14,7 @@ export 'glint_empty_state.dart';
 export 'glint_form_field.dart';
 export 'glint_gradient_elevated_button.dart';
 export 'glint_gradient_text.dart';
+export 'glint_icon_elevated_button.dart';
 export 'glint_icon_label.dart';
 export 'glint_notification_tile.dart';
 export 'glint_profile_image_selector.dart';

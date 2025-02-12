@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -115,7 +116,7 @@ class HotEvent extends StatelessWidget {
         Positioned(
           right: 0,
           child: Container(
-            width: screenSize.width * 0.35,
+            width: kIsWeb ? 300.0 : screenSize.width * 0.35,
             height: cardHeight,
             decoration: const BoxDecoration(
               image: DecorationImage(
