@@ -206,6 +206,10 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                 const Gap(12.0),
                 //event location picker
                 _buildEventLocationField(),
+
+                const Gap(24.0),
+                // event images upload container
+                _buildEventImagesUploadContainer(),
               ],
             ),
           ),
@@ -440,6 +444,20 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
             controller: _locationController,
           ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildEventImagesUploadContainer() {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Upload Event Images*',
+          style: AppTheme.smallBodyText,
+        ),
+        const Gap(16.0),
+        UploadEventImagesContainers(),
       ],
     );
   }

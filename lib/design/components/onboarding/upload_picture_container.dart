@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart'; // Import for kIsWeb
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
 
@@ -8,24 +9,29 @@ class UploadPictureContainer extends StatelessWidget {
     super.key,
     this.isDP = false,
     this.imageFile,
+    this.imageBytes, // Uint8List for web images
     this.onImagePick,
+    this.onRemoveImage, // New callback to remove image
   });
 
   final bool isDP;
   final File? imageFile;
-  final void Function()? onImagePick;
+  final Uint8List? imageBytes; // Web image data
+  final VoidCallback? onImagePick;
+  final VoidCallback? onRemoveImage; // Callback for removing the image
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    final bool hasImage = imageFile != null || imageBytes != null;
+
     final defaultBorder = BorderSide(
       color: isDP
           ? AppColours.primaryBlue
-          : imageFile == null
-              ? AppColours.darkGray
-              : AppColours.primaryBlue,
+          : (!hasImage ? AppColours.darkGray : AppColours.primaryBlue),
       width: 0.7,
     );
+
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.center,
@@ -33,20 +39,23 @@ class UploadPictureContainer extends StatelessWidget {
         GestureDetector(
           onTap: onImagePick,
           child: Container(
-            height: screenSize.width > 500
-                ? screenSize.width > 620
-                    ? 210.0
-                    : 180.0
-                : 140.0,
+            height: kIsWeb
+                ? 340
+                : screenSize.width > 500
+                    ? (screenSize.width > 620 ? 210.0 : 180.0)
+                    : 140.0,
             width: double.infinity,
             decoration: BoxDecoration(
               color: AppColours.white,
-              image: imageFile == null
-                  ? null
-                  : DecorationImage(
-                      image: FileImage(imageFile!),
+              image: hasImage
+                  ? DecorationImage(
+                      image: kIsWeb
+                          ? MemoryImage(imageBytes!) // Web image
+                          : FileImage(imageFile!)
+                              as ImageProvider, // Mobile image
                       fit: BoxFit.cover,
-                    ),
+                    )
+                  : null,
               borderRadius: BorderRadius.circular(16.0),
               border: Border(
                 top: defaultBorder,
@@ -56,8 +65,9 @@ class UploadPictureContainer extends StatelessWidget {
               ),
             ),
             child: Center(
-              child: imageFile == null
-                  ? CircleAvatar(
+              child: hasImage
+                  ? const SizedBox.shrink()
+                  : CircleAvatar(
                       radius: 15.0,
                       backgroundColor:
                           isDP ? AppColours.primaryBlue : AppColours.darkGray,
@@ -66,27 +76,41 @@ class UploadPictureContainer extends StatelessWidget {
                         color: Colors.white,
                         size: 20.0,
                       ),
-                    )
-                  : const SizedBox.shrink(),
+                    ),
             ),
           ),
         ),
+        // icon button to remove image
+        if (hasImage)
+          Positioned(
+            top: 8,
+            right: 8,
+            child: GestureDetector(
+              onTap: onRemoveImage,
+              child: Container(
+                padding: const EdgeInsets.all(4.0),
+                decoration: BoxDecoration(
+                  color: Colors.black54.withValues(alpha: 0.6),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 18.0,
+                ),
+              ),
+            ),
+          ),
         if (isDP)
           Positioned(
             top: -10,
             child: Container(
               height: 20.0,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 2.0,
-              ),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
               decoration: const BoxDecoration(
                 color: AppColours.primaryBlue,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    20.0,
-                  ),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
               child: Center(
                 child: Text(
@@ -99,7 +123,7 @@ class UploadPictureContainer extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
       ],
     );
   }
