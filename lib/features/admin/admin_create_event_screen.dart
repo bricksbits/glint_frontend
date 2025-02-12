@@ -26,6 +26,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
   String? _selectedDate;
   String? _selectedTime;
   final _locationController = TextEditingController();
+  final _eventDescriptionController = TextEditingController();
 
 // functions or static vars
   final List<Map<EventType, String>> eventTypeOptions = [
@@ -210,6 +211,10 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                 const Gap(24.0),
                 // event images upload container
                 _buildEventImagesUploadContainer(),
+
+                const Gap(36.0),
+                // enter event description
+                _buildEventDescriptionField(),
               ],
             ),
           ),
@@ -452,12 +457,52 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Upload Event Images*',
           style: AppTheme.smallBodyText,
         ),
-        const Gap(16.0),
+        Gap(16.0),
         UploadEventImagesContainers(),
+      ],
+    );
+  }
+
+  Widget _buildEventDescriptionField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Event Description*',
+          style: AppTheme.smallBodyText,
+        ),
+        const Gap(12.0),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: AppColours.white,
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(
+              color: AppColours.backgroundShade,
+              width: 1.0,
+            ),
+          ),
+          child: TextField(
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            autocorrect: true,
+            controller: _eventDescriptionController,
+            cursorColor: AppColours.primaryBlue,
+            style: AppTheme.simpleText,
+            decoration: const InputDecoration(
+              counter: SizedBox.shrink(),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
