@@ -14,7 +14,7 @@ class AdminDashboardScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColours.white,
       appBar: const GlintEventAuthAppbar(
-        hasLogoutIcon: true,
+        hasAdminActions: true,
       ),
       body: SizedBox(
         width: double.infinity,
@@ -28,6 +28,8 @@ class AdminDashboardScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // top spacing
+                    const Gap(32.0),
                     // event manager greeting
                     Text(
                       'Hello $eventManagerName',

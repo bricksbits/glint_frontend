@@ -7,10 +7,10 @@ class GlintEventAuthAppbar extends StatefulWidget
     implements PreferredSizeWidget {
   const GlintEventAuthAppbar({
     super.key,
-    this.hasLogoutIcon = false,
+    this.hasAdminActions = false,
   });
 
-  final bool hasLogoutIcon;
+  final bool hasAdminActions;
 
   @override
   State<GlintEventAuthAppbar> createState() => _GlintEventAuthAppbarState();
@@ -156,7 +156,7 @@ class _GlintEventAuthAppbarState extends State<GlintEventAuthAppbar> {
         'lib/assets/images/admin/glint_event_management_logo.svg',
       ),
       titleSpacing: 24.0,
-      actions: widget.hasLogoutIcon == true
+      actions: widget.hasAdminActions == true
           ? [
               GestureDetector(
                 onTap: () {

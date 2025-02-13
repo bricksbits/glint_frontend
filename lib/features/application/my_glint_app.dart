@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/admin/admin_dashboard_screen.dart';
+import 'package:glint_frontend/features/admin/admin_edit_profile_screen.dart';
 // import 'package:glint_frontend/navigation/glint_route_config.dart';
 
 class MyGlintApp extends StatelessWidget {
@@ -12,7 +12,7 @@ class MyGlintApp extends StatelessWidget {
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const AdminDashboardScreen(),
+      home: const AdminEditProfileScreen(),
       // routerConfig: glintMainRoutes,
       // routerConfig: glintMainRoutes,
     );
