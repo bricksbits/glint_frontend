@@ -97,6 +97,7 @@ class _GlintEventAuthAppbarState extends State<GlintEventAuthAppbar> {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: false,
+      scrolledUnderElevation: 0.0,
       backgroundColor: AppColours.white,
       title: SvgPicture.asset(
         'lib/assets/images/admin/glint_event_management_logo.svg',

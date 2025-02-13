@@ -15,6 +15,12 @@ class AppColours {
   static const tabBarBorder = Color(0xFFEEEEEE);
   static const vibrantYellow = Color(0xFFFAFF7F);
 
+  //event status colors
+  static const liveColor = Color(0xFF4BCB87);
+  static const inApprovalColor = Color(0xFFFFB97F);
+  static const rejectedColor = AppColours.pink;
+  static const pastEventColor = AppColours.black;
+
   static const lightRed = Color(0xFFFFF6F5);
   static const red = Colors.red;
 
