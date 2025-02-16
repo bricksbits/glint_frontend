@@ -1,187 +1,138 @@
 import 'package:flutter/material.dart';
+import 'package:glint_frontend/design/common/app_colours.dart';
+import 'package:glint_frontend/design/components/chat/common_ticket_banner.dart';
+import 'package:glint_frontend/design/components/chat/ticket_details_component.dart';
 
 class ChatTicketInfoView extends StatelessWidget {
   const ChatTicketInfoView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Card(
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Colors.white70, width: 1),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        margin: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Event Image
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.info, color: Colors.black),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close, color: Colors.black),
-                  onPressed: () {},
-                )
-              ],
+            CommonTicketBanner(
+              bannerImagerUrl: "",
+              onInfoClicked: () {},
+              onClosedClicked: () {},
             ),
-            Container(
-              height: 200,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(
-                      'lib/assets/images/chat/chat_ticket_info_pace_holder.png'),
-                  // Replace with event image
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-
             // Event Details
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'New Year Jashn 2025',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Row(
-                        children: [
-                          Icon(Icons.calendar_today, size: 16),
-                          SizedBox(width: 8),
-                          Text('31st Dec 2024 • 7:00 PM'),
-                        ],
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Text(
-                          '7 days left',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  const Row(
-                    children: [
-                      Icon(Icons.location_on, size: 16),
-                      SizedBox(width: 8),
-                      Text('Shriram Business Park'),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '₹349',
-                        style: TextStyle(
-                          decoration: TextDecoration.lineThrough,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Text(
-                        '₹199 / person',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.purple,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            const TicketDetailsComponent(
+              eventName: "Long Event name",
+              eventDate: "30st Dec 2024",
+              eventTime: "9:00 PM",
+              eventLocation: "Near Raipur Chai Stall",
+              eventInitialPrice: "400",
+              eventFinalPrice: "200",
+              dayLeftForEvent: "21 days left",
             ),
-
             // Divider
-            Divider(color: Colors.grey.shade300),
-
             // Payment Options
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.purple.shade100,
-                    child:
-                        const Icon(Icons.movie, color: Colors.purple, size: 30),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Choose your ticket payment option',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+              padding: const EdgeInsets.symmetric(vertical: 25),
+              child: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.purple.shade100,
+                child: const Icon(Icons.movie, color: Colors.purple, size: 30),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: Text(
+                'Choose your ticket payment option',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "AlbertSans"),
+              ),
+            ),
+            // Payment Buttons
+            IntrinsicWidth(
+              child: IntrinsicHeight(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  const SizedBox(height: 16),
-
-                  // Payment Buttons
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    onPressed: () {},
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  onPressed: () {},
+                  child: const Padding(
+                    padding: EdgeInsets.only(
+                        top: 14, right: 50, bottom: 14, left: 50),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.payment, color: Colors.white),
                         SizedBox(width: 8),
-                        Text('Pay for Both'),
+                        Text(
+                          'Pay for Both',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Cambon',
+                              color: AppColours.white),
+                        ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            IntrinsicWidth(
+              child: IntrinsicHeight(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                    onPressed: () {},
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  ),
+                  onPressed: () {},
+                  child: const Padding(
+                    padding: EdgeInsets.only(
+                        top: 14, right: 50, bottom: 14, left: 50),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.group, color: Colors.white),
                         SizedBox(width: 8),
-                        Text('Split Payment'),
+                        Text(
+                          'Split Payment',
+                          style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Cambon',
+                              color: AppColours.white),
+                        ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Note: Tickets will be sent to the person who makes the payment.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 48),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 24),
+              child: Text(
+                'Note: Tickets will be sent to the person who makes the payment.',
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
           ],

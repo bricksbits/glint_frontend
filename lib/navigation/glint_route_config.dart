@@ -49,11 +49,11 @@ final glintMainRoutes = GoRouter(
       name: GlintMainRoutes.chat.name,
       builder: (context, state) => const ChatScreen(),
       routes: [
-        GoRoute(
-          path: '/${GlintChatRoutes.chatWith.name}',
-          name: GlintChatRoutes.chatWith.name,
-          builder: (context, state) => const ChatWithScreen(),
-        ),
+        // GoRoute(
+        //   path: '/${GlintChatRoutes.chatWith.name}',
+        //   name: GlintChatRoutes.chatWith.name,
+        //   builder: (context, state) => const ChatWithScreen(),
+        // ),
         GoRoute(
           path: '/${GlintChatRoutes.videoCall.name}',
           name: GlintChatRoutes.videoCall.name,

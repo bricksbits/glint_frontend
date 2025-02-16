@@ -14,10 +14,16 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   late final _listController = StreamChannelListController(
-    client: StreamChat.of(context).client,
+    client: StreamChat
+        .of(context)
+        .client,
     filter: Filter.in_(
       'members',
-      [StreamChat.of(context).currentUser!.id],
+      [StreamChat
+          .of(context)
+          .currentUser!
+          .id
+      ],
     ),
     channelStateSort: const [SortOption('last_message_at')],
     limit: 20,
@@ -83,53 +89,44 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   title: Text(
                     channels[index].name ?? 'Chat',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text(
+                  subtitle: const Text(
                     'No messages yet',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   trailing: true
                       ? Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Text(
-                            'Your Turn',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        )
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Text(
+                      'Your Turn',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
                       : null,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => StreamChannel(
-                          channel: channels[index],
-                          child: const ChatWithScreen(),
-                        ),
+                        builder: (context) =>
+                            StreamChannel(
+                              channel: channels[index],
+                              child: ChatWithScreen(
+                                channel: channels[index],
+                              ),
+                            ),
                       ),
                     );
                   },
-                );
-              },
-              onChannelTap: (channel) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return StreamChannel(
-                        channel: channel,
-                        child: const ChatWithScreen(),
-                      );
-                    },
-                  ),
                 );
               },
             ),
