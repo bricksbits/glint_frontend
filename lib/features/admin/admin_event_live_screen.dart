@@ -35,7 +35,9 @@ class AdminEventLiveScreen extends StatelessWidget {
               ),
               const Gap(40.0),
               SizedBox(
-                width: screenSize.width / 2,
+                width: screenSize.width > 1050
+                    ? screenSize.width / 2
+                    : double.infinity,
                 child: Column(
                   children: [
                     const HotEvent(),

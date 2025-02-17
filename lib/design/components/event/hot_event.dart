@@ -116,7 +116,13 @@ class HotEvent extends StatelessWidget {
         Positioned(
           right: 0,
           child: Container(
-            width: kIsWeb ? 300.0 : screenSize.width * 0.35,
+            width: kIsWeb
+                ? screenSize.width > 560
+                    ? 300.0
+                    : screenSize.width < 360
+                        ? 60.0
+                        : 140.0
+                : screenSize.width * 0.35,
             height: cardHeight,
             decoration: const BoxDecoration(
               image: DecorationImage(
