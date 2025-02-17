@@ -11,6 +11,7 @@ class AppColours {
   static const gray = Color(0xFFAAAAAA);
   static const darkGray = Color(0xFF5B5B5B);
   static const lightGray = Color(0xFFF7F7F7);
+  static const mediumGray = Color(0xFFDDDDDD);
   static const chipBackgroundShade = Color(0xFFE9EAF7);
   static const tabBarBorder = Color(0xFFEEEEEE);
   static const vibrantYellow = Color(0xFFFAFF7F);

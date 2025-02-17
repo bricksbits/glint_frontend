@@ -50,6 +50,7 @@ flutter:
     - lib/assets/icons/
     - lib/assets/images/onboarding/
     - lib/assets/icons/profile/
+    - lib/assets/icons/admin/
     - lib/assets/images/event/
     - lib/assets/images/auth/
     - lib/assets/images/admin/
