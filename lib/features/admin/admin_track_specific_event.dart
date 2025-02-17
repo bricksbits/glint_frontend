@@ -20,7 +20,7 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
   final eventLocation = 'Shriram business park, Raipur';
   final eventTime = '5:00 Pm';
   final interestedPeople = 895;
-  final revenueGenerated = '₹ 8600';
+  final revenueGenerated = 8600;
 
   bool eventPaused = false;
 
@@ -187,7 +187,16 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
 
               const Gap(36.0),
 
+              // action buttons
               _buildEventActionButtons(context),
+
+              const Gap(24.0),
+
+              // event stats
+              TrackEventStats(
+                interestedUsers: interestedPeople,
+                revenueGenerated: revenueGenerated,
+              ),
             ],
           ),
         ),
