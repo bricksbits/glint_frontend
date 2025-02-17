@@ -178,7 +178,9 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28.0),
+          padding: const EdgeInsets.symmetric(horizontal: 28.0).copyWith(
+            bottom: 20.0,
+          ),
           child: Column(
             children: [
               const Gap(32.0),
@@ -197,6 +199,16 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
                 interestedUsers: interestedPeople,
                 revenueGenerated: revenueGenerated,
               ),
+
+              const Gap(20.0),
+
+              // interested people
+              const InterestedPeopleWidget(),
+
+              const Gap(20.0),
+
+              // tickets bought
+              const TicketsBoughtWidget(),
             ],
           ),
         ),

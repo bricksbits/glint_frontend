@@ -13,7 +13,7 @@ class AppColours {
   static const lightGray = Color(0xFFF7F7F7);
   static const mediumGray = Color(0xFFDDDDDD);
   static const chipBackgroundShade = Color(0xFFE9EAF7);
-  static const tabBarBorder = Color(0xFFEEEEEE);
+  static const borderGray = Color(0xFFEEEEEE);
   static const vibrantYellow = Color(0xFFFAFF7F);
 
   //event status colors

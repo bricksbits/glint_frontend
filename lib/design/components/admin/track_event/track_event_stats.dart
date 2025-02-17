@@ -26,7 +26,7 @@ class TrackEventStats extends StatelessWidget {
         color: AppColours.white,
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(
-          color: AppColours.mediumGray,
+          color: AppColours.borderGray,
           width: 1.0,
         ),
       ),
@@ -42,7 +42,7 @@ class TrackEventStats extends StatelessWidget {
             height: 80,
             child: VerticalDivider(
               thickness: 1.5,
-              color: AppColours.mediumGray,
+              color: AppColours.borderGray,
             ),
           ),
           const Gap(32.0),

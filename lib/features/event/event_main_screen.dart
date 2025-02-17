@@ -23,17 +23,17 @@ class _EventMainScreenState extends State<EventMainScreen> {
           titleSpacing: 0,
           scrolledUnderElevation: 0,
           title: TabBar(
-            dividerColor: AppColours.tabBarBorder,
+            dividerColor: AppColours.borderGray,
             dividerHeight: 1.2,
             indicator: const BoxDecoration(
               color: AppColours.backgroundShade,
               border: Border(
                 left: BorderSide(
-                  color: AppColours.tabBarBorder,
+                  color: AppColours.borderGray,
                   width: 1.2,
                 ),
                 right: BorderSide(
-                  color: AppColours.tabBarBorder,
+                  color: AppColours.borderGray,
                   width: 1.2,
                 ),
                 bottom: BorderSide(
