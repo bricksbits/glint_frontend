@@ -16,7 +16,7 @@ class PriceInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Container(
-      width: screenSize.width / 4.0,
+      width: screenSize.width > 800 ? screenSize.width / 4.0 : double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(

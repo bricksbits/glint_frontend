@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/admin/admin_edit_profile_screen.dart';
+import 'package:glint_frontend/features/admin/admin_create_event_screen.dart';
 // import 'package:glint_frontend/navigation/glint_route_config.dart';
 
 class MyGlintApp extends StatelessWidget {
@@ -9,12 +9,12 @@ class MyGlintApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Glint People App",
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.theme,
-      home: const AdminEditProfileScreen(),
-      // routerConfig: glintMainRoutes,
-      // routerConfig: glintMainRoutes,
-    );
+        title: "Glint People App",
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.theme,
+        home: const AdminCreateEventScreen()
+        // routerConfig: glintMainRoutes,
+        // routerConfig: glintMainRoutes,
+        );
   }
 }

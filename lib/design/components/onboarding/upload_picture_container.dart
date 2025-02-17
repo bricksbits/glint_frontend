@@ -40,7 +40,9 @@ class UploadPictureContainer extends StatelessWidget {
           onTap: onImagePick,
           child: Container(
             height: kIsWeb
-                ? 340
+                ? screenSize.width > 880
+                    ? 300
+                    : 140
                 : screenSize.width > 500
                     ? (screenSize.width > 620 ? 210.0 : 180.0)
                     : 140.0,
