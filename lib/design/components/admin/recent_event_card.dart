@@ -5,30 +5,6 @@ import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
 import 'package:glint_frontend/design/components/exports.dart';
 
-enum EventStatus {
-  live(color: AppColours.liveColor),
-  inApproval(color: AppColours.inApprovalColor),
-  rejected(color: AppColours.rejectedColor),
-  pastEvent(color: AppColours.pastEventColor);
-
-  final Color color;
-
-  const EventStatus({required this.color});
-
-  String get statusName {
-    switch (this) {
-      case EventStatus.live:
-        return 'LIVE';
-      case EventStatus.inApproval:
-        return 'IN APPROVAL';
-      case EventStatus.rejected:
-        return 'REJECTED';
-      case EventStatus.pastEvent:
-        return 'PAST EVENT';
-    }
-  }
-}
-
 class RecentEventCard extends StatelessWidget {
   const RecentEventCard({
     super.key,
@@ -130,9 +106,9 @@ class RecentEventCard extends StatelessWidget {
 
               Align(
                 alignment: Alignment.topRight,
-                child: eventStatusContainer(
-                  eventStatus,
-                  !isTrackEventScreen,
+                child: EventStatusContainer(
+                  status: eventStatus,
+                  isPrimaryColor: !isTrackEventScreen,
                 ),
               ),
             ],
@@ -198,23 +174,6 @@ class RecentEventCard extends StatelessWidget {
             ),
           ),
       ],
-    );
-  }
-
-  Widget eventStatusContainer(EventStatus status, bool isPrimaryColor) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-      decoration: BoxDecoration(
-        color: isPrimaryColor ? AppColours.primaryBlue : status.color,
-        borderRadius: BorderRadius.circular(40.0),
-      ),
-      child: Text(
-        status.statusName,
-        style: AppTheme.smallBodyText.copyWith(
-          color: AppColours.white,
-          fontSize: 10.0,
-        ),
-      ),
     );
   }
 

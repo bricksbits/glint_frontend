@@ -181,8 +181,8 @@ class _GlintEventAuthAppbarState extends State<GlintEventAuthAppbar> {
                   );
                 },
                 child: Container(
-                  height: 50.0,
-                  width: 50.0,
+                  height: 44.0,
+                  width: 44.0,
                   padding: const EdgeInsets.all(14.0),
                   decoration: BoxDecoration(
                     color: AppColours.backgroundShade,

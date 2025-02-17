@@ -10,17 +10,20 @@ class GlintIconElevatedButton extends StatelessWidget {
   final Color? foregroundColor;
   final double? customBorderRadius;
   final TextStyle? customTextStyle;
+  final BorderSide? customBorderSide;
 
-  const GlintIconElevatedButton(
-      {super.key,
-      required this.label,
-      this.onPressed,
-      this.isPrimary = true,
-      this.isCancel = false,
-      this.backgroundColor,
-      this.foregroundColor,
-      this.customBorderRadius,
-      this.customTextStyle});
+  const GlintIconElevatedButton({
+    super.key,
+    required this.label,
+    this.onPressed,
+    this.isPrimary = true,
+    this.isCancel = false,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.customBorderRadius,
+    this.customTextStyle,
+    this.customBorderSide,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +36,13 @@ class GlintIconElevatedButton extends StatelessWidget {
         disabledBackgroundColor: Colors.grey[400],
         disabledForegroundColor: Colors.white,
         shape: RoundedRectangleBorder(
+          side: customBorderSide ?? BorderSide.none,
           borderRadius: BorderRadius.circular(
             customBorderRadius ?? 24,
           ),
         ),
         elevation: 0,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       ),
       onPressed: onPressed,
       child: label,
