@@ -13,12 +13,6 @@ class AdminTrackSpecificEvent extends StatefulWidget {
 class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
   final GlobalKey _menuKey = GlobalKey();
 
-  final eventName = 'The Local Food Fest';
-  final eventDate = '20 Feb 2023';
-  final eventImage =
-      'https://media.istockphoto.com/id/1806011581/photo/overjoyed-happy-young-people-dancing-jumping-and-singing-during-concert-of-favorite-group.jpg?s=612x612&w=0&k=20&c=cMFdhX403-yKneupEN-VWSfFdy6UWf1H0zqo6QBChP4%3D';
-  final eventLocation = 'Shriram business park, Raipur';
-  final eventTime = '5:00 Pm';
   final interestedPeople = 895;
   final revenueGenerated = 8600;
 
@@ -185,7 +179,7 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
             children: [
               const Gap(32.0),
               // event details
-              _buildEventInfo(context),
+              const EventInfoImageContainer(),
 
               const Gap(36.0),
 
@@ -209,78 +203,11 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
 
               // tickets bought
               const TicketsBoughtWidget(),
+
+              const Gap(32.0), // bottom spacing
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildEventInfo(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    return SizedBox(
-      width: double.infinity,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          // details
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // event status
-              const EventStatusContainer(
-                status: EventStatus.live,
-              ),
-
-              const Gap(20.0),
-
-              // event name
-              Text(
-                eventName,
-                style: AppTheme.headingThree.copyWith(
-                  fontStyle: FontStyle.normal,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-
-              const Gap(24.0),
-
-              // event Location and Date
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GlintIconLabel(
-                    iconPath: 'lib/assets/icons/calendar_icon.svg',
-                    svgColor: AppColours.primaryBlue,
-                    label: '$eventDate • $eventTime',
-                    style: AppTheme.simpleText,
-                  ),
-                  const Gap(10.0),
-                  GlintIconLabel(
-                    iconPath: 'lib/assets/icons/location_icon.svg',
-                    svgColor: AppColours.primaryBlue,
-                    label: eventLocation,
-                    style: AppTheme.simpleText,
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          const Spacer(),
-
-          Container(
-            height: 120.0,
-            width: screenSize.width > 500 ? 200.0 : 100.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12.0),
-              image: DecorationImage(
-                image: NetworkImage(eventImage),
-                fit: BoxFit.cover,
-              ),
-            ),
-          )
-        ],
       ),
     );
   }
