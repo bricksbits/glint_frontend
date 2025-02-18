@@ -7,5 +7,6 @@ export 'glint_event_auth_appbar.dart';
 export 'track_event/event_info_image_container.dart';
 export 'track_event/interested_people_list_tiles.dart';
 export 'track_event/interested_people_widget.dart';
+export 'track_event/tickets_bought_list_tiles.dart';
 export 'track_event/tickets_bought_widget.dart';
 export 'track_event/track_event_stats.dart';
