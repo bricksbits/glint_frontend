@@ -8,9 +8,11 @@ class EventDetailScreen extends StatelessWidget {
   const EventDetailScreen({
     super.key,
     required this.isEventPreviewType,
+    this.isSuperAdmin = false,
   });
 
   final bool isEventPreviewType;
+  final bool isSuperAdmin;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +48,14 @@ Mark your calender, bring your appetite, and let’s make this fest a celebratio
         centerTitle: isEventPreview ? false : true,
         scrolledUnderElevation: 0,
         title: Text(
-          isEventPreview ? 'Event Preview' : 'Event',
-          style: AppTheme.headingTwo.copyWith(fontSize: 20.0),
+          isEventPreview
+              ? isSuperAdmin
+                  ? 'Event Request'
+                  : 'Event Preview'
+              : 'Event',
+          style: (isEventPreview || isSuperAdmin)
+              ? AppTheme.heavyBodyText
+              : AppTheme.headingTwo.copyWith(fontSize: 20.0),
         ),
       ),
       body: SingleChildScrollView(
@@ -147,6 +155,54 @@ Mark your calender, bring your appetite, and let’s make this fest a celebratio
                 ),
               ),
             ),
+            if (isSuperAdmin) ...[
+              const Gap(20.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 44.0,
+                        child: GlintElevatedButton(
+                          label: 'Accept',
+                          customBorderRadius: 10.0,
+                          customTextStyle: AppTheme.simpleText.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: AppColours.white,
+                          ),
+                          onPressed: () {
+                            // todo - implement super admin accept functionality
+                          },
+                        ),
+                      ),
+                    ),
+                    const Gap(12.0),
+                    Expanded(
+                      child: SizedBox(
+                        height: 44.0,
+                        child: GlintElevatedButton(
+                          label: 'Reject',
+                          customBorderRadius: 10.0,
+                          backgroundColor: AppColours.white,
+                          customBorderSide: const BorderSide(
+                            color: AppColours.rejectedColor,
+                            width: 1.0,
+                          ),
+                          customTextStyle: AppTheme.simpleText.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: AppColours.rejectedColor,
+                          ),
+                          onPressed: () {
+                            // todo - implement super admin reject functionality
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             // end of the page gap for design replication purpose
             const Gap(20.0),
           ],

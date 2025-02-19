@@ -10,6 +10,7 @@ class GlintElevatedButton extends StatelessWidget {
   final Color? foregroundColor;
   final double? customBorderRadius;
   final TextStyle? customTextStyle;
+  final BorderSide? customBorderSide;
 
   const GlintElevatedButton(
       {super.key,
@@ -20,7 +21,8 @@ class GlintElevatedButton extends StatelessWidget {
       this.backgroundColor,
       this.foregroundColor,
       this.customBorderRadius,
-      this.customTextStyle});
+      this.customTextStyle,
+      this.customBorderSide});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,7 @@ class GlintElevatedButton extends StatelessWidget {
         disabledBackgroundColor: Colors.grey[400],
         disabledForegroundColor: Colors.white,
         shape: RoundedRectangleBorder(
+          side: customBorderSide ?? BorderSide.none,
           borderRadius: BorderRadius.circular(
             customBorderRadius ?? 24,
           ),
