@@ -38,8 +38,8 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                   const Gap(32.0),
                   // event manager greeting
                   Text(
-                    'Hello Admin',
-                    style: AppTheme.headingThree.copyWith(
+                    'Hello Admin!',
+                    style: AppTheme.headingTwo.copyWith(
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -139,9 +139,10 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                 children: [
                   if (_selectedEventDisplayType == EventDisplayType.live)
                     // create event button
+                    ...[
                     _buildCreateEventContainer(),
-
-                  const Gap(16.0),
+                    const Gap(16.0),
+                  ],
 
                   // events list preview
                   SuperAdminEventPreviewCard(
@@ -149,7 +150,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
