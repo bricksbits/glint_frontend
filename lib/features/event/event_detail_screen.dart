@@ -156,7 +156,12 @@ Mark your calender, bring your appetite, and let’s make this fest a celebratio
               ),
             ),
             if (isSuperAdmin) ...[
-              const Gap(20.0),
+              const Gap(12.0),
+              const Divider(
+                color: AppColours.mediumGray,
+                thickness: 0.5,
+              ),
+              const Gap(8.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Row(
