@@ -21,6 +21,7 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 10.0),
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       decoration: BoxDecoration(
         color: AppColours.white,

@@ -141,13 +141,18 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                     // create event button
                     ...[
                     _buildCreateEventContainer(),
-                    const Gap(16.0),
+                    const Gap(20.0),
                   ],
 
                   // events list preview
-                  SuperAdminEventPreviewCard(
-                    eventDisplayType: _selectedEventDisplayType,
-                  ),
+                  ...List.generate(
+                    5,
+                    (int count) {
+                      return SuperAdminEventPreviewCard(
+                        eventDisplayType: _selectedEventDisplayType,
+                      );
+                    },
+                  )
                 ],
               ),
             ),
