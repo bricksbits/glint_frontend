@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/event/event_detail_screen.dart';
+import 'package:glint_frontend/features/admin/super_admin_dashboard_screen.dart';
 // import 'package:glint_frontend/navigation/glint_route_config.dart';
 
 class MyGlintApp extends StatelessWidget {
@@ -12,10 +12,7 @@ class MyGlintApp extends StatelessWidget {
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const EventDetailScreen(
-        isEventPreviewType: true,
-        isSuperAdmin: true,
-      ),
+      home: const SuperAdminDashboardScreen(),
       // routerConfig: glintMainRoutes,
       // routerConfig: glintMainRoutes,
     );

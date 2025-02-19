@@ -4,5 +4,6 @@ export 'admin_edit_profile_screen.dart';
 export 'admin_event_live_screen.dart';
 export 'admin_track_event_screen.dart';
 export 'admin_track_specific_event.dart';
+export 'super_admin_dashboard_screen.dart';
 export 'track_event_interested_people_screen.dart';
 export 'track_event_tickets_bought_screen.dart';
