@@ -37,7 +37,7 @@ class NearbyEventCard extends StatelessWidget {
               // Event name
               Text(
                 eventName,
-                style: AppTheme.headingThree.copyWith(
+                style: AppTheme.headingFour.copyWith(
                   fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.normal,
                 ),

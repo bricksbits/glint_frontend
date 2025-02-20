@@ -1,0 +1,165 @@
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/exports.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final bool isAdmin = false;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  Widget _buildAuthFields() {
+    return Column(
+      children: [
+        AuthIconTextField(
+          controller: _emailController,
+          type: IconTextFieldType.email,
+          focusNode: _emailFocusNode,
+          hintText: 'Enter Email',
+          isTextFieldFocused: _emailFocusNode.hasFocus,
+          onTap: () => setState(() => _emailFocusNode.requestFocus()),
+        ),
+        const Gap(20.0),
+        AuthIconTextField(
+          controller: _passwordController,
+          type: IconTextFieldType.password,
+          focusNode: _passwordFocusNode,
+          hintText: 'Enter Password',
+          isTextFieldFocused: _passwordFocusNode.hasFocus,
+          onTap: () => setState(() => _passwordFocusNode.requestFocus()),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildForgotPassword() {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {}, // TODO - Handle Forget Password tap
+      child: Align(
+        alignment: isAdmin ? Alignment.center : Alignment.centerRight,
+        child: Text(
+          'Forgot your password?',
+          style: AppTheme.simpleText.copyWith(
+            color: AppColours.primaryBlue,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(String label, VoidCallback onPressed) {
+    return SizedBox(
+      width: double.infinity,
+      child: GlintElevatedButton(
+        label: label,
+        customBorderRadius: 10.0,
+        customTextStyle: AppTheme.simpleBodyText.copyWith(
+          color: AppColours.white,
+        ),
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  Widget _buildRegisterText() {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        style: AppTheme.simpleText,
+        children: [
+          const TextSpan(text: "Don't have an account? "),
+          TextSpan(
+            text: isAdmin ? "Register now" : "Create now",
+            style: const TextStyle(
+              color: AppColours.primaryBlue,
+              decoration: TextDecoration.underline,
+              fontWeight: FontWeight.w600,
+            ),
+            recognizer: TapGestureRecognizer()..onTap = () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColours.white,
+      appBar: isAdmin
+          ? const GlintEventAuthAppbar()
+          : AppBar(
+              backgroundColor: AppColours.white,
+            ),
+      body: AuthStackedIllustrationScreen(
+        isAdmin: isAdmin,
+        body: Column(
+          children: [
+            if (!isAdmin)
+              Center(
+                child:
+                    SvgPicture.asset('lib/assets/images/auth/glint_login.svg'),
+              ),
+            const Gap(40.0),
+            if (isAdmin)
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 40.0),
+                  child: Column(
+                    children: [
+                      const Spacer(),
+                      Text(
+                        'Login',
+                        style: AppTheme.headingThree
+                            .copyWith(fontStyle: FontStyle.normal),
+                      ),
+                      const Gap(32.0),
+                      _buildAuthFields(),
+                      const Gap(60.0),
+                      _buildActionButton(
+                          'Log In', () => debugPrint('Login button pressed')),
+                      const Gap(16.0),
+                      _buildForgotPassword(),
+                      const Spacer(flex: 4),
+                      _buildRegisterText(),
+                    ],
+                  ),
+                ),
+              ),
+            if (!isAdmin) ...[
+              _buildAuthFields(),
+              const Gap(12.0),
+              _buildForgotPassword(),
+              const Gap(60.0),
+              _buildActionButton(
+                  'Login', () => debugPrint('Login button pressed')),
+              const Gap(16.0),
+              _buildRegisterText(),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}

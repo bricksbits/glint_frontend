@@ -17,6 +17,20 @@ class AppTheme {
     color: Colors.black87,
   );
 
+  static const TextStyle heavyBodyText = TextStyle(
+    fontFamily: 'AlbertSans',
+    fontSize: 18.0,
+    fontWeight: FontWeight.w700,
+    color: Colors.black87,
+  );
+
+  static const TextStyle logoHeadingText = TextStyle(
+    fontFamily: 'AlbertSans',
+    fontSize: 24.0,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
+
   static const TextStyle smallBodyText = TextStyle(
     fontFamily: 'AlbertSans',
     fontSize: 12.0,
@@ -41,6 +55,14 @@ class AppTheme {
   );
 
   static const TextStyle headingThree = TextStyle(
+    fontFamily: 'Cambon',
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.italic,
+    color: Colors.black,
+  );
+
+  static const TextStyle headingFour = TextStyle(
     fontFamily: 'Cambon',
     fontSize: 16,
     fontWeight: FontWeight.w600,
@@ -67,7 +89,7 @@ class AppTheme {
       textTheme: const TextTheme(
           headlineLarge: headingOne,
           headlineMedium: headingTwo,
-          headlineSmall: headingThree,
+          headlineSmall: headingFour,
           bodyMedium: simpleBodyText,
           bodySmall: simpleText),
     );

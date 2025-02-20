@@ -41,7 +41,7 @@ class _ImLookingForCardState extends State<ImLookingForCard> {
           children: [
             Text(
               "I'm Looking For",
-              style: AppTheme.headingThree.copyWith(
+              style: AppTheme.headingFour.copyWith(
                 fontWeight: FontWeight.w700,
                 fontStyle: FontStyle.italic,
               ),

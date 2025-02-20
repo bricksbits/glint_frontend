@@ -1,19 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class EventDetailScreen extends StatelessWidget {
-  const EventDetailScreen({super.key});
+  const EventDetailScreen({
+    super.key,
+    required this.isEventPreviewType,
+    this.isSuperAdmin = false,
+  });
+
+  final bool isEventPreviewType;
+  final bool isSuperAdmin;
 
   @override
   Widget build(BuildContext context) {
+    final isEventPreview = isEventPreviewType;
     const eventName = 'Taste Dubs';
     const eventDate = '20 May 2023';
     const eventTime = '12:00 PM';
     const oldPrice = 349;
     const newPrice = 199;
     const daysLeft = 7;
+    const eventOrganiser = 'Abhishek Verma';
     const eventLocation = 'New Delhi, India';
     const imageUrl =
         'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cmVzdGF1cmFudHxlbnwwfHwwfHx8MA%3D%3D';
@@ -35,19 +45,52 @@ Mark your calender, bring your appetite, and let’s make this fest a celebratio
       appBar: AppBar(
         automaticallyImplyLeading: true,
         backgroundColor: AppColours.white,
+        centerTitle: isEventPreview ? false : true,
+        scrolledUnderElevation: 0,
         title: Text(
-          'Event',
-          style: AppTheme.headingTwo.copyWith(fontSize: 20.0),
+          isEventPreview
+              ? isSuperAdmin
+                  ? 'Event Request'
+                  : 'Event Preview'
+              : 'Event',
+          style: (isEventPreview || isSuperAdmin)
+              ? AppTheme.heavyBodyText
+              : AppTheme.headingTwo.copyWith(fontSize: 20.0),
         ),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
+            if (isEventPreview) const Gap(12.0),
             // event image
-            _EventImage(imageUrl: imageUrl),
+            if (!isEventPreview) const _EventImage(imageUrl: imageUrl),
 
             // event Details
-            Padding(
+
+            // todo - Implement state here for admin event profile
+            CarouselSlider(
+              options: CarouselOptions(
+                height: 264,
+                enlargeCenterPage: true,
+                autoPlay: true,
+              ),
+              items: [
+                Image.network(
+                  imageUrl,
+                ),
+                Image.network(
+                  imageUrl,
+                ),
+                Image.network(
+                  imageUrl,
+                ),
+                Image.network(
+                  imageUrl,
+                ),
+              ],
+            ),
+
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,22 +113,103 @@ Mark your calender, bring your appetite, and let’s make this fest a celebratio
               ),
             ),
 
-            Gap(32.0),
+            const Gap(32.0),
 
             // interested profiles
             _BuildInterestedProfiles(
               interestedProfiles: interactedUsers,
+              showProfileIconsOnly: isEventPreview,
             ),
 
-            Gap(32.0),
+            const Gap(32.0),
 
             // about event
-            _AboutEvent(
+            const _AboutEvent(
               eventDescription: eventDescription,
             ),
 
+            // todo - implement Map (event location) ui here
+
+            const Gap(32.0),
+
+            // event by
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: 'Event by ',
+                        style: AppTheme.simpleText,
+                      ),
+                      TextSpan(
+                        text: eventOrganiser,
+                        style: AppTheme.simpleText.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            if (isSuperAdmin) ...[
+              const Gap(12.0),
+              const Divider(
+                color: AppColours.mediumGray,
+                thickness: 0.5,
+              ),
+              const Gap(8.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 44.0,
+                        child: GlintElevatedButton(
+                          label: 'Accept',
+                          customBorderRadius: 10.0,
+                          customTextStyle: AppTheme.simpleText.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: AppColours.white,
+                          ),
+                          onPressed: () {
+                            // todo - implement super admin accept functionality
+                          },
+                        ),
+                      ),
+                    ),
+                    const Gap(12.0),
+                    Expanded(
+                      child: SizedBox(
+                        height: 44.0,
+                        child: GlintElevatedButton(
+                          label: 'Reject',
+                          customBorderRadius: 10.0,
+                          backgroundColor: AppColours.white,
+                          customBorderSide: const BorderSide(
+                            color: AppColours.rejectedColor,
+                            width: 1.0,
+                          ),
+                          customTextStyle: AppTheme.simpleText.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: AppColours.rejectedColor,
+                          ),
+                          onPressed: () {
+                            // todo - implement super admin reject functionality
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             // end of the page gap for design replication purpose
-            Gap(20.0),
+            const Gap(20.0),
           ],
         ),
       ),
@@ -243,12 +367,11 @@ class _EventPricing extends StatelessWidget {
 }
 
 class _BuildInterestedProfiles extends StatelessWidget {
-  const _BuildInterestedProfiles({
-    super.key,
-    required this.interestedProfiles,
-  });
+  const _BuildInterestedProfiles(
+      {required this.interestedProfiles, required this.showProfileIconsOnly});
 
   final List<String> interestedProfiles;
+  final bool showProfileIconsOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -268,7 +391,17 @@ class _BuildInterestedProfiles extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 6),
                 child: CircleAvatar(
                   radius: 10.0,
-                  backgroundImage: NetworkImage(userImage),
+                  backgroundImage:
+                      showProfileIconsOnly ? null : NetworkImage(userImage),
+                  backgroundColor:
+                      showProfileIconsOnly ? AppColours.gray : null,
+                  child: showProfileIconsOnly
+                      ? const Icon(
+                          Icons.person,
+                          color: AppColours.white,
+                          size: 16.0,
+                        )
+                      : null,
                 ),
               ),
             ),
@@ -294,7 +427,6 @@ class _BuildInterestedProfiles extends StatelessWidget {
 
 class _AboutEvent extends StatelessWidget {
   const _AboutEvent({
-    super.key,
     required this.eventDescription,
   });
 

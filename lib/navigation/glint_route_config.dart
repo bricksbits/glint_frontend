@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:glint_frontend/features/chat/chat_event_tickets_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
@@ -48,11 +49,11 @@ final glintMainRoutes = GoRouter(
       name: GlintMainRoutes.chat.name,
       builder: (context, state) => const ChatScreen(),
       routes: [
-        GoRoute(
-          path: '/${GlintChatRoutes.chatWith.name}',
-          name: GlintChatRoutes.chatWith.name,
-          builder: (context, state) => const ChatWithScreen(),
-        ),
+        // GoRoute(
+        //   path: '/${GlintChatRoutes.chatWith.name}',
+        //   name: GlintChatRoutes.chatWith.name,
+        //   builder: (context, state) => const ChatWithScreen(),
+        // ),
         GoRoute(
           path: '/${GlintChatRoutes.videoCall.name}',
           name: GlintChatRoutes.videoCall.name,
@@ -83,7 +84,9 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintEventRoutes.eventDetails.name}',
           name: GlintEventRoutes.eventDetails.name,
-          builder: (context, state) => const EventDetailScreen(),
+          builder: (context, state) => const EventDetailScreen(
+            isEventPreviewType: false,
+          ),
         ),
         GoRoute(
           path: '/${GlintEventRoutes.peopleInterested.name}',

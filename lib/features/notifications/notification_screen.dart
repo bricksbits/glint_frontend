@@ -147,7 +147,7 @@ class NotificationScreen extends StatelessWidget {
             children: [
               Text(
                 'Want More Matches?',
-                style: AppTheme.headingThree.copyWith(
+                style: AppTheme.headingFour.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
                   fontStyle: FontStyle.normal,
