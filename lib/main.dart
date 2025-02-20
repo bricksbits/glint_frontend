@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/features/exports.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
+//TODO: Create a Bootstrap Lambda expression for initialization.
 Future<void> main() async{
   configureDependencies();
   final client = StreamChatClient(
@@ -18,6 +20,8 @@ Future<void> main() async{
   final channel = client.channel('messaging', id: 'flutterdevs');
 
   await channel.watch();
+
+  Gemini.init(apiKey: '');
 
   runApp(
     MyGlintApp(
