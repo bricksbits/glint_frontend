@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/admin/super_admin_dashboard_screen.dart';
-// import 'package:glint_frontend/navigation/glint_route_config.dart';
+import 'package:glint_frontend/navigation/glint_route_config.dart';
 
 class MyGlintApp extends StatelessWidget {
   const MyGlintApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const SuperAdminDashboardScreen(),
-      // routerConfig: glintMainRoutes,
+      // home: const ResetPasswordScreen(),
+      routerConfig: glintMainRoutes,
       // routerConfig: glintMainRoutes,
     );
   }
