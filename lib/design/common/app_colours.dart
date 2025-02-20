@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AppColours {
   static const primaryBlue = Color(0xFF5158BB);
   static const pink = Color(0xFFFC6F6E);
+  static const lightPink = Color(0xFFFFF1F1);
   static const backgroundShade = Color(0xFFF2F3FF);
   static const white = Color(0xFFFFFFFF);
   static const black = Color(0xFF000000);
@@ -10,9 +11,19 @@ class AppColours {
   static const gray = Color(0xFFAAAAAA);
   static const darkGray = Color(0xFF5B5B5B);
   static const lightGray = Color(0xFFF7F7F7);
+  static const mediumGray = Color(0xFFDDDDDD);
   static const chipBackgroundShade = Color(0xFFE9EAF7);
-  static const tabBarBorder = Color(0xFFEEEEEE);
+  static const borderGray = Color(0xFFEEEEEE);
   static const vibrantYellow = Color(0xFFFAFF7F);
+
+  //event status colors
+  static const liveColor = Color(0xFF4BCB87);
+  static const inApprovalColor = Color(0xFFFFB97F);
+  static const rejectedColor = AppColours.pink;
+  static const pastEventColor = AppColours.black;
+
+  static const lightRed = Color(0xFFFFF6F5);
+  static const red = Colors.red;
 
   // with opacity shades
   static final primaryBlue60 = primaryBlue.withAlpha(153);

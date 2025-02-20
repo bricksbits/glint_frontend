@@ -39,7 +39,7 @@ class ExploreCard extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: AppTheme.headingThree.copyWith(
+                style: AppTheme.headingFour.copyWith(
                   color: AppColours.white,
                   fontSize: 18.0,
                   fontWeight: FontWeight.w700,

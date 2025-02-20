@@ -95,7 +95,7 @@ class GlintLikedYouProfileContainer extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: age.toString(),
-                      style: AppTheme.headingThree.copyWith(
+                      style: AppTheme.headingFour.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
                         fontSize: 20.0,

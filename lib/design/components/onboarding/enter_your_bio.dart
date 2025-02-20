@@ -29,7 +29,7 @@ class _EnterYourBioState extends State<EnterYourBio> {
       children: [
         const Text(
           'Enter your Bio',
-          style: AppTheme.headingThree,
+          style: AppTheme.headingFour,
         ),
         const Gap(8.0),
         Container(

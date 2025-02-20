@@ -84,7 +84,9 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintEventRoutes.eventDetails.name}',
           name: GlintEventRoutes.eventDetails.name,
-          builder: (context, state) => const EventDetailScreen(),
+          builder: (context, state) => const EventDetailScreen(
+            isEventPreviewType: false,
+          ),
         ),
         GoRoute(
           path: '/${GlintEventRoutes.peopleInterested.name}',

@@ -5,6 +5,9 @@ import 'package:glint_frontend/design/common/app_colours.dart';
 enum IconTextFieldType {
   email,
   password,
+  organization,
+  user,
+  contact,
 }
 
 class AuthIconTextField extends StatefulWidget {
@@ -30,6 +33,21 @@ class AuthIconTextField extends StatefulWidget {
 }
 
 class _AuthIconTextFieldState extends State<AuthIconTextField> {
+  String getIcon(IconTextFieldType type) {
+    switch (type) {
+      case IconTextFieldType.email:
+        return 'lib/assets/icons/email_icon.svg';
+      case IconTextFieldType.password:
+        return 'lib/assets/icons/lock_icon.svg';
+      case IconTextFieldType.organization:
+        return 'lib/assets/icons/organization.svg';
+      case IconTextFieldType.contact:
+        return 'lib/assets/icons/contact_icon.svg';
+      case IconTextFieldType.user:
+        return 'lib/assets/icons/user_icon.svg';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const defaultBorder = BorderSide(
@@ -73,13 +91,13 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
                     ),
                   ),
                 ),
-                child: widget.type == IconTextFieldType.email
-                    ? SvgPicture.asset(
-                        'lib/assets/icons/email_icon.svg',
-                      )
-                    : SvgPicture.asset(
-                        'lib/assets/icons/lock_icon.svg',
-                      ),
+                child: SizedBox(
+                  width: 20.0,
+                  height: 20.0,
+                  child: SvgPicture.asset(
+                    getIcon(widget.type),
+                  ),
+                ),
               ),
             ),
             Expanded(
@@ -89,7 +107,11 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
                 focusNode: widget.focusNode,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
-                  hintStyle: const TextStyle(color: Colors.grey),
+                  hintStyle: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w300,
+                  ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 12.0,

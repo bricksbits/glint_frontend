@@ -50,10 +50,15 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                   offset: Offset(index == 1 ? 0 : (index == 0 ? 4 : -4), 0),
                   child: UploadPictureContainer(
                     isDP: index == 0,
-                    // First container is for DP
+                    // first container is for DP
                     imageFile: _images.length > index ? _images[index] : null,
-                    // Pass the image if available
+                    // pass the image if available
                     onImagePick: _pickImages,
+                    onRemoveImage: () {
+                      setState(() {
+                        _images.removeAt(index);
+                      });
+                    },
                   ),
                 ),
               );
@@ -74,6 +79,11 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                       ? _images[containerIndex]
                       : null,
                   onImagePick: _pickImages,
+                  onRemoveImage: () {
+                    setState(() {
+                      _images.removeAt(index);
+                    });
+                  },
                 ),
               ),
             );
@@ -94,6 +104,11 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                         ? _images[containerIndex]
                         : null,
                     onImagePick: _pickImages,
+                    onRemoveImage: () {
+                      setState(() {
+                        _images.removeAt(index);
+                      });
+                    },
                   ),
                 ),
               );

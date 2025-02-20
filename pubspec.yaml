@@ -34,6 +34,7 @@ dependencies:
   logging: ^1.3.0
   floor_generator: ^1.5.0
   flutter_secure_storage: ^4.2.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -50,8 +51,10 @@ flutter:
     - lib/assets/icons/
     - lib/assets/images/onboarding/
     - lib/assets/icons/profile/
+    - lib/assets/icons/admin/
     - lib/assets/images/event/
     - lib/assets/images/auth/
+    - lib/assets/images/admin/
 
   fonts:
     - family: AlbertSans
@@ -62,3 +65,7 @@ flutter:
         - asset: lib/assets/fonts/Cambon-Light.ttf
         - asset: lib/assets/fonts/Cambon-MediumItalic.ttf
         - asset: lib/assets/fonts/Cambon-SemiBoldItalic.ttf
+        - asset: lib/assets/fonts/Cambon-Bold.ttf
+          weight: 700
+        - asset: lib/assets/fonts/Cambon-BoldItalic.ttf
+          weight: 700

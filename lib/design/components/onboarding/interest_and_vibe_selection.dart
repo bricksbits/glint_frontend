@@ -108,7 +108,7 @@ class _InterestAndVibeSelectionState extends State<InterestAndVibeSelection> {
   Widget _buildLabel(String label) {
     return Text(
       label,
-      style: AppTheme.headingThree,
+      style: AppTheme.headingFour,
     );
   }
 }

@@ -105,7 +105,7 @@ class EditProfileScreen extends StatelessWidget {
       children: [
         Text(
           'Interests & Vibe',
-          style: AppTheme.headingThree.copyWith(
+          style: AppTheme.headingFour.copyWith(
             fontWeight: FontWeight.w700,
           ),
         ),

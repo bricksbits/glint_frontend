@@ -105,7 +105,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? PreferredSize(
               preferredSize: const Size.fromHeight(1.2),
               child: Container(
-                color: AppColours.tabBarBorder,
+                color: AppColours.borderGray,
                 height: 1.2,
               ),
             )

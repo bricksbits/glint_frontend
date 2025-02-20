@@ -13,6 +13,8 @@ class EnterOtpScreen extends StatefulWidget {
 }
 
 class _EnterOtpScreenState extends State<EnterOtpScreen> {
+  final bool isAdmin = true;
+
   final _codeController = TextEditingController();
   bool buttonDisabled = true;
 
@@ -26,18 +28,37 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: AppColours.white,
+      appBar: isAdmin
+          ? const GlintEventAuthAppbar()
+          : AppBar(
+              backgroundColor: AppColours.white,
+            ),
       body: AuthStackedIllustrationScreen(
+        isAdmin: isAdmin,
         body: Column(
           children: [
-            // enter otp heading
-            Center(
-              child: SvgPicture.asset(
-                'lib/assets/images/auth/glint_enter_otp.svg',
+            if (!isAdmin) ...[
+              // enter otp heading
+              Center(
+                child: SvgPicture.asset(
+                  'lib/assets/images/auth/glint_enter_otp.svg',
+                ),
               ),
-            ),
 
-            const Gap(40.0),
+              const Gap(40.0),
+            ],
+
+            if (isAdmin) ...[
+              const Spacer(),
+              Text(
+                'Enter OTP',
+                style: AppTheme.headingThree.copyWith(
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
+              const Gap(32.0),
+            ],
 
             SizedBox(
               width: double.infinity,
@@ -106,7 +127,12 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
                   decoration: TextDecoration.underline,
                 ),
               ),
-            )
+            ),
+
+            if (isAdmin)
+              const Spacer(
+                flex: 4,
+              )
           ],
         ),
       ),

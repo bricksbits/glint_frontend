@@ -86,7 +86,7 @@ class GlintTopProfileContainer extends StatelessWidget {
             children: [
               Text(
                 name,
-                style: AppTheme.headingThree.copyWith(
+                style: AppTheme.headingFour.copyWith(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w700,
                   fontStyle: FontStyle.normal,
