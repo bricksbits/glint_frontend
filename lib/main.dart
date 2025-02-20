@@ -7,7 +7,7 @@ Future<void> main() async{
   configureDependencies();
   final client = StreamChatClient(
     'b67pax5b2wdq',
-    logLevel: Level.INFO,
+    logLevel: Level.OFF,
   );
 
   await client.connectUser(

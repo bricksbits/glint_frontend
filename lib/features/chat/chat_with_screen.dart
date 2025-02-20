@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/components/chat/chat_ticket_info_view.dart';
+import 'package:glint_frontend/design/components/chat/empty_chat_state_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class ChatWithScreen extends StatefulWidget {
@@ -73,8 +74,13 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                 return const Text('Loading Builder');
               },
               emptyBuilder: (context) {
-                return const Center(
-                  child: ChatTicketInfoView(),
+                return Center(
+                  child: EmptyChatStateView(
+                    isEventMatch: false,
+                    matchUserId: "0",
+                    matchUserName: "Gajini",
+                    upgradePlanCallBack: () {},
+                  ),
                 );
               },
               errorBuilder: (context, error) {
