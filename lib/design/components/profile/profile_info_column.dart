@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -19,10 +20,10 @@ class ProfileInfoColumn extends StatelessWidget {
       children: [
         const Gap(20.0),
         // Profile picture
-        const Stack(
+        Stack(
           alignment: Alignment.center,
           children: [
-            GradientCircularProgressIndicator(
+            const GradientCircularProgressIndicator(
               progress: progress,
               gradient: AppColours.circularProgressGradient,
               backgroundColor: Colors.transparent,
@@ -32,11 +33,11 @@ class ProfileInfoColumn extends StatelessWidget {
             ClipOval(
               child: CircleAvatar(
                 radius: 75.0,
-                // child: CachedNetworkImage(
-                //   imageUrl:
-                //       'https://cdn2.iconfinder.com/data/icons/web-hosting-19/50/70-512.png',
-                //   fit: BoxFit.cover,
-                // ),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      'https://cdn2.iconfinder.com/data/icons/web-hosting-19/50/70-512.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ],
