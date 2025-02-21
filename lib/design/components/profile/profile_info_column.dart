@@ -18,7 +18,7 @@ class ProfileInfoColumn extends StatelessWidget {
 
     return Column(
       children: [
-        const Spacer(),
+        const Gap(20.0),
         // Profile picture
         Stack(
           alignment: Alignment.center,
@@ -35,7 +35,7 @@ class ProfileInfoColumn extends StatelessWidget {
                 radius: 75.0,
                 child: CachedNetworkImage(
                   imageUrl:
-                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                      'https://cdn2.iconfinder.com/data/icons/web-hosting-19/50/70-512.png',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -50,7 +50,7 @@ class ProfileInfoColumn extends StatelessWidget {
           context,
         ),
 
-        const Spacer(),
+        const Gap(20.0),
 
         // Profile name and age
         Row(
@@ -94,7 +94,7 @@ class ProfileInfoColumn extends StatelessWidget {
           ),
         ),
 
-        const Gap(8.0),
+        const Gap(12.0),
 
         const Divider(
           thickness: 0.5,

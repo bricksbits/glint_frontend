@@ -8,6 +8,8 @@ class FeaturesLeftCountContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final isSmallScreen = screenSize.width < 400;
     return Row(
       children: [
         //superlikes
@@ -16,6 +18,7 @@ class FeaturesLeftCountContainer extends StatelessWidget {
             iconPath: 'lib/assets/icons/super_like.svg',
             count: 3,
             label: 'Superlikes',
+            isSmallScreen: isSmallScreen,
           ),
         ),
 
@@ -27,6 +30,7 @@ class FeaturesLeftCountContainer extends StatelessWidget {
             iconPath: 'lib/assets/icons/profile/rewind_icon.svg',
             count: 8,
             label: 'Rewinds',
+            isSmallScreen: isSmallScreen,
           ),
         ),
 
@@ -38,6 +42,7 @@ class FeaturesLeftCountContainer extends StatelessWidget {
             iconPath: 'lib/assets/icons/direct_msg.svg',
             count: 6,
             label: 'SuperDM',
+            isSmallScreen: isSmallScreen,
           ),
         )
       ],
@@ -49,10 +54,11 @@ Widget _buildPremiumFeaturesCountContainer({
   required String iconPath,
   required int count,
   required String label,
+  required bool isSmallScreen,
 }) {
   return Container(
-    padding: const EdgeInsets.symmetric(
-      horizontal: 18.0,
+    padding: EdgeInsets.symmetric(
+      horizontal: isSmallScreen ? 14.0 : 18.0,
       vertical: 18.0,
     ),
     decoration: BoxDecoration(
@@ -85,6 +91,7 @@ Widget _buildPremiumFeaturesCountContainer({
             text: label,
             style: AppTheme.smallBodyText.copyWith(
               fontWeight: FontWeight.w700,
+              fontSize: isSmallScreen ? 10.0 : null,
             ),
             children: const [
               TextSpan(
