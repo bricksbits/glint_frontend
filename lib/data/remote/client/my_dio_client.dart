@@ -9,34 +9,27 @@ class MyDioClient {
   MyDioClient.test(this.dioHttpClient);
 
   MyDioClient(this.dioHttpClient) {
-    dioHttpClient
-      ..options.connectTimeout = const Duration(
-        milliseconds: GlintApiConstants.apiTimeOut,
-      )
-      ..options.receiveTimeout = const Duration(
-        milliseconds: GlintApiConstants.apiReceiveTimeOut,
-      )
-      ..interceptors.add(
-        LogInterceptor(
-          request: true,
-          requestHeader: true,
-          requestBody: true,
-          responseHeader: true,
-          responseBody: true,
-        ),
-      );
+    dioHttpClient.interceptors.add(
+      LogInterceptor(
+        request: true,
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: true,
+        responseBody: true,
+      ),
+    );
   }
 
-  Future<Response<dynamic>?> getRequest(
-    String url,
+  Future<Response<dynamic>?> getRequest({
+    required String endpoint,
     Map<String, dynamic>? queryParameters,
-    CancelToken? cancelToken,
     String? accessToken,
-  ) async {
+    // CancelToken? cancelToken,
+  }) async {
     try {
-      dioHttpClient.options.headers['Authorization'] = 'Bearer $accessToken';
-      final response =
-          await dioHttpClient.get(url, queryParameters: queryParameters);
+      dioHttpClient.options.headers['Auth'] = accessToken;
+      final response = await dioHttpClient.get(GlintApiConstants.glintBaseUrl,
+          queryParameters: queryParameters);
       return response;
     } on DioException catch (someException) {
       print(
@@ -45,11 +38,19 @@ class MyDioClient {
     }
   }
 
-  Future<Response<dynamic>?> postRequest(String url, dynamic body) async {
+  //Todo: GO Make it Generic
+  // Handle Errors as well
+  Future<Response<dynamic>?> postRequest({
+    required String endpoint,
+    required dynamic body,
+    required String accessToken,
+  }) async {
+    dioHttpClient.options.headers['Auth'] = accessToken;
     try {
       dioHttpClient.options.headers['Content-Type'] =
           'application/x-www-form-urlencoded';
-      final postResponse = await dioHttpClient.post(url, data: body);
+      final postResponse =
+          await dioHttpClient.post(GlintApiConstants.glintBaseUrl, data: body);
       print("Status Code -> ${postResponse.statusCode}");
       return postResponse;
     } on DioException catch (exception) {

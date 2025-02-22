@@ -1,6 +1,7 @@
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/data/remote/model/request/auth/login_request_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_response.dart'
     as api_response;
 import 'package:glint_frontend/data/remote/utils/safe_api_call_handler.dart';
@@ -18,7 +19,13 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
   @override
   Future<NetworkResponse<void>> createAccount() {
     final response = safeApiCallHandler(
-        httpClient, HttpRequestEnum.GET, "", sharedPreferencesAsync, null);
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      sharedPreference: sharedPreferencesAsync,
+      endpoint: "/registerUser",
+      requestBody: null,
+      passedQueryParameters: null,
+    );
 
     switch (response) {
       case api_response.Success():
@@ -31,9 +38,28 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
   }
 
   @override
-  Future<NetworkResponse<void>> login() {
-    // TODO: implement login
-    throw UnimplementedError();
+  Future<NetworkResponse<void>> login(LoginRequestBody loginRequestBody) {
+    final response = safeApiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      sharedPreference: sharedPreferencesAsync,
+      endpoint: "/login",
+      requestBody: loginRequestBody.toJson(),
+      passedQueryParameters: null,
+    );
+
+    switch (response) {
+      case api_response.Success():
+        return Future.value(Success(data: response));
+      case api_response.Failure():
+        return Future.value(Failure(error: Exception()));
+    }
+
+    return Future.value(
+      Failure(
+        error: Exception("Something went wrong"),
+      ),
+    );
   }
 
   @override
@@ -43,8 +69,7 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
   }
 
   @override
-  Future<NetworkResponse<void>> setAuthToken() {
-    // TODO: implement setAuthToken
-    throw UnimplementedError();
+  Future<void> setAuthToken(String newAuthToken) async {
+    sharedPreferencesAsync.setString("authToken", newAuthToken);
   }
 }

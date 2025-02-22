@@ -1,33 +1,40 @@
-import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:dio/dio.dart';
 import 'package:encrypt_shared_preferences/provider.dart';
+import 'package:glint_frontend/data/remote/model/request/auth/refresh_token_body_request.dart';
+import 'package:glint_frontend/data/remote/model/response/auth/refresh_auth_token_response.dart';
+import 'package:glint_frontend/data/remote/utils/api_response.dart';
+import 'package:glint_frontend/data/remote/utils/network_response_handler.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class AccessTokenHelper {
-  late EncryptedSharedPreferencesAsync sharedPreferences;
+  EncryptedSharedPreferencesAsync sharedPreferences;
+  Dio dioClient;
 
-  AccessTokenHelper() {
-    setupSharedPref();
-  }
+  AccessTokenHelper(this.sharedPreferences, this.dioClient);
 
-  Future<void> setupSharedPref() async {
-    const key = "";
-    await EncryptedSharedPreferencesAsync.initialize(key);
-    sharedPreferences = EncryptedSharedPreferencesAsync.getInstance();
-  }
-
-  // Method to check if Token is Valid or not.
+  //Todo: GO Method to check if Token is Valid or not.
   Future<bool> isTokenValid() async {
-    final lastUpdatedTime = await sharedPreferences.getInt("") ?? 0;
-    return lastUpdatedTime > DateTime.now().microsecondsSinceEpoch;
+    return false;
   }
 
-  Future<void> updateRefreshToken(
-    MyDioClient httpClient,
-  ) async {
-    // final requestBody = SpotifyAccessTokenRequestModel(
-    //   grantType: grant_type,
-    //   clientId: client_id,
-    //   clientSecret: client_secret,
-    // );
+  Future<void> updateRefreshToken() async {
+    final getRefreshToken =
+        await sharedPreferences.getString("refreshToken", defaultValue: "");
+    final requestBody = RefreshTokenBodyRequest(refreshToken: getRefreshToken);
+
+    final response =
+        await dioClient.post("/refresh", data: requestBody.toJson());
+
+    final tokenResponse = await networkResponseHandler(response);
+
+    switch (tokenResponse) {
+      case Success():
+        final newAuthToken = tokenResponse.data as RefreshAuthTokenResponse;
+        sharedPreferences.setString("accessToken", newAuthToken.accessToken);
+      case Failure():
+        print("Something went wrong");
+    }
     //
     // final accessTokenResponse = await httpClient.postRequest(
     //     SPOTIFY_ACCESS_TOKEN_ENDPOINT, requestBody.toJson());
