@@ -19,10 +19,10 @@ class FetchEventDetailsUseCase extends UseCase<EventDetailsResponse, int> {
       switch (eventDetailsResponse) {
         case Success():
           controller.add(eventDetailsResponse.data);
-          logger.finest('GetUsersUseCase successful.');
+          logger.finest('fetching event details successful.');
         case Failure():
           controller.addError(eventDetailsResponse.error);
-          logger.severe('GetUsersUseCase unsuccessful.');
+          logger.severe('fetching event details unsuccessful.');
           print(eventDetailsResponse.error);
       }
       controller.close();

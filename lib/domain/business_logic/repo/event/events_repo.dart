@@ -5,7 +5,7 @@ abstract class EventRepo {
 
   Future<NetworkResponse<void>> getEventDetails(int? eventId);
 
-  Future<NetworkResponse<void>> userInterested();
+  Future<NetworkResponse<void>> userInterested(int? eventId);
 
   Future<NetworkResponse<void>> fetchInterestedProfiles();
 

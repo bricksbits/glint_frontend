@@ -32,13 +32,13 @@ class EventRepoImpl extends EventRepo {
 
   @override
   Future<NetworkResponse<void>> getEventDetails(int? eventId) {
-    final id = eventId ?? 1; // todo - change/ remove this later
+    if (eventId == null) return Future.value(Failure(error: Exception()));
 
     final response = safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       sharedPreference: sharedPreferencesAsync,
-      endpoint: "/event/$id/details",
+      endpoint: "/event/$eventId/details",
       requestBody: null,
       passedQueryParameters: null,
     );
@@ -54,8 +54,25 @@ class EventRepoImpl extends EventRepo {
   }
 
   @override
-  Future<NetworkResponse<void>> userInterested() {
-    // TODO: implement userInterested
-    throw UnimplementedError();
+  Future<NetworkResponse<void>> userInterested(int? eventId) {
+    if (eventId == null) return Future.value(Failure(error: Exception()));
+
+    final response = safeApiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.POST,
+      sharedPreference: sharedPreferencesAsync,
+      endpoint: "/event/$eventId/like",
+      requestBody: null,
+      passedQueryParameters: null,
+    );
+
+    switch (response) {
+      case api_response.Success():
+        return Future.value(Success(data: response));
+      case api_response.Failure():
+        return Future.value(Failure(error: Exception()));
+    }
+
+    return Future.value(Failure(error: Exception()));
   }
 }
