@@ -14,15 +14,15 @@ class UserLikedEventUseCase extends UseCase<void, int> {
     final StreamController<NetworkResponse<bool>> controller =
         StreamController();
     try {
-      final loginResponse = await eventRepo.userInterested(params!);
-      switch (loginResponse) {
+      final userLikedResponse = await eventRepo.userInterested(params!);
+      switch (userLikedResponse) {
         case Success():
-          controller.add(loginResponse.data);
+          controller.add(userLikedResponse.data);
           logger.finest('like event successful.');
         case Failure():
-          controller.addError(loginResponse.error);
+          controller.addError(userLikedResponse.error);
           logger.severe('like event unsuccessful.');
-          print(loginResponse.error);
+          print(userLikedResponse.error);
       }
       controller.close();
     } catch (caughtError) {

@@ -13,8 +13,27 @@ class EventRepoImpl extends EventRepo {
   EventRepoImpl(this.httpClient, this.sharedPreferencesAsync);
 
   @override
-  Future<NetworkResponse<void>> fetchInterestedProfiles() {
-    // TODO: implement fetchInterestedProfiles
+  Future<NetworkResponse<void>> fetchInterestedProfiles(int? eventId) {
+    // if (eventId == null) return Future.value(Failure(error: Exception()));
+
+    // final response = safeApiCallHandler(
+    //   httpClient: httpClient,
+    //   requestType: HttpRequestEnum.GET,
+    //   sharedPreference: sharedPreferencesAsync,
+    //   endpoint: "/event/$eventId/profiles",
+    //   requestBody: null,
+    //   passedQueryParameters: null,
+    // );
+    //
+    // switch (response) {
+    //   case api_response.Success():
+    //     return Future.value(
+    //         // Success(data: response.data),
+    //         );
+    //   case api_response.Failure():
+    // return Future.value(Failure(error: Exception()));
+
+    // return Future.value(Failure(error: Exception()));
     throw UnimplementedError();
   }
 
