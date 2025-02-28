@@ -2,16 +2,20 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/event/bloc/interaction/event_interaction_bloc.dart';
 
 class HotEvent extends StatelessWidget {
   const HotEvent({
     super.key,
+    required this.eventId,
     this.showDiscount = true,
   });
 
+  final int eventId;
   final bool showDiscount;
 
   @override
@@ -97,9 +101,30 @@ class HotEvent extends StatelessWidget {
                       ],
                     ),
 
+                    // BlocListener<EventInteractionBloc, EventInteractionState>(
+                    //   listener: (context, state) {
+                    //     if (state is EventInteractionSuccess) {
+                    //       // show success message or update UI
+                    //       ScaffoldMessenger.of(context).showSnackBar(
+                    //         const SnackBar(
+                    //             content:
+                    //                 Text('Marked as interested in event!')),
+                    //       );
+                    //     } else if (state is EventInteractionFailure) {
+                    //       // Show error message
+                    //       ScaffoldMessenger.of(context).showSnackBar(
+                    //         SnackBar(content: Text('Error: ${state.error}')),
+                    //       );
+                    //     }
+                    //   },
+                    //   child: const SizedBox
+                    //       .shrink(), // Empty container as we're just listening
+                    // ),
+
                     // pricing and interested profiles
                     if (showDiscount)
-                      const _HotEventDiscountAndInterestedProfiles(
+                      _HotEventDiscountAndInterestedProfiles(
+                        eventId: eventId,
                         eventOldPrice: eventOldPrice,
                         eventNewPrice: eventNewPrice,
                         eventDiscountDaysLeft: eventDiscountDaysLeft,
@@ -158,12 +183,14 @@ class HotEvent extends StatelessWidget {
 
 class _HotEventDiscountAndInterestedProfiles extends StatelessWidget {
   const _HotEventDiscountAndInterestedProfiles({
+    required this.eventId,
     required this.eventOldPrice,
     required this.eventNewPrice,
     required this.eventDiscountDaysLeft,
     required this.interactedUsers,
   });
 
+  final int eventId;
   final int eventOldPrice;
   final int eventNewPrice;
   final int eventDiscountDaysLeft;
@@ -239,35 +266,45 @@ class _HotEventDiscountAndInterestedProfiles extends StatelessWidget {
         const Gap(16.0),
 
         // see profiles widget
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ...interactedUsers.map(
-              (userImage) => Align(
-                widthFactor: 0.5,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 6),
-                  child: CircleAvatar(
-                    radius: 10.0,
-                    backgroundImage: NetworkImage(userImage),
+        // when clicked here, it will mark user as interested in event
+        GestureDetector(
+          onTap: () {
+            context.read<EventInteractionBloc>().add(
+                  MarkUserInterestedEvent(eventId),
+                );
+            debugPrint('user as interested clicked for event $eventId');
+            debugPrint('user as interested clicked');
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ...interactedUsers.map(
+                (userImage) => Align(
+                  widthFactor: 0.5,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: CircleAvatar(
+                      radius: 10.0,
+                      backgroundImage: NetworkImage(userImage),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const Gap(20.0),
-            Text(
-              'See profiles',
-              style: AppTheme.simpleText.copyWith(
-                fontWeight: FontWeight.w500,
-                color: AppColours.white,
+              const Gap(20.0),
+              Text(
+                'See profiles',
+                style: AppTheme.simpleText.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: AppColours.white,
+                ),
               ),
-            ),
-            const Gap(2.0),
-            const Icon(
-              Icons.chevron_right,
-              color: AppColours.vibrantYellow,
-            ),
-          ],
+              const Gap(2.0),
+              const Icon(
+                Icons.chevron_right,
+                color: AppColours.vibrantYellow,
+              ),
+            ],
+          ),
         ),
       ],
     );
