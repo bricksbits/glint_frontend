@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/auth/login_screen.dart';
+import 'package:glint_frontend/features/home/home_bloc.dart';
 import 'package:glint_frontend/features/home/home_screen.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -15,7 +18,10 @@ class MyGlintApp extends StatelessWidget {
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const HomeScreen(),
+      home: BlocProvider<HomeBloc>(
+        create: (BuildContext context) => HomeBloc(),
+        child: const LoginScreen(),
+      ),
       // home: StreamChannel(
       //   channel: channel,
       //   child: const ChatScreen(),

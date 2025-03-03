@@ -15,7 +15,7 @@ class AccessTokenHelper {
 
   //Todo: GO Method to check if Token is Valid or not.
   Future<bool> isTokenValid() async {
-    return false;
+    return true;
   }
 
   Future<void> updateRefreshToken() async {

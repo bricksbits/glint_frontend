@@ -16,7 +16,9 @@ import 'package:injectable/injectable.dart' as _i526;
 import '../data/local/db/dao/profile_dao.dart' as _i719;
 import '../data/local/db/database/glint_database.dart' as _i160;
 import '../data/remote/client/my_dio_client.dart' as _i368;
+import '../data/remote/utils/access_token_helper.dart' as _i684;
 import '../data/repo/auth/authentication_repo_impl.dart' as _i840;
+import '../domain/application_logic/auth/sign_in_user_use_case.dart' as _i972;
 import '../domain/business_logic/repo/auth/authentication_repo.dart' as _i873;
 import 'local_module.dart' as _i519;
 import 'network_module.dart' as _i567;
@@ -32,28 +34,34 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
-    final networkModule = _$NetworkModule();
     final localModule = _$LocalModule();
+    final networkModule = _$NetworkModule();
+    await gh.singletonAsync<_i930.EncryptedSharedPreferencesAsync>(
+      () => localModule.sharedPref(),
+      preResolve: true,
+    );
     gh.singleton<_i361.Dio>(() => networkModule.getHttpClientInstance());
     await gh.lazySingletonAsync<_i160.GlintDatabase>(
       () => localModule.glintDatabase(),
       preResolve: true,
     );
-    await gh.lazySingletonAsync<_i930.EncryptedSharedPreferencesAsync>(
-      () => localModule.sharedPref(),
-      preResolve: true,
-    );
+    gh.lazySingleton<_i972.SignInUserUseCase>(() => _i972.SignInUserUseCase());
+    gh.factory<_i684.AccessTokenHelper>(() => _i684.AccessTokenHelper(
+          gh<_i930.EncryptedSharedPreferencesAsync>(),
+          gh<_i361.Dio>(),
+        ));
     gh.singleton<_i719.ProfileDao>(
         () => localModule.getProfileDao(gh<_i160.GlintDatabase>()));
     gh.factory<_i368.MyDioClient>(() => _i368.MyDioClient(gh<_i361.Dio>()));
-    gh.factory<_i873.AuthenticationRepo>(() => _i840.AuthenticationRepoImpl(
-          gh<_i368.MyDioClient>(),
-          gh<_i930.EncryptedSharedPreferencesAsync>(),
-        ));
+    gh.lazySingleton<_i873.AuthenticationRepo>(
+        () => _i840.AuthenticationRepoImpl(
+              gh<_i368.MyDioClient>(),
+              gh<_i930.EncryptedSharedPreferencesAsync>(),
+            ));
     return this;
   }
 }
 
-class _$NetworkModule extends _i567.NetworkModule {}
-
 class _$LocalModule extends _i519.LocalModule {}
+
+class _$NetworkModule extends _i567.NetworkModule {}
