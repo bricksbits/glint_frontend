@@ -21,6 +21,7 @@ class EventInteractionBloc
     emit(EventInteractionLoading());
 
     try {
+      //todo - change this to more efficient method
       final stream =
           await userLikedEventUseCase.buildUseCaseStream(event.eventId);
       await for (final _ in stream) {

@@ -101,26 +101,6 @@ class HotEvent extends StatelessWidget {
                       ],
                     ),
 
-                    // BlocListener<EventInteractionBloc, EventInteractionState>(
-                    //   listener: (context, state) {
-                    //     if (state is EventInteractionSuccess) {
-                    //       // show success message or update UI
-                    //       ScaffoldMessenger.of(context).showSnackBar(
-                    //         const SnackBar(
-                    //             content:
-                    //                 Text('Marked as interested in event!')),
-                    //       );
-                    //     } else if (state is EventInteractionFailure) {
-                    //       // Show error message
-                    //       ScaffoldMessenger.of(context).showSnackBar(
-                    //         SnackBar(content: Text('Error: ${state.error}')),
-                    //       );
-                    //     }
-                    //   },
-                    //   child: const SizedBox
-                    //       .shrink(), // Empty container as we're just listening
-                    // ),
-
                     // pricing and interested profiles
                     if (showDiscount)
                       _HotEventDiscountAndInterestedProfiles(
