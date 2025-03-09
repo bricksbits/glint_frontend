@@ -43,6 +43,8 @@ class ScrollableProfileView extends StatelessWidget {
     ),
     const ProfileCardBioBox(content: 'Hey there, just a chill person here'),
     const ProfileCardBioBox(content: 'Hey there, just a chill person here'),
+    const ProfileCardBioBox(content: 'Hey there, just a chill person here'),
+    const ProfileCardBioBox(content: 'Hey there, just a chill person here'),
   ];
 
   @override
