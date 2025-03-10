@@ -14,14 +14,13 @@ class ResetPasswordUseCase extends UseCase<void, ResetPasswordRequestBody> {
   @override
   Future<Stream<void>> buildUseCaseStream(
       ResetPasswordRequestBody? params) async {
-    final StreamController<NetworkResponse<bool>> controller =
-        StreamController();
+    final StreamController<Result<bool>> controller = StreamController();
     try {
       final resetPasswordResponse =
           await forgotPasswordRepo.resetPassword(params!);
       switch (resetPasswordResponse) {
         case Success():
-          controller.add(resetPasswordResponse.data);
+          controller.add(const Success(true));
           logger.finest('Reset Password successful.');
         case Failure():
           controller.addError(resetPasswordResponse.error);

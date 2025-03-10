@@ -33,18 +33,19 @@ Future<Result<dynamic>> safeApiCallHandler({
 
   switch (requestType) {
     case HttpRequestEnum.GET:
-      final response = await httpClient.getRequest(
+      final result = httpClient.getRequest(
         endpoint: endpoint,
         queryParameters: passedQueryParameters,
         accessToken: accessToken,
       );
-      return networkResponseHandler(response);
+      return result;
     case HttpRequestEnum.POST:
-      final response = await httpClient.postRequest(
+      final result = httpClient.postRequest(
         endpoint: endpoint,
         body: requestBody,
         accessToken: accessToken,
       );
-      return networkResponseHandler(response);
+      print("Safe API : $result");
+      return result;
   }
 }

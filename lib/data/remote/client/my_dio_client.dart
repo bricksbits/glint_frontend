@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/remote/client/glint_api_constants.dart';
+import 'package:glint_frontend/data/remote/utils/network_response_handler.dart';
+import 'package:glint_frontend/utils/network_response.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -20,7 +22,7 @@ class MyDioClient {
     );
   }
 
-  Future<Response<dynamic>?> getRequest({
+  Future<Result<dynamic>> getRequest({
     required String endpoint,
     Map<String, dynamic>? queryParameters,
     String? accessToken,
@@ -30,32 +32,29 @@ class MyDioClient {
       dioHttpClient.options.headers['Auth'] = accessToken;
       final response = await dioHttpClient.get(GlintApiConstants.glintBaseUrl,
           queryParameters: queryParameters);
-      return response;
-    } on DioException catch (someException) {
-      print(
-          '[API Helper - GET] Connection Exception => ${someException.message}');
-      return null;
+      return networkResponseHandler(response);
+    } on Exception catch (exception) {
+      return Failure(exception);
     }
   }
 
-  //Todo: GO Make it Generic
-  // Handle Errors as well
-  Future<Response<dynamic>?> postRequest({
+  Future<Result<dynamic>> postRequest({
     required String endpoint,
     required dynamic body,
-    required String accessToken,
+    required String? accessToken,
   }) async {
-    dioHttpClient.options.headers['Auth'] = accessToken;
+    if (accessToken != null) {
+      dioHttpClient.options.headers['Auth'] = accessToken;
+    }
+
     try {
-      dioHttpClient.options.headers['Content-Type'] =
-          'application/x-www-form-urlencoded';
-      final postResponse =
-          await dioHttpClient.post(endpoint, data: body);
+      print(
+          "Data of API Post Call : End point : $endpoint, Request Body : $body");
+      final postResponse = await dioHttpClient.post(endpoint, data: body);
       print("Status Code -> ${postResponse.statusCode}");
-      return postResponse;
-    } on DioException catch (exception) {
-      print('[API Helper - POST] Connection Exception => ${exception.message}');
-      return null;
+      return networkResponseHandler(postResponse);
+    } on Exception catch (exception) {
+      return Failure(exception);
     }
   }
 }
