@@ -3,8 +3,6 @@ import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/login_request_body.dart';
 import 'package:glint_frontend/data/remote/model/response/auth/login_response.dart';
-import 'package:glint_frontend/data/remote/utils/api_response.dart'
-    as api_response;
 import 'package:glint_frontend/data/remote/utils/safe_api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
 import 'package:glint_frontend/utils/network_response.dart';
@@ -17,13 +15,11 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
 
   AuthenticationRepoImpl(
     this.httpClient,
-    this.sharedPreferencesAsync ,
+    this.sharedPreferencesAsync,
   );
 
-  // final EncryptedSharedPreferencesAsync
-
   @override
-  Future<NetworkResponse<void>> createAccount() async {
+  Future<Result<void>> createAccount() async {
     const key = "";
     await EncryptedSharedPreferencesAsync.initialize(key);
     final sharedPreferencesAsync =
@@ -38,52 +34,39 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
       passedQueryParameters: null,
     );
 
-    switch (response) {
-      case api_response.Success():
-        return Future.value(Success(data: response));
-      case api_response.Failure():
-        return Future.value(Failure(error: Exception()));
-    }
-
-    return Future.value(Failure(error: Exception()));
+    return Future.value(Failure(Exception()));
   }
 
   @override
-  Future<NetworkResponse<void>> login(LoginRequestBody loginRequestBody) async {
+  Future<Result<LoginResponse>> login(LoginRequestBody loginRequestBody) async {
     const key = "";
     await EncryptedSharedPreferencesAsync.initialize(key);
     final sharedPreferencesAsync =
         EncryptedSharedPreferencesAsync.getInstance();
 
-    final response = safeApiCallHandler(
+    final response = await safeApiCallHandler(
       httpClient: httpClient,
-      requestType: HttpRequestEnum.GET,
+      requestType: HttpRequestEnum.POST,
       sharedPreference: sharedPreferencesAsync,
-      endpoint: "/login",
+      endpoint: "auth/v1/login",
       requestBody: loginRequestBody.toJson(),
       passedQueryParameters: null,
     );
 
     switch (response) {
-      case api_response.Success():
+      case Success():
+        final successResponse = response as LoginResponse;
         print(
             "Login Repo : Success Called with Response : ${(response as LoginResponse).toJson()}");
-        return Future.value(Success(data: response));
-      case api_response.Failure():
+        return Future.value(Success(successResponse));
+      case Failure():
         print("Login Repo : Failure Called");
-        return Future.value(Failure(error: Exception()));
+        return Future.value(Failure(Exception()));
     }
-
-    print("Login Repo : Failure Called");
-    return Future.value(
-      Failure(
-        error: Exception("Something went wrong"),
-      ),
-    );
   }
 
   @override
-  Future<NetworkResponse<void>> logout() {
+  Future<Result<void>> logout() {
     // TODO: implement logout
     throw UnimplementedError();
   }

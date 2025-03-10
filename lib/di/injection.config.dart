@@ -45,7 +45,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => localModule.glintDatabase(),
       preResolve: true,
     );
-    gh.lazySingleton<_i972.SignInUserUseCase>(() => _i972.SignInUserUseCase());
     gh.factory<_i684.AccessTokenHelper>(() => _i684.AccessTokenHelper(
           gh<_i930.EncryptedSharedPreferencesAsync>(),
           gh<_i361.Dio>(),
@@ -58,6 +57,8 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i368.MyDioClient>(),
               gh<_i930.EncryptedSharedPreferencesAsync>(),
             ));
+    gh.factory<_i972.SignInUserUseCase>(
+        () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
     return this;
   }
 }

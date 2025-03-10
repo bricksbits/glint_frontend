@@ -18,10 +18,7 @@ class MyGlintApp extends StatelessWidget {
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: BlocProvider<HomeBloc>(
-        create: (BuildContext context) => HomeBloc(),
-        child: const LoginScreen(),
-      ),
+      home: const LoginScreen(),
       // home: StreamChannel(
       //   channel: channel,
       //   child: const ChatScreen(),

@@ -21,6 +21,77 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordFocusNode = FocusNode();
 
   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColours.white,
+      appBar: isAdmin
+          ? const GlintEventAuthAppbar()
+          : AppBar(
+        backgroundColor: AppColours.white,
+      ),
+      body: BlocProvider<LoginBloc>(
+        create: (context) => LoginBloc(),
+        child: BlocBuilder<LoginBloc, LoginState>(
+          builder: (context, state) {
+            return AuthStackedIllustrationScreen(
+              isAdmin: isAdmin,
+              body: Column(
+                children: [
+                  if (!isAdmin)
+                    Center(
+                      child: SvgPicture.asset(
+                          'lib/assets/images/auth/glint_login.svg'),
+                    ),
+                  const Gap(40.0),
+                  if (isAdmin)
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 40.0),
+                        child: Column(
+                          children: [
+                            const Spacer(),
+                            Text(
+                              'Login',
+                              style: AppTheme.headingThree
+                                  .copyWith(fontStyle: FontStyle.normal),
+                            ),
+                            const Gap(32.0),
+                            _buildAuthFields(),
+                            const Gap(60.0),
+                            _buildActionButton('Log In',
+                                    () => debugPrint('Login button pressed')),
+                            const Gap(16.0),
+                            _buildForgotPassword(),
+                            const Spacer(flex: 4),
+                            _buildRegisterText(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (!isAdmin) ...[
+                    _buildAuthFields(),
+                    const Gap(12.0),
+                    _buildForgotPassword(),
+                    const Gap(60.0),
+                    _buildActionButton(
+                      'Login',
+                          () => context
+                          .read<LoginBloc>()
+                          .add(const LoginEvent.started()),
+                    ),
+                    const Gap(16.0),
+                    _buildRegisterText(),
+                  ],
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -101,77 +172,6 @@ class _LoginScreenState extends State<LoginScreen> {
             recognizer: TapGestureRecognizer()..onTap = () {},
           ),
         ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColours.white,
-      appBar: isAdmin
-          ? const GlintEventAuthAppbar()
-          : AppBar(
-              backgroundColor: AppColours.white,
-            ),
-      body: BlocProvider<LoginBloc>(
-        create: (context) => LoginBloc(),
-        child: BlocBuilder<LoginBloc, LoginState>(
-          builder: (context, state) {
-            return AuthStackedIllustrationScreen(
-              isAdmin: isAdmin,
-              body: Column(
-                children: [
-                  if (!isAdmin)
-                    Center(
-                      child: SvgPicture.asset(
-                          'lib/assets/images/auth/glint_login.svg'),
-                    ),
-                  const Gap(40.0),
-                  if (isAdmin)
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 40.0),
-                        child: Column(
-                          children: [
-                            const Spacer(),
-                            Text(
-                              'Login',
-                              style: AppTheme.headingThree
-                                  .copyWith(fontStyle: FontStyle.normal),
-                            ),
-                            const Gap(32.0),
-                            _buildAuthFields(),
-                            const Gap(60.0),
-                            _buildActionButton('Log In',
-                                () => debugPrint('Login button pressed')),
-                            const Gap(16.0),
-                            _buildForgotPassword(),
-                            const Spacer(flex: 4),
-                            _buildRegisterText(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  if (!isAdmin) ...[
-                    _buildAuthFields(),
-                    const Gap(12.0),
-                    _buildForgotPassword(),
-                    const Gap(60.0),
-                    _buildActionButton(
-                      'Login',
-                      () => context
-                          .read<LoginBloc>()
-                          .add(const LoginEvent.started()),
-                    ),
-                    const Gap(16.0),
-                    _buildRegisterText(),
-                  ],
-                ],
-              ),
-            );
-          },
-        ),
       ),
     );
   }
