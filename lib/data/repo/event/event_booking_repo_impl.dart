@@ -36,7 +36,22 @@ class EventBookingRepoImpl extends EventBookingRepo {
 
   @override
   Future<NetworkResponse<void>> getUserTickets() {
-    // TODO: implement getUserTickets
-    throw UnimplementedError();
+    final response = safeApiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      sharedPreference: sharedPreferencesAsync,
+      endpoint: "/event/ticket/history",
+      requestBody: null,
+      passedQueryParameters: null,
+    );
+
+    switch (response) {
+      case api_response.Success():
+        return Future.value(Success(data: response));
+      case api_response.Failure():
+        return Future.value(Failure(error: Exception()));
+    }
+
+    return Future.value(Failure(error: Exception()));
   }
 }
