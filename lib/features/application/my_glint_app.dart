@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/event/event_ticket_history_screen.dart';
+import 'package:glint_frontend/features/home/home_screen.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class MyGlintApp extends StatelessWidget {
@@ -15,7 +15,7 @@ class MyGlintApp extends StatelessWidget {
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const EventTicketHistoryScreen(),
+      home: const HomeScreen(),
       // home: StreamChannel(
       //   channel: channel,
       //   child: const ChatScreen(),
