@@ -17,15 +17,16 @@ class ResetPasswordUseCase extends UseCase<void, ResetPasswordRequestBody> {
     final StreamController<NetworkResponse<bool>> controller =
         StreamController();
     try {
-      final loginResponse = await forgotPasswordRepo.resetPassword(params!);
-      switch (loginResponse) {
+      final resetPasswordResponse =
+          await forgotPasswordRepo.resetPassword(params!);
+      switch (resetPasswordResponse) {
         case Success():
-          controller.add(loginResponse.data);
-          logger.finest('GetUsersUseCase successful.');
+          controller.add(resetPasswordResponse.data);
+          logger.finest('Reset Password successful.');
         case Failure():
-          controller.addError(loginResponse.error);
-          logger.severe('GetUsersUseCase unsuccessful.');
-          print(loginResponse.error);
+          controller.addError(resetPasswordResponse.error);
+          logger.severe('Reset Password unsuccessful.');
+          print(resetPasswordResponse.error);
       }
       controller.close();
     } catch (caughtError) {
