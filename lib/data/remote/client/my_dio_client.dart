@@ -50,7 +50,7 @@ class MyDioClient {
       dioHttpClient.options.headers['Content-Type'] =
           'application/x-www-form-urlencoded';
       final postResponse =
-          await dioHttpClient.post(GlintApiConstants.glintBaseUrl, data: body);
+          await dioHttpClient.post(endpoint, data: body);
       print("Status Code -> ${postResponse.statusCode}");
       return postResponse;
     } on DioException catch (exception) {

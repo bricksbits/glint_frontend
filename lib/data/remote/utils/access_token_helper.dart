@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/refresh_token_body_request.dart';
 import 'package:glint_frontend/data/remote/model/response/auth/refresh_auth_token_response.dart';
-import 'package:glint_frontend/data/remote/utils/api_response.dart';
 import 'package:glint_frontend/data/remote/utils/network_response_handler.dart';
+import 'package:glint_frontend/utils/network_response.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -15,7 +15,7 @@ class AccessTokenHelper {
 
   //Todo: GO Method to check if Token is Valid or not.
   Future<bool> isTokenValid() async {
-    return false;
+    return true;
   }
 
   Future<void> updateRefreshToken() async {

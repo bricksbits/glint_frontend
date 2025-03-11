@@ -1,13 +1,13 @@
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:get_it/get_it.dart';
-import 'package:glint_frontend/data/remote/utils/api_response.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/utils/network_response.dart';
 
 import '../utils/access_token_helper.dart';
 import '../utils/network_response_handler.dart';
 
-Future<ApiResponse<dynamic>> safeApiCallHandler({
+Future<Result<dynamic>> safeApiCallHandler({
   required MyDioClient httpClient,
   required HttpRequestEnum requestType,
   required EncryptedSharedPreferencesAsync sharedPreference,

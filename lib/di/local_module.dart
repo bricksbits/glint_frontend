@@ -13,7 +13,7 @@ abstract class LocalModule {
   @singleton
   ProfileDao getProfileDao(GlintDatabase database) => database.profileDao;
 
-  @lazySingleton
+  @singleton
   @preResolve
   Future<EncryptedSharedPreferencesAsync> sharedPref() async {
     const key = "";
