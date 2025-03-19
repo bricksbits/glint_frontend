@@ -3,9 +3,10 @@ enum ScrollableListItemType {
   ABOUT,
   BIO,
   LOOKING_FOR,
-  INTERETS,
+  INTEREST,
   LOCATION,
 }
+
 
 class PeopleListModelData {
   final ScrollableListItemType itemType;
@@ -13,16 +14,18 @@ class PeopleListModelData {
   final String? bio;
   final List<String>? lookingFor;
   final List<String>? interests;
-  final String location;
+  final String? location;
+  final String? imageUrl;
 
-  PeopleListModelData(
-    this.itemType,
+  PeopleListModelData({
+    required this.itemType,
     this.about,
     this.bio,
     this.lookingFor,
     this.interests,
     this.location,
-  );
+    this.imageUrl
+  });
 }
 
 class PeopleTopCardModel {
@@ -32,9 +35,11 @@ class PeopleTopCardModel {
   final String locationAway;
   final String views;
   final String designation;
+  final String imageUrl;
 
   PeopleTopCardModel(
     this.id,
+    this.imageUrl,
     this.name,
     this.age,
     this.locationAway,

@@ -8,6 +8,8 @@ class PeopleScreen extends StatelessWidget {
 
   final List<Widget> list = [
     ScrollableProfileView(),
+    ScrollableProfileView(),
+    ScrollableProfileView(),
   ];
 
   @override
@@ -21,7 +23,7 @@ class PeopleScreen extends StatelessWidget {
         onUndo: (_, __, ___) {
           return false;
         },
-        isLoop: true,
+        isLoop: false,
         cardsCount: list.length,
         cardBuilder: (context, index, percentThresholdX, percentThresholdY) =>
             list[index],
