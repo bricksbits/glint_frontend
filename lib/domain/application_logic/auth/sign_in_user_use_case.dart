@@ -18,18 +18,23 @@ class SignInUserUseCase extends UseCase<Result<bool>, LoginRequestBody> {
       LoginRequestBody? params) async {
     final StreamController<Result<bool>> controller = StreamController();
     try {
-      final loginResponse = await authenticationRepo.login(params!);
-      switch (loginResponse) {
-        case Success<LoginResponse>():
-          controller.add(const Success(true));
-        case Failure<LoginResponse>():
-          controller.addError(Failure(loginResponse.error));
-      }
+      authenticationRepo.login(params!).then((loginResponse) {
+        switch (loginResponse) {
+          case Success<LoginResponse>(data: _):
+            controller.add(const Success(true));
+            controller.close();
+          case Failure<LoginResponse>(error: var error):
+            controller.addError(Failure(error));
+            controller.close();
+        }
+      }).catchError((caughtError) {
+        controller.addError(Failure(Exception(caughtError.toString())));
+        controller.close();
+      });
+    } catch (e) {
+      controller.addError(Failure(Exception(e.toString())));
       controller.close();
-    } catch (caughtError) {
-      controller.addError(caughtError);
     }
-
     return controller.stream;
   }
 }

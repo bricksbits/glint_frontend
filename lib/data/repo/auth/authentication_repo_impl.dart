@@ -39,11 +39,6 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
 
   @override
   Future<Result<LoginResponse>> login(LoginRequestBody loginRequestBody) async {
-    const key = "";
-    await EncryptedSharedPreferencesAsync.initialize(key);
-    final sharedPreferencesAsync =
-        EncryptedSharedPreferencesAsync.getInstance();
-
     final response = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
@@ -53,14 +48,15 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
       passedQueryParameters: null,
     );
 
+    print("Repo : Initial --> $response");
     switch (response) {
       case Success():
-        final successResponse = response as LoginResponse;
-        print(
-            "Login Repo : Success Called with Response : ${(response as LoginResponse).toJson()}");
+        final successResponse = LoginResponse.fromJson(response.data);
+        print("Repo : Raw --> $response");
+        print("Repo : Converted --> $successResponse");
         return Future.value(Success(successResponse));
       case Failure():
-        print("Login Repo : Failure Called");
+        print("Repo : Failure Called");
         return Future.value(Failure(Exception()));
     }
   }
