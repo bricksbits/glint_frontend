@@ -10,6 +10,10 @@ class FetchEventInterestedProfilesUseCase extends UseCase<List<Profile>, int> {
 
   FetchEventInterestedProfilesUseCase(this.eventRepo);
 
+  /// Your Usecase design is all correct just return the required return
+  /// type that is required by the Usecase
+  /// Currently you are trying to Return `List<Profile>` but your repo
+  /// Method is returning Void
   @override
   Future<Stream<List<Profile>?>> buildUseCaseStream(int? params) async {
     final StreamController<List<Profile>> controller = StreamController();
@@ -18,7 +22,7 @@ class FetchEventInterestedProfilesUseCase extends UseCase<List<Profile>, int> {
           await eventRepo.fetchInterestedProfiles(params);
       switch (eventInterestedProfilesResponse) {
         case Success():
-          controller.add(eventInterestedProfilesResponse.data);
+          controller.add([]);
           logger.finest('fetching event details successful.');
         case Failure():
           controller.addError(eventInterestedProfilesResponse.error);

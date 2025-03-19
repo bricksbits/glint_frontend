@@ -18,7 +18,7 @@ class FetchEventDetailsUseCase extends UseCase<EventDetailsResponse, int> {
       final eventDetailsResponse = await eventRepo.getEventDetails(params);
       switch (eventDetailsResponse) {
         case Success():
-          controller.add(eventDetailsResponse.data);
+          controller.add(null);
           logger.finest('fetching event details successful.');
         case Failure():
           controller.addError(eventDetailsResponse.error);

@@ -3,7 +3,6 @@ import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/utils/safe_api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/event/events_repo.dart';
-import 'package:glint_frontend/utils/network_response.dart' as api_response;
 import 'package:glint_frontend/utils/network_response.dart';
 
 class EventRepoImpl extends EventRepo {
@@ -13,10 +12,10 @@ class EventRepoImpl extends EventRepo {
   EventRepoImpl(this.httpClient, this.sharedPreferencesAsync);
 
   @override
-  Future<NetworkResponse<void>> fetchInterestedProfiles(int? eventId) {
-    if (eventId == null) return Future.value(Failure(error: Exception()));
+  Future<Result<void>> fetchInterestedProfiles(int? eventId) async {
+    if (eventId == null) return  Result.failure(Exception("Event Id is null"));
 
-    final response = safeApiCallHandler(
+    final response = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       sharedPreference: sharedPreferencesAsync,
@@ -25,25 +24,23 @@ class EventRepoImpl extends EventRepo {
       passedQueryParameters: null,
     );
 
-    switch (response) {
-      case api_response.Success():
-        return Future.value(Success(data: response));
-      case api_response.Failure():
-        return Future.value(Failure(error: Exception()));
+    switch(response){
+      case Success():
+        return Success(response.data);
+      case Failure():
+        return Failure(Exception(response.error));
     }
-
-    return Future.value(Failure(error: Exception()));
   }
 
   @override
-  Future<NetworkResponse<void>> filterEvents() {
+  Future<Result<void>> filterEvents() {
     // TODO: implement filterEvents
     throw UnimplementedError();
   }
 
   @override
-  Future<NetworkResponse<void>> getAllEvents() {
-    final response = safeApiCallHandler(
+  Future<Result<void>> getAllEvents() async {
+    final response = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       sharedPreference: sharedPreferencesAsync,
@@ -52,21 +49,19 @@ class EventRepoImpl extends EventRepo {
       passedQueryParameters: null,
     );
 
-    switch (response) {
-      case api_response.Success():
-        return Future.value(Success(data: response));
-      case api_response.Failure():
-        return Future.value(Failure(error: Exception()));
+    switch(response){
+      case Success():
+        return Success(response.data);
+      case Failure():
+        return Failure(Exception(response.error));
     }
-
-    return Future.value(Failure(error: Exception()));
   }
 
   @override
-  Future<NetworkResponse<void>> getEventDetails(int? eventId) {
-    if (eventId == null) return Future.value(Failure(error: Exception()));
+  Future<Result<void>> getEventDetails(int? eventId) async {
+    if (eventId == null) return Result.failure(Exception("Event Id is null"));
 
-    final response = safeApiCallHandler(
+    final response = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       sharedPreference: sharedPreferencesAsync,
@@ -75,21 +70,19 @@ class EventRepoImpl extends EventRepo {
       passedQueryParameters: null,
     );
 
-    switch (response) {
-      case api_response.Success():
-        return Future.value(Success(data: response));
-      case api_response.Failure():
-        return Future.value(Failure(error: Exception()));
+    switch(response){
+      case Success():
+        return Success(response.data);
+      case Failure():
+        return Failure(Exception(response.error));
     }
-
-    return Future.value(Failure(error: Exception()));
   }
 
   @override
-  Future<NetworkResponse<void>> userInterested(int? eventId) {
-    if (eventId == null) return Future.value(Failure(error: Exception()));
+  Future<Result<void>> userInterested(int? eventId) async {
+    if (eventId == null) return  Result.failure(Exception("Event Id is null"));
 
-    final response = safeApiCallHandler(
+    final response = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
       sharedPreference: sharedPreferencesAsync,
@@ -98,13 +91,11 @@ class EventRepoImpl extends EventRepo {
       passedQueryParameters: null,
     );
 
-    switch (response) {
-      case api_response.Success():
-        return Future.value(Success(data: response));
-      case api_response.Failure():
-        return Future.value(Failure(error: Exception()));
+    switch(response){
+      case Success():
+        return Success(response.data);
+      case Failure():
+        return Failure(Exception(response.error));
     }
-
-    return Future.value(Failure(error: Exception()));
   }
 }
