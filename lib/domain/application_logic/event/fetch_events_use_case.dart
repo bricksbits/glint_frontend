@@ -16,8 +16,10 @@ class FetchEventsUseCase extends UseCase<List<Event>, void> {
     try {
       final eventsResponse = await eventRepo.getAllEvents();
       switch (eventsResponse) {
+      // TODO: Return the Required Type via the Repo
         case Success():
-          controller.add(eventsResponse.data);
+          // controller.add(eventsResponse.data
+          controller.add([]);
           logger.finest('fetching events successful.');
         case Failure():
           controller.addError(eventsResponse.error);

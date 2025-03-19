@@ -14,8 +14,8 @@ class EventBookingRepoImpl extends EventBookingRepo {
   EventBookingRepoImpl(this.httpClient, this.sharedPreferencesAsync);
 
   @override
-  Future<NetworkResponse<void>> bookEvent(EventBookingRequestBody body) {
-    final response = safeApiCallHandler(
+  Future<Result<void>> bookEvent(EventBookingRequestBody body) async {
+    final response = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
       sharedPreference: sharedPreferencesAsync,
@@ -25,18 +25,16 @@ class EventBookingRepoImpl extends EventBookingRepo {
     );
 
     switch (response) {
-      case api_response.Success():
-        return Future.value(Success(data: response));
-      case api_response.Failure():
-        return Future.value(Failure(error: Exception()));
+      case Success():
+        return Success(response.data);
+      case Failure():
+        return Failure(Exception(response.error));
     }
-
-    return Future.value(Failure(error: Exception()));
   }
 
   @override
-  Future<NetworkResponse<void>> getUserTickets() {
-    final response = safeApiCallHandler(
+  Future<Result<void>> getUserTickets() async {
+    final response = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       sharedPreference: sharedPreferencesAsync,
@@ -46,12 +44,10 @@ class EventBookingRepoImpl extends EventBookingRepo {
     );
 
     switch (response) {
-      case api_response.Success():
-        return Future.value(Success(data: response));
-      case api_response.Failure():
-        return Future.value(Failure(error: Exception()));
+      case Success():
+        return Success(response.data);
+      case Failure():
+        return Failure(Exception(response.error));
     }
-
-    return Future.value(Failure(error: Exception()));
   }
 }

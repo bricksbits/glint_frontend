@@ -11,13 +11,13 @@ class UserLikedEventUseCase extends UseCase<void, int> {
 
   @override
   Future<Stream<void>> buildUseCaseStream(int? params) async {
-    final StreamController<NetworkResponse<bool>> controller =
+    final StreamController<Result<bool>> controller =
         StreamController();
     try {
       final userLikedResponse = await eventRepo.userInterested(params!);
       switch (userLikedResponse) {
         case Success():
-          controller.add(userLikedResponse.data);
+          controller.add(const Success(true));
           logger.finest('like event successful.');
         case Failure():
           controller.addError(userLikedResponse.error);

@@ -13,13 +13,12 @@ class EventBookUseCase extends UseCase<void, EventBookingRequestBody> {
   @override
   Future<Stream<void>> buildUseCaseStream(
       EventBookingRequestBody? params) async {
-    final StreamController<NetworkResponse<bool>> controller =
-        StreamController();
+    final StreamController<Result<bool>> controller = StreamController();
     try {
       final eventBookingResponse = await eventBookingRepo.bookEvent(params!);
       switch (eventBookingResponse) {
         case Success():
-          controller.add(eventBookingResponse.data);
+          controller.add(const Success(true));
           logger.finest('event booking successful.');
         case Failure():
           controller.addError(eventBookingResponse.error);
