@@ -4,7 +4,7 @@ import 'package:glint_frontend/data/remote/model/request/auth/reset_password_req
 import 'package:glint_frontend/domain/business_logic/repo/auth/forgot_password_repo.dart';
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 
-import '../../../utils/network_response.dart';
+import '../../../utils/result_sealed.dart';
 
 class ResetPasswordUseCase extends UseCase<void, ResetPasswordRequestBody> {
   final ForgotPasswordRepo forgotPasswordRepo;

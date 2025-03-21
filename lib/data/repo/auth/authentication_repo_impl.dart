@@ -5,7 +5,7 @@ import 'package:glint_frontend/data/remote/model/request/auth/login_request_body
 import 'package:glint_frontend/data/remote/model/response/auth/login_response.dart';
 import 'package:glint_frontend/data/remote/utils/safe_api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: AuthenticationRepo)

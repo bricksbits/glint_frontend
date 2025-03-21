@@ -4,8 +4,8 @@ import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/event/event_booking_request_body.dart';
 import 'package:glint_frontend/data/remote/utils/safe_api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/event/event_booking_repo.dart';
-import 'package:glint_frontend/utils/network_response.dart' as api_response;
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart' as api_response;
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 class EventBookingRepoImpl extends EventBookingRepo {
   final MyDioClient httpClient;

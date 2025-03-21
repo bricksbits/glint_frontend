@@ -1,33 +1,33 @@
 class CreateEventRequest {
-  final String eventName;
-  final bool isHotEvent;
-  final String eventDescription;
-  final double eventLocationLat;
-  final double eventLocationLong;
-  final String createdTime;
-  final String bookTime;
-  final String startDateAndTime;
-  final String endDateAndTime;
-  final int originalPrice;
-  final int discountedPrice;
-  final int ticketsRemaining;
-  final int totalTicket;
-  final List<int> categoryList;
+  String eventName;
+  bool isHotEvent;
+  String eventDescription;
+  double eventLocationLat;
+  double eventLocationLong;
+  String createdTime;
+  String bookTime;
+  String startDateAndTime;
+  String endDateAndTime;
+  int originalPrice;
+  int discountedPrice;
+  int ticketsRemaining;
+  int totalTicket;
+  List<int> categoryList;
 
-  CreateEventRequest(
-    this.eventName,
-    this.isHotEvent,
-    this.eventDescription,
-    this.eventLocationLat,
-    this.eventLocationLong,
-    this.createdTime,
-    this.bookTime,
-    this.startDateAndTime,
-    this.endDateAndTime,
-    this.originalPrice,
-    this.discountedPrice,
-    this.ticketsRemaining,
-    this.totalTicket,
-    this.categoryList,
-  );
+  CreateEventRequest({
+    required this.eventName,
+    required this.isHotEvent,
+    required this.eventDescription,
+    required this.eventLocationLat,
+    required this.eventLocationLong,
+    required this.createdTime,
+    required this.bookTime,
+    required this.startDateAndTime,
+    required this.endDateAndTime,
+    required this.originalPrice,
+    required this.discountedPrice,
+    required this.ticketsRemaining,
+    required this.totalTicket,
+    required this.categoryList,
+  });
 }

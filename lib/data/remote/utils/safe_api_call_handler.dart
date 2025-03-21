@@ -2,7 +2,7 @@ import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:get_it/get_it.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 import '../utils/access_token_helper.dart';
 import '../utils/network_response_handler.dart';
@@ -45,7 +45,13 @@ Future<Result<dynamic>> safeApiCallHandler({
         body: requestBody,
         accessToken: accessToken,
       );
-      print("Safe API : $result");
+      return result;
+    case HttpRequestEnum.PUT:
+      final result = httpClient.putRequest(
+        endpoint: endpoint,
+        body: requestBody,
+        accessToken: accessToken,
+      );
       return result;
   }
 }

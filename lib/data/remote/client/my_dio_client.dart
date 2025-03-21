@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/remote/client/glint_api_constants.dart';
 import 'package:glint_frontend/data/remote/utils/network_response_handler.dart';
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -30,8 +30,10 @@ class MyDioClient {
   }) async {
     try {
       dioHttpClient.options.headers['Auth'] = accessToken;
-      final response = await dioHttpClient.get(GlintApiConstants.glintBaseUrl,
-          queryParameters: queryParameters);
+      final response = await dioHttpClient.get(
+        endpoint,
+        queryParameters: queryParameters,
+      );
       return networkResponseHandler(response);
     } on Exception catch (exception) {
       return Failure(exception);
@@ -46,12 +48,24 @@ class MyDioClient {
     if (accessToken != null) {
       dioHttpClient.options.headers['Auth'] = accessToken;
     }
-
     try {
-      print(
-          "Data of API Post Call : End point : $endpoint, Request Body : $body");
       final postResponse = await dioHttpClient.post(endpoint, data: body);
-      print("Status Code -> ${postResponse.statusCode}");
+      return networkResponseHandler(postResponse);
+    } on Exception catch (exception) {
+      return Failure(exception);
+    }
+  }
+
+  Future<Result<dynamic>> putRequest({
+    required String endpoint,
+    required dynamic body,
+    required String? accessToken,
+  }) async {
+    if (accessToken != null) {
+      dioHttpClient.options.headers['Auth'] = accessToken;
+    }
+    try {
+      final postResponse = await dioHttpClient.put(endpoint, data: body);
       return networkResponseHandler(postResponse);
     } on Exception catch (exception) {
       return Failure(exception);

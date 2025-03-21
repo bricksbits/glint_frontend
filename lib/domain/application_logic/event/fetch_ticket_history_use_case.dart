@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:glint_frontend/data/remote/model/response/event/ticket_history_response_body.dart';
 import 'package:glint_frontend/domain/business_logic/repo/event/event_booking_repo.dart';
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 class FetchTicketHistoryUseCase extends UseCase<List<TicketHistory>, void> {
   final EventBookingRepo eventBookingRepo;

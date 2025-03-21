@@ -4,7 +4,7 @@ import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/reset_password_request_body.dart';
 import 'package:glint_frontend/data/remote/utils/safe_api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/forgot_password_repo.dart';
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: ForgotPasswordRepo)
