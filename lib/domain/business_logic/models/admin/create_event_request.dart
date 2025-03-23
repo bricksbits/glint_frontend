@@ -1,4 +1,4 @@
-class CreateEventRequest {
+class CreateEventRequestDomainModel {
   String eventName;
   bool isHotEvent;
   String eventDescription;
@@ -14,7 +14,7 @@ class CreateEventRequest {
   int totalTicket;
   List<int> categoryList;
 
-  CreateEventRequest({
+  CreateEventRequestDomainModel({
     required this.eventName,
     required this.isHotEvent,
     required this.eventDescription,

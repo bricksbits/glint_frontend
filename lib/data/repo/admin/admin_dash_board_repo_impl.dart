@@ -13,7 +13,7 @@ import 'package:glint_frontend/domain/business_logic/models/admin/event_detail_d
 import 'package:glint_frontend/domain/business_logic/models/admin/event_interested_user_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_list_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_ticket_bought_domain_model.dart';
-import 'package:glint_frontend/domain/business_logic/models/event/create_event_request.dart';
+import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
 import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_repo.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
@@ -55,7 +55,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   /// TODO: MAKE USAGE OF THE CREATE EVENT REQUEST MODEL
   @override
   Future<Result<void>> createEvent(
-      CreateEventRequest createEventRequest) async {
+      CreateEventRequestDomainModel createEventRequest) async {
     final event1 = CreateEventRequestBody(
       eventName: "Glint Tech Conference",
       isHotEvent: true,
@@ -90,7 +90,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
 
   @override
   Future<Result<void>> editEvent(
-      UpdateEventRequestBody updateEventRequest) async {
+      CreateEventRequestDomainModel createEventRequest) async {
     final event1 = CreateEventRequestBody(
       eventName: "Glint Tech Conference",
       isHotEvent: true,
@@ -145,13 +145,13 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   }
 
   @override
-  Future<Result<EventInterestedUserDomainModel>>
-      fetchInterestedProfiles() async {
+  Future<Result<EventInterestedUserDomainModel>> fetchInterestedProfiles(
+      int eventId) async {
     final interestedProfiles = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       sharedPreference: sharedPreferencesAsync,
-      endpoint: "manage/super-admin/interested-users",
+      endpoint: "/event/$eventId/manage/super-admin/interested-users",
     );
 
     switch (interestedProfiles) {
@@ -213,6 +213,25 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     switch (approveRequestResponse) {
       case Success():
         return const Success(true);
+      case Failure():
+        return Failure(Exception("Something Went wrong"));
+    }
+  }
+
+  @override
+  Future<Result<EventListDomainModel>> getAllPublishEvents() async {
+    final allEventsResponse = await safeApiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      sharedPreference: sharedPreferencesAsync,
+      endpoint: "/event/manage/event-admin",
+    );
+
+    switch (allEventsResponse) {
+      case Success():
+        final response =
+            GetPublishedEventResponse.fromJson(allEventsResponse.data);
+        return Success(response.mapToDomainModel());
       case Failure():
         return Failure(Exception("Something Went wrong"));
     }
