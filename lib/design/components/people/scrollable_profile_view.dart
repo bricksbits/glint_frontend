@@ -24,7 +24,7 @@ class ScrollableProfileView extends StatelessWidget {
     'Chicago, IL',
     ['Management', 'Sports', 'Cooking'],
     [
-      'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',
+      'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
       'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',
       'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',
       'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',

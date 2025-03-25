@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/components/people/profile_action_button.dart';
 import 'package:glint_frontend/design/components/people/profile_name_and_detail_column.dart';
@@ -58,6 +59,26 @@ class TopProfileCard extends StatelessWidget {
             },
           ),
         ),
+        Positioned.fill(
+          child: Container(
+            height: availableHeight,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.transparent,
+                  Colors.transparent,
+                  Colors.transparent,
+                  AppColours.black.withValues(alpha: 0.5),
+                  AppColours.black.withValues(alpha: 0.6),
+                ],
+              ),
+            ),
+          ),
+        ),
         Positioned(
           top: 16.0,
           left: 16.0,
@@ -69,31 +90,36 @@ class TopProfileCard extends StatelessWidget {
           child: ShareProfileIconButton(onPressed: shareProfile),
         ),
         Positioned(
-          bottom: 20.0,
+          bottom: 26.0,
           left: 20.0,
           right: 20.0,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const ProfileNameAndDetailColumn(
+              ProfileNameAndDetailColumn(
                 name: 'Profile name',
                 distance: '9',
                 views: "62",
                 age: "21",
                 isPremiumUser: false,
-                designation: 'Graphic Designer',
+                designation: designation,
               ),
-              ProfileActionButton(
-                icon: 'lib/assets/icons/direct_msg.svg',
-                color: AppColours.white,
-                onPressed: sendMessage,
-              ),
-              ProfileActionButton(
-                icon: 'lib/assets/icons/super_like.svg',
-                color: AppColours.white,
-                onPressed: sendSuperLike,
-              ),
+              Row(
+                children: [
+                  ProfileActionButton(
+                    icon: 'lib/assets/icons/super_like.svg',
+                    color: AppColours.white,
+                    onPressed: sendSuperLike,
+                  ),
+                  const Gap(12.0),
+                  ProfileActionButton(
+                    icon: 'lib/assets/icons/direct_msg.svg',
+                    color: AppColours.white,
+                    onPressed: sendMessage,
+                  ),
+                ],
+              )
             ],
           ),
         ),

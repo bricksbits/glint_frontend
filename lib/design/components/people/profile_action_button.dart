@@ -15,17 +15,23 @@ class ProfileActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        shape: const CircleBorder(),
-        fixedSize: const Size(54, 54),
-      ),
-      child: SvgPicture.asset(
-        icon,
-        width: 28,
-        height: 28,
-        alignment: Alignment.center,
+    return SizedBox(
+      height: 52.0,
+      width: 52.0,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(),
+          padding: EdgeInsets.zero,
+        ),
+        child: Center(
+          child: SvgPicture.asset(
+            icon,
+            height: 24.0,
+            width: 24.0,
+            alignment: Alignment.center,
+          ),
+        ),
       ),
     );
   }
