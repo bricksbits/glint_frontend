@@ -669,14 +669,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-  gal:
-    dependency: transitive
-    description:
-      name: gal
-      sha256: "2771519c8b29f784d5e27f4efc2667667eef51c6c47cccaa0435a8fe8aa208e4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.1"
   gap:
     dependency: "direct main"
     description:
@@ -781,6 +773,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.5.3"
+  image_gallery_saver_plus:
+    dependency: transitive
+    description:
+      name: image_gallery_saver_plus
+      sha256: "05a5dfd60b0ecd9f990f578f4ff55fe2b6df57a03bb34e3d0963639584d76153"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.5"
   image_picker:
     dependency: "direct main"
     description:
@@ -1654,26 +1654,26 @@ packages:
     dependency: transitive
     description:
       name: stream_chat
-      sha256: "80b6e978124351513bc552ff0637559197cf26f62581b94c571a6bd1c5703c83"
+      sha256: "6ae488c287a7836c4d849f0ff77b74ca920fb0e6f44eeec50b8af994a217f32c"
       url: "https://pub.dev"
     source: hosted
-    version: "9.4.0"
+    version: "9.3.0"
   stream_chat_flutter:
     dependency: "direct main"
     description:
       name: stream_chat_flutter
-      sha256: "7a4e60472099d73dad6e7ff12ab58f48004ff3da1c737611886bc2afcbac9c43"
+      sha256: "58eda40099baf9ac95379a0c65b6ff33e136b146a0b30bbd989e92ba3e049609"
       url: "https://pub.dev"
     source: hosted
-    version: "9.4.0"
+    version: "9.3.0"
   stream_chat_flutter_core:
     dependency: "direct main"
     description:
       name: stream_chat_flutter_core
-      sha256: "13aa965cf89bbc8914b05a5760da7a52164309ec1cecad42779dd837c236fd6b"
+      sha256: "8ed182ded5a22a207e14787bd494c3ce1db3404a43012c56c0495198203ebc31"
       url: "https://pub.dev"
     source: hosted
-    version: "9.4.0"
+    version: "9.3.0"
   stream_transform:
     dependency: transitive
     description:
@@ -2051,5 +2051,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.6.2 <4.0.0"
-  flutter: ">=3.27.4"
+  dart: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"

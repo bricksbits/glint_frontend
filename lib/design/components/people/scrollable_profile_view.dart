@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/components/people/profile_card.dart';
-import 'package:glint_frontend/design/components/people/top_profile_card.dart';
 import 'package:glint_frontend/design/components/people/profile_card_bio_box.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_footer.dart';
+import 'package:glint_frontend/design/components/people/top_profile_card.dart';
 import 'package:glint_frontend/features/people/model/people_model.dart';
 import 'package:glint_frontend/features/people/scrollable_list_item_type.dart';
 import 'package:glint_frontend/features/people/state/people_screen_state.dart';
@@ -43,6 +44,7 @@ class ScrollableProfileView extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: AppColours.white,
       body: CustomScrollView(
         slivers: <Widget>[
           // Top Card Sliver
