@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/components/people/profile_card.dart';
+import 'package:glint_frontend/design/components/people/profile_card_about_box.dart';
 import 'package:glint_frontend/design/components/people/profile_card_bio_box.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_footer.dart';
 import 'package:glint_frontend/design/components/people/top_profile_card.dart';
@@ -61,6 +63,8 @@ class ScrollableProfileView extends StatelessWidget {
             ),
           ),
 
+          const SliverGap(32.0),
+
           // List of Items Sliver
           SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -98,8 +102,36 @@ class ScrollableProfileView extends StatelessWidget {
             : const SizedBox.shrink(); // Handle null imageUrl
       case ScrollableListItemType.ABOUT:
         return item.about != null
-            ? const ProfileCardBioBox(
-                content: 'Hey there, just a chill person here')
+            ? const ProfileCardAboutBox(
+                title: 'About',
+                tags: [
+                  {
+                    'icon': Icons.school,
+                    'text': 'Graduate',
+                  },
+                  {
+                    'icon': Icons.wc,
+                    'text': 'She/Her',
+                  },
+                  {
+                    'icon': Icons.straighten,
+                    'text': '5\'10',
+                  },
+                  {
+                    'icon': Icons.fitness_center,
+                    'text': 'Gym freak',
+                  },
+                  {
+                    'icon': Icons.local_bar,
+                    'text': 'Never',
+                  },
+                  {
+                    'icon': Icons.smoking_rooms,
+                    'text': 'Never',
+                  }
+                ],
+                name: 'Abhishek',
+              )
             : const SizedBox.shrink();
       case ScrollableListItemType.BIO:
         return item.bio != null

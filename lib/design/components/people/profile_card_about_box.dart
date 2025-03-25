@@ -1,21 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/components/people/profile_section_header.dart';
 
 class ProfileCardAboutBox extends StatelessWidget {
   final String title;
   final List<Map<String, dynamic>> tags;
+  final String name;
 
-  const ProfileCardAboutBox(
-      {super.key, required this.title, required this.tags});
+  const ProfileCardAboutBox({
+    super.key,
+    required this.title,
+    required this.tags,
+    required this.name,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ProfileSectionHeader(title: title),
-        const SizedBox(height: 10),
+        Row(
+          children: [
+            ProfileSectionHeader(title: title),
+            const Gap(4.0),
+            Text(
+              name,
+              style: const TextStyle(
+                fontFamily: 'Cambon',
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
+        ),
+        const Gap(10.0),
         Wrap(
           spacing: 10,
           runSpacing: 10,
@@ -28,6 +48,7 @@ class ProfileCardAboutBox extends StatelessWidget {
               )
               .toList(),
         ),
+        const Gap(36.0),
       ],
     );
   }
@@ -60,11 +81,10 @@ class ProfileCardAboutBoxTag extends StatelessWidget {
           Text(
             text,
             style: const TextStyle(
-              fontSize: 14,
-              fontFamily: 'AlbertSans',
-              color: Colors.black,
-              fontWeight: FontWeight.w400
-            ),
+                fontSize: 14,
+                fontFamily: 'AlbertSans',
+                color: Colors.black,
+                fontWeight: FontWeight.w400),
           ),
         ],
       ),
