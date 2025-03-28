@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -76,7 +78,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             GlintAuthActionButton(
               label: 'Get OTP',
               onPressed: () {
-                // TODO - add get otp functionality
+                context.go(
+                    "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.otp.name}"
+                );
                 debugPrint('Get otp button pressed');
               },
             ),

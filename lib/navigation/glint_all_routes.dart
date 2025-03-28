@@ -1,4 +1,5 @@
 enum GlintMainRoutes {
+  splash,
   auth,
   home,
   chat,
@@ -13,6 +14,14 @@ enum GlintMainRoutes {
   subscriptions,
   settings,
   history,
+}
+
+enum GlintAuthRoutes {
+  register,
+  resetPassword,
+  otp,
+  recreatePassword,
+  passwordSuccess
 }
 
 enum GlintChatRoutes {
@@ -41,4 +50,17 @@ enum GlintProfileRoutes {
   pronouns,
   interests,
   bio,
+}
+
+enum GlintAdminDasboardRoutes {
+  splash,
+  auth,
+  home,
+  createEvent,
+  previewEvent,
+  trackEvent,
+  liveEvent,
+  interestedUsers,
+  ticketBought,
+  profile,
 }

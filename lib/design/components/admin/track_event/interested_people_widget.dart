@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class InterestedPeopleWidget extends StatelessWidget {
   const InterestedPeopleWidget({super.key});
@@ -79,7 +81,9 @@ class InterestedPeopleWidget extends StatelessWidget {
           const Gap(12.0),
           InkWell(
             onTap: () {
-              // todo = handle see all interested people tap
+              context.go(
+                "/${GlintAdminDasboardRoutes.interestedUsers.name}"
+              );
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

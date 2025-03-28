@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class AdminTrackSpecificEvent extends StatefulWidget {
   const AdminTrackSpecificEvent({super.key});
@@ -43,6 +45,9 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
           ),
           onTap: () {
             //todo - Handle navigation to preview event screen
+            context.go(
+              "/${GlintAdminDasboardRoutes.previewEvent.name}"
+            );
           },
         ),
         PopupMenuItem(

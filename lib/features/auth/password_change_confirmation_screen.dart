@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class PasswordChangeConfirmationScreen extends StatelessWidget {
   const PasswordChangeConfirmationScreen({super.key});
@@ -34,7 +36,9 @@ class PasswordChangeConfirmationScreen extends StatelessWidget {
             //login now button
             GlintAuthActionButton(
               label: 'Login Now',
-              onPressed: () {},
+              onPressed: () {
+                context.go("/${GlintAdminDasboardRoutes.home.name}");
+              },
             ),
           ],
         ),

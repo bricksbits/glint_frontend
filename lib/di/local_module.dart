@@ -4,10 +4,10 @@ import 'package:injectable/injectable.dart';
 
 abstract class LocalModule {
 
-  @lazySingleton
-  @preResolve
-  Future<GlintDatabase> glintDatabase() => $FloorGlintDatabase.databaseBuilder('glint_database.db').build();
-
-  @singleton
-  ProfileDao getProfileDao(GlintDatabase database) => database.profileDao;
+  // @lazySingleton
+  // @preResolve
+  // Future<GlintDatabase> glintDatabase() => $FloorGlintDatabase.databaseBuilder('glint_database.db').build();
+  //
+  // @singleton
+  // ProfileDao getProfileDao(GlintDatabase database) => database.profileDao;
 }
