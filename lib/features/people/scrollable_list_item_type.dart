@@ -7,7 +7,6 @@ enum ScrollableListItemType {
   LOCATION,
 }
 
-
 class PeopleListModelData {
   final ScrollableListItemType itemType;
   final List<String>? about;
@@ -17,15 +16,14 @@ class PeopleListModelData {
   final String? location;
   final String? imageUrl;
 
-  PeopleListModelData({
-    required this.itemType,
-    this.about,
-    this.bio,
-    this.lookingFor,
-    this.interests,
-    this.location,
-    this.imageUrl
-  });
+  PeopleListModelData(
+      {required this.itemType,
+      this.about,
+      this.bio,
+      this.lookingFor,
+      this.interests,
+      this.location,
+      this.imageUrl});
 }
 
 class PeopleTopCardModel {

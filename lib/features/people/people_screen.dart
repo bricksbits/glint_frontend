@@ -21,6 +21,9 @@ class PeopleScreen extends StatelessWidget {
       onUndo: (_, __, ___) {
         return false;
       },
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20.0,
+      ),
       isLoop: false,
       cardsCount: list.length,
       cardBuilder: (context, index, percentThresholdX, percentThresholdY) =>

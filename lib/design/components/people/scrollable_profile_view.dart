@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
-import 'package:glint_frontend/design/components/people/profile_card.dart';
-import 'package:glint_frontend/design/components/people/profile_card_about_box.dart';
-import 'package:glint_frontend/design/components/people/profile_card_bio_box.dart';
-import 'package:glint_frontend/design/components/people/scrollable_profile_footer.dart';
-import 'package:glint_frontend/design/components/people/top_profile_card.dart';
+import 'package:glint_frontend/design/components/people/exports.dart';
 import 'package:glint_frontend/features/people/model/people_model.dart';
 import 'package:glint_frontend/features/people/scrollable_list_item_type.dart';
 import 'package:glint_frontend/features/people/state/people_screen_state.dart';
@@ -27,14 +23,14 @@ class ScrollableProfileView extends StatelessWidget {
     ['Management', 'Sports', 'Cooking'],
     [
       'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
-      'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',
-      'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',
-      'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',
-      'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',
-      'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',
-      'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',
-      'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',
-      'https://fastly.picsum.photos/id/960/200/300.jpg?hmac=lMLI27rQoFOVbWUEFQBILnVA_jFYw2b8KHACIGkDLD4',
+      'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
+      'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
+      'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
+      'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
+      'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
+      'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
+      'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
+      'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
     ],
   );
 
@@ -51,26 +47,34 @@ class ScrollableProfileView extends StatelessWidget {
         slivers: <Widget>[
           // Top Card Sliver
           SliverToBoxAdapter(
-            child: TopProfileCard(
-              screenWidth: screenWidth,
-              screenHeight: screenHeight,
-              imageUrl: peopleUiModel.convert().topCardModel.imageUrl,
-              recentActive: "New",
-              shareProfile: () {},
-              designation: "Fashion Designer",
-              sendMessage: () {},
-              sendSuperLike: () {},
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: TopProfileCard(
+                screenWidth: screenWidth,
+                screenHeight: screenHeight,
+                imageUrl: peopleUiModel.convert().topCardModel.imageUrl,
+                recentActive: "New",
+                shareProfile: () {},
+                designation: "Fashion Designer",
+                sendMessage: () {},
+                sendSuperLike: () {},
+              ),
             ),
           ),
 
-          const SliverGap(32.0),
+          const SliverGap(8.0),
 
           // List of Items Sliver
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return buildListItem(peopleUiModel.convert().listModel[index],
-                    screenWidth, screenHeight);
+                return Column(
+                  children: [
+                    const Gap(32.0),
+                    buildListItem(peopleUiModel.convert().listModel[index],
+                        screenWidth, screenHeight)
+                  ],
+                );
               },
               childCount: peopleUiModel.convert().listModel.length,
             ),
@@ -140,13 +144,42 @@ class ScrollableProfileView extends StatelessWidget {
             : const SizedBox.shrink();
       case ScrollableListItemType.LOOKING_FOR:
         return item.lookingFor != null
-            ? const ProfileCardBioBox(
-                content: 'Hey there, just a chill person here')
+            ? const ProfileCardLookingForBox(lookingFor: 'Something Casual')
             : const SizedBox.shrink();
       case ScrollableListItemType.INTEREST:
         return item.interests != null
-            ? const ProfileCardBioBox(
-                content: 'Hey there, just a chill person here')
+            ? const ProfileInterestVibeBox(
+                interests: [
+                  {
+                    'label': 'Photography',
+                    'icon': '📸',
+                  },
+                  {
+                    'label': 'Stand-Up Comedy',
+                    'icon': '🎙',
+                  },
+                  {
+                    'label': 'Bollywood',
+                    'icon': '💃🏻',
+                  },
+                  {
+                    'label': 'Music',
+                    'icon': '🎧',
+                  },
+                  {
+                    'label': 'Yoga',
+                    'icon': '🧘',
+                  },
+                  {
+                    'label': 'Festivals',
+                    'icon': '🎊',
+                  },
+                  {
+                    'label': 'Travelling',
+                    'icon': '✈️',
+                  },
+                ],
+              )
             : const SizedBox.shrink();
       case ScrollableListItemType.LOCATION:
         return item.location != null

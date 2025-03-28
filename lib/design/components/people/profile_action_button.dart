@@ -5,19 +5,21 @@ class ProfileActionButton extends StatelessWidget {
   final String icon;
   final Color color;
   final VoidCallback onPressed;
+  final bool isSmall;
 
   const ProfileActionButton({
     super.key,
     required this.icon,
     required this.color,
     required this.onPressed,
+    this.isSmall = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 52.0,
-      width: 52.0,
+      height: isSmall == true ? 48.0 : 52.0,
+      width: isSmall == true ? 48.0 : 52.0,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(

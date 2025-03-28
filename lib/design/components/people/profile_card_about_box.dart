@@ -48,7 +48,7 @@ class ProfileCardAboutBox extends StatelessWidget {
               )
               .toList(),
         ),
-        const Gap(36.0),
+        const Gap(8.0),
       ],
     );
   }
