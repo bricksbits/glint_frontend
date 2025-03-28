@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:glint_frontend/design/components/chat/empty_chat_state_view.dart';
-import 'package:glint_frontend/design/components/chat/event_ticket_view.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/chat/chat_screen.dart';
-import 'package:glint_frontend/features/people/people_screen.dart';
+import 'package:glint_frontend/features/exports.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class MyGlintApp extends StatelessWidget {
@@ -28,8 +25,8 @@ class MyGlintApp extends StatelessWidget {
       //     child: widget,
       //   );
       // },
-      home: Scaffold(
-        body: PeopleScreen(),
+      home: const Scaffold(
+        body: HomeScreen(),
       ),
       // routerConfig: glintMainRoutes,
     );

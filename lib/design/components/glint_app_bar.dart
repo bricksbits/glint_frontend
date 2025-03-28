@@ -101,7 +101,8 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       //bottom border for event screen
-      bottom: appBarAction == GlintAppBarActions.event
+      bottom: (appBarAction == GlintAppBarActions.event ||
+              appBarAction == GlintAppBarActions.defaultActions)
           ? PreferredSize(
               preferredSize: const Size.fromHeight(1.2),
               child: Container(
