@@ -183,8 +183,10 @@ class ScrollableProfileView extends StatelessWidget {
             : const SizedBox.shrink();
       case ScrollableListItemType.LOCATION:
         return item.location != null
-            ? const ProfileCardBioBox(
-                content: 'Hey there, just a chill person here')
+            ? const ProfileLocationBox(
+                location: 'Karnal, Haryana',
+                distance: '9',
+              )
             : const SizedBox.shrink();
     }
   }
