@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "992882318986",
+    "project_id": "glintapp-7971f",
+    "storage_bucket": "glintapp-7971f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992882318986:android:b5842cb31a20acb625d773",
+        "android_client_info": {
+          "package_name": "com.bricksbits.glint_frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW8-tD-Wy_jdxs7QpVFZWjENNB0VY_d1g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
