@@ -5,9 +5,12 @@ class ServiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child:
-          Text('Service Screen, needed to hidden and released in next version'),
+    return GestureDetector(
+      onTap: () => throw Exception(),
+      child: const Center(
+        child:
+            Text("Throw an Exception for Firebase check"),
+      ),
     );
   }
 }
