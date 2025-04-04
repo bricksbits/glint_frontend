@@ -12,7 +12,7 @@ class ProfileSectionHeader extends StatelessWidget {
       style: const TextStyle(
         fontFamily: 'Cambon',
         fontSize: 18,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w700,
         fontStyle: FontStyle.italic,
       ),
     );
