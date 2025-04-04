@@ -22,4 +22,5 @@ export 'glint_text_input_field.dart';
 export 'likes/glint_liked_you_profile_container.dart';
 export 'likes/glint_top_profile_container.dart';
 export 'onboarding/exports.dart';
+export 'people/exports.dart';
 export 'profile/exports.dart';

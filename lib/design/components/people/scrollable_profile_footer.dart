@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/exports.dart';
 
 class ScrollableProfileFooter extends StatelessWidget {
   const ScrollableProfileFooter({super.key});
@@ -6,7 +8,7 @@ class ScrollableProfileFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 180,
+      height: 180.0,
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -16,60 +18,58 @@ class ScrollableProfileFooter extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    print('Dislike button tapped');
+                    debugPrint('Dislike button tapped');
                   },
                   child: Container(
-                    width: 80,
-                    height: 80,
+                    width: 44.0,
+                    height: 44.0,
                     decoration: const BoxDecoration(
-                      color: Colors.redAccent,
+                      color: AppColours.red,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.close, // Replace with your custom icon
                       color: Colors.white,
-                      size: 40,
+                      size: 22.0,
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                const Text(
+                const Gap(8.0),
+                Text(
                   'Dislike',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  style: AppTheme.simpleText.copyWith(
+                    color: AppColours.black,
                   ),
                 ),
               ],
             ),
-            const SizedBox(width: 50),
+            const Gap(32.0),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
                   onTap: () {
-                    print('Like button tapped');
+                    debugPrint('Like button tapped');
                   },
                   child: Container(
-                    width: 80,
-                    height: 80,
+                    width: 44.0,
+                    height: 44.0,
                     decoration: const BoxDecoration(
-                      color: Colors.blue,
+                      color: AppColours.primaryBlue,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.favorite, // Replace with your custom icon
                       color: Colors.white,
-                      size: 40,
+                      size: 22.0,
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                const Text(
+                const Gap(8.0),
+                Text(
                   'Like',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  style: AppTheme.simpleText.copyWith(
+                    color: AppColours.black,
                   ),
                 ),
               ],

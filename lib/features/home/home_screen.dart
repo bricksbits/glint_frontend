@@ -83,9 +83,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: _bottomNavScreens[_selectedIndex],
       bottomNavigationBar: Container(
+        height: 70.0,
         width: double.infinity,
         margin:
-            const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: 24.0),
+            const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: 20.0),
         decoration: BoxDecoration(
           color: AppColours.white,
           borderRadius: BorderRadius.circular(50.0),

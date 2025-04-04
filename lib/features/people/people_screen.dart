@@ -8,24 +8,26 @@ class PeopleScreen extends StatelessWidget {
 
   final List<Widget> list = [
     ScrollableProfileView(),
+    ScrollableProfileView(),
+    ScrollableProfileView(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: CardSwiper(
-        allowedSwipeDirection: const AllowedSwipeDirection.only(
-            left: true, right: true, up: false, down: false),
-        numberOfCardsDisplayed: 1,
-        onUndo: (_, __, ___) {
-          return false;
-        },
-        isLoop: true,
-        cardsCount: list.length,
-        cardBuilder: (context, index, percentThresholdX, percentThresholdY) =>
-            list[index],
+    return CardSwiper(
+      allowedSwipeDirection: const AllowedSwipeDirection.only(
+          left: true, right: true, up: false, down: false),
+      numberOfCardsDisplayed: 1,
+      onUndo: (_, __, ___) {
+        return false;
+      },
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20.0,
       ),
+      isLoop: false,
+      cardsCount: list.length,
+      cardBuilder: (context, index, percentThresholdX, percentThresholdY) =>
+          list[index],
     );
   }
 }
