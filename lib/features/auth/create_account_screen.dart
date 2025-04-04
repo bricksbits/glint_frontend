@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -153,9 +155,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       const Gap(48.0),
                       GlintAuthActionButton(
                         label: 'Register',
-                        onPressed: () => debugPrint(
+                        onPressed: () {
+                          context.go(
+                              "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}"
+                          );
+                          debugPrint(
                           'register button pressed',
-                        ),
+                        );
+                        },
                       ),
                       const Gap(16.0),
                       _buildLoginText(),

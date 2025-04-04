@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthenticationScreen extends StatelessWidget {
   const AuthenticationScreen({super.key});
@@ -135,7 +137,13 @@ class _AuthButtons extends StatelessWidget {
               color: AppColours.white,
             ),
             onPressed: () {
-              // todo - add login functionality
+              final isSuperAdmin = true;
+              final isEventAdmin = false;
+              if(isSuperAdmin){
+                context.go(
+                  "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.register.name}"
+                );
+              }
               debugPrint('Login button pressed');
             },
           ),
