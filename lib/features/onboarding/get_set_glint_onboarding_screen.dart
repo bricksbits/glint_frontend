@@ -81,7 +81,9 @@ class _GetSetGlintOnboardingScreenState
                       foregroundColor: Colors.white,
                       backgroundColor: AppColours.primaryBlue,
                       onPressed: () {
-                        context.goNamed(GlintProfileRoutes.interests.name);
+                        final base = GlintMainRoutes.onBoarding.name;
+                        final target = GlintBoardingRoutes.interests.name;
+                        context.go("/$base/$target");
                       },
                     ),
                   ),

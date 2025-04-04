@@ -18,7 +18,7 @@ class MyGlintApp extends StatelessWidget {
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      routerConfig: kIsWeb ? glintAdminRoutes : glintMainRoutes,
+      routerConfig: !kIsWeb ? glintAdminRoutes : glintMainRoutes,
       // home: StreamChannel(
       //   channel: channel,
       //   child: const ChatScreen(),
@@ -37,7 +37,6 @@ class MyGlintApp extends StatelessWidget {
       //     ),
       //   ),
       // ),
-      // routerConfig: glintMainRoutes,
     );
   }
 }

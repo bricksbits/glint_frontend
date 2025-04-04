@@ -85,9 +85,9 @@ class _DateOfBirthOnboardingScreenState
                     foregroundColor: Colors.white,
                     backgroundColor: AppColours.primaryBlue,
                     onPressed: () {
-                      context.goNamed(
-                        GlintProfileRoutes.gender.name
-                      );
+                      final base = GlintMainRoutes.onBoarding.name;
+                      final target = GlintBoardingRoutes.gender.name;
+                      context.go("/$base/$target");
                     },
                   ),
                 ),

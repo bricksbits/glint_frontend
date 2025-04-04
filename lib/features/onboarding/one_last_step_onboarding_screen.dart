@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class OneLastStepOnboardingScreen extends StatefulWidget {
   const OneLastStepOnboardingScreen({super.key});
@@ -66,6 +68,7 @@ class _OneLastStepOnboardingScreenState
                   backgroundColor: AppColours.primaryBlue,
                   onPressed: () {
                     // Handle button press
+                    context.goNamed(GlintMainRoutes.home.name);
                   },
                 ),
               ),

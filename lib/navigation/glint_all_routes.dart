@@ -1,6 +1,7 @@
 enum GlintMainRoutes {
   splash,
   auth,
+  onBoarding,
   home,
   chat,
   service,
@@ -36,12 +37,15 @@ enum GlintEventRoutes {
   explore,
 }
 
-//Todo(Nike): Divide this into onBoarding and Profile Screens
 enum GlintProfileRoutes {
   profilePreview,
-  ticketHistory,
-  transactionHistory,
   editProfile,
+  ticketHistory,
+  subscription,
+  settings,
+}
+
+enum GlintBoardingRoutes {
   name,
   dob,
   gender,

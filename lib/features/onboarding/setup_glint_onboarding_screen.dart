@@ -56,9 +56,9 @@ class SetupGlintOnboardingScreen extends StatelessWidget {
                 foregroundColor: Colors.white,
                 backgroundColor: AppColours.primaryBlue,
                 onPressed: () {
-                  context.goNamed(
-                      GlintMainRoutes.home.name
-                  );
+                  final base = GlintMainRoutes.onBoarding.name;
+                  final target = GlintBoardingRoutes.name.name;
+                  context.go("/$base/$target");
                 },
               ),
             ),

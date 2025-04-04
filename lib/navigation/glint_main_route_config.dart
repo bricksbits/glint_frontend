@@ -13,6 +13,7 @@ import 'package:glint_frontend/features/onboarding/enter_name_onboarding_screen.
 import 'package:glint_frontend/features/onboarding/get_set_glint_onboarding_screen.dart';
 import 'package:glint_frontend/features/onboarding/identify_yourself_onboarding_screen.dart';
 import 'package:glint_frontend/features/onboarding/interests_and_vibe_onboarding_screen.dart';
+import 'package:glint_frontend/features/onboarding/one_last_step_onboarding_screen.dart';
 import 'package:glint_frontend/features/onboarding/setup_glint_onboarding_screen.dart';
 import 'package:glint_frontend/features/onboarding/upload_photos_onboarding_screen.dart';
 import 'package:glint_frontend/features/onboarding/who_catches_your_eye_onboarding_screen.dart';
@@ -42,10 +43,58 @@ final glintMainRoutes = GoRouter(
       builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
-      path: '/${GlintMainRoutes.auth.name}',
-      name: GlintMainRoutes.auth.name,
-      builder: (context, state) => const AuthenticationScreen(),
-      routes: glintAuthenticationRoutesBase
+      path: '/${GlintMainRoutes.onBoarding.name}',
+      name: GlintMainRoutes.onBoarding.name,
+      builder: (context, state) => const SetupGlintOnboardingScreen(),
+      routes: [
+        GoRoute(
+          path: '/${GlintBoardingRoutes.name.name}',
+          name: GlintBoardingRoutes.name.name,
+          builder: (context, state) => const EnterNameOnboardingScreen(),
+        ),
+        GoRoute(
+          path: '/${GlintBoardingRoutes.dob.name}',
+          name: GlintBoardingRoutes.dob.name,
+          builder: (context, state) => const DateOfBirthOnboardingScreen(),
+        ),
+        GoRoute(
+          path: '/${GlintBoardingRoutes.pronouns.name}',
+          name: GlintBoardingRoutes.pronouns.name,
+          builder: (context, state) => const GetSetGlintOnboardingScreen(),
+        ),
+        GoRoute(
+          path: '/${GlintBoardingRoutes.media.name}',
+          name: GlintBoardingRoutes.media.name,
+          builder: (context, state) => const UploadPhotosOnboardingScreen(),
+        ),
+        GoRoute(
+          path: '/${GlintBoardingRoutes.gender.name}',
+          name: GlintBoardingRoutes.gender.name,
+          builder: (context, state) => const IdentifyYourselfOnboardingScreen(),
+        ),
+        GoRoute(
+          path: '/${GlintBoardingRoutes.interestedGender.name}',
+          name: GlintBoardingRoutes.interestedGender.name,
+          builder: (context, state) =>
+          const WhoCatchesYourEyeOnboardingScreen(),
+        ),
+        GoRoute(
+          path: '/${GlintBoardingRoutes.interests.name}',
+          name: GlintBoardingRoutes.interests.name,
+          builder: (context, state) => const InterestsAndVibeOnboardingScreen(),
+        ),
+        GoRoute(
+          path: '/${GlintBoardingRoutes.bio.name}',
+          name: GlintBoardingRoutes.bio.name,
+          builder: (context, state) => const OneLastStepOnboardingScreen(),
+        ),
+      ]
+    ),
+    GoRoute(
+        path: '/${GlintMainRoutes.auth.name}',
+        name: GlintMainRoutes.auth.name,
+        builder: (context, state) => const AuthenticationScreen(),
+        routes: glintAuthenticationRoutesBase
     ),
     GoRoute(
       path: '/${GlintMainRoutes.home.name}',
@@ -57,11 +106,11 @@ final glintMainRoutes = GoRouter(
       name: GlintMainRoutes.chat.name,
       builder: (context, state) => const ChatScreen(),
       routes: [
-        // GoRoute(
-        //   path: '/${GlintChatRoutes.chatWith.name}',
-        //   name: GlintChatRoutes.chatWith.name,
-        //   builder: (context, state) => const ChatWithScreen(),
-        // ),
+        GoRoute(
+          path: '/${GlintChatRoutes.chatWith.name}',
+          name: GlintChatRoutes.chatWith.name,
+          builder: (context, state) => const ChatWithScreen(),
+        ),
         GoRoute(
           path: '/${GlintChatRoutes.videoCall.name}',
           name: GlintChatRoutes.videoCall.name,
@@ -124,50 +173,14 @@ final glintMainRoutes = GoRouter(
           builder: (context, state) => const ProfileHistoryTicketsScreen(),
         ),
         GoRoute(
-          path: '/${GlintProfileRoutes.transactionHistory.name}',
-          name: GlintProfileRoutes.transactionHistory.name,
-          builder: (context, state) => const ProfileHistoryTransactionsScreen(),
+          path: '/${GlintProfileRoutes.settings.name}',
+          name: GlintProfileRoutes.settings.name,
+          builder: (context, state) => const SettingsScreen(),
         ),
         GoRoute(
-          path: '/${GlintProfileRoutes.name.name}',
-          name: GlintProfileRoutes.name.name,
-          builder: (context, state) => const EnterNameOnboardingScreen(),
-        ),
-        GoRoute(
-          path: '/${GlintProfileRoutes.dob.name}',
-          name: GlintProfileRoutes.dob.name,
-          builder: (context, state) => const DateOfBirthOnboardingScreen(),
-        ),
-        GoRoute(
-          path: '/${GlintProfileRoutes.pronouns.name}',
-          name: GlintProfileRoutes.pronouns.name,
-          builder: (context, state) => const GetSetGlintOnboardingScreen(),
-        ),
-        GoRoute(
-          path: '/${GlintProfileRoutes.media.name}',
-          name: GlintProfileRoutes.media.name,
-          builder: (context, state) => const UploadPhotosOnboardingScreen(),
-        ),
-        GoRoute(
-          path: '/${GlintProfileRoutes.gender.name}',
-          name: GlintProfileRoutes.gender.name,
-          builder: (context, state) => const IdentifyYourselfOnboardingScreen(),
-        ),
-        GoRoute(
-          path: '/${GlintProfileRoutes.interestedGender.name}',
-          name: GlintProfileRoutes.interestedGender.name,
-          builder: (context, state) =>
-              const WhoCatchesYourEyeOnboardingScreen(),
-        ),
-        GoRoute(
-          path: '/${GlintProfileRoutes.interests.name}',
-          name: GlintProfileRoutes.interests.name,
-          builder: (context, state) => const InterestsAndVibeOnboardingScreen(),
-        ),
-        GoRoute(
-          path: '/${GlintProfileRoutes.bio.name}',
-          name: GlintProfileRoutes.bio.name,
-          builder: (context, state) => const SetupGlintOnboardingScreen(),
+          path: '/${GlintProfileRoutes.subscription.name}',
+          name: GlintProfileRoutes.subscription.name,
+          builder: (context, state) => const SettingsScreen(),
         ),
       ],
     ),

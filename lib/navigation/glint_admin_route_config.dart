@@ -44,6 +44,7 @@ final glintAdminRoutes = GoRouter(
       name: GlintAdminDasboardRoutes.splash.name,
       builder: (context, state) => const SplashScreen(),
     ),
+    // TODO: Make it Login Screen Direct
     GoRoute(
       path: '/${GlintAdminDasboardRoutes.auth.name}',
       name: GlintAdminDasboardRoutes.auth.name,

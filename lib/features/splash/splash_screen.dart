@@ -16,9 +16,9 @@ class SplashScreen extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             if (isAuthenticated) {
-              final targetRoute = kIsWeb
+              final targetRoute = !kIsWeb
                   ? "/${GlintAdminDasboardRoutes.auth.name}"
-                  : "/${GlintMainRoutes.auth.name}";
+                  : "/${GlintMainRoutes.onBoarding.name}";
               context.go(targetRoute);
             } else {
               final targetRoute = kIsWeb

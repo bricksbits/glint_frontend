@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:glint_frontend/design/components/chat/chat_ticket_info_view.dart';
 import 'package:glint_frontend/design/components/chat/empty_chat_state_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class ChatWithScreen extends StatefulWidget {
-  final Channel channel;
+  // final Channel channel;
 
-  const ChatWithScreen({super.key, required this.channel});
+  const ChatWithScreen({super.key});
 
   @override
   State<ChatWithScreen> createState() => _ChatWithScreenState();
@@ -45,9 +44,10 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
             ],
           ),
         ),
-        title: Text(
-          widget.channel.name ?? 'Chat', // Display channel name
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        title: const Text(
+          "Chat",
+          // widget.channel.name ?? 'Chat', // Display channel name
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         showConnectionStateTile: true,
