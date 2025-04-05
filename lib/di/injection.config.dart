@@ -15,11 +15,17 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import '../data/local/db/dao/profile_dao.dart' as _i719;
 import '../data/local/db/database/glint_database.dart' as _i160;
+import '../data/local/persist/async_encrypted_shared_preference_helper.dart'
+    as _i274;
 import '../data/remote/client/my_dio_client.dart' as _i368;
 import '../data/remote/utils/access_token_helper.dart' as _i684;
+import '../data/repo/admin/admin_dash_board_repo_impl.dart' as _i72;
 import '../data/repo/auth/authentication_repo_impl.dart' as _i840;
+import '../data/repo/auth/forgot_password_repo_impl.dart' as _i509;
 import '../domain/application_logic/auth/sign_in_user_use_case.dart' as _i972;
+import '../domain/business_logic/repo/admin/admin_dasboard_repo.dart' as _i1000;
 import '../domain/business_logic/repo/auth/authentication_repo.dart' as _i873;
+import '../domain/business_logic/repo/auth/forgot_password_repo.dart' as _i995;
 import 'local_module.dart' as _i519;
 import 'network_module.dart' as _i567;
 
@@ -45,18 +51,29 @@ extension GetItInjectableX on _i174.GetIt {
       () => localModule.glintDatabase(),
       preResolve: true,
     );
-    gh.factory<_i684.AccessTokenHelper>(() => _i684.AccessTokenHelper(
-          gh<_i930.EncryptedSharedPreferencesAsync>(),
-          gh<_i361.Dio>(),
-        ));
     gh.singleton<_i719.ProfileDao>(
         () => localModule.getProfileDao(gh<_i160.GlintDatabase>()));
+    gh.factory<_i274.AsyncEncryptedSharedPreferenceHelper>(() =>
+        _i274.AsyncEncryptedSharedPreferenceHelper(
+            gh<_i930.EncryptedSharedPreferencesAsync>()));
     gh.factory<_i368.MyDioClient>(() => _i368.MyDioClient(gh<_i361.Dio>()));
+    gh.factory<_i684.AccessTokenHelper>(() => _i684.AccessTokenHelper(
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          gh<_i368.MyDioClient>(),
+        ));
+    gh.factory<_i995.ForgotPasswordRepo>(() => _i509.ForgotPasswordRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+        ));
     gh.lazySingleton<_i873.AuthenticationRepo>(
         () => _i840.AuthenticationRepoImpl(
               gh<_i368.MyDioClient>(),
-              gh<_i930.EncryptedSharedPreferencesAsync>(),
+              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
             ));
+    gh.factory<_i1000.AdminDashboardRepo>(() => _i72.AdminDashBoardRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+        ));
     gh.factory<_i972.SignInUserUseCase>(
         () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
     return this;

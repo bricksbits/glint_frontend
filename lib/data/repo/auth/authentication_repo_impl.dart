@@ -1,4 +1,5 @@
 import 'package:encrypt_shared_preferences/provider.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/login_request_body.dart';
@@ -11,11 +12,11 @@ import 'package:injectable/injectable.dart';
 @LazySingleton(as: AuthenticationRepo)
 class AuthenticationRepoImpl extends AuthenticationRepo {
   final MyDioClient httpClient;
-  final EncryptedSharedPreferencesAsync sharedPreferencesAsync;
+  final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
 
   AuthenticationRepoImpl(
     this.httpClient,
-    this.sharedPreferencesAsync,
+    this.sharedPreferenceHelper,
   );
 
   @override
@@ -28,7 +29,7 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
     final response = safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      sharedPreference: sharedPreferencesAsync,
+      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/registerUser",
       requestBody: null,
       passedQueryParameters: null,
@@ -42,7 +43,7 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
     final response = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
-      sharedPreference: sharedPreferencesAsync,
+      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "auth/v1/login",
       requestBody: loginRequestBody.toJson(),
       passedQueryParameters: null,

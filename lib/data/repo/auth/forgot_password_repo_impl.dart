@@ -1,4 +1,5 @@
 import 'package:encrypt_shared_preferences/provider.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/reset_password_request_body.dart';
@@ -10,11 +11,11 @@ import 'package:injectable/injectable.dart';
 @Injectable(as: ForgotPasswordRepo)
 class ForgotPasswordRepoImpl extends ForgotPasswordRepo {
   final MyDioClient httpClient;
-  final EncryptedSharedPreferencesAsync sharedPreferencesAsync;
+  final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
 
   ForgotPasswordRepoImpl(
     this.httpClient,
-    this.sharedPreferencesAsync,
+    this.sharedPreferenceHelper,
   );
 
   @override
@@ -34,7 +35,7 @@ class ForgotPasswordRepoImpl extends ForgotPasswordRepo {
     final response = safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
-      sharedPreference: sharedPreferencesAsync,
+      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/reset-password",
       requestBody: body.toJson(),
       passedQueryParameters: null,

@@ -1,4 +1,5 @@
 import 'package:encrypt_shared_preferences/provider.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/approve_or_reject_request_body.dart';
@@ -21,9 +22,9 @@ import 'package:injectable/injectable.dart';
 @Injectable(as: AdminDashboardRepo)
 class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   final MyDioClient httpClient;
-  final EncryptedSharedPreferencesAsync sharedPreferencesAsync;
+  final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
 
-  AdminDashBoardRepoImpl(this.httpClient, this.sharedPreferencesAsync);
+  AdminDashBoardRepoImpl(this.httpClient, this.sharedPreferenceHelper);
 
   @override
   Future<Result<void>> approveEvent(
@@ -39,7 +40,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     final approveRequestResponse = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.PUT,
-      sharedPreference: sharedPreferencesAsync,
+      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/manage/super-admin/approval",
       requestBody: requestBody.toJson(),
     );
@@ -75,7 +76,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     final createEventRequest = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
-      sharedPreference: sharedPreferencesAsync,
+      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/manage/event-admin/create",
       passedQueryParameters: event1.toJson(),
     );
@@ -110,7 +111,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     final createEventRequest = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
-      sharedPreference: sharedPreferencesAsync,
+      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/manage/event-admin/edit",
       passedQueryParameters: event1.toJson(),
     );
@@ -130,7 +131,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     final ticketBookedUsers = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      sharedPreference: sharedPreferencesAsync,
+      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "event/$eventId/manage/super-admin/booked-tickets",
     );
 
@@ -150,7 +151,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     final interestedProfiles = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      sharedPreference: sharedPreferencesAsync,
+      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/$eventId/manage/super-admin/interested-users",
     );
 
@@ -172,7 +173,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     final allEventsResponse = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      sharedPreference: sharedPreferencesAsync,
+      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/manage/super-admin",
     );
 
@@ -206,7 +207,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     final approveRequestResponse = await safeApiCallHandler(
         httpClient: httpClient,
         requestType: HttpRequestEnum.PUT,
-        sharedPreference: sharedPreferencesAsync,
+        sharedPrefHelper: sharedPreferenceHelper,
         endpoint: "/event/manage/super-admin/approval",
         requestBody: requestBody.toJson());
 
@@ -223,7 +224,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     final allEventsResponse = await safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      sharedPreference: sharedPreferencesAsync,
+      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/manage/event-admin",
     );
 

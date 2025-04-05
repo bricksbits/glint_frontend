@@ -1,5 +1,7 @@
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:get_it/get_it.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
@@ -10,7 +12,7 @@ import '../utils/network_response_handler.dart';
 Future<Result<dynamic>> safeApiCallHandler({
   required MyDioClient httpClient,
   required HttpRequestEnum requestType,
-  required EncryptedSharedPreferencesAsync sharedPreference,
+  required AsyncEncryptedSharedPreferenceHelper sharedPrefHelper,
   required String endpoint,
   dynamic requestBody,
   Map<String, dynamic>? passedQueryParameters,
@@ -28,8 +30,8 @@ Future<Result<dynamic>> safeApiCallHandler({
     await accessTokenHelper.updateRefreshToken();
   }
 
-  /// Get Request needed access_token for each Request
-  final accessToken = await sharedPreference.getString("") ?? "";
+  final accessToken =
+      await sharedPrefHelper.getString(SharedPreferenceKeys.accessTokenKey);
 
   switch (requestType) {
     case HttpRequestEnum.GET:
