@@ -40,6 +40,11 @@ class AccessTokenHelper {
   Future<void> updateRefreshToken() async {
     final getRefreshToken =
         await sharedPreferenceHelper.getString("refreshToken");
+
+    if(getRefreshToken.isEmpty){
+      return;
+    }
+
     final requestBody = RefreshTokenBodyRequest(refreshToken: getRefreshToken);
 
     final response = await httpClient.postRequest(

@@ -8,6 +8,4 @@ class LoginState with _$LoginState {
   const factory LoginState.error(String message) = _Error;
   const factory LoginState.emailChanged(String email) = _EmailChanged;
   const factory LoginState.passwordChanged(String password) = _PasswordChanged;
-  const factory LoginState.formValid(String email, String password) = _FormValid;
-  const factory LoginState.formInvalid() = _FormInvalid;
 }

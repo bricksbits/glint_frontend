@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:glint_frontend/features/auth/login_screen.dart';
 import 'package:glint_frontend/features/chat/chat_event_tickets_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
@@ -31,13 +32,13 @@ import '../features/chat/chat_screen.dart';
 import '../features/home/home_screen.dart';
 
 final glintMainRoutes = GoRouter(
-  initialLocation: '/${GlintMainRoutes.home.name}',
+  initialLocation: '/${GlintMainRoutes.auth.name}',
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
       path: '/${GlintMainRoutes.auth.name}',
       name: GlintMainRoutes.auth.name,
-      builder: (context, state) => const AuthenticationScreen(),
+      builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
       path: '/${GlintMainRoutes.home.name}',

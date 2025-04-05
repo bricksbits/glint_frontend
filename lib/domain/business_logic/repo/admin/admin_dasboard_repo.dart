@@ -1,6 +1,3 @@
-import 'dart:ffi';
-
-import 'package:glint_frontend/data/remote/model/request/admin/update_event_request_body.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_approve_reject_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_detail_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_interested_user_domain_model.dart';

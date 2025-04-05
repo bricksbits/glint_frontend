@@ -4,21 +4,23 @@ import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
 import 'package:glint_frontend/features/home/home_bloc.dart';
 import 'package:glint_frontend/features/home/home_screen.dart';
+import 'package:glint_frontend/navigation/glint_route_config.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class MyGlintApp extends StatelessWidget {
-  final StreamChatClient client;
-  final Channel channel;
+  // final StreamChatClient client;
+  // final Channel channel;
+  //
+  // const MyGlintApp({super.key, required this.client, required this.channel});
 
-  const MyGlintApp({super.key, required this.client, required this.channel});
+  const MyGlintApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const LoginScreen(),
       // home: StreamChannel(
       //   channel: channel,
       //   child: const ChatScreen(),
@@ -37,7 +39,7 @@ class MyGlintApp extends StatelessWidget {
       //     ),
       //   ),
       // ),
-      // routerConfig: glintMainRoutes,
+      routerConfig: glintMainRoutes,
     );
   }
 }

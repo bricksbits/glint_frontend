@@ -1,5 +1,4 @@
 import 'package:encrypt_shared_preferences/provider.dart';
-import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable

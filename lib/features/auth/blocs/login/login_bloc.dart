@@ -11,6 +11,7 @@ part 'login_state.dart';
 part 'login_bloc.freezed.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  final SignInUserUseCase signInUserUseCase = getIt.get();
 
   LoginBloc() : super(const LoginState.initial()) {
     on<LoginEvent>(
@@ -22,14 +23,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
   }
 
-  final SignInUserUseCase signInUserUseCase = getIt.get();
 
   Future<void> loginUser() async {
-    print("Login Bloc : Called");
     signInUserUseCase.perform((response) {
       print("Login Bloc : Response $response");
+      emit(const LoginState.success());
     }, (error) {
       print("Login Bloc : Error $error");
+      emit(LoginState.error("Eroor ${error.toString()}"));
     }, () {
       print("Login Bloc : On Done");
     }, LoginRequestBody(username: "NP", password: "1234"));

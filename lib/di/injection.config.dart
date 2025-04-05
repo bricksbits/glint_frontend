@@ -13,8 +13,6 @@ import 'package:encrypt_shared_preferences/provider.dart' as _i930;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
-import '../data/local/db/dao/profile_dao.dart' as _i719;
-import '../data/local/db/database/glint_database.dart' as _i160;
 import '../data/local/persist/async_encrypted_shared_preference_helper.dart'
     as _i274;
 import '../data/remote/client/my_dio_client.dart' as _i368;
@@ -47,12 +45,6 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i361.Dio>(() => networkModule.getHttpClientInstance());
-    await gh.lazySingletonAsync<_i160.GlintDatabase>(
-      () => localModule.glintDatabase(),
-      preResolve: true,
-    );
-    gh.singleton<_i719.ProfileDao>(
-        () => localModule.getProfileDao(gh<_i160.GlintDatabase>()));
     gh.factory<_i274.AsyncEncryptedSharedPreferenceHelper>(() =>
         _i274.AsyncEncryptedSharedPreferenceHelper(
             gh<_i930.EncryptedSharedPreferencesAsync>()));

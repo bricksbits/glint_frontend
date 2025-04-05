@@ -1,5 +1,6 @@
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/login_request_body.dart';
@@ -21,11 +22,6 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
 
   @override
   Future<Result<void>> createAccount() async {
-    const key = "";
-    await EncryptedSharedPreferencesAsync.initialize(key);
-    final sharedPreferencesAsync =
-        EncryptedSharedPreferencesAsync.getInstance();
-
     final response = safeApiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
@@ -49,15 +45,35 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
       passedQueryParameters: null,
     );
 
-    print("Repo : Initial --> $response");
     switch (response) {
       case Success():
         final successResponse = LoginResponse.fromJson(response.data);
-        print("Repo : Raw --> $response");
-        print("Repo : Converted --> $successResponse");
+        final accessToken = successResponse.profile?.authToken;
+        if (accessToken != null) {
+          if (accessToken.isNotEmpty) {
+            await sharedPreferenceHelper.saveString(
+                SharedPreferenceKeys.accessTokenKey, accessToken);
+          }
+        }
+
+        final refreshToken = successResponse.profile?.refreshToken;
+        if (refreshToken != null) {
+          if (refreshToken.isNotEmpty) {
+            await sharedPreferenceHelper.saveString(
+                SharedPreferenceKeys.refreshTokenKey, refreshToken);
+          }
+        }
+
+        final tokenBufferTime = DateTime.now()
+            .add(const Duration(minutes: 55))
+            .microsecondsSinceEpoch;
+
+        await sharedPreferenceHelper.saveInt(
+            SharedPreferenceKeys.lastSavedTimeKey, tokenBufferTime);
+
         return Future.value(Success(successResponse));
+
       case Failure():
-        print("Repo : Failure Called");
         return Future.value(Failure(Exception()));
     }
   }

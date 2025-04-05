@@ -180,8 +180,6 @@ mixin _$LoginState {
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
-    required TResult Function(String email, String password) formValid,
-    required TResult Function() formInvalid,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -192,8 +190,6 @@ mixin _$LoginState {
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
-    TResult? Function(String email, String password)? formValid,
-    TResult? Function()? formInvalid,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -204,8 +200,6 @@ mixin _$LoginState {
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
-    TResult Function(String email, String password)? formValid,
-    TResult Function()? formInvalid,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -217,8 +211,6 @@ mixin _$LoginState {
     required TResult Function(_Error value) error,
     required TResult Function(_EmailChanged value) emailChanged,
     required TResult Function(_PasswordChanged value) passwordChanged,
-    required TResult Function(_FormValid value) formValid,
-    required TResult Function(_FormInvalid value) formInvalid,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -229,8 +221,6 @@ mixin _$LoginState {
     TResult? Function(_Error value)? error,
     TResult? Function(_EmailChanged value)? emailChanged,
     TResult? Function(_PasswordChanged value)? passwordChanged,
-    TResult? Function(_FormValid value)? formValid,
-    TResult? Function(_FormInvalid value)? formInvalid,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -241,8 +231,6 @@ mixin _$LoginState {
     TResult Function(_Error value)? error,
     TResult Function(_EmailChanged value)? emailChanged,
     TResult Function(_PasswordChanged value)? passwordChanged,
-    TResult Function(_FormValid value)? formValid,
-    TResult Function(_FormInvalid value)? formInvalid,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -316,8 +304,6 @@ class _$InitialImpl implements _Initial {
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
-    required TResult Function(String email, String password) formValid,
-    required TResult Function() formInvalid,
   }) {
     return initial();
   }
@@ -331,8 +317,6 @@ class _$InitialImpl implements _Initial {
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
-    TResult? Function(String email, String password)? formValid,
-    TResult? Function()? formInvalid,
   }) {
     return initial?.call();
   }
@@ -346,8 +330,6 @@ class _$InitialImpl implements _Initial {
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
-    TResult Function(String email, String password)? formValid,
-    TResult Function()? formInvalid,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -365,8 +347,6 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Error value) error,
     required TResult Function(_EmailChanged value) emailChanged,
     required TResult Function(_PasswordChanged value) passwordChanged,
-    required TResult Function(_FormValid value) formValid,
-    required TResult Function(_FormInvalid value) formInvalid,
   }) {
     return initial(this);
   }
@@ -380,8 +360,6 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_Error value)? error,
     TResult? Function(_EmailChanged value)? emailChanged,
     TResult? Function(_PasswordChanged value)? passwordChanged,
-    TResult? Function(_FormValid value)? formValid,
-    TResult? Function(_FormInvalid value)? formInvalid,
   }) {
     return initial?.call(this);
   }
@@ -395,8 +373,6 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Error value)? error,
     TResult Function(_EmailChanged value)? emailChanged,
     TResult Function(_PasswordChanged value)? passwordChanged,
-    TResult Function(_FormValid value)? formValid,
-    TResult Function(_FormInvalid value)? formInvalid,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -457,8 +433,6 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
-    required TResult Function(String email, String password) formValid,
-    required TResult Function() formInvalid,
   }) {
     return loading();
   }
@@ -472,8 +446,6 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
-    TResult? Function(String email, String password)? formValid,
-    TResult? Function()? formInvalid,
   }) {
     return loading?.call();
   }
@@ -487,8 +459,6 @@ class _$LoadingImpl implements _Loading {
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
-    TResult Function(String email, String password)? formValid,
-    TResult Function()? formInvalid,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -506,8 +476,6 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Error value) error,
     required TResult Function(_EmailChanged value) emailChanged,
     required TResult Function(_PasswordChanged value) passwordChanged,
-    required TResult Function(_FormValid value) formValid,
-    required TResult Function(_FormInvalid value) formInvalid,
   }) {
     return loading(this);
   }
@@ -521,8 +489,6 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_Error value)? error,
     TResult? Function(_EmailChanged value)? emailChanged,
     TResult? Function(_PasswordChanged value)? passwordChanged,
-    TResult? Function(_FormValid value)? formValid,
-    TResult? Function(_FormInvalid value)? formInvalid,
   }) {
     return loading?.call(this);
   }
@@ -536,8 +502,6 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Error value)? error,
     TResult Function(_EmailChanged value)? emailChanged,
     TResult Function(_PasswordChanged value)? passwordChanged,
-    TResult Function(_FormValid value)? formValid,
-    TResult Function(_FormInvalid value)? formInvalid,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -598,8 +562,6 @@ class _$SuccessImpl implements _Success {
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
-    required TResult Function(String email, String password) formValid,
-    required TResult Function() formInvalid,
   }) {
     return success();
   }
@@ -613,8 +575,6 @@ class _$SuccessImpl implements _Success {
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
-    TResult? Function(String email, String password)? formValid,
-    TResult? Function()? formInvalid,
   }) {
     return success?.call();
   }
@@ -628,8 +588,6 @@ class _$SuccessImpl implements _Success {
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
-    TResult Function(String email, String password)? formValid,
-    TResult Function()? formInvalid,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -647,8 +605,6 @@ class _$SuccessImpl implements _Success {
     required TResult Function(_Error value) error,
     required TResult Function(_EmailChanged value) emailChanged,
     required TResult Function(_PasswordChanged value) passwordChanged,
-    required TResult Function(_FormValid value) formValid,
-    required TResult Function(_FormInvalid value) formInvalid,
   }) {
     return success(this);
   }
@@ -662,8 +618,6 @@ class _$SuccessImpl implements _Success {
     TResult? Function(_Error value)? error,
     TResult? Function(_EmailChanged value)? emailChanged,
     TResult? Function(_PasswordChanged value)? passwordChanged,
-    TResult? Function(_FormValid value)? formValid,
-    TResult? Function(_FormInvalid value)? formInvalid,
   }) {
     return success?.call(this);
   }
@@ -677,8 +631,6 @@ class _$SuccessImpl implements _Success {
     TResult Function(_Error value)? error,
     TResult Function(_EmailChanged value)? emailChanged,
     TResult Function(_PasswordChanged value)? passwordChanged,
-    TResult Function(_FormValid value)? formValid,
-    TResult Function(_FormInvalid value)? formInvalid,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -766,8 +718,6 @@ class _$ErrorImpl implements _Error {
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
-    required TResult Function(String email, String password) formValid,
-    required TResult Function() formInvalid,
   }) {
     return error(message);
   }
@@ -781,8 +731,6 @@ class _$ErrorImpl implements _Error {
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
-    TResult? Function(String email, String password)? formValid,
-    TResult? Function()? formInvalid,
   }) {
     return error?.call(message);
   }
@@ -796,8 +744,6 @@ class _$ErrorImpl implements _Error {
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
-    TResult Function(String email, String password)? formValid,
-    TResult Function()? formInvalid,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -815,8 +761,6 @@ class _$ErrorImpl implements _Error {
     required TResult Function(_Error value) error,
     required TResult Function(_EmailChanged value) emailChanged,
     required TResult Function(_PasswordChanged value) passwordChanged,
-    required TResult Function(_FormValid value) formValid,
-    required TResult Function(_FormInvalid value) formInvalid,
   }) {
     return error(this);
   }
@@ -830,8 +774,6 @@ class _$ErrorImpl implements _Error {
     TResult? Function(_Error value)? error,
     TResult? Function(_EmailChanged value)? emailChanged,
     TResult? Function(_PasswordChanged value)? passwordChanged,
-    TResult? Function(_FormValid value)? formValid,
-    TResult? Function(_FormInvalid value)? formInvalid,
   }) {
     return error?.call(this);
   }
@@ -845,8 +787,6 @@ class _$ErrorImpl implements _Error {
     TResult Function(_Error value)? error,
     TResult Function(_EmailChanged value)? emailChanged,
     TResult Function(_PasswordChanged value)? passwordChanged,
-    TResult Function(_FormValid value)? formValid,
-    TResult Function(_FormInvalid value)? formInvalid,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -942,8 +882,6 @@ class _$EmailChangedImpl implements _EmailChanged {
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
-    required TResult Function(String email, String password) formValid,
-    required TResult Function() formInvalid,
   }) {
     return emailChanged(email);
   }
@@ -957,8 +895,6 @@ class _$EmailChangedImpl implements _EmailChanged {
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
-    TResult? Function(String email, String password)? formValid,
-    TResult? Function()? formInvalid,
   }) {
     return emailChanged?.call(email);
   }
@@ -972,8 +908,6 @@ class _$EmailChangedImpl implements _EmailChanged {
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
-    TResult Function(String email, String password)? formValid,
-    TResult Function()? formInvalid,
     required TResult orElse(),
   }) {
     if (emailChanged != null) {
@@ -991,8 +925,6 @@ class _$EmailChangedImpl implements _EmailChanged {
     required TResult Function(_Error value) error,
     required TResult Function(_EmailChanged value) emailChanged,
     required TResult Function(_PasswordChanged value) passwordChanged,
-    required TResult Function(_FormValid value) formValid,
-    required TResult Function(_FormInvalid value) formInvalid,
   }) {
     return emailChanged(this);
   }
@@ -1006,8 +938,6 @@ class _$EmailChangedImpl implements _EmailChanged {
     TResult? Function(_Error value)? error,
     TResult? Function(_EmailChanged value)? emailChanged,
     TResult? Function(_PasswordChanged value)? passwordChanged,
-    TResult? Function(_FormValid value)? formValid,
-    TResult? Function(_FormInvalid value)? formInvalid,
   }) {
     return emailChanged?.call(this);
   }
@@ -1021,8 +951,6 @@ class _$EmailChangedImpl implements _EmailChanged {
     TResult Function(_Error value)? error,
     TResult Function(_EmailChanged value)? emailChanged,
     TResult Function(_PasswordChanged value)? passwordChanged,
-    TResult Function(_FormValid value)? formValid,
-    TResult Function(_FormInvalid value)? formInvalid,
     required TResult orElse(),
   }) {
     if (emailChanged != null) {
@@ -1120,8 +1048,6 @@ class _$PasswordChangedImpl implements _PasswordChanged {
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
-    required TResult Function(String email, String password) formValid,
-    required TResult Function() formInvalid,
   }) {
     return passwordChanged(password);
   }
@@ -1135,8 +1061,6 @@ class _$PasswordChangedImpl implements _PasswordChanged {
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
-    TResult? Function(String email, String password)? formValid,
-    TResult? Function()? formInvalid,
   }) {
     return passwordChanged?.call(password);
   }
@@ -1150,8 +1074,6 @@ class _$PasswordChangedImpl implements _PasswordChanged {
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
-    TResult Function(String email, String password)? formValid,
-    TResult Function()? formInvalid,
     required TResult orElse(),
   }) {
     if (passwordChanged != null) {
@@ -1169,8 +1091,6 @@ class _$PasswordChangedImpl implements _PasswordChanged {
     required TResult Function(_Error value) error,
     required TResult Function(_EmailChanged value) emailChanged,
     required TResult Function(_PasswordChanged value) passwordChanged,
-    required TResult Function(_FormValid value) formValid,
-    required TResult Function(_FormInvalid value) formInvalid,
   }) {
     return passwordChanged(this);
   }
@@ -1184,8 +1104,6 @@ class _$PasswordChangedImpl implements _PasswordChanged {
     TResult? Function(_Error value)? error,
     TResult? Function(_EmailChanged value)? emailChanged,
     TResult? Function(_PasswordChanged value)? passwordChanged,
-    TResult? Function(_FormValid value)? formValid,
-    TResult? Function(_FormInvalid value)? formInvalid,
   }) {
     return passwordChanged?.call(this);
   }
@@ -1199,8 +1117,6 @@ class _$PasswordChangedImpl implements _PasswordChanged {
     TResult Function(_Error value)? error,
     TResult Function(_EmailChanged value)? emailChanged,
     TResult Function(_PasswordChanged value)? passwordChanged,
-    TResult Function(_FormValid value)? formValid,
-    TResult Function(_FormInvalid value)? formInvalid,
     required TResult orElse(),
   }) {
     if (passwordChanged != null) {
@@ -1220,332 +1136,4 @@ abstract class _PasswordChanged implements LoginState {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PasswordChangedImplCopyWith<_$PasswordChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$FormValidImplCopyWith<$Res> {
-  factory _$$FormValidImplCopyWith(
-          _$FormValidImpl value, $Res Function(_$FormValidImpl) then) =
-      __$$FormValidImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String email, String password});
-}
-
-/// @nodoc
-class __$$FormValidImplCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$FormValidImpl>
-    implements _$$FormValidImplCopyWith<$Res> {
-  __$$FormValidImplCopyWithImpl(
-      _$FormValidImpl _value, $Res Function(_$FormValidImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? email = null,
-    Object? password = null,
-  }) {
-    return _then(_$FormValidImpl(
-      null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$FormValidImpl implements _FormValid {
-  const _$FormValidImpl(this.email, this.password);
-
-  @override
-  final String email;
-  @override
-  final String password;
-
-  @override
-  String toString() {
-    return 'LoginState.formValid(email: $email, password: $password)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$FormValidImpl &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.password, password) ||
-                other.password == password));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, email, password);
-
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$FormValidImplCopyWith<_$FormValidImpl> get copyWith =>
-      __$$FormValidImplCopyWithImpl<_$FormValidImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function() success,
-    required TResult Function(String message) error,
-    required TResult Function(String email) emailChanged,
-    required TResult Function(String password) passwordChanged,
-    required TResult Function(String email, String password) formValid,
-    required TResult Function() formInvalid,
-  }) {
-    return formValid(email, password);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function()? success,
-    TResult? Function(String message)? error,
-    TResult? Function(String email)? emailChanged,
-    TResult? Function(String password)? passwordChanged,
-    TResult? Function(String email, String password)? formValid,
-    TResult? Function()? formInvalid,
-  }) {
-    return formValid?.call(email, password);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? success,
-    TResult Function(String message)? error,
-    TResult Function(String email)? emailChanged,
-    TResult Function(String password)? passwordChanged,
-    TResult Function(String email, String password)? formValid,
-    TResult Function()? formInvalid,
-    required TResult orElse(),
-  }) {
-    if (formValid != null) {
-      return formValid(email, password);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Success value) success,
-    required TResult Function(_Error value) error,
-    required TResult Function(_EmailChanged value) emailChanged,
-    required TResult Function(_PasswordChanged value) passwordChanged,
-    required TResult Function(_FormValid value) formValid,
-    required TResult Function(_FormInvalid value) formInvalid,
-  }) {
-    return formValid(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Success value)? success,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_EmailChanged value)? emailChanged,
-    TResult? Function(_PasswordChanged value)? passwordChanged,
-    TResult? Function(_FormValid value)? formValid,
-    TResult? Function(_FormInvalid value)? formInvalid,
-  }) {
-    return formValid?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Success value)? success,
-    TResult Function(_Error value)? error,
-    TResult Function(_EmailChanged value)? emailChanged,
-    TResult Function(_PasswordChanged value)? passwordChanged,
-    TResult Function(_FormValid value)? formValid,
-    TResult Function(_FormInvalid value)? formInvalid,
-    required TResult orElse(),
-  }) {
-    if (formValid != null) {
-      return formValid(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _FormValid implements LoginState {
-  const factory _FormValid(final String email, final String password) =
-      _$FormValidImpl;
-
-  String get email;
-  String get password;
-
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$FormValidImplCopyWith<_$FormValidImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$FormInvalidImplCopyWith<$Res> {
-  factory _$$FormInvalidImplCopyWith(
-          _$FormInvalidImpl value, $Res Function(_$FormInvalidImpl) then) =
-      __$$FormInvalidImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$FormInvalidImplCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$FormInvalidImpl>
-    implements _$$FormInvalidImplCopyWith<$Res> {
-  __$$FormInvalidImplCopyWithImpl(
-      _$FormInvalidImpl _value, $Res Function(_$FormInvalidImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$FormInvalidImpl implements _FormInvalid {
-  const _$FormInvalidImpl();
-
-  @override
-  String toString() {
-    return 'LoginState.formInvalid()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$FormInvalidImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function() success,
-    required TResult Function(String message) error,
-    required TResult Function(String email) emailChanged,
-    required TResult Function(String password) passwordChanged,
-    required TResult Function(String email, String password) formValid,
-    required TResult Function() formInvalid,
-  }) {
-    return formInvalid();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function()? success,
-    TResult? Function(String message)? error,
-    TResult? Function(String email)? emailChanged,
-    TResult? Function(String password)? passwordChanged,
-    TResult? Function(String email, String password)? formValid,
-    TResult? Function()? formInvalid,
-  }) {
-    return formInvalid?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? success,
-    TResult Function(String message)? error,
-    TResult Function(String email)? emailChanged,
-    TResult Function(String password)? passwordChanged,
-    TResult Function(String email, String password)? formValid,
-    TResult Function()? formInvalid,
-    required TResult orElse(),
-  }) {
-    if (formInvalid != null) {
-      return formInvalid();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Success value) success,
-    required TResult Function(_Error value) error,
-    required TResult Function(_EmailChanged value) emailChanged,
-    required TResult Function(_PasswordChanged value) passwordChanged,
-    required TResult Function(_FormValid value) formValid,
-    required TResult Function(_FormInvalid value) formInvalid,
-  }) {
-    return formInvalid(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Success value)? success,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_EmailChanged value)? emailChanged,
-    TResult? Function(_PasswordChanged value)? passwordChanged,
-    TResult? Function(_FormValid value)? formValid,
-    TResult? Function(_FormInvalid value)? formInvalid,
-  }) {
-    return formInvalid?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Success value)? success,
-    TResult Function(_Error value)? error,
-    TResult Function(_EmailChanged value)? emailChanged,
-    TResult Function(_PasswordChanged value)? passwordChanged,
-    TResult Function(_FormValid value)? formValid,
-    TResult Function(_FormInvalid value)? formInvalid,
-    required TResult orElse(),
-  }) {
-    if (formInvalid != null) {
-      return formInvalid(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _FormInvalid implements LoginState {
-  const factory _FormInvalid() = _$FormInvalidImpl;
 }

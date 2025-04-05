@@ -28,6 +28,7 @@ class SignInUserUseCase extends UseCase<Result<bool>, LoginRequestBody> {
             controller.close();
         }
       }).catchError((caughtError) {
+        print("SignInUsecase : $caughtError");
         controller.addError(Failure(Exception(caughtError.toString())));
         controller.close();
       });
