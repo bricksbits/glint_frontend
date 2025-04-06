@@ -170,43 +170,60 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildRecentMatchesSection() {
-    return SizedBox(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: matches.length,
-        itemBuilder: (context, index) {
-          var match = matches[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              children: [
-                Stack(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Recent Matches",
+          style: AppTheme.headingThree.copyWith(
+            fontStyle: FontStyle.normal,
+          ),
+        ),
+        const Gap(2.0),
+        const Text(
+          'Start conversation to find your spark',
+          style: AppTheme.simpleText,
+        ),
+        const Gap(6.0),
+        SizedBox(
+          height: 100,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: matches.length,
+            itemBuilder: (context, index) {
+              var match = matches[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Image.asset(match['image'],
-                          width: 70, height: 70, fit: BoxFit.cover),
-                    ),
-                    if (match.containsKey('icon'))
-                      Positioned(
-                        bottom: 5,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 12,
-                          child: Icon(match['icon'],
-                              size: 14, color: Colors.black),
+                    Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.asset(match['image'],
+                              width: 70, height: 70, fit: BoxFit.cover),
                         ),
-                      ),
+                        if (match.containsKey('icon'))
+                          Positioned(
+                            bottom: 5,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 12,
+                              child: Icon(match['icon'],
+                                  size: 14, color: Colors.black),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(match['name']),
                   ],
                 ),
-                const SizedBox(height: 4),
-                Text(match['name']),
-              ],
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
