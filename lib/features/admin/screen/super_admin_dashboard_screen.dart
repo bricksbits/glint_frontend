@@ -49,7 +49,6 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                   Row(
                     children: [
                       // live event chip
-
                       ChoiceChip(
                         onSelected: (bool? value) {
                           setState(() {
@@ -74,7 +73,6 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                         ),
                       ),
                       const Gap(12.0),
-
                       // event requests chip
                       ChoiceChip(
                         onSelected: (bool? value) {

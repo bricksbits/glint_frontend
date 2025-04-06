@@ -29,10 +29,10 @@ import 'network_module.dart' as _i567;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
-  Future<_i174.GetIt> init({
+  _i174.GetIt init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
-  }) async {
+  }) {
     final gh = _i526.GetItHelper(
       this,
       environment,
@@ -40,34 +40,35 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final localModule = _$LocalModule();
     final networkModule = _$NetworkModule();
-    await gh.singletonAsync<_i930.EncryptedSharedPreferencesAsync>(
-      () => localModule.sharedPref(),
-      preResolve: true,
-    );
+    gh.singletonAsync<_i930.EncryptedSharedPreferencesAsync>(
+        () => localModule.sharedPref());
     gh.singleton<_i361.Dio>(() => networkModule.getHttpClientInstance());
-    gh.factory<_i274.AsyncEncryptedSharedPreferenceHelper>(() =>
+    gh.factoryAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(() async =>
         _i274.AsyncEncryptedSharedPreferenceHelper(
-            gh<_i930.EncryptedSharedPreferencesAsync>()));
+            await getAsync<_i930.EncryptedSharedPreferencesAsync>()));
     gh.factory<_i368.MyDioClient>(() => _i368.MyDioClient(gh<_i361.Dio>()));
-    gh.factory<_i684.AccessTokenHelper>(() => _i684.AccessTokenHelper(
-          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-          gh<_i368.MyDioClient>(),
-        ));
-    gh.factory<_i995.ForgotPasswordRepo>(() => _i509.ForgotPasswordRepoImpl(
-          gh<_i368.MyDioClient>(),
-          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-        ));
-    gh.lazySingleton<_i873.AuthenticationRepo>(
-        () => _i840.AuthenticationRepoImpl(
+    gh.factoryAsync<_i684.AccessTokenHelper>(
+        () async => _i684.AccessTokenHelper(
+              await getAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(),
               gh<_i368.MyDioClient>(),
-              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
             ));
-    gh.factory<_i1000.AdminDashboardRepo>(() => _i72.AdminDashBoardRepoImpl(
-          gh<_i368.MyDioClient>(),
-          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-        ));
-    gh.factory<_i972.SignInUserUseCase>(
-        () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
+    gh.factoryAsync<_i995.ForgotPasswordRepo>(
+        () async => _i509.ForgotPasswordRepoImpl(
+              gh<_i368.MyDioClient>(),
+              await getAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+            ));
+    gh.lazySingletonAsync<_i873.AuthenticationRepo>(
+        () async => _i840.AuthenticationRepoImpl(
+              gh<_i368.MyDioClient>(),
+              await getAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+            ));
+    gh.factoryAsync<_i1000.AdminDashboardRepo>(
+        () async => _i72.AdminDashBoardRepoImpl(
+              gh<_i368.MyDioClient>(),
+              await getAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+            ));
+    gh.factoryAsync<_i972.SignInUserUseCase>(() async =>
+        _i972.SignInUserUseCase(await getAsync<_i873.AuthenticationRepo>()));
     return this;
   }
 }
