@@ -84,81 +84,87 @@ class _ChatScreenState extends State<ChatScreen> {
             final channel = snapshot.data!;
             return StreamChannel(
               channel: channel,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildStoriesSection(),
-                  _buildRecentMatchesSection(),
-                  const Divider(),
-                  const Text(
-                    'Chats',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Expanded(
-                    child: StreamChannelListView(
-                      controller: _listController,
-                      itemBuilder: (context, channels, index, defaultTile) {
-                        // final lastMessage = channels[index].state?.messages.last;
-                        // final unreadCount = channels[index].state?.unreadCount ?? 0;
-                        // final myUserId = StreamChat.of(context).currentUser?.id ?? 0;
-                        // //
-                        // // // Determine if the last message was sent by the opposite user and is unread
-                        // final isUnreadFromOtherUser = lastMessage != null &&
-                        //     lastMessage.user?.id != myUserId &&
-                        //     unreadCount > 0;
-
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(channels[index].image ?? ''),
-                          ),
-                          title: Text(
-                            channels[index].name ?? 'Chat',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: const Text(
-                            'No messages yet',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: true
-                              ? Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Text(
-                                    'Your Turn',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                )
-                              : null,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => StreamChannel(
-                                  channel: channels[index],
-                                  child: const ChatWithScreen(
-                                      // channel: channels[index],
-                                      ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
+              child: Container(
+                color: AppColours.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildStoriesSection(),
+                    const Gap(12.0),
+                    _buildRecentMatchesSection(),
+                    const Gap(12.0),
+                    const Divider(),
+                    const Text(
+                      'Chats',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(fontSize: 18),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: StreamChannelListView(
+                        controller: _listController,
+                        itemBuilder: (context, channels, index, defaultTile) {
+                          // final lastMessage = channels[index].state?.messages.last;
+                          // final unreadCount = channels[index].state?.unreadCount ?? 0;
+                          // final myUserId = StreamChat.of(context).currentUser?.id ?? 0;
+                          // //
+                          // // // Determine if the last message was sent by the opposite user and is unread
+                          // final isUnreadFromOtherUser = lastMessage != null &&
+                          //     lastMessage.user?.id != myUserId &&
+                          //     unreadCount > 0;
+
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(channels[index].image ?? ''),
+                            ),
+                            title: Text(
+                              channels[index].name ?? 'Chat',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: const Text(
+                              'No messages yet',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: true
+                                ? Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Text(
+                                      'Your Turn',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  )
+                                : null,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => StreamChannel(
+                                    channel: channels[index],
+                                    child: const ChatWithScreen(
+                                        // channel: channels[index],
+                                        ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           } else {
@@ -170,60 +176,108 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildRecentMatchesSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Recent Matches",
-          style: AppTheme.headingThree.copyWith(
-            fontStyle: FontStyle.normal,
-          ),
-        ),
-        const Gap(2.0),
-        const Text(
-          'Start conversation to find your spark',
-          style: AppTheme.simpleText,
-        ),
-        const Gap(6.0),
-        SizedBox(
-          height: 100,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: matches.length,
-            itemBuilder: (context, index) {
-              var match = matches[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.asset(match['image'],
-                              width: 70, height: 70, fit: BoxFit.cover),
-                        ),
-                        if (match.containsKey('icon'))
-                          Positioned(
-                            bottom: 5,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 12,
-                              child: Icon(match['icon'],
-                                  size: 14, color: Colors.black),
-                            ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(match['name']),
-                  ],
+    return Container(
+      color: AppColours.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Recent Matches",
+                  style: AppTheme.headingThree.copyWith(
+                    fontStyle: FontStyle.normal,
+                  ),
                 ),
-              );
-            },
+                const Gap(2.0),
+                const Text(
+                  'Start conversation to find your spark',
+                  style: AppTheme.simpleText,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+          const Gap(20.0),
+          SizedBox(
+            height: 100.0,
+            child: Row(
+              children: [
+                const Gap(12.0),
+                Expanded(
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: matches.length,
+                    itemBuilder: (context, index) {
+                      var match = matches[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            Stack(
+                              clipBehavior: Clip.none,
+                              alignment: Alignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(22.0),
+                                  child: Image.asset(
+                                    match['image'],
+                                    width: 72.0,
+                                    height: 72.0,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                if (match.containsKey('icon'))
+                                  Positioned.fill(
+                                    child: Container(
+                                      height: 72.0,
+                                      width: 72.0,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.transparent,
+                                            Colors.transparent,
+                                            Colors.black.withValues(alpha: 0.8),
+                                          ],
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(22.0),
+                                      ),
+                                    ),
+                                  ),
+                                if (match.containsKey('icon'))
+                                  Positioned(
+                                    bottom: 8,
+                                    child: Icon(
+                                      match['icon'],
+                                      size: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            const Spacer(),
+                            Text(
+                              match['name'],
+                              style: AppTheme.simpleText.copyWith(
+                                color: AppColours.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
