@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
@@ -37,17 +38,36 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColours.white,
       appBar: AppBar(
-        title: const Text('Stories'),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.favorite),
+        backgroundColor: AppColours.white,
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        titleSpacing: 20,
+        title: Text(
+          "Stories",
+          style: AppTheme.headingThree.copyWith(
+            fontStyle: FontStyle.normal,
           ),
-          const Gap(16),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.add),
+        ),
+        actionsPadding: const EdgeInsets.only(right: 20.0),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              // todo - add heart clicked functionality
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/glint_heart.svg',
+            ),
+          ),
+          const Gap(18.0),
+          GestureDetector(
+            onTap: () {
+              // todo - add heart clicked functionality
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/upload_story.svg',
+            ),
           ),
         ],
       ),
@@ -128,8 +148,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                 builder: (context) => StreamChannel(
                                   channel: channels[index],
                                   child: const ChatWithScreen(
-                                    // channel: channels[index],
-                                  ),
+                                      // channel: channels[index],
+                                      ),
                                 ),
                               ),
                             );

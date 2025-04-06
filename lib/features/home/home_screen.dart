@@ -133,9 +133,12 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Scaffold(
               // extendBody: true,
               backgroundColor: AppColours.white,
-              appBar: GlintAppBar(
-                appBarAction: appBarAction(_selectedIndex),
-              ),
+              // do not show app bar on chat screen
+              appBar: _selectedIndex == 4
+                  ? null
+                  : GlintAppBar(
+                      appBarAction: appBarAction(_selectedIndex),
+                    ),
               body: _bottomNavScreens[_selectedIndex],
               bottomNavigationBar: Container(
                 height: 70.0,
