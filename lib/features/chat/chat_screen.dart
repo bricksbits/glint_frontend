@@ -211,172 +211,203 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildStoriesSection() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        height: 120,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: stories.length,
-          padding: const EdgeInsets.all(4),
-          itemBuilder: (context, index) {
-            var story = stories[index];
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      GradientCircularProgressIndicator(
-                        progress: 100,
-                        gradient: AppColours.circularProgressGradient,
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundImage: AssetImage(
-                            story['image'],
+    return Container(
+      color: AppColours.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0).copyWith(bottom: 0),
+        child: SizedBox(
+          height: 140,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: stories.length,
+            padding: const EdgeInsets.all(4),
+            itemBuilder: (context, index) {
+              var story = stories[index];
+              return Container(
+                padding: const EdgeInsets.only(right: 16.0),
+                margin: index == 0 ? const EdgeInsets.only(left: 16.0) : null,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: [
+                        GradientCircularProgressIndicator(
+                          progress: 100,
+                          stroke: 3.6,
+                          gradient: AppColours.circularProgressGradient,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: CircleAvatar(
+                              radius: 36,
+                              backgroundImage: AssetImage(
+                                story['image'],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      if (story.containsKey('likes'))
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 12,
-                            child: Text('${story['likes']}',
-                                style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue)),
+                        if (story.containsKey('likes'))
+                          Positioned(
+                            bottom: -8.0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6.0, vertical: 3.6),
+                              decoration: BoxDecoration(
+                                color: AppColours.primaryBlue,
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.local_fire_department,
+                                    size: 14,
+                                    color: AppColours.white,
+                                  ),
+                                  const Gap(2.0),
+                                  Text(
+                                    '${story['likes']}',
+                                    style: AppTheme.smallBodyText.copyWith(
+                                      color: AppColours.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        )
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(story['name']),
-                ],
-              ),
-            );
-          },
+                      ],
+                    ),
+                    const Gap(12.0),
+                    Text(story['name'],
+                        style: AppTheme.simpleText.copyWith(
+                          color: AppColours.black,
+                        )),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
   }
-}
 
-List<Map<String, dynamic>> matches = [
-  {
-    'name': 'Rakhi',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'icon': Icons.favorite
-  },
-  {
-    'name': 'Dimpy',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'icon': Icons.pets
-  },
-  {'name': 'Shreya', 'image': 'lib/assets/images/temp_place_holder.png'},
-  {'name': 'Kathie', 'image': 'lib/assets/images/temp_place_holder.png'},
-  {
-    'name': 'Rakhi',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'icon': Icons.favorite
-  },
-  {
-    'name': 'Dimpy',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'icon': Icons.pets
-  },
-  {'name': 'Shreya', 'image': 'lib/assets/images/temp_place_holder.png'},
-  {'name': 'Kathie', 'image': 'lib/assets/images/temp_place_holder.png'},
-  {
-    'name': 'Rakhi',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'icon': Icons.favorite
-  },
-  {
-    'name': 'Dimpy',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'icon': Icons.pets
-  },
-  {'name': 'Shreya', 'image': 'lib/assets/images/temp_place_holder.png'},
-  {'name': 'Kathie', 'image': 'lib/assets/images/temp_place_holder.png'},
-];
-List<Map<String, dynamic>> stories = [
-  {
-    'name': 'You',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 1.0
-  },
-  {
-    'name': 'Shalini',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 0.7,
-    'likes': 3
-  },
-  {
-    'name': 'Riya',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 0.5,
-    'likes': 1
-  },
-  {
-    'name': 'Shreya',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 0.9,
-    'likes': 4
-  },
-  {
-    'name': 'You',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 1.0
-  },
-  {
-    'name': 'Shalini',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 0.7,
-    'likes': 3
-  },
-  {
-    'name': 'Riya',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 0.5,
-    'likes': 1
-  },
-  {
-    'name': 'Shreya',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 0.9,
-    'likes': 4
-  },
-  {
-    'name': 'You',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 1.0
-  },
-  {
-    'name': 'Shalini',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 0.7,
-    'likes': 3
-  },
-  {
-    'name': 'Riya',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 0.5,
-    'likes': 1
-  },
-  {
-    'name': 'Shreya',
-    'image': 'lib/assets/images/temp_place_holder.png',
-    'progress': 0.9,
-    'likes': 4
-  },
-];
+  List<Map<String, dynamic>> matches = [
+    {
+      'name': 'Rakhi',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'icon': Icons.favorite
+    },
+    {
+      'name': 'Dimpy',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'icon': Icons.pets
+    },
+    {'name': 'Shreya', 'image': 'lib/assets/images/temp_place_holder.png'},
+    {'name': 'Kathie', 'image': 'lib/assets/images/temp_place_holder.png'},
+    {
+      'name': 'Rakhi',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'icon': Icons.favorite
+    },
+    {
+      'name': 'Dimpy',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'icon': Icons.pets
+    },
+    {'name': 'Shreya', 'image': 'lib/assets/images/temp_place_holder.png'},
+    {'name': 'Kathie', 'image': 'lib/assets/images/temp_place_holder.png'},
+    {
+      'name': 'Rakhi',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'icon': Icons.favorite
+    },
+    {
+      'name': 'Dimpy',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'icon': Icons.pets
+    },
+    {'name': 'Shreya', 'image': 'lib/assets/images/temp_place_holder.png'},
+    {'name': 'Kathie', 'image': 'lib/assets/images/temp_place_holder.png'},
+  ];
+  List<Map<String, dynamic>> stories = [
+    {
+      'name': 'You',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 1.0
+    },
+    {
+      'name': 'Shalini',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 0.7,
+      'likes': 3
+    },
+    {
+      'name': 'Riya',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 0.5,
+      'likes': 1
+    },
+    {
+      'name': 'Shreya',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 0.9,
+      'likes': 4
+    },
+    {
+      'name': 'You',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 1.0
+    },
+    {
+      'name': 'Shalini',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 0.7,
+      'likes': 3
+    },
+    {
+      'name': 'Riya',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 0.5,
+      'likes': 1
+    },
+    {
+      'name': 'Shreya',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 0.9,
+      'likes': 4
+    },
+    {
+      'name': 'Dimpy',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 1.0
+    },
+    {
+      'name': 'Shalini',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 0.7,
+      'likes': 3
+    },
+    {
+      'name': 'Riya',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 0.5,
+      'likes': 1
+    },
+    {
+      'name': 'Shreya',
+      'image': 'lib/assets/images/temp_place_holder.png',
+      'progress': 0.9,
+      'likes': 4
+    },
+  ];
 
-Future<Channel> initializeChat(
-    StreamChatClient client, String channelId) async {
-  final channel = client.channel('messaging', id: 'flutterdevs');
-  await channel.watch();
-  return channel;
+  Future<Channel> initializeChat(
+      StreamChatClient client, String channelId) async {
+    final channel = client.channel('messaging', id: 'flutterdevs');
+    await channel.watch();
+    return channel;
+  }
 }
