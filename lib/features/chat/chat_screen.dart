@@ -51,80 +51,100 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildStoriesSection(),
-          _buildRecentMatchesSection(),
-          const Divider(),
-          const Text(
-            'Chats',
-            textAlign: TextAlign.start,
-            style: TextStyle(fontSize: 18),
-          ),
-          Expanded(
-            child: StreamChannelListView(
-              controller: _listController,
-              itemBuilder: (context, channels, index, defaultTile) {
-                // final lastMessage = channels[index].state?.messages.last;
-                // final unreadCount = channels[index].state?.unreadCount ?? 0;
-                // final myUserId = StreamChat.of(context).currentUser?.id ?? 0;
-                // //
-                // // // Determine if the last message was sent by the opposite user and is unread
-                // final isUnreadFromOtherUser = lastMessage != null &&
-                //     lastMessage.user?.id != myUserId &&
-                //     unreadCount > 0;
+      body: FutureBuilder<Channel>(
+        future:
+            initializeChat(StreamChat.of(context).client, 'your_channel_id'),
+        // Call your async method
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            final channel = snapshot.data!;
+            return StreamChannel(
+              channel: channel,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildStoriesSection(),
+                  _buildRecentMatchesSection(),
+                  const Divider(),
+                  const Text(
+                    'Chats',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Expanded(
+                    child: StreamChannelListView(
+                      controller: _listController,
+                      itemBuilder: (context, channels, index, defaultTile) {
+                        // final lastMessage = channels[index].state?.messages.last;
+                        // final unreadCount = channels[index].state?.unreadCount ?? 0;
+                        // final myUserId = StreamChat.of(context).currentUser?.id ?? 0;
+                        // //
+                        // // // Determine if the last message was sent by the opposite user and is unread
+                        // final isUnreadFromOtherUser = lastMessage != null &&
+                        //     lastMessage.user?.id != myUserId &&
+                        //     unreadCount > 0;
 
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(channels[index].image ?? ''),
-                  ),
-                  title: Text(
-                    channels[index].name ?? 'Chat',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: const Text(
-                    'No messages yet',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing: true
-                      ? Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12),
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(channels[index].image ?? ''),
                           ),
-                          child: const Text(
-                            'Your Turn',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          title: Text(
+                            channels[index].name ?? 'Chat',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                        )
-                      : null,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StreamChannel(
-                          channel: channels[index],
-                          child: const ChatWithScreen(
-                              // channel: channels[index],
+                          subtitle: const Text(
+                            'No messages yet',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: true
+                              ? Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Text(
+                                    'Your Turn',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
+                              : null,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => StreamChannel(
+                                  channel: channels[index],
+                                  child: const ChatWithScreen(
+                                    // channel: channels[index],
+                                  ),
+                                ),
                               ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return const Center(child: Text('No data'));
+          }
+        },
       ),
     );
   }
@@ -333,3 +353,10 @@ List<Map<String, dynamic>> stories = [
     'likes': 4
   },
 ];
+
+Future<Channel> initializeChat(
+    StreamChatClient client, String channelId) async {
+  final channel = client.channel('messaging', id: 'flutterdevs');
+  await channel.watch();
+  return channel;
+}

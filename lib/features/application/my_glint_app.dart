@@ -7,10 +7,7 @@ import 'package:glint_frontend/navigation/glint_main_route_config.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class MyGlintApp extends StatelessWidget {
-  final StreamChatClient client;
-  final Channel channel;
-
-  const MyGlintApp({super.key, required this.client, required this.channel});
+  const MyGlintApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +15,7 @@ class MyGlintApp extends StatelessWidget {
       title: "Glint People App",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      routerConfig: !kIsWeb ? glintAdminRoutes : glintMainRoutes,
+      routerConfig: kIsWeb ? glintAdminRoutes : glintMainRoutes,
     );
   }
 }

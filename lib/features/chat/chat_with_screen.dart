@@ -3,7 +3,6 @@ import 'package:glint_frontend/design/components/chat/empty_chat_state_view.dart
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class ChatWithScreen extends StatefulWidget {
-  // final Channel channel;
 
   const ChatWithScreen({super.key});
 
@@ -44,10 +43,10 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
             ],
           ),
         ),
-        title: const Text(
-          "Chat",
+        title: Text(
+          'Chat',
           // widget.channel.name ?? 'Chat', // Display channel name
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         showConnectionStateTile: true,
