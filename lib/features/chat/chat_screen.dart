@@ -212,13 +212,22 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildStoriesSection() {
     return Container(
-      color: AppColours.white,
+      decoration: const BoxDecoration(
+        color: AppColours.white,
+        border: Border(
+          bottom: BorderSide(
+            color: AppColours.borderGray,
+            width: 1.2,
+          ),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.0).copyWith(bottom: 0),
         child: SizedBox(
-          height: 140,
+          height: 128.0,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
             itemCount: stories.length,
             padding: const EdgeInsets.all(4),
             itemBuilder: (context, index) {
@@ -280,10 +289,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       ],
                     ),
                     const Gap(12.0),
-                    Text(story['name'],
-                        style: AppTheme.simpleText.copyWith(
-                          color: AppColours.black,
-                        )),
+                    Text(
+                      story['name'],
+                      style: AppTheme.simpleText.copyWith(
+                        color: AppColours.black,
+                      ),
+                    ),
                   ],
                 ),
               );
