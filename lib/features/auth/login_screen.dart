@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/features/auth/blocs/login/login_bloc.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,66 +30,119 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: isAdmin
           ? const GlintEventAuthAppbar()
           : AppBar(
-        backgroundColor: AppColours.white,
-      ),
+              backgroundColor: AppColours.white,
+            ),
       body: BlocProvider<LoginBloc>(
         create: (context) => LoginBloc(),
-        child: BlocBuilder<LoginBloc, LoginState>(
+        child:
+            BlocListener<LoginBloc, LoginState>(listener: (myContext, state) {
+          state.when(
+              initial: () {},
+              loading: () {},
+              success: (type) {
+                switch (type) {
+                  case UsersType.USER:
+                    myContext.go("/${GlintMainRoutes.home.name}");
+                  case UsersType.ADMIN:
+                    myContext.go("/${GlintMainRoutes.home.name}");
+                  case UsersType.SUPER_ADMIN:
+                    myContext.go("/${GlintMainRoutes.home.name}");
+                }
+              },
+              error: (error) {
+                ScaffoldMessenger.of(myContext).showSnackBar(
+                  SnackBar(content: Text('Login Error: ${error}')),
+                );
+              },
+              emailChanged: (emailChanged) {},
+              passwordChanged: (password) {});
+        }, child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
-            return AuthStackedIllustrationScreen(
-              isAdmin: isAdmin,
-              body: Column(
-                children: [
-                  if (!isAdmin)
-                    Center(
-                      child: SvgPicture.asset(
-                          'lib/assets/images/auth/glint_login.svg'),
-                    ),
-                  const Gap(40.0),
-                  if (isAdmin)
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 40.0),
-                        child: Column(
-                          children: [
-                            const Spacer(),
-                            Text(
-                              'Login',
-                              style: AppTheme.headingThree
-                                  .copyWith(fontStyle: FontStyle.normal),
-                            ),
-                            const Gap(32.0),
-                            _buildAuthFields(),
-                            const Gap(60.0),
-                            _buildActionButton('Log In',
-                                    () => debugPrint('Login button pressed')),
-                            const Gap(16.0),
-                            _buildForgotPassword(),
-                            const Spacer(flex: 4),
-                            _buildRegisterText(),
-                          ],
+            return state.when(
+              initial: () {
+                return AuthStackedIllustrationScreen(
+                  isAdmin: isAdmin,
+                  body: Column(
+                    children: [
+                      if (!isAdmin)
+                        Center(
+                          child: SvgPicture.asset(
+                              'lib/assets/images/auth/glint_login.svg'),
                         ),
-                      ),
-                    ),
-                  if (!isAdmin) ...[
-                    _buildAuthFields(),
-                    const Gap(12.0),
-                    _buildForgotPassword(),
-                    const Gap(60.0),
-                    _buildActionButton(
-                      'Login',
-                          () => context
-                          .read<LoginBloc>()
-                          .add(const LoginEvent.started()),
-                    ),
-                    const Gap(16.0),
-                    _buildRegisterText(),
-                  ],
-                ],
-              ),
+                      const Gap(40.0),
+                      if (isAdmin)
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 40.0),
+                            child: Column(
+                              children: [
+                                const Spacer(),
+                                Text(
+                                  'Login',
+                                  style: AppTheme.headingThree
+                                      .copyWith(fontStyle: FontStyle.normal),
+                                ),
+                                const Gap(32.0),
+                                _buildAuthFields(),
+                                const Gap(60.0),
+                                _buildActionButton('Log In',
+                                    () => debugPrint('Login button pressed')),
+                                const Gap(16.0),
+                                _buildForgotPassword(),
+                                const Spacer(flex: 4),
+                                _buildRegisterText(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      if (!isAdmin) ...[
+                        _buildAuthFields(),
+                        const Gap(12.0),
+                        _buildForgotPassword(),
+                        const Gap(60.0),
+                        _buildActionButton(
+                          'Login',
+                          () {
+                            context.read<LoginBloc>()
+                              ..add(
+                                  LoginEvent.emailInput(_emailController.text))
+                              ..add(LoginEvent.passwordInput(
+                                  _passwordController.text));
+                          },
+                        ),
+                        const Gap(16.0),
+                        _buildRegisterText(),
+                      ],
+                    ],
+                  ),
+                );
+              },
+              loading: () {
+                return const Center(
+                  child: Text("Loading"),
+                );
+              },
+              success: (type) {
+                return const SizedBox.shrink();
+              },
+              error: (errorMessage) {
+                return Center(
+                  child: Text("Error : $errorMessage"),
+                );
+              },
+              emailChanged: (email) {
+                return Center(
+                  child: Text("Email $email"),
+                );
+              },
+              passwordChanged: (password) {
+                return Center(
+                  child: Text("Email $password"),
+                );
+              },
             );
           },
-        ),
+        )),
       ),
     );
   }

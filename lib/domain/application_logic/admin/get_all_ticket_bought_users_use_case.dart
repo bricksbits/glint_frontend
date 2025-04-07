@@ -1,0 +1,40 @@
+import 'dart:async';
+
+import 'package:glint_frontend/domain/business_logic/models/admin/event_interested_user_domain_model.dart';
+import 'package:glint_frontend/domain/business_logic/models/admin/event_ticket_bought_domain_model.dart';
+import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_repo.dart';
+import 'package:glint_frontend/utils/clean_arch_use_case.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
+
+class GetAllTicketBoughtUsersUseCase
+    extends UseCase<EventTicketBoughtDomainModel, int> {
+  final AdminDashboardRepo adminDashboardRepo;
+
+  GetAllTicketBoughtUsersUseCase(this.adminDashboardRepo);
+
+  @override
+  Future<Stream<EventTicketBoughtDomainModel?>> buildUseCaseStream(
+      int? params) async {
+    final StreamController<EventTicketBoughtDomainModel> controller =
+        StreamController();
+    try {
+      adminDashboardRepo.fetchBookedTicketList(params ?? 0).then((result) {
+        switch (result) {
+          case Success(data: var successResult):
+            controller.add(successResult);
+            controller.close();
+          case Failure(error: var error):
+            controller.addError(error);
+            controller.close();
+        }
+      }).catchError((caughtError) {
+        controller.addError(Exception(caughtError.toString()));
+        controller.close();
+      });
+    } catch (e) {
+      controller.addError(Exception(e.toString()));
+      controller.close();
+    }
+    return controller.stream;
+  }
+}

@@ -1,4 +1,4 @@
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class OnBoardingRepo {
   Future<Result<void>> setUpUser();

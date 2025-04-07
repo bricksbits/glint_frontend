@@ -4,7 +4,7 @@ import 'package:glint_frontend/data/remote/model/request/auth/login_request_body
 import 'package:glint_frontend/data/remote/model/response/auth/login_response.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -28,6 +28,7 @@ class SignInUserUseCase extends UseCase<Result<bool>, LoginRequestBody> {
             controller.close();
         }
       }).catchError((caughtError) {
+        print("SignInUsecase : $caughtError");
         controller.addError(Failure(Exception(caughtError.toString())));
         controller.close();
       });
