@@ -18,33 +18,45 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$LoginEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() started,
+    required TResult Function() login,
+    required TResult Function(String email) emailInput,
+    required TResult Function(String password) passwordInput,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? started,
+    TResult? Function()? login,
+    TResult? Function(String email)? emailInput,
+    TResult? Function(String password)? passwordInput,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? started,
+    TResult Function()? login,
+    TResult Function(String email)? emailInput,
+    TResult Function(String password)? passwordInput,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Started value) started,
+    required TResult Function(_Login value) login,
+    required TResult Function(_EmailInput value) emailInput,
+    required TResult Function(_PasswordInput value) passwordInput,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Started value)? started,
+    TResult? Function(_Login value)? login,
+    TResult? Function(_EmailInput value)? emailInput,
+    TResult? Function(_PasswordInput value)? passwordInput,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Started value)? started,
+    TResult Function(_Login value)? login,
+    TResult Function(_EmailInput value)? emailInput,
+    TResult Function(_PasswordInput value)? passwordInput,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -72,18 +84,18 @@ class _$LoginEventCopyWithImpl<$Res, $Val extends LoginEvent>
 }
 
 /// @nodoc
-abstract class _$$StartedImplCopyWith<$Res> {
-  factory _$$StartedImplCopyWith(
-          _$StartedImpl value, $Res Function(_$StartedImpl) then) =
-      __$$StartedImplCopyWithImpl<$Res>;
+abstract class _$$LoginImplCopyWith<$Res> {
+  factory _$$LoginImplCopyWith(
+          _$LoginImpl value, $Res Function(_$LoginImpl) then) =
+      __$$LoginImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$StartedImplCopyWithImpl<$Res>
-    extends _$LoginEventCopyWithImpl<$Res, _$StartedImpl>
-    implements _$$StartedImplCopyWith<$Res> {
-  __$$StartedImplCopyWithImpl(
-      _$StartedImpl _value, $Res Function(_$StartedImpl) _then)
+class __$$LoginImplCopyWithImpl<$Res>
+    extends _$LoginEventCopyWithImpl<$Res, _$LoginImpl>
+    implements _$$LoginImplCopyWith<$Res> {
+  __$$LoginImplCopyWithImpl(
+      _$LoginImpl _value, $Res Function(_$LoginImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of LoginEvent
@@ -92,18 +104,18 @@ class __$$StartedImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$StartedImpl implements _Started {
-  const _$StartedImpl();
+class _$LoginImpl implements _Login {
+  const _$LoginImpl();
 
   @override
   String toString() {
-    return 'LoginEvent.started()';
+    return 'LoginEvent.login()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$StartedImpl);
+        (other.runtimeType == runtimeType && other is _$LoginImpl);
   }
 
   @override
@@ -112,27 +124,33 @@ class _$StartedImpl implements _Started {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() started,
+    required TResult Function() login,
+    required TResult Function(String email) emailInput,
+    required TResult Function(String password) passwordInput,
   }) {
-    return started();
+    return login();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? started,
+    TResult? Function()? login,
+    TResult? Function(String email)? emailInput,
+    TResult? Function(String password)? passwordInput,
   }) {
-    return started?.call();
+    return login?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? started,
+    TResult Function()? login,
+    TResult Function(String email)? emailInput,
+    TResult Function(String password)? passwordInput,
     required TResult orElse(),
   }) {
-    if (started != null) {
-      return started();
+    if (login != null) {
+      return login();
     }
     return orElse();
   }
@@ -140,34 +158,333 @@ class _$StartedImpl implements _Started {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Started value) started,
+    required TResult Function(_Login value) login,
+    required TResult Function(_EmailInput value) emailInput,
+    required TResult Function(_PasswordInput value) passwordInput,
   }) {
-    return started(this);
+    return login(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Started value)? started,
+    TResult? Function(_Login value)? login,
+    TResult? Function(_EmailInput value)? emailInput,
+    TResult? Function(_PasswordInput value)? passwordInput,
   }) {
-    return started?.call(this);
+    return login?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Started value)? started,
+    TResult Function(_Login value)? login,
+    TResult Function(_EmailInput value)? emailInput,
+    TResult Function(_PasswordInput value)? passwordInput,
     required TResult orElse(),
   }) {
-    if (started != null) {
-      return started(this);
+    if (login != null) {
+      return login(this);
     }
     return orElse();
   }
 }
 
-abstract class _Started implements LoginEvent {
-  const factory _Started() = _$StartedImpl;
+abstract class _Login implements LoginEvent {
+  const factory _Login() = _$LoginImpl;
+}
+
+/// @nodoc
+abstract class _$$EmailInputImplCopyWith<$Res> {
+  factory _$$EmailInputImplCopyWith(
+          _$EmailInputImpl value, $Res Function(_$EmailInputImpl) then) =
+      __$$EmailInputImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String email});
+}
+
+/// @nodoc
+class __$$EmailInputImplCopyWithImpl<$Res>
+    extends _$LoginEventCopyWithImpl<$Res, _$EmailInputImpl>
+    implements _$$EmailInputImplCopyWith<$Res> {
+  __$$EmailInputImplCopyWithImpl(
+      _$EmailInputImpl _value, $Res Function(_$EmailInputImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of LoginEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? email = null,
+  }) {
+    return _then(_$EmailInputImpl(
+      null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$EmailInputImpl implements _EmailInput {
+  const _$EmailInputImpl(this.email);
+
+  @override
+  final String email;
+
+  @override
+  String toString() {
+    return 'LoginEvent.emailInput(email: $email)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$EmailInputImpl &&
+            (identical(other.email, email) || other.email == email));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, email);
+
+  /// Create a copy of LoginEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$EmailInputImplCopyWith<_$EmailInputImpl> get copyWith =>
+      __$$EmailInputImplCopyWithImpl<_$EmailInputImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() login,
+    required TResult Function(String email) emailInput,
+    required TResult Function(String password) passwordInput,
+  }) {
+    return emailInput(email);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? login,
+    TResult? Function(String email)? emailInput,
+    TResult? Function(String password)? passwordInput,
+  }) {
+    return emailInput?.call(email);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? login,
+    TResult Function(String email)? emailInput,
+    TResult Function(String password)? passwordInput,
+    required TResult orElse(),
+  }) {
+    if (emailInput != null) {
+      return emailInput(email);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Login value) login,
+    required TResult Function(_EmailInput value) emailInput,
+    required TResult Function(_PasswordInput value) passwordInput,
+  }) {
+    return emailInput(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Login value)? login,
+    TResult? Function(_EmailInput value)? emailInput,
+    TResult? Function(_PasswordInput value)? passwordInput,
+  }) {
+    return emailInput?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Login value)? login,
+    TResult Function(_EmailInput value)? emailInput,
+    TResult Function(_PasswordInput value)? passwordInput,
+    required TResult orElse(),
+  }) {
+    if (emailInput != null) {
+      return emailInput(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _EmailInput implements LoginEvent {
+  const factory _EmailInput(final String email) = _$EmailInputImpl;
+
+  String get email;
+
+  /// Create a copy of LoginEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$EmailInputImplCopyWith<_$EmailInputImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PasswordInputImplCopyWith<$Res> {
+  factory _$$PasswordInputImplCopyWith(
+          _$PasswordInputImpl value, $Res Function(_$PasswordInputImpl) then) =
+      __$$PasswordInputImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String password});
+}
+
+/// @nodoc
+class __$$PasswordInputImplCopyWithImpl<$Res>
+    extends _$LoginEventCopyWithImpl<$Res, _$PasswordInputImpl>
+    implements _$$PasswordInputImplCopyWith<$Res> {
+  __$$PasswordInputImplCopyWithImpl(
+      _$PasswordInputImpl _value, $Res Function(_$PasswordInputImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of LoginEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? password = null,
+  }) {
+    return _then(_$PasswordInputImpl(
+      null == password
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PasswordInputImpl implements _PasswordInput {
+  const _$PasswordInputImpl(this.password);
+
+  @override
+  final String password;
+
+  @override
+  String toString() {
+    return 'LoginEvent.passwordInput(password: $password)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PasswordInputImpl &&
+            (identical(other.password, password) ||
+                other.password == password));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, password);
+
+  /// Create a copy of LoginEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PasswordInputImplCopyWith<_$PasswordInputImpl> get copyWith =>
+      __$$PasswordInputImplCopyWithImpl<_$PasswordInputImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() login,
+    required TResult Function(String email) emailInput,
+    required TResult Function(String password) passwordInput,
+  }) {
+    return passwordInput(password);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? login,
+    TResult? Function(String email)? emailInput,
+    TResult? Function(String password)? passwordInput,
+  }) {
+    return passwordInput?.call(password);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? login,
+    TResult Function(String email)? emailInput,
+    TResult Function(String password)? passwordInput,
+    required TResult orElse(),
+  }) {
+    if (passwordInput != null) {
+      return passwordInput(password);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Login value) login,
+    required TResult Function(_EmailInput value) emailInput,
+    required TResult Function(_PasswordInput value) passwordInput,
+  }) {
+    return passwordInput(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Login value)? login,
+    TResult? Function(_EmailInput value)? emailInput,
+    TResult? Function(_PasswordInput value)? passwordInput,
+  }) {
+    return passwordInput?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Login value)? login,
+    TResult Function(_EmailInput value)? emailInput,
+    TResult Function(_PasswordInput value)? passwordInput,
+    required TResult orElse(),
+  }) {
+    if (passwordInput != null) {
+      return passwordInput(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _PasswordInput implements LoginEvent {
+  const factory _PasswordInput(final String password) = _$PasswordInputImpl;
+
+  String get password;
+
+  /// Create a copy of LoginEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PasswordInputImplCopyWith<_$PasswordInputImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -176,7 +493,7 @@ mixin _$LoginState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
@@ -186,7 +503,7 @@ mixin _$LoginState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
@@ -196,7 +513,7 @@ mixin _$LoginState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
@@ -300,7 +617,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
@@ -313,7 +630,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
@@ -326,7 +643,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
@@ -429,7 +746,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
@@ -442,7 +759,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
@@ -455,7 +772,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
@@ -520,6 +837,8 @@ abstract class _$$SuccessImplCopyWith<$Res> {
   factory _$$SuccessImplCopyWith(
           _$SuccessImpl value, $Res Function(_$SuccessImpl) then) =
       __$$SuccessImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({UsersType type});
 }
 
 /// @nodoc
@@ -532,38 +851,63 @@ class __$$SuccessImplCopyWithImpl<$Res>
 
   /// Create a copy of LoginState
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? type = null,
+  }) {
+    return _then(_$SuccessImpl(
+      null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as UsersType,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$SuccessImpl implements _Success {
-  const _$SuccessImpl();
+  const _$SuccessImpl(this.type);
+
+  @override
+  final UsersType type;
 
   @override
   String toString() {
-    return 'LoginState.success()';
+    return 'LoginState.success(type: $type)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$SuccessImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$SuccessImpl &&
+            (identical(other.type, type) || other.type == type));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, type);
+
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
+      __$$SuccessImplCopyWithImpl<_$SuccessImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
   }) {
-    return success();
+    return success(type);
   }
 
   @override
@@ -571,12 +915,12 @@ class _$SuccessImpl implements _Success {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
   }) {
-    return success?.call();
+    return success?.call(type);
   }
 
   @override
@@ -584,14 +928,14 @@ class _$SuccessImpl implements _Success {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
     required TResult orElse(),
   }) {
     if (success != null) {
-      return success();
+      return success(type);
     }
     return orElse();
   }
@@ -641,7 +985,15 @@ class _$SuccessImpl implements _Success {
 }
 
 abstract class _Success implements LoginState {
-  const factory _Success() = _$SuccessImpl;
+  const factory _Success(final UsersType type) = _$SuccessImpl;
+
+  UsersType get type;
+
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -714,7 +1066,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
@@ -727,7 +1079,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
@@ -740,7 +1092,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
@@ -878,7 +1230,7 @@ class _$EmailChangedImpl implements _EmailChanged {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
@@ -891,7 +1243,7 @@ class _$EmailChangedImpl implements _EmailChanged {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
@@ -904,7 +1256,7 @@ class _$EmailChangedImpl implements _EmailChanged {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,
@@ -1044,7 +1396,7 @@ class _$PasswordChangedImpl implements _PasswordChanged {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
@@ -1057,7 +1409,7 @@ class _$PasswordChangedImpl implements _PasswordChanged {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
@@ -1070,7 +1422,7 @@ class _$PasswordChangedImpl implements _PasswordChanged {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
     TResult Function(String password)? passwordChanged,

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/features/auth/blocs/login/login_bloc.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -33,12 +34,20 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
       body: BlocProvider<LoginBloc>(
         create: (context) => LoginBloc(),
-        child: BlocListener<LoginBloc, LoginState>(listener: (myContext, state) {
+        child:
+            BlocListener<LoginBloc, LoginState>(listener: (myContext, state) {
           state.when(
               initial: () {},
               loading: () {},
-              success: () {
-                myContext.go("/${GlintMainRoutes.home.name}");
+              success: (type) {
+                switch (type) {
+                  case UsersType.USER:
+                    myContext.go("/${GlintMainRoutes.home.name}");
+                  case UsersType.ADMIN:
+                    myContext.go("/${GlintMainRoutes.home.name}");
+                  case UsersType.SUPER_ADMIN:
+                    myContext.go("/${GlintMainRoutes.home.name}");
+                }
               },
               error: (error) {
                 ScaffoldMessenger.of(myContext).showSnackBar(
@@ -93,9 +102,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         const Gap(60.0),
                         _buildActionButton(
                           'Login',
-                          () => context
-                              .read<LoginBloc>()
-                              .add(const LoginEvent.started()),
+                          () {
+                            context.read<LoginBloc>()
+                              ..add(
+                                  LoginEvent.emailInput(_emailController.text))
+                              ..add(LoginEvent.passwordInput(
+                                  _passwordController.text));
+                          },
                         ),
                         const Gap(16.0),
                         _buildRegisterText(),
@@ -109,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text("Loading"),
                 );
               },
-              success: () {
+              success: (type) {
                 return const SizedBox.shrink();
               },
               error: (errorMessage) {
