@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class TicketsBoughtWidget extends StatelessWidget {
   const TicketsBoughtWidget({super.key});
@@ -80,6 +82,7 @@ class TicketsBoughtWidget extends StatelessWidget {
           InkWell(
             onTap: () {
               // todo = handle see all tickets bought tap
+              context.go("/${GlintAdminDasboardRoutes.interestedUsers.name}");
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

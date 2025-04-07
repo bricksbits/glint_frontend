@@ -72,8 +72,9 @@ class _IdentifyYourselfOnboardingScreenState
                 backgroundColor: AppColours.primaryBlue,
                 onPressed: selectedIdentity != null
                     ? () {
-                        context
-                            .goNamed(GlintProfileRoutes.interestedGender.name);
+                        final base = GlintMainRoutes.onBoarding.name;
+                        final target = GlintBoardingRoutes.interestedGender.name;
+                        context.go("/$base/$target");
                       }
                     : null,
               ),

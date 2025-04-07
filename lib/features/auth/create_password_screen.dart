@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class CreatePasswordScreen extends StatefulWidget {
   const CreatePasswordScreen({super.key});
@@ -105,7 +107,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                   color: AppColours.white,
                 ),
                 onPressed: () {
-                  // TODO - add login (create password) functionality
+                  context.go("/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.passwordSuccess.name}");
                   debugPrint('login (create password) button pressed');
                 },
               ),

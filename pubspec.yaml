@@ -42,6 +42,7 @@ dependencies:
   flutter_bloc: ^9.0.0
   freezed_annotation: ^2.4.4
   crypto: ^3.0.6
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +50,7 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   build_runner: ^2.4.13
   injectable_generator: ^2.6.2
+  flutter_launcher_icons: ^0.14.3
   freezed: ^2.5.7
 
 flutter:
@@ -63,6 +65,7 @@ flutter:
     - lib/assets/images/event/
     - lib/assets/images/auth/
     - lib/assets/images/admin/
+    - lib/assets/animation/
 
   fonts:
     - family: AlbertSans
@@ -77,3 +80,9 @@ flutter:
           weight: 700
         - asset: lib/assets/fonts/Cambon-BoldItalic.ttf
           weight: 700
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/assets/icons/glint-app-icon.png"
+  min_sdk_android: 21

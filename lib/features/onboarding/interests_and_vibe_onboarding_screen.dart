@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class InterestsAndVibeOnboardingScreen extends StatefulWidget {
   const InterestsAndVibeOnboardingScreen({super.key});
@@ -61,6 +63,9 @@ class _InterestsAndVibeOnboardingScreenState
                             backgroundColor: AppColours.primaryBlue,
                             onPressed: () {
                               // Handle button press
+                              final base = GlintMainRoutes.onBoarding.name;
+                              final target = GlintBoardingRoutes.bio.name;
+                              context.go("/$base/$target");
                             },
                           ),
                         ),
