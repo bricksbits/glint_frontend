@@ -19,24 +19,6 @@ class MyGlintApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
       routerConfig: !kIsWeb ? glintAdminRoutes : glintMainRoutes,
-      // home: StreamChannel(
-      //   channel: channel,
-      //   child: const ChatScreen(),
-      // ),
-      // builder: (context, widget) {
-      //   return StreamChat(
-      //     client: client,
-      //     child: widget,
-      //   );
-      // },
-      // home: Scaffold(
-      //   body: Center(
-      //     child: EventTicketView(
-      //       eventName: 'This is a Event Name',
-      //       onDowloadTicket: () {},
-      //     ),
-      //   ),
-      // ),
     );
   }
 }

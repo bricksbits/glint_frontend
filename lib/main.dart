@@ -21,9 +21,9 @@ Future<void> main() async{
   await channel.watch();
 
   runApp(
-    const MyGlintApp(
-      // client: client,
-      // channel: channel,
+    MyGlintApp(
+      client: client,
+      channel: channel,
     ),
   );
 }
