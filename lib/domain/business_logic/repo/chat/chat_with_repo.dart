@@ -1,13 +1,13 @@
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class ChatWithRepo {
-  Future<NetworkResponse<void>> sendTextMessage();
+  Future<Result<void>> sendTextMessage();
 
-  Future<NetworkResponse<void>> sendOneTimeImageMessage();
+  Future<Result<void>> sendOneTimeImageMessage();
 
-  Future<NetworkResponse<void>> generateAiMessage();
+  Future<Result<void>> generateAiMessage();
 
-  Future<NetworkResponse<void>> reactToMessage();
+  Future<Result<void>> reactToMessage();
 
-  Future<NetworkResponse<void>> bookTicket();
+  Future<Result<void>> bookTicket();
 }

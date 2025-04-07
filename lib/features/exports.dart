@@ -1,4 +1,4 @@
-export 'admin/exports.dart';
+export 'admin/screen/exports.dart';
 export 'application/my_glint_app.dart';
 export 'auth/exports.dart';
 export 'event/exports.dart';

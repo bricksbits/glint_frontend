@@ -1,9 +1,9 @@
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class NotificationRepo {
-  Future<NetworkResponse<void>> getLatestNotifications();
+  Future<Result<void>> getLatestNotifications();
 
-  Future<NetworkResponse<void>> getAllNotifications();
+  Future<Result<void>> getAllNotifications();
 
-  Future<NetworkResponse<void>> deleteOldNotifications();
+  Future<Result<void>> deleteOldNotifications();
 }
