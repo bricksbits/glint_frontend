@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
 class EnterOtpScreen extends StatefulWidget {
@@ -105,7 +107,8 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
                 onPressed: buttonDisabled
                     ? null
                     : () {
-                        // TODO - add confirm otp functionality
+                        context.go(
+                            "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.recreatePassword.name}");
                         debugPrint('confirm otp button pressed');
                       },
               ),

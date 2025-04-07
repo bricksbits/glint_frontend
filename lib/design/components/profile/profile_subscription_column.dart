@@ -14,16 +14,19 @@ class ProfileSubscriptionColumn extends StatelessWidget {
       children: [
         // Displays the remaining features count
         const Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: const FeaturesLeftCountContainer(),
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: FeaturesLeftCountContainer(),
         ),
 
         // Carousel for subscription cards
-        Expanded(
+        SizedBox(
+          height: 280.0,
+          width: double.infinity,
           child: CarouselSlider(
             items: [
               // Platinum card
               _buildSubscriptionCard(
+                context: context,
                 onTap: () {
                   debugPrint('Platinum card tapped');
                 },
@@ -51,6 +54,7 @@ class ProfileSubscriptionColumn extends StatelessWidget {
 
               // Gold card
               _buildSubscriptionCard(
+                context: context,
                 onTap: () {
                   debugPrint('Gold card tapped');
                 },
@@ -90,6 +94,7 @@ class ProfileSubscriptionColumn extends StatelessWidget {
 
   // subscription card widget
   Widget _buildSubscriptionCard({
+    required BuildContext context,
     required String title,
     required String logoPath,
     required List<String> leftFeatures,
@@ -100,6 +105,8 @@ class ProfileSubscriptionColumn extends StatelessWidget {
     required bool isGoldPlan,
     required VoidCallback? onTap,
   }) {
+    final screenSize = MediaQuery.of(context).size;
+    final isSmallScreen = screenSize.width < 400;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 18.0),
       child: Container(
@@ -144,7 +151,8 @@ class ProfileSubscriptionColumn extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: leftFeatures
                         .map(
-                          (feature) => _buildTickLabel(feature, isGoldPlan),
+                          (feature) => _buildTickLabel(
+                              feature, isGoldPlan, isSmallScreen),
                         )
                         .toList(),
                   ),
@@ -155,7 +163,11 @@ class ProfileSubscriptionColumn extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: rightFeatures
                         .map(
-                          (feature) => _buildTickLabel(feature, isGoldPlan),
+                          (feature) => _buildTickLabel(
+                            feature,
+                            isGoldPlan,
+                            isSmallScreen,
+                          ),
                         )
                         .toList(),
                   ),
@@ -207,22 +219,25 @@ class ProfileSubscriptionColumn extends StatelessWidget {
   }
 
   // feature tick label
-  Widget _buildTickLabel(String text, bool isGoldPlan) {
+  Widget _buildTickLabel(String text, bool isGoldPlan, bool isSmallScreen) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
           Icons.check,
           color: isGoldPlan ? const Color(0xFFEAA74A) : AppColours.white,
-          size: 18,
+          size: isSmallScreen ? 16.0 : 18.0,
         ),
         const Gap(4.0),
-        Text(
-          text,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: isGoldPlan ? AppColours.black : AppColours.white,
-            fontSize: 14,
+        Expanded(
+          child: Text(
+            text,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              overflow: TextOverflow.ellipsis,
+              color: isGoldPlan ? AppColours.black : AppColours.white,
+              fontSize: isSmallScreen ? 12.0 : 14.0,
+            ),
           ),
         ),
       ],

@@ -91,9 +91,9 @@ class _UploadPhotosOnboardingScreenState
                   foregroundColor: Colors.white,
                   backgroundColor: AppColours.primaryBlue,
                   onPressed: () {
-                    context.goNamed(
-                      GlintProfileRoutes.pronouns.name
-                    );
+                    final base = GlintMainRoutes.onBoarding.name;
+                    final target = GlintBoardingRoutes.pronouns.name;
+                    context.go("/$base/$target");
                   },
                 ),
               ),

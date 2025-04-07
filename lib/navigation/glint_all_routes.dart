@@ -1,5 +1,7 @@
 enum GlintMainRoutes {
+  splash,
   auth,
+  onBoarding,
   home,
   chat,
   service,
@@ -15,6 +17,14 @@ enum GlintMainRoutes {
   history,
 }
 
+enum GlintAuthRoutes {
+  register,
+  resetPassword,
+  otp,
+  recreatePassword,
+  passwordSuccess
+}
+
 enum GlintChatRoutes {
   chatWith,
   videoCall,
@@ -27,12 +37,15 @@ enum GlintEventRoutes {
   explore,
 }
 
-//Todo(Nike): Divide this into onBoarding and Profile Screens
 enum GlintProfileRoutes {
   profilePreview,
-  ticketHistory,
-  transactionHistory,
   editProfile,
+  ticketHistory,
+  subscription,
+  settings,
+}
+
+enum GlintBoardingRoutes {
   name,
   dob,
   gender,
@@ -41,4 +54,17 @@ enum GlintProfileRoutes {
   pronouns,
   interests,
   bio,
+}
+
+enum GlintAdminDasboardRoutes {
+  splash,
+  auth,
+  home,
+  createEvent,
+  previewEvent,
+  trackEvent,
+  liveEvent,
+  interestedUsers,
+  ticketBought,
+  profile,
 }

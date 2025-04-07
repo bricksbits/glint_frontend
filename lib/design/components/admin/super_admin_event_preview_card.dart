@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/admin/exports.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
+import 'package:glint_frontend/features/admin/screen/exports.dart';
 
 class SuperAdminEventPreviewCard extends StatelessWidget {
   const SuperAdminEventPreviewCard({
@@ -90,7 +92,9 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: IconButton(
                     onPressed: () {
-                      // todo - redirect to specific event screen
+                      context.go(
+                        "/${GlintAdminDasboardRoutes.trackEvent.name}"
+                      );
                     },
                     icon: const Icon(
                       Icons.arrow_forward_ios,

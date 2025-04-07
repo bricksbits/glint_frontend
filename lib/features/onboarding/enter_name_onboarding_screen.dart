@@ -138,9 +138,9 @@ class _EnterNameOnboardingScreenState extends State<EnterNameOnboardingScreen> {
                   backgroundColor: AppColours.primaryBlue,
                   onPressed: _allowSubmit
                       ? () {
-                          context.goNamed(
-                            GlintProfileRoutes.dob.name
-                          );
+                          final base = GlintMainRoutes.onBoarding.name;
+                          final target = GlintBoardingRoutes.dob.name;
+                          context.go("/$base/$target");
                         }
                       : null),
             ),

@@ -1,9 +1,9 @@
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class LikesDataRepo {
-  Future<NetworkResponse<void>> getUserProfileViews();
+  Future<Result<void>> getUserProfileViews();
 
-  Future<NetworkResponse<void>> getTopProfiles();
+  Future<Result<void>> getTopProfiles();
 
-  Future<NetworkResponse<void>> getLikedProfiles();
+  Future<Result<void>> getLikedProfiles();
 }

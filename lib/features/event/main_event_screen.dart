@@ -99,10 +99,13 @@ class _MainEventScreenState extends State<MainEventScreen> {
         const Gap(16.0),
         const Column(
           children: [
-            HotEvent(),
+            HotEvent(
+              eventId: 1,
+            ),
             Gap(16.0),
             HotEvent(
               showDiscount: false,
+              eventId: 2,
             ),
           ],
         )

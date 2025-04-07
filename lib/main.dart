@@ -4,6 +4,7 @@ import 'package:glint_frontend/features/exports.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
   final client = StreamChatClient(
     'b67pax5b2wdq',

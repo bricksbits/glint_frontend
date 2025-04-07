@@ -5,21 +5,23 @@ import 'package:glint_frontend/design/exports.dart';
 class GlintEmojiSelectionChip extends StatelessWidget {
   final String label;
   final String? icon;
-  final bool isSelected;
-  final VoidCallback onTap;
+  final bool? isSelected;
+  final VoidCallback? onTap;
 
   const GlintEmojiSelectionChip({
     super.key,
     required this.label,
     this.icon,
-    required this.isSelected,
-    required this.onTap,
+    this.isSelected,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final defaultBorder = BorderSide(
-      color: isSelected ? AppColours.primaryBlue : AppColours.lightGray,
+      color: isSelected == true
+          ? AppColours.primaryBlue
+          : AppColours.backgroundShade,
       width: 1.0,
     );
     return InkWell(
@@ -33,7 +35,9 @@ class GlintEmojiSelectionChip extends StatelessWidget {
           vertical: 10.0,
         ),
         decoration: BoxDecoration(
-          color: isSelected ? AppColours.chipBackgroundShade : AppColours.white,
+          color: isSelected == true
+              ? AppColours.chipBackgroundShade
+              : AppColours.white,
           borderRadius: BorderRadius.circular(
             50.0,
           ),

@@ -71,9 +71,9 @@ class _OnboardingScreenState extends State<WhoCatchesYourEyeOnboardingScreen> {
                 backgroundColor: AppColours.primaryBlue,
                 onPressed: selectedGender != null
                     ? () {
-                        context.goNamed(
-                          GlintProfileRoutes.media.name
-                        );
+                        final base = GlintMainRoutes.onBoarding.name;
+                        final target = GlintBoardingRoutes.media.name;
+                        context.go("/$base/$target");
                       }
                     : null,
               ),

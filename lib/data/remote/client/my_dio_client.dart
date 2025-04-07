@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/glint_api_constants.dart';
+import 'package:glint_frontend/data/remote/utils/network_response_handler.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -9,52 +12,64 @@ class MyDioClient {
   MyDioClient.test(this.dioHttpClient);
 
   MyDioClient(this.dioHttpClient) {
-    dioHttpClient
-      ..options.connectTimeout = const Duration(
-        milliseconds: GlintApiConstants.apiTimeOut,
-      )
-      ..options.receiveTimeout = const Duration(
-        milliseconds: GlintApiConstants.apiReceiveTimeOut,
-      )
-      ..interceptors.add(
-        LogInterceptor(
-          request: true,
-          requestHeader: true,
-          requestBody: true,
-          responseHeader: true,
-          responseBody: true,
-        ),
-      );
+    dioHttpClient.interceptors.add(
+      LogInterceptor(
+        request: true,
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: true,
+        responseBody: true,
+      ),
+    );
   }
 
-  Future<Response<dynamic>?> getRequest(
-    String url,
+  Future<Result<dynamic>> getRequest({
+    required String endpoint,
     Map<String, dynamic>? queryParameters,
-    CancelToken? cancelToken,
     String? accessToken,
-  ) async {
+    // CancelToken? cancelToken,
+  }) async {
     try {
-      dioHttpClient.options.headers['Authorization'] = 'Bearer $accessToken';
-      final response =
-          await dioHttpClient.get(url, queryParameters: queryParameters);
-      return response;
-    } on DioException catch (someException) {
-      print(
-          '[API Helper - GET] Connection Exception => ${someException.message}');
-      return null;
+      dioHttpClient.options.headers['Auth'] = accessToken;
+      final response = await dioHttpClient.get(
+        endpoint,
+        queryParameters: queryParameters,
+      );
+      return networkResponseHandler(response);
+    } on Exception catch (exception) {
+      return Failure(exception);
     }
   }
 
-  Future<Response<dynamic>?> postRequest(String url, dynamic body) async {
+  Future<Result<dynamic>> postRequest({
+    required String endpoint,
+    required dynamic body,
+    required String? accessToken,
+  }) async {
+    if (accessToken != null) {
+      dioHttpClient.options.headers['Auth'] = accessToken;
+    }
     try {
-      dioHttpClient.options.headers['Content-Type'] =
-          'application/x-www-form-urlencoded';
-      final postResponse = await dioHttpClient.post(url, data: body);
-      print("Status Code -> ${postResponse.statusCode}");
-      return postResponse;
-    } on DioException catch (exception) {
-      print('[API Helper - POST] Connection Exception => ${exception.message}');
-      return null;
+      final postResponse = await dioHttpClient.post(endpoint, data: body);
+      return networkResponseHandler(postResponse);
+    } on Exception catch (exception) {
+      return Failure(exception);
+    }
+  }
+
+  Future<Result<dynamic>> putRequest({
+    required String endpoint,
+    required dynamic body,
+    required String? accessToken,
+  }) async {
+    if (accessToken != null) {
+      dioHttpClient.options.headers['Auth'] = accessToken;
+    }
+    try {
+      final postResponse = await dioHttpClient.put(endpoint, data: body);
+      return networkResponseHandler(postResponse);
+    } on Exception catch (exception) {
+      return Failure(exception);
     }
   }
 }

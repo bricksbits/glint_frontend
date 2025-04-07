@@ -1,55 +1,82 @@
-import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:dio/dio.dart';
 import 'package:encrypt_shared_preferences/provider.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
+import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/data/remote/model/request/auth/refresh_token_body_request.dart';
+import 'package:glint_frontend/data/remote/model/response/auth/refresh_auth_token_response.dart';
+import 'package:glint_frontend/data/remote/utils/network_response_handler.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class AccessTokenHelper {
-  late EncryptedSharedPreferencesAsync sharedPreferences;
+  AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
+  MyDioClient httpClient;
 
-  AccessTokenHelper() {
-    setupSharedPref();
-  }
+  AccessTokenHelper(
+    this.sharedPreferenceHelper,
+    this.httpClient,
+  );
 
-  Future<void> setupSharedPref() async {
-    const key = "";
-    await EncryptedSharedPreferencesAsync.initialize(key);
-    sharedPreferences = EncryptedSharedPreferencesAsync.getInstance();
-  }
-
-  // Method to check if Token is Valid or not.
   Future<bool> isTokenValid() async {
-    final lastUpdatedTime = await sharedPreferences.getInt("") ?? 0;
-    return lastUpdatedTime > DateTime.now().microsecondsSinceEpoch;
+    final inBoundTime = await sharedPreferenceHelper
+        .getInt(SharedPreferenceKeys.lastSavedTimeKey);
+    final currentTime = DateTime.now().microsecondsSinceEpoch;
+    final accessToken = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.accessTokenKey);
+
+    if (accessToken == null || accessToken.isEmpty) {
+      return false;
+    }
+
+    if (inBoundTime >= currentTime) {
+      return true;
+    }
+
+    return false;
   }
 
-  Future<void> updateRefreshToken(
-    MyDioClient httpClient,
-  ) async {
-    // final requestBody = SpotifyAccessTokenRequestModel(
-    //   grantType: grant_type,
-    //   clientId: client_id,
-    //   clientSecret: client_secret,
-    // );
-    //
-    // final accessTokenResponse = await httpClient.postRequest(
-    //     SPOTIFY_ACCESS_TOKEN_ENDPOINT, requestBody.toJson());
-    //
-    // if (accessTokenResponse?.statusCode == 200) {
-    //   final accessTokenResponseModel =
-    //       SpotifyAccessTokenDataModel.fromJson(accessTokenResponse?.data);
-    //
-    //   final accessToken =
-    //       accessTokenResponseModel.accessToken ?? "empty_access_token";
-    //
-    //   // Saving the time Token received and added 3500 millisecond buffer
-    //   // as per the Spotify Docs.
-    //
-    //   final expireTimePeriod = DateTime.now()
-    //       .add(const Duration(minutes: 55))
-    //       .microsecondsSinceEpoch;
-    //   await sharedPreferences.setInt(
-    //       LAST_SAVED_TIME_IN_MS_KEY, expireTimePeriod);
-    //
-    //   // Saving the new access token
-    //   await sharedPreferences.setString(SPOTIFY_ACCESS_TOKEN_KEY, accessToken);
-    // }
+  Future<void> updateRefreshToken() async {
+    final getRefreshToken =
+        await sharedPreferenceHelper.getString("refreshToken");
+
+    if(getRefreshToken.isEmpty){
+      return;
+    }
+
+    final requestBody = RefreshTokenBodyRequest(refreshToken: getRefreshToken);
+
+    final response = await httpClient.postRequest(
+      endpoint: "/refresh",
+      body: requestBody.toJson(),
+      accessToken: null,
+    );
+
+    switch (response) {
+      case Success():
+        final successResponse =
+            RefreshAuthTokenResponse.fromJson(response.data);
+
+        //Todo: Make better time control here.
+        final epochWithBuffer = DateTime.now()
+            .add(const Duration(minutes: 55))
+            .microsecondsSinceEpoch;
+
+        await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.accessTokenKey,
+            successResponse.accessToken ?? "");
+
+        await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.refreshTokenKey,
+            successResponse.refreshToken ?? "");
+
+        await sharedPreferenceHelper.saveInt(
+            SharedPreferenceKeys.lastSavedTimeKey, epochWithBuffer);
+
+      case Failure():
+        print("Something Went Wrong");
+        throw Exception(response.error);
+    }
   }
 }

@@ -1,13 +1,13 @@
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class EventRepo {
-  Future<NetworkResponse<void>> getAllEvents();
+  Future<Result<void>> getAllEvents();
 
-  Future<NetworkResponse<void>> getEventDetails();
+  Future<Result<void>> getEventDetails(int? eventId);
 
-  Future<NetworkResponse<void>> userInterested();
+  Future<Result<void>> userInterested(int? eventId);
 
-  Future<NetworkResponse<void>> fetchInterestedProfiles();
+  Future<Result<void>> fetchInterestedProfiles(int? eventId);
 
-  Future<NetworkResponse<void>> filterEvents();
+  Future<Result<void>> filterEvents();
 }

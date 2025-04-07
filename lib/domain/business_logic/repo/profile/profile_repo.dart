@@ -1,17 +1,17 @@
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class ProfileRepo {
-  Future<NetworkResponse<void>> fetchUserProfile();
+  Future<Result<void>> fetchUserProfile();
 
-  Future<NetworkResponse<void>> fetchPaymentHistory();
+  Future<Result<void>> fetchPaymentHistory();
 
-  Future<NetworkResponse<void>> fetchTicketHistory();
+  Future<Result<void>> fetchTicketHistory();
 
-  Future<NetworkResponse<void>> buySubscription();
+  Future<Result<void>> buySubscription();
 
-  Future<NetworkResponse<void>> updateProfileData();
+  Future<Result<void>> updateProfileData();
 
-  Future<NetworkResponse<void>> updateMedia();
+  Future<Result<void>> updateMedia();
 
-  Future<NetworkResponse<void>> verifyUser();
+  Future<Result<void>> verifyUser();
 }

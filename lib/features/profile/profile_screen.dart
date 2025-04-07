@@ -8,18 +8,14 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: AppColours.white,
-      body: Center(
-        child: Column(
-          children: [
-            //profile info
-            Expanded(
-              child: ProfileInfoColumn(),
-            ),
-            // subscription cards
-            Expanded(
-              child: ProfileSubscriptionColumn(),
-            ),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ProfileInfoColumn(),
+              ProfileSubscriptionColumn(),
+            ],
+          ),
         ),
       ),
     );

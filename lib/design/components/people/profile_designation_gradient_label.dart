@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:glint_frontend/design/exports.dart';
 
 class ProfileDesignationGradientLabel extends StatelessWidget {
   final String text;
@@ -10,20 +13,27 @@ class ProfileDesignationGradientLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        gradient: const RadialGradient(
-          radius: 2.5,
-          colors: [Colors.white, Colors.black12],
-        ),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: Container(
+          height: 38.0,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12.0,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.black.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Center(
+            child: Text(
+              'Graphic Designer',
+              style: AppTheme.simpleText.copyWith(
+                color: AppColours.white,
+              ),
+            ),
+          ),
         ),
       ),
     );

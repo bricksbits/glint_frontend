@@ -1,11 +1,11 @@
-import 'package:glint_frontend/utils/network_response.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class OnBoardingRepo {
-  Future<NetworkResponse<void>> setUpUser();
+  Future<Result<void>> setUpUser();
 
-  Future<NetworkResponse<void>> uploadMedia();
+  Future<Result<void>> uploadMedia();
 
-  Future<NetworkResponse<void>> getLastUpdateState();
+  Future<Result<void>> getLastUpdateState();
 
-  Future<NetworkResponse<void>> updateLocation();
+  Future<Result<void>> updateLocation();
 }

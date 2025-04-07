@@ -1,35 +1,59 @@
 import 'package:encrypt_shared_preferences/provider.dart';
-import 'package:glint_frontend/data/remote/utils/api_response.dart';
+import 'package:get_it/get_it.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 import '../utils/access_token_helper.dart';
 import '../utils/network_response_handler.dart';
 
-Future<ApiResponse<dynamic>> safeApiCallHandler(
-  MyDioClient httpClient,
-  HttpRequestEnum requestType,
-  String url,
-  EncryptedSharedPreferencesAsync sharedPreference,
+Future<Result<dynamic>> safeApiCallHandler({
+  required MyDioClient httpClient,
+  required HttpRequestEnum requestType,
+  required AsyncEncryptedSharedPreferenceHelper sharedPrefHelper,
+  required String endpoint,
   dynamic requestBody,
-) async {
-  // Checks if the Access Token is Valid or not.
-  // IF Not valid, we make another API call to update the Refresh Token.
-  final isValidToken = await AccessTokenHelper().isTokenValid();
+  Map<String, dynamic>? passedQueryParameters,
+}) async {
+  /**
+   *  Checks if the Access Token is Valid or not.
+   *  IF Not valid, we make another API call to update the Auth Token.
+   *  By using the Refresh Token
+   */
+  final accessTokenHelper = GetIt.instance.get<AccessTokenHelper>();
+
+  final isValidToken = await accessTokenHelper.isTokenValid();
 
   if (!isValidToken) {
-    await AccessTokenHelper().updateRefreshToken(httpClient);
+    await accessTokenHelper.updateRefreshToken();
   }
 
-  /// Get Request needed access_token for each Request
+  final accessToken =
+      await sharedPrefHelper.getString(SharedPreferenceKeys.accessTokenKey);
+
   switch (requestType) {
     case HttpRequestEnum.GET:
-      final accessToken = sharedPreference.getString("");
-      final response =
-          await httpClient.getRequest(url, null, null, "accessToken");
-      return networkResponseHandler(response);
+      final result = httpClient.getRequest(
+        endpoint: endpoint,
+        queryParameters: passedQueryParameters,
+        accessToken: accessToken,
+      );
+      return result;
     case HttpRequestEnum.POST:
-      final response = await httpClient.postRequest(url, requestBody);
-      return networkResponseHandler(response);
+      final result = httpClient.postRequest(
+        endpoint: endpoint,
+        body: requestBody,
+        accessToken: accessToken,
+      );
+      return result;
+    case HttpRequestEnum.PUT:
+      final result = httpClient.putRequest(
+        endpoint: endpoint,
+        body: requestBody,
+        accessToken: accessToken,
+      );
+      return result;
   }
 }
