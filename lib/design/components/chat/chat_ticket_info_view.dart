@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/components/chat/common_ticket_banner.dart';
 import 'package:glint_frontend/design/components/chat/ticket_details_component.dart';
@@ -11,10 +12,10 @@ class ChatTicketInfoView extends StatelessWidget {
     return SingleChildScrollView(
       child: Card(
         shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.white70, width: 1),
-          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: Colors.white70, width: 1.0),
+          borderRadius: BorderRadius.circular(20.0),
         ),
-        margin: const EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -22,7 +23,8 @@ class ChatTicketInfoView extends StatelessWidget {
           children: [
             // Event Image
             CommonTicketBanner(
-              bannerImagerUrl: "",
+              bannerImagerUrl:
+                  'lib/assets/images/chat/chat_ticket_info_pace_holder.png',
               onInfoClicked: () {},
               onClosedClicked: () {},
             ),
@@ -39,19 +41,23 @@ class ChatTicketInfoView extends StatelessWidget {
             // Divider
             // Payment Options
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 25),
+              padding: const EdgeInsets.symmetric(vertical: 25.0),
               child: CircleAvatar(
-                radius: 30,
+                radius: 30.0,
                 backgroundColor: Colors.purple.shade100,
-                child: const Icon(Icons.movie, color: Colors.purple, size: 30),
+                child: const Icon(
+                  Icons.movie,
+                  color: Colors.purple,
+                  size: 30.0,
+                ),
               ),
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 24),
+              padding: EdgeInsets.symmetric(vertical: 24.0),
               child: Text(
                 'Choose your ticket payment option',
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                     fontFamily: "AlbertSans"),
               ),
@@ -69,12 +75,16 @@ class ChatTicketInfoView extends StatelessWidget {
                   onPressed: () {},
                   child: const Padding(
                     padding: EdgeInsets.only(
-                        top: 14, right: 50, bottom: 14, left: 50),
+                      top: 14.0,
+                      right: 50.0,
+                      bottom: 14.0,
+                      left: 50.0,
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.payment, color: Colors.white),
-                        SizedBox(width: 8),
+                        Gap(12.0),
                         Text(
                           'Pay for Both',
                           textAlign: TextAlign.center,
@@ -90,7 +100,7 @@ class ChatTicketInfoView extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const Gap(16.0),
             IntrinsicWidth(
               child: IntrinsicHeight(
                 child: ElevatedButton(
@@ -103,15 +113,19 @@ class ChatTicketInfoView extends StatelessWidget {
                   onPressed: () {},
                   child: const Padding(
                     padding: EdgeInsets.only(
-                        top: 14, right: 50, bottom: 14, left: 50),
+                      top: 14.0,
+                      right: 50.0,
+                      bottom: 14.0,
+                      left: 50.0,
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.group, color: Colors.white),
-                        SizedBox(width: 8),
+                        Gap(12.0),
                         Text(
                           'Split Payment',
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
                               fontFamily: 'Cambon',
@@ -123,9 +137,9 @@ class ChatTicketInfoView extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 48),
+            const Gap(48.0),
             const Padding(
-              padding: EdgeInsets.only(bottom: 24),
+              padding: EdgeInsets.only(bottom: 24.0),
               child: Text(
                 'Note: Tickets will be sent to the person who makes the payment.',
                 style: TextStyle(

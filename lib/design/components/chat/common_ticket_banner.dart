@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:glint_frontend/design/exports.dart';
 
 //Todo: Change the Network Image URL
 //Todo: Add Error Builders
@@ -24,10 +26,11 @@ class CommonTicketBanner extends StatelessWidget {
         children: [
           Container(
             height: 108,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(
-                    'lib/assets/images/chat/chat_ticket_info_pace_holder.png'),
+                image: AssetImage(
+                  bannerImagerUrl,
+                ),
                 // Replace with event image
                 fit: BoxFit.cover,
               ),
@@ -39,12 +42,26 @@ class CommonTicketBanner extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                icon: const Icon(Icons.info, color: Colors.black),
-                onPressed: () {},
+                icon: SvgPicture.asset(
+                  'lib/assets/icons/info_icon.svg',
+                ),
+                onPressed: () {
+                  // todo - add event info popup
+                },
               ),
               IconButton(
-                icon: const Icon(Icons.close, color: Colors.black),
-                onPressed: () {},
+                icon: const CircleAvatar(
+                  radius: 10.0,
+                  backgroundColor: AppColours.white,
+                  child: Icon(
+                    Icons.close,
+                    size: 14.0,
+                    color: Colors.black,
+                  ),
+                ),
+                onPressed: () {
+                  // todo - close ticket popup
+                },
               )
             ],
           ),
