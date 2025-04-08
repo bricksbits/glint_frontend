@@ -1,3 +1,4 @@
+import 'package:glint_frontend/demo_screen.dart';
 import 'package:glint_frontend/features/chat/chat_event_tickets_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
@@ -27,7 +28,6 @@ import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/navigation/glint_authentication_routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../demo_screen.dart';
 import '../features/auth/authentication_screen.dart';
 import '../features/chat/chat_screen.dart';
 import '../features/home/home_screen.dart';
