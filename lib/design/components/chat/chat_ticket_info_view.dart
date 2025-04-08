@@ -36,7 +36,7 @@ class ChatTicketInfoView extends StatelessWidget {
               eventLocation: "Near Raipur Chai Stall",
               eventInitialPrice: "400",
               eventFinalPrice: "200",
-              dayLeftForEvent: "21 days left",
+              dayLeftForEvent: "21",
             ),
             // Divider
             // Payment Options
