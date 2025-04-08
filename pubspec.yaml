@@ -58,6 +58,7 @@ flutter:
   generate: true
   assets:
     - lib/assets/images/
+    - lib/assets/images/chat/
     - lib/assets/icons/
     - lib/assets/images/onboarding/
     - lib/assets/icons/profile/

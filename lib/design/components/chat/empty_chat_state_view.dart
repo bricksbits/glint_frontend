@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:glint_frontend/design/components/chat/people_venn_view.dart';
+import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/exports.dart';
 
 class EmptyChatStateView extends StatelessWidget {
   final bool isEventMatch;
@@ -19,70 +19,104 @@ class EmptyChatStateView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // Ensures it wraps its content
+        mainAxisSize: MainAxisSize.min,
         children: [
           Stack(
-            clipBehavior: Clip.none, // Allows images to overlap
+            clipBehavior: Clip.none,
             children: [
-              // 🔹 Background Card with Image & Text
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                child: Image.asset(
-                  'lib/assets/images/event/movie_card_illustration.png',
-                  height: 220,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
+              // background image
+              Container(
+                height: 200.0,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColours.backgroundShade,
+                  borderRadius: BorderRadius.vertical(
+                    top: const Radius.circular(20.0),
+                    bottom: isEventMatch == false
+                        ? Radius.zero
+                        : const Radius.circular(20.0),
+                  ),
+                  image: const DecorationImage(
+                    image: AssetImage(
+                      'lib/assets/images/chat/empty_chat_container_illustration.png',
+                    ),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
+
+              // text
               Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 80),
-                    const Text("Got an Event match with", style: TextStyle(fontSize: 16)),
-                    const Text("Gajgamini", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 36),
-                    const Text("Wait for Gajgamini to message you!", style: TextStyle(fontSize: 14)),
+                    const Gap(80.0),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: AppTheme.headingFour.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: AppColours.black,
+                          fontStyle: FontStyle.normal,
+                        ),
+                        children: [
+                          TextSpan(
+                              text: isEventMatch
+                                  ? 'Got an Event match\nwith '
+                                  : 'You have got a\nmatch with '),
+                          TextSpan(
+                            text: matchUserName,
+                            style: AppTheme.headingFour.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: AppColours.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Gap(36.0),
+                    Text(
+                      'Wait for $matchUserName to message you',
+                      style: AppTheme.simpleText.copyWith(
+                        color: AppColours.black,
+                      ),
+                    ),
                   ],
                 ),
               ),
-              // 🔹 Venn Diagram Profile Images
-              const Positioned(
-                top: -40, // Moves the images partly outside the card
-                left: 0,
+              Positioned(
+                top: -40.0,
                 right: 0,
+                left: 0,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Left User Image
-                    CircleAvatar(
-                      radius: 36,
-                      backgroundColor: Colors.white,
-                      child: CircleAvatar(
-                        radius: 34,
-                        backgroundImage: NetworkImage('https://picsum.photos/200'),
-                      ),
-                    ),
-                    // App Logo
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.0),
-                      child: CircleAvatar(
-                        radius: 18,
+                    Transform.translate(
+                      offset: const Offset(22, 0),
+                      child: const CircleAvatar(
+                        radius: 42.0,
                         backgroundColor: Colors.white,
-                        child: Icon(Icons.favorite, color: Colors.purple),
+                        child: CircleAvatar(
+                          radius: 40.0,
+                          backgroundImage:
+                              NetworkImage('https://picsum.photos/200'),
+                        ),
                       ),
                     ),
-                    // Right User Image
-                    CircleAvatar(
-                      radius: 36,
-                      backgroundColor: Colors.white,
-                      child: CircleAvatar(
-                        radius: 34,
-                        backgroundImage: NetworkImage('https://picsum.photos/200'),
+                    Transform.translate(
+                      offset: const Offset(0, 0),
+                      child: const CircleAvatar(
+                        radius: 42.0,
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
+                          radius: 40.0,
+                          backgroundImage:
+                              NetworkImage('https://picsum.photos/207'),
+                        ),
                       ),
                     ),
                   ],
@@ -90,42 +124,64 @@ class EmptyChatStateView extends StatelessWidget {
               ),
             ],
           ),
-
-          // 🔹 Bottom Buttons
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.purple.shade200,
-                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(20)),
-                  ),
-                  child: const Center(
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(20.0),
+            )),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 12.0,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20.0),
+                      ),
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          AppColours.primaryBlue,
+                          AppColours.primaryBlue.withValues(alpha: 0.6),
+                        ],
+                      ),
+                    ),
                     child: Text(
-                      "Wanted to message first?",
-                      style: TextStyle(color: Colors.white),
+                      'Wanted to message first?',
+                      style: AppTheme.simpleText.copyWith(
+                        color: AppColours.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  height: 50,
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 12.0,
+                  ),
                   decoration: const BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(20.0),
+                    ),
+                    color: AppColours.black,
                   ),
-                  child: const Center(
-                    child: Text(
-                      "Upgrade Plan Now",
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  child: Text(
+                    'Upgrade Plan Now',
+                    style: AppTheme.simpleText.copyWith(
+                      color: AppColours.white,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          )
         ],
       ),
     );
