@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
 import 'package:gradient_circular_progress_indicator/gradient_circular_progress_indicator.dart';
+import 'package:intl/intl.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -86,24 +87,31 @@ class _ChatScreenState extends State<ChatScreen> {
               channel: channel,
               child: Container(
                 color: AppColours.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildStoriesSection(),
-                    const Gap(12.0),
-                    _buildRecentMatchesSection(),
-                    const Gap(12.0),
-                    const Divider(),
-                    const Text(
-                      'Chats',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    Expanded(
-                      child: StreamChannelListView(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildStoriesSection(),
+                      const Gap(12.0),
+                      _buildRecentMatchesSection(),
+                      const Gap(12.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Text(
+                          'Chats',
+                          textAlign: TextAlign.start,
+                          style: AppTheme.headingThree.copyWith(
+                            fontStyle: FontStyle.normal,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                      StreamChannelListView(
                         controller: _listController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
                         itemBuilder: (context, channels, index, defaultTile) {
                           // final lastMessage = channels[index].state?.messages.last;
                           // final unreadCount = channels[index].state?.unreadCount ?? 0;
@@ -115,37 +123,113 @@ class _ChatScreenState extends State<ChatScreen> {
                           //     unreadCount > 0;
 
                           return ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(channels[index].image ?? ''),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 6.0,
+                              horizontal: 20.0,
+                            ),
+                            leading: Stack(
+                              clipBehavior: Clip.none,
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  height: 52.0,
+                                  width: 48.0,
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8.0),
+                                    ),
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                        'lib/assets/images/temp_place_holder.png',
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                if (true)
+                                  Positioned(
+                                    bottom: -8.0,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5.2, vertical: 2.0),
+                                      decoration: BoxDecoration(
+                                        color: AppColours.primaryBlue,
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(
+                                            Icons.local_fire_department,
+                                            size: 11,
+                                            color: AppColours.white,
+                                          ),
+                                          const Gap(2.0),
+                                          Text(
+                                            '3',
+                                            style:
+                                                AppTheme.smallBodyText.copyWith(
+                                              color: AppColours.white,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
                             title: Text(
                               channels[index].name ?? 'Chat',
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                              style: AppTheme.simpleBodyText.copyWith(
+                                color: AppColours.black,
+                              ),
                             ),
-                            subtitle: const Text(
+                            subtitle: Text(
                               'No messages yet',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
+                              style: AppTheme.simpleText.copyWith(
+                                color: AppColours.darkGray,
+                              ),
                             ),
-                            trailing: true
-                                ? Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: const Text(
-                                      'Your Turn',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
+                            trailing: Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Column(
+                                children: [
+                                  if (true)
+                                    // your turn if message received
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 6,
+                                        vertical: 2.0,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius:
+                                            BorderRadius.circular(4.0),
+                                      ),
+                                      child: Text(
+                                        'Your Turn',
+                                        style: AppTheme.simpleText.copyWith(
+                                          fontSize: 10.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColours.white,
+                                        ),
                                       ),
                                     ),
-                                  )
-                                : null,
+                                  const Gap(8.0),
+                                  // time of last message
+                                  Text(
+                                    formatDateTime('2025-04-08T10:15:00.000Z'),
+                                    style: AppTheme.smallBodyText.copyWith(
+                                      color: AppColours.darkGray,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -162,8 +246,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           );
                         },
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
@@ -177,7 +261,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildRecentMatchesSection() {
     return Container(
-      color: AppColours.white,
+      decoration: const BoxDecoration(
+        color: AppColours.white,
+        border: Border(
+          bottom: BorderSide(
+            color: AppColours.borderGray,
+            width: 1.2,
+          ),
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -190,6 +282,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   "Recent Matches",
                   style: AppTheme.headingThree.copyWith(
                     fontStyle: FontStyle.normal,
+                    fontSize: 18.0,
                   ),
                 ),
                 const Gap(2.0),
@@ -202,7 +295,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           const Gap(20.0),
           SizedBox(
-            height: 100.0,
+            height: 120.0,
             child: Row(
               children: [
                 const Gap(12.0),
@@ -267,6 +360,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 color: AppColours.black,
                               ),
                             ),
+                            const Gap(12.0),
                           ],
                         ),
                       );
@@ -491,5 +585,26 @@ class _ChatScreenState extends State<ChatScreen> {
     final channel = client.channel('messaging', id: 'flutterdevs');
     await channel.watch();
     return channel;
+  }
+
+  String formatDateTime(String isoDateString) {
+    final dateTime = DateTime.parse(isoDateString).toLocal();
+    final now = DateTime.now();
+    final yesterday = now.subtract(const Duration(days: 1));
+
+    if (dateTime.year == now.year &&
+        dateTime.month == now.month &&
+        dateTime.day == now.day) {
+      // today time
+      return DateFormat('hh:mm a').format(dateTime);
+    } else if (dateTime.year == yesterday.year &&
+        dateTime.month == yesterday.month &&
+        dateTime.day == yesterday.day) {
+      // Yesterday
+      return 'Yesterday';
+    } else {
+      // older date
+      return DateFormat('dd MMM').format(dateTime);
+    }
   }
 }
