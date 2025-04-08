@@ -38,9 +38,11 @@ class EmptyChatStateView extends StatelessWidget {
                         ? Radius.zero
                         : const Radius.circular(20.0),
                   ),
-                  image: const DecorationImage(
+                  image: DecorationImage(
                     image: AssetImage(
-                      'lib/assets/images/chat/empty_chat_container_illustration.png',
+                      isEventMatch
+                          ? 'lib/assets/images/chat/empty_chat_container_illustration_event_match.png'
+                          : 'lib/assets/images/chat/empty_chat_container_illustration.png',
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -88,6 +90,7 @@ class EmptyChatStateView extends StatelessWidget {
                   ],
                 ),
               ),
+              // this is the overlapping profile image without the logo
               Positioned(
                 top: -40.0,
                 right: 0,
