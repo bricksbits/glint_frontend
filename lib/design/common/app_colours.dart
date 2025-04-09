@@ -15,6 +15,7 @@ class AppColours {
   static const chipBackgroundShade = Color(0xFFE9EAF7);
   static const borderGray = Color(0xFFEEEEEE);
   static const vibrantYellow = Color(0xFFFAFF7F);
+  static const ticketBackgroundDark = Color(0xFF0E1625);
 
   //event status colors
   static const liveColor = Color(0xFF4BCB87);
@@ -155,6 +156,19 @@ class AppColours {
     stops: [
       0.0,
       0.4148,
+    ],
+  );
+
+  static const ticketCouponBackgroundGradient = LinearGradient(
+    begin: Alignment(-1.0, 0.0),
+    end: Alignment(1.0, 0.0),
+    colors: [
+      Color(0xFFFAFF6F),
+      Color(0xFFFFFFFF),
+    ],
+    stops: [
+      -0.0409,
+      0.9964,
     ],
   );
 }

@@ -15,6 +15,7 @@ class TicketDetailsComponent extends StatelessWidget {
     required this.eventInitialPrice,
     required this.eventFinalPrice,
     required this.dayLeftForEvent,
+    this.isTicketBanner = false,
   });
 
   final String eventName;
@@ -24,11 +25,14 @@ class TicketDetailsComponent extends StatelessWidget {
   final String eventInitialPrice;
   final String eventFinalPrice;
   final String dayLeftForEvent;
+  final bool? isTicketBanner;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColours.backgroundShade,
+      color: isTicketBanner == true
+          ? AppColours.ticketBackgroundDark
+          : AppColours.backgroundShade,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 24.0,
@@ -48,31 +52,46 @@ class TicketDetailsComponent extends StatelessWidget {
                   style: AppTheme.headingFour.copyWith(
                     fontStyle: FontStyle.normal,
                     fontSize: 18.0,
-                    color: AppColours.black,
+                    color: isTicketBanner == true
+                        ? AppColours.white
+                        : AppColours.black,
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColours.black,
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 3.0,
-                  ),
-                  child: Text(
-                    '$dayLeftForEvent days left',
-                    style: const TextStyle(
-                      fontFamily: 'AlbertSans',
-                      fontSize: 10.0,
-                      fontWeight: FontWeight.w500,
-                      color: AppColours.white,
+                if (isTicketBanner == true)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.download,
+                        size: 24.0,
+                        color: AppColours.white,
+                      ),
                     ),
                   ),
-                ),
+                if (isTicketBanner == false)
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColours.black,
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 3.0,
+                    ),
+                    child: Text(
+                      '$dayLeftForEvent days left',
+                      style: const TextStyle(
+                        fontFamily: 'AlbertSans',
+                        fontSize: 10.0,
+                        fontWeight: FontWeight.w500,
+                        color: AppColours.white,
+                      ),
+                    ),
+                  ),
               ],
             ),
-            const Gap(24.0),
+            Gap(isTicketBanner == true ? 8.0 : 24.0),
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,20 +100,23 @@ class TicketDetailsComponent extends StatelessWidget {
                 GlintIconLabel(
                   iconPath: 'lib/assets/icons/calendar_icon.svg',
                   label: '$eventDate • $eventTime',
-                  style: AppTheme.simpleText,
+                  style: AppTheme.simpleText.copyWith(color: AppColours.white),
+                  svgColor:
+                      isTicketBanner == true ? AppColours.warning400 : null,
                 ),
-                Row(
-                  children: [
-                    const Text('₹ ', style: AppTheme.simpleText),
-                    Text(
-                      eventInitialPrice,
-                      style: AppTheme.simpleText.copyWith(
-                        decoration: TextDecoration.lineThrough,
-                        fontWeight: FontWeight.w300,
+                if (isTicketBanner == false)
+                  Row(
+                    children: [
+                      const Text('₹ ', style: AppTheme.simpleText),
+                      Text(
+                        eventInitialPrice,
+                        style: AppTheme.simpleText.copyWith(
+                          decoration: TextDecoration.lineThrough,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
               ],
             ),
             const Gap(6.0),
@@ -106,32 +128,35 @@ class TicketDetailsComponent extends StatelessWidget {
                 GlintIconLabel(
                   iconPath: 'lib/assets/icons/location_icon.svg',
                   label: eventLocation,
-                  style: AppTheme.simpleText,
+                  style: AppTheme.simpleText.copyWith(color: AppColours.white),
+                  svgColor:
+                      isTicketBanner == true ? AppColours.warning400 : null,
                 ),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '₹ $eventFinalPrice',
-                        style: const TextStyle(
-                          fontFamily: 'AlbertSans',
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w700,
-                          color: AppColours.primaryBlue,
+                if (isTicketBanner == false)
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '₹ $eventFinalPrice',
+                          style: const TextStyle(
+                            fontFamily: 'AlbertSans',
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w700,
+                            color: AppColours.primaryBlue,
+                          ),
                         ),
-                      ),
-                      const TextSpan(
-                        text: ' / person',
-                        style: TextStyle(
-                          fontFamily: 'AlbertSans',
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w600,
-                          color: AppColours.primaryBlue,
+                        const TextSpan(
+                          text: ' / person',
+                          style: TextStyle(
+                            fontFamily: 'AlbertSans',
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w600,
+                            color: AppColours.primaryBlue,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
               ],
             ),
           ],
