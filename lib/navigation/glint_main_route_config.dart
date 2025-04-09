@@ -1,4 +1,3 @@
-import 'package:glint_frontend/demo_screen.dart';
 import 'package:glint_frontend/features/chat/chat_event_tickets_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
@@ -24,6 +23,7 @@ import 'package:glint_frontend/features/profile/profile_history_transactions_scr
 import 'package:glint_frontend/features/profile/profile_preview_screen.dart';
 import 'package:glint_frontend/features/profile/profile_screen.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
+import 'package:glint_frontend/features/splash/splash_screen.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/navigation/glint_authentication_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -39,7 +39,7 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/',
       name: GlintMainRoutes.splash.name,
-      builder: (context, state) => const DemoScreen(),
+      builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
         path: '/${GlintMainRoutes.onBoarding.name}',
