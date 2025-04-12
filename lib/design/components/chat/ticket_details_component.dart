@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
+import 'package:glint_frontend/design/common/app_theme.dart';
+
+import '../glint_icon_label.dart';
 
 class TicketDetailsComponent extends StatelessWidget {
   const TicketDetailsComponent({
@@ -11,6 +15,7 @@ class TicketDetailsComponent extends StatelessWidget {
     required this.eventInitialPrice,
     required this.eventFinalPrice,
     required this.dayLeftForEvent,
+    this.isTicketBanner = false,
   });
 
   final String eventName;
@@ -20,13 +25,19 @@ class TicketDetailsComponent extends StatelessWidget {
   final String eventInitialPrice;
   final String eventFinalPrice;
   final String dayLeftForEvent;
+  final bool? isTicketBanner;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColours.backgroundShade,
+      color: isTicketBanner == true
+          ? AppColours.ticketBackgroundDark
+          : AppColours.backgroundShade,
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24.0,
+          vertical: 18.0,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -38,99 +49,114 @@ class TicketDetailsComponent extends StatelessWidget {
                 Text(
                   eventName,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Cambon',
+                  style: AppTheme.headingFour.copyWith(
+                    fontStyle: FontStyle.normal,
+                    fontSize: 18.0,
+                    color: isTicketBanner == true
+                        ? AppColours.white
+                        : AppColours.black,
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 4), // Adjust padding
-                  decoration: BoxDecoration(
-                    color: AppColours.black, // Background color
-                    borderRadius: BorderRadius.circular(16), // Rounded corners
+                if (isTicketBanner == true)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.download,
+                        size: 24.0,
+                        color: AppColours.white,
+                      ),
+                    ),
                   ),
-                  child: Text(
-                    dayLeftForEvent,
-                    style: const TextStyle(
+                if (isTicketBanner == false)
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColours.black,
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 3.0,
+                    ),
+                    child: Text(
+                      '$dayLeftForEvent days left',
+                      style: const TextStyle(
                         fontFamily: 'AlbertSans',
-                        fontSize: 10,
+                        fontSize: 10.0,
                         fontWeight: FontWeight.w500,
-                        color: AppColours.white),
+                        color: AppColours.white,
+                      ),
+                    ),
                   ),
-                )
               ],
             ),
-            const SizedBox(height: 20),
+            Gap(isTicketBanner == true ? 8.0 : 24.0),
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.calendar_month,
-                      size: 18,
-                    ),
-                    Text(
-                      "$eventDate - $eventTime",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Cambon',
+                GlintIconLabel(
+                  iconPath: 'lib/assets/icons/calendar_icon.svg',
+                  label: '$eventDate • $eventTime',
+                  style: AppTheme.simpleText.copyWith(color: AppColours.white),
+                  svgColor:
+                      isTicketBanner == true ? AppColours.warning400 : null,
+                ),
+                if (isTicketBanner == false)
+                  Row(
+                    children: [
+                      const Text('₹ ', style: AppTheme.simpleText),
+                      Text(
+                        eventInitialPrice,
+                        style: AppTheme.simpleText.copyWith(
+                          decoration: TextDecoration.lineThrough,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Text(
-                  eventInitialPrice,
-                  style: const TextStyle(
-                    fontFamily: "AlbertSans",
-                    fontWeight: FontWeight.w300,
-                    fontSize: 14,
-                    decoration: TextDecoration.lineThrough,
-                    color: Colors.black,
+                    ],
                   ),
-                ),
               ],
             ),
-            const SizedBox(height: 8),
+            const Gap(6.0),
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.location_on,
-                      size: 18,
-                    ),
-                    Text(
-                      eventLocation,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Cambon',
-                      ),
-                    ),
-                  ],
+                GlintIconLabel(
+                  iconPath: 'lib/assets/icons/location_icon.svg',
+                  label: eventLocation,
+                  style: AppTheme.simpleText.copyWith(color: AppColours.white),
+                  svgColor:
+                      isTicketBanner == true ? AppColours.warning400 : null,
                 ),
-                Text(
-                  "$eventFinalPrice/person",
-                  style: const TextStyle(
-                    fontFamily: "AlbertSans",
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                    color: AppColours.purpleShade,
+                if (isTicketBanner == false)
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '₹ $eventFinalPrice',
+                          style: const TextStyle(
+                            fontFamily: 'AlbertSans',
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w700,
+                            color: AppColours.primaryBlue,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: ' / person',
+                          style: TextStyle(
+                            fontFamily: 'AlbertSans',
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w600,
+                            color: AppColours.primaryBlue,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
               ],
             ),
           ],

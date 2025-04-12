@@ -58,6 +58,7 @@ flutter:
   generate: true
   assets:
     - lib/assets/images/
+    - lib/assets/images/chat/
     - lib/assets/icons/
     - lib/assets/images/onboarding/
     - lib/assets/icons/profile/
@@ -71,6 +72,8 @@ flutter:
     - family: AlbertSans
       fonts:
         - asset: lib/assets/fonts/AlbertSans_regular.ttf
+        - asset: lib/assets/fonts/AlbertSans-Bold.ttf
+          weight: 700
     - family: Cambon
       fonts:
         - asset: lib/assets/fonts/Cambon-Light.ttf
