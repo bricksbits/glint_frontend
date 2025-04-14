@@ -91,7 +91,17 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                     ),
                   ),
                   onPressed: () {
-                    // TODO - Action for logging out
+                    showAccountLifecycleDialog(
+                      context,
+                      icon: Icons.power_settings_new_outlined,
+                      title: 'Logout Account?',
+                      subtitle: 'Are you sure you want to logout?',
+                      buttonText: 'Yes, Logout',
+                      buttonabackgroundColor: AppColours.black,
+                      onAccept: () {
+                        // todo - handle logout
+                      },
+                    );
                   },
                 ),
               ),
@@ -111,7 +121,17 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                     ),
                   ),
                   onPressed: () {
-                    // TODO - Action for logging out
+                    showAccountLifecycleDialog(
+                      context,
+                      icon: Icons.delete_outline_rounded,
+                      title: 'Delete Glint Profile',
+                      subtitle:
+                          'Are you sure you want to delete your Glint Profile permanently?',
+                      buttonText: 'Yes, Delete',
+                      onAccept: () {
+                        // todo - handle logout
+                      },
+                    );
                   },
                 ),
               ),

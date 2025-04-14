@@ -23,4 +23,5 @@ export 'likes/glint_liked_you_profile_container.dart';
 export 'likes/glint_top_profile_container.dart';
 export 'onboarding/exports.dart';
 export 'people/exports.dart';
+export 'popups/log_out_popup.dart';
 export 'profile/exports.dart';
