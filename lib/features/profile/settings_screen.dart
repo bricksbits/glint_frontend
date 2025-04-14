@@ -223,14 +223,13 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                     color: AppColours.white,
                   ),
                   onPressed: () {
-                    // Debug-level implementation
-                    debugPrint(
-                        'Location update requested: ${_locationController.text}');
+                    // TODO - Action for changing location.
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
                             'Location would be updated to: ${_locationController.text}'),
                         duration: const Duration(seconds: 2),
+                        backgroundColor: AppColours.primaryBlue,
                       ),
                     );
                   },
