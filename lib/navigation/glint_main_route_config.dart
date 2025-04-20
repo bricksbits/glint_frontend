@@ -17,11 +17,7 @@ import 'package:glint_frontend/features/onboarding/setup_glint_onboarding_screen
 import 'package:glint_frontend/features/onboarding/upload_photos_onboarding_screen.dart';
 import 'package:glint_frontend/features/onboarding/who_catches_your_eye_onboarding_screen.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
-import 'package:glint_frontend/features/profile/edit_profile_screen.dart';
-import 'package:glint_frontend/features/profile/profile_history_tickets_screen.dart';
-import 'package:glint_frontend/features/profile/profile_history_transactions_screen.dart';
-import 'package:glint_frontend/features/profile/profile_preview_screen.dart';
-import 'package:glint_frontend/features/profile/profile_screen.dart';
+import 'package:glint_frontend/features/profile/exports.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
 import 'package:glint_frontend/features/splash/splash_screen.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -174,7 +170,7 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintProfileRoutes.settings.name}',
           name: GlintProfileRoutes.settings.name,
-          builder: (context, state) => const SettingsScreen(),
+          builder: (context, state) => const ProfileSettingsScreen(),
         ),
         GoRoute(
           path: '/${GlintProfileRoutes.subscription.name}',
