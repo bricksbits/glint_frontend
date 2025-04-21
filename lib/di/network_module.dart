@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/remote/client/glint_api_constants.dart';
 import 'package:injectable/injectable.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 @module
 abstract class NetworkModule {
@@ -14,4 +15,9 @@ abstract class NetworkModule {
               const Duration(milliseconds: GlintApiConstants.apiReceiveTimeOut),
         ),
       );
+
+  @singleton
+  StreamChatClient chatClient() => StreamChatClient(STREAM_API_KEY);
 }
+
+const STREAM_API_KEY = 'b67pax5b2wdq';

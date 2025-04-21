@@ -45,9 +45,7 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
           ),
           onTap: () {
             //todo - Handle navigation to preview event screen
-            context.go(
-              "/${GlintAdminDasboardRoutes.previewEvent.name}"
-            );
+            context.pushNamed(GlintAdminDasboardRoutes.previewEvent.name);
           },
         ),
         PopupMenuItem(

@@ -135,14 +135,6 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (_selectedEventDisplayType == EventDisplayType.live)
-                    // create event button
-                    ...[
-                    _buildCreateEventContainer(),
-                    const Gap(20.0),
-                  ],
-
-                  // events list preview
                   ...List.generate(
                     5,
                     (int count) {

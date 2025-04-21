@@ -11,7 +11,6 @@ import 'package:glint_frontend/features/splash/splash_screen.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/auth/authentication_screen.dart';
 import 'glint_authentication_routes.dart';
 
 final glintAdminRoutes = GoRouter(

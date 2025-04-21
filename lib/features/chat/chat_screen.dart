@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/chat/chat_with_screen.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gradient_circular_progress_indicator/gradient_circular_progress_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -24,11 +25,6 @@ class _ChatScreenState extends State<ChatScreen> {
     channelStateSort: const [SortOption('last_message_at')],
     limit: 20,
   );
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -73,8 +69,10 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
       body: FutureBuilder<Channel>(
-        future:
-            initializeChat(StreamChat.of(context).client, 'your_channel_id'),
+        future: initializeChat(
+          StreamChat.of(context).client,
+          'your_channel_id',
+        ),
         // Call your async method
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -231,17 +229,8 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => StreamChannel(
-                                    channel: channels[index],
-                                    child: const ChatWithScreen(
-                                        // channel: channels[index],
-                                        ),
-                                  ),
-                                ),
-                              );
+                              context.pushNamed(GlintChatRoutes.chatWith.name,
+                                  extra: channels[index]);
                             },
                           );
                         },

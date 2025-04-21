@@ -22,7 +22,7 @@ Future<Result<dynamic>> safeApiCallHandler({
    *  IF Not valid, we make another API call to update the Auth Token.
    *  By using the Refresh Token
    */
-  final accessTokenHelper = GetIt.instance.get<AccessTokenHelper>();
+  final accessTokenHelper = await GetIt.instance.getAsync<AccessTokenHelper>();
 
   final isValidToken = await accessTokenHelper.isTokenValid();
 

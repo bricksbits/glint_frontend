@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:glint_frontend/features/auth/login_screen.dart';
 import 'package:glint_frontend/features/chat/chat_event_tickets_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
@@ -23,8 +25,7 @@ import 'package:glint_frontend/features/splash/splash_screen.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/navigation/glint_authentication_routes.dart';
 import 'package:go_router/go_router.dart';
-
-import '../features/auth/authentication_screen.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../features/chat/chat_screen.dart';
 import '../features/home/home_screen.dart';
 
@@ -87,10 +88,11 @@ final glintMainRoutes = GoRouter(
           ),
         ]),
     GoRoute(
-        path: '/${GlintMainRoutes.auth.name}',
-        name: GlintMainRoutes.auth.name,
-        builder: (context, state) => const AuthenticationScreen(),
-        routes: glintAuthenticationRoutesBase),
+      path: '/${GlintMainRoutes.auth.name}',
+      name: GlintMainRoutes.auth.name,
+      builder: (context, state) => const LoginScreen(),
+      routes: glintAuthenticationRoutesBase,
+    ),
     GoRoute(
       path: '/${GlintMainRoutes.home.name}',
       name: GlintMainRoutes.home.name,
@@ -104,7 +106,15 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintChatRoutes.chatWith.name}',
           name: GlintChatRoutes.chatWith.name,
-          builder: (context, state) => const ChatWithScreen(),
+          builder: (context, state) {
+            final passedChannel = state.extra as Channel?;
+            if (passedChannel == null) {
+              return const Center(
+                child: Text("Chat Servers went out"),
+              );
+            }
+            return ChatWithScreen(passedChannel: passedChannel);
+          },
         ),
         GoRoute(
           path: '/${GlintChatRoutes.videoCall.name}',

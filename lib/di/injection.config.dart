@@ -12,6 +12,7 @@ import 'package:dio/dio.dart' as _i361;
 import 'package:encrypt_shared_preferences/provider.dart' as _i930;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:stream_chat_flutter/stream_chat_flutter.dart' as _i981;
 
 import '../data/local/persist/async_encrypted_shared_preference_helper.dart'
     as _i274;
@@ -43,6 +44,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singletonAsync<_i930.EncryptedSharedPreferencesAsync>(
         () => localModule.sharedPref());
     gh.singleton<_i361.Dio>(() => networkModule.getHttpClientInstance());
+    gh.singleton<_i981.StreamChatClient>(() => networkModule.chatClient());
     gh.factoryAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(() async =>
         _i274.AsyncEncryptedSharedPreferenceHelper(
             await getAsync<_i930.EncryptedSharedPreferencesAsync>()));

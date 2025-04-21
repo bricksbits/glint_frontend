@@ -92,9 +92,8 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: IconButton(
                     onPressed: () {
-                      context.go(
-                        "/${GlintAdminDasboardRoutes.trackEvent.name}"
-                      );
+                      context
+                          .pushNamed(GlintAdminDasboardRoutes.trackEvent.name);
                     },
                     icon: const Icon(
                       Icons.arrow_forward_ios,

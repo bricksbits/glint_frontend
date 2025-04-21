@@ -17,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final bool isAdmin = false;
+  final bool isAdmin = true;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _emailFocusNode = FocusNode();
@@ -44,9 +44,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   case UsersType.USER:
                     myContext.go("/${GlintMainRoutes.home.name}");
                   case UsersType.ADMIN:
-                    myContext.go("/${GlintMainRoutes.home.name}");
+                    myContext.go("/${GlintAdminDasboardRoutes.home.name}");
                   case UsersType.SUPER_ADMIN:
-                    myContext.go("/${GlintMainRoutes.home.name}");
+                    myContext.go("/${GlintAdminDasboardRoutes.home.name}");
                 }
               },
               error: (error) {
@@ -85,8 +85,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const Gap(32.0),
                                 _buildAuthFields(),
                                 const Gap(60.0),
-                                _buildActionButton('Log In',
-                                    () => debugPrint('Login button pressed')),
+                                _buildActionButton('Log In', () {
+                                  context.read<LoginBloc>()
+                                    ..add(LoginEvent.emailInput(
+                                        _emailController.text))
+                                    ..add(
+                                      LoginEvent.passwordInput(
+                                          _passwordController.text),
+                                    )
+                                    ..add(
+                                      const LoginEvent.login(),
+                                    );
+                                }),
                                 const Gap(16.0),
                                 _buildForgotPassword(),
                                 const Spacer(flex: 4),
@@ -106,8 +116,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             context.read<LoginBloc>()
                               ..add(
                                   LoginEvent.emailInput(_emailController.text))
-                              ..add(LoginEvent.passwordInput(
-                                  _passwordController.text));
+                              ..add(
+                                LoginEvent.passwordInput(
+                                    _passwordController.text),
+                              )
+                              ..add(
+                                const LoginEvent.login(),
+                              );
                           },
                         ),
                         const Gap(16.0),

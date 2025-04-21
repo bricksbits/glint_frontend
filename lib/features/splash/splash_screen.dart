@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
+import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,21 +26,32 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        _navigateBasedOnAuth();
+        _navigateBasedOnAuth().then(
+          (_) {
+            _navigateToRespectedRoutes();
+          },
+        ).onError((error, stackTraces) {
+          print("Splash Screen : Something went wrong");
+        });
       }
     });
   }
 
-  void _navigateBasedOnAuth() {
-    final targetRoute = isAuthenticated
-        ? (!kIsWeb
-            ? "/${GlintAdminDasboardRoutes.auth.name}"
-            : "/${GlintMainRoutes.onBoarding.name}")
-        : (kIsWeb
-            ? "/${GlintAdminDasboardRoutes.home.name}"
-            : "/${GlintMainRoutes.home.name}");
+  Future<void> _navigateBasedOnAuth() async {
+    final StreamChatClient chatClient = getIt.get();
+    final userId = await getUserId();
+    final userToken = await getUserToken(userId);
+    await chatClient.connectUser(
+      User(id: userId),
+      userToken,
+    );
+  }
 
-    context.go(targetRoute);
+  void _navigateToRespectedRoutes() {
+    final targetRoute = GlintMainRoutes.home.name;
+    if (context.mounted) {
+      context.goNamed(targetRoute);
+    }
   }
 
   @override
@@ -69,4 +82,12 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
   }
+}
+
+Future<String> getUserId() async {
+  return 'tutorial-flutter';
+}
+
+Future<String> getUserToken(String userId) async {
+  return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidHV0b3JpYWwtZmx1dHRlciJ9.S-MJpoSwDiqyXpUURgO5wVqJ4vKlIVFLSEyrFYCOE1c';
 }
