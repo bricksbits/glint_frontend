@@ -7,3 +7,4 @@ export 'one_last_step_onboarding_screen.dart';
 export 'setup_glint_onboarding_screen.dart';
 export 'upload_photos_onboarding_screen.dart';
 export 'who_catches_your_eye_onboarding_screen.dart';
+export 'location_permission_onboarding_screen.dart';
