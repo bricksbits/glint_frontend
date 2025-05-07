@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
-import 'package:glint_frontend/features/chat/chat_event_tickets_screen.dart';
+import 'package:glint_frontend/features/chat/confirm_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
+import 'package:glint_frontend/features/chat/get_ticket_screen.dart';
 import 'package:glint_frontend/features/event/event_detail_screen.dart';
 import 'package:glint_frontend/features/event/event_main_screen.dart';
 import 'package:glint_frontend/features/event/event_people_screen.dart';
@@ -117,6 +118,11 @@ final glintMainRoutes = GoRouter(
           },
         ),
         GoRoute(
+          path: '/${GlintChatRoutes.getTicket.name}',
+          name: GlintChatRoutes.getTicket.name,
+          builder: (context, state) => const GetEventTicketScreen(),
+        ),
+        GoRoute(
           path: '/${GlintChatRoutes.videoCall.name}',
           name: GlintChatRoutes.videoCall.name,
           builder: (context, state) => const ChatWithVideoCallScreen(),
@@ -124,7 +130,7 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintChatRoutes.tickets.name}',
           name: GlintChatRoutes.tickets.name,
-          builder: (context, state) => const ChatEventTicketsScreen(),
+          builder: (context, state) => const ConfirmTicketScreen(),
         )
       ],
     ),

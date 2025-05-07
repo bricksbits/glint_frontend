@@ -29,6 +29,7 @@ enum GlintChatRoutes {
   chatWith,
   videoCall,
   tickets,
+  getTicket,
 }
 
 enum GlintEventRoutes {
