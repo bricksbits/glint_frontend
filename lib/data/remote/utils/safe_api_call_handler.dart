@@ -1,13 +1,12 @@
-import 'package:encrypt_shared_preferences/provider.dart';
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/data/remote/utils/access_token_helper.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
-import '../utils/access_token_helper.dart';
-import '../utils/network_response_handler.dart';
 
 Future<Result<dynamic>> safeApiCallHandler({
   required MyDioClient httpClient,
@@ -16,6 +15,7 @@ Future<Result<dynamic>> safeApiCallHandler({
   required String endpoint,
   dynamic requestBody,
   Map<String, dynamic>? passedQueryParameters,
+  FormData? uploadFilesFormData,
 }) async {
   /**
    *  Checks if the Access Token is Valid or not.
@@ -54,6 +54,10 @@ Future<Result<dynamic>> safeApiCallHandler({
         body: requestBody,
         accessToken: accessToken,
       );
+      return result;
+    case HttpRequestEnum.UPLOAD:
+      final result = httpClient.uploadFiles(
+          endpoint: endpoint, accessToken: accessToken, formData: uploadFilesFormData);
       return result;
   }
 }

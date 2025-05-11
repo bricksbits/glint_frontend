@@ -72,4 +72,26 @@ class MyDioClient {
       return Failure(exception);
     }
   }
+
+  Future<Result<dynamic>> uploadFiles({
+    required String endpoint,
+    required FormData? formData,
+    required String accessToken,
+  }) async {
+    if (formData == null) {
+      return Failure(Exception("Can't Upload, if there are no files."));
+    }
+
+    if (formData.files.isEmpty) {
+      return Failure(Exception("Can't Upload, if there are no files."));
+    }
+
+    try {
+      final uploadFileResponse =
+          await dioHttpClient.post(endpoint, data: formData);
+      return networkResponseHandler(uploadFileResponse);
+    } on Exception catch (exception) {
+      return Failure(exception);
+    }
+  }
 }
