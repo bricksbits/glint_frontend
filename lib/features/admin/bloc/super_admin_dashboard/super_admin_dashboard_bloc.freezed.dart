@@ -19,28 +19,31 @@ mixin _$SuperAdminDashboardEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetch,
-    required TResult Function() approveEvent,
-    required TResult Function() rejectEvent,
+    required TResult Function(String eventId) approveEvent,
+    required TResult Function(String eventId) rejectEvent,
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
+    required TResult Function() updateList,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetch,
-    TResult? Function()? approveEvent,
-    TResult? Function()? rejectEvent,
+    TResult? Function(String eventId)? approveEvent,
+    TResult? Function(String eventId)? rejectEvent,
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
+    TResult? Function()? updateList,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetch,
-    TResult Function()? approveEvent,
-    TResult Function()? rejectEvent,
+    TResult Function(String eventId)? approveEvent,
+    TResult Function(String eventId)? rejectEvent,
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
+    TResult Function()? updateList,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -51,6 +54,7 @@ mixin _$SuperAdminDashboardEvent {
     required TResult Function(_RejectEvent value) rejectEvent,
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
+    required TResult Function(_UpdateList value) updateList,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -60,6 +64,7 @@ mixin _$SuperAdminDashboardEvent {
     TResult? Function(_RejectEvent value)? rejectEvent,
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
+    TResult? Function(_UpdateList value)? updateList,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -69,6 +74,7 @@ mixin _$SuperAdminDashboardEvent {
     TResult Function(_RejectEvent value)? rejectEvent,
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
+    TResult Function(_UpdateList value)? updateList,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -138,10 +144,11 @@ class _$FetchImpl implements _Fetch {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetch,
-    required TResult Function() approveEvent,
-    required TResult Function() rejectEvent,
+    required TResult Function(String eventId) approveEvent,
+    required TResult Function(String eventId) rejectEvent,
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
+    required TResult Function() updateList,
   }) {
     return fetch();
   }
@@ -150,10 +157,11 @@ class _$FetchImpl implements _Fetch {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetch,
-    TResult? Function()? approveEvent,
-    TResult? Function()? rejectEvent,
+    TResult? Function(String eventId)? approveEvent,
+    TResult? Function(String eventId)? rejectEvent,
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
+    TResult? Function()? updateList,
   }) {
     return fetch?.call();
   }
@@ -162,10 +170,11 @@ class _$FetchImpl implements _Fetch {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetch,
-    TResult Function()? approveEvent,
-    TResult Function()? rejectEvent,
+    TResult Function(String eventId)? approveEvent,
+    TResult Function(String eventId)? rejectEvent,
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
+    TResult Function()? updateList,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -182,6 +191,7 @@ class _$FetchImpl implements _Fetch {
     required TResult Function(_RejectEvent value) rejectEvent,
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
+    required TResult Function(_UpdateList value) updateList,
   }) {
     return fetch(this);
   }
@@ -194,6 +204,7 @@ class _$FetchImpl implements _Fetch {
     TResult? Function(_RejectEvent value)? rejectEvent,
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
+    TResult? Function(_UpdateList value)? updateList,
   }) {
     return fetch?.call(this);
   }
@@ -206,6 +217,7 @@ class _$FetchImpl implements _Fetch {
     TResult Function(_RejectEvent value)? rejectEvent,
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
+    TResult Function(_UpdateList value)? updateList,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -224,6 +236,8 @@ abstract class _$$ApproveEventImplCopyWith<$Res> {
   factory _$$ApproveEventImplCopyWith(
           _$ApproveEventImpl value, $Res Function(_$ApproveEventImpl) then) =
       __$$ApproveEventImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String eventId});
 }
 
 /// @nodoc
@@ -236,63 +250,91 @@ class __$$ApproveEventImplCopyWithImpl<$Res>
 
   /// Create a copy of SuperAdminDashboardEvent
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? eventId = null,
+  }) {
+    return _then(_$ApproveEventImpl(
+      null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$ApproveEventImpl implements _ApproveEvent {
-  const _$ApproveEventImpl();
+  const _$ApproveEventImpl(this.eventId);
+
+  @override
+  final String eventId;
 
   @override
   String toString() {
-    return 'SuperAdminDashboardEvent.approveEvent()';
+    return 'SuperAdminDashboardEvent.approveEvent(eventId: $eventId)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ApproveEventImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$ApproveEventImpl &&
+            (identical(other.eventId, eventId) || other.eventId == eventId));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, eventId);
+
+  /// Create a copy of SuperAdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ApproveEventImplCopyWith<_$ApproveEventImpl> get copyWith =>
+      __$$ApproveEventImplCopyWithImpl<_$ApproveEventImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetch,
-    required TResult Function() approveEvent,
-    required TResult Function() rejectEvent,
+    required TResult Function(String eventId) approveEvent,
+    required TResult Function(String eventId) rejectEvent,
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
+    required TResult Function() updateList,
   }) {
-    return approveEvent();
+    return approveEvent(eventId);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetch,
-    TResult? Function()? approveEvent,
-    TResult? Function()? rejectEvent,
+    TResult? Function(String eventId)? approveEvent,
+    TResult? Function(String eventId)? rejectEvent,
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
+    TResult? Function()? updateList,
   }) {
-    return approveEvent?.call();
+    return approveEvent?.call(eventId);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetch,
-    TResult Function()? approveEvent,
-    TResult Function()? rejectEvent,
+    TResult Function(String eventId)? approveEvent,
+    TResult Function(String eventId)? rejectEvent,
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
+    TResult Function()? updateList,
     required TResult orElse(),
   }) {
     if (approveEvent != null) {
-      return approveEvent();
+      return approveEvent(eventId);
     }
     return orElse();
   }
@@ -305,6 +347,7 @@ class _$ApproveEventImpl implements _ApproveEvent {
     required TResult Function(_RejectEvent value) rejectEvent,
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
+    required TResult Function(_UpdateList value) updateList,
   }) {
     return approveEvent(this);
   }
@@ -317,6 +360,7 @@ class _$ApproveEventImpl implements _ApproveEvent {
     TResult? Function(_RejectEvent value)? rejectEvent,
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
+    TResult? Function(_UpdateList value)? updateList,
   }) {
     return approveEvent?.call(this);
   }
@@ -329,6 +373,7 @@ class _$ApproveEventImpl implements _ApproveEvent {
     TResult Function(_RejectEvent value)? rejectEvent,
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
+    TResult Function(_UpdateList value)? updateList,
     required TResult orElse(),
   }) {
     if (approveEvent != null) {
@@ -339,7 +384,15 @@ class _$ApproveEventImpl implements _ApproveEvent {
 }
 
 abstract class _ApproveEvent implements SuperAdminDashboardEvent {
-  const factory _ApproveEvent() = _$ApproveEventImpl;
+  const factory _ApproveEvent(final String eventId) = _$ApproveEventImpl;
+
+  String get eventId;
+
+  /// Create a copy of SuperAdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ApproveEventImplCopyWith<_$ApproveEventImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -347,6 +400,8 @@ abstract class _$$RejectEventImplCopyWith<$Res> {
   factory _$$RejectEventImplCopyWith(
           _$RejectEventImpl value, $Res Function(_$RejectEventImpl) then) =
       __$$RejectEventImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String eventId});
 }
 
 /// @nodoc
@@ -359,63 +414,91 @@ class __$$RejectEventImplCopyWithImpl<$Res>
 
   /// Create a copy of SuperAdminDashboardEvent
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? eventId = null,
+  }) {
+    return _then(_$RejectEventImpl(
+      null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$RejectEventImpl implements _RejectEvent {
-  const _$RejectEventImpl();
+  const _$RejectEventImpl(this.eventId);
+
+  @override
+  final String eventId;
 
   @override
   String toString() {
-    return 'SuperAdminDashboardEvent.rejectEvent()';
+    return 'SuperAdminDashboardEvent.rejectEvent(eventId: $eventId)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$RejectEventImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$RejectEventImpl &&
+            (identical(other.eventId, eventId) || other.eventId == eventId));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, eventId);
+
+  /// Create a copy of SuperAdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RejectEventImplCopyWith<_$RejectEventImpl> get copyWith =>
+      __$$RejectEventImplCopyWithImpl<_$RejectEventImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetch,
-    required TResult Function() approveEvent,
-    required TResult Function() rejectEvent,
+    required TResult Function(String eventId) approveEvent,
+    required TResult Function(String eventId) rejectEvent,
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
+    required TResult Function() updateList,
   }) {
-    return rejectEvent();
+    return rejectEvent(eventId);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetch,
-    TResult? Function()? approveEvent,
-    TResult? Function()? rejectEvent,
+    TResult? Function(String eventId)? approveEvent,
+    TResult? Function(String eventId)? rejectEvent,
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
+    TResult? Function()? updateList,
   }) {
-    return rejectEvent?.call();
+    return rejectEvent?.call(eventId);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetch,
-    TResult Function()? approveEvent,
-    TResult Function()? rejectEvent,
+    TResult Function(String eventId)? approveEvent,
+    TResult Function(String eventId)? rejectEvent,
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
+    TResult Function()? updateList,
     required TResult orElse(),
   }) {
     if (rejectEvent != null) {
-      return rejectEvent();
+      return rejectEvent(eventId);
     }
     return orElse();
   }
@@ -428,6 +511,7 @@ class _$RejectEventImpl implements _RejectEvent {
     required TResult Function(_RejectEvent value) rejectEvent,
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
+    required TResult Function(_UpdateList value) updateList,
   }) {
     return rejectEvent(this);
   }
@@ -440,6 +524,7 @@ class _$RejectEventImpl implements _RejectEvent {
     TResult? Function(_RejectEvent value)? rejectEvent,
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
+    TResult? Function(_UpdateList value)? updateList,
   }) {
     return rejectEvent?.call(this);
   }
@@ -452,6 +537,7 @@ class _$RejectEventImpl implements _RejectEvent {
     TResult Function(_RejectEvent value)? rejectEvent,
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
+    TResult Function(_UpdateList value)? updateList,
     required TResult orElse(),
   }) {
     if (rejectEvent != null) {
@@ -462,7 +548,15 @@ class _$RejectEventImpl implements _RejectEvent {
 }
 
 abstract class _RejectEvent implements SuperAdminDashboardEvent {
-  const factory _RejectEvent() = _$RejectEventImpl;
+  const factory _RejectEvent(final String eventId) = _$RejectEventImpl;
+
+  String get eventId;
+
+  /// Create a copy of SuperAdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RejectEventImplCopyWith<_$RejectEventImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -507,10 +601,11 @@ class _$SelectLiveImpl implements _SelectLive {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetch,
-    required TResult Function() approveEvent,
-    required TResult Function() rejectEvent,
+    required TResult Function(String eventId) approveEvent,
+    required TResult Function(String eventId) rejectEvent,
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
+    required TResult Function() updateList,
   }) {
     return selectLive();
   }
@@ -519,10 +614,11 @@ class _$SelectLiveImpl implements _SelectLive {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetch,
-    TResult? Function()? approveEvent,
-    TResult? Function()? rejectEvent,
+    TResult? Function(String eventId)? approveEvent,
+    TResult? Function(String eventId)? rejectEvent,
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
+    TResult? Function()? updateList,
   }) {
     return selectLive?.call();
   }
@@ -531,10 +627,11 @@ class _$SelectLiveImpl implements _SelectLive {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetch,
-    TResult Function()? approveEvent,
-    TResult Function()? rejectEvent,
+    TResult Function(String eventId)? approveEvent,
+    TResult Function(String eventId)? rejectEvent,
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
+    TResult Function()? updateList,
     required TResult orElse(),
   }) {
     if (selectLive != null) {
@@ -551,6 +648,7 @@ class _$SelectLiveImpl implements _SelectLive {
     required TResult Function(_RejectEvent value) rejectEvent,
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
+    required TResult Function(_UpdateList value) updateList,
   }) {
     return selectLive(this);
   }
@@ -563,6 +661,7 @@ class _$SelectLiveImpl implements _SelectLive {
     TResult? Function(_RejectEvent value)? rejectEvent,
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
+    TResult? Function(_UpdateList value)? updateList,
   }) {
     return selectLive?.call(this);
   }
@@ -575,6 +674,7 @@ class _$SelectLiveImpl implements _SelectLive {
     TResult Function(_RejectEvent value)? rejectEvent,
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
+    TResult Function(_UpdateList value)? updateList,
     required TResult orElse(),
   }) {
     if (selectLive != null) {
@@ -630,10 +730,11 @@ class _$selectRequestsImpl implements selectRequests {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() fetch,
-    required TResult Function() approveEvent,
-    required TResult Function() rejectEvent,
+    required TResult Function(String eventId) approveEvent,
+    required TResult Function(String eventId) rejectEvent,
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
+    required TResult Function() updateList,
   }) {
     return selectRequests();
   }
@@ -642,10 +743,11 @@ class _$selectRequestsImpl implements selectRequests {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? fetch,
-    TResult? Function()? approveEvent,
-    TResult? Function()? rejectEvent,
+    TResult? Function(String eventId)? approveEvent,
+    TResult? Function(String eventId)? rejectEvent,
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
+    TResult? Function()? updateList,
   }) {
     return selectRequests?.call();
   }
@@ -654,10 +756,11 @@ class _$selectRequestsImpl implements selectRequests {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? fetch,
-    TResult Function()? approveEvent,
-    TResult Function()? rejectEvent,
+    TResult Function(String eventId)? approveEvent,
+    TResult Function(String eventId)? rejectEvent,
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
+    TResult Function()? updateList,
     required TResult orElse(),
   }) {
     if (selectRequests != null) {
@@ -674,6 +777,7 @@ class _$selectRequestsImpl implements selectRequests {
     required TResult Function(_RejectEvent value) rejectEvent,
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
+    required TResult Function(_UpdateList value) updateList,
   }) {
     return selectRequests(this);
   }
@@ -686,6 +790,7 @@ class _$selectRequestsImpl implements selectRequests {
     TResult? Function(_RejectEvent value)? rejectEvent,
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
+    TResult? Function(_UpdateList value)? updateList,
   }) {
     return selectRequests?.call(this);
   }
@@ -698,6 +803,7 @@ class _$selectRequestsImpl implements selectRequests {
     TResult Function(_RejectEvent value)? rejectEvent,
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
+    TResult Function(_UpdateList value)? updateList,
     required TResult orElse(),
   }) {
     if (selectRequests != null) {
@@ -712,62 +818,146 @@ abstract class selectRequests implements SuperAdminDashboardEvent {
 }
 
 /// @nodoc
-mixin _$SuperAdminDashboardState {
+abstract class _$$UpdateListImplCopyWith<$Res> {
+  factory _$$UpdateListImplCopyWith(
+          _$UpdateListImpl value, $Res Function(_$UpdateListImpl) then) =
+      __$$UpdateListImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$UpdateListImplCopyWithImpl<$Res>
+    extends _$SuperAdminDashboardEventCopyWithImpl<$Res, _$UpdateListImpl>
+    implements _$$UpdateListImplCopyWith<$Res> {
+  __$$UpdateListImplCopyWithImpl(
+      _$UpdateListImpl _value, $Res Function(_$UpdateListImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SuperAdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$UpdateListImpl implements _UpdateList {
+  const _$UpdateListImpl();
+
+  @override
+  String toString() {
+    return 'SuperAdminDashboardEvent.updateList()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$UpdateListImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String error) error,
-    required TResult Function(List<String> liveEvents) live,
-    required TResult Function(List<String> requestsEvents) requests,
-  }) =>
-      throw _privateConstructorUsedError;
+    required TResult Function() fetch,
+    required TResult Function(String eventId) approveEvent,
+    required TResult Function(String eventId) rejectEvent,
+    required TResult Function() selectLive,
+    required TResult Function() selectRequests,
+    required TResult Function() updateList,
+  }) {
+    return updateList();
+  }
+
+  @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String error)? error,
-    TResult? Function(List<String> liveEvents)? live,
-    TResult? Function(List<String> requestsEvents)? requests,
-  }) =>
-      throw _privateConstructorUsedError;
+    TResult? Function()? fetch,
+    TResult? Function(String eventId)? approveEvent,
+    TResult? Function(String eventId)? rejectEvent,
+    TResult? Function()? selectLive,
+    TResult? Function()? selectRequests,
+    TResult? Function()? updateList,
+  }) {
+    return updateList?.call();
+  }
+
+  @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String error)? error,
-    TResult Function(List<String> liveEvents)? live,
-    TResult Function(List<String> requestsEvents)? requests,
+    TResult Function()? fetch,
+    TResult Function(String eventId)? approveEvent,
+    TResult Function(String eventId)? rejectEvent,
+    TResult Function()? selectLive,
+    TResult Function()? selectRequests,
+    TResult Function()? updateList,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    if (updateList != null) {
+      return updateList();
+    }
+    return orElse();
+  }
+
+  @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Error value) error,
-    required TResult Function(_LiveEvents value) live,
-    required TResult Function(_RequestsEvents value) requests,
-  }) =>
-      throw _privateConstructorUsedError;
+    required TResult Function(_Fetch value) fetch,
+    required TResult Function(_ApproveEvent value) approveEvent,
+    required TResult Function(_RejectEvent value) rejectEvent,
+    required TResult Function(_SelectLive value) selectLive,
+    required TResult Function(selectRequests value) selectRequests,
+    required TResult Function(_UpdateList value) updateList,
+  }) {
+    return updateList(this);
+  }
+
+  @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_LiveEvents value)? live,
-    TResult? Function(_RequestsEvents value)? requests,
-  }) =>
-      throw _privateConstructorUsedError;
+    TResult? Function(_Fetch value)? fetch,
+    TResult? Function(_ApproveEvent value)? approveEvent,
+    TResult? Function(_RejectEvent value)? rejectEvent,
+    TResult? Function(_SelectLive value)? selectLive,
+    TResult? Function(selectRequests value)? selectRequests,
+    TResult? Function(_UpdateList value)? updateList,
+  }) {
+    return updateList?.call(this);
+  }
+
+  @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Error value)? error,
-    TResult Function(_LiveEvents value)? live,
-    TResult Function(_RequestsEvents value)? requests,
+    TResult Function(_Fetch value)? fetch,
+    TResult Function(_ApproveEvent value)? approveEvent,
+    TResult Function(_RejectEvent value)? rejectEvent,
+    TResult Function(_SelectLive value)? selectLive,
+    TResult Function(selectRequests value)? selectRequests,
+    TResult Function(_UpdateList value)? updateList,
     required TResult orElse(),
-  }) =>
+  }) {
+    if (updateList != null) {
+      return updateList(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _UpdateList implements SuperAdminDashboardEvent {
+  const factory _UpdateList() = _$UpdateListImpl;
+}
+
+/// @nodoc
+mixin _$SuperAdminDashboardState {
+  bool get isLoading => throw _privateConstructorUsedError;
+  String? get errorMessage => throw _privateConstructorUsedError;
+  EventDisplayType get currentTab => throw _privateConstructorUsedError;
+  List<EventListDomainModel> get currentSelectedList =>
+      throw _privateConstructorUsedError;
+
+  /// Create a copy of SuperAdminDashboardState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SuperAdminDashboardStateCopyWith<SuperAdminDashboardState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -776,6 +966,12 @@ abstract class $SuperAdminDashboardStateCopyWith<$Res> {
   factory $SuperAdminDashboardStateCopyWith(SuperAdminDashboardState value,
           $Res Function(SuperAdminDashboardState) then) =
       _$SuperAdminDashboardStateCopyWithImpl<$Res, SuperAdminDashboardState>;
+  @useResult
+  $Res call(
+      {bool isLoading,
+      String? errorMessage,
+      EventDisplayType currentTab,
+      List<EventListDomainModel> currentSelectedList});
 }
 
 /// @nodoc
@@ -791,269 +987,59 @@ class _$SuperAdminDashboardStateCopyWithImpl<$Res,
 
   /// Create a copy of SuperAdminDashboardState
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? isLoading = null,
+    Object? errorMessage = freezed,
+    Object? currentTab = null,
+    Object? currentSelectedList = null,
+  }) {
+    return _then(_value.copyWith(
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      currentTab: null == currentTab
+          ? _value.currentTab
+          : currentTab // ignore: cast_nullable_to_non_nullable
+              as EventDisplayType,
+      currentSelectedList: null == currentSelectedList
+          ? _value.currentSelectedList
+          : currentSelectedList // ignore: cast_nullable_to_non_nullable
+              as List<EventListDomainModel>,
+    ) as $Val);
+  }
 }
 
 /// @nodoc
-abstract class _$$InitialImplCopyWith<$Res> {
-  factory _$$InitialImplCopyWith(
-          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
-      __$$InitialImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$InitialImplCopyWithImpl<$Res>
-    extends _$SuperAdminDashboardStateCopyWithImpl<$Res, _$InitialImpl>
-    implements _$$InitialImplCopyWith<$Res> {
-  __$$InitialImplCopyWithImpl(
-      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of SuperAdminDashboardState
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$InitialImpl implements _Initial {
-  const _$InitialImpl();
-
+abstract class _$$SuperAdminDashboardStateImplCopyWith<$Res>
+    implements $SuperAdminDashboardStateCopyWith<$Res> {
+  factory _$$SuperAdminDashboardStateImplCopyWith(
+          _$SuperAdminDashboardStateImpl value,
+          $Res Function(_$SuperAdminDashboardStateImpl) then) =
+      __$$SuperAdminDashboardStateImplCopyWithImpl<$Res>;
   @override
-  String toString() {
-    return 'SuperAdminDashboardState.initial()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$InitialImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String error) error,
-    required TResult Function(List<String> liveEvents) live,
-    required TResult Function(List<String> requestsEvents) requests,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String error)? error,
-    TResult? Function(List<String> liveEvents)? live,
-    TResult? Function(List<String> requestsEvents)? requests,
-  }) {
-    return initial?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String error)? error,
-    TResult Function(List<String> liveEvents)? live,
-    TResult Function(List<String> requestsEvents)? requests,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Error value) error,
-    required TResult Function(_LiveEvents value) live,
-    required TResult Function(_RequestsEvents value) requests,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_LiveEvents value)? live,
-    TResult? Function(_RequestsEvents value)? requests,
-  }) {
-    return initial?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Error value)? error,
-    TResult Function(_LiveEvents value)? live,
-    TResult Function(_RequestsEvents value)? requests,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Initial implements SuperAdminDashboardState {
-  const factory _Initial() = _$InitialImpl;
-}
-
-/// @nodoc
-abstract class _$$LoadingImplCopyWith<$Res> {
-  factory _$$LoadingImplCopyWith(
-          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
-      __$$LoadingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$SuperAdminDashboardStateCopyWithImpl<$Res, _$LoadingImpl>
-    implements _$$LoadingImplCopyWith<$Res> {
-  __$$LoadingImplCopyWithImpl(
-      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of SuperAdminDashboardState
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$LoadingImpl implements _Loading {
-  const _$LoadingImpl();
-
-  @override
-  String toString() {
-    return 'SuperAdminDashboardState.loading()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoadingImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String error) error,
-    required TResult Function(List<String> liveEvents) live,
-    required TResult Function(List<String> requestsEvents) requests,
-  }) {
-    return loading();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String error)? error,
-    TResult? Function(List<String> liveEvents)? live,
-    TResult? Function(List<String> requestsEvents)? requests,
-  }) {
-    return loading?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String error)? error,
-    TResult Function(List<String> liveEvents)? live,
-    TResult Function(List<String> requestsEvents)? requests,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Error value) error,
-    required TResult Function(_LiveEvents value) live,
-    required TResult Function(_RequestsEvents value) requests,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_LiveEvents value)? live,
-    TResult? Function(_RequestsEvents value)? requests,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Error value)? error,
-    TResult Function(_LiveEvents value)? live,
-    TResult Function(_RequestsEvents value)? requests,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Loading implements SuperAdminDashboardState {
-  const factory _Loading() = _$LoadingImpl;
-}
-
-/// @nodoc
-abstract class _$$ErrorImplCopyWith<$Res> {
-  factory _$$ErrorImplCopyWith(
-          _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
-      __$$ErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String error});
+  $Res call(
+      {bool isLoading,
+      String? errorMessage,
+      EventDisplayType currentTab,
+      List<EventListDomainModel> currentSelectedList});
 }
 
 /// @nodoc
-class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$SuperAdminDashboardStateCopyWithImpl<$Res, _$ErrorImpl>
-    implements _$$ErrorImplCopyWith<$Res> {
-  __$$ErrorImplCopyWithImpl(
-      _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
+class __$$SuperAdminDashboardStateImplCopyWithImpl<$Res>
+    extends _$SuperAdminDashboardStateCopyWithImpl<$Res,
+        _$SuperAdminDashboardStateImpl>
+    implements _$$SuperAdminDashboardStateImplCopyWith<$Res> {
+  __$$SuperAdminDashboardStateImplCopyWithImpl(
+      _$SuperAdminDashboardStateImpl _value,
+      $Res Function(_$SuperAdminDashboardStateImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of SuperAdminDashboardState
@@ -1061,472 +1047,115 @@ class __$$ErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? error = null,
+    Object? isLoading = null,
+    Object? errorMessage = freezed,
+    Object? currentTab = null,
+    Object? currentSelectedList = null,
   }) {
-    return _then(_$ErrorImpl(
-      null == error
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
+    return _then(_$SuperAdminDashboardStateImpl(
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      currentTab: null == currentTab
+          ? _value.currentTab
+          : currentTab // ignore: cast_nullable_to_non_nullable
+              as EventDisplayType,
+      currentSelectedList: null == currentSelectedList
+          ? _value._currentSelectedList
+          : currentSelectedList // ignore: cast_nullable_to_non_nullable
+              as List<EventListDomainModel>,
     ));
   }
 }
 
 /// @nodoc
 
-class _$ErrorImpl implements _Error {
-  const _$ErrorImpl(this.error);
+class _$SuperAdminDashboardStateImpl implements _SuperAdminDashboardState {
+  const _$SuperAdminDashboardStateImpl(
+      {this.isLoading = false,
+      this.errorMessage,
+      this.currentTab = EventDisplayType.live,
+      final List<EventListDomainModel> currentSelectedList = const []})
+      : _currentSelectedList = currentSelectedList;
 
   @override
-  final String error;
-
+  @JsonKey()
+  final bool isLoading;
   @override
-  String toString() {
-    return 'SuperAdminDashboardState.error(error: $error)';
-  }
-
+  final String? errorMessage;
   @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ErrorImpl &&
-            (identical(other.error, error) || other.error == error));
-  }
-
+  @JsonKey()
+  final EventDisplayType currentTab;
+  final List<EventListDomainModel> _currentSelectedList;
   @override
-  int get hashCode => Object.hash(runtimeType, error);
-
-  /// Create a copy of SuperAdminDashboardState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
-      __$$ErrorImplCopyWithImpl<_$ErrorImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String error) error,
-    required TResult Function(List<String> liveEvents) live,
-    required TResult Function(List<String> requestsEvents) requests,
-  }) {
-    return error(this.error);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String error)? error,
-    TResult? Function(List<String> liveEvents)? live,
-    TResult? Function(List<String> requestsEvents)? requests,
-  }) {
-    return error?.call(this.error);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String error)? error,
-    TResult Function(List<String> liveEvents)? live,
-    TResult Function(List<String> requestsEvents)? requests,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this.error);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Error value) error,
-    required TResult Function(_LiveEvents value) live,
-    required TResult Function(_RequestsEvents value) requests,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_LiveEvents value)? live,
-    TResult? Function(_RequestsEvents value)? requests,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Error value)? error,
-    TResult Function(_LiveEvents value)? live,
-    TResult Function(_RequestsEvents value)? requests,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Error implements SuperAdminDashboardState {
-  const factory _Error(final String error) = _$ErrorImpl;
-
-  String get error;
-
-  /// Create a copy of SuperAdminDashboardState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$LiveEventsImplCopyWith<$Res> {
-  factory _$$LiveEventsImplCopyWith(
-          _$LiveEventsImpl value, $Res Function(_$LiveEventsImpl) then) =
-      __$$LiveEventsImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({List<String> liveEvents});
-}
-
-/// @nodoc
-class __$$LiveEventsImplCopyWithImpl<$Res>
-    extends _$SuperAdminDashboardStateCopyWithImpl<$Res, _$LiveEventsImpl>
-    implements _$$LiveEventsImplCopyWith<$Res> {
-  __$$LiveEventsImplCopyWithImpl(
-      _$LiveEventsImpl _value, $Res Function(_$LiveEventsImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of SuperAdminDashboardState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? liveEvents = null,
-  }) {
-    return _then(_$LiveEventsImpl(
-      null == liveEvents
-          ? _value._liveEvents
-          : liveEvents // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$LiveEventsImpl implements _LiveEvents {
-  const _$LiveEventsImpl(final List<String> liveEvents)
-      : _liveEvents = liveEvents;
-
-  final List<String> _liveEvents;
-  @override
-  List<String> get liveEvents {
-    if (_liveEvents is EqualUnmodifiableListView) return _liveEvents;
+  @JsonKey()
+  List<EventListDomainModel> get currentSelectedList {
+    if (_currentSelectedList is EqualUnmodifiableListView)
+      return _currentSelectedList;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_liveEvents);
+    return EqualUnmodifiableListView(_currentSelectedList);
   }
 
   @override
   String toString() {
-    return 'SuperAdminDashboardState.live(liveEvents: $liveEvents)';
+    return 'SuperAdminDashboardState(isLoading: $isLoading, errorMessage: $errorMessage, currentTab: $currentTab, currentSelectedList: $currentSelectedList)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LiveEventsImpl &&
+            other is _$SuperAdminDashboardStateImpl &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage) &&
+            (identical(other.currentTab, currentTab) ||
+                other.currentTab == currentTab) &&
             const DeepCollectionEquality()
-                .equals(other._liveEvents, _liveEvents));
+                .equals(other._currentSelectedList, _currentSelectedList));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_liveEvents));
+  int get hashCode => Object.hash(runtimeType, isLoading, errorMessage,
+      currentTab, const DeepCollectionEquality().hash(_currentSelectedList));
 
   /// Create a copy of SuperAdminDashboardState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$LiveEventsImplCopyWith<_$LiveEventsImpl> get copyWith =>
-      __$$LiveEventsImplCopyWithImpl<_$LiveEventsImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String error) error,
-    required TResult Function(List<String> liveEvents) live,
-    required TResult Function(List<String> requestsEvents) requests,
-  }) {
-    return live(liveEvents);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String error)? error,
-    TResult? Function(List<String> liveEvents)? live,
-    TResult? Function(List<String> requestsEvents)? requests,
-  }) {
-    return live?.call(liveEvents);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String error)? error,
-    TResult Function(List<String> liveEvents)? live,
-    TResult Function(List<String> requestsEvents)? requests,
-    required TResult orElse(),
-  }) {
-    if (live != null) {
-      return live(liveEvents);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Error value) error,
-    required TResult Function(_LiveEvents value) live,
-    required TResult Function(_RequestsEvents value) requests,
-  }) {
-    return live(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_LiveEvents value)? live,
-    TResult? Function(_RequestsEvents value)? requests,
-  }) {
-    return live?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Error value)? error,
-    TResult Function(_LiveEvents value)? live,
-    TResult Function(_RequestsEvents value)? requests,
-    required TResult orElse(),
-  }) {
-    if (live != null) {
-      return live(this);
-    }
-    return orElse();
-  }
+  _$$SuperAdminDashboardStateImplCopyWith<_$SuperAdminDashboardStateImpl>
+      get copyWith => __$$SuperAdminDashboardStateImplCopyWithImpl<
+          _$SuperAdminDashboardStateImpl>(this, _$identity);
 }
 
-abstract class _LiveEvents implements SuperAdminDashboardState {
-  const factory _LiveEvents(final List<String> liveEvents) = _$LiveEventsImpl;
+abstract class _SuperAdminDashboardState implements SuperAdminDashboardState {
+  const factory _SuperAdminDashboardState(
+          {final bool isLoading,
+          final String? errorMessage,
+          final EventDisplayType currentTab,
+          final List<EventListDomainModel> currentSelectedList}) =
+      _$SuperAdminDashboardStateImpl;
 
-  List<String> get liveEvents;
+  @override
+  bool get isLoading;
+  @override
+  String? get errorMessage;
+  @override
+  EventDisplayType get currentTab;
+  @override
+  List<EventListDomainModel> get currentSelectedList;
 
   /// Create a copy of SuperAdminDashboardState
   /// with the given fields replaced by the non-null parameter values.
+  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LiveEventsImplCopyWith<_$LiveEventsImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$RequestsEventsImplCopyWith<$Res> {
-  factory _$$RequestsEventsImplCopyWith(_$RequestsEventsImpl value,
-          $Res Function(_$RequestsEventsImpl) then) =
-      __$$RequestsEventsImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({List<String> requestsEvents});
-}
-
-/// @nodoc
-class __$$RequestsEventsImplCopyWithImpl<$Res>
-    extends _$SuperAdminDashboardStateCopyWithImpl<$Res, _$RequestsEventsImpl>
-    implements _$$RequestsEventsImplCopyWith<$Res> {
-  __$$RequestsEventsImplCopyWithImpl(
-      _$RequestsEventsImpl _value, $Res Function(_$RequestsEventsImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of SuperAdminDashboardState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? requestsEvents = null,
-  }) {
-    return _then(_$RequestsEventsImpl(
-      null == requestsEvents
-          ? _value._requestsEvents
-          : requestsEvents // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$RequestsEventsImpl implements _RequestsEvents {
-  const _$RequestsEventsImpl(final List<String> requestsEvents)
-      : _requestsEvents = requestsEvents;
-
-  final List<String> _requestsEvents;
-  @override
-  List<String> get requestsEvents {
-    if (_requestsEvents is EqualUnmodifiableListView) return _requestsEvents;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_requestsEvents);
-  }
-
-  @override
-  String toString() {
-    return 'SuperAdminDashboardState.requests(requestsEvents: $requestsEvents)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$RequestsEventsImpl &&
-            const DeepCollectionEquality()
-                .equals(other._requestsEvents, _requestsEvents));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_requestsEvents));
-
-  /// Create a copy of SuperAdminDashboardState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$RequestsEventsImplCopyWith<_$RequestsEventsImpl> get copyWith =>
-      __$$RequestsEventsImplCopyWithImpl<_$RequestsEventsImpl>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(String error) error,
-    required TResult Function(List<String> liveEvents) live,
-    required TResult Function(List<String> requestsEvents) requests,
-  }) {
-    return requests(requestsEvents);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(String error)? error,
-    TResult? Function(List<String> liveEvents)? live,
-    TResult? Function(List<String> requestsEvents)? requests,
-  }) {
-    return requests?.call(requestsEvents);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(String error)? error,
-    TResult Function(List<String> liveEvents)? live,
-    TResult Function(List<String> requestsEvents)? requests,
-    required TResult orElse(),
-  }) {
-    if (requests != null) {
-      return requests(requestsEvents);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Error value) error,
-    required TResult Function(_LiveEvents value) live,
-    required TResult Function(_RequestsEvents value) requests,
-  }) {
-    return requests(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Error value)? error,
-    TResult? Function(_LiveEvents value)? live,
-    TResult? Function(_RequestsEvents value)? requests,
-  }) {
-    return requests?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Error value)? error,
-    TResult Function(_LiveEvents value)? live,
-    TResult Function(_RequestsEvents value)? requests,
-    required TResult orElse(),
-  }) {
-    if (requests != null) {
-      return requests(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _RequestsEvents implements SuperAdminDashboardState {
-  const factory _RequestsEvents(final List<String> requestsEvents) =
-      _$RequestsEventsImpl;
-
-  List<String> get requestsEvents;
-
-  /// Create a copy of SuperAdminDashboardState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$RequestsEventsImplCopyWith<_$RequestsEventsImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$SuperAdminDashboardStateImplCopyWith<_$SuperAdminDashboardStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

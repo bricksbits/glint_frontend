@@ -5,7 +5,7 @@ import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/login_request_body.dart';
 import 'package:glint_frontend/data/remote/model/response/auth/login_response.dart';
-import 'package:glint_frontend/data/remote/utils/safe_api_call_handler.dart';
+import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
@@ -22,10 +22,9 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
 
   @override
   Future<Result<void>> createAccount() async {
-    final response = safeApiCallHandler(
+    final response = apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/registerUser",
       requestBody: null,
       passedQueryParameters: null,
@@ -36,10 +35,9 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
 
   @override
   Future<Result<LoginResponse>> login(LoginRequestBody loginRequestBody) async {
-    final response = await safeApiCallHandler(
+    final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
-      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "auth/v1/login",
       requestBody: loginRequestBody.toJson(),
       passedQueryParameters: null,

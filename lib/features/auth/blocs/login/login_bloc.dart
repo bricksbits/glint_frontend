@@ -16,21 +16,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final Future<SignInUserUseCase> signInUserUseCase = getIt.getAsync();
 
   LoginBloc() : super(const LoginState.initial()) {
-    String? _email;
-    String? _password;
+    String? email;
+    String? password;
 
     on<_EmailInput>((event, emit) {
-      _email = event.email;
+      email = event.email;
     });
 
     on<_PasswordInput>((event, emit) {
-      _password = event.password;
+      password = event.password;
     });
 
     on<_Login>(
       (event, emit) async {
-        if (_email != null && _password != null) {
-          loginUser(_email!, _password!);
+        if (email != null && password != null) {
+          loginUser(email!, password!);
         }
       },
     );

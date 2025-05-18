@@ -4,7 +4,9 @@ import 'package:glint_frontend/domain/business_logic/models/admin/event_approve_
 import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_repo.dart';
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class ApprovePublishedEventUsecase
     extends UseCase<bool, EventApproveOrRejectDomainModel> {
   final AdminDashboardRepo adminDashBoardRepo;

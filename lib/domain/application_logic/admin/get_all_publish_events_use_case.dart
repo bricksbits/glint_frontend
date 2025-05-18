@@ -5,14 +5,14 @@ import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_r
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
-class GetAllPublishEventsUsecase extends UseCase<EventListDomainModel, void> {
+class GetAllPublishEventsUsecase extends UseCase<List<EventListDomainModel>, void> {
   final AdminDashboardRepo adminDashboardRepo;
 
   GetAllPublishEventsUsecase(this.adminDashboardRepo);
 
   @override
-  Future<Stream<EventListDomainModel?>> buildUseCaseStream(void params) async {
-    final StreamController<EventListDomainModel?> controller =
+  Future<Stream<List<EventListDomainModel>?>> buildUseCaseStream(void params) async {
+    final StreamController<List<EventListDomainModel>?> controller =
         StreamController();
     try {
       adminDashboardRepo.getAllPublishEvents().then((result) {

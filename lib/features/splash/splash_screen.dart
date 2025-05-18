@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _navigateToRespectedRoutes() {
-    final targetRoute = GlintMainRoutes.home.name;
+    final targetRoute = GlintAdminDasboardRoutes.auth.name;
     if (context.mounted) {
       context.goNamed(targetRoute);
     }

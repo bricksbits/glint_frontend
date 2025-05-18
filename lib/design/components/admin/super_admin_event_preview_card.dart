@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/admin/bloc/super_admin_dashboard/super_admin_dashboard_bloc.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:glint_frontend/features/admin/screen/exports.dart';
 
 class SuperAdminEventPreviewCard extends StatelessWidget {
   const SuperAdminEventPreviewCard({
     super.key,
     required this.eventDisplayType,
+    required this.onAcceptEvent,
+    required this.onRejectEvent,
+    required this.eventName,
+    required this.eventDate,
+    required this.eventOrganiser,
   });
 
   final EventDisplayType eventDisplayType;
+  final VoidCallback onAcceptEvent;
+  final VoidCallback onRejectEvent;
+  final String eventName;
+  final String eventDate;
+  final String eventOrganiser;
 
   @override
   Widget build(BuildContext context) {
-    const eventName = 'The Local Food Fest';
-    const eventDate = '20 Feb 2023';
     const eventImage =
         'https://media.istockphoto.com/id/1806011581/photo/overjoyed-happy-young-people-dancing-jumping-and-singing-during-concert-of-favorite-group.jpg?s=612x612&w=0&k=20&c=cMFdhX403-yKneupEN-VWSfFdy6UWf1H0zqo6QBChP4%3D';
-    const eventOrganiser = 'Invisible Studios';
 
     return Container(
       width: double.infinity,
@@ -39,6 +46,7 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // image and details.
@@ -61,7 +69,7 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
 
                     const Gap(12.0),
 
-                    const SizedBox(
+                    SizedBox(
                       height: 64.0,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,23 +79,20 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
                             eventName,
                             overflow: TextOverflow.clip,
                             style: AppTheme.simpleBodyText,
+
                           ),
                           GlintIconLabel(
                             iconPath: 'lib/assets/icons/calendar_icon.svg',
                             label: eventDate,
                             style: AppTheme.smallBodyText,
                           ),
-                          Gap(4.0),
+                          const Gap(4.0),
                         ],
                       ),
                     ),
                   ],
                 ),
 
-                // event status
-                const Spacer(),
-
-                // redirect to specific event screen
                 Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
@@ -156,9 +161,7 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         color: AppColours.white,
                       ),
-                      onPressed: () {
-                        // todo - implement super admin accept functionality
-                      },
+                      onPressed: onAcceptEvent,
                     ),
                   ),
                   const Gap(24.0),
@@ -175,9 +178,7 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         color: AppColours.rejectedColor,
                       ),
-                      onPressed: () {
-                        // todo - implement super admin reject functionality
-                      },
+                      onPressed: onRejectEvent,
                     ),
                   ),
                 ],
