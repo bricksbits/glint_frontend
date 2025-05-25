@@ -14,7 +14,7 @@ abstract class LocalModule {
   // ProfileDao getProfileDao(GlintDatabase database) => database.profileDao;
   //
 
-  @singleton
+  @preResolve
   Future<EncryptedSharedPreferencesAsync> sharedPref() async {
     const baseKey = "GLINT_PREF";
     final hashedKeyBytes = sha256.convert(utf8.encode(baseKey)).bytes;

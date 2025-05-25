@@ -9,7 +9,7 @@ import 'package:stream_chat_localizations/stream_chat_localizations.dart';
 class MyGlintApp extends StatelessWidget {
   MyGlintApp({super.key});
 
-  final StreamChatClient chatClient = getIt.get();
+  final StreamChatClient chatClient = getIt.get<StreamChatClient>();
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class MyGlintApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
       // routerConfig: kIsWeb ? glintAdminRoutes : glintMainRoutes,
-      routerConfig: glintAdminRoutes,
+      routerConfig: glintMainRoutes,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -27,10 +27,9 @@ class MyGlintApp extends StatelessWidget {
         // Add this for Cupertino widgets if needed
       ],
       supportedLocales: const [
-        Locale('en'), // Add other supported locales here
+        Locale('en'),
       ],
       builder: (context, child) {
-        // ✅ Here, context has Localizations above it
         return StreamChat(
           streamChatThemeData: StreamChatThemeData(),
           client: chatClient,

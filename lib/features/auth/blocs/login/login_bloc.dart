@@ -13,7 +13,7 @@ part 'login_state.dart';
 part 'login_bloc.freezed.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final Future<SignInUserUseCase> signInUserUseCase = getIt.getAsync();
+  final SignInUserUseCase signInUserUseCase = getIt.get();
 
   LoginBloc() : super(const LoginState.initial()) {
     String? email;
@@ -40,10 +40,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     String validEmail,
     String validPassword,
   ) async {
-    SignInUserUseCase useCase = await signInUserUseCase;
-    useCase.perform(
+    signInUserUseCase.perform(
       (response) {
-        emit(LoginState.success(UsersType.SUPER_ADMIN));
+        emit(const LoginState.success(UsersType.USER));
       },
       (error) {
         print("Login Bloc : Error $error");

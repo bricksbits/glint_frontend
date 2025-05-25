@@ -19,32 +19,45 @@ mixin _$SplashScreenEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
+    required TResult Function(SplashScreenState passedState) emitNewStates,
+    required TResult Function() startSplashAnimation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
+    TResult? Function(SplashScreenState passedState)? emitNewStates,
+    TResult? Function()? startSplashAnimation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
+    TResult Function(SplashScreenState passedState)? emitNewStates,
+    TResult Function()? startSplashAnimation,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
+    required TResult Function(_EmitStates value) emitNewStates,
+    required TResult Function(_SplashAnimationStarted value)
+        startSplashAnimation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
+    TResult? Function(_EmitStates value)? emitNewStates,
+    TResult? Function(_SplashAnimationStarted value)? startSplashAnimation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
+    TResult Function(_EmitStates value)? emitNewStates,
+    TResult Function(_SplashAnimationStarted value)? startSplashAnimation,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -113,6 +126,8 @@ class _$StartedImpl implements _Started {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
+    required TResult Function(SplashScreenState passedState) emitNewStates,
+    required TResult Function() startSplashAnimation,
   }) {
     return started();
   }
@@ -121,6 +136,8 @@ class _$StartedImpl implements _Started {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
+    TResult? Function(SplashScreenState passedState)? emitNewStates,
+    TResult? Function()? startSplashAnimation,
   }) {
     return started?.call();
   }
@@ -129,6 +146,8 @@ class _$StartedImpl implements _Started {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
+    TResult Function(SplashScreenState passedState)? emitNewStates,
+    TResult Function()? startSplashAnimation,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -141,6 +160,9 @@ class _$StartedImpl implements _Started {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
+    required TResult Function(_EmitStates value) emitNewStates,
+    required TResult Function(_SplashAnimationStarted value)
+        startSplashAnimation,
   }) {
     return started(this);
   }
@@ -149,6 +171,8 @@ class _$StartedImpl implements _Started {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
+    TResult? Function(_EmitStates value)? emitNewStates,
+    TResult? Function(_SplashAnimationStarted value)? startSplashAnimation,
   }) {
     return started?.call(this);
   }
@@ -157,6 +181,8 @@ class _$StartedImpl implements _Started {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
+    TResult Function(_EmitStates value)? emitNewStates,
+    TResult Function(_SplashAnimationStarted value)? startSplashAnimation,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -171,23 +197,305 @@ abstract class _Started implements SplashScreenEvent {
 }
 
 /// @nodoc
+abstract class _$$EmitStatesImplCopyWith<$Res> {
+  factory _$$EmitStatesImplCopyWith(
+          _$EmitStatesImpl value, $Res Function(_$EmitStatesImpl) then) =
+      __$$EmitStatesImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({SplashScreenState passedState});
+
+  $SplashScreenStateCopyWith<$Res> get passedState;
+}
+
+/// @nodoc
+class __$$EmitStatesImplCopyWithImpl<$Res>
+    extends _$SplashScreenEventCopyWithImpl<$Res, _$EmitStatesImpl>
+    implements _$$EmitStatesImplCopyWith<$Res> {
+  __$$EmitStatesImplCopyWithImpl(
+      _$EmitStatesImpl _value, $Res Function(_$EmitStatesImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SplashScreenEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? passedState = null,
+  }) {
+    return _then(_$EmitStatesImpl(
+      null == passedState
+          ? _value.passedState
+          : passedState // ignore: cast_nullable_to_non_nullable
+              as SplashScreenState,
+    ));
+  }
+
+  /// Create a copy of SplashScreenEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SplashScreenStateCopyWith<$Res> get passedState {
+    return $SplashScreenStateCopyWith<$Res>(_value.passedState, (value) {
+      return _then(_value.copyWith(passedState: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$EmitStatesImpl implements _EmitStates {
+  const _$EmitStatesImpl(this.passedState);
+
+  @override
+  final SplashScreenState passedState;
+
+  @override
+  String toString() {
+    return 'SplashScreenEvent.emitNewStates(passedState: $passedState)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$EmitStatesImpl &&
+            (identical(other.passedState, passedState) ||
+                other.passedState == passedState));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, passedState);
+
+  /// Create a copy of SplashScreenEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$EmitStatesImplCopyWith<_$EmitStatesImpl> get copyWith =>
+      __$$EmitStatesImplCopyWithImpl<_$EmitStatesImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function(SplashScreenState passedState) emitNewStates,
+    required TResult Function() startSplashAnimation,
+  }) {
+    return emitNewStates(passedState);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function(SplashScreenState passedState)? emitNewStates,
+    TResult? Function()? startSplashAnimation,
+  }) {
+    return emitNewStates?.call(passedState);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function(SplashScreenState passedState)? emitNewStates,
+    TResult Function()? startSplashAnimation,
+    required TResult orElse(),
+  }) {
+    if (emitNewStates != null) {
+      return emitNewStates(passedState);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) started,
+    required TResult Function(_EmitStates value) emitNewStates,
+    required TResult Function(_SplashAnimationStarted value)
+        startSplashAnimation,
+  }) {
+    return emitNewStates(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? started,
+    TResult? Function(_EmitStates value)? emitNewStates,
+    TResult? Function(_SplashAnimationStarted value)? startSplashAnimation,
+  }) {
+    return emitNewStates?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? started,
+    TResult Function(_EmitStates value)? emitNewStates,
+    TResult Function(_SplashAnimationStarted value)? startSplashAnimation,
+    required TResult orElse(),
+  }) {
+    if (emitNewStates != null) {
+      return emitNewStates(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _EmitStates implements SplashScreenEvent {
+  const factory _EmitStates(final SplashScreenState passedState) =
+      _$EmitStatesImpl;
+
+  SplashScreenState get passedState;
+
+  /// Create a copy of SplashScreenEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$EmitStatesImplCopyWith<_$EmitStatesImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SplashAnimationStartedImplCopyWith<$Res> {
+  factory _$$SplashAnimationStartedImplCopyWith(
+          _$SplashAnimationStartedImpl value,
+          $Res Function(_$SplashAnimationStartedImpl) then) =
+      __$$SplashAnimationStartedImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$SplashAnimationStartedImplCopyWithImpl<$Res>
+    extends _$SplashScreenEventCopyWithImpl<$Res, _$SplashAnimationStartedImpl>
+    implements _$$SplashAnimationStartedImplCopyWith<$Res> {
+  __$$SplashAnimationStartedImplCopyWithImpl(
+      _$SplashAnimationStartedImpl _value,
+      $Res Function(_$SplashAnimationStartedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SplashScreenEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$SplashAnimationStartedImpl implements _SplashAnimationStarted {
+  const _$SplashAnimationStartedImpl();
+
+  @override
+  String toString() {
+    return 'SplashScreenEvent.startSplashAnimation()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SplashAnimationStartedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function(SplashScreenState passedState) emitNewStates,
+    required TResult Function() startSplashAnimation,
+  }) {
+    return startSplashAnimation();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function(SplashScreenState passedState)? emitNewStates,
+    TResult? Function()? startSplashAnimation,
+  }) {
+    return startSplashAnimation?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function(SplashScreenState passedState)? emitNewStates,
+    TResult Function()? startSplashAnimation,
+    required TResult orElse(),
+  }) {
+    if (startSplashAnimation != null) {
+      return startSplashAnimation();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) started,
+    required TResult Function(_EmitStates value) emitNewStates,
+    required TResult Function(_SplashAnimationStarted value)
+        startSplashAnimation,
+  }) {
+    return startSplashAnimation(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? started,
+    TResult? Function(_EmitStates value)? emitNewStates,
+    TResult? Function(_SplashAnimationStarted value)? startSplashAnimation,
+  }) {
+    return startSplashAnimation?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? started,
+    TResult Function(_EmitStates value)? emitNewStates,
+    TResult Function(_SplashAnimationStarted value)? startSplashAnimation,
+    required TResult orElse(),
+  }) {
+    if (startSplashAnimation != null) {
+      return startSplashAnimation(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SplashAnimationStarted implements SplashScreenEvent {
+  const factory _SplashAnimationStarted() = _$SplashAnimationStartedImpl;
+}
+
+/// @nodoc
 mixin _$SplashScreenState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function(String newRoute) navigateTo,
+    required TResult Function() splashSuccess,
+    required TResult Function() splashFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function(String newRoute)? navigateTo,
+    TResult? Function()? splashSuccess,
+    TResult? Function()? splashFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(String newRoute)? navigateTo,
+    TResult Function()? splashSuccess,
+    TResult Function()? splashFailure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -195,18 +503,24 @@ mixin _$SplashScreenState {
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
     required TResult Function(_NavigateTo value) navigateTo,
+    required TResult Function(_SplashSuccess value) splashSuccess,
+    required TResult Function(_SplashFailure value) splashFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
     TResult? Function(_NavigateTo value)? navigateTo,
+    TResult? Function(_SplashSuccess value)? splashSuccess,
+    TResult? Function(_SplashFailure value)? splashFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
     TResult Function(_NavigateTo value)? navigateTo,
+    TResult Function(_SplashSuccess value)? splashSuccess,
+    TResult Function(_SplashFailure value)? splashFailure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -276,6 +590,8 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function(String newRoute) navigateTo,
+    required TResult Function() splashSuccess,
+    required TResult Function() splashFailure,
   }) {
     return initial();
   }
@@ -285,6 +601,8 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function(String newRoute)? navigateTo,
+    TResult? Function()? splashSuccess,
+    TResult? Function()? splashFailure,
   }) {
     return initial?.call();
   }
@@ -294,6 +612,8 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(String newRoute)? navigateTo,
+    TResult Function()? splashSuccess,
+    TResult Function()? splashFailure,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -307,6 +627,8 @@ class _$InitialImpl implements _Initial {
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
     required TResult Function(_NavigateTo value) navigateTo,
+    required TResult Function(_SplashSuccess value) splashSuccess,
+    required TResult Function(_SplashFailure value) splashFailure,
   }) {
     return initial(this);
   }
@@ -316,6 +638,8 @@ class _$InitialImpl implements _Initial {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
     TResult? Function(_NavigateTo value)? navigateTo,
+    TResult? Function(_SplashSuccess value)? splashSuccess,
+    TResult? Function(_SplashFailure value)? splashFailure,
   }) {
     return initial?.call(this);
   }
@@ -325,6 +649,8 @@ class _$InitialImpl implements _Initial {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
     TResult Function(_NavigateTo value)? navigateTo,
+    TResult Function(_SplashSuccess value)? splashSuccess,
+    TResult Function(_SplashFailure value)? splashFailure,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -409,6 +735,8 @@ class _$NavigateToImpl implements _NavigateTo {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function(String newRoute) navigateTo,
+    required TResult Function() splashSuccess,
+    required TResult Function() splashFailure,
   }) {
     return navigateTo(newRoute);
   }
@@ -418,6 +746,8 @@ class _$NavigateToImpl implements _NavigateTo {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function(String newRoute)? navigateTo,
+    TResult? Function()? splashSuccess,
+    TResult? Function()? splashFailure,
   }) {
     return navigateTo?.call(newRoute);
   }
@@ -427,6 +757,8 @@ class _$NavigateToImpl implements _NavigateTo {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(String newRoute)? navigateTo,
+    TResult Function()? splashSuccess,
+    TResult Function()? splashFailure,
     required TResult orElse(),
   }) {
     if (navigateTo != null) {
@@ -440,6 +772,8 @@ class _$NavigateToImpl implements _NavigateTo {
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
     required TResult Function(_NavigateTo value) navigateTo,
+    required TResult Function(_SplashSuccess value) splashSuccess,
+    required TResult Function(_SplashFailure value) splashFailure,
   }) {
     return navigateTo(this);
   }
@@ -449,6 +783,8 @@ class _$NavigateToImpl implements _NavigateTo {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
     TResult? Function(_NavigateTo value)? navigateTo,
+    TResult? Function(_SplashSuccess value)? splashSuccess,
+    TResult? Function(_SplashFailure value)? splashFailure,
   }) {
     return navigateTo?.call(this);
   }
@@ -458,6 +794,8 @@ class _$NavigateToImpl implements _NavigateTo {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
     TResult Function(_NavigateTo value)? navigateTo,
+    TResult Function(_SplashSuccess value)? splashSuccess,
+    TResult Function(_SplashFailure value)? splashFailure,
     required TResult orElse(),
   }) {
     if (navigateTo != null) {
@@ -477,4 +815,238 @@ abstract class _NavigateTo implements SplashScreenState {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NavigateToImplCopyWith<_$NavigateToImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SplashSuccessImplCopyWith<$Res> {
+  factory _$$SplashSuccessImplCopyWith(
+          _$SplashSuccessImpl value, $Res Function(_$SplashSuccessImpl) then) =
+      __$$SplashSuccessImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$SplashSuccessImplCopyWithImpl<$Res>
+    extends _$SplashScreenStateCopyWithImpl<$Res, _$SplashSuccessImpl>
+    implements _$$SplashSuccessImplCopyWith<$Res> {
+  __$$SplashSuccessImplCopyWithImpl(
+      _$SplashSuccessImpl _value, $Res Function(_$SplashSuccessImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SplashScreenState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$SplashSuccessImpl implements _SplashSuccess {
+  const _$SplashSuccessImpl();
+
+  @override
+  String toString() {
+    return 'SplashScreenState.splashSuccess()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$SplashSuccessImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(String newRoute) navigateTo,
+    required TResult Function() splashSuccess,
+    required TResult Function() splashFailure,
+  }) {
+    return splashSuccess();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(String newRoute)? navigateTo,
+    TResult? Function()? splashSuccess,
+    TResult? Function()? splashFailure,
+  }) {
+    return splashSuccess?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(String newRoute)? navigateTo,
+    TResult Function()? splashSuccess,
+    TResult Function()? splashFailure,
+    required TResult orElse(),
+  }) {
+    if (splashSuccess != null) {
+      return splashSuccess();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_NavigateTo value) navigateTo,
+    required TResult Function(_SplashSuccess value) splashSuccess,
+    required TResult Function(_SplashFailure value) splashFailure,
+  }) {
+    return splashSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_NavigateTo value)? navigateTo,
+    TResult? Function(_SplashSuccess value)? splashSuccess,
+    TResult? Function(_SplashFailure value)? splashFailure,
+  }) {
+    return splashSuccess?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_NavigateTo value)? navigateTo,
+    TResult Function(_SplashSuccess value)? splashSuccess,
+    TResult Function(_SplashFailure value)? splashFailure,
+    required TResult orElse(),
+  }) {
+    if (splashSuccess != null) {
+      return splashSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SplashSuccess implements SplashScreenState {
+  const factory _SplashSuccess() = _$SplashSuccessImpl;
+}
+
+/// @nodoc
+abstract class _$$SplashFailureImplCopyWith<$Res> {
+  factory _$$SplashFailureImplCopyWith(
+          _$SplashFailureImpl value, $Res Function(_$SplashFailureImpl) then) =
+      __$$SplashFailureImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$SplashFailureImplCopyWithImpl<$Res>
+    extends _$SplashScreenStateCopyWithImpl<$Res, _$SplashFailureImpl>
+    implements _$$SplashFailureImplCopyWith<$Res> {
+  __$$SplashFailureImplCopyWithImpl(
+      _$SplashFailureImpl _value, $Res Function(_$SplashFailureImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SplashScreenState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$SplashFailureImpl implements _SplashFailure {
+  const _$SplashFailureImpl();
+
+  @override
+  String toString() {
+    return 'SplashScreenState.splashFailure()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$SplashFailureImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(String newRoute) navigateTo,
+    required TResult Function() splashSuccess,
+    required TResult Function() splashFailure,
+  }) {
+    return splashFailure();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(String newRoute)? navigateTo,
+    TResult? Function()? splashSuccess,
+    TResult? Function()? splashFailure,
+  }) {
+    return splashFailure?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(String newRoute)? navigateTo,
+    TResult Function()? splashSuccess,
+    TResult Function()? splashFailure,
+    required TResult orElse(),
+  }) {
+    if (splashFailure != null) {
+      return splashFailure();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_NavigateTo value) navigateTo,
+    required TResult Function(_SplashSuccess value) splashSuccess,
+    required TResult Function(_SplashFailure value) splashFailure,
+  }) {
+    return splashFailure(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_NavigateTo value)? navigateTo,
+    TResult? Function(_SplashSuccess value)? splashSuccess,
+    TResult? Function(_SplashFailure value)? splashFailure,
+  }) {
+    return splashFailure?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_NavigateTo value)? navigateTo,
+    TResult Function(_SplashSuccess value)? splashSuccess,
+    TResult Function(_SplashFailure value)? splashFailure,
+    required TResult orElse(),
+  }) {
+    if (splashFailure != null) {
+      return splashFailure(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SplashFailure implements SplashScreenState {
+  const factory _SplashFailure() = _$SplashFailureImpl;
 }

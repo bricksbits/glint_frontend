@@ -3,7 +3,7 @@ import 'package:glint_frontend/data/local/persist/async_encrypted_shared_prefere
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@LazySingleton()
 class IsUserLoggedInUsecase extends UseCase<bool,void> {
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
 

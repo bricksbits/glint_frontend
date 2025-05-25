@@ -16,18 +16,18 @@ part 'super_admin_dashboard_bloc.freezed.dart';
 
 class SuperAdminDashboardBloc
     extends Bloc<SuperAdminDashboardEvent, SuperAdminDashboardState> {
-  final Future<GetAllEventsUsecase> allEventsUseCase = getIt.getAsync();
-  final Future<ApprovePublishedEventUsecase> approveEventUseCase =
-      getIt.getAsync();
-  final Future<RejectPublishedEventUsecase> rejectEventUseCase =
-      getIt.getAsync();
+  final GetAllEventsUsecase allEventsUseCase = getIt.get();
+  final ApprovePublishedEventUsecase approveEventUseCase =
+      getIt.get();
+  final RejectPublishedEventUsecase rejectEventUseCase =
+      getIt.get();
 
   List<EventListDomainModel> liveEvents = [];
   List<EventListDomainModel> requestEvents = [];
 
   SuperAdminDashboardBloc() : super(const SuperAdminDashboardState()) {
     on<_Fetch>((event, emit) async {
-      final allEvents = await allEventsUseCase;
+      final allEvents = allEventsUseCase;
       allEvents.perform((allEvents) async {
         if (allEvents != null && allEvents.isNotEmpty) {
           liveEvents = allEvents
@@ -49,7 +49,7 @@ class SuperAdminDashboardBloc
       (event, emit) async {
         emit(state.copyWith(isLoading: true));
         final selectedEventId = event.eventId;
-        final usecase = await approveEventUseCase;
+        final usecase = approveEventUseCase;
         usecase.perform((isApproved) {
           if (isApproved != null && isApproved) {
             final itemSelected = requestEvents
@@ -77,7 +77,7 @@ class SuperAdminDashboardBloc
 
     on<_RejectEvent>((event, emit) async {
       final selectedEventId = event.eventId;
-      final usecase = await rejectEventUseCase;
+      final usecase = rejectEventUseCase;
       usecase.perform(
         (isRejected) {
           if (isRejected != null && isRejected) {

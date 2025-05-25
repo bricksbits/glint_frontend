@@ -39,10 +39,10 @@ import 'network_module.dart' as _i567;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
-  _i174.GetIt init({
+  Future<_i174.GetIt> init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
-  }) {
+  }) async {
     final gh = _i526.GetItHelper(
       this,
       environment,
@@ -50,42 +50,41 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final localModule = _$LocalModule();
     final networkModule = _$NetworkModule();
-    gh.singletonAsync<_i930.EncryptedSharedPreferencesAsync>(
-        () => localModule.sharedPref());
+    await gh.factoryAsync<_i930.EncryptedSharedPreferencesAsync>(
+      () => localModule.sharedPref(),
+      preResolve: true,
+    );
     gh.singleton<_i361.Dio>(() => networkModule.getHttpClientInstance());
     gh.singleton<_i981.StreamChatClient>(() => networkModule.chatClient());
-    gh.factoryAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(() async =>
+    gh.lazySingleton<_i274.AsyncEncryptedSharedPreferenceHelper>(() =>
         _i274.AsyncEncryptedSharedPreferenceHelper(
-            await getAsync<_i930.EncryptedSharedPreferencesAsync>()));
-    gh.factoryAsync<_i368.MyDioClient>(() async => _i368.MyDioClient(
+            gh<_i930.EncryptedSharedPreferencesAsync>()));
+    gh.factory<_i368.MyDioClient>(() => _i368.MyDioClient(
           gh<_i361.Dio>(),
-          await getAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
-    gh.factoryAsync<_i995.ForgotPasswordRepo>(() async =>
-        _i509.ForgotPasswordRepoImpl(await getAsync<_i368.MyDioClient>()));
-    gh.factoryAsync<_i143.IsUserLoggedInUsecase>(() async =>
+    gh.factory<_i995.ForgotPasswordRepo>(
+        () => _i509.ForgotPasswordRepoImpl(gh<_i368.MyDioClient>()));
+    gh.lazySingleton<_i143.IsUserLoggedInUsecase>(() =>
         _i143.IsUserLoggedInUsecase(
-            await getAsync<_i274.AsyncEncryptedSharedPreferenceHelper>()));
-    gh.lazySingletonAsync<_i873.AuthenticationRepo>(
-        () async => _i840.AuthenticationRepoImpl(
-              await getAsync<_i368.MyDioClient>(),
-              await getAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+            gh<_i274.AsyncEncryptedSharedPreferenceHelper>()));
+    gh.lazySingleton<_i873.AuthenticationRepo>(
+        () => _i840.AuthenticationRepoImpl(
+              gh<_i368.MyDioClient>(),
+              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
             ));
-    gh.factoryAsync<_i972.SignInUserUseCase>(() async =>
-        _i972.SignInUserUseCase(await getAsync<_i873.AuthenticationRepo>()));
-    gh.factoryAsync<_i1000.AdminDashboardRepo>(() async =>
-        _i72.AdminDashBoardRepoImpl(await getAsync<_i368.MyDioClient>()));
-    gh.factoryAsync<_i849.ChatRepo>(
-        () async => _i651.ChatRepoImpl(await getAsync<_i368.MyDioClient>()));
-    gh.factoryAsync<_i579.RejectPublishedEventUsecase>(() async =>
-        _i579.RejectPublishedEventUsecase(
-            await getAsync<_i1000.AdminDashboardRepo>()));
-    gh.factoryAsync<_i839.ApprovePublishedEventUsecase>(() async =>
-        _i839.ApprovePublishedEventUsecase(
-            await getAsync<_i1000.AdminDashboardRepo>()));
-    gh.factoryAsync<_i1027.GetAllEventsUsecase>(() async =>
-        _i1027.GetAllEventsUsecase(
-            await getAsync<_i1000.AdminDashboardRepo>()));
+    gh.factory<_i972.SignInUserUseCase>(
+        () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
+    gh.factory<_i1000.AdminDashboardRepo>(
+        () => _i72.AdminDashBoardRepoImpl(gh<_i368.MyDioClient>()));
+    gh.factory<_i849.ChatRepo>(
+        () => _i651.ChatRepoImpl(gh<_i368.MyDioClient>()));
+    gh.factory<_i579.RejectPublishedEventUsecase>(() =>
+        _i579.RejectPublishedEventUsecase(gh<_i1000.AdminDashboardRepo>()));
+    gh.factory<_i839.ApprovePublishedEventUsecase>(() =>
+        _i839.ApprovePublishedEventUsecase(gh<_i1000.AdminDashboardRepo>()));
+    gh.factory<_i1027.GetAllEventsUsecase>(
+        () => _i1027.GetAllEventsUsecase(gh<_i1000.AdminDashboardRepo>()));
     return this;
   }
 }
