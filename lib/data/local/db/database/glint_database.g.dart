@@ -98,7 +98,7 @@ class _$GlintDatabase extends GlintDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `ProfileEntity` (`userId` INTEGER NOT NULL, `tag` TEXT NOT NULL, `name` TEXT NOT NULL, `age` TEXT NOT NULL, `designation` TEXT NOT NULL, `profileViews` TEXT NOT NULL, `lastLocation` TEXT NOT NULL, `pronouns` TEXT NOT NULL, `location` TEXT NOT NULL, `bio` TEXT NOT NULL, `lookingFor` TEXT NOT NULL, `about` TEXT NOT NULL, `interests` TEXT NOT NULL, PRIMARY KEY (`userId`))');
+            'CREATE TABLE IF NOT EXISTS `ProfileEntity` (`userId` INTEGER NOT NULL, `tag` TEXT NOT NULL, `name` TEXT NOT NULL, `age` TEXT NOT NULL, `designation` TEXT NOT NULL, `profileViews` TEXT NOT NULL, `lastLocation` TEXT NOT NULL, `pronouns` TEXT NOT NULL, `location` TEXT NOT NULL, `bio` TEXT NOT NULL, `lookingFor` TEXT NOT NULL, `about` TEXT NOT NULL, `interests` TEXT NOT NULL, `profilePics` TEXT NOT NULL, PRIMARY KEY (`userId`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `swipe_actions` (`collabId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `currentUserId` TEXT NOT NULL, `swipedOnUserId` TEXT NOT NULL, `isUnsent` INTEGER NOT NULL, `action` TEXT NOT NULL, `timestamp` INTEGER NOT NULL)');
 
@@ -141,7 +141,8 @@ class _$ProfileDao extends ProfileDao {
                   'bio': item.bio,
                   'lookingFor': item.lookingFor,
                   'about': _stringTypeConverter.encode(item.about),
-                  'interests': _stringTypeConverter.encode(item.interests)
+                  'interests': _stringTypeConverter.encode(item.interests),
+                  'profilePics': _stringTypeConverter.encode(item.profilePics)
                 }),
         _profileEntityUpdateAdapter = UpdateAdapter(
             database,
@@ -160,7 +161,8 @@ class _$ProfileDao extends ProfileDao {
                   'bio': item.bio,
                   'lookingFor': item.lookingFor,
                   'about': _stringTypeConverter.encode(item.about),
-                  'interests': _stringTypeConverter.encode(item.interests)
+                  'interests': _stringTypeConverter.encode(item.interests),
+                  'profilePics': _stringTypeConverter.encode(item.profilePics)
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -175,7 +177,7 @@ class _$ProfileDao extends ProfileDao {
 
   @override
   Future<ProfileEntity?> getProfileData(String passedId) async {
-    return _queryAdapter.query('SELECT * FROM ProfileEntity where id = ?1',
+    return _queryAdapter.query('SELECT * FROM ProfileEntity where userId = ?1',
         mapper: (Map<String, Object?> row) => ProfileEntity(
             userId: row['userId'] as int,
             tag: row['tag'] as String,
@@ -189,12 +191,21 @@ class _$ProfileDao extends ProfileDao {
             bio: row['bio'] as String,
             lookingFor: row['lookingFor'] as String,
             about: _stringTypeConverter.decode(row['about'] as String),
-            interests: _stringTypeConverter.decode(row['interests'] as String)),
+            interests: _stringTypeConverter.decode(row['interests'] as String),
+            profilePics:
+                _stringTypeConverter.decode(row['profilePics'] as String)),
         arguments: [passedId]);
   }
 
   @override
-  Future<void> insertCurrentUserData(ProfileEntity profile) async {
+  Future<void> deleteAlreadySwipedOnProfile(int passedId) async {
+    await _queryAdapter.queryNoReturn(
+        'DELETE FROM ProfileEntity WHERE userId is (?1)',
+        arguments: [passedId]);
+  }
+
+  @override
+  Future<void> insertProfile(ProfileEntity profile) async {
     await _profileEntityInsertionAdapter.insert(
         profile, OnConflictStrategy.replace);
   }

@@ -68,7 +68,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => localModule.getProfileDao(gh<_i160.GlintDatabase>()));
     gh.singleton<_i1004.SwipeActionDao>(
         () => localModule.getSwipeActionDao(gh<_i160.GlintDatabase>()));
-    gh.factoryAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(() async =>
     gh.lazySingleton<_i274.AsyncEncryptedSharedPreferenceHelper>(() =>
         _i274.AsyncEncryptedSharedPreferenceHelper(
             gh<_i930.EncryptedSharedPreferencesAsync>()));
@@ -90,6 +89,13 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
     gh.factory<_i1000.AdminDashboardRepo>(
         () => _i72.AdminDashBoardRepoImpl(gh<_i368.MyDioClient>()));
+    gh.factory<_i350.SwipeBufferManager>(() => _i350.SwipeBufferManager(
+          gh<_i368.MyDioClient>(),
+          profileDao: gh<_i719.ProfileDao>(),
+          swipeActionDao: gh<_i1004.SwipeActionDao>(),
+          debounceDuration: gh<Duration>(),
+          batchSize: gh<int>(),
+        ));
     gh.factory<_i849.ChatRepo>(
         () => _i651.ChatRepoImpl(gh<_i368.MyDioClient>()));
     gh.factory<_i579.RejectPublishedEventUsecase>(() =>
@@ -98,23 +104,6 @@ extension GetItInjectableX on _i174.GetIt {
         _i839.ApprovePublishedEventUsecase(gh<_i1000.AdminDashboardRepo>()));
     gh.factory<_i1027.GetAllEventsUsecase>(
         () => _i1027.GetAllEventsUsecase(gh<_i1000.AdminDashboardRepo>()));
-    gh.factoryAsync<_i849.ChatRepo>(() async => _i651.ChatRepoImpl(
-          gh<_i368.MyDioClient>(),
-          await getAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-        ));
-    gh.factoryAsync<_i1000.AdminDashboardRepo>(
-        () async => _i72.AdminDashBoardRepoImpl(
-              gh<_i368.MyDioClient>(),
-              await getAsync<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-            ));
-    gh.factoryAsync<_i972.SignInUserUseCase>(() async =>
-        _i972.SignInUserUseCase(await getAsync<_i873.AuthenticationRepo>()));
-    gh.factory<_i350.SwipeBufferManager>(() => _i350.SwipeBufferManager(
-          gh<_i368.MyDioClient>(),
-          swipeActionDao: gh<_i1004.SwipeActionDao>(),
-          debounceDuration: gh<Duration>(),
-          batchSize: gh<int>(),
-        ));
     return this;
   }
 }
