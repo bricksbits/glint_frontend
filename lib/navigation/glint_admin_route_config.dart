@@ -16,6 +16,7 @@ import 'glint_authentication_routes.dart';
 final glintAdminRoutes = GoRouter(
   initialLocation: '/',
   debugLogDiagnostics: true,
+  navigatorKey: rootNavigatorKey,
   routes: [
     GoRoute(
       path: '/',
@@ -25,7 +26,9 @@ final glintAdminRoutes = GoRouter(
     GoRoute(
       path: '/${GlintAdminDasboardRoutes.auth.name}',
       name: GlintAdminDasboardRoutes.auth.name,
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => const LoginScreen(
+        isAdmin: true,
+      ),
       routes: glintAuthenticationRoutesBase,
     ),
     GoRoute(

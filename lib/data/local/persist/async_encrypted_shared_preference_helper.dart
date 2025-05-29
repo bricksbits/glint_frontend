@@ -1,7 +1,8 @@
 import 'package:encrypt_shared_preferences/provider.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@LazySingleton()
 class AsyncEncryptedSharedPreferenceHelper {
   final EncryptedSharedPreferencesAsync sharedPreferencesAsync;
 
@@ -50,5 +51,18 @@ class AsyncEncryptedSharedPreferenceHelper {
     final value =
         await sharedPreferencesAsync.getInt(key, defaultValue: 0) ?? 0;
     return value;
+  }
+
+  Future<void> clearEncryptedPrefs() async {
+    final keys = await sharedPreferencesAsync.getKeys();
+    for (var key in keys) {
+      await sharedPreferencesAsync.remove(key);
+    }
+  }
+
+  Future<String?> isRefreshTokenAvailable() async {
+    final token = await sharedPreferencesAsync
+        .getString(SharedPreferenceKeys.refreshTokenKey);
+    return token;
   }
 }

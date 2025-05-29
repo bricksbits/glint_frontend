@@ -33,6 +33,7 @@ import '../features/home/home_screen.dart';
 final glintMainRoutes = GoRouter(
   initialLocation: '/',
   debugLogDiagnostics: true,
+  navigatorKey: rootNavigatorKey,
   routes: [
     GoRoute(
       path: '/',
@@ -91,7 +92,7 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintMainRoutes.auth.name}',
       name: GlintMainRoutes.auth.name,
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => const LoginScreen(isAdmin: false,),
       routes: glintAuthenticationRoutesBase,
     ),
     GoRoute(

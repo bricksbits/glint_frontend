@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:glint_frontend/domain/business_logic/models/admin/event_list_domain_model.dart';
+import 'package:intl/intl.dart';
 
 GetPublishedEventResponse getPublishedEventResponseFromJson(String str) =>
     GetPublishedEventResponse.fromJson(json.decode(str));
@@ -82,7 +83,7 @@ class Response {
   int? ticketPrice;
   int? totalTickets;
   int? ticketsRemaining;
-  bool? approvedByAdmin;
+  String? approvedByAdmin;
   bool? isHotEvent;
 
   Response copyWith({
@@ -95,7 +96,7 @@ class Response {
     int? ticketPrice,
     int? totalTickets,
     int? ticketsRemaining,
-    bool? approvedByAdmin,
+    String? approvedByAdmin,
     bool? isHotEvent,
   }) =>
       Response(
@@ -129,13 +130,49 @@ class Response {
   }
 }
 
-extension GetPublishedEventResponseMapper on GetPublishedEventResponse {
-  EventListDomainModel mapToDomainModel() {
-    return EventListDomainModel(
-        eventName: response?.first.eventName ?? "",
-        eventId: response?.first.eventId.toString() ?? "",
-        eventThumbnail: response?.first.eventName ?? "",
-        eventDate: response?.first.startTime ?? "",
-        eventBy: response?.first.eventName ?? "");
+extension PublishedEventMapper on GetPublishedEventResponse {
+  List<EventListDomainModel> mapToDomain() {
+    if (response != null) {
+      return response!
+          .map((eventResponse) => EventListDomainModel(
+              eventName: eventResponse.eventName ?? "Event Name",
+              eventId: eventResponse.eventId.toString() ?? "0",
+              eventThumbnail: eventResponse.eventName ?? "NO_URL",
+              eventDate: eventResponse.startTime?.toFormattedDateTime() ?? "Starting Soon",
+              eventBy: eventResponse.endTime?.toFormattedDateTime() ?? "Glint Media",
+              eventState:
+                  getEventState(eventResponse.approvedByAdmin ?? "false")))
+          .toList();
+    } else {
+      return [];
+    }
+  }
+}
+
+AdminEventState getEventState(String responseEventState) {
+  if (responseEventState == "true") {
+    return AdminEventState.LIVE;
+  } else if (responseEventState == "false") {
+    return AdminEventState.REJECTED;
+  } else if (responseEventState == "pending") {
+    return AdminEventState.PENDING;
+  } else {
+    return AdminEventState.PAST_EVENT;
+  }
+}
+
+extension DateStringFormatter on String {
+  String toFormattedDateTime() {
+    try {
+      final parsed = DateTime.parse(this);
+      final date = DateFormat('dd MMM').format(parsed);
+      final time = DateFormat('hh:mm a').format(parsed);
+      return '$date • $time';
+    } catch (e) {
+      if (length >= 10 && RegExp(r'^\d{4}-\d{2}-\d{2}').hasMatch(this)) {
+        return substring(0, 10);
+      }
+      return this;
+    }
   }
 }
