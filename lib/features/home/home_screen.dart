@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
@@ -6,6 +7,7 @@ import 'package:glint_frontend/features/event/event_main_screen.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/profile_screen.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
+import 'package:glint_frontend/utils/internet/internet_status_checker_cubit.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -78,36 +80,48 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // extendBody: true,
-      backgroundColor: AppColours.white,
-      // do not show app bar on chat screen
-      appBar: _selectedIndex == 4
-          ? null
-          : GlintAppBar(
-              appBarAction: appBarAction(_selectedIndex),
+    return BlocBuilder<InternetStatusCheckerCubit, InternetStatusCheckerState>(
+      builder: (context, state) {
+        if (state is InternetStatusDisConnected) {
+          return const Banner(
+            message: "No Internet Connection",
+            location: BannerLocation.topStart,
+            color: Colors.red,
+          );
+        }
+        return Scaffold(
+          // extendBody: true,
+          backgroundColor: AppColours.white,
+          // do not show app bar on chat screen
+          appBar: _selectedIndex == 4
+              ? null
+              : GlintAppBar(
+                  appBarAction: appBarAction(_selectedIndex),
+                ),
+          body: _bottomNavScreens[_selectedIndex],
+          bottomNavigationBar: Container(
+            height: 70.0,
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(horizontal: 20.0)
+                .copyWith(bottom: 20.0),
+            decoration: BoxDecoration(
+              color: AppColours.white,
+              borderRadius: BorderRadius.circular(50.0),
+              border: Border.all(
+                color: AppColours.gray.withAlpha(92),
+                width: 1.25,
+              ),
             ),
-      body: _bottomNavScreens[_selectedIndex],
-      bottomNavigationBar: Container(
-        height: 70.0,
-        width: double.infinity,
-        margin:
-            const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: 20.0),
-        decoration: BoxDecoration(
-          color: AppColours.white,
-          borderRadius: BorderRadius.circular(50.0),
-          border: Border.all(
-            color: AppColours.gray.withAlpha(92),
-            width: 1.25,
+            padding:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: List.generate(_navIcons.length, _buildNavItem),
+            ),
           ),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: List.generate(_navIcons.length, _buildNavItem),
-        ),
-      ),
+        );
+      },
     );
   }
 }
