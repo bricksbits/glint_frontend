@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 enum GlintMainRoutes {
   splash,
   auth,
@@ -29,6 +31,7 @@ enum GlintChatRoutes {
   chatWith,
   videoCall,
   tickets,
+  getTicket,
 }
 
 enum GlintEventRoutes {
@@ -68,3 +71,5 @@ enum GlintAdminDasboardRoutes {
   ticketBought,
   profile,
 }
+
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();

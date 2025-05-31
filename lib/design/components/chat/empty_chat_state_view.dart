@@ -90,6 +90,7 @@ class EmptyChatStateView extends StatelessWidget {
                   ],
                 ),
               ),
+
               // this is the overlapping profile image without the logo
               Positioned(
                 top: -40.0,
@@ -141,44 +142,20 @@ class EmptyChatStateView extends StatelessWidget {
                       horizontal: 16.0,
                       vertical: 12.0,
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(20.0),
                         bottomLeft: Radius.circular(20.0),
                       ),
-                      gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [
-                          AppColours.primaryBlue,
-                          AppColours.primaryBlue.withValues(alpha: 0.6),
-                        ],
-                      ),
+                      color: AppColours.black,
                     ),
                     child: Text(
-                      'Wanted to message first?',
+                      'Or Upgrade Plan Now',
+                      textAlign: TextAlign.center,
                       style: AppTheme.simpleText.copyWith(
                         color: AppColours.white,
                         fontWeight: FontWeight.w600,
                       ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 12.0,
-                  ),
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(20.0),
-                    ),
-                    color: AppColours.black,
-                  ),
-                  child: Text(
-                    'Upgrade Plan Now',
-                    style: AppTheme.simpleText.copyWith(
-                      color: AppColours.white,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),

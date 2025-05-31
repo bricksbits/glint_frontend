@@ -10,14 +10,15 @@ import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final bool isAdmin;
+
+  const LoginScreen({super.key, required this.isAdmin});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final bool isAdmin = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _emailFocusNode = FocusNode();
@@ -27,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColours.white,
-      appBar: isAdmin
+      appBar: widget.isAdmin
           ? const GlintEventAuthAppbar()
           : AppBar(
               backgroundColor: AppColours.white,
@@ -44,14 +45,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   case UsersType.USER:
                     myContext.go("/${GlintMainRoutes.home.name}");
                   case UsersType.ADMIN:
-                    myContext.go("/${GlintMainRoutes.home.name}");
+                    myContext.go("/${GlintAdminDasboardRoutes.home.name}");
                   case UsersType.SUPER_ADMIN:
-                    myContext.go("/${GlintMainRoutes.home.name}");
+                    myContext.go("/${GlintAdminDasboardRoutes.home.name}");
                 }
               },
               error: (error) {
                 ScaffoldMessenger.of(myContext).showSnackBar(
-                  SnackBar(content: Text('Login Error: ${error}')),
+                  SnackBar(content: Text('Login Error: $error')),
                 );
               },
               emailChanged: (emailChanged) {},
@@ -61,16 +62,16 @@ class _LoginScreenState extends State<LoginScreen> {
             return state.when(
               initial: () {
                 return AuthStackedIllustrationScreen(
-                  isAdmin: isAdmin,
+                  isAdmin: widget.isAdmin,
                   body: Column(
                     children: [
-                      if (!isAdmin)
+                      if (!widget.isAdmin)
                         Center(
                           child: SvgPicture.asset(
                               'lib/assets/images/auth/glint_login.svg'),
                         ),
                       const Gap(40.0),
-                      if (isAdmin)
+                      if (widget.isAdmin)
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 40.0),
@@ -85,8 +86,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const Gap(32.0),
                                 _buildAuthFields(),
                                 const Gap(60.0),
-                                _buildActionButton('Log In',
-                                    () => debugPrint('Login button pressed')),
+                                _buildActionButton('Log In', () {
+                                  context.read<LoginBloc>()
+                                    ..add(LoginEvent.emailInput(
+                                        _emailController.text))
+                                    ..add(
+                                      LoginEvent.passwordInput(
+                                          _passwordController.text),
+                                    )
+                                    ..add(
+                                      const LoginEvent.login(),
+                                    );
+                                }),
                                 const Gap(16.0),
                                 _buildForgotPassword(),
                                 const Spacer(flex: 4),
@@ -95,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                      if (!isAdmin) ...[
+                      if (!widget.isAdmin) ...[
                         _buildAuthFields(),
                         const Gap(12.0),
                         _buildForgotPassword(),
@@ -106,8 +117,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             context.read<LoginBloc>()
                               ..add(
                                   LoginEvent.emailInput(_emailController.text))
-                              ..add(LoginEvent.passwordInput(
-                                  _passwordController.text));
+                              ..add(
+                                LoginEvent.passwordInput(
+                                    _passwordController.text),
+                              )
+                              ..add(
+                                const LoginEvent.login(),
+                              );
                           },
                         ),
                         const Gap(16.0),
@@ -185,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
       behavior: HitTestBehavior.opaque,
       onTap: () {}, // TODO - Handle Forget Password tap
       child: Align(
-        alignment: isAdmin ? Alignment.center : Alignment.centerRight,
+        alignment: widget.isAdmin ? Alignment.center : Alignment.centerRight,
         child: Text(
           'Forgot your password?',
           style: AppTheme.simpleText.copyWith(
@@ -219,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           const TextSpan(text: "Don't have an account? "),
           TextSpan(
-            text: isAdmin ? "Register now" : "Create now",
+            text: widget.isAdmin ? "Register now" : "Create now",
             style: const TextStyle(
               color: AppColours.primaryBlue,
               decoration: TextDecoration.underline,

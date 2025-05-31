@@ -1,14 +1,11 @@
-import 'package:encrypt_shared_preferences/provider.dart';
-import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/approve_or_reject_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/create_event_request_body.dart';
-import 'package:glint_frontend/data/remote/model/request/admin/update_event_request_body.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_interested_users_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_published_event_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_ticket_booked_response.dart';
-import 'package:glint_frontend/data/remote/utils/safe_api_call_handler.dart';
+import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_approve_reject_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_detail_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_interested_user_domain_model.dart';
@@ -22,9 +19,8 @@ import 'package:injectable/injectable.dart';
 @Injectable(as: AdminDashboardRepo)
 class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   final MyDioClient httpClient;
-  final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
 
-  AdminDashBoardRepoImpl(this.httpClient, this.sharedPreferenceHelper);
+  AdminDashBoardRepoImpl(this.httpClient);
 
   @override
   Future<Result<void>> approveEvent(
@@ -37,10 +33,9 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       ],
     );
 
-    final approveRequestResponse = await safeApiCallHandler(
+    final approveRequestResponse = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.PUT,
-      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/manage/super-admin/approval",
       requestBody: requestBody.toJson(),
     );
@@ -73,10 +68,9 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       categoryList: ["Technology", "Conference", "Innovation"],
     );
 
-    final createEventRequest = await safeApiCallHandler(
+    final createEventRequest = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
-      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/manage/event-admin/create",
       passedQueryParameters: event1.toJson(),
     );
@@ -108,10 +102,9 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       categoryList: ["Technology", "Conference", "Innovation"],
     );
 
-    final createEventRequest = await safeApiCallHandler(
+    final createEventRequest = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
-      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/manage/event-admin/edit",
       passedQueryParameters: event1.toJson(),
     );
@@ -128,10 +121,9 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   @override
   Future<Result<EventTicketBoughtDomainModel>> fetchBookedTicketList(
       int eventId) async {
-    final ticketBookedUsers = await safeApiCallHandler(
+    final ticketBookedUsers = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "event/$eventId/manage/super-admin/booked-tickets",
     );
 
@@ -148,10 +140,9 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   @override
   Future<Result<EventInterestedUserDomainModel>> fetchInterestedProfiles(
       int eventId) async {
-    final interestedProfiles = await safeApiCallHandler(
+    final interestedProfiles = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/$eventId/manage/super-admin/interested-users",
     );
 
@@ -169,11 +160,10 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   /// MAPPING NEEDED MORE DATA
   /// DATA MISSING
   @override
-  Future<Result<EventListDomainModel>> getAllEvents() async {
-    final allEventsResponse = await safeApiCallHandler(
+  Future<Result<List<EventListDomainModel>>> getAllEvents() async {
+    final allEventsResponse = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/manage/super-admin",
     );
 
@@ -181,7 +171,12 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       case Success():
         final response =
             GetPublishedEventResponse.fromJson(allEventsResponse.data);
-        return Success(response.mapToDomainModel());
+        final mappedResponse = response.mapToDomain();
+        if (mappedResponse != null && mappedResponse.isNotEmpty) {
+          return Success(mappedResponse);
+        } else {
+          return Failure(Exception("Response is Empty"));
+        }
       case Failure():
         return Failure(Exception("Something Went wrong"));
     }
@@ -204,10 +199,9 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       ],
     );
 
-    final approveRequestResponse = await safeApiCallHandler(
+    final approveRequestResponse = await apiCallHandler(
         httpClient: httpClient,
         requestType: HttpRequestEnum.PUT,
-        sharedPrefHelper: sharedPreferenceHelper,
         endpoint: "/event/manage/super-admin/approval",
         requestBody: requestBody.toJson());
 
@@ -220,11 +214,10 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   }
 
   @override
-  Future<Result<EventListDomainModel>> getAllPublishEvents() async {
-    final allEventsResponse = await safeApiCallHandler(
+  Future<Result<List<EventListDomainModel>>> getAllPublishEvents() async {
+    final allEventsResponse = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      sharedPrefHelper: sharedPreferenceHelper,
       endpoint: "/event/manage/event-admin",
     );
 
@@ -232,7 +225,12 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       case Success():
         final response =
             GetPublishedEventResponse.fromJson(allEventsResponse.data);
-        return Success(response.mapToDomainModel());
+        final mappedResponse = response.mapToDomain();
+        if (mappedResponse != null && mappedResponse.isNotEmpty) {
+          return Success(mappedResponse);
+        } else {
+          return Failure(Exception("Response is Empty"));
+        }
       case Failure():
         return Failure(Exception("Something Went wrong"));
     }
