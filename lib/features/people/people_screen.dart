@@ -16,7 +16,11 @@ class PeopleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CardSwiper(
       allowedSwipeDirection: const AllowedSwipeDirection.only(
-          left: true, right: true, up: false, down: false),
+        left: true,
+        right: true,
+        up: false,
+        down: false,
+      ),
       numberOfCardsDisplayed: 1,
       onUndo: (_, __, ___) {
         return false;
