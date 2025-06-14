@@ -47,7 +47,7 @@ class _UploadPhotosOnboardingScreenState
                       const Gap(24.0),
                       // Description
                       const Text(
-                        'Upload a clear, recent photo or video where you’re being your true self. Let them see who they’re swiping for!',
+                        'Upload a clear, recent photo where you’re being your true self. Let them see who they’re swiping for!',
                         textAlign: TextAlign.center,
                         style: AppTheme.simpleText,
                       ),

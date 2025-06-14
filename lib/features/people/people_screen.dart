@@ -1,37 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_view.dart';
+import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 
-// Todo(Nike): Make the People Screen Const Again for better performance.
 class PeopleScreen extends StatelessWidget {
-  PeopleScreen({super.key});
-
-  final List<Widget> list = [
-    ScrollableProfileView(),
-    ScrollableProfileView(),
-    ScrollableProfileView(),
-  ];
+  const PeopleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CardSwiper(
-      allowedSwipeDirection: const AllowedSwipeDirection.only(
-        left: true,
-        right: true,
-        up: false,
-        down: false,
+    return BlocProvider(
+      create: (context) =>
+          PeopleCardsBloc()..add(const PeopleCardsEvent.started()),
+      child: BlocBuilder<PeopleCardsBloc, PeopleCardsState>(
+        builder: (context, state) {
+          return state.isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : state.cardList.isNotEmpty
+                  ? CardSwiper(
+                      allowedSwipeDirection: const AllowedSwipeDirection.only(
+                        left: true,
+                        right: true,
+                        up: false,
+                        down: false,
+                      ),
+                      numberOfCardsDisplayed: 1,
+                      onUndo:
+                          (previousIndex, currentIndex, cardSwipeDirection) {
+                        if (cardSwipeDirection == CardSwiperDirection.left &&
+                            previousIndex != null) {}
+                        return false;
+                      },
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                      ),
+                      isLoop: false,
+                      cardsCount: state.cardList.length,
+                      cardBuilder: (context, index, percentThresholdX,
+                              percentThresholdY) =>
+                          ScrollableProfileView(
+                              peopleUiModel: state.cardList[index]),
+                    )
+                  : const Center(
+                      child: Text("Its a little quiet here"),
+                    );
+        },
       ),
-      numberOfCardsDisplayed: 1,
-      onUndo: (_, __, ___) {
-        return false;
-      },
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20.0,
-      ),
-      isLoop: false,
-      cardsCount: list.length,
-      cardBuilder: (context, index, percentThresholdX, percentThresholdY) =>
-          list[index],
     );
   }
 }

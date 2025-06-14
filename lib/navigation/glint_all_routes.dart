@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 enum GlintMainRoutes {
   splash,
+  starter,
   auth,
   onBoarding,
   home,
@@ -20,7 +21,6 @@ enum GlintMainRoutes {
 }
 
 enum GlintAuthRoutes {
-  register,
   resetPassword,
   otp,
   recreatePassword,
@@ -57,6 +57,7 @@ enum GlintBoardingRoutes {
   pronouns,
   interests,
   bio,
+  register,
 }
 
 enum GlintAdminDasboardRoutes {

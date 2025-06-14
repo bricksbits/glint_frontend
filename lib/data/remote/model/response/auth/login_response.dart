@@ -3,23 +3,19 @@ LoginResponse loginResponseFromJson(String str) => LoginResponse.fromJson(json.d
 String loginResponseToJson(LoginResponse data) => json.encode(data.toJson());
 class LoginResponse {
   LoginResponse({
-      Profile? profile,}){
-    _profile = profile;
-}
+      this.profile,});
 
   LoginResponse.fromJson(dynamic json) {
-    _profile = json['profile'] != null ? Profile.fromJson(json['profile']) : null;
+    profile = json['profile'] != null ? Profile.fromJson(json['profile']) : null;
   }
-  Profile? _profile;
+  Profile? profile;
 LoginResponse copyWith({  Profile? profile,
-}) => LoginResponse(  profile: profile ?? _profile,
+}) => LoginResponse(  profile: profile ?? this.profile,
 );
-  Profile? get profile => _profile;
-
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    if (_profile != null) {
-      map['profile'] = _profile?.toJson();
+    if (profile != null) {
+      map['profile'] = profile?.toJson();
     }
     return map;
   }
@@ -30,92 +26,94 @@ Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
 String profileToJson(Profile data) => json.encode(data.toJson());
 class Profile {
   Profile({
-      String? authToken, 
-      String? refreshToken, 
-      int? userId, 
-      String? username, 
-      String? dateOfBirth, 
-      String? gender, 
-      String? genderPreference, 
-      List<String>? interests, 
-      List<String>? relationshipGoals, 
-      String? bio, 
-      double? height, 
-      String? occupation, 
-      String? education, 
-      String? workoutHabit, 
-      String? drinkingHabit, 
-      String? smokingHabit, 
-      int? profileViews, 
-      int? profileLikes, 
-      dynamic pictureUrlList, 
-      dynamic videoUrlList,}){
-    _authToken = authToken;
-    _refreshToken = refreshToken;
-    _userId = userId;
-    _username = username;
-    _dateOfBirth = dateOfBirth;
-    _gender = gender;
-    _genderPreference = genderPreference;
-    _interests = interests;
-    _relationshipGoals = relationshipGoals;
-    _bio = bio;
-    _height = height;
-    _occupation = occupation;
-    _education = education;
-    _workoutHabit = workoutHabit;
-    _drinkingHabit = drinkingHabit;
-    _smokingHabit = smokingHabit;
-    _profileViews = profileViews;
-    _profileLikes = profileLikes;
-    _pictureUrlList = pictureUrlList;
-    _videoUrlList = videoUrlList;
-}
+      this.authToken, 
+      this.refreshToken, 
+      this.streamAuthToken, 
+      this.userRole, 
+      this.userId, 
+      this.username, 
+      this.dateOfBirth, 
+      this.gender, 
+      this.genderPreference, 
+      this.interests, 
+      this.relationshipGoals, 
+      this.bio, 
+      this.height, 
+      this.occupation, 
+      this.education, 
+      this.workoutHabit, 
+      this.drinkingHabit, 
+      this.smokingHabit, 
+      this.profileViews, 
+      this.profileLikes, 
+      this.pictureUrlList, 
+      this.videoUrlList, 
+      this.isPremiumUser, 
+      this.aiMessagesRemaining, 
+      this.rewindsRemaining, 
+      this.superLikesLeft, 
+      this.directDmRemaining,});
 
   Profile.fromJson(dynamic json) {
-    _authToken = json['auth_token'];
-    _refreshToken = json['refresh_token'];
-    _userId = json['user_id'];
-    _username = json['username'];
-    _dateOfBirth = json['date_of_birth'];
-    _gender = json['gender'];
-    _genderPreference = json['gender_preference'];
-    _interests = json['interests'] != null ? json['interests'].cast<String>() : [];
-    _relationshipGoals = json['relationship_goals'] != null ? json['relationship_goals'].cast<String>() : [];
-    _bio = json['bio'];
-    _height = json['height'];
-    _occupation = json['occupation'];
-    _education = json['education'];
-    _workoutHabit = json['workout_habit'];
-    _drinkingHabit = json['drinking_habit'];
-    _smokingHabit = json['smoking_habit'];
-    _profileViews = json['profile_views'];
-    _profileLikes = json['profile_likes'];
-    _pictureUrlList = json['picture_url_list'];
-    _videoUrlList = json['video_url_list'];
+    authToken = json['auth_token'];
+    refreshToken = json['refresh_token'];
+    streamAuthToken = json['stream_auth_token'];
+    userRole = json['user_role'];
+    userId = json['user_id'];
+    username = json['username'];
+    dateOfBirth = json['date_of_birth'];
+    gender = json['gender'];
+    genderPreference = json['gender_preference'];
+    interests = json['interests'] != null ? json['interests'].cast<String>() : [];
+    relationshipGoals = json['relationship_goals'] != null ? json['relationship_goals'].cast<String>() : [];
+    bio = json['bio'];
+    height = json['height'];
+    occupation = json['occupation'];
+    education = json['education'];
+    workoutHabit = json['workout_habit'];
+    drinkingHabit = json['drinking_habit'];
+    smokingHabit = json['smoking_habit'];
+    profileViews = json['profile_views'];
+    profileLikes = json['profile_likes'];
+    pictureUrlList = json['picture_url_list'];
+    videoUrlList = json['video_url_list'];
+    isPremiumUser = json['is_premium_user'];
+    aiMessagesRemaining = json['ai_messages_remaining'];
+    rewindsRemaining = json['rewinds_remaining'];
+    superLikesLeft = json['super_likes_left'];
+    directDmRemaining = json['direct_dm_remaining'];
   }
-  String? _authToken;
-  String? _refreshToken;
-  int? _userId;
-  String? _username;
-  String? _dateOfBirth;
-  String? _gender;
-  String? _genderPreference;
-  List<String>? _interests;
-  List<String>? _relationshipGoals;
-  String? _bio;
-  double? _height;
-  String? _occupation;
-  String? _education;
-  String? _workoutHabit;
-  String? _drinkingHabit;
-  String? _smokingHabit;
-  int? _profileViews;
-  int? _profileLikes;
-  dynamic _pictureUrlList;
-  dynamic _videoUrlList;
+  String? authToken;
+  String? refreshToken;
+  String? streamAuthToken;
+  String? userRole;
+  int? userId;
+  String? username;
+  String? dateOfBirth;
+  String? gender;
+  String? genderPreference;
+  List<String>? interests;
+  List<String>? relationshipGoals;
+  String? bio;
+  double? height;
+  String? occupation;
+  String? education;
+  String? workoutHabit;
+  String? drinkingHabit;
+  String? smokingHabit;
+  int? profileViews;
+  int? profileLikes;
+  dynamic pictureUrlList;
+  dynamic videoUrlList;
+  bool? isPremiumUser;
+  int? aiMessagesRemaining;
+  int? rewindsRemaining;
+  int? superLikesLeft;
+  int? directDmRemaining;
 Profile copyWith({  String? authToken,
   String? refreshToken,
+  String? streamAuthToken,
+  String? userRole,
   int? userId,
   String? username,
   String? dateOfBirth,
@@ -134,70 +132,68 @@ Profile copyWith({  String? authToken,
   int? profileLikes,
   dynamic pictureUrlList,
   dynamic videoUrlList,
-}) => Profile(  authToken: authToken ?? _authToken,
-  refreshToken: refreshToken ?? _refreshToken,
-  userId: userId ?? _userId,
-  username: username ?? _username,
-  dateOfBirth: dateOfBirth ?? _dateOfBirth,
-  gender: gender ?? _gender,
-  genderPreference: genderPreference ?? _genderPreference,
-  interests: interests ?? _interests,
-  relationshipGoals: relationshipGoals ?? _relationshipGoals,
-  bio: bio ?? _bio,
-  height: height ?? _height,
-  occupation: occupation ?? _occupation,
-  education: education ?? _education,
-  workoutHabit: workoutHabit ?? _workoutHabit,
-  drinkingHabit: drinkingHabit ?? _drinkingHabit,
-  smokingHabit: smokingHabit ?? _smokingHabit,
-  profileViews: profileViews ?? _profileViews,
-  profileLikes: profileLikes ?? _profileLikes,
-  pictureUrlList: pictureUrlList ?? _pictureUrlList,
-  videoUrlList: videoUrlList ?? _videoUrlList,
+  bool? isPremiumUser,
+  int? aiMessagesRemaining,
+  int? rewindsRemaining,
+  int? superLikesLeft,
+  int? directDmRemaining,
+}) => Profile(  authToken: authToken ?? this.authToken,
+  refreshToken: refreshToken ?? this.refreshToken,
+  streamAuthToken: streamAuthToken ?? this.streamAuthToken,
+  userRole: userRole ?? this.userRole,
+  userId: userId ?? this.userId,
+  username: username ?? this.username,
+  dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+  gender: gender ?? this.gender,
+  genderPreference: genderPreference ?? this.genderPreference,
+  interests: interests ?? this.interests,
+  relationshipGoals: relationshipGoals ?? this.relationshipGoals,
+  bio: bio ?? this.bio,
+  height: height ?? this.height,
+  occupation: occupation ?? this.occupation,
+  education: education ?? this.education,
+  workoutHabit: workoutHabit ?? this.workoutHabit,
+  drinkingHabit: drinkingHabit ?? this.drinkingHabit,
+  smokingHabit: smokingHabit ?? this.smokingHabit,
+  profileViews: profileViews ?? this.profileViews,
+  profileLikes: profileLikes ?? this.profileLikes,
+  pictureUrlList: pictureUrlList ?? this.pictureUrlList,
+  videoUrlList: videoUrlList ?? this.videoUrlList,
+  isPremiumUser: isPremiumUser ?? this.isPremiumUser,
+  aiMessagesRemaining: aiMessagesRemaining ?? this.aiMessagesRemaining,
+  rewindsRemaining: rewindsRemaining ?? this.rewindsRemaining,
+  superLikesLeft: superLikesLeft ?? this.superLikesLeft,
+  directDmRemaining: directDmRemaining ?? this.directDmRemaining,
 );
-  String? get authToken => _authToken;
-  String? get refreshToken => _refreshToken;
-  int? get userId => _userId;
-  String? get username => _username;
-  String? get dateOfBirth => _dateOfBirth;
-  String? get gender => _gender;
-  String? get genderPreference => _genderPreference;
-  List<String>? get interests => _interests;
-  List<String>? get relationshipGoals => _relationshipGoals;
-  String? get bio => _bio;
-  double? get height => _height;
-  String? get occupation => _occupation;
-  String? get education => _education;
-  String? get workoutHabit => _workoutHabit;
-  String? get drinkingHabit => _drinkingHabit;
-  String? get smokingHabit => _smokingHabit;
-  int? get profileViews => _profileViews;
-  int? get profileLikes => _profileLikes;
-  dynamic get pictureUrlList => _pictureUrlList;
-  dynamic get videoUrlList => _videoUrlList;
-
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['auth_token'] = _authToken;
-    map['refresh_token'] = _refreshToken;
-    map['user_id'] = _userId;
-    map['username'] = _username;
-    map['date_of_birth'] = _dateOfBirth;
-    map['gender'] = _gender;
-    map['gender_preference'] = _genderPreference;
-    map['interests'] = _interests;
-    map['relationship_goals'] = _relationshipGoals;
-    map['bio'] = _bio;
-    map['height'] = _height;
-    map['occupation'] = _occupation;
-    map['education'] = _education;
-    map['workout_habit'] = _workoutHabit;
-    map['drinking_habit'] = _drinkingHabit;
-    map['smoking_habit'] = _smokingHabit;
-    map['profile_views'] = _profileViews;
-    map['profile_likes'] = _profileLikes;
-    map['picture_url_list'] = _pictureUrlList;
-    map['video_url_list'] = _videoUrlList;
+    map['auth_token'] = authToken;
+    map['refresh_token'] = refreshToken;
+    map['stream_auth_token'] = streamAuthToken;
+    map['user_role'] = userRole;
+    map['user_id'] = userId;
+    map['username'] = username;
+    map['date_of_birth'] = dateOfBirth;
+    map['gender'] = gender;
+    map['gender_preference'] = genderPreference;
+    map['interests'] = interests;
+    map['relationship_goals'] = relationshipGoals;
+    map['bio'] = bio;
+    map['height'] = height;
+    map['occupation'] = occupation;
+    map['education'] = education;
+    map['workout_habit'] = workoutHabit;
+    map['drinking_habit'] = drinkingHabit;
+    map['smoking_habit'] = smokingHabit;
+    map['profile_views'] = profileViews;
+    map['profile_likes'] = profileLikes;
+    map['picture_url_list'] = pictureUrlList;
+    map['video_url_list'] = videoUrlList;
+    map['is_premium_user'] = isPremiumUser;
+    map['ai_messages_remaining'] = aiMessagesRemaining;
+    map['rewinds_remaining'] = rewindsRemaining;
+    map['super_likes_left'] = superLikesLeft;
+    map['direct_dm_remaining'] = directDmRemaining;
     return map;
   }
 

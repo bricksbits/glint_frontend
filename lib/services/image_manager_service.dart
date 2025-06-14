@@ -4,12 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:glint_frontend/utils/image_manager/image_manager_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:file_picker/file_picker.dart';
 
 import '../utils/image_manager/image_manager_data.dart';
 
+@injectable
 class ImageService {
   final ImagePicker _picker = ImagePicker();
 
@@ -28,8 +30,7 @@ class ImageService {
             .map((file) => ImageManagerData(
           name: file.name,
           bytes: file.bytes,
-        ))
-            .toList();
+        )).toList();
       }
     } else {
       // Mobile: Pick images using image_picker

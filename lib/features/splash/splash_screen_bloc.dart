@@ -31,7 +31,7 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
               add(
                 SplashScreenEvent.emitNewStates(
                   SplashScreenState.navigateTo(
-                    GlintMainRoutes.auth.name,
+                    GlintMainRoutes.starter.name,
                   ),
                 ),
               );

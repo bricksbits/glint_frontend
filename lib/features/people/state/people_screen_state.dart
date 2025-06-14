@@ -1,5 +1,5 @@
 import 'package:glint_frontend/features/people/model/people_model.dart';
-import 'package:glint_frontend/features/people/scrollable_list_item_type.dart';
+import 'package:glint_frontend/features/people/model/scrollable_list_item_type.dart';
 
 class PeopleScreenState {
   final List<PeopleListModelData> listModel;
@@ -11,13 +11,13 @@ class PeopleScreenState {
 extension ToPeopleScreenState on PeopleUiModel {
   PeopleScreenState convert() {
     final topCardModel = PeopleTopCardModel(
-      id,
+      userId,
       images.isNotEmpty ? images.first : '',
       // Added imageUrl from the first image
       name,
       age,
       distanceAway,
-      views,
+      profileViews,
       designation,
     );
 
@@ -96,13 +96,13 @@ extension ToPeopleScreenState on PeopleUiModel {
 PeopleScreenState convertPeopleUiModelToPeopleScreenState(
     PeopleUiModel uiModel) {
   final topCardModel = PeopleTopCardModel(
-    uiModel.id,
+    uiModel.userId,
     uiModel.images.isNotEmpty ? uiModel.images.first : '',
     // Added imageUrl from the first image
     uiModel.name,
     uiModel.age,
     uiModel.distanceAway,
-    uiModel.views,
+    uiModel.profileViews,
     uiModel.designation,
   );
 

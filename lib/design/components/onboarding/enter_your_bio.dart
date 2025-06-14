@@ -3,7 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class EnterYourBio extends StatefulWidget {
-  const EnterYourBio({super.key});
+  const EnterYourBio({super.key, required this.onBioCompleted});
+
+  final Function(String) onBioCompleted;
 
   @override
   State<EnterYourBio> createState() => _EnterYourBioState();
@@ -11,6 +13,14 @@ class EnterYourBio extends StatefulWidget {
 
 class _EnterYourBioState extends State<EnterYourBio> {
   final _bioController = TextEditingController();
+
+  @override
+  void initState() {
+    _bioController.addListener(() {
+      widget.onBioCompleted(_bioController.text);
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {

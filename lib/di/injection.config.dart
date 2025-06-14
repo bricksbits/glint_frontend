@@ -25,6 +25,8 @@ import '../data/repo/admin/admin_dash_board_repo_impl.dart' as _i72;
 import '../data/repo/auth/authentication_repo_impl.dart' as _i840;
 import '../data/repo/auth/forgot_password_repo_impl.dart' as _i509;
 import '../data/repo/chat/chat_main/chat_repo_impl.dart' as _i651;
+import '../data/repo/onBoard/on_boarding_repo_impl.dart' as _i359;
+import '../data/repo/people/people_repo_impl.dart' as _i955;
 import '../domain/application_logic/admin/approve_published_event_usecase.dart'
     as _i839;
 import '../domain/application_logic/admin/get_all_events_use_case.dart'
@@ -37,7 +39,10 @@ import '../domain/application_logic/auth/sign_in_user_use_case.dart' as _i972;
 import '../domain/business_logic/repo/admin/admin_dasboard_repo.dart' as _i1000;
 import '../domain/business_logic/repo/auth/authentication_repo.dart' as _i873;
 import '../domain/business_logic/repo/auth/forgot_password_repo.dart' as _i995;
+import '../domain/business_logic/repo/boarding/on_boarding_repo.dart' as _i330;
 import '../domain/business_logic/repo/chat/chat_repo.dart' as _i849;
+import '../domain/business_logic/repo/people/people_repo.dart' as _i678;
+import '../services/image_manager_service.dart' as _i43;
 import 'local_module.dart' as _i519;
 import 'network_module.dart' as _i567;
 
@@ -58,6 +63,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => localModule.sharedPref(),
       preResolve: true,
     );
+    gh.factory<_i43.ImageService>(() => _i43.ImageService());
     gh.singleton<_i361.Dio>(() => networkModule.getHttpClientInstance());
     gh.singleton<_i981.StreamChatClient>(() => networkModule.chatClient());
     await gh.lazySingletonAsync<_i160.GlintDatabase>(
@@ -75,6 +81,16 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i361.Dio>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
+    gh.singleton<_i350.SwipeBufferManager>(() => _i350.SwipeBufferManager(
+          gh<_i368.MyDioClient>(),
+          profileDao: gh<_i719.ProfileDao>(),
+          swipeActionDao: gh<_i1004.SwipeActionDao>(),
+        ));
+    gh.factory<_i330.OnBoardingRepo>(() => _i359.OnBoardRepoImpl(
+          gh<_i719.ProfileDao>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          gh<_i368.MyDioClient>(),
+        ));
     gh.factory<_i995.ForgotPasswordRepo>(
         () => _i509.ForgotPasswordRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i143.IsUserLoggedInUsecase>(() =>
@@ -84,17 +100,16 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i840.AuthenticationRepoImpl(
               gh<_i368.MyDioClient>(),
               gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+              gh<_i719.ProfileDao>(),
             ));
     gh.factory<_i972.SignInUserUseCase>(
         () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
     gh.factory<_i1000.AdminDashboardRepo>(
         () => _i72.AdminDashBoardRepoImpl(gh<_i368.MyDioClient>()));
-    gh.factory<_i350.SwipeBufferManager>(() => _i350.SwipeBufferManager(
+    gh.lazySingleton<_i678.PeopleRepo>(() => _i955.PeopleRepoImpl(
           gh<_i368.MyDioClient>(),
-          profileDao: gh<_i719.ProfileDao>(),
-          swipeActionDao: gh<_i1004.SwipeActionDao>(),
-          debounceDuration: gh<Duration>(),
-          batchSize: gh<int>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          gh<_i719.ProfileDao>(),
         ));
     gh.factory<_i849.ChatRepo>(
         () => _i651.ChatRepoImpl(gh<_i368.MyDioClient>()));

@@ -6,14 +6,14 @@ import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
-class CreateAccountScreen extends StatefulWidget {
-  const CreateAccountScreen({super.key});
+class CreateAccounScreen extends StatefulWidget {
+  const CreateAccounScreen({super.key});
 
   @override
-  State<CreateAccountScreen> createState() => _CreateAccountScreenState();
+  State<CreateAccounScreen> createState() => _CreateAccounScreenState();
 }
 
-class _CreateAccountScreenState extends State<CreateAccountScreen> {
+class _CreateAccounScreenState extends State<CreateAccounScreen> {
   final bool isAdmin = true;
 
   final _nameController = TextEditingController();
@@ -157,11 +157,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         label: 'Register',
                         onPressed: () {
                           context.go(
-                              "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}"
-                          );
+                              "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}");
                           debugPrint(
-                          'register button pressed',
-                        );
+                            'register button pressed',
+                          );
                         },
                       ),
                       const Gap(16.0),
@@ -197,7 +196,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               const Gap(60.0),
               GlintAuthActionButton(
                 label: 'Sign up',
-                onPressed: () => debugPrint('Sign up button pressed'),
+                onPressed: () {
+                  // Once User is created, Save the data locally
+                  // Move to the Home Screen.
+                  context.goNamed(GlintMainRoutes.home.name);
+                },
               ),
               const Gap(16.0),
               _buildLoginText(),

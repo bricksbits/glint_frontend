@@ -2,11 +2,14 @@ import 'package:bottom_picker/bottom_picker.dart';
 import 'package:bottom_picker/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/components/glint_custom_app_bar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
+
+import 'on_boarding_cubit.dart';
 
 class DateOfBirthOnboardingScreen extends StatefulWidget {
   const DateOfBirthOnboardingScreen({super.key});
@@ -34,9 +37,9 @@ class _DateOfBirthOnboardingScreenState
     });
   }
 
-  String calculateAge() {
+  int calculateAge() {
     final now = DateTime.now();
-    return (now.difference(_selectedDate).inDays ~/ 365).toString();
+    return (now.difference(_selectedDate).inDays ~/ 365);
   }
 
   void showAgeConfirmationSheet(BuildContext context) {
@@ -44,68 +47,80 @@ class _DateOfBirthOnboardingScreenState
       isDismissible: false,
       enableDrag: false,
       (context) {
-        return SizedBox(
-          width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0).copyWith(
-              bottom: 60.0,
-              top: 24.0,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: calculateAge(),
-                    style: AppTheme.headingOne.copyWith(
-                      fontSize: 48.0,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: ' years',
+        return BlocBuilder<OnBoardingCubit, OnBoardingState>(
+          builder: (context, state) {
+            return SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0).copyWith(
+                  bottom: 60.0,
+                  top: 24.0,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: calculateAge().toString(),
                         style: AppTheme.headingOne.copyWith(
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.italic,
+                          fontSize: 48.0,
                         ),
+                        children: [
+                          TextSpan(
+                            text: ' years',
+                            style: AppTheme.headingOne.copyWith(
+                              fontWeight: FontWeight.w400,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    const Gap(32.0),
+                    Text(
+                      'Hey $userName, your age is ${calculateAge()} years\nThis will be shown in your profile.',
+                      style: AppTheme.simpleText,
+                    ),
+                    const Gap(32.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: GlintElevatedButton(
+                        label: 'Confirm Age',
+                        foregroundColor: Colors.white,
+                        backgroundColor: AppColours.primaryBlue,
+                        onPressed: () {
+                          if (calculateAge() >= 18) {
+                            context
+                                .read<OnBoardingCubit>()
+                                .setAge(calculateAge().toString());
+                          }
+                          final currentAge = state.currentState?.age;
+                          if (currentAge != null && calculateAge() >= 18) {
+                            final base = GlintMainRoutes.onBoarding.name;
+                            final target = GlintBoardingRoutes.gender.name;
+                            context.go("/$base/$target");
+                          }
+                        },
+                      ),
+                    ),
+                    const Gap(12.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: GlintElevatedButton(
+                        label: 'Change DOB',
+                        isCancel: true,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          showBottomDatePicker();
+                        },
+                      ),
+                    )
+                  ],
                 ),
-                const Gap(32.0),
-                Text(
-                  'Hey $userName, your age is ${calculateAge()} years\nThis will be shown in your profile.',
-                  style: AppTheme.simpleText,
-                ),
-                const Gap(32.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: GlintElevatedButton(
-                    label: 'Confirm Age',
-                    foregroundColor: Colors.white,
-                    backgroundColor: AppColours.primaryBlue,
-                    onPressed: () {
-                      final base = GlintMainRoutes.onBoarding.name;
-                      final target = GlintBoardingRoutes.gender.name;
-                      context.go("/$base/$target");
-                    },
-                  ),
-                ),
-                const Gap(12.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: GlintElevatedButton(
-                    label: 'Change DOB',
-                    isCancel: true,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      showBottomDatePicker();
-                    },
-                  ),
-                )
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static final List<Widget> _bottomNavScreens = [
     const ProfileScreen(),
     const EventMainScreen(),
-    PeopleScreen(),
+    const PeopleScreen(),
     const ServiceScreen(),
     const ChatScreen(),
   ];
