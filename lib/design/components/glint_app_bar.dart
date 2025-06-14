@@ -11,6 +11,7 @@ enum GlintAppBarActions {
   event,
 }
 
+//Todo : Create a GlintAppBar State Handler
 class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
   const GlintAppBar({
     super.key,

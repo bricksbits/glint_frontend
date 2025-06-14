@@ -11,23 +11,21 @@ import 'package:injectable/injectable.dart';
 /// - Early flush if 10 swipes are reached
 /// - Safe retry logic if app is paused
 
-@injectable
+@singleton
 class SwipeBufferManager {
   final SwipeActionDao swipeActionDao;
   final ProfileDao profileDao;
-  final Duration debounceDuration;
-  final int batchSize;
   final MyDioClient httpClient;
 
   Timer? _debounceTimer;
   bool _isProcessing = false;
+  Duration debounceDuration = const Duration(seconds: 10);
+  int batchSize = 10;
 
   SwipeBufferManager(
     this.httpClient, {
     required this.profileDao,
     required this.swipeActionDao,
-    this.debounceDuration = const Duration(seconds: 10),
-    this.batchSize = 10,
   });
 
   /// Call this method whenever user swipes a profile.
@@ -89,7 +87,7 @@ class SwipeBufferManager {
     }
   }
 
-  /// Simulate sending swipes to server (replace with your real HTTP logic)
+  /// Todo: Send the Batches of the files here
   Future<bool> _sendBatchToServer(List<SwipeActionEntity> batch) async {
     try {
       print("Sending ${batch.length} swipes to server...");

@@ -51,7 +51,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       () {
         print("Login Bloc : On Done");
       },
-      LoginRequestBody(username: validEmail, password: validPassword),
+      LoginRequestBody(email: validEmail, password: validPassword),
     );
   }
 }

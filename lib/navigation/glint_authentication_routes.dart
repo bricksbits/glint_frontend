@@ -8,11 +8,6 @@ import 'package:go_router/go_router.dart';
 
 final glintAuthenticationRoutesBase = [
   GoRoute(
-    path: '/${GlintAuthRoutes.register.name}',
-    name: GlintAuthRoutes.register.name,
-    builder: (context, state) => const CreateAccountScreen(),
-  ),
-  GoRoute(
     path: '/${GlintAuthRoutes.resetPassword.name}',
     name: GlintAuthRoutes.resetPassword.name,
     builder: (context, state) => const ResetPasswordScreen(),

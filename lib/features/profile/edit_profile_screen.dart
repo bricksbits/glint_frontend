@@ -71,12 +71,16 @@ class EditProfileScreen extends StatelessWidget {
               const Gap(32.0),
 
               //im looking for card
-              const ImLookingForCard(),
+              ImLookingForCard(
+                lookingForCallback: (lookingFor) {},
+              ),
 
               const Gap(16.0),
 
               // pronouns card
-              const YourPronounsCard(),
+              YourPronounsCard(
+                pronounsSelected: (pronouns) {},
+              ),
 
               const Gap(20.0),
 
@@ -86,7 +90,9 @@ class EditProfileScreen extends StatelessWidget {
               const Gap(20.0),
 
               // enter bio
-              const EnterYourBio(),
+              EnterYourBio(
+                onBioCompleted: (newBio) {},
+              ),
 
               // Additional info
               const Gap(24.0),

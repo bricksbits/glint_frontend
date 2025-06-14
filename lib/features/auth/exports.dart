@@ -1,4 +1,4 @@
-export 'authentication_screen.dart';
+export 'starter_screen.dart';
 export 'create_account_screen.dart';
 export 'create_password_screen.dart';
 export 'enter_otp_screen.dart';

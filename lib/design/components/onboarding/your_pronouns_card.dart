@@ -3,7 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class YourPronounsCard extends StatefulWidget {
-  const YourPronounsCard({super.key});
+  const YourPronounsCard({super.key, required this.pronounsSelected});
+
+  final Function(String) pronounsSelected;
 
   @override
   State<YourPronounsCard> createState() => _YourPronounsCardState();
@@ -117,29 +119,42 @@ class _YourPronounsCardState extends State<YourPronounsCard> {
                   GlintCustomLabelChip(
                     label: 'He/Him',
                     isSelected: _pronouns == 'He/Him',
-                    onTap: () => setState(() => _pronouns = 'He/Him'),
+                    onTap: () {
+                      setState(() => _pronouns = 'He/Him');
+                      widget.pronounsSelected("He/Him");
+                    },
                   ),
                   GlintCustomLabelChip(
                     label: 'She/Her',
                     isSelected: _pronouns == 'She/Her',
-                    onTap: () => setState(() => _pronouns = 'She/Her'),
+                    onTap: () {
+                      setState(() => _pronouns = 'She/Her');
+                      widget.pronounsSelected("She/Her");
+                    },
                   ),
                   GlintCustomLabelChip(
                     label: 'They/Them',
                     isSelected: _pronouns == 'They/Them',
-                    onTap: () => setState(() => _pronouns = 'They/Them'),
+                    onTap: () {
+                      setState(() => _pronouns = 'They/Them');
+                      widget.pronounsSelected("They/Them");
+                    },
                   ),
                   GlintCustomLabelChip(
                     label: 'Prefer not to say',
                     isSelected: _pronouns == 'Prefer not to say',
-                    onTap: () =>
-                        setState(() => _pronouns = 'Prefer not to say'),
+                    onTap: () {
+                      setState(() => _pronouns = 'Prefer not to say');
+                      widget.pronounsSelected("Prefer not to say");
+                    },
                   ),
 
                   // custom add button if not already set custom
                   if (!_choseCustomPronoun)
                     GestureDetector(
-                      onTap: () => settingCustomPronouns(context),
+                      onTap: () {
+                        // settingCustomPronouns(context);
+                      },
                       onDoubleTap: () {},
                       child: Container(
                         decoration: BoxDecoration(

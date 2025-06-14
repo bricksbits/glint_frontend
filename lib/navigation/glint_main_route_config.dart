@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:glint_frontend/features/auth/starter_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
 import 'package:glint_frontend/features/chat/confirm_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
@@ -10,21 +11,14 @@ import 'package:glint_frontend/features/event/event_people_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 import 'package:glint_frontend/features/likes/likes_screen.dart';
 import 'package:glint_frontend/features/notifications/notification_screen.dart';
-import 'package:glint_frontend/features/onboarding/date_of_birth_onboarding_screen.dart';
-import 'package:glint_frontend/features/onboarding/enter_name_onboarding_screen.dart';
-import 'package:glint_frontend/features/onboarding/get_set_glint_onboarding_screen.dart';
-import 'package:glint_frontend/features/onboarding/identify_yourself_onboarding_screen.dart';
-import 'package:glint_frontend/features/onboarding/interests_and_vibe_onboarding_screen.dart';
-import 'package:glint_frontend/features/onboarding/one_last_step_onboarding_screen.dart';
 import 'package:glint_frontend/features/onboarding/setup_glint_onboarding_screen.dart';
-import 'package:glint_frontend/features/onboarding/upload_photos_onboarding_screen.dart';
-import 'package:glint_frontend/features/onboarding/who_catches_your_eye_onboarding_screen.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/exports.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
 import 'package:glint_frontend/features/splash/splash_screen.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/navigation/glint_authentication_routes.dart';
+import 'package:glint_frontend/navigation/glint_user_on_boarding_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../features/chat/chat_screen.dart';
@@ -41,58 +35,22 @@ final glintMainRoutes = GoRouter(
       builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
-        path: '/${GlintMainRoutes.onBoarding.name}',
-        name: GlintMainRoutes.onBoarding.name,
-        builder: (context, state) => const SetupGlintOnboardingScreen(),
-        routes: [
-          GoRoute(
-            path: '/${GlintBoardingRoutes.name.name}',
-            name: GlintBoardingRoutes.name.name,
-            builder: (context, state) => const EnterNameOnboardingScreen(),
-          ),
-          GoRoute(
-            path: '/${GlintBoardingRoutes.dob.name}',
-            name: GlintBoardingRoutes.dob.name,
-            builder: (context, state) => const DateOfBirthOnboardingScreen(),
-          ),
-          GoRoute(
-            path: '/${GlintBoardingRoutes.pronouns.name}',
-            name: GlintBoardingRoutes.pronouns.name,
-            builder: (context, state) => const GetSetGlintOnboardingScreen(),
-          ),
-          GoRoute(
-            path: '/${GlintBoardingRoutes.media.name}',
-            name: GlintBoardingRoutes.media.name,
-            builder: (context, state) => const UploadPhotosOnboardingScreen(),
-          ),
-          GoRoute(
-            path: '/${GlintBoardingRoutes.gender.name}',
-            name: GlintBoardingRoutes.gender.name,
-            builder: (context, state) =>
-                const IdentifyYourselfOnboardingScreen(),
-          ),
-          GoRoute(
-            path: '/${GlintBoardingRoutes.interestedGender.name}',
-            name: GlintBoardingRoutes.interestedGender.name,
-            builder: (context, state) =>
-                const WhoCatchesYourEyeOnboardingScreen(),
-          ),
-          GoRoute(
-            path: '/${GlintBoardingRoutes.interests.name}',
-            name: GlintBoardingRoutes.interests.name,
-            builder: (context, state) =>
-                const InterestsAndVibeOnboardingScreen(),
-          ),
-          GoRoute(
-            path: '/${GlintBoardingRoutes.bio.name}',
-            name: GlintBoardingRoutes.bio.name,
-            builder: (context, state) => const OneLastStepOnboardingScreen(),
-          ),
-        ]),
+      path: '/${GlintMainRoutes.starter.name}',
+      name: GlintMainRoutes.starter.name,
+      builder: (context, state) => const StarterScreen(),
+    ),
+    GoRoute(
+      path: '/${GlintMainRoutes.onBoarding.name}',
+      name: GlintMainRoutes.onBoarding.name,
+      builder: (context, state) => const SetupGlintOnboardingScreen(),
+      routes: glintUserOnBoardingInnerRoutes,
+    ),
     GoRoute(
       path: '/${GlintMainRoutes.auth.name}',
       name: GlintMainRoutes.auth.name,
-      builder: (context, state) => const LoginScreen(isAdmin: false,),
+      builder: (context, state) => const LoginScreen(
+        isAdmin: false,
+      ),
       routes: glintAuthenticationRoutesBase,
     ),
     GoRoute(

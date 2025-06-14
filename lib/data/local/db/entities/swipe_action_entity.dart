@@ -21,7 +21,7 @@ class SwipeActionEntity {
       {required this.collabId,
       required this.currentUserId,
       required this.swipedOnUserId,
-      required this.isUnsent,
+      this.isUnsent = false,
       required this.action,
       required this.timestamp});
 }

@@ -3,7 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class ImLookingForCard extends StatefulWidget {
-  const ImLookingForCard({super.key});
+  const ImLookingForCard({super.key, required this.lookingForCallback});
+
+  final Function(String) lookingForCallback;
 
   @override
   State<ImLookingForCard> createState() => _ImLookingForCardState();
@@ -54,22 +56,34 @@ class _ImLookingForCardState extends State<ImLookingForCard> {
                 GlintCustomLabelChip(
                   label: 'Long-Term',
                   isSelected: _lookingFor == 'Long-Term',
-                  onTap: () => setState(() => _lookingFor = 'Long-Term'),
+                  onTap: () {
+                    setState(() => _lookingFor = 'Long-Term');
+                    widget.lookingForCallback("Long Term");
+                  },
                 ),
                 GlintCustomLabelChip(
                   label: 'Something Casual',
                   isSelected: _lookingFor == 'Something Casual',
-                  onTap: () => setState(() => _lookingFor = 'Something Casual'),
+                  onTap: () {
+                    setState(() => _lookingFor = 'Something Casual');
+                    widget.lookingForCallback("Something Casual");
+                  },
                 ),
                 GlintCustomLabelChip(
                   label: 'New Friends',
                   isSelected: _lookingFor == 'New Friends',
-                  onTap: () => setState(() => _lookingFor = 'New Friends'),
+                  onTap: () {
+                    setState(() => _lookingFor = 'New Friends');
+                    widget.lookingForCallback("New Friends");
+                  },
                 ),
                 GlintCustomLabelChip(
                   label: 'Not Sure',
                   isSelected: _lookingFor == 'Not Sure',
-                  onTap: () => setState(() => _lookingFor = 'Not Sure'),
+                  onTap: () {
+                    setState(() => _lookingFor = 'Not Sure');
+                    widget.lookingForCallback("Not Sure");
+                  },
                 ),
               ],
             ),

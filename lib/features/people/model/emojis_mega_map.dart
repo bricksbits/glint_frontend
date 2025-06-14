@@ -1,0 +1,63 @@
+final Map<String, String> interestEmojisMap = {
+  // 🎨 Hobbies & Creativity
+  'Drawing': '🎨',
+  'Photography': '📷',
+  'Baking': '🥐',
+  'Cooking': '👨‍🍳',
+  'Writing': '✍️',
+  'Dance': '💃',
+  'Crafting': '✂️',
+  'DIY Projects': '🛠️',
+
+  // 🎬 Entertainment
+  'Movies': '🎬',
+  'Bollywood': '🎞️',
+  'Music': '🎵',
+  'Folk music': '🎶',
+  'Video Games': '🎮',
+  'Anime': '🧝‍♂️',
+  'TV Shows': '📺',
+  'Podcasts': '🎧',
+  'Sports': '🏅',
+  'Stand-Up Comedy': '🎤',
+
+  // 🏃 Sports & Fitness
+  'Running': '🏃‍♂️',
+  'Swimming': '🏊‍♂️',
+  'Gym': '💪',
+  'Cycling': '🚴‍♂️',
+  'Football': '⚽',
+  'Basketball': '🏀',
+  'Cricket': '🏏',
+  'Volleyball': '🏐',
+  'Yoga': '🧘‍♂️',
+
+  // 🧬 Lifestyle
+  'Partying & Clubbing': '🕺',
+  'Festivals': '🪅',
+  'Events': '🎟️',
+  'Cafes': '☕',
+  'Travelling': '🧳',
+  'Volunteering': '🤝',
+
+  // 💡 Additional Interests (Inspired by Tinder/Bumble)
+  'Pets': '🐶',
+  'Books': '📚',
+  'Fashion': '👗',
+  'Spirituality': '🕉️',
+  'Memes': '😹',
+  'Board Games': '♟️',
+  'Coding': '👨‍💻',
+  'Startups': '🚀',
+  'Adventure Sports': '🪂',
+  'Camping': '🏕️',
+  'Karaoke': '🎤',
+  'Museums': '🏛️',
+  'Theatre': '🎭',
+  'Astrology': '🔮',
+  'Thrifting': '🛍️',
+  'Sustainable Living': '🌱',
+  'Wine Tasting': '🍷',
+  'Skating': '⛸️',
+  'Hiking': '🥾',
+};

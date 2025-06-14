@@ -6,8 +6,8 @@ import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
-class AuthenticationScreen extends StatelessWidget {
-  const AuthenticationScreen({super.key});
+class StarterScreen extends StatelessWidget {
+  const StarterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -122,8 +122,7 @@ class _AuthButtons extends StatelessWidget {
               customBorderRadius: 30.0,
               customTextStyle: AppTheme.simpleBodyText,
               onPressed: () {
-                // TODO - add create account functionality
-                debugPrint('Create account button pressed');
+                context.go("/${GlintMainRoutes.onBoarding.name}");
               },
             ),
           ),
@@ -137,14 +136,7 @@ class _AuthButtons extends StatelessWidget {
               color: AppColours.white,
             ),
             onPressed: () {
-              final isSuperAdmin = true;
-              final isEventAdmin = false;
-              if(isSuperAdmin){
-                context.go(
-                  "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.register.name}"
-                );
-              }
-              debugPrint('Login button pressed');
+              context.go("/${GlintMainRoutes.auth.name}");
             },
           ),
           const Gap(24.0),

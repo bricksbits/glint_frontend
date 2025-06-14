@@ -3,7 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class InterestAndVibeSelection extends StatefulWidget {
-  const InterestAndVibeSelection({super.key});
+  const InterestAndVibeSelection({super.key, required this.selectedInterests});
+
+  final Function(List<String> selectedInterests) selectedInterests;
 
   @override
   State<InterestAndVibeSelection> createState() =>
@@ -95,8 +97,10 @@ class _InterestAndVibeSelectionState extends State<InterestAndVibeSelection> {
             setState(() {
               if (isSelected) {
                 _selectedInterests.remove(label);
+                widget.selectedInterests(_selectedInterests.toList());
               } else {
                 _selectedInterests.add(label);
+                widget.selectedInterests(_selectedInterests.toList());
               }
             });
           },

@@ -3,30 +3,24 @@ LoginRequestBody loginRequestBodyFromJson(String str) => LoginRequestBody.fromJs
 String loginRequestBodyToJson(LoginRequestBody data) => json.encode(data.toJson());
 class LoginRequestBody {
   LoginRequestBody({
-      String? username, 
-      String? password,}){
-    _username = username;
-    _password = password;
-}
+      this.email, 
+      this.password,});
 
   LoginRequestBody.fromJson(dynamic json) {
-    _username = json['username'];
-    _password = json['password'];
+    email = json['email'];
+    password = json['password'];
   }
-  String? _username;
-  String? _password;
-LoginRequestBody copyWith({  String? username,
+  String? email;
+  String? password;
+LoginRequestBody copyWith({  String? email,
   String? password,
-}) => LoginRequestBody(  username: username ?? _username,
-  password: password ?? _password,
+}) => LoginRequestBody(  email: email ?? this.email,
+  password: password ?? this.password,
 );
-  String? get username => _username;
-  String? get password => _password;
-
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['username'] = _username;
-    map['password'] = _password;
+    map['email'] = email;
+    map['password'] = password;
     return map;
   }
 

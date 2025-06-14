@@ -7,4 +7,5 @@ class SharedPreferenceKeys {
   static const String userIdKey = "userId";
   static const String verifiedUserKey = "verifiedUser";
   static const String lastSavedTimeKey = "lastSavedTime";
+  static const String lastOnBoardingState = "lastOnBoardingState";
 }
