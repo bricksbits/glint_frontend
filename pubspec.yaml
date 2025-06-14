@@ -93,6 +93,8 @@ flutter:
           weight: 700
         - asset: lib/assets/fonts/Cambon-BoldItalic.ttf
           weight: 700
+        - asset: lib/assets/fonts/Cambon-BlackItalic.ttf
+          weight: 900
 
 flutter_launcher_icons:
   android: "launcher_icon"
