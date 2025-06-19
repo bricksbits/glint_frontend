@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -10,133 +12,158 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   //Todo(GO): Inject Razorpay Instance
+  //Todo(GO): Support for the Different UPI apps on IOS and Android.
   final Razorpay _razorpay = Razorpay();
+  late final PaymentCubit _paymentCubit;
+
+  @override
+  void dispose() {
+    _razorpay.clear();
+    super.dispose();
+  }
 
   @override
   void initState() {
+    super.initState();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentFailure);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handlePaymentWalletAdded);
-    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _paymentCubit = context.read<PaymentCubit>();
+      _paymentCubit.bookTheEvent("1", "1");
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade200,
-      appBar: AppBar(
-        centerTitle: false,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: const Icon(Icons.arrow_back, color: Colors.black),
-        title: const Text(
-          'Payment',
-          textAlign: TextAlign.start,
-          style: TextStyle(
-            fontStyle: FontStyle.italic,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ClipPath(
-                clipper: WaveClipper(),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
-                  ),
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Text(
-                          'Event Ticket Booking',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      const Divider(),
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text(
-                          'Ticket Holders',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      _buildTicketHolder('Shubham (You)',
-                          'lib/assets/images/temp_place_holder.png'),
-                      _buildTicketHolder(
-                          'Gajgamini', 'lib/assets/images/temp_place_holder.png'),
-                      const Divider(),
-                      _buildPriceDetails(),
-                    ],
-                  ),
-                ),
+    return BlocBuilder<PaymentCubit, PaymentState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: Colors.grey.shade200,
+          appBar: AppBar(
+            centerTitle: false,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: const Icon(Icons.arrow_back, color: Colors.black),
+            title: const Text(
+              'Payment',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                color: Colors.black,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const Column(
-                      children: [
-                        Text('Amount to be paid',
-                            style: TextStyle(color: Colors.grey)),
-                        Text('₹ 470',
-                            style: TextStyle(
-                                fontSize: 24,
+          ),
+          body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ClipPath(
+                    clipper: WaveClipper(),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Text(
+                              'Event Ticket Booking',
+                              style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.indigo)),
-                        SizedBox(height: 10),
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                          const Divider(),
+                          const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Text(
+                              'Ticket Holders',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTicketHolder('Shubham (You)',
+                              'lib/assets/images/temp_place_holder.png'),
+                          _buildTicketHolder('Gajgamini',
+                              'lib/assets/images/temp_place_holder.png'),
+                          const Divider(),
+                          _buildPriceDetails(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Column(
+                          children: [
+                            Text('Amount to be paid',
+                                style: TextStyle(color: Colors.grey)),
+                            Text('₹ 470',
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.indigo)),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                            backgroundColor: Colors.indigo,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 12),
+                          ),
+                          onPressed: () {
+                            //Todo : make the Payment
+                            final getTheOrder = context
+                                .read<PaymentCubit>()
+                                .generateTheOrderId("", "");
+
+                            _razorpay.open(getTheOrder.toJson());
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 14, horizontal: 35),
+                            child: Text('Proceed',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white)),
+                          ),
+                        ),
                       ],
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        backgroundColor: Colors.indigo,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 12),
-                      ),
-                      onPressed: () {},
-                      child: const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 14, horizontal: 35),
-                        child: Text('Proceed',
-                            style: TextStyle(fontSize: 16, color: Colors.white)),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -176,9 +203,24 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse successResponse) {}
+  void _handlePaymentSuccess(PaymentSuccessResponse successResponse) {
+    if (context.mounted) {
+      if (successResponse.data != null) {
+        if (successResponse.orderId != null &&
+            successResponse.paymentId != null) {
+          _paymentCubit.verifyThePayment(
+            successResponse.orderId!,
+            successResponse.paymentId!,
+          );
+        }
+      }
+    }
+  }
 
-  void _handlePaymentFailure(PaymentFailureResponse failureResponse) {}
+  void _handlePaymentFailure(PaymentFailureResponse failureResponse) {
+    print(
+        "PaymentFailed : Response : ${failureResponse.error}, ${failureResponse.message}");
+  }
 
   void _handlePaymentWalletAdded(ExternalWalletResponse walletAddedResponse) {}
 }
