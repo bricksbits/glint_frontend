@@ -102,7 +102,7 @@ extension ProfileToPeopleMapper on ProfileEntity {
     );
   }
 
-  RegisterUserRequest mapToDomain() {
+  RegisterUserRequest mapToRequestUserModel() {
     return RegisterUserRequest(
       userId,
       username,

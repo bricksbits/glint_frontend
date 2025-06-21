@@ -15,5 +15,9 @@ abstract class OnBoardingRepo {
 
   Future<OnBoardingCompletedTill> getLastUpdateState();
 
+  Future<void> setupCurrentBoardingState(OnBoardingCompletedTill currentBoardingStep);
+
   Future<Result<void>> updateLocation();
+
+  Future<Result<RegisterUserRequest>> getLastUpdatedUser();
 }

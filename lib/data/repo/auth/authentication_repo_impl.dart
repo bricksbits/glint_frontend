@@ -111,7 +111,7 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
   @override
   Future<RegisterUserRequest?> getOnBoardedUser() async {
     final user = await profileDao.getProfileData(NEW_ON_BOARD_USER_ID);
-    return user?.mapToDomain();
+    return user?.mapToRequestUserModel();
   }
 
   @override

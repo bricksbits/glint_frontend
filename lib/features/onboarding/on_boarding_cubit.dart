@@ -18,59 +18,57 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   OnBoardingCubit() : super(const OnBoardingState.initial()) {
     initializePersonWithAllDetails();
-    setUpTempUserIdForCurrentUser();
   }
 
-  // Future<void> getCurrentBoardingStatus() async {
-  //   final currentStatus = await authenticationRepo.getOnBoardingStatusTillNow();
-  //   switch (currentStatus) {
-  //     case OnBoardingCompletedTill.NOT_STARTED:
-  //       emitNewState(state.copyWith(
-  //           onBoarding
-  //       ));
-  //     case OnBoardingCompletedTill.NAME_PROVIDED:
-  //     // TODO: Handle this case.
-  //       throw UnimplementedError();
-  //     case OnBoardingCompletedTill.AGE_CALCULATED:
-  //     // TODO: Handle this case.
-  //       throw UnimplementedError();
-  //     case OnBoardingCompletedTill.GENDER_SELECTED:
-  //     // TODO: Handle this case.
-  //       throw UnimplementedError();
-  //     case OnBoardingCompletedTill.CHOICE_OF_GENDER_SELECTED:
-  //     // TODO: Handle this case.
-  //       throw UnimplementedError();
-  //     case OnBoardingCompletedTill.IMAGES_SELECTED:
-  //     // TODO: Handle this case.
-  //       throw UnimplementedError();
-  //     case OnBoardingCompletedTill.PRONOUNS_DONE:
-  //     // TODO: Handle this case.
-  //       throw UnimplementedError();
-  //     case OnBoardingCompletedTill.INTERESTS_DONE:
-  //     // TODO: Handle this case.
-  //       throw UnimplementedError();
-  //     case OnBoardingCompletedTill.COMPLETED:
-  //     // TODO: Handle this case.
-  //       throw UnimplementedError();
-  //   }
+  /// This method will be called when create account is clicked
+  /// And will decide which screen to display
+  Future<void> getCurrentBoardingStatus() async {
+    final currentStatus = await boardingRepo.getLastUpdateState();
+    switch (currentStatus) {
+      case OnBoardingCompletedTill.NOT_STARTED:
+      case OnBoardingCompletedTill.NAME_PROVIDED:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case OnBoardingCompletedTill.AGE_CALCULATED:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case OnBoardingCompletedTill.GENDER_SELECTED:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case OnBoardingCompletedTill.CHOICE_OF_GENDER_SELECTED:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case OnBoardingCompletedTill.IMAGES_SELECTED:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case OnBoardingCompletedTill.PRONOUNS_DONE:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case OnBoardingCompletedTill.INTERESTS_DONE:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case OnBoardingCompletedTill.COMPLETED:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+    }
+  }
+
+  // void setUpTempUserIdForCurrentUser() {
+  //   state.when(
+  //     initial: (currentState, onBoardingStatus, error, uploadedFiles) {
+  //       if (currentState != null) {
+  //         emit(
+  //           state.copyWith(
+  //             currentState:
+  //                 currentState.copyWith(tempUserId: NEW_ON_BOARD_USER_ID),
+  //           ),
+  //         );
+  //       } else {
+  //         _handleNullCurrentState("USER ID");
+  //       }
+  //     },
+  //   );
   // }
-
-  void setUpTempUserIdForCurrentUser() {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
-        if (currentState != null) {
-          emit(
-            state.copyWith(
-              currentState:
-                  currentState.copyWith(tempUserId: NEW_ON_BOARD_USER_ID),
-            ),
-          );
-        } else {
-          _handleNullCurrentState("USER ID");
-        }
-      },
-    );
-  }
 
   // Helper method to get the current PeopleUiModel, handles null
   RegisterUserRequest? _getCurrentRegisterUserState() {
@@ -389,29 +387,45 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   //Todo: Fetch from the DB and Update the required fields
-  void initializePersonWithAllDetails() {
-    emit(
-      state.copyWith(
-        currentState: RegisterUserRequest(
-          NEW_ON_BOARD_USER_ID,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-        ),
-        onBoardingStatus: OnBoardingCompletedTill.NOT_STARTED,
-      ),
-    );
+  Future<void> initializePersonWithAllDetails() async {
+    final currentProgress = await boardingRepo.getLastUpdatedUser();
+    switch (currentProgress) {
+      case Success<RegisterUserRequest>():
+        final currentUser = currentProgress.data;
+        emitNewState(
+          state.copyWith(
+            currentState: currentUser,
+            onBoardingStatus: OnBoardingCompletedTill.NOT_STARTED,
+          ),
+        );
+      case Failure<RegisterUserRequest>():
+        emitNewState(
+          state.copyWith(
+            currentState: RegisterUserRequest(
+              NEW_ON_BOARD_USER_ID,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+            ),
+            onBoardingStatus: OnBoardingCompletedTill.NOT_STARTED,
+          ),
+        );
+    }
+  }
+
+  void emitNewState(OnBoardingState newState) {
+    emit(newState);
   }
 }

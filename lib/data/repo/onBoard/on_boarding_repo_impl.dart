@@ -83,6 +83,24 @@ class OnBoardRepoImpl extends OnBoardingRepo {
     await profileDao.updateProfileData(updatedModel.mapToEntity());
     return const Result.success("");
   }
+
+  @override
+  Future<void> setupCurrentBoardingState(
+      OnBoardingCompletedTill currentBoardingStep) async {
+    await sharedPreferenceHelper.saveString(
+        SharedPreferenceKeys.lastOnBoardingState, currentBoardingStep.name);
+  }
+
+  @override
+  Future<Result<RegisterUserRequest>> getLastUpdatedUser() async {
+    final currentUser = await profileDao.getProfileData(NEW_ON_BOARD_USER_ID);
+    final registerUserModel = currentUser?.mapToRequestUserModel();
+    if(registerUserModel != null){
+      return Success(registerUserModel);
+    }else {
+      return Failure(Exception("User doesn't exists, create new one"));
+    }
+  }
 }
 
 //Todo: How to Manage the password here
