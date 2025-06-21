@@ -95,7 +95,7 @@ class _DateOfBirthOnboardingScreenState
                                 .read<OnBoardingCubit>()
                                 .setAge(calculateAge().toString());
                           }
-                          final currentAge = state.currentState?.age;
+                          final currentAge = state.currentState?.dob;
                           if (currentAge != null && calculateAge() >= 18) {
                             final base = GlintMainRoutes.onBoarding.name;
                             final target = GlintBoardingRoutes.gender.name;

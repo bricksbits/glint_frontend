@@ -118,15 +118,15 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
   Future<OnBoardingCompletedTill> getOnBoardingStatusTillNow() async {
     OnBoardingCompletedTill currentState = OnBoardingCompletedTill.NOT_STARTED;
     final user = await profileDao.getProfileData(NEW_ON_BOARD_USER_ID);
-    if (user?.name == null) {
+    if (user?.username == null) {
       currentState = OnBoardingCompletedTill.NOT_STARTED;
     } else if (user?.age == null) {
       currentState = OnBoardingCompletedTill.NAME_PROVIDED;
-    } else if (user?.pronouns == null) {
+    } else if (user?.gender == null) {
       currentState = OnBoardingCompletedTill.AGE_CALCULATED;
-    } else if (user?.choiceOfGender == null) {
+    } else if (user?.genderPreference == null) {
       currentState = OnBoardingCompletedTill.GENDER_SELECTED;
-    } else if (user?.profilePics == null) {
+    } else if (user?.pictureUrlList == null) {
       currentState = OnBoardingCompletedTill.CHOICE_OF_GENDER_SELECTED;
     } else if (user?.lookingFor == null) {
       currentState = OnBoardingCompletedTill.IMAGES_SELECTED;

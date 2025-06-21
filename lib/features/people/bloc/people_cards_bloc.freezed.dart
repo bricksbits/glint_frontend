@@ -1969,22 +1969,22 @@ abstract class _flushSwipeCards implements PeopleCardsEvent {
 /// @nodoc
 mixin _$PeopleCardsState {
   bool get isLoading => throw _privateConstructorUsedError;
-  List<PeopleUiModel> get cardList => throw _privateConstructorUsedError;
+  List<PeopleCardModel> get cardList => throw _privateConstructorUsedError;
   String get error => throw _privateConstructorUsedError;
   int get currentPaginatedIndex => throw _privateConstructorUsedError;
   int get currentPaginatedPage => throw _privateConstructorUsedError;
-  PeopleUiModel? get lastSwipedProfile => throw _privateConstructorUsedError;
-  PeopleUiModel? get matchUpProfile => throw _privateConstructorUsedError;
+  PeopleCardModel? get lastSwipedProfile => throw _privateConstructorUsedError;
+  PeopleCardModel? get matchUpProfile => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
             bool isLoading,
-            List<PeopleUiModel> cardList,
+            List<PeopleCardModel> cardList,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
-            PeopleUiModel? lastSwipedProfile,
-            PeopleUiModel? matchUpProfile)
+            PeopleCardModel? lastSwipedProfile,
+            PeopleCardModel? matchUpProfile)
         ignite,
   }) =>
       throw _privateConstructorUsedError;
@@ -1992,12 +1992,12 @@ mixin _$PeopleCardsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
             bool isLoading,
-            List<PeopleUiModel> cardList,
+            List<PeopleCardModel> cardList,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
-            PeopleUiModel? lastSwipedProfile,
-            PeopleUiModel? matchUpProfile)?
+            PeopleCardModel? lastSwipedProfile,
+            PeopleCardModel? matchUpProfile)?
         ignite,
   }) =>
       throw _privateConstructorUsedError;
@@ -2005,12 +2005,12 @@ mixin _$PeopleCardsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
             bool isLoading,
-            List<PeopleUiModel> cardList,
+            List<PeopleCardModel> cardList,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
-            PeopleUiModel? lastSwipedProfile,
-            PeopleUiModel? matchUpProfile)?
+            PeopleCardModel? lastSwipedProfile,
+            PeopleCardModel? matchUpProfile)?
         ignite,
     required TResult orElse(),
   }) =>
@@ -2047,12 +2047,12 @@ abstract class $PeopleCardsStateCopyWith<$Res> {
   @useResult
   $Res call(
       {bool isLoading,
-      List<PeopleUiModel> cardList,
+      List<PeopleCardModel> cardList,
       String error,
       int currentPaginatedIndex,
       int currentPaginatedPage,
-      PeopleUiModel? lastSwipedProfile,
-      PeopleUiModel? matchUpProfile});
+      PeopleCardModel? lastSwipedProfile,
+      PeopleCardModel? matchUpProfile});
 }
 
 /// @nodoc
@@ -2086,7 +2086,7 @@ class _$PeopleCardsStateCopyWithImpl<$Res, $Val extends PeopleCardsState>
       cardList: null == cardList
           ? _value.cardList
           : cardList // ignore: cast_nullable_to_non_nullable
-              as List<PeopleUiModel>,
+              as List<PeopleCardModel>,
       error: null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -2102,11 +2102,11 @@ class _$PeopleCardsStateCopyWithImpl<$Res, $Val extends PeopleCardsState>
       lastSwipedProfile: freezed == lastSwipedProfile
           ? _value.lastSwipedProfile
           : lastSwipedProfile // ignore: cast_nullable_to_non_nullable
-              as PeopleUiModel?,
+              as PeopleCardModel?,
       matchUpProfile: freezed == matchUpProfile
           ? _value.matchUpProfile
           : matchUpProfile // ignore: cast_nullable_to_non_nullable
-              as PeopleUiModel?,
+              as PeopleCardModel?,
     ) as $Val);
   }
 }
@@ -2121,12 +2121,12 @@ abstract class _$$IgniteImplCopyWith<$Res>
   @useResult
   $Res call(
       {bool isLoading,
-      List<PeopleUiModel> cardList,
+      List<PeopleCardModel> cardList,
       String error,
       int currentPaginatedIndex,
       int currentPaginatedPage,
-      PeopleUiModel? lastSwipedProfile,
-      PeopleUiModel? matchUpProfile});
+      PeopleCardModel? lastSwipedProfile,
+      PeopleCardModel? matchUpProfile});
 }
 
 /// @nodoc
@@ -2158,7 +2158,7 @@ class __$$IgniteImplCopyWithImpl<$Res>
       cardList: null == cardList
           ? _value._cardList
           : cardList // ignore: cast_nullable_to_non_nullable
-              as List<PeopleUiModel>,
+              as List<PeopleCardModel>,
       error: null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -2174,11 +2174,11 @@ class __$$IgniteImplCopyWithImpl<$Res>
       lastSwipedProfile: freezed == lastSwipedProfile
           ? _value.lastSwipedProfile
           : lastSwipedProfile // ignore: cast_nullable_to_non_nullable
-              as PeopleUiModel?,
+              as PeopleCardModel?,
       matchUpProfile: freezed == matchUpProfile
           ? _value.matchUpProfile
           : matchUpProfile // ignore: cast_nullable_to_non_nullable
-              as PeopleUiModel?,
+              as PeopleCardModel?,
     ));
   }
 }
@@ -2188,7 +2188,7 @@ class __$$IgniteImplCopyWithImpl<$Res>
 class _$IgniteImpl implements _Ignite {
   const _$IgniteImpl(
       {this.isLoading = true,
-      final List<PeopleUiModel> cardList = const [],
+      final List<PeopleCardModel> cardList = const [],
       this.error = "",
       this.currentPaginatedIndex = 1,
       this.currentPaginatedPage = 0,
@@ -2199,10 +2199,10 @@ class _$IgniteImpl implements _Ignite {
   @override
   @JsonKey()
   final bool isLoading;
-  final List<PeopleUiModel> _cardList;
+  final List<PeopleCardModel> _cardList;
   @override
   @JsonKey()
-  List<PeopleUiModel> get cardList {
+  List<PeopleCardModel> get cardList {
     if (_cardList is EqualUnmodifiableListView) return _cardList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_cardList);
@@ -2219,10 +2219,10 @@ class _$IgniteImpl implements _Ignite {
   final int currentPaginatedPage;
   @override
   @JsonKey()
-  final PeopleUiModel? lastSwipedProfile;
+  final PeopleCardModel? lastSwipedProfile;
   @override
   @JsonKey()
-  final PeopleUiModel? matchUpProfile;
+  final PeopleCardModel? matchUpProfile;
 
   @override
   String toString() {
@@ -2272,12 +2272,12 @@ class _$IgniteImpl implements _Ignite {
   TResult when<TResult extends Object?>({
     required TResult Function(
             bool isLoading,
-            List<PeopleUiModel> cardList,
+            List<PeopleCardModel> cardList,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
-            PeopleUiModel? lastSwipedProfile,
-            PeopleUiModel? matchUpProfile)
+            PeopleCardModel? lastSwipedProfile,
+            PeopleCardModel? matchUpProfile)
         ignite,
   }) {
     return ignite(isLoading, cardList, error, currentPaginatedIndex,
@@ -2289,12 +2289,12 @@ class _$IgniteImpl implements _Ignite {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
             bool isLoading,
-            List<PeopleUiModel> cardList,
+            List<PeopleCardModel> cardList,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
-            PeopleUiModel? lastSwipedProfile,
-            PeopleUiModel? matchUpProfile)?
+            PeopleCardModel? lastSwipedProfile,
+            PeopleCardModel? matchUpProfile)?
         ignite,
   }) {
     return ignite?.call(isLoading, cardList, error, currentPaginatedIndex,
@@ -2306,12 +2306,12 @@ class _$IgniteImpl implements _Ignite {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
             bool isLoading,
-            List<PeopleUiModel> cardList,
+            List<PeopleCardModel> cardList,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
-            PeopleUiModel? lastSwipedProfile,
-            PeopleUiModel? matchUpProfile)?
+            PeopleCardModel? lastSwipedProfile,
+            PeopleCardModel? matchUpProfile)?
         ignite,
     required TResult orElse(),
   }) {
@@ -2354,17 +2354,17 @@ class _$IgniteImpl implements _Ignite {
 abstract class _Ignite implements PeopleCardsState {
   const factory _Ignite(
       {final bool isLoading,
-      final List<PeopleUiModel> cardList,
+      final List<PeopleCardModel> cardList,
       final String error,
       final int currentPaginatedIndex,
       final int currentPaginatedPage,
-      final PeopleUiModel? lastSwipedProfile,
-      final PeopleUiModel? matchUpProfile}) = _$IgniteImpl;
+      final PeopleCardModel? lastSwipedProfile,
+      final PeopleCardModel? matchUpProfile}) = _$IgniteImpl;
 
   @override
   bool get isLoading;
   @override
-  List<PeopleUiModel> get cardList;
+  List<PeopleCardModel> get cardList;
   @override
   String get error;
   @override
@@ -2372,9 +2372,9 @@ abstract class _Ignite implements PeopleCardsState {
   @override
   int get currentPaginatedPage;
   @override
-  PeopleUiModel? get lastSwipedProfile;
+  PeopleCardModel? get lastSwipedProfile;
   @override
-  PeopleUiModel? get matchUpProfile;
+  PeopleCardModel? get matchUpProfile;
 
   /// Create a copy of PeopleCardsState
   /// with the given fields replaced by the non-null parameter values.

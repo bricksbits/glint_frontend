@@ -3,9 +3,10 @@ part of 'on_boarding_cubit.dart';
 @freezed
 class OnBoardingState with _$OnBoardingState {
   const factory OnBoardingState.initial({
-    @Default(null) PeopleUiModel? currentState,
+    @Default(null) RegisterUserRequest? currentState,
     @Default(OnBoardingCompletedTill.NOT_STARTED) OnBoardingCompletedTill onBoardingStatus,
     @Default("") String error,
+    @Default([]) List<String> uploadedFilePaths,
   }) = _Initial;
 }
 

@@ -64,7 +64,7 @@ class SetupGlintOnboardingScreen extends StatelessWidget {
                       backgroundColor: AppColours.primaryBlue,
                       onPressed: () {
                         final isNewUserCreated = state.currentState;
-                        if (isNewUserCreated?.userId == NEW_ON_BOARD_USER_ID) {
+                        if (isNewUserCreated?.tempUserId == NEW_ON_BOARD_USER_ID) {
                           final base = GlintMainRoutes.onBoarding.name;
                           final target = GlintBoardingRoutes.name.name;
                           context.go("/$base/$target");

@@ -16,28 +16,38 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$OnBoardingState {
-  PeopleUiModel? get currentState => throw _privateConstructorUsedError;
+  RegisterUserRequest? get currentState => throw _privateConstructorUsedError;
   OnBoardingCompletedTill get onBoardingStatus =>
       throw _privateConstructorUsedError;
   String get error => throw _privateConstructorUsedError;
+  List<String> get uploadedFilePaths => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(PeopleUiModel? currentState,
-            OnBoardingCompletedTill onBoardingStatus, String error)
+    required TResult Function(
+            RegisterUserRequest? currentState,
+            OnBoardingCompletedTill onBoardingStatus,
+            String error,
+            List<String> uploadedFilePaths)
         initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(PeopleUiModel? currentState,
-            OnBoardingCompletedTill onBoardingStatus, String error)?
+    TResult? Function(
+            RegisterUserRequest? currentState,
+            OnBoardingCompletedTill onBoardingStatus,
+            String error,
+            List<String> uploadedFilePaths)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(PeopleUiModel? currentState,
-            OnBoardingCompletedTill onBoardingStatus, String error)?
+    TResult Function(
+            RegisterUserRequest? currentState,
+            OnBoardingCompletedTill onBoardingStatus,
+            String error,
+            List<String> uploadedFilePaths)?
         initial,
     required TResult orElse(),
   }) =>
@@ -73,9 +83,10 @@ abstract class $OnBoardingStateCopyWith<$Res> {
       _$OnBoardingStateCopyWithImpl<$Res, OnBoardingState>;
   @useResult
   $Res call(
-      {PeopleUiModel? currentState,
+      {RegisterUserRequest? currentState,
       OnBoardingCompletedTill onBoardingStatus,
-      String error});
+      String error,
+      List<String> uploadedFilePaths});
 }
 
 /// @nodoc
@@ -96,12 +107,13 @@ class _$OnBoardingStateCopyWithImpl<$Res, $Val extends OnBoardingState>
     Object? currentState = freezed,
     Object? onBoardingStatus = null,
     Object? error = null,
+    Object? uploadedFilePaths = null,
   }) {
     return _then(_value.copyWith(
       currentState: freezed == currentState
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
-              as PeopleUiModel?,
+              as RegisterUserRequest?,
       onBoardingStatus: null == onBoardingStatus
           ? _value.onBoardingStatus
           : onBoardingStatus // ignore: cast_nullable_to_non_nullable
@@ -110,6 +122,10 @@ class _$OnBoardingStateCopyWithImpl<$Res, $Val extends OnBoardingState>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String,
+      uploadedFilePaths: null == uploadedFilePaths
+          ? _value.uploadedFilePaths
+          : uploadedFilePaths // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -123,9 +139,10 @@ abstract class _$$InitialImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {PeopleUiModel? currentState,
+      {RegisterUserRequest? currentState,
       OnBoardingCompletedTill onBoardingStatus,
-      String error});
+      String error,
+      List<String> uploadedFilePaths});
 }
 
 /// @nodoc
@@ -144,12 +161,13 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? currentState = freezed,
     Object? onBoardingStatus = null,
     Object? error = null,
+    Object? uploadedFilePaths = null,
   }) {
     return _then(_$InitialImpl(
       currentState: freezed == currentState
           ? _value.currentState
           : currentState // ignore: cast_nullable_to_non_nullable
-              as PeopleUiModel?,
+              as RegisterUserRequest?,
       onBoardingStatus: null == onBoardingStatus
           ? _value.onBoardingStatus
           : onBoardingStatus // ignore: cast_nullable_to_non_nullable
@@ -158,6 +176,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String,
+      uploadedFilePaths: null == uploadedFilePaths
+          ? _value._uploadedFilePaths
+          : uploadedFilePaths // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -168,21 +190,32 @@ class _$InitialImpl implements _Initial {
   const _$InitialImpl(
       {this.currentState = null,
       this.onBoardingStatus = OnBoardingCompletedTill.NOT_STARTED,
-      this.error = ""});
+      this.error = "",
+      final List<String> uploadedFilePaths = const []})
+      : _uploadedFilePaths = uploadedFilePaths;
 
   @override
   @JsonKey()
-  final PeopleUiModel? currentState;
+  final RegisterUserRequest? currentState;
   @override
   @JsonKey()
   final OnBoardingCompletedTill onBoardingStatus;
   @override
   @JsonKey()
   final String error;
+  final List<String> _uploadedFilePaths;
+  @override
+  @JsonKey()
+  List<String> get uploadedFilePaths {
+    if (_uploadedFilePaths is EqualUnmodifiableListView)
+      return _uploadedFilePaths;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_uploadedFilePaths);
+  }
 
   @override
   String toString() {
-    return 'OnBoardingState.initial(currentState: $currentState, onBoardingStatus: $onBoardingStatus, error: $error)';
+    return 'OnBoardingState.initial(currentState: $currentState, onBoardingStatus: $onBoardingStatus, error: $error, uploadedFilePaths: $uploadedFilePaths)';
   }
 
   @override
@@ -194,12 +227,14 @@ class _$InitialImpl implements _Initial {
                 other.currentState == currentState) &&
             (identical(other.onBoardingStatus, onBoardingStatus) ||
                 other.onBoardingStatus == onBoardingStatus) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.error, error) || other.error == error) &&
+            const DeepCollectionEquality()
+                .equals(other._uploadedFilePaths, _uploadedFilePaths));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, currentState, onBoardingStatus, error);
+  int get hashCode => Object.hash(runtimeType, currentState, onBoardingStatus,
+      error, const DeepCollectionEquality().hash(_uploadedFilePaths));
 
   /// Create a copy of OnBoardingState
   /// with the given fields replaced by the non-null parameter values.
@@ -212,33 +247,43 @@ class _$InitialImpl implements _Initial {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(PeopleUiModel? currentState,
-            OnBoardingCompletedTill onBoardingStatus, String error)
+    required TResult Function(
+            RegisterUserRequest? currentState,
+            OnBoardingCompletedTill onBoardingStatus,
+            String error,
+            List<String> uploadedFilePaths)
         initial,
   }) {
-    return initial(currentState, onBoardingStatus, error);
+    return initial(currentState, onBoardingStatus, error, uploadedFilePaths);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(PeopleUiModel? currentState,
-            OnBoardingCompletedTill onBoardingStatus, String error)?
+    TResult? Function(
+            RegisterUserRequest? currentState,
+            OnBoardingCompletedTill onBoardingStatus,
+            String error,
+            List<String> uploadedFilePaths)?
         initial,
   }) {
-    return initial?.call(currentState, onBoardingStatus, error);
+    return initial?.call(
+        currentState, onBoardingStatus, error, uploadedFilePaths);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(PeopleUiModel? currentState,
-            OnBoardingCompletedTill onBoardingStatus, String error)?
+    TResult Function(
+            RegisterUserRequest? currentState,
+            OnBoardingCompletedTill onBoardingStatus,
+            String error,
+            List<String> uploadedFilePaths)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(currentState, onBoardingStatus, error);
+      return initial(currentState, onBoardingStatus, error, uploadedFilePaths);
     }
     return orElse();
   }
@@ -274,16 +319,19 @@ class _$InitialImpl implements _Initial {
 
 abstract class _Initial implements OnBoardingState {
   const factory _Initial(
-      {final PeopleUiModel? currentState,
+      {final RegisterUserRequest? currentState,
       final OnBoardingCompletedTill onBoardingStatus,
-      final String error}) = _$InitialImpl;
+      final String error,
+      final List<String> uploadedFilePaths}) = _$InitialImpl;
 
   @override
-  PeopleUiModel? get currentState;
+  RegisterUserRequest? get currentState;
   @override
   OnBoardingCompletedTill get onBoardingStatus;
   @override
   String get error;
+  @override
+  List<String> get uploadedFilePaths;
 
   /// Create a copy of OnBoardingState
   /// with the given fields replaced by the non-null parameter values.

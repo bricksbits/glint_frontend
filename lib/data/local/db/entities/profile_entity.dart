@@ -1,96 +1,123 @@
 import 'package:floor/floor.dart';
 import 'package:glint_frontend/data/local/db/database/string_type_converter.dart';
 import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
-import 'package:glint_frontend/features/people/model/people_model.dart';
+import 'package:glint_frontend/features/people/model/people_card_model.dart';
 
-// TODO: Find a Way to setup the Membership and Event related details as well.
-@entity
+//Todo : Cross check if all those SP items are adding or not
+/// Data Like
+/// AccessToken, RefreshToken, StreamToken,
+/// IsPremiumUser, Email, Current Role, Profile Views
+///
+/// All are put via the SharedPref Encrypted
+///
+/// This ProfileEntity works as the base for
+/// - User Profile, Update and Read
+/// - Registration process
+/// - Fetching Profiles for matching
+///
+/// Model for each usecase can change as per requirement
+@Entity(tableName: 'profiles')
 class ProfileEntity {
   @primaryKey
   final String userId;
-  final String tag;
-  final String name;
+  final String username;
   final String age;
-  final String designation;
-  final String profileViews;
-  final String lastLocation;
-  final String pronouns;
-  final String location;
-  final String bio;
-  final String lookingFor;
-  final String choiceOfGender;
-
-  @TypeConverters([StringTypeConverter])
-  final List<String> about;
+  final String gender;
+  final String genderPreference;
 
   @TypeConverters([StringTypeConverter])
   final List<String> interests;
 
+  final String lookingFor;
+  final String bio;
+
+  final String? height;
+  final String? occupation;
+  final String? education;
+  final String? workoutHabit;
+  final String? drinkingHabit;
+  final String? smokingHabit;
+  final String profileViews;
+  final String profileLikes;
+
   @TypeConverters([StringTypeConverter])
-  final List<String> profilePics;
+  final List<String> pictureUrlList;
+
+  final String? profileTag;
+  final String? lastLocation;
+  final String? location;
 
   ProfileEntity({
     required this.userId,
-    required this.tag,
-    required this.name,
+    required this.username,
     required this.age,
-    required this.designation,
-    required this.profileViews,
-    required this.lastLocation,
-    required this.pronouns,
-    required this.location,
-    required this.bio,
-    required this.lookingFor,
-    required this.about,
+    required this.gender,
+    required this.genderPreference,
     required this.interests,
-    required this.profilePics,
-    required this.choiceOfGender,
+    required this.lookingFor,
+    required this.bio,
+    required this.height,
+    required this.occupation,
+    required this.education,
+    required this.workoutHabit,
+    required this.drinkingHabit,
+    required this.smokingHabit,
+    required this.profileViews,
+    required this.profileLikes,
+    required this.pictureUrlList,
+    required this.profileTag,
+    required this.lastLocation,
+    required this.location,
   });
 }
 
 extension ProfileToPeopleMapper on ProfileEntity {
-  PeopleUiModel mapToPeopleUiModel() {
-    return PeopleUiModel(
-      userId.toString(),
-      name,
-      age,
-      location,
-      profileViews,
-      designation,
-      about,
-      bio,
-      [lookingFor, lookingFor],
-      lastLocation,
-      interests,
-      profilePics,
-      pronouns,
-      choiceOfGender,
-      "NOT SET- HEIGHT",
-      "NOT SET_ OCCUPATION",
-      "NOT-SET Education",
-      "NOT SET- WORK OUT HABITS",
-      "NOT SET_ DRINKING HABIT",
-      "NOT-SET Smoking habit",
-      "NOT SET PROFILE LIKES",
+  PeopleCardModel mapToPeopleUiModel() {
+    final aboutMap = {
+      "height": height ?? "",
+      "occupation": occupation ?? "",
+      "education": education ?? "",
+      "workout": workoutHabit ?? "",
+      "drinking": drinkingHabit ?? "",
+      "smoking": smokingHabit ?? "",
+    };
+    return PeopleCardModel(
+        userId: userId,
+        username: username,
+        age: age,
+        profileViews: profileViews,
+        bio: bio,
+        lookingFor: lookingFor,
+        location: location ?? "",
+        interests: interests,
+        pictureUrlList: pictureUrlList,
+        gender: gender,
+        genderPreference: genderPreference,
+        profileLikes: profileLikes,
+        isVerified: false,
+        distanceAway: "",
+        about: aboutMap,
+        profileTag: profileTag ?? "",
+        occupation: occupation ?? ""
     );
   }
 
   RegisterUserRequest mapToDomain() {
     return RegisterUserRequest(
-      name,
-      "email",
-      "password",
-      "phoneNumber",
+      userId,
+      username,
+      "",
+      "",
       bio,
       age,
-      "height",
-      "education",
-      designation,
-      pronouns,
-      choiceOfGender,
-      "workoutHabit",
-      "drinkingHabit",
-      "smokingHabit",
+      height ?? "",
+      education ?? "",
+      occupation ?? "",
+      gender,
+      genderPreference,
+      workoutHabit ?? "",
+      drinkingHabit ?? "",
+      smokingHabit ?? "",
       lookingFor,
       interests,
     );

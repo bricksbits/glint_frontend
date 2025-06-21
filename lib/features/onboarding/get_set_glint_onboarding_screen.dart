@@ -62,15 +62,15 @@ class _GetSetGlintOnboardingScreenState
 
                   //im looking for card
                   ImLookingForCard(lookingForCallback: (value) {
-                    context.read<OnBoardingCubit>().setLookingFor([value]);
+                    context.read<OnBoardingCubit>().setLookingFor(value);
                   }),
 
                   const Gap(16.0),
 
-                  // pronouns card
-                  YourPronounsCard(pronounsSelected: (pronouns) {
-                    context.read<OnBoardingCubit>().setPronouns(pronouns);
-                  }),
+                  // pronouns card Not needed as already asking for Gender
+                  // YourPronounsCard(pronounsSelected: (pronouns) {
+                  //   context.read<OnBoardingCubit>().setPronouns("");
+                  // }),
 
                   const Spacer(),
 

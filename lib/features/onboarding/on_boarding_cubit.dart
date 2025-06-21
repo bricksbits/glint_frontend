@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/di/injection.dart';
+import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
 import 'package:glint_frontend/domain/business_logic/repo/boarding/on_boarding_repo.dart';
-import 'package:glint_frontend/features/people/model/people_model.dart';
+import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
@@ -56,11 +57,12 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setUpTempUserIdForCurrentUser() {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(
             state.copyWith(
-              currentState: currentState.copyWith(userId: NEW_ON_BOARD_USER_ID),
+              currentState:
+                  currentState.copyWith(tempUserId: NEW_ON_BOARD_USER_ID),
             ),
           );
         } else {
@@ -71,59 +73,49 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   // Helper method to get the current PeopleUiModel, handles null
-  PeopleUiModel? _getCurrentPeopleUiModel() {
+  RegisterUserRequest? _getCurrentRegisterUserState() {
     return state.mapOrNull(
       initial: (s) => s.currentState,
     );
   }
 
-  // --- Getters for PeopleUiModel properties ---
-  String? get currentUserId => _getCurrentPeopleUiModel()?.userId;
+  String? get currentName => _getCurrentRegisterUserState()?.username;
 
-  String? get currentName => _getCurrentPeopleUiModel()?.name;
+  String? get currentAge => _getCurrentRegisterUserState()?.dob;
 
-  String? get currentAge => _getCurrentPeopleUiModel()?.age;
+  String? get currentDesignation => _getCurrentRegisterUserState()?.occupation;
 
-  String? get currentDistanceAway => _getCurrentPeopleUiModel()?.distanceAway;
+  String? get currentBio => _getCurrentRegisterUserState()?.bio;
 
-  String? get currentViews => _getCurrentPeopleUiModel()?.profileViews;
+  String? get currentLookingFor =>
+      _getCurrentRegisterUserState()?.relationShipGoals;
 
-  String? get currentDesignation => _getCurrentPeopleUiModel()?.designation;
+  List<String>? get currentInterests =>
+      _getCurrentRegisterUserState()?.interests;
 
-  List<String>? get currentAbout => _getCurrentPeopleUiModel()?.about;
-
-  String? get currentBio => _getCurrentPeopleUiModel()?.bio;
-
-  List<String>? get currentLookingFor => _getCurrentPeopleUiModel()?.lookingFor;
-
-  String? get currentLocation => _getCurrentPeopleUiModel()?.location;
-
-  List<String>? get currentInterests => _getCurrentPeopleUiModel()?.interests;
-
-  List<String>? get currentImages => _getCurrentPeopleUiModel()?.images;
-
-  String? get currentGender => _getCurrentPeopleUiModel()?.gender;
+  String? get currentGender => _getCurrentRegisterUserState()?.gender;
 
   String? get currentGenderPreferences =>
-      _getCurrentPeopleUiModel()?.genderPreference;
+      _getCurrentRegisterUserState()?.genderPreference;
 
-  String? get currentHeight => _getCurrentPeopleUiModel()?.height;
+  String? get currentHeight => _getCurrentRegisterUserState()?.height;
 
-  String? get currentOccupation => _getCurrentPeopleUiModel()?.occupation;
+  String? get currentOccupation => _getCurrentRegisterUserState()?.occupation;
 
-  String? get currentEducation => _getCurrentPeopleUiModel()?.education;
+  String? get currentEducation => _getCurrentRegisterUserState()?.education;
 
-  String? get currentWorkingHabit => _getCurrentPeopleUiModel()?.workoutHabit;
+  String? get currentWorkingHabit =>
+      _getCurrentRegisterUserState()?.workoutHabit;
 
-  String? get currentDrinkingHabit => _getCurrentPeopleUiModel()?.drinkingHabit;
+  String? get currentDrinkingHabit =>
+      _getCurrentRegisterUserState()?.drinkingHabit;
 
-  String? get currentSmokingHabit => _getCurrentPeopleUiModel()?.smokingHabit;
-
-  String? get currentProfileLikes => _getCurrentPeopleUiModel()?.profileLikes;
+  String? get currentSmokingHabit =>
+      _getCurrentRegisterUserState()?.smokingHabit;
 
   void setGender(String gender) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(state.copyWith(
               currentState: currentState.copyWith(gender: gender)));
@@ -136,7 +128,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setGenderPreferences(String genderPreferences) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(state.copyWith(
               currentState:
@@ -150,10 +142,15 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setHeight(String height) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(height: height)));
+          emit(
+            state.copyWith(
+              currentState: currentState.copyWith(
+                height: height,
+              ),
+            ),
+          );
         } else {
           _handleNullCurrentState("setHeight");
         }
@@ -163,7 +160,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setOccupation(String occupation) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(state.copyWith(
               currentState: currentState.copyWith(occupation: occupation)));
@@ -176,7 +173,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setEducation(String education) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(state.copyWith(
               currentState: currentState.copyWith(education: education)));
@@ -189,7 +186,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setWorkingHabit(String workingHabit) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(state.copyWith(
               currentState: currentState.copyWith(workoutHabit: workingHabit)));
@@ -202,7 +199,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setDrinkingHabit(String drinkingHabit) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(state.copyWith(
               currentState:
@@ -216,7 +213,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setSmokingHabit(String smokingHabit) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(state.copyWith(
               currentState: currentState.copyWith(smokingHabit: smokingHabit)));
@@ -227,26 +224,13 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     );
   }
 
-  void setProfileLikes(String profileLikes) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error) {
-        if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(profileLikes: profileLikes)));
-        } else {
-          _handleNullCurrentState("setProfileLikes");
-        }
-      },
-    );
-  }
-
   void setName(String name) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           if (name.isNotEmpty) {
             emit(state.copyWith(
-                currentState: currentState.copyWith(name: name)));
+                currentState: currentState.copyWith(username: name)));
           }
         } else {
           _handleNullCurrentState("setName");
@@ -257,9 +241,9 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setAge(String age) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(age: age)));
+          emit(state.copyWith(currentState: currentState.copyWith(dob: age)));
         } else {
           _handleNullCurrentState("setAge");
         }
@@ -267,38 +251,12 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     );
   }
 
-  void setDistanceAway(String distanceAway) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error) {
-        if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(distanceAway: distanceAway)));
-        } else {
-          _handleNullCurrentState("setDistanceAway");
-        }
-      },
-    );
-  }
-
-  void setViews(String views) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error) {
-        if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(profileViews: views)));
-        } else {
-          _handleNullCurrentState("setViews");
-        }
-      },
-    );
-  }
-
   void setDesignation(String designation) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(state.copyWith(
-              currentState: currentState.copyWith(designation: designation)));
+              currentState: currentState.copyWith(occupation: designation)));
         } else {
           _handleNullCurrentState("setDesignation");
         }
@@ -306,24 +264,9 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     );
   }
 
-  void setAbout(List<String> about) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error) {
-        if (currentState != null) {
-          // IMPORTANT: When setting a list, always provide a *new* list instance
-          // to ensure immutability and trigger proper state updates.
-          emit(state.copyWith(
-              currentState: currentState.copyWith(about: List.from(about))));
-        } else {
-          _handleNullCurrentState("setAbout");
-        }
-      },
-    );
-  }
-
   void setBio(String bio) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(state.copyWith(currentState: currentState.copyWith(bio: bio)));
         } else {
@@ -333,41 +276,15 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     );
   }
 
-  void setLookingFor(List<String> lookingFor) {
+  void setLookingFor(String lookingFor) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(state.copyWith(
               currentState:
-                  currentState.copyWith(lookingFor: List.from(lookingFor))));
+                  currentState.copyWith(relationShipGoals: lookingFor)));
         } else {
           _handleNullCurrentState("setLookingFor");
-        }
-      },
-    );
-  }
-
-  void setPronouns(String pronouns) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error) {
-        if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(gender: pronouns)));
-        } else {
-          _handleNullCurrentState("setLookingFor");
-        }
-      },
-    );
-  }
-
-  void setLocation(String location) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error) {
-        if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(location: location)));
-        } else {
-          _handleNullCurrentState("setLocation");
         }
       },
     );
@@ -375,7 +292,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setInterests(List<String> interests) {
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
           emit(state.copyWith(
               currentState:
@@ -399,13 +316,16 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   void removeImageAt(int index) {
-    final currentImagesList = state.currentState?.images;
-    currentImagesList?.removeAt(index);
+    final currentImagesList = state.uploadedFilePaths;
+    currentImagesList.removeAt(index);
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(images: currentImagesList)));
+          emit(
+            state.copyWith(
+              uploadedFilePaths: currentImagesList,
+            ),
+          );
         } else {
           _handleNullCurrentState("setImages");
         }
@@ -414,11 +334,17 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   void setImages(List<String?> images) {
+    final filteredList = images
+        .where((item) => item != null)
+        .map((mapItem) => mapItem!)
+        .toList();
+
     state.when(
-      initial: (currentState, onBoardingStatus, error) {
-        if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(images: List.from(images))));
+      initial: (currentState, onBoardingStatus, error, uploadedFiles) {
+        if (images.isNotEmpty) {
+          emit(
+            state.copyWith(uploadedFilePaths: filteredList),
+          );
         } else {
           _handleNullCurrentState("setImages");
         }
@@ -427,7 +353,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   Future<void> updateProfileLocally() async {
-    final getUpdateProfile = _getCurrentPeopleUiModel();
+    final getUpdateProfile = _getCurrentRegisterUserState();
     if (getUpdateProfile != null) {
       boardingRepo.updateUserDetailsLocally(getUpdateProfile);
     }
@@ -466,28 +392,23 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   void initializePersonWithAllDetails() {
     emit(
       state.copyWith(
-        currentState: PeopleUiModel(
-          "test_user_id",
-          "Bricks Bits",
-          "1",
-          "0 km",
-          "250",
-          "Software Company",
-          ["Loves art", "Travel enthusiast"],
-          "Creative soul seeking inspiration.",
-          ["Long-term relationship", "Friendship"],
-          "Bhilai",
-          ["Photography", "Cooking", "Yoga"],
-          [],
-          "BOT",
-          "BOT",
-          "5'6",
-          "Software Developer",
-          "Master's Degree",
-          "Morning Person",
-          "Social Drinker",
-          "Non-Smoker",
-          "Dogs, Beaches, Sunsets",
+        currentState: RegisterUserRequest(
+          NEW_ON_BOARD_USER_ID,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
         ),
         onBoardingStatus: OnBoardingCompletedTill.NOT_STARTED,
       ),

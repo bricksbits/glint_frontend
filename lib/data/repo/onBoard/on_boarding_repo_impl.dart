@@ -4,11 +4,13 @@ import 'package:glint_frontend/data/local/persist/async_encrypted_shared_prefere
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/data/remote/model/request/auth/register_account_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/on_board/on_board_request_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
+import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
 import 'package:glint_frontend/domain/business_logic/repo/boarding/on_boarding_repo.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
-import 'package:glint_frontend/features/people/model/people_model.dart';
+import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
@@ -77,7 +79,7 @@ class OnBoardRepoImpl extends OnBoardingRepo {
 
   @override
   Future<Result<void>> updateUserDetailsLocally(
-      PeopleUiModel updatedModel) async {
+      RegisterUserRequest updatedModel) async {
     await profileDao.updateProfileData(updatedModel.mapToEntity());
     return const Result.success("");
   }
@@ -88,7 +90,7 @@ class OnBoardRepoImpl extends OnBoardingRepo {
 extension ProfileEntityToRequestMapper on ProfileEntity {
   OnBoardRequestBody mapTo(String encryptedPassword) {
     return OnBoardRequestBody(
-        username: name,
+        username: username,
         password: encryptedPassword,
         phoneNumber: "NOT_PROVIDED",
         bio: bio,
@@ -96,8 +98,8 @@ extension ProfileEntityToRequestMapper on ProfileEntity {
         height: 180.2,
         education: "Dophar Tak",
         occupation: "Test_Object",
-        gender: pronouns,
-        genderPreference: choiceOfGender,
+        gender: gender,
+        genderPreference: genderPreference,
         workoutHabit: "Sometimes",
         drinkingHabit: "Never",
         smokingHabit: "Never",

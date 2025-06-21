@@ -2,39 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/components/people/exports.dart';
-import 'package:glint_frontend/features/people/model/people_model.dart';
+import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/features/people/model/scrollable_list_item_type.dart';
 import 'package:glint_frontend/features/people/state/people_screen_state.dart';
 
 //TODO(Nike): Use proper Exports
 class ScrollableProfileView extends StatelessWidget {
-  final PeopleUiModel peopleUiModel;
-
-  // final Map<String, dynamic> profileData;
-  // final peopleUiModel = PeopleUiModel(
-  //   '5',
-  //   'Ethan White',
-  //   '40',
-  //   '7.2 km',
-  //   '950',
-  //   'Project Manager',
-  //   ['Experienced in agile methodologies', 'Strong leadership skills'],
-  //   'A project manager dedicated to delivering projects on time and within budget.',
-  //   ['Team building', 'Project management opportunities'],
-  //   'Chicago, IL',
-  //   ['Management', 'Sports', 'Cooking'],
-  //   [
-  //     'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
-  //     'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
-  //     'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
-  //     'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
-  //     'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
-  //     'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
-  //     'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
-  //     'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
-  //     'https://content.api.news/v3/images/bin/9816751587a5e583738e01fc87fb0f52?width=1024',
-  //   ],
-  // );
+  final PeopleCardModel peopleUiModel;
 
   const ScrollableProfileView({
     super.key,
@@ -76,8 +50,11 @@ class ScrollableProfileView extends StatelessWidget {
                 return Column(
                   children: [
                     const Gap(32.0),
-                    buildListItem(peopleUiModel.convert().listModel[index],
-                        screenWidth, screenHeight)
+                    buildListItem(
+                      peopleUiModel.convert().listModel[index],
+                      screenWidth,
+                      screenHeight,
+                    )
                   ],
                 );
               },
