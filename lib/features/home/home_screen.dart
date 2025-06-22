@@ -22,7 +22,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<StreamChatClient?> _clientFuture;
 
   int _selectedIndex = 2;
   static final List<Widget> _bottomNavScreens = [

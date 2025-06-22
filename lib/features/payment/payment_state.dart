@@ -9,5 +9,6 @@ class PaymentState with _$PaymentState {
     @Default("") final String? razorpayKey,
     @Default("") final String? name,
     @Default("") final String? description,
+    @Default(null) final RazorpayOrderModel? razorpayModel,
   }) = _Initiate;
 }

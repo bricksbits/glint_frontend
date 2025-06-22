@@ -14,7 +14,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
   //Todo(GO): Inject Razorpay Instance
   //Todo(GO): Support for the Different UPI apps on IOS and Android.
   final Razorpay _razorpay = Razorpay();
-  late final PaymentCubit _paymentCubit;
 
   @override
   void dispose() {
@@ -25,14 +24,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<PaymentCubit>().state.when(initiate:
+        (orderId, key, amount, razorpayKey, name, desc, razorPayModel) {
+      if (razorPayModel != null) {
+        _razorpay.open(razorPayModel.toJson());
+      }
+    });
+
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentFailure);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handlePaymentWalletAdded);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _paymentCubit = context.read<PaymentCubit>();
-      _paymentCubit.bookTheEvent("1", "1");
-    });
   }
 
   @override
@@ -140,12 +141,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 horizontal: 40, vertical: 12),
                           ),
                           onPressed: () {
-                            //Todo : make the Payment
-                            final getTheOrder = context
-                                .read<PaymentCubit>()
-                                .generateTheOrderId("", "");
-
-                            _razorpay.open(getTheOrder.toJson());
+                            // Buy things
+                            context.read<PaymentCubit>().bookTheEvent("1", "1");
                           },
                           child: const Padding(
                             padding: EdgeInsets.symmetric(
@@ -204,16 +201,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse successResponse) {
+    print("Success Payment callback called");
     if (context.mounted) {
       if (successResponse.data != null) {
         if (successResponse.orderId != null &&
             successResponse.paymentId != null) {
-          _paymentCubit.verifyThePayment(
-            successResponse.orderId!,
-            successResponse.paymentId!,
-          );
+          context.read<PaymentCubit>().verifyThePayment(
+                successResponse.orderId!,
+                successResponse.paymentId!,
+              );
         }
       }
+    } else {
+      print("Context changes, can't find payment");
     }
   }
 

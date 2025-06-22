@@ -22,24 +22,43 @@ mixin _$PaymentState {
   String? get razorpayKey => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
+  RazorpayOrderModel? get razorpayModel => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? orderId, String? key, String? amount,
-            String? razorpayKey, String? name, String? description)
+    required TResult Function(
+            String? orderId,
+            String? key,
+            String? amount,
+            String? razorpayKey,
+            String? name,
+            String? description,
+            RazorpayOrderModel? razorpayModel)
         initiate,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String? orderId, String? key, String? amount,
-            String? razorpayKey, String? name, String? description)?
+    TResult? Function(
+            String? orderId,
+            String? key,
+            String? amount,
+            String? razorpayKey,
+            String? name,
+            String? description,
+            RazorpayOrderModel? razorpayModel)?
         initiate,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? orderId, String? key, String? amount,
-            String? razorpayKey, String? name, String? description)?
+    TResult Function(
+            String? orderId,
+            String? key,
+            String? amount,
+            String? razorpayKey,
+            String? name,
+            String? description,
+            RazorpayOrderModel? razorpayModel)?
         initiate,
     required TResult orElse(),
   }) =>
@@ -80,7 +99,8 @@ abstract class $PaymentStateCopyWith<$Res> {
       String? amount,
       String? razorpayKey,
       String? name,
-      String? description});
+      String? description,
+      RazorpayOrderModel? razorpayModel});
 }
 
 /// @nodoc
@@ -104,6 +124,7 @@ class _$PaymentStateCopyWithImpl<$Res, $Val extends PaymentState>
     Object? razorpayKey = freezed,
     Object? name = freezed,
     Object? description = freezed,
+    Object? razorpayModel = freezed,
   }) {
     return _then(_value.copyWith(
       orderId: freezed == orderId
@@ -130,6 +151,10 @@ class _$PaymentStateCopyWithImpl<$Res, $Val extends PaymentState>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      razorpayModel: freezed == razorpayModel
+          ? _value.razorpayModel
+          : razorpayModel // ignore: cast_nullable_to_non_nullable
+              as RazorpayOrderModel?,
     ) as $Val);
   }
 }
@@ -148,7 +173,8 @@ abstract class _$$InitiateImplCopyWith<$Res>
       String? amount,
       String? razorpayKey,
       String? name,
-      String? description});
+      String? description,
+      RazorpayOrderModel? razorpayModel});
 }
 
 /// @nodoc
@@ -170,6 +196,7 @@ class __$$InitiateImplCopyWithImpl<$Res>
     Object? razorpayKey = freezed,
     Object? name = freezed,
     Object? description = freezed,
+    Object? razorpayModel = freezed,
   }) {
     return _then(_$InitiateImpl(
       orderId: freezed == orderId
@@ -196,6 +223,10 @@ class __$$InitiateImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      razorpayModel: freezed == razorpayModel
+          ? _value.razorpayModel
+          : razorpayModel // ignore: cast_nullable_to_non_nullable
+              as RazorpayOrderModel?,
     ));
   }
 }
@@ -209,7 +240,8 @@ class _$InitiateImpl implements _Initiate {
       this.amount = "",
       this.razorpayKey = "",
       this.name = "",
-      this.description = ""});
+      this.description = "",
+      this.razorpayModel = null});
 
   @override
   @JsonKey()
@@ -229,10 +261,13 @@ class _$InitiateImpl implements _Initiate {
   @override
   @JsonKey()
   final String? description;
+  @override
+  @JsonKey()
+  final RazorpayOrderModel? razorpayModel;
 
   @override
   String toString() {
-    return 'PaymentState.initiate(orderId: $orderId, key: $key, amount: $amount, razorpayKey: $razorpayKey, name: $name, description: $description)';
+    return 'PaymentState.initiate(orderId: $orderId, key: $key, amount: $amount, razorpayKey: $razorpayKey, name: $name, description: $description, razorpayModel: $razorpayModel)';
   }
 
   @override
@@ -247,12 +282,14 @@ class _$InitiateImpl implements _Initiate {
                 other.razorpayKey == razorpayKey) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
-                other.description == description));
+                other.description == description) &&
+            (identical(other.razorpayModel, razorpayModel) ||
+                other.razorpayModel == razorpayModel));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, orderId, key, amount, razorpayKey, name, description);
+  int get hashCode => Object.hash(runtimeType, orderId, key, amount,
+      razorpayKey, name, description, razorpayModel);
 
   /// Create a copy of PaymentState
   /// with the given fields replaced by the non-null parameter values.
@@ -265,33 +302,54 @@ class _$InitiateImpl implements _Initiate {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? orderId, String? key, String? amount,
-            String? razorpayKey, String? name, String? description)
+    required TResult Function(
+            String? orderId,
+            String? key,
+            String? amount,
+            String? razorpayKey,
+            String? name,
+            String? description,
+            RazorpayOrderModel? razorpayModel)
         initiate,
   }) {
-    return initiate(orderId, key, amount, razorpayKey, name, description);
+    return initiate(
+        orderId, key, amount, razorpayKey, name, description, razorpayModel);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String? orderId, String? key, String? amount,
-            String? razorpayKey, String? name, String? description)?
+    TResult? Function(
+            String? orderId,
+            String? key,
+            String? amount,
+            String? razorpayKey,
+            String? name,
+            String? description,
+            RazorpayOrderModel? razorpayModel)?
         initiate,
   }) {
-    return initiate?.call(orderId, key, amount, razorpayKey, name, description);
+    return initiate?.call(
+        orderId, key, amount, razorpayKey, name, description, razorpayModel);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? orderId, String? key, String? amount,
-            String? razorpayKey, String? name, String? description)?
+    TResult Function(
+            String? orderId,
+            String? key,
+            String? amount,
+            String? razorpayKey,
+            String? name,
+            String? description,
+            RazorpayOrderModel? razorpayModel)?
         initiate,
     required TResult orElse(),
   }) {
     if (initiate != null) {
-      return initiate(orderId, key, amount, razorpayKey, name, description);
+      return initiate(
+          orderId, key, amount, razorpayKey, name, description, razorpayModel);
     }
     return orElse();
   }
@@ -332,7 +390,8 @@ abstract class _Initiate implements PaymentState {
       final String? amount,
       final String? razorpayKey,
       final String? name,
-      final String? description}) = _$InitiateImpl;
+      final String? description,
+      final RazorpayOrderModel? razorpayModel}) = _$InitiateImpl;
 
   @override
   String? get orderId;
@@ -346,6 +405,8 @@ abstract class _Initiate implements PaymentState {
   String? get name;
   @override
   String? get description;
+  @override
+  RazorpayOrderModel? get razorpayModel;
 
   /// Create a copy of PaymentState
   /// with the given fields replaced by the non-null parameter values.
