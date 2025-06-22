@@ -4,6 +4,7 @@ import 'package:glint_frontend/data/remote/model/response/payment/book_event_res
     as bookEventResponse;
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/repo/payment/payment_repo.dart';
+import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/model/razorpay_order_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
@@ -17,9 +18,9 @@ class PaymentCubit extends Cubit<PaymentState> {
 
   PaymentCubit() : super(const PaymentState.initiate());
 
-  void collectTicketInformation() {}
+  void collectPaymentRequest(PaymentArgumentModel? paymentRequest){
 
-  void collectMembershipInformation() {}
+  }
 
   Future<void> bookTheEvent(
     String eventId,

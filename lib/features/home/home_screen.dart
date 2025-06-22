@@ -22,13 +22,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   int _selectedIndex = 2;
   static final List<Widget> _bottomNavScreens = [
     const ProfileScreen(),
     const EventMainScreen(),
     const PeopleScreen(),
-    const PaymentScreen(),
+    const ServiceScreen(),
     const ChatScreen(),
   ];
 
@@ -61,8 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
             _selectedIndex == index
                 ? AppColours.primaryBlue
                 : index == 2 // glint logo will always be primary blue
-                ? AppColours.primaryBlue
-                : AppColours.black,
+                    ? AppColours.primaryBlue
+                    : AppColours.black,
             BlendMode.srcIn,
           ),
         ),
@@ -85,8 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => PaymentCubit(),
-      child: BlocBuilder<InternetStatusCheckerCubit,
-          InternetStatusCheckerState>(
+      child:
+          BlocBuilder<InternetStatusCheckerCubit, InternetStatusCheckerState>(
         builder: (context, state) {
           if (state is InternetStatusDisConnected) {
             return const Banner(
@@ -102,8 +101,8 @@ class _HomeScreenState extends State<HomeScreen> {
             appBar: _selectedIndex == 4
                 ? null
                 : GlintAppBar(
-              appBarAction: appBarAction(_selectedIndex),
-            ),
+                    appBarAction: appBarAction(_selectedIndex),
+                  ),
             body: _bottomNavScreens[_selectedIndex],
             bottomNavigationBar: Container(
               height: 70.0,
@@ -119,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               padding:
-              const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,

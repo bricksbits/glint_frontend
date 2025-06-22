@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({super.key});
+  const PaymentScreen({
+    super.key,
+    required this.paymentArgumentModel,
+  });
+
+  final PaymentArgumentModel? paymentArgumentModel;
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -24,6 +30,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   void initState() {
     super.initState();
+    context
+        .read<PaymentCubit>()
+        .collectPaymentRequest(widget.paymentArgumentModel);
+
     context.read<PaymentCubit>().state.when(initiate:
         (orderId, key, amount, razorpayKey, name, desc, razorPayModel) {
       if (razorPayModel != null) {

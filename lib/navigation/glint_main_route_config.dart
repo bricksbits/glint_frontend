@@ -8,6 +8,7 @@ import 'package:glint_frontend/features/chat/confirm_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
 import 'package:glint_frontend/features/chat/get_ticket_screen.dart';
+import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
 import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/event_detail_screen.dart';
 import 'package:glint_frontend/features/event/event_main_screen.dart';
@@ -16,6 +17,8 @@ import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 import 'package:glint_frontend/features/likes/likes_screen.dart';
 import 'package:glint_frontend/features/notifications/notification_screen.dart';
 import 'package:glint_frontend/features/onboarding/setup_glint_onboarding_screen.dart';
+import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
+import 'package:glint_frontend/features/payment/payment_screen.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/exports.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
@@ -99,7 +102,10 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintChatRoutes.getTicket.name}',
           name: GlintChatRoutes.getTicket.name,
-          builder: (context, state) => const GetEventTicketScreen(),
+          builder: (context, state) {
+            final argument = state.extra as GetTicketArgumentModel;
+            return GetEventTicketScreen(getTicketArgumentModel: argument);
+          },
         ),
         GoRoute(
           path: '/${GlintChatRoutes.videoCall.name}',
@@ -121,7 +127,7 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintMainRoutes.people.name}',
       name: GlintMainRoutes.people.name,
-      builder: (context, state) => PeopleScreen(),
+      builder: (context, state) => const PeopleScreen(),
     ),
     GoRoute(
       path: '/${GlintMainRoutes.event.name}',
@@ -188,6 +194,16 @@ final glintMainRoutes = GoRouter(
       path: '/${GlintMainRoutes.likes.name}',
       name: GlintMainRoutes.likes.name,
       builder: (context, state) => const LikesScreen(),
+    ),
+    GoRoute(
+      path: '/${GlintMainRoutes.payment.name}',
+      name: GlintMainRoutes.payment.name,
+      builder: (context, state) {
+        final paymentArgumentModel = state.extra as PaymentArgumentModel?;
+        return PaymentScreen(
+          paymentArgumentModel: paymentArgumentModel,
+        );
+      },
     ),
   ],
 );

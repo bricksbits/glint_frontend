@@ -2,6 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../exports.dart';
 
@@ -28,7 +31,19 @@ class ProfileSubscriptionColumn extends StatelessWidget {
               _buildSubscriptionCard(
                 context: context,
                 onTap: () {
-                  debugPrint('Platinum card tapped');
+                  context.pushNamed(
+                    GlintMainRoutes.payment.name,
+                    extra: PaymentArgumentModel(
+                      membershipType: MembershipType.PLATINUM,
+                      amountOfSelectedMembership: "359",
+                      timePeriod: "30",
+                      eventId: null,
+                      matchId: null,
+                      userOne: null,
+                      userTwo: null,
+                      eventTicketPrice: null,
+                    ),
+                  );
                 },
                 title: "Platinum plan",
                 logoPath:
@@ -56,7 +71,19 @@ class ProfileSubscriptionColumn extends StatelessWidget {
               _buildSubscriptionCard(
                 context: context,
                 onTap: () {
-                  debugPrint('Gold card tapped');
+                  context.pushNamed(
+                    GlintMainRoutes.payment.name,
+                    extra: PaymentArgumentModel(
+                      membershipType: MembershipType.PLATINUM,
+                      amountOfSelectedMembership: "359",
+                      timePeriod: "30",
+                      eventId: null,
+                      matchId: null,
+                      userOne: null,
+                      userTwo: null,
+                      eventTicketPrice: null,
+                    ),
+                  );
                 },
                 title: "Gold plan",
                 logoPath: 'lib/assets/icons/profile/gold_card_glint_logo.svg',
