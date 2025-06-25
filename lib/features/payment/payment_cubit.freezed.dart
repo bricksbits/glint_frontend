@@ -17,22 +17,26 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PaymentState {
   String? get orderId => throw _privateConstructorUsedError;
-  String? get key => throw _privateConstructorUsedError;
-  String? get amount => throw _privateConstructorUsedError;
-  String? get razorpayKey => throw _privateConstructorUsedError;
+  String? get totalAmount => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   RazorpayOrderModel? get razorpayModel => throw _privateConstructorUsedError;
+  PaymentArgumentModel? get paymentModel => throw _privateConstructorUsedError;
+  bool get loading => throw _privateConstructorUsedError;
+  bool get isMembershipRequest => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
             String? orderId,
-            String? key,
-            String? amount,
-            String? razorpayKey,
+            String? totalAmount,
             String? name,
             String? description,
-            RazorpayOrderModel? razorpayModel)
+            RazorpayOrderModel? razorpayModel,
+            PaymentArgumentModel? paymentModel,
+            bool loading,
+            bool isMembershipRequest,
+            String? error)
         initiate,
   }) =>
       throw _privateConstructorUsedError;
@@ -40,12 +44,14 @@ mixin _$PaymentState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
             String? orderId,
-            String? key,
-            String? amount,
-            String? razorpayKey,
+            String? totalAmount,
             String? name,
             String? description,
-            RazorpayOrderModel? razorpayModel)?
+            RazorpayOrderModel? razorpayModel,
+            PaymentArgumentModel? paymentModel,
+            bool loading,
+            bool isMembershipRequest,
+            String? error)?
         initiate,
   }) =>
       throw _privateConstructorUsedError;
@@ -53,12 +59,14 @@ mixin _$PaymentState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
             String? orderId,
-            String? key,
-            String? amount,
-            String? razorpayKey,
+            String? totalAmount,
             String? name,
             String? description,
-            RazorpayOrderModel? razorpayModel)?
+            RazorpayOrderModel? razorpayModel,
+            PaymentArgumentModel? paymentModel,
+            bool loading,
+            bool isMembershipRequest,
+            String? error)?
         initiate,
     required TResult orElse(),
   }) =>
@@ -95,12 +103,14 @@ abstract class $PaymentStateCopyWith<$Res> {
   @useResult
   $Res call(
       {String? orderId,
-      String? key,
-      String? amount,
-      String? razorpayKey,
+      String? totalAmount,
       String? name,
       String? description,
-      RazorpayOrderModel? razorpayModel});
+      RazorpayOrderModel? razorpayModel,
+      PaymentArgumentModel? paymentModel,
+      bool loading,
+      bool isMembershipRequest,
+      String? error});
 }
 
 /// @nodoc
@@ -119,29 +129,23 @@ class _$PaymentStateCopyWithImpl<$Res, $Val extends PaymentState>
   @override
   $Res call({
     Object? orderId = freezed,
-    Object? key = freezed,
-    Object? amount = freezed,
-    Object? razorpayKey = freezed,
+    Object? totalAmount = freezed,
     Object? name = freezed,
     Object? description = freezed,
     Object? razorpayModel = freezed,
+    Object? paymentModel = freezed,
+    Object? loading = null,
+    Object? isMembershipRequest = null,
+    Object? error = freezed,
   }) {
     return _then(_value.copyWith(
       orderId: freezed == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
               as String?,
-      key: freezed == key
-          ? _value.key
-          : key // ignore: cast_nullable_to_non_nullable
-              as String?,
-      amount: freezed == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as String?,
-      razorpayKey: freezed == razorpayKey
-          ? _value.razorpayKey
-          : razorpayKey // ignore: cast_nullable_to_non_nullable
+      totalAmount: freezed == totalAmount
+          ? _value.totalAmount
+          : totalAmount // ignore: cast_nullable_to_non_nullable
               as String?,
       name: freezed == name
           ? _value.name
@@ -155,6 +159,22 @@ class _$PaymentStateCopyWithImpl<$Res, $Val extends PaymentState>
           ? _value.razorpayModel
           : razorpayModel // ignore: cast_nullable_to_non_nullable
               as RazorpayOrderModel?,
+      paymentModel: freezed == paymentModel
+          ? _value.paymentModel
+          : paymentModel // ignore: cast_nullable_to_non_nullable
+              as PaymentArgumentModel?,
+      loading: null == loading
+          ? _value.loading
+          : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isMembershipRequest: null == isMembershipRequest
+          ? _value.isMembershipRequest
+          : isMembershipRequest // ignore: cast_nullable_to_non_nullable
+              as bool,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -169,12 +189,14 @@ abstract class _$$InitiateImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? orderId,
-      String? key,
-      String? amount,
-      String? razorpayKey,
+      String? totalAmount,
       String? name,
       String? description,
-      RazorpayOrderModel? razorpayModel});
+      RazorpayOrderModel? razorpayModel,
+      PaymentArgumentModel? paymentModel,
+      bool loading,
+      bool isMembershipRequest,
+      String? error});
 }
 
 /// @nodoc
@@ -191,29 +213,23 @@ class __$$InitiateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? orderId = freezed,
-    Object? key = freezed,
-    Object? amount = freezed,
-    Object? razorpayKey = freezed,
+    Object? totalAmount = freezed,
     Object? name = freezed,
     Object? description = freezed,
     Object? razorpayModel = freezed,
+    Object? paymentModel = freezed,
+    Object? loading = null,
+    Object? isMembershipRequest = null,
+    Object? error = freezed,
   }) {
     return _then(_$InitiateImpl(
       orderId: freezed == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
               as String?,
-      key: freezed == key
-          ? _value.key
-          : key // ignore: cast_nullable_to_non_nullable
-              as String?,
-      amount: freezed == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as String?,
-      razorpayKey: freezed == razorpayKey
-          ? _value.razorpayKey
-          : razorpayKey // ignore: cast_nullable_to_non_nullable
+      totalAmount: freezed == totalAmount
+          ? _value.totalAmount
+          : totalAmount // ignore: cast_nullable_to_non_nullable
               as String?,
       name: freezed == name
           ? _value.name
@@ -227,6 +243,22 @@ class __$$InitiateImplCopyWithImpl<$Res>
           ? _value.razorpayModel
           : razorpayModel // ignore: cast_nullable_to_non_nullable
               as RazorpayOrderModel?,
+      paymentModel: freezed == paymentModel
+          ? _value.paymentModel
+          : paymentModel // ignore: cast_nullable_to_non_nullable
+              as PaymentArgumentModel?,
+      loading: null == loading
+          ? _value.loading
+          : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isMembershipRequest: null == isMembershipRequest
+          ? _value.isMembershipRequest
+          : isMembershipRequest // ignore: cast_nullable_to_non_nullable
+              as bool,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -236,25 +268,21 @@ class __$$InitiateImplCopyWithImpl<$Res>
 class _$InitiateImpl implements _Initiate {
   const _$InitiateImpl(
       {this.orderId = "",
-      this.key = "",
-      this.amount = "",
-      this.razorpayKey = "",
+      this.totalAmount = "",
       this.name = "",
       this.description = "",
-      this.razorpayModel = null});
+      this.razorpayModel = null,
+      this.paymentModel = null,
+      this.loading = true,
+      this.isMembershipRequest = false,
+      this.error = ""});
 
   @override
   @JsonKey()
   final String? orderId;
   @override
   @JsonKey()
-  final String? key;
-  @override
-  @JsonKey()
-  final String? amount;
-  @override
-  @JsonKey()
-  final String? razorpayKey;
+  final String? totalAmount;
   @override
   @JsonKey()
   final String? name;
@@ -264,10 +292,22 @@ class _$InitiateImpl implements _Initiate {
   @override
   @JsonKey()
   final RazorpayOrderModel? razorpayModel;
+  @override
+  @JsonKey()
+  final PaymentArgumentModel? paymentModel;
+  @override
+  @JsonKey()
+  final bool loading;
+  @override
+  @JsonKey()
+  final bool isMembershipRequest;
+  @override
+  @JsonKey()
+  final String? error;
 
   @override
   String toString() {
-    return 'PaymentState.initiate(orderId: $orderId, key: $key, amount: $amount, razorpayKey: $razorpayKey, name: $name, description: $description, razorpayModel: $razorpayModel)';
+    return 'PaymentState.initiate(orderId: $orderId, totalAmount: $totalAmount, name: $name, description: $description, razorpayModel: $razorpayModel, paymentModel: $paymentModel, loading: $loading, isMembershipRequest: $isMembershipRequest, error: $error)';
   }
 
   @override
@@ -276,20 +316,33 @@ class _$InitiateImpl implements _Initiate {
         (other.runtimeType == runtimeType &&
             other is _$InitiateImpl &&
             (identical(other.orderId, orderId) || other.orderId == orderId) &&
-            (identical(other.key, key) || other.key == key) &&
-            (identical(other.amount, amount) || other.amount == amount) &&
-            (identical(other.razorpayKey, razorpayKey) ||
-                other.razorpayKey == razorpayKey) &&
+            (identical(other.totalAmount, totalAmount) ||
+                other.totalAmount == totalAmount) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.razorpayModel, razorpayModel) ||
-                other.razorpayModel == razorpayModel));
+                other.razorpayModel == razorpayModel) &&
+            (identical(other.paymentModel, paymentModel) ||
+                other.paymentModel == paymentModel) &&
+            (identical(other.loading, loading) || other.loading == loading) &&
+            (identical(other.isMembershipRequest, isMembershipRequest) ||
+                other.isMembershipRequest == isMembershipRequest) &&
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, orderId, key, amount,
-      razorpayKey, name, description, razorpayModel);
+  int get hashCode => Object.hash(
+      runtimeType,
+      orderId,
+      totalAmount,
+      name,
+      description,
+      razorpayModel,
+      paymentModel,
+      loading,
+      isMembershipRequest,
+      error);
 
   /// Create a copy of PaymentState
   /// with the given fields replaced by the non-null parameter values.
@@ -304,16 +357,18 @@ class _$InitiateImpl implements _Initiate {
   TResult when<TResult extends Object?>({
     required TResult Function(
             String? orderId,
-            String? key,
-            String? amount,
-            String? razorpayKey,
+            String? totalAmount,
             String? name,
             String? description,
-            RazorpayOrderModel? razorpayModel)
+            RazorpayOrderModel? razorpayModel,
+            PaymentArgumentModel? paymentModel,
+            bool loading,
+            bool isMembershipRequest,
+            String? error)
         initiate,
   }) {
-    return initiate(
-        orderId, key, amount, razorpayKey, name, description, razorpayModel);
+    return initiate(orderId, totalAmount, name, description, razorpayModel,
+        paymentModel, loading, isMembershipRequest, error);
   }
 
   @override
@@ -321,16 +376,18 @@ class _$InitiateImpl implements _Initiate {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
             String? orderId,
-            String? key,
-            String? amount,
-            String? razorpayKey,
+            String? totalAmount,
             String? name,
             String? description,
-            RazorpayOrderModel? razorpayModel)?
+            RazorpayOrderModel? razorpayModel,
+            PaymentArgumentModel? paymentModel,
+            bool loading,
+            bool isMembershipRequest,
+            String? error)?
         initiate,
   }) {
-    return initiate?.call(
-        orderId, key, amount, razorpayKey, name, description, razorpayModel);
+    return initiate?.call(orderId, totalAmount, name, description,
+        razorpayModel, paymentModel, loading, isMembershipRequest, error);
   }
 
   @override
@@ -338,18 +395,20 @@ class _$InitiateImpl implements _Initiate {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
             String? orderId,
-            String? key,
-            String? amount,
-            String? razorpayKey,
+            String? totalAmount,
             String? name,
             String? description,
-            RazorpayOrderModel? razorpayModel)?
+            RazorpayOrderModel? razorpayModel,
+            PaymentArgumentModel? paymentModel,
+            bool loading,
+            bool isMembershipRequest,
+            String? error)?
         initiate,
     required TResult orElse(),
   }) {
     if (initiate != null) {
-      return initiate(
-          orderId, key, amount, razorpayKey, name, description, razorpayModel);
+      return initiate(orderId, totalAmount, name, description, razorpayModel,
+          paymentModel, loading, isMembershipRequest, error);
     }
     return orElse();
   }
@@ -386,27 +445,33 @@ class _$InitiateImpl implements _Initiate {
 abstract class _Initiate implements PaymentState {
   const factory _Initiate(
       {final String? orderId,
-      final String? key,
-      final String? amount,
-      final String? razorpayKey,
+      final String? totalAmount,
       final String? name,
       final String? description,
-      final RazorpayOrderModel? razorpayModel}) = _$InitiateImpl;
+      final RazorpayOrderModel? razorpayModel,
+      final PaymentArgumentModel? paymentModel,
+      final bool loading,
+      final bool isMembershipRequest,
+      final String? error}) = _$InitiateImpl;
 
   @override
   String? get orderId;
   @override
-  String? get key;
-  @override
-  String? get amount;
-  @override
-  String? get razorpayKey;
+  String? get totalAmount;
   @override
   String? get name;
   @override
   String? get description;
   @override
   RazorpayOrderModel? get razorpayModel;
+  @override
+  PaymentArgumentModel? get paymentModel;
+  @override
+  bool get loading;
+  @override
+  bool get isMembershipRequest;
+  @override
+  String? get error;
 
   /// Create a copy of PaymentState
   /// with the given fields replaced by the non-null parameter values.

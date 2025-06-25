@@ -3,30 +3,30 @@ RazorpayOrderModel razorpayOrderModelFromJson(String str) => RazorpayOrderModel.
 String razorpayOrderModelToJson(RazorpayOrderModel data) => json.encode(data.toJson());
 class RazorpayOrderModel {
   RazorpayOrderModel({
-      this.key, 
+      this.razorpayKey, 
       this.amount, 
       this.currency, 
       this.name, 
-      this.orderId, 
+      this.razorpayOrderId,
       this.description, 
       this.timeout, 
       this.prefill,});
 
   RazorpayOrderModel.fromJson(dynamic json) {
-    key = json['key'];
+    razorpayKey = json['key'];
     amount = json['amount'];
     currency = json['currency'];
     name = json['name'];
-    orderId = json['order_id'];
+    razorpayOrderId = json['order_id'];
     description = json['description'];
     timeout = json['timeout'];
     prefill = json['prefill'] != null ? Prefill.fromJson(json['prefill']) : null;
   }
-  String? key;
+  String? razorpayKey;
   int? amount;
   String? currency;
   String? name;
-  String? orderId;
+  String? razorpayOrderId;
   String? description;
   int? timeout;
   Prefill? prefill;
@@ -38,22 +38,22 @@ RazorpayOrderModel copyWith({  String? key,
   String? description,
   int? timeout,
   Prefill? prefill,
-}) => RazorpayOrderModel(  key: key ?? this.key,
+}) => RazorpayOrderModel(  razorpayKey: key ?? this.razorpayKey,
   amount: amount ?? this.amount,
   currency: currency ?? this.currency,
   name: name ?? this.name,
-  orderId: orderId ?? this.orderId,
+  razorpayOrderId: orderId ?? this.razorpayOrderId,
   description: description ?? this.description,
   timeout: timeout ?? this.timeout,
   prefill: prefill ?? this.prefill,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['key'] = key;
+    map['key'] = razorpayKey;
     map['amount'] = amount;
     map['currency'] = currency;
     map['name'] = name;
-    map['order_id'] = orderId;
+    map['order_id'] = razorpayOrderId;
     map['description'] = description;
     map['timeout'] = timeout;
     if (prefill != null) {

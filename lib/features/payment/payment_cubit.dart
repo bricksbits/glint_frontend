@@ -18,37 +18,55 @@ class PaymentCubit extends Cubit<PaymentState> {
 
   PaymentCubit() : super(const PaymentState.initiate());
 
-  void collectPaymentRequest(PaymentArgumentModel? paymentRequest){
-
+  void collectPaymentRequest(PaymentArgumentModel? paymentRequest) {
+    emit(
+      state.copyWith(
+          paymentModel: paymentRequest,
+          loading: false,
+          isMembershipRequest: paymentRequest?.membershipType != null &&
+              paymentRequest?.eventId == null),
+    );
   }
 
-  Future<void> bookTheEvent(
-    String eventId,
-    String matchId,
-  ) async {
-    print("Booking started");
-    final eventResponse = await paymentRepo.bookEvent(eventId, matchId);
-    switch (eventResponse) {
-      case Success<bookEventResponse.BookEventResponse>():
-        final orderResponse = eventResponse.data;
-        final orderIdReceived = orderResponse.success?.orderId;
-        final razorPayKey = orderResponse.success?.razorpayKey;
-        final razorPayOrderId = orderResponse.success?.razorpayOrderId;
-        if (razorPayOrderId != null && razorPayKey != null) {
-          generateTheOrderId(razorPayKey, razorPayOrderId);
-        }
-      case Failure<bookEventResponse.BookEventResponse>():
-        print("BookEvent : Failed ${eventResponse.error}");
+  Future<void> bookTheEvent() async {
+    final eventId = state.paymentModel?.eventId;
+    final matchId = state.paymentModel?.matchId;
+    if (eventId != null && matchId != null) {
+      final eventResponse = await paymentRepo.bookEvent(eventId, matchId);
+      switch (eventResponse) {
+        case Success<bookEventResponse.BookEventResponse>():
+          final orderResponse = eventResponse.data;
+          final orderIdReceived = orderResponse.success?.orderId;
+          final razorPayKey = orderResponse.success?.razorpayKey;
+          final razorPayOrderId = orderResponse.success?.razorpayOrderId;
+          if (razorPayOrderId != null && razorPayKey != null) {
+            generateTheOrderId(razorPayKey, razorPayOrderId);
+          }
+        case Failure<bookEventResponse.BookEventResponse>():
+          print("BookEvent : Failed ${eventResponse.error}");
+      }
+    } else {
+      emit(state.copyWith(
+          error: "Can't initate the event payment, try again please,"));
     }
   }
 
-  Future<void> getTheMembership() async {}
-
-  void updateStateForNoReason() {
-    emit(state.copyWith(
-      name: "NEW NAME",
-      description: "NEW DESC"
-    ));
+  Future<void> getTheMembership() async {
+    final membershipType = state.paymentModel?.membershipType;
+    final membershipAmount = state.paymentModel?.amountOfSelectedMembership;
+    final membershipTime = state.paymentModel?.timePeriod;
+    if (membershipTime != null &&
+        membershipAmount != null &&
+        membershipType != null) {
+      final getMembershipResponse = await paymentRepo.buyMembership(
+        membershipType,
+        membershipAmount,
+        membershipTime,
+      );
+    } else {
+      emit(state.copyWith(
+          error: "Can't proceed with Membership, please try again"));
+    }
   }
 
   void generateTheOrderId(
@@ -58,9 +76,9 @@ class PaymentCubit extends Cubit<PaymentState> {
     print("Order Generated with Id: $razorpayOrderId and Key: $razorpayKey");
     final amountParsed = int.parse("3200");
     final orderObject = RazorpayOrderModel(
-      key: razorpayKey,
+      razorpayKey: razorpayKey,
       amount: amountParsed,
-      orderId: razorpayOrderId,
+      razorpayOrderId: razorpayOrderId,
       name: state.name,
       description: state.description,
     );
