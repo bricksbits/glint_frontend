@@ -6,10 +6,4 @@ abstract class ChatRepo {
   Future<Result<void>> fetchRecentMatches();
 
   Future<Result<void>> fetchChannels();
-
-  Future<Result<void>> uploadStory();
-
-  Future<Result<void>> uploadStoryViews();
-
-  Future<Result<void>> replyToStory();
 }

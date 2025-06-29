@@ -26,13 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const ProfileScreen(),
     const EventMainScreen(),
     const PeopleScreen(),
-    UploadStoryScreen(
-      hasStory: false,
-      imageUrl: "",
-      viewsCount: 32,
-      onDelete: () {},
-      onUpload: () {},
-    ),
+    const ServiceScreen(),
     const ChatScreen(),
   ];
 
