@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/features/chat/story/upload/upload_story_bloc.dart';
 
+//Todo: Implement the Mechanism to watch user own stories,
+// Once Uploaded, Move to the Chat Screen.
 class UploadStoryScreen extends StatefulWidget {
   final bool isUploadStory;
 
@@ -46,7 +48,8 @@ class _UploadStoryScreenState extends State<UploadStoryScreen> {
                                 child: Text('Please, select a story.'),
                               ),
                             )
-                      : Image.network(state.uploadedStories.first.storyUrl,
+                      : Image.network(
+                          state.uploadedStories?.storiesUrl.first ?? "",
                           fit: BoxFit.cover),
                 ),
 
@@ -110,7 +113,8 @@ class _UploadStoryScreenState extends State<UploadStoryScreen> {
                       : _buildViewBar(
                           "lib/assets/icons/male.svg",
                           "lib/assets/icons/male.svg",
-                          state.uploadedStories.first.storyViewCount),
+                          state.uploadedStories?.storiesUrl.first ?? "",
+                        ),
                 ),
               ],
             ),

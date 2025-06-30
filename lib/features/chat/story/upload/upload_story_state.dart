@@ -4,7 +4,7 @@ part of 'upload_story_bloc.dart';
 class UploadStoryState with _$UploadStoryState {
   const factory UploadStoryState.uploadStoryState({
     // When Viewing the Stories
-    @Default([]) List<ViewStoryModel> uploadedStories,
+    @Default(null) ViewStoryModel? uploadedStories,
 
     // When uploading the Story
     @Default("") String userName,

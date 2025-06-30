@@ -37,25 +37,24 @@ class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
       }
     });
 
+    //Todo: Check when there are no Current users stories.
     on<_CurrentUserStories>((event, emit) async {
       final storiesResponse = await storyRepo.getMyStories();
       switch (storiesResponse) {
-        case Success<List<ViewStoryModel>>():
+        case Success<ViewStoryModel>():
           final stories = storiesResponse.data;
-          if (stories.isNotEmpty) {
-            add(
-              _UpdateAndEmitNewState(
-                state.copyWith(
-                  uploadedStories: stories,
-                  userName: "Current User",
-                  userCircularAvatarUrl:
-                      "https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U",
-                  isVerified: false,
-                ),
+          add(
+            _UpdateAndEmitNewState(
+              state.copyWith(
+                uploadedStories: stories,
+                userName: "Current User",
+                userCircularAvatarUrl:
+                    "https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U",
+                isVerified: false,
               ),
-            );
-          }
-        case Failure<List<ViewStoryModel>>():
+            ),
+          );
+        case Failure<ViewStoryModel>():
           add(_UpdateAndEmitNewState(state.copyWith(
               error: "Cant fetch your stories please try again, later.")));
       }
@@ -69,7 +68,8 @@ class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
             state.copyWith(
               currentUploadedFile: selectedFile.file,
               userName: "Test User",
-              userCircularAvatarUrl: "https://images.unsplash.com/photo-1728577740843-5f29c7586afe?q=80&w=148&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              userCircularAvatarUrl:
+                  "https://images.unsplash.com/photo-1728577740843-5f29c7586afe?q=80&w=148&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
               isVerified: false,
             ),
           ),

@@ -16,6 +16,7 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
 
   SplashScreenBloc() : super(const SplashScreenState.initial()) {
     on<_Started>((event, emit) async {
+      await _connectToStreamClient();
       isUserLoggedInUsecase.perform(
         (isLoggedIn) {
           if (isLoggedIn != null) {

@@ -810,7 +810,7 @@ abstract class _SelectStoryFromGallery implements UploadStoryEvent {
 /// @nodoc
 mixin _$UploadStoryState {
 // When Viewing the Stories
-  List<ViewStoryModel> get uploadedStories =>
+  ViewStoryModel? get uploadedStories =>
       throw _privateConstructorUsedError; // When uploading the Story
   String get userName => throw _privateConstructorUsedError;
   String get userCircularAvatarUrl => throw _privateConstructorUsedError;
@@ -823,7 +823,7 @@ mixin _$UploadStoryState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            List<ViewStoryModel> uploadedStories,
+            ViewStoryModel? uploadedStories,
             String userName,
             String userCircularAvatarUrl,
             bool isVerified,
@@ -837,7 +837,7 @@ mixin _$UploadStoryState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            List<ViewStoryModel> uploadedStories,
+            ViewStoryModel? uploadedStories,
             String userName,
             String userCircularAvatarUrl,
             bool isVerified,
@@ -851,7 +851,7 @@ mixin _$UploadStoryState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            List<ViewStoryModel> uploadedStories,
+            ViewStoryModel? uploadedStories,
             String userName,
             String userCircularAvatarUrl,
             bool isVerified,
@@ -894,7 +894,7 @@ abstract class $UploadStoryStateCopyWith<$Res> {
       _$UploadStoryStateCopyWithImpl<$Res, UploadStoryState>;
   @useResult
   $Res call(
-      {List<ViewStoryModel> uploadedStories,
+      {ViewStoryModel? uploadedStories,
       String userName,
       String userCircularAvatarUrl,
       bool isVerified,
@@ -919,7 +919,7 @@ class _$UploadStoryStateCopyWithImpl<$Res, $Val extends UploadStoryState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uploadedStories = null,
+    Object? uploadedStories = freezed,
     Object? userName = null,
     Object? userCircularAvatarUrl = null,
     Object? isVerified = null,
@@ -929,10 +929,10 @@ class _$UploadStoryStateCopyWithImpl<$Res, $Val extends UploadStoryState>
     Object? isUploadingStoryEvent = null,
   }) {
     return _then(_value.copyWith(
-      uploadedStories: null == uploadedStories
+      uploadedStories: freezed == uploadedStories
           ? _value.uploadedStories
           : uploadedStories // ignore: cast_nullable_to_non_nullable
-              as List<ViewStoryModel>,
+              as ViewStoryModel?,
       userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
@@ -974,7 +974,7 @@ abstract class _$$UploadStoryStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<ViewStoryModel> uploadedStories,
+      {ViewStoryModel? uploadedStories,
       String userName,
       String userCircularAvatarUrl,
       bool isVerified,
@@ -997,7 +997,7 @@ class __$$UploadStoryStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uploadedStories = null,
+    Object? uploadedStories = freezed,
     Object? userName = null,
     Object? userCircularAvatarUrl = null,
     Object? isVerified = null,
@@ -1007,10 +1007,10 @@ class __$$UploadStoryStateImplCopyWithImpl<$Res>
     Object? isUploadingStoryEvent = null,
   }) {
     return _then(_$UploadStoryStateImpl(
-      uploadedStories: null == uploadedStories
-          ? _value._uploadedStories
+      uploadedStories: freezed == uploadedStories
+          ? _value.uploadedStories
           : uploadedStories // ignore: cast_nullable_to_non_nullable
-              as List<ViewStoryModel>,
+              as ViewStoryModel?,
       userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
@@ -1047,27 +1047,19 @@ class __$$UploadStoryStateImplCopyWithImpl<$Res>
 
 class _$UploadStoryStateImpl implements _UploadStoryState {
   const _$UploadStoryStateImpl(
-      {final List<ViewStoryModel> uploadedStories = const [],
+      {this.uploadedStories = null,
       this.userName = "",
       this.userCircularAvatarUrl = "",
       this.isVerified = false,
       this.currentUploadedFile = null,
       this.isLoading = false,
       this.error = null,
-      this.isUploadingStoryEvent = false})
-      : _uploadedStories = uploadedStories;
+      this.isUploadingStoryEvent = false});
 
-// When Viewing the Stories
-  final List<ViewStoryModel> _uploadedStories;
 // When Viewing the Stories
   @override
   @JsonKey()
-  List<ViewStoryModel> get uploadedStories {
-    if (_uploadedStories is EqualUnmodifiableListView) return _uploadedStories;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_uploadedStories);
-  }
-
+  final ViewStoryModel? uploadedStories;
 // When uploading the Story
   @override
   @JsonKey()
@@ -1102,8 +1094,8 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UploadStoryStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._uploadedStories, _uploadedStories) &&
+            (identical(other.uploadedStories, uploadedStories) ||
+                other.uploadedStories == uploadedStories) &&
             (identical(other.userName, userName) ||
                 other.userName == userName) &&
             (identical(other.userCircularAvatarUrl, userCircularAvatarUrl) ||
@@ -1122,7 +1114,7 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_uploadedStories),
+      uploadedStories,
       userName,
       userCircularAvatarUrl,
       isVerified,
@@ -1144,7 +1136,7 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            List<ViewStoryModel> uploadedStories,
+            ViewStoryModel? uploadedStories,
             String userName,
             String userCircularAvatarUrl,
             bool isVerified,
@@ -1169,7 +1161,7 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            List<ViewStoryModel> uploadedStories,
+            ViewStoryModel? uploadedStories,
             String userName,
             String userCircularAvatarUrl,
             bool isVerified,
@@ -1194,7 +1186,7 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            List<ViewStoryModel> uploadedStories,
+            ViewStoryModel? uploadedStories,
             String userName,
             String userCircularAvatarUrl,
             bool isVerified,
@@ -1250,7 +1242,7 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
 
 abstract class _UploadStoryState implements UploadStoryState {
   const factory _UploadStoryState(
-      {final List<ViewStoryModel> uploadedStories,
+      {final ViewStoryModel? uploadedStories,
       final String userName,
       final String userCircularAvatarUrl,
       final bool isVerified,
@@ -1261,7 +1253,7 @@ abstract class _UploadStoryState implements UploadStoryState {
 
 // When Viewing the Stories
   @override
-  List<ViewStoryModel> get uploadedStories; // When uploading the Story
+  ViewStoryModel? get uploadedStories; // When uploading the Story
   @override
   String get userName;
   @override

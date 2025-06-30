@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/components/chat/chat_circular_icon_button.dart';
 import 'package:glint_frontend/design/components/chat/empty_chat_state_view.dart';
 import 'package:glint_frontend/design/components/chat/get_ticket_gradient_view.dart';
-import 'package:glint_frontend/features/chat/confirm_ticket_screen.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';

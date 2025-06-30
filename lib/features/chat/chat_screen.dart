@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
+import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
 import 'package:glint_frontend/features/chat/story/upload/upload_story_bloc.dart';
+import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gradient_circular_progress_indicator/gradient_circular_progress_indicator.dart';
@@ -36,226 +39,270 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => UploadStoryBloc(),
-      child: Scaffold(
-        backgroundColor: AppColours.white,
-        appBar: AppBar(
-          backgroundColor: AppColours.white,
-          scrolledUnderElevation: 0,
-          centerTitle: false,
-          titleSpacing: 20,
-          title: Text(
-            "Stories",
-            style: AppTheme.headingThree.copyWith(
-              fontStyle: FontStyle.normal,
-            ),
-          ),
-          actionsPadding: const EdgeInsets.only(right: 20.0),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                // todo - add heart clicked functionality
-              },
-              child: SvgPicture.asset(
-                'lib/assets/icons/glint_heart.svg',
-              ),
-            ),
-            const Gap(18.0),
-            GestureDetector(
-              onTap: () {
-                // todo - add heart clicked functionality
-              },
-              child: SvgPicture.asset(
-                'lib/assets/icons/upload_story.svg',
-              ),
-            ),
-          ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => UploadStoryBloc(),
         ),
-        body: FutureBuilder<Channel>(
-          future: initializeChat(
-            StreamChat.of(context).client,
-            'your_channel_id',
-          ),
-          // Call your async method
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (snapshot.hasData) {
-              final channel = snapshot.data!;
-              return StreamChannel(
-                channel: channel,
-                child: Container(
-                  color: AppColours.white,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildStoriesSection(),
-                        const Gap(12.0),
-                        _buildRecentMatchesSection(),
-                        const Gap(12.0),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Text(
-                            'Chats',
-                            textAlign: TextAlign.start,
-                            style: AppTheme.headingThree.copyWith(
-                              fontStyle: FontStyle.normal,
-                              fontSize: 18.0,
+        BlocProvider(
+          create: (context) => ChatScreenCubit(),
+        ),
+      ],
+      child: BlocBuilder<ChatScreenCubit, ChatScreenState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColours.white,
+            appBar: AppBar(
+              backgroundColor: AppColours.white,
+              scrolledUnderElevation: 0,
+              centerTitle: false,
+              titleSpacing: 20,
+              title: Text(
+                "Stories",
+                style: AppTheme.headingThree.copyWith(
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
+              actionsPadding: const EdgeInsets.only(right: 20.0),
+              actions: [
+                GestureDetector(
+                  onTap: () {
+                    // todo - add heart clicked functionality
+                  },
+                  child: SvgPicture.asset(
+                    'lib/assets/icons/glint_heart.svg',
+                  ),
+                ),
+                const Gap(18.0),
+                GestureDetector(
+                  onTap: () {
+                    // todo - add heart clicked functionality
+                  },
+                  child: SvgPicture.asset(
+                    'lib/assets/icons/upload_story.svg',
+                  ),
+                ),
+              ],
+            ),
+            body: FutureBuilder<Channel>(
+              future: initializeChat(
+                StreamChat.of(context).client,
+                'your_channel_id',
+              ),
+              // Call your async method
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  final channel = snapshot.data!;
+                  return StreamChannel(
+                    channel: channel,
+                    child: Container(
+                      color: AppColours.white,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            state.stories?.isNotEmpty ?? false
+                                ? _buildStoriesSection(
+                                    state.stories ?? [],
+                                    (index) {
+                                      context.pushNamed(
+                                        GlintChatRoutes.stories.name,
+                                        extra: index
+                                      );
+                                    },
+                                  )
+                                : const Text("No Stories found,"),
+                            const Gap(12.0),
+                            state.recentMatches?.isNotEmpty ?? false
+                                ? _buildRecentMatchesSection(
+                                    state.recentMatches ?? [],
+                                    (match) {
+                                      final client =
+                                          StreamChat.of(context).client;
+                                      final channelObj = client.channel(
+                                          'messaging',
+                                          id: match.chatChannelId);
+                                      context.pushNamed(
+                                        GlintChatRoutes.chatWith.name,
+                                        extra: channelObj,
+                                      );
+                                    },
+                                  )
+                                : const Text("No Recent Matches,"),
+                            const Gap(12.0),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Text(
+                                'Chats',
+                                textAlign: TextAlign.start,
+                                style: AppTheme.headingThree.copyWith(
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 18.0,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        StreamChannelListView(
-                          controller: _listController,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, channels, index, defaultTile) {
-                            // final lastMessage = channels[index].state?.messages.last;
-                            // final unreadCount = channels[index].state?.unreadCount ?? 0;
-                            // final myUserId = StreamChat.of(context).currentUser?.id ?? 0;
-                            // //
-                            // // // Determine if the last message was sent by the opposite user and is unread
-                            // final isUnreadFromOtherUser = lastMessage != null &&
-                            //     lastMessage.user?.id != myUserId &&
-                            //     unreadCount > 0;
+                            StreamChannelListView(
+                              controller: _listController,
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder:
+                                  (context, channels, index, defaultTile) {
+                                // final lastMessage = channels[index].state?.messages.last;
+                                // final unreadCount = channels[index].state?.unreadCount ?? 0;
+                                // final myUserId = StreamChat.of(context).currentUser?.id ?? 0;
+                                // //
+                                // // // Determine if the last message was sent by the opposite user and is unread
+                                // final isUnreadFromOtherUser = lastMessage != null &&
+                                //     lastMessage.user?.id != myUserId &&
+                                //     unreadCount > 0;
 
-                            return ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                vertical: 6.0,
-                                horizontal: 20.0,
-                              ),
-                              leading: Stack(
-                                clipBehavior: Clip.none,
-                                alignment: Alignment.center,
-                                children: [
-                                  Container(
-                                    height: 52.0,
-                                    width: 48.0,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(8.0),
-                                      ),
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                          'lib/assets/images/temp_place_holder.png',
-                                        ),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                                return ListTile(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 6.0,
+                                    horizontal: 20.0,
                                   ),
-                                  if (true)
-                                    Positioned(
-                                      bottom: -8.0,
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5.2, vertical: 2.0),
-                                        decoration: BoxDecoration(
-                                          color: AppColours.primaryBlue,
-                                          borderRadius:
-                                              BorderRadius.circular(24),
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Icon(
-                                              Icons.local_fire_department,
-                                              size: 11,
-                                              color: AppColours.white,
-                                            ),
-                                            const Gap(2.0),
-                                            Text(
-                                              '3',
-                                              style: AppTheme.smallBodyText
-                                                  .copyWith(
-                                                color: AppColours.white,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 11.0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              title: Text(
-                                channels[index].name ?? 'Chat',
-                                style: AppTheme.simpleBodyText.copyWith(
-                                  color: AppColours.black,
-                                ),
-                              ),
-                              subtitle: Text(
-                                'No messages yet',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTheme.simpleText.copyWith(
-                                  color: AppColours.darkGray,
-                                ),
-                              ),
-                              trailing: Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: Column(
-                                  children: [
-                                    if (true)
-                                      // your turn if message received
+                                  leading: Stack(
+                                    clipBehavior: Clip.none,
+                                    alignment: Alignment.center,
+                                    children: [
                                       Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 6,
-                                          vertical: 2.0,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius:
-                                              BorderRadius.circular(4.0),
-                                        ),
-                                        child: Text(
-                                          'Your Turn',
-                                          style: AppTheme.simpleText.copyWith(
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.w600,
-                                            color: AppColours.white,
+                                        height: 52.0,
+                                        width: 48.0,
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(8.0),
+                                          ),
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                              'lib/assets/images/temp_place_holder.png',
+                                            ),
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
                                       ),
-                                    const Gap(8.0),
-                                    // time of last message
-                                    Text(
-                                      formatDateTime(
-                                          '2025-04-08T10:15:00.000Z'),
-                                      style: AppTheme.smallBodyText.copyWith(
-                                        color: AppColours.darkGray,
-                                      ),
+                                      if (true)
+                                        Positioned(
+                                          bottom: -8.0,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5.2, vertical: 2.0),
+                                            decoration: BoxDecoration(
+                                              color: AppColours.primaryBlue,
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Icon(
+                                                  Icons.local_fire_department,
+                                                  size: 11,
+                                                  color: AppColours.white,
+                                                ),
+                                                const Gap(2.0),
+                                                Text(
+                                                  '3',
+                                                  style: AppTheme.smallBodyText
+                                                      .copyWith(
+                                                    color: AppColours.white,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 11.0,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  title: Text(
+                                    channels[index].name ?? 'Chat',
+                                    style: AppTheme.simpleBodyText.copyWith(
+                                      color: AppColours.black,
                                     ),
-                                  ],
-                                ),
-                              ),
-                              onTap: () {
-                                context.pushNamed(GlintChatRoutes.chatWith.name,
-                                    extra: channels[index]);
+                                  ),
+                                  subtitle: Text(
+                                    'No messages yet',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppTheme.simpleText.copyWith(
+                                      color: AppColours.darkGray,
+                                    ),
+                                  ),
+                                  trailing: Padding(
+                                    padding: const EdgeInsets.only(top: 5.0),
+                                    child: Column(
+                                      children: [
+                                        if (true)
+                                          // your turn if message received
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 6,
+                                              vertical: 2.0,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius:
+                                                  BorderRadius.circular(4.0),
+                                            ),
+                                            child: Text(
+                                              'Your Turn',
+                                              style:
+                                                  AppTheme.simpleText.copyWith(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.w600,
+                                                color: AppColours.white,
+                                              ),
+                                            ),
+                                          ),
+                                        const Gap(8.0),
+                                        // time of last message
+                                        Text(
+                                          formatDateTime(
+                                              '2025-04-08T10:15:00.000Z'),
+                                          style:
+                                              AppTheme.smallBodyText.copyWith(
+                                            color: AppColours.darkGray,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    context.pushNamed(
+                                        GlintChatRoutes.chatWith.name,
+                                        extra: channels[index]);
+                                  },
+                                );
                               },
-                            );
-                          },
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              );
-            } else {
-              return const Center(child: Text('No data'));
-            }
-          },
-        ),
+                  );
+                } else {
+                  return const Center(child: Text('No data'));
+                }
+              },
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildRecentMatchesSection() {
+  Widget _buildRecentMatchesSection(
+    List<RecentMatchesModel> recentMatches,
+    void Function(RecentMatchesModel match) onRecentMatchItemClicked,
+  ) {
     return Container(
       decoration: const BoxDecoration(
         color: AppColours.white,
@@ -298,66 +345,72 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: matches.length,
+                    itemCount: recentMatches.length,
                     itemBuilder: (context, index) {
-                      var match = matches[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          children: [
-                            Stack(
-                              clipBehavior: Clip.none,
-                              alignment: Alignment.center,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(22.0),
-                                  child: Image.asset(
-                                    match['image'],
-                                    width: 72.0,
-                                    height: 72.0,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                if (match.containsKey('icon'))
-                                  Positioned.fill(
-                                    child: Container(
-                                      height: 72.0,
+                      var match = recentMatches[index];
+                      return GestureDetector(
+                        onTap: () {
+                          onRecentMatchItemClicked(match);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Column(
+                            children: [
+                              Stack(
+                                clipBehavior: Clip.none,
+                                alignment: Alignment.center,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(22.0),
+                                    child: Image.asset(
+                                      match.matchUserImageUrl,
                                       width: 72.0,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: [
-                                            Colors.transparent,
-                                            Colors.transparent,
-                                            Colors.black.withValues(alpha: 0.8),
-                                          ],
+                                      height: 72.0,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  if (match.matchedAtEvent)
+                                    Positioned.fill(
+                                      child: Container(
+                                        height: 72.0,
+                                        width: 72.0,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.transparent,
+                                              Colors.transparent,
+                                              Colors.black
+                                                  .withValues(alpha: 0.8),
+                                            ],
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(22.0),
                                         ),
-                                        borderRadius:
-                                            BorderRadius.circular(22.0),
                                       ),
                                     ),
-                                  ),
-                                if (match.containsKey('icon'))
-                                  Positioned(
-                                    bottom: 8,
-                                    child: Icon(
-                                      match['icon'],
-                                      size: 16.0,
-                                      color: Colors.white,
+                                  if (match.matchedAtEvent)
+                                    const Positioned(
+                                      bottom: 8,
+                                      child: Icon(
+                                        Icons.favorite,
+                                        size: 16.0,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                              ],
-                            ),
-                            const Spacer(),
-                            Text(
-                              match['name'],
-                              style: AppTheme.simpleText.copyWith(
-                                color: AppColours.black,
+                                ],
                               ),
-                            ),
-                            const Gap(12.0),
-                          ],
+                              const Spacer(),
+                              Text(
+                                match.matchUserName,
+                                style: AppTheme.simpleText.copyWith(
+                                  color: AppColours.black,
+                                ),
+                              ),
+                              const Gap(12.0),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -371,7 +424,10 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _buildStoriesSection() {
+  Widget _buildStoriesSection(
+    List<ViewStoryModel> viewStoryModel,
+    void Function(int clickedIndex) storySelectedIndex,
+  ) {
     return Container(
       decoration: const BoxDecoration(
         color: AppColours.white,
@@ -389,74 +445,78 @@ class _ChatScreenState extends State<ChatScreen> {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            itemCount: stories.length,
+            itemCount: viewStoryModel.length,
             padding: const EdgeInsets.all(4),
             itemBuilder: (context, index) {
-              var story = stories[index];
-              return Container(
-                padding: const EdgeInsets.only(right: 16.0),
-                margin: index == 0 ? const EdgeInsets.only(left: 16.0) : null,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.center,
-                      children: [
-                        GradientCircularProgressIndicator(
-                          progress: 100,
-                          stroke: 3.6,
-                          gradient: AppColours.circularProgressGradient,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: CircleAvatar(
-                              radius: 36,
-                              backgroundImage: AssetImage(
-                                story['image'],
+              var story = viewStoryModel[index];
+              return GestureDetector(
+                onTap: () {
+                  storySelectedIndex(index);
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  margin: index == 0 ? const EdgeInsets.only(left: 16.0) : null,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: [
+                          GradientCircularProgressIndicator(
+                            progress: 100,
+                            stroke: 3.6,
+                            gradient: AppColours.circularProgressGradient,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: CircleAvatar(
+                                radius: 36,
+                                backgroundImage:
+                                    NetworkImage(story.userImageUrl),
                               ),
                             ),
                           ),
-                        ),
-                        if (story.containsKey('likes'))
-                          Positioned(
-                            bottom: -8.0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6.0, vertical: 3.6),
-                              decoration: BoxDecoration(
-                                color: AppColours.primaryBlue,
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.local_fire_department,
-                                    size: 14,
-                                    color: AppColours.white,
-                                  ),
-                                  const Gap(2.0),
-                                  Text(
-                                    '${story['likes']}',
-                                    style: AppTheme.smallBodyText.copyWith(
+                          if (int.parse(story.streakCount) > 0)
+                            Positioned(
+                              bottom: -8.0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6.0, vertical: 3.6),
+                                decoration: BoxDecoration(
+                                  color: AppColours.primaryBlue,
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.local_fire_department,
+                                      size: 14,
                                       color: AppColours.white,
-                                      fontWeight: FontWeight.w600,
                                     ),
-                                  ),
-                                ],
+                                    const Gap(2.0),
+                                    Text(
+                                      story.streakCount,
+                                      style: AppTheme.smallBodyText.copyWith(
+                                        color: AppColours.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                      ],
-                    ),
-                    const Gap(12.0),
-                    Text(
-                      story['name'],
-                      style: AppTheme.simpleText.copyWith(
-                        color: AppColours.black,
+                        ],
                       ),
-                    ),
-                  ],
+                      const Gap(12.0),
+                      Text(
+                        story.username,
+                        style: AppTheme.simpleText.copyWith(
+                          color: AppColours.black,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -465,116 +525,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-
-  List<Map<String, dynamic>> matches = [
-    {
-      'name': 'Rakhi',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'icon': Icons.favorite
-    },
-    {
-      'name': 'Dimpy',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'icon': Icons.pets
-    },
-    {'name': 'Shreya', 'image': 'lib/assets/images/temp_place_holder.png'},
-    {'name': 'Kathie', 'image': 'lib/assets/images/temp_place_holder.png'},
-    {
-      'name': 'Rakhi',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'icon': Icons.favorite
-    },
-    {
-      'name': 'Dimpy',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'icon': Icons.pets
-    },
-    {'name': 'Shreya', 'image': 'lib/assets/images/temp_place_holder.png'},
-    {'name': 'Kathie', 'image': 'lib/assets/images/temp_place_holder.png'},
-    {
-      'name': 'Rakhi',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'icon': Icons.favorite
-    },
-    {
-      'name': 'Dimpy',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'icon': Icons.pets
-    },
-    {'name': 'Shreya', 'image': 'lib/assets/images/temp_place_holder.png'},
-    {'name': 'Kathie', 'image': 'lib/assets/images/temp_place_holder.png'},
-  ];
-  List<Map<String, dynamic>> stories = [
-    {
-      'name': 'You',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 1.0
-    },
-    {
-      'name': 'Shalini',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 0.7,
-      'likes': 3
-    },
-    {
-      'name': 'Riya',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 0.5,
-      'likes': 1
-    },
-    {
-      'name': 'Shreya',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 0.9,
-      'likes': 4
-    },
-    {
-      'name': 'You',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 1.0
-    },
-    {
-      'name': 'Shalini',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 0.7,
-      'likes': 3
-    },
-    {
-      'name': 'Riya',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 0.5,
-      'likes': 1
-    },
-    {
-      'name': 'Shreya',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 0.9,
-      'likes': 4
-    },
-    {
-      'name': 'Dimpy',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 1.0
-    },
-    {
-      'name': 'Shalini',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 0.7,
-      'likes': 3
-    },
-    {
-      'name': 'Riya',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 0.5,
-      'likes': 1
-    },
-    {
-      'name': 'Shreya',
-      'image': 'lib/assets/images/temp_place_holder.png',
-      'progress': 0.9,
-      'likes': 4
-    },
-  ];
 
   Future<Channel> initializeChat(
       StreamChatClient client, String channelId) async {

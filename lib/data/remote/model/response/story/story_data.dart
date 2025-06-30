@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:glint_frontend/features/chat/story/model/story_model.dart';
 import 'story_url.dart';
 
 part 'story_data.freezed.dart';
