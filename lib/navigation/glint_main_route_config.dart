@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/features/auth/starter_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
+import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/confirm_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
 import 'package:glint_frontend/features/chat/get_ticket_screen.dart';
+import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/event_detail_screen.dart';
 import 'package:glint_frontend/features/event/event_main_screen.dart';
 import 'package:glint_frontend/features/event/event_people_screen.dart';
@@ -74,6 +78,22 @@ final glintMainRoutes = GoRouter(
               );
             }
             return ChatWithScreen(passedChannel: passedChannel);
+          },
+        ),
+        GoRoute(
+          path: '/${GlintChatRoutes.stories.name}',
+          name: GlintChatRoutes.stories.name,
+          pageBuilder: (context, state) {
+            final chatCubit = context.read<ChatScreenCubit>();
+            final passedIndex = state.extra as int?;
+            return MaterialPage(
+              child: BlocProvider.value(
+                value: chatCubit,
+                child: ViewStoryScreen(
+                  passedIndex: passedIndex ?? 0,
+                ),
+              ),
+            );
           },
         ),
         GoRoute(

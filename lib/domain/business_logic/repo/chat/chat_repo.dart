@@ -1,15 +1,11 @@
+import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
+import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class ChatRepo {
-  Future<Result<void>> fetchStories();
+  Future<Result<List<ViewStoryModel>>> fetchStories();
 
-  Future<Result<void>> fetchRecentMatches();
+  Future<Result<List<RecentMatchesModel>>> fetchRecentMatches();
 
   Future<Result<void>> fetchChannels();
-
-  Future<Result<void>> uploadStory();
-
-  Future<Result<void>> uploadStoryViews();
-
-  Future<Result<void>> replyToStory();
 }

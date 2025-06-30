@@ -2,8 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/data/remote/model/response/chat/get_recent_matches_response.dart';
+import 'package:glint_frontend/data/remote/model/response/story/story_response.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/chat/chat_repo.dart';
+import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
+import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
@@ -22,43 +26,41 @@ class ChatRepoImpl extends ChatRepo {
   }
 
   @override
-  Future<Result<void>> fetchRecentMatches() {
-    // TODO: implement fetchRecentMatches
-    throw UnimplementedError();
-  }
+  Future<Result<List<RecentMatchesModel>>> fetchRecentMatches() async {
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      endpoint: "user/recent-matches",
+    );
 
-  @override
-  Future<Result<void>> fetchStories() {
-    // TODO: implement fetchStories
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Result<void>> replyToStory() {
-    // TODO: implement replyToStory
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Result<void>> uploadStory() async {
-    // Todo: Update the Func signature and upload the files,
-    final uploadFileResponse = await apiCallHandler(
-        httpClient: httpClient,
-        requestType: HttpRequestEnum.UPLOAD,
-        endpoint: "",
-        uploadFilesFormData: FormData());
-
-    switch (uploadFileResponse) {
+    switch (response) {
       case Success():
-        return const Result.success(true);
+        final recentMatchesResponse =
+            GetRecentMatchesResponse.fromJson(response.data);
+        final matches = recentMatchesResponse.mapToUiModel();
+        return Success(matches);
       case Failure():
-        return Failure(Exception(uploadFileResponse.error));
+        return Failure(
+          Exception("No Recent matches found"),
+        );
     }
   }
 
   @override
-  Future<Result<void>> uploadStoryViews() {
-    // TODO: implement uploadStoryViews
-    throw UnimplementedError();
+  Future<Result<List<ViewStoryModel>>> fetchStories() async {
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      endpoint: "user/content/story",
+    );
+
+    switch (response) {
+      case Success():
+        final storiesResponse = StoryResponse.fromJson(response.data);
+        final stories = storiesResponse.mapToUiModel();
+        return Success(stories);
+      case Failure():
+        return Failure(Exception("No stories found"));
+    }
   }
 }

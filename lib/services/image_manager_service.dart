@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:glint_frontend/utils/image_manager/image_manager_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
@@ -28,9 +27,10 @@ class ImageService {
         return result.files
             .take(maxCount)
             .map((file) => ImageManagerData(
-          name: file.name,
-          bytes: file.bytes,
-        )).toList();
+                  name: file.name,
+                  bytes: file.bytes,
+                ))
+            .toList();
       }
     } else {
       // Mobile: Pick images using image_picker
@@ -65,6 +65,32 @@ class ImageService {
     return [];
   }
 
+  Future<ImageManagerData?> pickStory({int maxCount = 1}) async {
+    final storyFilePath = await _picker.pickImage(source: ImageSource.gallery);
+    if (storyFilePath != null) {
+      final directory = await getApplicationDocumentsDirectory();
+      final existing = await _loadSavedStoriesNames(directory);
+      final availableSlots = _getAvailableSlots(existing);
+
+      final compressedBytes = await FlutterImageCompress.compressWithFile(
+        storyFilePath.path,
+        quality: 75,
+      );
+
+      final filename = 'story_${availableSlots.first}.jpg';
+      final filePath = p.join(directory.path, filename);
+      final file = File(filePath);
+      await file.writeAsBytes(compressedBytes!);
+
+      return ImageManagerData(
+        name: filename,
+        file: file,
+      );
+    }
+
+    return null;
+  }
+
   Future<List<ImageManagerData>> loadSavedImages() async {
     if (kIsWeb) return []; // No file storage on web
     final dir = await getApplicationDocumentsDirectory();
@@ -74,9 +100,13 @@ class ImageService {
         .where((file) => file.path.contains(RegExp(r'picture_\d+\.jpg')))
         .toList();
 
-    files.sort((a, b) => _extractNum(a.path).compareTo(_extractNum(b.path)));
+    files.sort((a, b) =>
+        _extractPictureNum(a.path).compareTo(_extractPictureNum(b.path)));
 
-    return files.map((file) => ImageManagerData(name: p.basename(file.path), file: file)).toList();
+    return files
+        .map(
+            (file) => ImageManagerData(name: p.basename(file.path), file: file))
+        .toList();
   }
 
   Future<void> deleteImage(ImageManagerData image) async {
@@ -91,7 +121,17 @@ class ImageService {
         .listSync()
         .whereType<File>()
         .where((file) => file.path.contains(RegExp(r'picture_\d+\.jpg')))
-        .map((f) => _extractNum(f.path))
+        .map((f) => _extractPictureNum(f.path))
+        .toList();
+    return files;
+  }
+
+  Future<List<int>> _loadSavedStoriesNames(Directory dir) async {
+    final files = dir
+        .listSync()
+        .whereType<File>()
+        .where((file) => file.path.contains(RegExp(r'story_\d+\.jpg')))
+        .map((f) => _extractPictureNum(f.path))
         .toList();
     return files;
   }
@@ -104,8 +144,13 @@ class ImageService {
     return slots;
   }
 
-  int _extractNum(String path) {
+  int _extractPictureNum(String path) {
     final match = RegExp(r'picture_(\d+)').firstMatch(path);
+    return int.tryParse(match?.group(1) ?? '0') ?? 0;
+  }
+
+  int _extractStoryNum(String path) {
+    final match = RegExp(r'story_(\d+)').firstMatch(path);
     return int.tryParse(match?.group(1) ?? '0') ?? 0;
   }
 }

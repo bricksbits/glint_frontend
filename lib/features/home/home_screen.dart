@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
+import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
 import 'package:glint_frontend/features/event/event_main_screen.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/profile_screen.dart';

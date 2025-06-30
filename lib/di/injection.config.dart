@@ -27,6 +27,7 @@ import '../data/repo/auth/forgot_password_repo_impl.dart' as _i509;
 import '../data/repo/chat/chat_main/chat_repo_impl.dart' as _i651;
 import '../data/repo/onBoard/on_boarding_repo_impl.dart' as _i359;
 import '../data/repo/people/people_repo_impl.dart' as _i955;
+import '../data/repo/story/story_repo_impl.dart' as _i946;
 import '../domain/application_logic/admin/approve_published_event_usecase.dart'
     as _i839;
 import '../domain/application_logic/admin/get_all_events_use_case.dart'
@@ -42,6 +43,7 @@ import '../domain/business_logic/repo/auth/forgot_password_repo.dart' as _i995;
 import '../domain/business_logic/repo/boarding/on_boarding_repo.dart' as _i330;
 import '../domain/business_logic/repo/chat/chat_repo.dart' as _i849;
 import '../domain/business_logic/repo/people/people_repo.dart' as _i678;
+import '../domain/business_logic/repo/story/story_repo.dart' as _i762;
 import '../services/image_manager_service.dart' as _i43;
 import 'local_module.dart' as _i519;
 import 'network_module.dart' as _i567;
@@ -104,6 +106,10 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.factory<_i972.SignInUserUseCase>(
         () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
+    gh.factory<_i762.StoryRepo>(() => _i946.StoryRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+        ));
     gh.factory<_i1000.AdminDashboardRepo>(
         () => _i72.AdminDashBoardRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i678.PeopleRepo>(() => _i955.PeopleRepoImpl(
