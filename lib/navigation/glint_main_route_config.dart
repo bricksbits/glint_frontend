@@ -18,6 +18,7 @@ import 'package:glint_frontend/features/likes/likes_screen.dart';
 import 'package:glint_frontend/features/notifications/notification_screen.dart';
 import 'package:glint_frontend/features/onboarding/setup_glint_onboarding_screen.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
+import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:glint_frontend/features/payment/payment_screen.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/exports.dart';
@@ -198,10 +199,16 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintMainRoutes.payment.name}',
       name: GlintMainRoutes.payment.name,
-      builder: (context, state) {
+      pageBuilder: (context, state) {
+        final paymentCubit = context.read<PaymentCubit>();
         final paymentArgumentModel = state.extra as PaymentArgumentModel?;
-        return PaymentScreen(
-          paymentArgumentModel: paymentArgumentModel,
+        return MaterialPage(
+          child: BlocProvider.value(
+            value: paymentCubit,
+            child: PaymentScreen(
+              paymentArgumentModel: paymentArgumentModel,
+            ),
+          ),
         );
       },
     ),

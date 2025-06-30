@@ -5,6 +5,7 @@ import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
 import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
 import 'package:glint_frontend/features/event/event_main_screen.dart';
+import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/profile_screen.dart';
@@ -27,7 +28,20 @@ class _HomeScreenState extends State<HomeScreen> {
     const ProfileScreen(),
     const EventMainScreen(),
     const PeopleScreen(),
-    const ServiceScreen(),
+    PaymentScreen(
+      paymentArgumentModel: PaymentArgumentModel(
+        membershipType: null,
+        amountOfSelectedMembership: null,
+        timePeriod: null,
+        eventId: "1",
+        matchId: "2",
+        userOne: UserTicketHolderModel(
+            userId: "1", username: "bricksBits", imageUrl: ""),
+        userTwo: UserTicketHolderModel(
+            userId: "2", username: "Female", imageUrl: ""),
+        eventTicketPrice: "42",
+      ),
+    ),
     const ChatScreen(),
   ];
 

@@ -38,13 +38,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
         .read<PaymentCubit>()
         .collectPaymentRequest(widget.paymentArgumentModel);
 
-    context.read<PaymentCubit>().state.when(initiate: (orderId, amount, name,
-        desc, razorPayModel, paymentModel, loading, isMembership, error) {
-      if (razorPayModel != null) {
-        _razorpay.open(razorPayModel.toJson());
-      }
-    });
-
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentFailure);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handlePaymentWalletAdded);
@@ -52,93 +45,105 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PaymentCubit, PaymentState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: Colors.grey.shade200,
-          appBar: AppBar(
-            centerTitle: false,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            leading: const Icon(Icons.arrow_back, color: Colors.black),
-            title: const Text(
-              'Payment',
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                color: Colors.black,
+    return BlocListener<PaymentCubit, PaymentState>(
+      listener: (context, state) {
+        state.when(initiate: (orderId, amount, name, desc, razorPayModel,
+            paymentModel, loading, isMembership, error) {
+          if (razorPayModel != null) {
+            print("Success Order Placed, opening razorpay");
+            _razorpay.open(razorPayModel.toJson());
+          }
+        });
+      },
+      child: BlocBuilder<PaymentCubit, PaymentState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: Colors.grey.shade200,
+            appBar: AppBar(
+              centerTitle: false,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              leading: const Icon(Icons.arrow_back, color: Colors.black),
+              title: const Text(
+                'Payment',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  color: Colors.black,
+                ),
               ),
             ),
-          ),
-          body: state.loading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    children: [
-                      _upperTicketView(state),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                children: [
-                                  const Text('Amount to be paid',
-                                      style: TextStyle(color: Colors.grey)),
-                                  Text('₹ ${state.totalAmount}',
-                                      style: const TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.indigo)),
-                                  const SizedBox(height: 10),
-                                ],
-                              ),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30)),
-                                  backgroundColor: Colors.indigo,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 40, vertical: 12),
+            body: state.loading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        _upperTicketView(state),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Column(
+                                  children: [
+                                    const Text('Amount to be paid',
+                                        style: TextStyle(color: Colors.grey)),
+                                    Text('₹ ${state.totalAmount}',
+                                        style: const TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.indigo)),
+                                    const SizedBox(height: 10),
+                                  ],
                                 ),
-                                onPressed: () {
-                                  // Buy things
-                                  state.isMembershipRequest
-                                      ? context
-                                          .read<PaymentCubit>()
-                                          .getTheMembership()
-                                      : context
-                                          .read<PaymentCubit>()
-                                          .bookTheEvent();
-                                },
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 14, horizontal: 35),
-                                  child: Text('Proceed',
-                                      style: TextStyle(
-                                          fontSize: 16, color: Colors.white)),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    backgroundColor: Colors.indigo,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 40, vertical: 12),
+                                  ),
+                                  onPressed: () {
+                                    // Buy things
+                                    state.isMembershipRequest
+                                        ? context
+                                            .read<PaymentCubit>()
+                                            .getTheMembership()
+                                        : context
+                                            .read<PaymentCubit>()
+                                            .bookTheEvent();
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 14, horizontal: 35),
+                                    child: Text('Proceed',
+                                        style: TextStyle(
+                                            fontSize: 16, color: Colors.white)),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -228,11 +233,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 state.paymentModel?.userTwo?.username ?? "",
               ),
               _buildTicketHolder(
-                state.paymentModel?.userTwo?.username ?? "",
+                state.paymentModel?.userTwo?.username ?? "Your Partner",
                 state.paymentModel?.userTwo?.imageUrl ?? "",
               ),
               const Divider(),
-              _buildPriceDetails(state.totalAmount ?? ""),
+              _buildPriceDetails(state.totalAmount ?? "10"),
             ],
           ),
         ),
@@ -323,7 +328,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildPriceRow(
-              'Ticket cost per person', '₹ ${double.parse(totalAmount) / 2}'),
+              // 'Ticket cost per person', '₹ ${int.parse(totalAmount) / 2}'),
+              'Ticket cost per person', '₹ $totalAmount'),
           _buildPriceRow('Person(s)', 'x 2'),
           _buildPriceRow('Ticket Amount', '₹ $totalAmount'),
           _buildPriceRow('GST', '+ 18%'),
@@ -346,7 +352,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse successResponse) {
-    print("Success Payment callback called");
+    print("Success Payment callback called $successResponse");
     if (context.mounted) {
       if (successResponse.data != null) {
         if (successResponse.orderId != null &&

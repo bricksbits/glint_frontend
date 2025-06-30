@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/data/remote/model/response/payment/book_event_response.dart'
     as bookEventResponse;
+import 'package:glint_frontend/data/remote/model/response/payment/buy_membership_response.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/repo/payment/payment_repo.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
@@ -31,6 +32,7 @@ class PaymentCubit extends Cubit<PaymentState> {
   Future<void> bookTheEvent() async {
     final eventId = state.paymentModel?.eventId;
     final matchId = state.paymentModel?.matchId;
+    final amount = state.paymentModel?.amountOfSelectedMembership;
     if (eventId != null && matchId != null) {
       final eventResponse = await paymentRepo.bookEvent(eventId, matchId);
       switch (eventResponse) {
@@ -40,14 +42,14 @@ class PaymentCubit extends Cubit<PaymentState> {
           final razorPayKey = orderResponse.success?.razorpayKey;
           final razorPayOrderId = orderResponse.success?.razorpayOrderId;
           if (razorPayOrderId != null && razorPayKey != null) {
-            generateTheOrderId(razorPayKey, razorPayOrderId);
+            generateTheOrderId(razorPayKey, razorPayOrderId, amount ?? "349");
           }
         case Failure<bookEventResponse.BookEventResponse>():
           print("BookEvent : Failed ${eventResponse.error}");
       }
     } else {
       emit(state.copyWith(
-          error: "Can't initate the event payment, try again please,"));
+          error: "Can't initiate the event payment, try again please,"));
     }
   }
 
@@ -63,6 +65,24 @@ class PaymentCubit extends Cubit<PaymentState> {
         membershipAmount,
         membershipTime,
       );
+
+      switch (getMembershipResponse) {
+        case Success<BuyMembershipResponse>():
+          final orderResponse = getMembershipResponse.data;
+          final orderIdReceived = orderResponse.orderId;
+          final razorPayKey = orderResponse.razorpayKey;
+          final razorPayOrderId = orderResponse.razorpayOrderId;
+          if (razorPayOrderId != null && razorPayKey != null) {
+            generateTheOrderId(
+              razorPayKey,
+              razorPayOrderId,
+              membershipAmount,
+            );
+          }
+        case Failure<BuyMembershipResponse>():
+          emit(state.copyWith(
+              error: "Can't verify the membership request, try again please,"));
+      }
     } else {
       emit(state.copyWith(
           error: "Can't proceed with Membership, please try again"));
@@ -72,12 +92,12 @@ class PaymentCubit extends Cubit<PaymentState> {
   void generateTheOrderId(
     String razorpayKey,
     String razorpayOrderId,
+    String amount,
   ) {
     print("Order Generated with Id: $razorpayOrderId and Key: $razorpayKey");
-    final amountParsed = int.parse("3200");
     final orderObject = RazorpayOrderModel(
       razorpayKey: razorpayKey,
-      amount: amountParsed,
+      amount: int.parse(amount),
       razorpayOrderId: razorpayOrderId,
       name: state.name,
       description: state.description,
@@ -90,12 +110,13 @@ class PaymentCubit extends Cubit<PaymentState> {
     String paymentId,
   ) async {
     print("Verification Started");
-    final verifyResponse = await paymentRepo.verifyPayment(orderId, paymentId);
-    switch (verifyResponse) {
-      case Success<void>():
-        print("VerifyPayment : Payment got verified");
-      case Failure<void>():
-        print("VerifyPayment : Payment failed : ${verifyResponse.error}");
-    }
+    print("Verify data, OI : $orderId, PI : $paymentId");
+    // final verifyResponse = await paymentRepo.verifyPayment(orderId, paymentId);
+    // switch (verifyResponse) {
+    //   case Success<void>():
+    //     print("VerifyPayment : Payment got verified");
+    //   case Failure<void>():
+    //     print("VerifyPayment : Payment failed : ${verifyResponse.error}");
+    // }
   }
 }
