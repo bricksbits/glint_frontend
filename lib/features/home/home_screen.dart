@@ -5,11 +5,15 @@ import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
 import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
 import 'package:glint_frontend/features/event/event_main_screen.dart';
+import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
+import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/profile_screen.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
 import 'package:glint_frontend/utils/internet/internet_status_checker_cubit.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+
+import '../payment/payment_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,14 +23,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<StreamChatClient?> _clientFuture;
-
   int _selectedIndex = 2;
   static final List<Widget> _bottomNavScreens = [
     const ProfileScreen(),
     const EventMainScreen(),
     const PeopleScreen(),
-    const ServiceScreen(),
+    PaymentScreen(
+      paymentArgumentModel: PaymentArgumentModel(
+        membershipType: null,
+        amountOfSelectedMembership: null,
+        timePeriod: null,
+        eventId: "3",
+        matchId: "2",
+        userOne: UserTicketHolderModel(
+            userId: "1", username: "bricksBits", imageUrl: "https://picsum.photos/id/1/200/300"),
+        userTwo: UserTicketHolderModel(
+            userId: "2", username: "Female", imageUrl: "https://picsum.photos/id/1/200/300"),
+        eventTicketPrice: "42",
+      ),
+    ),
     const ChatScreen(),
   ];
 
@@ -81,48 +96,52 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InternetStatusCheckerCubit, InternetStatusCheckerState>(
-      builder: (context, state) {
-        if (state is InternetStatusDisConnected) {
-          return const Banner(
-            message: "No Internet Connection",
-            location: BannerLocation.topStart,
-            color: Colors.red,
-          );
-        }
-        return Scaffold(
-          // extendBody: true,
-          backgroundColor: AppColours.white,
-          // do not show app bar on chat screen
-          appBar: _selectedIndex == 4
-              ? null
-              : GlintAppBar(
-                  appBarAction: appBarAction(_selectedIndex),
+    return BlocProvider(
+      create: (context) => PaymentCubit(),
+      child:
+          BlocBuilder<InternetStatusCheckerCubit, InternetStatusCheckerState>(
+        builder: (context, state) {
+          if (state is InternetStatusDisConnected) {
+            return const Banner(
+              message: "No Internet Connection",
+              location: BannerLocation.topStart,
+              color: Colors.red,
+            );
+          }
+          return Scaffold(
+            // extendBody: true,
+            backgroundColor: AppColours.white,
+            // do not show app bar on chat screen
+            appBar: _selectedIndex == 4
+                ? null
+                : GlintAppBar(
+                    appBarAction: appBarAction(_selectedIndex),
+                  ),
+            body: _bottomNavScreens[_selectedIndex],
+            bottomNavigationBar: Container(
+              height: 70.0,
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 20.0)
+                  .copyWith(bottom: 20.0),
+              decoration: BoxDecoration(
+                color: AppColours.white,
+                borderRadius: BorderRadius.circular(50.0),
+                border: Border.all(
+                  color: AppColours.gray.withAlpha(92),
+                  width: 1.25,
                 ),
-          body: _bottomNavScreens[_selectedIndex],
-          bottomNavigationBar: Container(
-            height: 70.0,
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 20.0)
-                .copyWith(bottom: 20.0),
-            decoration: BoxDecoration(
-              color: AppColours.white,
-              borderRadius: BorderRadius.circular(50.0),
-              border: Border.all(
-                color: AppColours.gray.withAlpha(92),
-                width: 1.25,
+              ),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: List.generate(_navIcons.length, _buildNavItem),
               ),
             ),
-            padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: List.generate(_navIcons.length, _buildNavItem),
-            ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

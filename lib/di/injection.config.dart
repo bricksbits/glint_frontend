@@ -26,6 +26,7 @@ import '../data/repo/auth/authentication_repo_impl.dart' as _i840;
 import '../data/repo/auth/forgot_password_repo_impl.dart' as _i509;
 import '../data/repo/chat/chat_main/chat_repo_impl.dart' as _i651;
 import '../data/repo/onBoard/on_boarding_repo_impl.dart' as _i359;
+import '../data/repo/payment/payment_repo_impl.dart' as _i854;
 import '../data/repo/people/people_repo_impl.dart' as _i955;
 import '../data/repo/story/story_repo_impl.dart' as _i946;
 import '../domain/application_logic/admin/approve_published_event_usecase.dart'
@@ -42,6 +43,7 @@ import '../domain/business_logic/repo/auth/authentication_repo.dart' as _i873;
 import '../domain/business_logic/repo/auth/forgot_password_repo.dart' as _i995;
 import '../domain/business_logic/repo/boarding/on_boarding_repo.dart' as _i330;
 import '../domain/business_logic/repo/chat/chat_repo.dart' as _i849;
+import '../domain/business_logic/repo/payment/payment_repo.dart' as _i235;
 import '../domain/business_logic/repo/people/people_repo.dart' as _i678;
 import '../domain/business_logic/repo/story/story_repo.dart' as _i762;
 import '../services/image_manager_service.dart' as _i43;
@@ -110,6 +112,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
+    gh.factory<_i235.PaymentRepo>(
+        () => _i854.PaymentRepoImpl(gh<_i368.MyDioClient>()));
     gh.factory<_i1000.AdminDashboardRepo>(
         () => _i72.AdminDashBoardRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i678.PeopleRepo>(() => _i955.PeopleRepoImpl(

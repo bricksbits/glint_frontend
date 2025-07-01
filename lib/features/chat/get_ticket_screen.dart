@@ -6,9 +6,19 @@ import 'package:glint_frontend/design/common/app_theme.dart';
 import 'package:glint_frontend/design/components/chat/common_ticket_banner.dart';
 import 'package:glint_frontend/design/components/chat/ticket_details_component.dart';
 import 'package:glint_frontend/design/components/exports.dart';
+import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
+
+import '../payment/model/payment_argument_model.dart';
 
 class GetEventTicketScreen extends StatelessWidget {
-  const GetEventTicketScreen({super.key});
+  const GetEventTicketScreen({
+    super.key,
+    required this.getTicketArgumentModel,
+  });
+
+  final GetTicketArgumentModel getTicketArgumentModel;
 
   @override
   Widget build(BuildContext context) {
@@ -32,20 +42,20 @@ class GetEventTicketScreen extends StatelessWidget {
               children: [
                 // Event Image
                 CommonTicketBanner(
-                  bannerImagerUrl:
+                  bannerImagerUrl: getTicketArgumentModel.eventBanner ??
                       'lib/assets/images/chat/chat_ticket_info_pace_holder.png',
                   onInfoClicked: () {},
                   onClosedClicked: () {},
                 ),
                 // Event Details
-                const TicketDetailsComponent(
-                  eventName: "Long Event name",
-                  eventDate: "30st Dec 2024",
-                  eventTime: "9:00 PM",
-                  eventLocation: "Near Raipur Chai Stall",
-                  eventInitialPrice: "400",
-                  eventFinalPrice: "200",
-                  dayLeftForEvent: "21",
+                TicketDetailsComponent(
+                  eventName: getTicketArgumentModel.eventName,
+                  eventDate: getTicketArgumentModel.eventDate,
+                  eventTime: getTicketArgumentModel.eventTime,
+                  eventLocation: getTicketArgumentModel.eventLocation,
+                  eventInitialPrice: getTicketArgumentModel.eventInitialPrice,
+                  eventFinalPrice: getTicketArgumentModel.eventFinalPrice,
+                  dayLeftForEvent: getTicketArgumentModel.dayLeftForEvent,
                 ),
                 // Divider
                 const Gap(24.0),
@@ -91,7 +101,21 @@ class GetEventTicketScreen extends StatelessWidget {
                         const Text('Pay for Both'),
                       ],
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      context.pushNamed(
+                        GlintMainRoutes.payment.name,
+                        extra: PaymentArgumentModel(
+                          membershipType: null,
+                          amountOfSelectedMembership: null,
+                          timePeriod: null,
+                          eventId: getTicketArgumentModel.eventId,
+                          matchId: getTicketArgumentModel.matchId,
+                          userOne: getTicketArgumentModel.currentUser,
+                          userTwo: getTicketArgumentModel.matchedUser,
+                          eventTicketPrice: getTicketArgumentModel.eventFinalPrice,
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const Gap(16.0),
@@ -111,7 +135,9 @@ class GetEventTicketScreen extends StatelessWidget {
                         const Text('Split Payment'),
                       ],
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      //Todo: Show a Snackbar that, is not available will be add up in the future,
+                    },
                   ),
                 ),
                 const Gap(48.0),

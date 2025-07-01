@@ -1,0 +1,2 @@
+/Users/niketjain/Desktop/Glint/glint_frontend/android/app/.cxx/Debug/1ex64476/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/niketjain/Desktop/Glint/glint_frontend/android/app/.cxx/Debug/1ex64476/armeabi-v7a/CMakeFiles/rebuild_cache.dir

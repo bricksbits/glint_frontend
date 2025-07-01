@@ -32,8 +32,9 @@ Future<Result<dynamic>> apiCallHandler({
       return result;
     case HttpRequestEnum.UPLOAD:
       final result = httpClient.uploadFiles(
-          endpoint: endpoint,
-          formData: uploadFilesFormData);
+        endpoint: endpoint,
+        formData: uploadFilesFormData,
+      );
       return result;
   }
 }
