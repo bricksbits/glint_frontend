@@ -108,12 +108,12 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.factory<_i972.SignInUserUseCase>(
         () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
-    gh.factory<_i235.PaymentRepo>(
-        () => _i854.PaymentRepoImpl(gh<_i368.MyDioClient>()));
     gh.factory<_i762.StoryRepo>(() => _i946.StoryRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
+    gh.factory<_i235.PaymentRepo>(
+        () => _i854.PaymentRepoImpl(gh<_i368.MyDioClient>()));
     gh.factory<_i1000.AdminDashboardRepo>(
         () => _i72.AdminDashBoardRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i678.PeopleRepo>(() => _i955.PeopleRepoImpl(

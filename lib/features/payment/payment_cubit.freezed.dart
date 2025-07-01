@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PaymentState {
-  String? get orderId => throw _privateConstructorUsedError;
+  int? get orderId => throw _privateConstructorUsedError;
   String? get totalAmount => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$PaymentState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String? orderId,
+            int? orderId,
             String? totalAmount,
             String? name,
             String? description,
@@ -43,7 +43,7 @@ mixin _$PaymentState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            String? orderId,
+            int? orderId,
             String? totalAmount,
             String? name,
             String? description,
@@ -58,7 +58,7 @@ mixin _$PaymentState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            String? orderId,
+            int? orderId,
             String? totalAmount,
             String? name,
             String? description,
@@ -102,7 +102,7 @@ abstract class $PaymentStateCopyWith<$Res> {
       _$PaymentStateCopyWithImpl<$Res, PaymentState>;
   @useResult
   $Res call(
-      {String? orderId,
+      {int? orderId,
       String? totalAmount,
       String? name,
       String? description,
@@ -142,7 +142,7 @@ class _$PaymentStateCopyWithImpl<$Res, $Val extends PaymentState>
       orderId: freezed == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       totalAmount: freezed == totalAmount
           ? _value.totalAmount
           : totalAmount // ignore: cast_nullable_to_non_nullable
@@ -188,7 +188,7 @@ abstract class _$$InitiateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? orderId,
+      {int? orderId,
       String? totalAmount,
       String? name,
       String? description,
@@ -226,7 +226,7 @@ class __$$InitiateImplCopyWithImpl<$Res>
       orderId: freezed == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       totalAmount: freezed == totalAmount
           ? _value.totalAmount
           : totalAmount // ignore: cast_nullable_to_non_nullable
@@ -267,7 +267,7 @@ class __$$InitiateImplCopyWithImpl<$Res>
 
 class _$InitiateImpl implements _Initiate {
   const _$InitiateImpl(
-      {this.orderId = "",
+      {this.orderId = null,
       this.totalAmount = "",
       this.name = "",
       this.description = "",
@@ -279,7 +279,7 @@ class _$InitiateImpl implements _Initiate {
 
   @override
   @JsonKey()
-  final String? orderId;
+  final int? orderId;
   @override
   @JsonKey()
   final String? totalAmount;
@@ -356,7 +356,7 @@ class _$InitiateImpl implements _Initiate {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String? orderId,
+            int? orderId,
             String? totalAmount,
             String? name,
             String? description,
@@ -375,7 +375,7 @@ class _$InitiateImpl implements _Initiate {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            String? orderId,
+            int? orderId,
             String? totalAmount,
             String? name,
             String? description,
@@ -394,7 +394,7 @@ class _$InitiateImpl implements _Initiate {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            String? orderId,
+            int? orderId,
             String? totalAmount,
             String? name,
             String? description,
@@ -444,7 +444,7 @@ class _$InitiateImpl implements _Initiate {
 
 abstract class _Initiate implements PaymentState {
   const factory _Initiate(
-      {final String? orderId,
+      {final int? orderId,
       final String? totalAmount,
       final String? name,
       final String? description,
@@ -455,7 +455,7 @@ abstract class _Initiate implements PaymentState {
       final String? error}) = _$InitiateImpl;
 
   @override
-  String? get orderId;
+  int? get orderId;
   @override
   String? get totalAmount;
   @override

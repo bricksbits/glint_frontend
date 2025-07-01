@@ -3,7 +3,7 @@ part of 'payment_cubit.dart';
 @freezed
 class PaymentState with _$PaymentState {
   const factory PaymentState.initiate({
-    @Default("") final String? orderId,
+    @Default(null) final int? orderId,
     @Default("") final String? totalAmount,
     @Default("") final String? name,
     @Default("") final String? description,

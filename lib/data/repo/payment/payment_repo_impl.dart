@@ -20,7 +20,9 @@ class PaymentRepoImpl extends PaymentRepo {
 
   @override
   Future<Result<bookEventResponse.BookEventResponse>> bookEvent(
-      String eventId, String matchId) async {
+    String eventId,
+    String matchId,
+  ) async {
     final requestBody = BookEventRequestBody(
       eventId: int.parse(eventId),
       matchId: int.parse(matchId),
@@ -77,9 +79,12 @@ class PaymentRepoImpl extends PaymentRepo {
   }
 
   @override
-  Future<Result<void>> verifyPayment(String orderId, String paymentId) async {
+  Future<Result<void>> verifyPayment(
+    int orderId,
+    String paymentId,
+  ) async {
     final requestBody = VerifyPaymentRequestBody(
-        orderId: int.parse(orderId), razorpayPaymentId: paymentId);
+        orderId: orderId, razorpayPaymentId: paymentId);
 
     final response = await apiCallHandler(
       httpClient: httpClient,

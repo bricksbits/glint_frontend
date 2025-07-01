@@ -32,17 +32,22 @@ class PaymentCubit extends Cubit<PaymentState> {
   Future<void> bookTheEvent() async {
     final eventId = state.paymentModel?.eventId;
     final matchId = state.paymentModel?.matchId;
-    final amount = state.paymentModel?.amountOfSelectedMembership;
+    final amount = state.totalAmount;
     if (eventId != null && matchId != null) {
       final eventResponse = await paymentRepo.bookEvent(eventId, matchId);
       switch (eventResponse) {
         case Success<bookEventResponse.BookEventResponse>():
           final orderResponse = eventResponse.data;
           final orderIdReceived = orderResponse.success?.orderId;
+          if (orderIdReceived != null) {
+            emitNewState(state.copyWith(
+              orderId: orderIdReceived,
+            ));
+          }
           final razorPayKey = orderResponse.success?.razorpayKey;
           final razorPayOrderId = orderResponse.success?.razorpayOrderId;
-          if (razorPayOrderId != null && razorPayKey != null) {
-            generateTheOrderId(razorPayKey, razorPayOrderId, amount ?? "349");
+          if (razorPayOrderId != null && razorPayKey != null && amount != null) {
+            generateTheOrderId(razorPayKey, razorPayOrderId, "1200");
           }
         case Failure<bookEventResponse.BookEventResponse>():
           print("BookEvent : Failed ${eventResponse.error}");
@@ -72,6 +77,9 @@ class PaymentCubit extends Cubit<PaymentState> {
           final orderIdReceived = orderResponse.orderId;
           final razorPayKey = orderResponse.razorpayKey;
           final razorPayOrderId = orderResponse.razorpayOrderId;
+          if (orderIdReceived != null) {
+            emitNewState(state.copyWith(orderId: orderIdReceived));
+          }
           if (razorPayOrderId != null && razorPayKey != null) {
             generateTheOrderId(
               razorPayKey,
@@ -106,17 +114,24 @@ class PaymentCubit extends Cubit<PaymentState> {
   }
 
   Future<void> verifyThePayment(
-    String orderId,
-    String paymentId,
+    String razorpayPaymentId,
   ) async {
-    print("Verification Started");
-    print("Verify data, OI : $orderId, PI : $paymentId");
-    // final verifyResponse = await paymentRepo.verifyPayment(orderId, paymentId);
-    // switch (verifyResponse) {
-    //   case Success<void>():
-    //     print("VerifyPayment : Payment got verified");
-    //   case Failure<void>():
-    //     print("VerifyPayment : Payment failed : ${verifyResponse.error}");
-    // }
+    final myOrderId = state.orderId;
+    print(
+        "Verification Started with Order ID : $myOrderId and $razorpayPaymentId");
+    if (myOrderId != null) {
+      final verifyResponse =
+          await paymentRepo.verifyPayment(myOrderId, razorpayPaymentId);
+      switch (verifyResponse) {
+        case Success<void>():
+          print("VerifyPayment : Payment got verified");
+        case Failure<void>():
+          print("VerifyPayment : Payment failed : ${verifyResponse.error}");
+      }
+    }
+  }
+
+  void emitNewState(PaymentState newState) {
+    emit(newState);
   }
 }

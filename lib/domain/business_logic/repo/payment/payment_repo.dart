@@ -16,7 +16,7 @@ abstract class PaymentRepo {
   );
 
   Future<Result<void>> verifyPayment(
-    String orderId,
+    int orderId,
     String paymentId,
   );
 

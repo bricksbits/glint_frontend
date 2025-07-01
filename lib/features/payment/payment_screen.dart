@@ -230,7 +230,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               const SizedBox(height: 16),
               _buildTicketHolder(
                 state.paymentModel?.userOne?.username ?? "You",
-                state.paymentModel?.userTwo?.username ?? "",
+                state.paymentModel?.userOne?.imageUrl ?? "",
               ),
               _buildTicketHolder(
                 state.paymentModel?.userTwo?.username ?? "Your Partner",
@@ -358,7 +358,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
         if (successResponse.orderId != null &&
             successResponse.paymentId != null) {
           context.read<PaymentCubit>().verifyThePayment(
-                successResponse.orderId!,
                 successResponse.paymentId!,
               );
         }

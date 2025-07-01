@@ -33,12 +33,12 @@ class _HomeScreenState extends State<HomeScreen> {
         membershipType: null,
         amountOfSelectedMembership: null,
         timePeriod: null,
-        eventId: "1",
+        eventId: "3",
         matchId: "2",
         userOne: UserTicketHolderModel(
-            userId: "1", username: "bricksBits", imageUrl: ""),
+            userId: "1", username: "bricksBits", imageUrl: "https://picsum.photos/id/1/200/300"),
         userTwo: UserTicketHolderModel(
-            userId: "2", username: "Female", imageUrl: ""),
+            userId: "2", username: "Female", imageUrl: "https://picsum.photos/id/1/200/300"),
         eventTicketPrice: "42",
       ),
     ),
