@@ -3,7 +3,7 @@ import 'package:glint_frontend/data/local/db/entities/profile_entity.dart';
 class RegisterUserRequest {
   final String? tempUserId;
   final String? username;
-  final String? dob;
+  final String? dateOfBirthWithDateFormat;
   final String? gender;
   final String? genderPreference;
   final String? email;
@@ -17,6 +17,7 @@ class RegisterUserRequest {
   final String? smokingHabit;
   final String? relationShipGoals;
   final List<String>? interests;
+  final String? calculatedAge;
 
   RegisterUserRequest(
     this.tempUserId,
@@ -24,7 +25,7 @@ class RegisterUserRequest {
     this.email,
     this.password,
     this.bio,
-    this.dob,
+    this.dateOfBirthWithDateFormat,
     this.height,
     this.education,
     this.occupation,
@@ -34,7 +35,7 @@ class RegisterUserRequest {
     this.drinkingHabit,
     this.smokingHabit,
     this.relationShipGoals,
-    this.interests,
+    this.interests, this.calculatedAge,
   );
 
   RegisterUserRequest copyWith({
@@ -54,6 +55,7 @@ class RegisterUserRequest {
     String? smokingHabit,
     String? relationShipGoals,
     List<String>? interests,
+    String? calculatedAge,
   }) {
     return RegisterUserRequest(
       tempUserId ?? this.tempUserId,
@@ -61,7 +63,7 @@ class RegisterUserRequest {
       email ?? this.email,
       password ?? this.password,
       bio ?? this.bio,
-      dob ?? this.dob,
+      dob ?? this.dateOfBirthWithDateFormat,
       height ?? this.height,
       education ?? this.education,
       occupation ?? this.occupation,
@@ -72,6 +74,7 @@ class RegisterUserRequest {
       smokingHabit ?? this.smokingHabit,
       relationShipGoals ?? this.relationShipGoals,
       interests ?? this.interests,
+      calculatedAge = calculatedAge
     );
   }
 }
@@ -81,7 +84,7 @@ extension RegisterRequestToEntityMapper on RegisterUserRequest {
     return ProfileEntity(
       userId: tempUserId ?? "",
       username: username ?? "",
-      age: dob ?? "",
+      age: calculatedAge ?? "",
       gender: gender ?? "",
       genderPreference: genderPreference ?? "",
       interests: interests ?? [],

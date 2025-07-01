@@ -79,7 +79,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   String? get currentName => _getCurrentRegisterUserState()?.username;
 
-  String? get currentAge => _getCurrentRegisterUserState()?.dob;
+  String? get currentAge => _getCurrentRegisterUserState()?.dateOfBirthWithDateFormat;
 
   String? get currentDesignation => _getCurrentRegisterUserState()?.occupation;
 
