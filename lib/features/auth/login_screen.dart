@@ -199,8 +199,34 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildForgotPassword() {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        context.go("/${GlintAuthRoutes.resetPassword.name}");
+      onTap: () async {
+        final emailController = TextEditingController();
+        final result = await showDialog<String>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Forgot Password'),
+            content: TextField(
+              controller: emailController,
+              decoration: const InputDecoration(hintText: 'Enter your email'),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(emailController.text);
+                },
+                child: const Text('Send OTP'),
+              ),
+            ],
+          ),
+        );
+        if (result != null && result.isNotEmpty) {
+          context.go('/${GlintAuthRoutes.otp.name}?email=$result');
+        }
       },
       child: Align(
         alignment: widget.isAdmin ? Alignment.center : Alignment.centerRight,
