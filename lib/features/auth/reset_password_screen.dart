@@ -45,9 +45,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             state.when(
               initial: () {},
               loading: () {},
-              otpSent: () {
-                context.go("/${GlintAuthRoutes.otp.name}");
-              },
+              otpSent: () {},
               passwordResetSuccess: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
