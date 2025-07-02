@@ -28,6 +28,9 @@ class _DateOfBirthOnboardingScreenState
   @override
   void initState() {
     super.initState();
+    context.read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.NAME_PROVIDED);
+
     final now = DateTime.now();
     _selectedDate = DateTime(now.year - 18, now.month, now.day);
 

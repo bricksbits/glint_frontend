@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
+import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:glint_frontend/features/onboarding/date_of_birth_onboarding_screen.dart';
@@ -15,49 +18,118 @@ final glintUserOnBoardingInnerRoutes = [
   GoRoute(
     path: '/${GlintBoardingRoutes.name.name}',
     name: GlintBoardingRoutes.name.name,
-    builder: (context, state) => const EnterNameOnboardingScreen(),
+    pageBuilder: (context, state) {
+      var onBoardingCubit = context.read<OnBoardingCubit>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: onBoardingCubit,
+          child: const EnterNameOnboardingScreen(),
+        ),
+      );
+    },
   ),
   GoRoute(
     path: '/${GlintBoardingRoutes.dob.name}',
     name: GlintBoardingRoutes.dob.name,
-    builder: (context, state) => const DateOfBirthOnboardingScreen(),
+    pageBuilder: (context, state) {
+      var onBoardingCubit = context.read<OnBoardingCubit>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: onBoardingCubit,
+          child: const DateOfBirthOnboardingScreen(),
+        ),
+      );
+    },
   ),
   GoRoute(
     path: '/${GlintBoardingRoutes.pronouns.name}',
     name: GlintBoardingRoutes.pronouns.name,
-    builder: (context, state) => const GetSetGlintOnboardingScreen(),
+    pageBuilder: (context, state) {
+      var onBoardingCubit = context.read<OnBoardingCubit>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: onBoardingCubit,
+          child: const GetSetGlintOnboardingScreen(),
+        ),
+      );
+    },
   ),
   GoRoute(
     path: '/${GlintBoardingRoutes.media.name}',
     name: GlintBoardingRoutes.media.name,
-    builder: (context, state) => const UploadPhotosOnboardingScreen(),
+    pageBuilder: (context, state) {
+      var onBoardingCubit = context.read<OnBoardingCubit>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: onBoardingCubit,
+          child: const UploadPhotosOnboardingScreen(),
+        ),
+      );
+    },
   ),
   GoRoute(
     path: '/${GlintBoardingRoutes.gender.name}',
     name: GlintBoardingRoutes.gender.name,
-    builder: (context, state) =>
-    const IdentifyYourselfOnboardingScreen(),
+    pageBuilder: (context, state) {
+      var onBoardingCubit = context.read<OnBoardingCubit>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: onBoardingCubit,
+          child: const IdentifyYourselfOnboardingScreen(),
+        ),
+      );
+    },
   ),
   GoRoute(
     path: '/${GlintBoardingRoutes.interestedGender.name}',
     name: GlintBoardingRoutes.interestedGender.name,
-    builder: (context, state) =>
-    const WhoCatchesYourEyeOnboardingScreen(),
+    pageBuilder: (context, state) {
+      var onBoardingCubit = context.read<OnBoardingCubit>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: onBoardingCubit,
+          child: const WhoCatchesYourEyeOnboardingScreen(),
+        ),
+      );
+    },
   ),
   GoRoute(
     path: '/${GlintBoardingRoutes.interests.name}',
     name: GlintBoardingRoutes.interests.name,
-    builder: (context, state) =>
-    const InterestsAndVibeOnboardingScreen(),
+    pageBuilder: (context, state) {
+      var onBoardingCubit = context.read<OnBoardingCubit>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: onBoardingCubit,
+          child: const InterestsAndVibeOnboardingScreen(),
+        ),
+      );
+    },
   ),
   GoRoute(
     path: '/${GlintBoardingRoutes.bio.name}',
     name: GlintBoardingRoutes.bio.name,
-    builder: (context, state) => const OneLastStepOnboardingScreen(),
+    pageBuilder: (context, state) {
+      var onBoardingCubit = context.read<OnBoardingCubit>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: onBoardingCubit,
+          child: const OneLastStepOnboardingScreen(),
+        ),
+      );
+    },
   ),
   GoRoute(
     path: '/${GlintBoardingRoutes.register.name}',
     name: GlintBoardingRoutes.register.name,
-    builder: (context, state) => const CreateAccounScreen(),
+    pageBuilder: (context, state) {
+      var onBoardingCubit = context.read<OnBoardingCubit>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: onBoardingCubit,
+          child: const CreateAccounScreen(),
+        ),
+      );
+    },
   )
 ];

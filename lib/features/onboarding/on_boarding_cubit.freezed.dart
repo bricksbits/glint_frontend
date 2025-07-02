@@ -21,13 +21,15 @@ mixin _$OnBoardingState {
       throw _privateConstructorUsedError;
   String get error => throw _privateConstructorUsedError;
   List<String> get uploadedFilePaths => throw _privateConstructorUsedError;
+  String? get currentDestination => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
             RegisterUserRequest? currentState,
             OnBoardingCompletedTill onBoardingStatus,
             String error,
-            List<String> uploadedFilePaths)
+            List<String> uploadedFilePaths,
+            String? currentDestination)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -37,7 +39,8 @@ mixin _$OnBoardingState {
             RegisterUserRequest? currentState,
             OnBoardingCompletedTill onBoardingStatus,
             String error,
-            List<String> uploadedFilePaths)?
+            List<String> uploadedFilePaths,
+            String? currentDestination)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -47,7 +50,8 @@ mixin _$OnBoardingState {
             RegisterUserRequest? currentState,
             OnBoardingCompletedTill onBoardingStatus,
             String error,
-            List<String> uploadedFilePaths)?
+            List<String> uploadedFilePaths,
+            String? currentDestination)?
         initial,
     required TResult orElse(),
   }) =>
@@ -86,7 +90,8 @@ abstract class $OnBoardingStateCopyWith<$Res> {
       {RegisterUserRequest? currentState,
       OnBoardingCompletedTill onBoardingStatus,
       String error,
-      List<String> uploadedFilePaths});
+      List<String> uploadedFilePaths,
+      String? currentDestination});
 }
 
 /// @nodoc
@@ -108,6 +113,7 @@ class _$OnBoardingStateCopyWithImpl<$Res, $Val extends OnBoardingState>
     Object? onBoardingStatus = null,
     Object? error = null,
     Object? uploadedFilePaths = null,
+    Object? currentDestination = freezed,
   }) {
     return _then(_value.copyWith(
       currentState: freezed == currentState
@@ -126,6 +132,10 @@ class _$OnBoardingStateCopyWithImpl<$Res, $Val extends OnBoardingState>
           ? _value.uploadedFilePaths
           : uploadedFilePaths // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      currentDestination: freezed == currentDestination
+          ? _value.currentDestination
+          : currentDestination // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -142,7 +152,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       {RegisterUserRequest? currentState,
       OnBoardingCompletedTill onBoardingStatus,
       String error,
-      List<String> uploadedFilePaths});
+      List<String> uploadedFilePaths,
+      String? currentDestination});
 }
 
 /// @nodoc
@@ -162,6 +173,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? onBoardingStatus = null,
     Object? error = null,
     Object? uploadedFilePaths = null,
+    Object? currentDestination = freezed,
   }) {
     return _then(_$InitialImpl(
       currentState: freezed == currentState
@@ -180,6 +192,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value._uploadedFilePaths
           : uploadedFilePaths // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      currentDestination: freezed == currentDestination
+          ? _value.currentDestination
+          : currentDestination // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -191,7 +207,8 @@ class _$InitialImpl implements _Initial {
       {this.currentState = null,
       this.onBoardingStatus = OnBoardingCompletedTill.NOT_STARTED,
       this.error = "",
-      final List<String> uploadedFilePaths = const []})
+      final List<String> uploadedFilePaths = const [],
+      this.currentDestination = null})
       : _uploadedFilePaths = uploadedFilePaths;
 
   @override
@@ -214,8 +231,12 @@ class _$InitialImpl implements _Initial {
   }
 
   @override
+  @JsonKey()
+  final String? currentDestination;
+
+  @override
   String toString() {
-    return 'OnBoardingState.initial(currentState: $currentState, onBoardingStatus: $onBoardingStatus, error: $error, uploadedFilePaths: $uploadedFilePaths)';
+    return 'OnBoardingState.initial(currentState: $currentState, onBoardingStatus: $onBoardingStatus, error: $error, uploadedFilePaths: $uploadedFilePaths, currentDestination: $currentDestination)';
   }
 
   @override
@@ -229,12 +250,19 @@ class _$InitialImpl implements _Initial {
                 other.onBoardingStatus == onBoardingStatus) &&
             (identical(other.error, error) || other.error == error) &&
             const DeepCollectionEquality()
-                .equals(other._uploadedFilePaths, _uploadedFilePaths));
+                .equals(other._uploadedFilePaths, _uploadedFilePaths) &&
+            (identical(other.currentDestination, currentDestination) ||
+                other.currentDestination == currentDestination));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, currentState, onBoardingStatus,
-      error, const DeepCollectionEquality().hash(_uploadedFilePaths));
+  int get hashCode => Object.hash(
+      runtimeType,
+      currentState,
+      onBoardingStatus,
+      error,
+      const DeepCollectionEquality().hash(_uploadedFilePaths),
+      currentDestination);
 
   /// Create a copy of OnBoardingState
   /// with the given fields replaced by the non-null parameter values.
@@ -251,10 +279,12 @@ class _$InitialImpl implements _Initial {
             RegisterUserRequest? currentState,
             OnBoardingCompletedTill onBoardingStatus,
             String error,
-            List<String> uploadedFilePaths)
+            List<String> uploadedFilePaths,
+            String? currentDestination)
         initial,
   }) {
-    return initial(currentState, onBoardingStatus, error, uploadedFilePaths);
+    return initial(currentState, onBoardingStatus, error, uploadedFilePaths,
+        currentDestination);
   }
 
   @override
@@ -264,11 +294,12 @@ class _$InitialImpl implements _Initial {
             RegisterUserRequest? currentState,
             OnBoardingCompletedTill onBoardingStatus,
             String error,
-            List<String> uploadedFilePaths)?
+            List<String> uploadedFilePaths,
+            String? currentDestination)?
         initial,
   }) {
-    return initial?.call(
-        currentState, onBoardingStatus, error, uploadedFilePaths);
+    return initial?.call(currentState, onBoardingStatus, error,
+        uploadedFilePaths, currentDestination);
   }
 
   @override
@@ -278,12 +309,14 @@ class _$InitialImpl implements _Initial {
             RegisterUserRequest? currentState,
             OnBoardingCompletedTill onBoardingStatus,
             String error,
-            List<String> uploadedFilePaths)?
+            List<String> uploadedFilePaths,
+            String? currentDestination)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(currentState, onBoardingStatus, error, uploadedFilePaths);
+      return initial(currentState, onBoardingStatus, error, uploadedFilePaths,
+          currentDestination);
     }
     return orElse();
   }
@@ -322,7 +355,8 @@ abstract class _Initial implements OnBoardingState {
       {final RegisterUserRequest? currentState,
       final OnBoardingCompletedTill onBoardingStatus,
       final String error,
-      final List<String> uploadedFilePaths}) = _$InitialImpl;
+      final List<String> uploadedFilePaths,
+      final String? currentDestination}) = _$InitialImpl;
 
   @override
   RegisterUserRequest? get currentState;
@@ -332,6 +366,8 @@ abstract class _Initial implements OnBoardingState {
   String get error;
   @override
   List<String> get uploadedFilePaths;
+  @override
+  String? get currentDestination;
 
   /// Create a copy of OnBoardingState
   /// with the given fields replaced by the non-null parameter values.

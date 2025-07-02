@@ -16,6 +16,14 @@ class InterestsAndVibeOnboardingScreen extends StatefulWidget {
 
 class _InterestsAndVibeOnboardingScreenState
     extends State<InterestsAndVibeOnboardingScreen> {
+
+  @override
+  void initState() {
+    context.read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.PRONOUNS_DONE);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OnBoardingCubit, OnBoardingState>(

@@ -13,11 +13,11 @@ abstract class OnBoardingRepo {
 
   Future<Result<void>> uploadMedia();
 
-  Future<OnBoardingCompletedTill> getLastUpdateState();
+  Future<OnBoardingCompletedTill> getCurrentBoardingState();
+
+  Future<Result<RegisterUserRequest>> getCurrentUserState();
 
   Future<void> setupCurrentBoardingState(OnBoardingCompletedTill currentBoardingStep);
 
   Future<Result<void>> updateLocation();
-
-  Future<Result<RegisterUserRequest>> getLastUpdatedUser();
 }

@@ -65,9 +65,8 @@ class OnBoardRepoImpl extends OnBoardingRepo {
     throw UnimplementedError();
   }
 
-  //TODO: Provide the Default Value here
   @override
-  Future<OnBoardingCompletedTill> getLastUpdateState() async {
+  Future<OnBoardingCompletedTill> getCurrentBoardingState() async {
     final currentUpdatedState = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.lastOnBoardingState);
     if (currentUpdatedState.isEmpty || currentUpdatedState == "") {
@@ -92,7 +91,7 @@ class OnBoardRepoImpl extends OnBoardingRepo {
   }
 
   @override
-  Future<Result<RegisterUserRequest>> getLastUpdatedUser() async {
+  Future<Result<RegisterUserRequest>> getCurrentUserState() async {
     final currentUser = await profileDao.getProfileData(NEW_ON_BOARD_USER_ID);
     final registerUserModel = currentUser?.mapToRequestUserModel();
     if(registerUserModel != null){

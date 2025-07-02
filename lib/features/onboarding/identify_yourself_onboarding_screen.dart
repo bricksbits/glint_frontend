@@ -21,6 +21,13 @@ class _IdentifyYourselfOnboardingScreenState
   String? selectedIdentity;
 
   @override
+  void initState() {
+    context.read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.AGE_CALCULATED);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<OnBoardingCubit, OnBoardingState>(
       builder: (context, state) {

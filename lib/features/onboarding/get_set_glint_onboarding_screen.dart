@@ -17,6 +17,14 @@ class GetSetGlintOnboardingScreen extends StatefulWidget {
 
 class _GetSetGlintOnboardingScreenState
     extends State<GetSetGlintOnboardingScreen> {
+
+  @override
+  void initState() {
+    context.read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.IMAGES_SELECTED);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OnBoardingCubit, OnBoardingState>(

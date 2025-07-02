@@ -17,6 +17,14 @@ class OneLastStepOnboardingScreen extends StatefulWidget {
 
 class _OneLastStepOnboardingScreenState
     extends State<OneLastStepOnboardingScreen> {
+
+  @override
+  void initState() {
+    context.read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.INTERESTS_DONE);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OnBoardingCubit, OnBoardingState>(

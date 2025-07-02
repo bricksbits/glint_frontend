@@ -1,10 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
+
+import '../onboarding/on_boarding_cubit.dart';
 
 class CreateAccounScreen extends StatefulWidget {
   const CreateAccounScreen({super.key});
@@ -85,6 +88,13 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    context.read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.COMPLETED);
+    super.initState();
   }
 
   @override

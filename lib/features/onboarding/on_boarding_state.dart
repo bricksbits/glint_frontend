@@ -7,6 +7,7 @@ class OnBoardingState with _$OnBoardingState {
     @Default(OnBoardingCompletedTill.NOT_STARTED) OnBoardingCompletedTill onBoardingStatus,
     @Default("") String error,
     @Default([]) List<String> uploadedFilePaths,
+    @Default(null) String? currentDestination,
   }) = _Initial;
 }
 

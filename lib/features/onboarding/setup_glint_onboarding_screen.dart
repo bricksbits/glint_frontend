@@ -63,11 +63,11 @@ class SetupGlintOnboardingScreen extends StatelessWidget {
                       foregroundColor: Colors.white,
                       backgroundColor: AppColours.primaryBlue,
                       onPressed: () {
+                        final targetDestination = state.currentDestination ?? GlintBoardingRoutes.name.name;
                         final isNewUserCreated = state.currentState;
                         if (isNewUserCreated?.tempUserId == NEW_ON_BOARD_USER_ID) {
                           final base = GlintMainRoutes.onBoarding.name;
-                          final target = GlintBoardingRoutes.name.name;
-                          context.go("/$base/$target");
+                          context.go("/$base/$targetDestination");
                         }
                       },
                     ),

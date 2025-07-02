@@ -19,6 +19,13 @@ class _OnboardingScreenState extends State<WhoCatchesYourEyeOnboardingScreen> {
   String? selectedGender;
 
   @override
+  void initState() {
+    context.read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.GENDER_SELECTED);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<OnBoardingCubit, OnBoardingState>(
       builder: (context, state) {

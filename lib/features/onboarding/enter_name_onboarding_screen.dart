@@ -24,6 +24,9 @@ class _EnterNameOnboardingScreenState extends State<EnterNameOnboardingScreen> {
 
   @override
   void initState() {
+    context.read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.NOT_STARTED);
+
     _nameController.addListener(() {
       context.read<OnBoardingCubit>().setName(_nameController.text);
     });
