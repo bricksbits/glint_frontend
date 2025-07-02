@@ -199,7 +199,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildForgotPassword() {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {}, // TODO - Handle Forget Password tap
+      onTap: () {
+        context.go("/${GlintAuthRoutes.resetPassword.name}");
+      },
       child: Align(
         alignment: widget.isAdmin ? Alignment.center : Alignment.centerRight,
         child: Text(
