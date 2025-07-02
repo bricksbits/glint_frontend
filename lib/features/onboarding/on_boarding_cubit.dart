@@ -79,7 +79,8 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   String? get currentName => _getCurrentRegisterUserState()?.username;
 
-  String? get currentAge => _getCurrentRegisterUserState()?.dateOfBirthWithDateFormat;
+  String? get currentAge =>
+      _getCurrentRegisterUserState()?.dateOfBirthWithDateFormat;
 
   String? get currentDesignation => _getCurrentRegisterUserState()?.occupation;
 
@@ -403,6 +404,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
           state.copyWith(
             currentState: RegisterUserRequest(
               NEW_ON_BOARD_USER_ID,
+              null,
               null,
               null,
               null,
