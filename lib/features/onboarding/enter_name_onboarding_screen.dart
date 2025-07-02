@@ -24,9 +24,6 @@ class _EnterNameOnboardingScreenState extends State<EnterNameOnboardingScreen> {
 
   @override
   void initState() {
-    context.read<OnBoardingCubit>()
-        .setUpLastBoardingState(OnBoardingCompletedTill.NOT_STARTED);
-
     _nameController.addListener(() {
       context.read<OnBoardingCubit>().setName(_nameController.text);
     });
@@ -156,9 +153,11 @@ class _EnterNameOnboardingScreenState extends State<EnterNameOnboardingScreen> {
                         ? () {
                             final currentName = state.currentState?.username;
                             if (currentName != null && _allowSubmit) {
-                              final base = GlintMainRoutes.onBoarding.name;
+                              context
+                                  .read<OnBoardingCubit>()
+                                  .updateProfileLocally();
                               final target = GlintBoardingRoutes.dob.name;
-                              context.go("/$base/$target");
+                              context.go("/$target");
                             }
                           }
                         : null,

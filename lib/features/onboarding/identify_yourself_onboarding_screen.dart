@@ -101,10 +101,12 @@ class _IdentifyYourselfOnboardingScreenState
                         ? () {
                             final selectedGender = state.currentState?.gender;
                             if (selectedGender != null) {
-                              final base = GlintMainRoutes.onBoarding.name;
+                              context
+                                  .read<OnBoardingCubit>()
+                                  .updateProfileLocally();
                               final target =
                                   GlintBoardingRoutes.interestedGender.name;
-                              context.go("/$base/$target");
+                              context.go("/$target");
                             }
                           }
                         : null,

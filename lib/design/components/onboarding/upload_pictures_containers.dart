@@ -15,28 +15,6 @@ class UploadPicturesContainers extends StatefulWidget {
 }
 
 class UploadPicturesContainersState extends State<UploadPicturesContainers> {
-  // list of images
-  // final List<File?> _images = [];
-  // final ImagePicker _picker = ImagePicker();
-  //
-  // Future<void> _pickImages() async {
-  //   final List<XFile> pickedFiles = await _picker.pickMultiImage(limit: 9);
-  //
-  //   if (pickedFiles.isNotEmpty) {
-  //     setState(() {
-  //       int maxImages = 9;
-  //
-  //       for (var file in pickedFiles) {
-  //         if (_images.length < maxImages) {
-  //           _images.add(File(file.path));
-  //         } else {
-  //           break;
-  //         }
-  //       }
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OnBoardingCubit, OnBoardingState>(
@@ -60,7 +38,7 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                           // first container is for DP
                           imageFile: state.uploadedFilePaths != null
                               ? state.uploadedFilePaths.length > index
-                                  ? File(state.uploadedFilePaths[index])
+                                  ? state.uploadedFilePaths[index]
                                   : null
                               : null,
                           // pass the image if available
@@ -90,7 +68,7 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                     child: UploadPictureContainer(
                       imageFile: state.uploadedFilePaths != null
                           ? state.uploadedFilePaths.length > containerIndex
-                              ? File(state.uploadedFilePaths[containerIndex])
+                              ? state.uploadedFilePaths[containerIndex]
                               : null
                           : null,
                       // pass the image if available
@@ -119,8 +97,7 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                         child: UploadPictureContainer(
                           imageFile: state.uploadedFilePaths != null
                               ? state.uploadedFilePaths.length > containerIndex
-                                  ? File(
-                                      state.uploadedFilePaths[containerIndex])
+                                  ? state.uploadedFilePaths[containerIndex]
                                   : null
                               : null,
                           // pass the image if available

@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
 import 'package:glint_frontend/domain/business_logic/repo/boarding/on_boarding_repo.dart';
-import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
@@ -73,14 +74,15 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
         ));
         break;
       case OnBoardingCompletedTill.COMPLETED:
-        emitNewState(state.copyWith(
-          currentDestination: GlintBoardingRoutes.register.name,
+        //Todo: Update this Logic as per Bio screen only
+         emitNewState(state.copyWith(
+          currentDestination: GlintMainRoutes.register.name,
         ));
         break;
     }
   }
 
-  // Helper method to get the current PeopleUiModel, handles null
+  // Helper method to get the current RegisterUserModel,
   RegisterUserRequest? _getCurrentRegisterUserState() {
     return state.mapOrNull(
       initial: (s) => s.currentState,
@@ -329,13 +331,20 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   Future<void> onPickImage() async {
     final pickedImages = await imageService.pickImages();
-    final mappedToPaths = pickedImages.map((file) {
-      if (file.file?.path != null) {
-        return file.file!.path;
-      }
-    }).toList();
-
-    setImages(mappedToPaths);
+    state.when(
+      initial: (currentState, onBoardingStatus, error, uploadedFiles,
+          currentDestination) {
+        if (pickedImages.isNotEmpty) {
+          emit(
+            state.copyWith(
+                uploadedFilePaths:
+                    pickedImages.map((image) => image.file).toList()),
+          );
+        } else {
+          _handleNullCurrentState("setImages");
+        }
+      },
+    );
   }
 
   void removeImageAt(int index) {
@@ -357,26 +366,6 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     );
   }
 
-  void setImages(List<String?> images) {
-    final filteredList = images
-        .where((item) => item != null)
-        .map((mapItem) => mapItem!)
-        .toList();
-
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
-        if (images.isNotEmpty) {
-          emit(
-            state.copyWith(uploadedFilePaths: filteredList),
-          );
-        } else {
-          _handleNullCurrentState("setImages");
-        }
-      },
-    );
-  }
-
   Future<void> updateProfileLocally() async {
     final getUpdateProfile = _getCurrentRegisterUserState();
     if (getUpdateProfile != null) {
@@ -389,22 +378,6 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     emitNewState(
       state.copyWith(onBoardingStatus: currentStage),
     );
-  }
-
-  Future<void> completeOnBoardingAndRegisterUser() async {
-    final isUserRegistered = await boardingRepo.registerNewUser();
-    switch (isUserRegistered) {
-      case Success<void>():
-        emit(
-          state.copyWith(
-            onBoardingStatus: OnBoardingCompletedTill.COMPLETED,
-          ),
-        );
-      case Failure<void>():
-        emit(state.copyWith(
-            error:
-                "Something Went Wrong, please check your internet, and try again."));
-    }
   }
 
   // Helper for when currentState is null

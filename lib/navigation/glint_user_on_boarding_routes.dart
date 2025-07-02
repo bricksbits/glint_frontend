@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:glint_frontend/features/auth/create_account_screen.dart';
+import 'package:glint_frontend/features/onboarding/location_permission_onboarding_screen.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:glint_frontend/features/onboarding/setup_glint_onboarding_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -134,16 +134,16 @@ final glintUserOnBoardingInnerRoutes = [
     },
   ),
   GoRoute(
-    path: '/${GlintBoardingRoutes.register.name}',
-    name: GlintBoardingRoutes.register.name,
+    path: '/${GlintBoardingRoutes.location.name}',
+    name: GlintBoardingRoutes.location.name,
     pageBuilder: (context, state) {
       var onBoardingCubit = BlocProvider.of<OnBoardingCubit>(context);
       return MaterialPage(
         child: BlocProvider.value(
           value: onBoardingCubit,
-          child: const CreateAccounScreen(),
+          child: const LocationPermissionOnboardingScreen(),
         ),
       );
     },
-  )
+  ),
 ];

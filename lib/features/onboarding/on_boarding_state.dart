@@ -6,7 +6,7 @@ class OnBoardingState with _$OnBoardingState {
     @Default(null) RegisterUserRequest? currentState,
     @Default(OnBoardingCompletedTill.NOT_STARTED) OnBoardingCompletedTill onBoardingStatus,
     @Default("") String error,
-    @Default([]) List<String> uploadedFilePaths,
+    @Default([]) List<File?> uploadedFilePaths,
     @Default(null) String? currentDestination,
   }) = _Initial;
 }

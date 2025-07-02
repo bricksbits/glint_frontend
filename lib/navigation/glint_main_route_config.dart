@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/starter_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
 import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
@@ -49,31 +50,26 @@ final glintMainRoutes = GoRouter(
       builder: (context, state) => const StarterScreen(),
     ),
     ShellRoute(
-        navigatorKey: onBoardingKey,
-        routes: glintUserOnBoardingInnerRoutes,
-        builder: (context, state, child) {
-          return BlocProvider(
-            create: (_) => OnBoardingCubit(),
-            child: child, // <-- Here it goes
-          );
-        },
+      navigatorKey: onBoardingKey,
+      routes: glintUserOnBoardingInnerRoutes,
+      builder: (context, state, child) {
+        return BlocProvider(
+          create: (_) => OnBoardingCubit(),
+          child: child, // <-- Here it goes
+        );
+      },
     ),
-    // GoRoute(
-    //   path: '/${GlintMainRoutes.onBoarding.name}',
-    //   name: GlintMainRoutes.onBoarding.name,
-    //   routes: glintUserOnBoardingInnerRoutes,
-    //   builder: (context, state) {
-    //     return BlocProvider(
-    //       create: (context) => OnBoardingCubit(),
-    //       child: const SetupGlintOnboardingScreen(),
-    //     );
-    //   },
-    // ),
+    GoRoute(
+      path: '/${GlintMainRoutes.register.name}',
+      name: GlintMainRoutes.register.name,
+      builder: (context, state) {
+        return const CreateAccounScreen();
+      },
+    ),
     GoRoute(
       path: '/${GlintMainRoutes.auth.name}',
       name: GlintMainRoutes.auth.name,
-      builder: (context, state) =>
-      const LoginScreen(
+      builder: (context, state) => const LoginScreen(
         isAdmin: false,
       ),
       routes: glintAuthenticationRoutesBase,
@@ -155,8 +151,7 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintEventRoutes.eventDetails.name}',
           name: GlintEventRoutes.eventDetails.name,
-          builder: (context, state) =>
-          const EventDetailScreen(
+          builder: (context, state) => const EventDetailScreen(
             isEventPreviewType: false,
           ),
         ),

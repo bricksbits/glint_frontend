@@ -32,40 +32,6 @@ class OnBoardRepoImpl extends OnBoardingRepo {
   }
 
   @override
-  Future<Result<void>> registerNewUser() async {
-    final getOnBoardUserDetails =
-        await profileDao.getProfileData(NEW_ON_BOARD_USER_ID);
-    final onBoardRequestBody = getOnBoardUserDetails?.mapTo("PASSED_PASSWORD");
-
-    final response = await apiCallHandler(
-      httpClient: httpClient,
-      requestType: HttpRequestEnum.POST,
-      endpoint: "/auth/v1/register",
-      requestBody: onBoardRequestBody?.toJson(),
-      passedQueryParameters: null,
-    );
-
-    switch (response) {
-      case Success():
-        return Success(response.data);
-      case Failure():
-        return Failure(Exception(response.error));
-    }
-  }
-
-  @override
-  Future<Result<void>> updateLocation() {
-    // TODO: implement updateLocation
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Result<void>> uploadMedia() {
-    // TODO: implement uploadMedia
-    throw UnimplementedError();
-  }
-
-  @override
   Future<OnBoardingCompletedTill> getCurrentBoardingState() async {
     final currentUpdatedState = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.lastOnBoardingState);

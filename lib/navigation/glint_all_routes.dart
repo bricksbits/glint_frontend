@@ -5,6 +5,7 @@ enum GlintMainRoutes {
   starter,
   auth,
   onBoarding,
+  register,
   home,
   chat,
   service,
@@ -59,7 +60,7 @@ enum GlintBoardingRoutes {
   pronouns,
   interests,
   bio,
-  register,
+  location,
 }
 
 enum GlintAdminDasboardRoutes {

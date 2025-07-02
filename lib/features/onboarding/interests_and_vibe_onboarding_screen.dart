@@ -16,10 +16,10 @@ class InterestsAndVibeOnboardingScreen extends StatefulWidget {
 
 class _InterestsAndVibeOnboardingScreenState
     extends State<InterestsAndVibeOnboardingScreen> {
-
   @override
   void initState() {
-    context.read<OnBoardingCubit>()
+    context
+        .read<OnBoardingCubit>()
         .setUpLastBoardingState(OnBoardingCompletedTill.PRONOUNS_DONE);
     super.initState();
   }
@@ -84,12 +84,12 @@ class _InterestsAndVibeOnboardingScreenState
                                       state.currentState?.interests;
                                   if (interestListLength != null) {
                                     if (interestListLength.length >= 5) {
-                                      // Handle button press
-                                      final base =
-                                          GlintMainRoutes.onBoarding.name;
+                                      context
+                                          .read<OnBoardingCubit>()
+                                          .updateProfileLocally();
                                       final target =
                                           GlintBoardingRoutes.bio.name;
-                                      context.go("/$base/$target");
+                                      context.go("/$target");
                                     } else {
                                       //Todo: Show Snackbar to select more items
                                     }

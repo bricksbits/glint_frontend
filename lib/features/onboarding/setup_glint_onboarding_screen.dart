@@ -64,8 +64,6 @@ class SetupGlintOnboardingScreen extends StatelessWidget {
                       final targetDestination = state.currentDestination ?? GlintBoardingRoutes.name.name;
                       final isNewUserCreated = state.currentState;
                       if (isNewUserCreated?.tempUserId == NEW_ON_BOARD_USER_ID) {
-                        final base = GlintMainRoutes.onBoarding.name;
-                        // context.go("/$base/$targetDestination");
                         context.go("/$targetDestination");
                       }
                     },

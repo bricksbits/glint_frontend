@@ -17,10 +17,10 @@ class GetSetGlintOnboardingScreen extends StatefulWidget {
 
 class _GetSetGlintOnboardingScreenState
     extends State<GetSetGlintOnboardingScreen> {
-
   @override
   void initState() {
-    context.read<OnBoardingCubit>()
+    context
+        .read<OnBoardingCubit>()
         .setUpLastBoardingState(OnBoardingCompletedTill.IMAGES_SELECTED);
     super.initState();
   }
@@ -89,9 +89,14 @@ class _GetSetGlintOnboardingScreenState
                       foregroundColor: Colors.white,
                       backgroundColor: AppColours.primaryBlue,
                       onPressed: () {
-                        final base = GlintMainRoutes.onBoarding.name;
-                        final target = GlintBoardingRoutes.interests.name;
-                        context.go("/$base/$target");
+                        var lookingFor = state.currentState?.relationShipGoals;
+                        if (lookingFor != null) {
+                          context
+                              .read<OnBoardingCubit>()
+                              .updateProfileLocally();
+                          final target = GlintBoardingRoutes.interests.name;
+                          context.go("/$target");
+                        }
                       },
                     ),
                   ),

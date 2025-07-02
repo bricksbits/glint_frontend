@@ -20,7 +20,8 @@ class _OnboardingScreenState extends State<WhoCatchesYourEyeOnboardingScreen> {
 
   @override
   void initState() {
-    context.read<OnBoardingCubit>()
+    context
+        .read<OnBoardingCubit>()
         .setUpLastBoardingState(OnBoardingCompletedTill.GENDER_SELECTED);
     super.initState();
   }
@@ -106,9 +107,11 @@ class _OnboardingScreenState extends State<WhoCatchesYourEyeOnboardingScreen> {
                             final selectedGenderPreferences =
                                 state.currentState?.genderPreference;
                             if (selectedGenderPreferences != null) {
-                              final base = GlintMainRoutes.onBoarding.name;
+                              context
+                                  .read<OnBoardingCubit>()
+                                  .updateProfileLocally();
                               final target = GlintBoardingRoutes.media.name;
-                              context.go("/$base/$target");
+                              context.go("/$target");
                             }
                           }
                         : null,
