@@ -1,4 +1,6 @@
-import 'package:encrypt_shared_preferences/provider.dart';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/profile_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
@@ -8,11 +10,11 @@ import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/login_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/register_account_request_body.dart';
 import 'package:glint_frontend/data/remote/model/response/auth/login_response.dart';
+import 'package:glint_frontend/data/remote/model/response/chat/story_upload_response.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
 import 'package:glint_frontend/domain/business_logic/repo/boarding/on_boarding_repo.dart';
-import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
@@ -28,6 +30,9 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
     this.profileDao,
   );
 
+  //Todo: Save the new Data to the Local \
+  // Tokens
+  // Profile Response to Db
   @override
   Future<Result<void>> createAccount(
     RegisterUserRequest registerUserModel,
@@ -37,12 +42,17 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
-      endpoint: "/registerUser",
+      endpoint: "/auth/v1/register",
       requestBody: requestBody.toJson(),
       passedQueryParameters: null,
     );
 
-    return Future.value(Failure(Exception()));
+    switch (response) {
+      case Success():
+        return Success(response.data);
+      case Failure():
+        return Failure(Exception(response.error));
+    }
   }
 
   @override
@@ -96,11 +106,10 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
 
   @override
   Future<void> setAuthToken(String newAuthToken) async {
-    const key = "";
-    await EncryptedSharedPreferencesAsync.initialize(key);
-    final sharedPreferencesAsync =
-        EncryptedSharedPreferencesAsync.getInstance();
-    sharedPreferencesAsync.setString("authToken", newAuthToken);
+    await sharedPreferenceHelper.saveString(
+      SharedPreferenceKeys.accessTokenKey,
+      newAuthToken,
+    );
   }
 
   @override
@@ -111,33 +120,49 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
   @override
   Future<RegisterUserRequest?> getOnBoardedUser() async {
     final user = await profileDao.getProfileData(NEW_ON_BOARD_USER_ID);
-    return user?.mapToDomain();
+    return user?.mapToRequestUserModel();
   }
 
   @override
-  Future<OnBoardingCompletedTill> getOnBoardingStatusTillNow() async {
-    OnBoardingCompletedTill currentState = OnBoardingCompletedTill.NOT_STARTED;
-    final user = await profileDao.getProfileData(NEW_ON_BOARD_USER_ID);
-    if (user?.name == null) {
-      currentState = OnBoardingCompletedTill.NOT_STARTED;
-    } else if (user?.age == null) {
-      currentState = OnBoardingCompletedTill.NAME_PROVIDED;
-    } else if (user?.pronouns == null) {
-      currentState = OnBoardingCompletedTill.AGE_CALCULATED;
-    } else if (user?.choiceOfGender == null) {
-      currentState = OnBoardingCompletedTill.GENDER_SELECTED;
-    } else if (user?.profilePics == null) {
-      currentState = OnBoardingCompletedTill.CHOICE_OF_GENDER_SELECTED;
-    } else if (user?.lookingFor == null) {
-      currentState = OnBoardingCompletedTill.IMAGES_SELECTED;
-    } else if (user?.interests == null) {
-      currentState = OnBoardingCompletedTill.PRONOUNS_DONE;
-    } else if (user?.bio == null) {
-      currentState = OnBoardingCompletedTill.INTERESTS_DONE;
-    } else {
-      currentState = OnBoardingCompletedTill.COMPLETED;
+  Future<Result<void>> uploadMediaFile(List<File?> loadedFiles) async {
+    FormData formData = FormData();
+    for (int i = 0; i < loadedFiles.length; i++) {
+      final file = loadedFiles[i];
+      if (file != null) {
+        formData.files.add(
+          MapEntry(
+            "picture_$i",
+            await MultipartFile.fromFile(
+              file.path,
+              filename: file.path.split('/').last, // or keep your custom name
+            ),
+          ),
+        );
+      }
     }
 
-    return currentState;
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.UPLOAD,
+      endpoint: "user/content/profile",
+      uploadFilesFormData: formData,
+    );
+
+    switch (response) {
+      case Success():
+        final storiesResponse = StoryUploadResponse.fromJson(response.data);
+        if (storiesResponse.filesUploaded?.isNotEmpty == true) {
+          return const Success(true);
+        } else {
+          return Failure(
+            Exception(
+                "Files ${storiesResponse.filesNotUploaded} failed to upload"),
+          );
+        }
+      case Failure():
+        return Failure(
+          Exception("Not able to upload files currently, please try again."),
+        );
+    }
   }
 }

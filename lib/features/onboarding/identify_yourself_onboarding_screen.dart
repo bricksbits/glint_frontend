@@ -21,6 +21,13 @@ class _IdentifyYourselfOnboardingScreenState
   String? selectedIdentity;
 
   @override
+  void initState() {
+    context.read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.AGE_CALCULATED);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<OnBoardingCubit, OnBoardingState>(
       builder: (context, state) {
@@ -94,10 +101,12 @@ class _IdentifyYourselfOnboardingScreenState
                         ? () {
                             final selectedGender = state.currentState?.gender;
                             if (selectedGender != null) {
-                              final base = GlintMainRoutes.onBoarding.name;
+                              context
+                                  .read<OnBoardingCubit>()
+                                  .updateProfileLocally();
                               final target =
                                   GlintBoardingRoutes.interestedGender.name;
-                              context.go("/$base/$target");
+                              context.go("/$target");
                             }
                           }
                         : null,

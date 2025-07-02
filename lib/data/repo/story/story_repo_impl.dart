@@ -27,10 +27,11 @@ class StoryRepoImpl extends StoryRepo {
     });
 
     final response = await apiCallHandler(
-        httpClient: httpClient,
-        requestType: HttpRequestEnum.UPLOAD,
-        endpoint: "user/content/story",
-        uploadFilesFormData: formData);
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.UPLOAD,
+      endpoint: "user/content/story",
+      uploadFilesFormData: formData,
+    );
 
     switch (response) {
       case Success():
@@ -62,8 +63,8 @@ class StoryRepoImpl extends StoryRepo {
       ViewStoryModel(
         storiesUrl: [
           "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         ],
         username: "",
         userImageUrl:

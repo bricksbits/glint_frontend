@@ -7,7 +7,7 @@ import 'package:glint_frontend/data/local/swipe_cache_manager.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/swipe_action_type.dart';
 import 'package:glint_frontend/domain/business_logic/repo/people/people_repo.dart';
-import 'package:glint_frontend/features/people/model/people_model.dart';
+import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 part 'people_cards_event.dart';
@@ -21,11 +21,11 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
   final SwipeBufferManager swipeBufferManager = getIt.get<SwipeBufferManager>();
   final assumingFetchedCurrentUserId = 0;
 
-  StreamSubscription<Result<List<PeopleUiModel>>>? _peopleCardStream;
+  StreamSubscription<Result<List<PeopleCardModel>>>? _peopleCardStream;
 
   PeopleCardsBloc() : super(const PeopleCardsState.ignite()) {
     List<String?> advertisementList = [];
-    List<PeopleUiModel> cardsList = [];
+    List<PeopleCardModel> cardsList = [];
 
     on<_Started>((event, emit) async {
 
@@ -35,7 +35,7 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
 
       _peopleCardStream = peopleRepo.getProfilesFromDB().listen((newList) {
         switch (newList) {
-          case Success<List<PeopleUiModel>>():
+          case Success<List<PeopleCardModel>>():
             if (newList.data.isNotEmpty) {
               cardsList.addAll(newList.data);
               add(
@@ -48,7 +48,7 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
                 ),
               );
             }
-          case Failure<List<PeopleUiModel>>():
+          case Failure<List<PeopleCardModel>>():
             add(
               PeopleCardsEvent.emitNewState(
                 state.copyWith(

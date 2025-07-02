@@ -122,7 +122,7 @@ class _AuthButtons extends StatelessWidget {
               customBorderRadius: 30.0,
               customTextStyle: AppTheme.simpleBodyText,
               onPressed: () {
-                context.go("/${GlintMainRoutes.onBoarding.name}");
+                context.go("/${GlintBoardingRoutes.boarding.name}");
               },
             ),
           ),

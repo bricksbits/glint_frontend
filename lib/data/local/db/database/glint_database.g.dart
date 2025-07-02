@@ -74,6 +74,10 @@ class _$GlintDatabase extends GlintDatabase {
 
   ProfileDao? _profileDaoInstance;
 
+  MembershipDao? _membershipDaoInstance;
+
+  EventLikeDao? _eventLikeDaoInstance;
+
   SwipeActionDao? _swipeActionDaoInstance;
 
   Future<sqflite.Database> open(
@@ -98,9 +102,13 @@ class _$GlintDatabase extends GlintDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `ProfileEntity` (`userId` TEXT NOT NULL, `tag` TEXT NOT NULL, `name` TEXT NOT NULL, `age` TEXT NOT NULL, `designation` TEXT NOT NULL, `profileViews` TEXT NOT NULL, `lastLocation` TEXT NOT NULL, `pronouns` TEXT NOT NULL, `location` TEXT NOT NULL, `bio` TEXT NOT NULL, `lookingFor` TEXT NOT NULL, `choiceOfGender` TEXT NOT NULL, `about` TEXT NOT NULL, `interests` TEXT NOT NULL, `profilePics` TEXT NOT NULL, PRIMARY KEY (`userId`))');
+            'CREATE TABLE IF NOT EXISTS `profiles` (`userId` TEXT NOT NULL, `username` TEXT NOT NULL, `age` TEXT NOT NULL, `gender` TEXT NOT NULL, `genderPreference` TEXT NOT NULL, `interests` TEXT NOT NULL, `lookingFor` TEXT NOT NULL, `bio` TEXT NOT NULL, `height` TEXT, `occupation` TEXT, `education` TEXT, `workoutHabit` TEXT, `drinkingHabit` TEXT, `smokingHabit` TEXT, `profileViews` TEXT NOT NULL, `profileLikes` TEXT NOT NULL, `pictureUrlList` TEXT NOT NULL, `profileTag` TEXT, `lastLocation` TEXT, `location` TEXT, PRIMARY KEY (`userId`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `swipe_actions` (`collabId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `currentUserId` TEXT NOT NULL, `swipedOnUserId` TEXT NOT NULL, `isUnsent` INTEGER NOT NULL, `action` TEXT NOT NULL, `timestamp` INTEGER NOT NULL)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `memberships` (`userId` TEXT NOT NULL, `superLikes` INTEGER NOT NULL, `aiMessages` INTEGER NOT NULL, `rewinds` INTEGER NOT NULL, `superDm` INTEGER NOT NULL, FOREIGN KEY (`userId`) REFERENCES `profiles` (`userId`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`userId`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `user_event_likes` (`userId` TEXT NOT NULL, `eventId` TEXT NOT NULL, FOREIGN KEY (`userId`) REFERENCES `profiles` (`userId`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`userId`, `eventId`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -111,6 +119,16 @@ class _$GlintDatabase extends GlintDatabase {
   @override
   ProfileDao get profileDao {
     return _profileDaoInstance ??= _$ProfileDao(database, changeListener);
+  }
+
+  @override
+  MembershipDao get membershipDao {
+    return _membershipDaoInstance ??= _$MembershipDao(database, changeListener);
+  }
+
+  @override
+  EventLikeDao get eventLikeDao {
+    return _eventLikeDaoInstance ??= _$EventLikeDao(database, changeListener);
   }
 
   @override
@@ -127,45 +145,57 @@ class _$ProfileDao extends ProfileDao {
   )   : _queryAdapter = QueryAdapter(database, changeListener),
         _profileEntityInsertionAdapter = InsertionAdapter(
             database,
-            'ProfileEntity',
+            'profiles',
             (ProfileEntity item) => <String, Object?>{
                   'userId': item.userId,
-                  'tag': item.tag,
-                  'name': item.name,
+                  'username': item.username,
                   'age': item.age,
-                  'designation': item.designation,
-                  'profileViews': item.profileViews,
-                  'lastLocation': item.lastLocation,
-                  'pronouns': item.pronouns,
-                  'location': item.location,
-                  'bio': item.bio,
-                  'lookingFor': item.lookingFor,
-                  'choiceOfGender': item.choiceOfGender,
-                  'about': _stringTypeConverter.encode(item.about),
+                  'gender': item.gender,
+                  'genderPreference': item.genderPreference,
                   'interests': _stringTypeConverter.encode(item.interests),
-                  'profilePics': _stringTypeConverter.encode(item.profilePics)
+                  'lookingFor': item.lookingFor,
+                  'bio': item.bio,
+                  'height': item.height,
+                  'occupation': item.occupation,
+                  'education': item.education,
+                  'workoutHabit': item.workoutHabit,
+                  'drinkingHabit': item.drinkingHabit,
+                  'smokingHabit': item.smokingHabit,
+                  'profileViews': item.profileViews,
+                  'profileLikes': item.profileLikes,
+                  'pictureUrlList':
+                      _stringTypeConverter.encode(item.pictureUrlList),
+                  'profileTag': item.profileTag,
+                  'lastLocation': item.lastLocation,
+                  'location': item.location
                 },
             changeListener),
         _profileEntityUpdateAdapter = UpdateAdapter(
             database,
-            'ProfileEntity',
+            'profiles',
             ['userId'],
             (ProfileEntity item) => <String, Object?>{
                   'userId': item.userId,
-                  'tag': item.tag,
-                  'name': item.name,
+                  'username': item.username,
                   'age': item.age,
-                  'designation': item.designation,
-                  'profileViews': item.profileViews,
-                  'lastLocation': item.lastLocation,
-                  'pronouns': item.pronouns,
-                  'location': item.location,
-                  'bio': item.bio,
-                  'lookingFor': item.lookingFor,
-                  'choiceOfGender': item.choiceOfGender,
-                  'about': _stringTypeConverter.encode(item.about),
+                  'gender': item.gender,
+                  'genderPreference': item.genderPreference,
                   'interests': _stringTypeConverter.encode(item.interests),
-                  'profilePics': _stringTypeConverter.encode(item.profilePics)
+                  'lookingFor': item.lookingFor,
+                  'bio': item.bio,
+                  'height': item.height,
+                  'occupation': item.occupation,
+                  'education': item.education,
+                  'workoutHabit': item.workoutHabit,
+                  'drinkingHabit': item.drinkingHabit,
+                  'smokingHabit': item.smokingHabit,
+                  'profileViews': item.profileViews,
+                  'profileLikes': item.profileLikes,
+                  'pictureUrlList':
+                      _stringTypeConverter.encode(item.pictureUrlList),
+                  'profileTag': item.profileTag,
+                  'lastLocation': item.lastLocation,
+                  'location': item.location
                 },
             changeListener);
 
@@ -181,62 +211,72 @@ class _$ProfileDao extends ProfileDao {
 
   @override
   Future<ProfileEntity?> getProfileData(String passedId) async {
-    return _queryAdapter.query('SELECT * FROM ProfileEntity where userId = ?1',
+    return _queryAdapter.query('SELECT * FROM profiles where userId = ?1',
         mapper: (Map<String, Object?> row) => ProfileEntity(
             userId: row['userId'] as String,
-            tag: row['tag'] as String,
-            name: row['name'] as String,
+            username: row['username'] as String,
             age: row['age'] as String,
-            designation: row['designation'] as String,
-            profileViews: row['profileViews'] as String,
-            lastLocation: row['lastLocation'] as String,
-            pronouns: row['pronouns'] as String,
-            location: row['location'] as String,
-            bio: row['bio'] as String,
-            lookingFor: row['lookingFor'] as String,
-            about: _stringTypeConverter.decode(row['about'] as String),
+            gender: row['gender'] as String,
+            genderPreference: row['genderPreference'] as String,
             interests: _stringTypeConverter.decode(row['interests'] as String),
-            profilePics:
-                _stringTypeConverter.decode(row['profilePics'] as String),
-            choiceOfGender: row['choiceOfGender'] as String),
+            lookingFor: row['lookingFor'] as String,
+            bio: row['bio'] as String,
+            height: row['height'] as String?,
+            occupation: row['occupation'] as String?,
+            education: row['education'] as String?,
+            workoutHabit: row['workoutHabit'] as String?,
+            drinkingHabit: row['drinkingHabit'] as String?,
+            smokingHabit: row['smokingHabit'] as String?,
+            profileViews: row['profileViews'] as String,
+            profileLikes: row['profileLikes'] as String,
+            pictureUrlList:
+                _stringTypeConverter.decode(row['pictureUrlList'] as String),
+            profileTag: row['profileTag'] as String?,
+            lastLocation: row['lastLocation'] as String?,
+            location: row['location'] as String?),
         arguments: [passedId]);
   }
 
   @override
-  Stream<List<ProfileEntity>> getAllProfiles() {
-    return _queryAdapter.queryListStream('SELECT * FROM ProfileEntity',
+  Stream<List<ProfileEntity>> getAllProfiles(String currentUserId) {
+    return _queryAdapter.queryListStream(
+        'SELECT * FROM profiles WHERE userId != ?1',
         mapper: (Map<String, Object?> row) => ProfileEntity(
             userId: row['userId'] as String,
-            tag: row['tag'] as String,
-            name: row['name'] as String,
+            username: row['username'] as String,
             age: row['age'] as String,
-            designation: row['designation'] as String,
-            profileViews: row['profileViews'] as String,
-            lastLocation: row['lastLocation'] as String,
-            pronouns: row['pronouns'] as String,
-            location: row['location'] as String,
-            bio: row['bio'] as String,
-            lookingFor: row['lookingFor'] as String,
-            about: _stringTypeConverter.decode(row['about'] as String),
+            gender: row['gender'] as String,
+            genderPreference: row['genderPreference'] as String,
             interests: _stringTypeConverter.decode(row['interests'] as String),
-            profilePics:
-                _stringTypeConverter.decode(row['profilePics'] as String),
-            choiceOfGender: row['choiceOfGender'] as String),
-        queryableName: 'ProfileEntity',
+            lookingFor: row['lookingFor'] as String,
+            bio: row['bio'] as String,
+            height: row['height'] as String?,
+            occupation: row['occupation'] as String?,
+            education: row['education'] as String?,
+            workoutHabit: row['workoutHabit'] as String?,
+            drinkingHabit: row['drinkingHabit'] as String?,
+            smokingHabit: row['smokingHabit'] as String?,
+            profileViews: row['profileViews'] as String,
+            profileLikes: row['profileLikes'] as String,
+            pictureUrlList:
+                _stringTypeConverter.decode(row['pictureUrlList'] as String),
+            profileTag: row['profileTag'] as String?,
+            lastLocation: row['lastLocation'] as String?,
+            location: row['location'] as String?),
+        arguments: [currentUserId],
+        queryableName: 'profiles',
         isView: false);
   }
 
   @override
   Future<void> deleteAlreadySwipedOnProfile(int passedId) async {
-    await _queryAdapter.queryNoReturn(
-        'DELETE FROM ProfileEntity WHERE userId is (?1)',
+    await _queryAdapter.queryNoReturn('DELETE FROM profiles WHERE userId is ?1',
         arguments: [passedId]);
   }
 
   @override
   Future<void> deleteOnBoardingProfile(String passedId) async {
-    await _queryAdapter.queryNoReturn(
-        'DELETE FROM ProfileEntity WHERE userId is (?1)',
+    await _queryAdapter.queryNoReturn('DELETE FROM profiles WHERE userId is ?1',
         arguments: [passedId]);
   }
 
@@ -256,6 +296,88 @@ class _$ProfileDao extends ProfileDao {
   Future<void> updateProfileData(ProfileEntity updatedProfile) async {
     await _profileEntityUpdateAdapter.update(
         updatedProfile, OnConflictStrategy.replace);
+  }
+}
+
+class _$MembershipDao extends MembershipDao {
+  _$MembershipDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _profileMembershipEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'memberships',
+            (ProfileMembershipEntity item) => <String, Object?>{
+                  'userId': item.userId,
+                  'superLikes': item.superLikes,
+                  'aiMessages': item.aiMessages,
+                  'rewinds': item.rewinds,
+                  'superDm': item.superDm
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<ProfileMembershipEntity>
+      _profileMembershipEntityInsertionAdapter;
+
+  @override
+  Future<ProfileMembershipEntity?> getMembership(String userId) async {
+    return _queryAdapter.query('SELECT * FROM memberships WHERE userId = ?1',
+        mapper: (Map<String, Object?> row) => ProfileMembershipEntity(
+            userId: row['userId'] as String,
+            superLikes: row['superLikes'] as int,
+            aiMessages: row['aiMessages'] as int,
+            rewinds: row['rewinds'] as int,
+            superDm: row['superDm'] as int),
+        arguments: [userId]);
+  }
+
+  @override
+  Future<void> insertMembership(ProfileMembershipEntity membership) async {
+    await _profileMembershipEntityInsertionAdapter.insert(
+        membership, OnConflictStrategy.replace);
+  }
+}
+
+class _$EventLikeDao extends EventLikeDao {
+  _$EventLikeDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _userEventLikeEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'user_event_likes',
+            (UserEventLikeEntity item) => <String, Object?>{
+                  'userId': item.userId,
+                  'eventId': item.eventId
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<UserEventLikeEntity>
+      _userEventLikeEntityInsertionAdapter;
+
+  @override
+  Future<List<UserEventLikeEntity>> getLikedEvents(String userId) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM user_event_likes WHERE userId = ?1',
+        mapper: (Map<String, Object?> row) => UserEventLikeEntity(
+            userId: row['userId'] as String, eventId: row['eventId'] as String),
+        arguments: [userId]);
+  }
+
+  @override
+  Future<void> likeEvent(UserEventLikeEntity entity) async {
+    await _userEventLikeEntityInsertionAdapter.insert(
+        entity, OnConflictStrategy.replace);
   }
 }
 

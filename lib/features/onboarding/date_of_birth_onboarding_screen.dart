@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:glint_frontend/design/components/glint_custom_app_bar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -28,6 +27,9 @@ class _DateOfBirthOnboardingScreenState
   @override
   void initState() {
     super.initState();
+    context.read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.NAME_PROVIDED);
+
     final now = DateTime.now();
     _selectedDate = DateTime(now.year - 18, now.month, now.day);
 
@@ -95,11 +97,13 @@ class _DateOfBirthOnboardingScreenState
                                 .read<OnBoardingCubit>()
                                 .setAge(calculateAge().toString());
                           }
-                          final currentAge = state.currentState?.age;
+                          final currentAge = state.currentState?.dateOfBirthWithDateFormat;
                           if (currentAge != null && calculateAge() >= 18) {
-                            final base = GlintMainRoutes.onBoarding.name;
+                            context
+                                .read<OnBoardingCubit>()
+                                .updateProfileLocally();
                             final target = GlintBoardingRoutes.gender.name;
-                            context.go("/$base/$target");
+                            context.go("/$target");
                           }
                         },
                       ),

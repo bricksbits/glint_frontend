@@ -1,6 +1,7 @@
 import 'dart:convert' show base64UrlEncode, utf8;
 import 'package:crypto/crypto.dart' show sha256;
 import 'package:encrypt_shared_preferences/provider.dart';
+import 'package:floor/floor.dart';
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/db/dao/swipe_action_dao.dart';
 import 'package:glint_frontend/data/local/db/database/glint_database.dart';
@@ -10,15 +11,21 @@ import 'package:injectable/injectable.dart';
 abstract class LocalModule {
   @lazySingleton
   @preResolve
-  Future<GlintDatabase> glintDatabase() =>
-      $FloorGlintDatabase.databaseBuilder('glint_database.db').build();
+  Future<GlintDatabase> glintDatabase() => $FloorGlintDatabase
+      .databaseBuilder('glint_database.db')
+      .addCallback(Callback(onCreate: (db, version) {
+        print("DB Created $db with Version $version");
+      }, onOpen: (db) {
+        print("Db $db is open now");
+      }))
+      .build();
 
   @singleton
   ProfileDao getProfileDao(GlintDatabase database) => database.profileDao;
 
   @singleton
-  SwipeActionDao getSwipeActionDao(GlintDatabase database) => database.swipeActionDao;
-
+  SwipeActionDao getSwipeActionDao(GlintDatabase database) =>
+      database.swipeActionDao;
 
   @preResolve
   Future<EncryptedSharedPreferencesAsync> sharedPref() async {
