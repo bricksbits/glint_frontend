@@ -50,6 +50,7 @@ enum GlintProfileRoutes {
 }
 
 enum GlintBoardingRoutes {
+  boarding,
   name,
   dob,
   gender,
@@ -75,3 +76,4 @@ enum GlintAdminDasboardRoutes {
 }
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> onBoardingKey = GlobalKey<NavigatorState>();

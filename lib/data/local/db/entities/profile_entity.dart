@@ -16,6 +16,7 @@ import 'package:glint_frontend/features/people/model/people_card_model.dart';
 /// - Fetching Profiles for matching
 ///
 /// Model for each usecase can change as per requirement
+
 @Entity(tableName: 'profiles')
 class ProfileEntity {
   @primaryKey
@@ -109,7 +110,7 @@ extension ProfileToPeopleMapper on ProfileEntity {
       "",
       "",
       bio,
-      age,
+      "",
       height ?? "",
       education ?? "",
       occupation ?? "",
@@ -120,6 +121,7 @@ extension ProfileToPeopleMapper on ProfileEntity {
       smokingHabit ?? "",
       lookingFor,
       interests,
+      age
     );
   }
 }

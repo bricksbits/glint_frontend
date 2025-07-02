@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
+import 'package:glint_frontend/features/onboarding/setup_glint_onboarding_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:glint_frontend/features/onboarding/date_of_birth_onboarding_screen.dart';
@@ -15,6 +16,19 @@ import 'package:glint_frontend/features/onboarding/who_catches_your_eye_onboardi
 import 'glint_all_routes.dart';
 
 final glintUserOnBoardingInnerRoutes = [
+  GoRoute(
+    path: '/${GlintBoardingRoutes.boarding.name}',
+    name: GlintBoardingRoutes.boarding.name,
+    pageBuilder: (context, state) {
+      var onBoardingCubit = context.read<OnBoardingCubit>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: onBoardingCubit,
+          child: const SetupGlintOnboardingScreen(),
+        ),
+      );
+    },
+  ),
   GoRoute(
     path: '/${GlintBoardingRoutes.name.name}',
     name: GlintBoardingRoutes.name.name,
@@ -32,7 +46,7 @@ final glintUserOnBoardingInnerRoutes = [
     path: '/${GlintBoardingRoutes.dob.name}',
     name: GlintBoardingRoutes.dob.name,
     pageBuilder: (context, state) {
-      var onBoardingCubit = context.read<OnBoardingCubit>();
+      var onBoardingCubit = BlocProvider.of<OnBoardingCubit>(context);
       return MaterialPage(
         child: BlocProvider.value(
           value: onBoardingCubit,
@@ -45,7 +59,7 @@ final glintUserOnBoardingInnerRoutes = [
     path: '/${GlintBoardingRoutes.pronouns.name}',
     name: GlintBoardingRoutes.pronouns.name,
     pageBuilder: (context, state) {
-      var onBoardingCubit = context.read<OnBoardingCubit>();
+      var onBoardingCubit = BlocProvider.of<OnBoardingCubit>(context);
       return MaterialPage(
         child: BlocProvider.value(
           value: onBoardingCubit,
@@ -58,7 +72,7 @@ final glintUserOnBoardingInnerRoutes = [
     path: '/${GlintBoardingRoutes.media.name}',
     name: GlintBoardingRoutes.media.name,
     pageBuilder: (context, state) {
-      var onBoardingCubit = context.read<OnBoardingCubit>();
+      var onBoardingCubit = BlocProvider.of<OnBoardingCubit>(context);
       return MaterialPage(
         child: BlocProvider.value(
           value: onBoardingCubit,
@@ -71,7 +85,7 @@ final glintUserOnBoardingInnerRoutes = [
     path: '/${GlintBoardingRoutes.gender.name}',
     name: GlintBoardingRoutes.gender.name,
     pageBuilder: (context, state) {
-      var onBoardingCubit = context.read<OnBoardingCubit>();
+      var onBoardingCubit = BlocProvider.of<OnBoardingCubit>(context);
       return MaterialPage(
         child: BlocProvider.value(
           value: onBoardingCubit,
@@ -84,7 +98,7 @@ final glintUserOnBoardingInnerRoutes = [
     path: '/${GlintBoardingRoutes.interestedGender.name}',
     name: GlintBoardingRoutes.interestedGender.name,
     pageBuilder: (context, state) {
-      var onBoardingCubit = context.read<OnBoardingCubit>();
+      var onBoardingCubit = BlocProvider.of<OnBoardingCubit>(context);
       return MaterialPage(
         child: BlocProvider.value(
           value: onBoardingCubit,
@@ -97,7 +111,7 @@ final glintUserOnBoardingInnerRoutes = [
     path: '/${GlintBoardingRoutes.interests.name}',
     name: GlintBoardingRoutes.interests.name,
     pageBuilder: (context, state) {
-      var onBoardingCubit = context.read<OnBoardingCubit>();
+      var onBoardingCubit = BlocProvider.of<OnBoardingCubit>(context);
       return MaterialPage(
         child: BlocProvider.value(
           value: onBoardingCubit,
@@ -110,7 +124,7 @@ final glintUserOnBoardingInnerRoutes = [
     path: '/${GlintBoardingRoutes.bio.name}',
     name: GlintBoardingRoutes.bio.name,
     pageBuilder: (context, state) {
-      var onBoardingCubit = context.read<OnBoardingCubit>();
+      var onBoardingCubit = BlocProvider.of<OnBoardingCubit>(context);
       return MaterialPage(
         child: BlocProvider.value(
           value: onBoardingCubit,
@@ -123,7 +137,7 @@ final glintUserOnBoardingInnerRoutes = [
     path: '/${GlintBoardingRoutes.register.name}',
     name: GlintBoardingRoutes.register.name,
     pageBuilder: (context, state) {
-      var onBoardingCubit = context.read<OnBoardingCubit>();
+      var onBoardingCubit = BlocProvider.of<OnBoardingCubit>(context);
       return MaterialPage(
         child: BlocProvider.value(
           value: onBoardingCubit,

@@ -211,7 +211,7 @@ class _$ProfileDao extends ProfileDao {
 
   @override
   Future<ProfileEntity?> getProfileData(String passedId) async {
-    return _queryAdapter.query('SELECT * FROM ProfileEntity where userId = ?1',
+    return _queryAdapter.query('SELECT * FROM profiles where userId = ?1',
         mapper: (Map<String, Object?> row) => ProfileEntity(
             userId: row['userId'] as String,
             username: row['username'] as String,
@@ -240,7 +240,7 @@ class _$ProfileDao extends ProfileDao {
   @override
   Stream<List<ProfileEntity>> getAllProfiles(String currentUserId) {
     return _queryAdapter.queryListStream(
-        'SELECT * FROM ProfileEntity WHERE userId != ?1',
+        'SELECT * FROM profiles WHERE userId != ?1',
         mapper: (Map<String, Object?> row) => ProfileEntity(
             userId: row['userId'] as String,
             username: row['username'] as String,
@@ -264,21 +264,19 @@ class _$ProfileDao extends ProfileDao {
             lastLocation: row['lastLocation'] as String?,
             location: row['location'] as String?),
         arguments: [currentUserId],
-        queryableName: 'ProfileEntity',
+        queryableName: 'profiles',
         isView: false);
   }
 
   @override
   Future<void> deleteAlreadySwipedOnProfile(int passedId) async {
-    await _queryAdapter.queryNoReturn(
-        'DELETE FROM ProfileEntity WHERE userId is (?1)',
+    await _queryAdapter.queryNoReturn('DELETE FROM profiles WHERE userId is ?1',
         arguments: [passedId]);
   }
 
   @override
   Future<void> deleteOnBoardingProfile(String passedId) async {
-    await _queryAdapter.queryNoReturn(
-        'DELETE FROM ProfileEntity WHERE userId is (?1)',
+    await _queryAdapter.queryNoReturn('DELETE FROM profiles WHERE userId is ?1',
         arguments: [passedId]);
   }
 
