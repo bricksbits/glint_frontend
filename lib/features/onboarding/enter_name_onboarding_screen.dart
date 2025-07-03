@@ -151,11 +151,13 @@ class _EnterNameOnboardingScreenState extends State<EnterNameOnboardingScreen> {
                     backgroundColor: AppColours.primaryBlue,
                     onPressed: _allowSubmit
                         ? () {
-                            final currentName = state.currentState?.name;
+                            final currentName = state.currentState?.username;
                             if (currentName != null && _allowSubmit) {
-                              final base = GlintMainRoutes.onBoarding.name;
+                              context
+                                  .read<OnBoardingCubit>()
+                                  .updateProfileLocally();
                               final target = GlintBoardingRoutes.dob.name;
-                              context.go("/$base/$target");
+                              context.go("/$target");
                             }
                           }
                         : null,

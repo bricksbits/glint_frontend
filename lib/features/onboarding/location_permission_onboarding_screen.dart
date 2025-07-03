@@ -1,55 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 
 class LocationPermissionOnboardingScreen extends StatelessWidget {
   const LocationPermissionOnboardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        width: double.infinity,
-        child: Stack(
-          children: [
-            // Background Image
-            Positioned.fill(
-              child: Image.asset(
-                'lib/assets/images/onboarding/location_background.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-
-            // Main content goes here
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 48.0),
-                child: Column(
-                  children: [
-                    const Spacer(),
-                    // Add more widgets here
-
-                    _locationPermissionContainer(context),
-
-                    const Gap(20.0),
-
-                    Text(
-                      'We value your privacy and only use your location to enhance your experience.',
-                      style: AppTheme.simpleText.copyWith(
-                        fontWeight: FontWeight.w300,
-                        fontSize: 12.0,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-
-                    const Spacer(),
-                  ],
+    return BlocBuilder<OnBoardingCubit, OnBoardingState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: SizedBox(
+            width: double.infinity,
+            child: Stack(
+              children: [
+                // Background Image
+                Positioned.fill(
+                  child: Image.asset(
+                    'lib/assets/images/onboarding/location_background.png',
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
+
+                // Main content goes here
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 48.0),
+                    child: Column(
+                      children: [
+                        const Spacer(),
+                        // Add more widgets here
+
+                        _locationPermissionContainer(context),
+
+                        const Gap(20.0),
+
+                        Text(
+                          'We value your privacy and only use your location to enhance your experience.',
+                          style: AppTheme.simpleText.copyWith(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 12.0,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+
+                        const Spacer(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -88,6 +94,9 @@ class LocationPermissionOnboardingScreen extends StatelessWidget {
               label: 'Enable Location',
               onPressed: () {
                 //todo - add location permission setup
+                context
+                    .read<OnBoardingCubit>()
+                    .setUpLastBoardingState(OnBoardingCompletedTill.COMPLETED);
               },
             ),
           )

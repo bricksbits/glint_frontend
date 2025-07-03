@@ -1,4 +1,4 @@
-import 'package:glint_frontend/features/people/model/people_model.dart';
+import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/features/people/model/scrollable_list_item_type.dart';
 
 class PeopleScreenState {
@@ -8,17 +8,17 @@ class PeopleScreenState {
   PeopleScreenState(this.listModel, this.topCardModel);
 }
 
-extension ToPeopleScreenState on PeopleUiModel {
+extension ToPeopleScreenState on PeopleCardModel {
   PeopleScreenState convert() {
     final topCardModel = PeopleTopCardModel(
       userId,
-      images.isNotEmpty ? images.first : '',
+      pictureUrlList.isNotEmpty ? pictureUrlList.first : '',
       // Added imageUrl from the first image
-      name,
+      username,
       age,
       distanceAway,
-      profileViews,
-      designation,
+      profileViews ?? "",
+      occupation ?? "",
     );
 
     List<PeopleListModelData> listModel = [];
@@ -29,7 +29,7 @@ extension ToPeopleScreenState on PeopleUiModel {
     const int totalComponents = 5;
 
     while (
-    componentIndex < totalComponents || imageIndex < images.length) {
+    componentIndex < totalComponents || imageIndex < pictureUrlList.length) {
       // Add component (if available)
       if (componentIndex < totalComponents) {
         switch (componentIndex) {
@@ -80,10 +80,10 @@ extension ToPeopleScreenState on PeopleUiModel {
       }
 
       // Add image (if available)
-      if (imageIndex < images.length) {
+      if (imageIndex < pictureUrlList.length) {
         listModel.add(PeopleListModelData(
           itemType: ScrollableListItemType.IMAGE,
-          imageUrl: images[imageIndex],
+          imageUrl: pictureUrlList[imageIndex],
         ));
         imageIndex++;
       }
@@ -94,16 +94,16 @@ extension ToPeopleScreenState on PeopleUiModel {
 }
 
 PeopleScreenState convertPeopleUiModelToPeopleScreenState(
-    PeopleUiModel uiModel) {
+    PeopleCardModel uiModel) {
   final topCardModel = PeopleTopCardModel(
     uiModel.userId,
-    uiModel.images.isNotEmpty ? uiModel.images.first : '',
+    uiModel.pictureUrlList.isNotEmpty ? uiModel.pictureUrlList.first : '',
     // Added imageUrl from the first image
-    uiModel.name,
+    uiModel.username,
     uiModel.age,
     uiModel.distanceAway,
-    uiModel.profileViews,
-    uiModel.designation,
+    uiModel.profileViews ?? "",
+    uiModel.occupation,
   );
 
   List<PeopleListModelData> listModel = [];
@@ -114,7 +114,7 @@ PeopleScreenState convertPeopleUiModelToPeopleScreenState(
   const int totalComponents = 5;
 
   while (
-      componentIndex < totalComponents || imageIndex < uiModel.images.length) {
+      componentIndex < totalComponents || imageIndex < uiModel.pictureUrlList.length) {
     // Add component (if available)
     if (componentIndex < totalComponents) {
       switch (componentIndex) {
@@ -165,10 +165,10 @@ PeopleScreenState convertPeopleUiModelToPeopleScreenState(
     }
 
     // Add image (if available)
-    if (imageIndex < uiModel.images.length) {
+    if (imageIndex < uiModel.pictureUrlList.length) {
       listModel.add(PeopleListModelData(
         itemType: ScrollableListItemType.IMAGE,
-        imageUrl: uiModel.images[imageIndex],
+        imageUrl: uiModel.pictureUrlList[imageIndex],
       ));
       imageIndex++;
     }

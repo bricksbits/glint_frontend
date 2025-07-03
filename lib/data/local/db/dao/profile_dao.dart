@@ -14,16 +14,16 @@ abstract class ProfileDao {
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertFetchedProfiles(List<ProfileEntity> profiles);
 
-  @Query("SELECT * FROM ProfileEntity where userId = :passedId")
+  @Query("SELECT * FROM profiles where userId = :passedId")
   Future<ProfileEntity?> getProfileData(String passedId);
 
-  @Query("SELECT * FROM ProfileEntity")
-  Stream<List<ProfileEntity>> getAllProfiles();
+  @Query("SELECT * FROM profiles WHERE userId != :currentUserId")
+  Stream<List<ProfileEntity>> getAllProfiles(String currentUserId);
 
-  @Query("DELETE FROM ProfileEntity WHERE userId is (:passedId)")
+  @Query("DELETE FROM profiles WHERE userId is :passedId")
   Future<void> deleteAlreadySwipedOnProfile(int passedId);
 
-  @Query("DELETE FROM ProfileEntity WHERE userId is (:passedId)")
+  @Query("DELETE FROM profiles WHERE userId is :passedId")
   Future<void> deleteOnBoardingProfile(String passedId);
 
 }

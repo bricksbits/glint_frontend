@@ -18,6 +18,14 @@ class GetSetGlintOnboardingScreen extends StatefulWidget {
 class _GetSetGlintOnboardingScreenState
     extends State<GetSetGlintOnboardingScreen> {
   @override
+  void initState() {
+    context
+        .read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.IMAGES_SELECTED);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<OnBoardingCubit, OnBoardingState>(
       builder: (context, state) {
@@ -62,15 +70,15 @@ class _GetSetGlintOnboardingScreenState
 
                   //im looking for card
                   ImLookingForCard(lookingForCallback: (value) {
-                    context.read<OnBoardingCubit>().setLookingFor([value]);
+                    context.read<OnBoardingCubit>().setLookingFor(value);
                   }),
 
                   const Gap(16.0),
 
-                  // pronouns card
-                  YourPronounsCard(pronounsSelected: (pronouns) {
-                    context.read<OnBoardingCubit>().setPronouns(pronouns);
-                  }),
+                  // pronouns card Not needed as already asking for Gender
+                  // YourPronounsCard(pronounsSelected: (pronouns) {
+                  //   context.read<OnBoardingCubit>().setPronouns("");
+                  // }),
 
                   const Spacer(),
 
@@ -81,9 +89,14 @@ class _GetSetGlintOnboardingScreenState
                       foregroundColor: Colors.white,
                       backgroundColor: AppColours.primaryBlue,
                       onPressed: () {
-                        final base = GlintMainRoutes.onBoarding.name;
-                        final target = GlintBoardingRoutes.interests.name;
-                        context.go("/$base/$target");
+                        var lookingFor = state.currentState?.relationShipGoals;
+                        if (lookingFor != null) {
+                          context
+                              .read<OnBoardingCubit>()
+                              .updateProfileLocally();
+                          final target = GlintBoardingRoutes.interests.name;
+                          context.go("/$target");
+                        }
                       },
                     ),
                   ),

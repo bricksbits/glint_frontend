@@ -18,6 +18,14 @@ class OneLastStepOnboardingScreen extends StatefulWidget {
 class _OneLastStepOnboardingScreenState
     extends State<OneLastStepOnboardingScreen> {
   @override
+  void initState() {
+    context
+        .read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.INTERESTS_DONE);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<OnBoardingCubit, OnBoardingState>(
       builder: (context, state) {
@@ -78,10 +86,11 @@ class _OneLastStepOnboardingScreenState
                       onPressed: () {
                         final bioValue = state.currentState?.bio;
                         if (bioValue != null && bioValue.isNotEmpty) {
-                          // Handle button press
-                          final base = GlintMainRoutes.onBoarding.name;
-                          final target = GlintBoardingRoutes.register.name;
-                          context.go("/$base/$target");
+                          context
+                              .read<OnBoardingCubit>()
+                              .updateProfileLocally();
+                          final target = GlintMainRoutes.register.name;
+                          context.go("/$target");
                         } else {
                           //Todo: Show Error
                         }

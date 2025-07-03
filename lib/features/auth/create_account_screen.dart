@@ -1,10 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/auth/blocs/register/register_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
+
+import '../onboarding/on_boarding_cubit.dart';
 
 class CreateAccounScreen extends StatefulWidget {
   const CreateAccounScreen({super.key});
@@ -14,7 +18,7 @@ class CreateAccounScreen extends StatefulWidget {
 }
 
 class _CreateAccounScreenState extends State<CreateAccounScreen> {
-  final bool isAdmin = true;
+  final bool isAdmin = false;
 
   final _nameController = TextEditingController();
   final _contactController = TextEditingController();
@@ -79,7 +83,8 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                // TODO - Handle Login tap
+                // Handle Login tap
+                context.read<RegisterCubit>().registerUser();
               },
           ),
         ],
@@ -88,125 +93,147 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
   }
 
   @override
+  void initState() {
+    _emailController.addListener(() {
+      context.read<RegisterCubit>().enteredEmail(_emailController.text);
+    });
+
+    _passwordController.addListener(() {
+      context.read<RegisterCubit>().enteredPassword(_passwordController.text);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColours.white,
-      appBar: isAdmin
-          ? const GlintEventAuthAppbar()
-          : AppBar(backgroundColor: AppColours.white),
-      body: AuthStackedIllustrationScreen(
-        isAdmin: isAdmin,
-        body: Column(
-          children: [
-            if (!isAdmin)
-              Center(
-                child: SvgPicture.asset(
-                    'lib/assets/images/auth/glint_create_account.svg'),
-              ),
-            const Gap(40.0),
-            if (isAdmin)
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 40.0),
-                  child: Column(
-                    children: [
-                      const Spacer(),
-                      Text(
-                        'Create Account',
-                        style: AppTheme.headingThree.copyWith(
-                          fontStyle: FontStyle.normal,
-                        ),
-                      ),
-                      const Gap(32.0),
-                      _buildTextField(
-                        controller: _nameController,
-                        type: IconTextFieldType.user,
-                        focusNode: _nameFocusNode,
-                        hintText: 'Enter Your Name',
-                      ),
-                      const Gap(20.0),
-                      _buildTextField(
-                        controller: _emailController,
-                        type: IconTextFieldType.email,
-                        focusNode: _emailFocusNode,
-                        hintText: 'Enter Email',
-                      ),
-                      const Gap(20.0),
-                      _buildTextField(
-                        controller: _organizationController,
-                        type: IconTextFieldType.organization,
-                        focusNode: _organizationFocusNode,
-                        hintText: 'Organization (ex: Hotel Vistara)',
-                      ),
-                      const Gap(20.0),
-                      _buildTextField(
-                        controller: _contactController,
-                        type: IconTextFieldType.contact,
-                        focusNode: _contactFocusNode,
-                        hintText: 'Contact Number',
-                      ),
-                      const Gap(20.0),
-                      _buildTextField(
-                        controller: _passwordController,
-                        type: IconTextFieldType.password,
-                        focusNode: _passwordFocusNode,
-                        hintText: 'Create Password',
-                      ),
-                      const Gap(48.0),
-                      GlintAuthActionButton(
-                        label: 'Register',
-                        onPressed: () {
-                          context.go(
-                              "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}");
-                          debugPrint(
-                            'register button pressed',
-                          );
-                        },
-                      ),
-                      const Gap(16.0),
-                      _buildLoginText(),
-                      const Spacer(
-                        flex: 4,
-                      )
-                    ],
+    return BlocProvider(
+      create: (context) => RegisterCubit(),
+      child: BlocBuilder<RegisterCubit, RegisterState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColours.white,
+            appBar: isAdmin
+                ? const GlintEventAuthAppbar()
+                : AppBar(backgroundColor: AppColours.white),
+            body: state.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : AuthStackedIllustrationScreen(
+                    isAdmin: isAdmin,
+                    body: Column(
+                      children: [
+                        if (!isAdmin)
+                          Center(
+                            child: SvgPicture.asset(
+                                'lib/assets/images/auth/glint_create_account.svg'),
+                          ),
+                        const Gap(40.0),
+                        if (isAdmin)
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 40.0),
+                              child: Column(
+                                children: [
+                                  const Spacer(),
+                                  Text(
+                                    'Create Account',
+                                    style: AppTheme.headingThree.copyWith(
+                                      fontStyle: FontStyle.normal,
+                                    ),
+                                  ),
+                                  const Gap(32.0),
+                                  _buildTextField(
+                                    controller: _nameController,
+                                    type: IconTextFieldType.user,
+                                    focusNode: _nameFocusNode,
+                                    hintText: 'Enter Your Name',
+                                  ),
+                                  const Gap(20.0),
+                                  _buildTextField(
+                                    controller: _emailController,
+                                    type: IconTextFieldType.email,
+                                    focusNode: _emailFocusNode,
+                                    hintText: 'Enter Email',
+                                  ),
+                                  const Gap(20.0),
+                                  _buildTextField(
+                                    controller: _organizationController,
+                                    type: IconTextFieldType.organization,
+                                    focusNode: _organizationFocusNode,
+                                    hintText:
+                                        'Organization (ex: Hotel Vistara)',
+                                  ),
+                                  const Gap(20.0),
+                                  _buildTextField(
+                                    controller: _contactController,
+                                    type: IconTextFieldType.contact,
+                                    focusNode: _contactFocusNode,
+                                    hintText: 'Contact Number',
+                                  ),
+                                  const Gap(20.0),
+                                  _buildTextField(
+                                    controller: _passwordController,
+                                    type: IconTextFieldType.password,
+                                    focusNode: _passwordFocusNode,
+                                    hintText: 'Create Password',
+                                  ),
+                                  const Gap(48.0),
+                                  GlintAuthActionButton(
+                                    label: 'Register',
+                                    onPressed: () {
+                                      context.go(
+                                          "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}");
+                                      debugPrint(
+                                        'register button pressed',
+                                      );
+                                    },
+                                  ),
+                                  const Gap(16.0),
+                                  _buildLoginText(),
+                                  const Spacer(
+                                    flex: 4,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        if (!isAdmin) ...[
+                          _buildTextField(
+                            controller: _emailController,
+                            type: IconTextFieldType.email,
+                            focusNode: _emailFocusNode,
+                            hintText: 'Enter Email',
+                          ),
+                          const Gap(20.0),
+                          _buildTextField(
+                            controller: _passwordController,
+                            type: IconTextFieldType.password,
+                            focusNode: _passwordFocusNode,
+                            hintText: 'Create Password',
+                          ),
+                          const Gap(20.0),
+                          _buildTextField(
+                            controller: _confirmPasswordController,
+                            type: IconTextFieldType.password,
+                            focusNode: _confirmPasswordFocusNode,
+                            hintText: 'Confirm Password',
+                          ),
+                          const Gap(60.0),
+                          GlintAuthActionButton(
+                            label: 'Sign up',
+                            onPressed: () {
+                              context.read<RegisterCubit>().registerUser();
+                            },
+                          ),
+                          const Gap(16.0),
+                          _buildLoginText(),
+                        ],
+                      ],
+                    ),
                   ),
-                ),
-              ),
-            if (!isAdmin) ...[
-              _buildTextField(
-                controller: _emailController,
-                type: IconTextFieldType.email,
-                focusNode: _emailFocusNode,
-                hintText: 'Enter Email',
-              ),
-              const Gap(20.0),
-              _buildTextField(
-                controller: _passwordController,
-                type: IconTextFieldType.password,
-                focusNode: _passwordFocusNode,
-                hintText: 'Create Password',
-              ),
-              const Gap(20.0),
-              _buildTextField(
-                controller: _confirmPasswordController,
-                type: IconTextFieldType.password,
-                focusNode: _confirmPasswordFocusNode,
-                hintText: 'Confirm Password',
-              ),
-              const Gap(60.0),
-              GlintAuthActionButton(
-                label: 'Sign up',
-                onPressed: () {
-                  // Once User is created, Save the data locally
-                  // Move to the Home Screen.
-                  context.goNamed(GlintMainRoutes.home.name);
-                },
-              ),
-              const Gap(16.0),
-              _buildLoginText(),
-            ],
-          ],
-        ),
+          );
+        },
       ),
     );
   }
