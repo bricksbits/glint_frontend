@@ -29,8 +29,8 @@ class ForgotPasswordRepoImpl extends ForgotPasswordRepo {
   }
 
   @override
-  Future<Result<void>> resetPassword(ResetPasswordRequestBody body) {
-    final response = apiCallHandler(
+  Future<Result<void>> resetPassword(ResetPasswordRequestBody body) async {
+    final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
       endpoint: "/reset-password",
@@ -40,17 +40,15 @@ class ForgotPasswordRepoImpl extends ForgotPasswordRepo {
 
     switch (response) {
       case Success():
-        return Future.value(Success(response));
+        return const Success(true);
       case Failure():
-        return Future.value(Failure(Exception()));
+        return Failure(Exception());
     }
-
-    return Future.value(Failure(Exception()));
   }
 
   @override
-  Future<Result<void>> sendOtp(SendOtpRequestBody body) {
-    final response = apiCallHandler(
+  Future<Result<void>> sendOtp(SendOtpRequestBody body) async {
+    final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
       endpoint: "/auth/v1/reset-password/generate-otp",
@@ -60,12 +58,10 @@ class ForgotPasswordRepoImpl extends ForgotPasswordRepo {
 
     switch (response) {
       case Success():
-        return Future.value(Success(response));
+        return const Success(true);
       case Failure():
-        return Future.value(Failure(Exception()));
+        return Failure(Exception());
     }
-
-    return Future.value(Failure(Exception()));
   }
 
   @override

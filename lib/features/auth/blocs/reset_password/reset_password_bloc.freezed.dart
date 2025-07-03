@@ -16,12 +16,12 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ResetPasswordEvent {
-  String get email => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String email) sendOtp,
     required TResult Function(String email, String otp, String newPassword)
         resetPassword,
+    required TResult Function(ResetPasswordState newState) emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -29,6 +29,7 @@ mixin _$ResetPasswordEvent {
     TResult? Function(String email)? sendOtp,
     TResult? Function(String email, String otp, String newPassword)?
         resetPassword,
+    TResult? Function(ResetPasswordState newState)? emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -36,6 +37,7 @@ mixin _$ResetPasswordEvent {
     TResult Function(String email)? sendOtp,
     TResult Function(String email, String otp, String newPassword)?
         resetPassword,
+    TResult Function(ResetPasswordState newState)? emitNewState,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -43,26 +45,23 @@ mixin _$ResetPasswordEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_SendOtp value) sendOtp,
     required TResult Function(_ResetPassword value) resetPassword,
+    required TResult Function(_EmitNewState value) emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_SendOtp value)? sendOtp,
     TResult? Function(_ResetPassword value)? resetPassword,
+    TResult? Function(_EmitNewState value)? emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_SendOtp value)? sendOtp,
     TResult Function(_ResetPassword value)? resetPassword,
+    TResult Function(_EmitNewState value)? emitNewState,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  /// Create a copy of ResetPasswordEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ResetPasswordEventCopyWith<ResetPasswordEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -71,8 +70,6 @@ abstract class $ResetPasswordEventCopyWith<$Res> {
   factory $ResetPasswordEventCopyWith(
           ResetPasswordEvent value, $Res Function(ResetPasswordEvent) then) =
       _$ResetPasswordEventCopyWithImpl<$Res, ResetPasswordEvent>;
-  @useResult
-  $Res call({String email});
 }
 
 /// @nodoc
@@ -87,27 +84,13 @@ class _$ResetPasswordEventCopyWithImpl<$Res, $Val extends ResetPasswordEvent>
 
   /// Create a copy of ResetPasswordEvent
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? email = null,
-  }) {
-    return _then(_value.copyWith(
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$SendOtpImplCopyWith<$Res>
-    implements $ResetPasswordEventCopyWith<$Res> {
+abstract class _$$SendOtpImplCopyWith<$Res> {
   factory _$$SendOtpImplCopyWith(
           _$SendOtpImpl value, $Res Function(_$SendOtpImpl) then) =
       __$$SendOtpImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({String email});
 }
@@ -174,6 +157,7 @@ class _$SendOtpImpl implements _SendOtp {
     required TResult Function(String email) sendOtp,
     required TResult Function(String email, String otp, String newPassword)
         resetPassword,
+    required TResult Function(ResetPasswordState newState) emitNewState,
   }) {
     return sendOtp(email);
   }
@@ -184,6 +168,7 @@ class _$SendOtpImpl implements _SendOtp {
     TResult? Function(String email)? sendOtp,
     TResult? Function(String email, String otp, String newPassword)?
         resetPassword,
+    TResult? Function(ResetPasswordState newState)? emitNewState,
   }) {
     return sendOtp?.call(email);
   }
@@ -194,6 +179,7 @@ class _$SendOtpImpl implements _SendOtp {
     TResult Function(String email)? sendOtp,
     TResult Function(String email, String otp, String newPassword)?
         resetPassword,
+    TResult Function(ResetPasswordState newState)? emitNewState,
     required TResult orElse(),
   }) {
     if (sendOtp != null) {
@@ -207,6 +193,7 @@ class _$SendOtpImpl implements _SendOtp {
   TResult map<TResult extends Object?>({
     required TResult Function(_SendOtp value) sendOtp,
     required TResult Function(_ResetPassword value) resetPassword,
+    required TResult Function(_EmitNewState value) emitNewState,
   }) {
     return sendOtp(this);
   }
@@ -216,6 +203,7 @@ class _$SendOtpImpl implements _SendOtp {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_SendOtp value)? sendOtp,
     TResult? Function(_ResetPassword value)? resetPassword,
+    TResult? Function(_EmitNewState value)? emitNewState,
   }) {
     return sendOtp?.call(this);
   }
@@ -225,6 +213,7 @@ class _$SendOtpImpl implements _SendOtp {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_SendOtp value)? sendOtp,
     TResult Function(_ResetPassword value)? resetPassword,
+    TResult Function(_EmitNewState value)? emitNewState,
     required TResult orElse(),
   }) {
     if (sendOtp != null) {
@@ -237,24 +226,20 @@ class _$SendOtpImpl implements _SendOtp {
 abstract class _SendOtp implements ResetPasswordEvent {
   const factory _SendOtp(final String email) = _$SendOtpImpl;
 
-  @override
   String get email;
 
   /// Create a copy of ResetPasswordEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SendOtpImplCopyWith<_$SendOtpImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ResetPasswordImplCopyWith<$Res>
-    implements $ResetPasswordEventCopyWith<$Res> {
+abstract class _$$ResetPasswordImplCopyWith<$Res> {
   factory _$$ResetPasswordImplCopyWith(
           _$ResetPasswordImpl value, $Res Function(_$ResetPasswordImpl) then) =
       __$$ResetPasswordImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({String email, String otp, String newPassword});
 }
@@ -338,6 +323,7 @@ class _$ResetPasswordImpl implements _ResetPassword {
     required TResult Function(String email) sendOtp,
     required TResult Function(String email, String otp, String newPassword)
         resetPassword,
+    required TResult Function(ResetPasswordState newState) emitNewState,
   }) {
     return resetPassword(email, otp, newPassword);
   }
@@ -348,6 +334,7 @@ class _$ResetPasswordImpl implements _ResetPassword {
     TResult? Function(String email)? sendOtp,
     TResult? Function(String email, String otp, String newPassword)?
         resetPassword,
+    TResult? Function(ResetPasswordState newState)? emitNewState,
   }) {
     return resetPassword?.call(email, otp, newPassword);
   }
@@ -358,6 +345,7 @@ class _$ResetPasswordImpl implements _ResetPassword {
     TResult Function(String email)? sendOtp,
     TResult Function(String email, String otp, String newPassword)?
         resetPassword,
+    TResult Function(ResetPasswordState newState)? emitNewState,
     required TResult orElse(),
   }) {
     if (resetPassword != null) {
@@ -371,6 +359,7 @@ class _$ResetPasswordImpl implements _ResetPassword {
   TResult map<TResult extends Object?>({
     required TResult Function(_SendOtp value) sendOtp,
     required TResult Function(_ResetPassword value) resetPassword,
+    required TResult Function(_EmitNewState value) emitNewState,
   }) {
     return resetPassword(this);
   }
@@ -380,6 +369,7 @@ class _$ResetPasswordImpl implements _ResetPassword {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_SendOtp value)? sendOtp,
     TResult? Function(_ResetPassword value)? resetPassword,
+    TResult? Function(_EmitNewState value)? emitNewState,
   }) {
     return resetPassword?.call(this);
   }
@@ -389,6 +379,7 @@ class _$ResetPasswordImpl implements _ResetPassword {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_SendOtp value)? sendOtp,
     TResult Function(_ResetPassword value)? resetPassword,
+    TResult Function(_EmitNewState value)? emitNewState,
     required TResult orElse(),
   }) {
     if (resetPassword != null) {
@@ -403,16 +394,177 @@ abstract class _ResetPassword implements ResetPasswordEvent {
           final String email, final String otp, final String newPassword) =
       _$ResetPasswordImpl;
 
-  @override
   String get email;
   String get otp;
   String get newPassword;
 
   /// Create a copy of ResetPasswordEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ResetPasswordImplCopyWith<_$ResetPasswordImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$EmitNewStateImplCopyWith<$Res> {
+  factory _$$EmitNewStateImplCopyWith(
+          _$EmitNewStateImpl value, $Res Function(_$EmitNewStateImpl) then) =
+      __$$EmitNewStateImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({ResetPasswordState newState});
+
+  $ResetPasswordStateCopyWith<$Res> get newState;
+}
+
+/// @nodoc
+class __$$EmitNewStateImplCopyWithImpl<$Res>
+    extends _$ResetPasswordEventCopyWithImpl<$Res, _$EmitNewStateImpl>
+    implements _$$EmitNewStateImplCopyWith<$Res> {
+  __$$EmitNewStateImplCopyWithImpl(
+      _$EmitNewStateImpl _value, $Res Function(_$EmitNewStateImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ResetPasswordEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? newState = null,
+  }) {
+    return _then(_$EmitNewStateImpl(
+      null == newState
+          ? _value.newState
+          : newState // ignore: cast_nullable_to_non_nullable
+              as ResetPasswordState,
+    ));
+  }
+
+  /// Create a copy of ResetPasswordEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ResetPasswordStateCopyWith<$Res> get newState {
+    return $ResetPasswordStateCopyWith<$Res>(_value.newState, (value) {
+      return _then(_value.copyWith(newState: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$EmitNewStateImpl implements _EmitNewState {
+  const _$EmitNewStateImpl(this.newState);
+
+  @override
+  final ResetPasswordState newState;
+
+  @override
+  String toString() {
+    return 'ResetPasswordEvent.emitNewState(newState: $newState)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$EmitNewStateImpl &&
+            (identical(other.newState, newState) ||
+                other.newState == newState));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, newState);
+
+  /// Create a copy of ResetPasswordEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$EmitNewStateImplCopyWith<_$EmitNewStateImpl> get copyWith =>
+      __$$EmitNewStateImplCopyWithImpl<_$EmitNewStateImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String email) sendOtp,
+    required TResult Function(String email, String otp, String newPassword)
+        resetPassword,
+    required TResult Function(ResetPasswordState newState) emitNewState,
+  }) {
+    return emitNewState(newState);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String email)? sendOtp,
+    TResult? Function(String email, String otp, String newPassword)?
+        resetPassword,
+    TResult? Function(ResetPasswordState newState)? emitNewState,
+  }) {
+    return emitNewState?.call(newState);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String email)? sendOtp,
+    TResult Function(String email, String otp, String newPassword)?
+        resetPassword,
+    TResult Function(ResetPasswordState newState)? emitNewState,
+    required TResult orElse(),
+  }) {
+    if (emitNewState != null) {
+      return emitNewState(newState);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_SendOtp value) sendOtp,
+    required TResult Function(_ResetPassword value) resetPassword,
+    required TResult Function(_EmitNewState value) emitNewState,
+  }) {
+    return emitNewState(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_SendOtp value)? sendOtp,
+    TResult? Function(_ResetPassword value)? resetPassword,
+    TResult? Function(_EmitNewState value)? emitNewState,
+  }) {
+    return emitNewState?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_SendOtp value)? sendOtp,
+    TResult Function(_ResetPassword value)? resetPassword,
+    TResult Function(_EmitNewState value)? emitNewState,
+    required TResult orElse(),
+  }) {
+    if (emitNewState != null) {
+      return emitNewState(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _EmitNewState implements ResetPasswordEvent {
+  const factory _EmitNewState(final ResetPasswordState newState) =
+      _$EmitNewStateImpl;
+
+  ResetPasswordState get newState;
+
+  /// Create a copy of ResetPasswordEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$EmitNewStateImplCopyWith<_$EmitNewStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

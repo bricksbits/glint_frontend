@@ -26,13 +26,22 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       emit(const ResetPasswordState.loading());
       await _resetPassword(event.email, event.otp, event.newPassword);
     });
+
+    on<_EmitNewState>((event, emit) {
+      emit(event.newState);
+    });
   }
 
   Future<void> _sendOtp(String email, Emitter<ResetPasswordState> emit) async {
     sendOtpUseCase.perform(
       (response) {
         print("BLoC: OTP sent success!");
-        emit(const ResetPasswordState.otpSent());
+
+        add(
+          const ResetPasswordEvent.emitNewState(
+            ResetPasswordState.otpSent(),
+          ),
+        );
       },
       (error) {
         print("BLoC: OTP send error: $error");
