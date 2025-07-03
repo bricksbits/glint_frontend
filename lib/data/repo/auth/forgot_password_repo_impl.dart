@@ -1,5 +1,3 @@
-import 'package:encrypt_shared_preferences/provider.dart';
-import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/reset_password_request_body.dart';
@@ -55,7 +53,7 @@ class ForgotPasswordRepoImpl extends ForgotPasswordRepo {
     final response = apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
-      endpoint: "/send-otp",
+      endpoint: "/auth/v1/reset-password/generate-otp",
       requestBody: body.toJson(),
       passedQueryParameters: null,
     );
@@ -71,7 +69,8 @@ class ForgotPasswordRepoImpl extends ForgotPasswordRepo {
   }
 
   @override
-  Future<Result<void>> resetPasswordWithOtp(ResetPasswordWithOtpRequestBody body) {
+  Future<Result<void>> resetPasswordWithOtp(
+      ResetPasswordWithOtpRequestBody body) {
     final response = apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.PUT,

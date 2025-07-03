@@ -1,4 +1,3 @@
-import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/create_password_screen.dart';
 import 'package:glint_frontend/features/auth/enter_otp_screen.dart';
 import 'package:glint_frontend/features/auth/password_change_confirmation_screen.dart';
@@ -13,10 +12,12 @@ final glintAuthenticationRoutesBase = [
     builder: (context, state) => const ResetPasswordScreen(),
   ),
   GoRoute(
-    path: '/${GlintAuthRoutes.otp.name}',
-    name: GlintAuthRoutes.otp.name,
-    builder: (context, state) => const EnterOtpScreen(),
-  ),
+      path: '/${GlintAuthRoutes.otp.name}/:email',
+      name: GlintAuthRoutes.otp.name,
+      builder: (context, state) {
+        final email = state.pathParameters['email'];
+        return EnterOtpScreen(email: email);
+      }),
   GoRoute(
     path: '/${GlintAuthRoutes.recreatePassword.name}',
     name: GlintAuthRoutes.recreatePassword.name,

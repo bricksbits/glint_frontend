@@ -200,10 +200,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
-        final emailController = TextEditingController();
+        final emailController =
+            TextEditingController(text: _emailController.text);
         final result = await showDialog<String>(
           context: context,
           builder: (context) => AlertDialog(
+            backgroundColor: AppColours.white,
             title: const Text('Forgot Password'),
             content: TextField(
               controller: emailController,
@@ -225,7 +227,11 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
         if (result != null && result.isNotEmpty) {
-          context.go('/${GlintAuthRoutes.otp.name}?email=$result');
+          if (!mounted) return;
+          final target = GlintAuthRoutes.otp.name;
+          context.pushNamed(target, pathParameters: {
+            'email': result,
+          });
         }
       },
       child: Align(

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/reset_password_with_otp_request_body.dart';
@@ -16,6 +17,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
 
   ResetPasswordBloc() : super(const ResetPasswordState.initial()) {
     on<_SendOtp>((event, emit) async {
+      debugPrint('SEND OTP IS CALLED');
       emit(const ResetPasswordState.loading());
       await _sendOtp(event.email);
     });

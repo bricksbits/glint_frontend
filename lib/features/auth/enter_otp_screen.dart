@@ -1,24 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/auth/blocs/reset_password/reset_password_bloc.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
 class EnterOtpScreen extends StatefulWidget {
-  const EnterOtpScreen({super.key});
+  const EnterOtpScreen({super.key, required this.email});
+
+  final String? email;
 
   @override
   State<EnterOtpScreen> createState() => _EnterOtpScreenState();
 }
 
 class _EnterOtpScreenState extends State<EnterOtpScreen> {
-  final bool isAdmin = true;
+  final bool isAdmin = false;
 
   final _codeController = TextEditingController();
   bool buttonDisabled = true;
+
+  String? email;
+
+  @override
+  void initState() {
+    super.initState();
+
+    email = widget.email;
+
+    if (email != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context
+            .read<ResetPasswordBloc>()
+            .add(ResetPasswordEvent.sendOtp(email!));
+      });
+    }
+  }
 
   @override
   void dispose() {
