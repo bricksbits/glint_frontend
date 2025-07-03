@@ -9,6 +9,8 @@ import 'package:glint_frontend/features/auth/blocs/login/login_bloc.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
+import 'blocs/reset_password/reset_password_bloc.dart';
+
 class LoginScreen extends StatefulWidget {
   final bool isAdmin;
 
@@ -202,6 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
       onTap: () async {
         final emailController =
             TextEditingController(text: _emailController.text);
+
         final result = await showDialog<String>(
           context: context,
           builder: (context) => AlertDialog(
@@ -226,11 +229,50 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
         );
-        if (result != null && result.isNotEmpty) {
+
+        // Proceed if user entered something
+        if (result != null && result.trim().isNotEmpty) {
+          final email = result.trim();
+
           if (!mounted) return;
-          final target = GlintAuthRoutes.otp.name;
-          context.pushNamed(target, pathParameters: {
-            'email': result,
+
+          // Show loading spinner
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => const Center(child: CircularProgressIndicator()),
+          );
+
+          // Send the OTP via bloc
+          context.read<ResetPasswordBloc>().add(
+                ResetPasswordEvent.sendOtp(email),
+              );
+
+          // Listen for the next state from bloc
+          final bloc = context.read<ResetPasswordBloc>();
+          final subscription = bloc.stream.listen((state) {
+            state.maybeWhen(
+              otpSent: () {
+                Navigator.of(context).pop(); // Dismiss loading
+                if (!context.mounted) return;
+
+                context.pushNamed(
+                  GlintAuthRoutes.otp.name,
+                  pathParameters: {'email': email},
+                );
+              },
+              error: (message) {
+                Navigator.of(context).pop(); // Dismiss loading
+                if (!context.mounted) return;
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(message)),
+                );
+              },
+              orElse: () {
+                debugPrint('SOMETHINS ELSE HAPPENED');
+              },
+            );
           });
         }
       },
