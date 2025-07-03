@@ -37,6 +37,9 @@ import '../domain/application_logic/admin/reject_published_event_usecase.dart'
     as _i579;
 import '../domain/application_logic/auth/is_user_logged_in_use_case.dart'
     as _i143;
+import '../domain/application_logic/auth/reset_password_with_otp_use_case.dart'
+    as _i804;
+import '../domain/application_logic/auth/send_otp_use_case.dart' as _i786;
 import '../domain/application_logic/auth/sign_in_user_use_case.dart' as _i972;
 import '../domain/business_logic/repo/admin/admin_dasboard_repo.dart' as _i1000;
 import '../domain/business_logic/repo/auth/authentication_repo.dart' as _i873;
@@ -127,6 +130,10 @@ extension GetItInjectableX on _i174.GetIt {
         _i579.RejectPublishedEventUsecase(gh<_i1000.AdminDashboardRepo>()));
     gh.factory<_i839.ApprovePublishedEventUsecase>(() =>
         _i839.ApprovePublishedEventUsecase(gh<_i1000.AdminDashboardRepo>()));
+    gh.factory<_i786.SendOtpUseCase>(
+        () => _i786.SendOtpUseCase(gh<_i995.ForgotPasswordRepo>()));
+    gh.factory<_i804.ResetPasswordWithOtpUseCase>(() =>
+        _i804.ResetPasswordWithOtpUseCase(gh<_i995.ForgotPasswordRepo>()));
     gh.factory<_i1027.GetAllEventsUsecase>(
         () => _i1027.GetAllEventsUsecase(gh<_i1000.AdminDashboardRepo>()));
     return this;

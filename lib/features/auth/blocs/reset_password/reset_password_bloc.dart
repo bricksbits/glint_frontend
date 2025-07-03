@@ -6,9 +6,9 @@ import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/application_logic/auth/reset_password_with_otp_use_case.dart';
 import 'package:glint_frontend/domain/application_logic/auth/send_otp_use_case.dart';
 
+part 'reset_password_bloc.freezed.dart';
 part 'reset_password_event.dart';
 part 'reset_password_state.dart';
-part 'reset_password_bloc.freezed.dart';
 
 class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   final SendOtpUseCase sendOtpUseCase = getIt.get();
@@ -33,7 +33,8 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       },
       (error) {
         print("Send OTP Bloc : Error $error");
-        emit(ResetPasswordState.error("Failed to send OTP: ${error.toString()}"));
+        emit(ResetPasswordState.error(
+            "Failed to send OTP: ${error.toString()}"));
       },
       () {
         print("Send OTP Bloc : On Done");
@@ -42,14 +43,16 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
     );
   }
 
-  Future<void> _resetPassword(String email, String otp, String newPassword) async {
+  Future<void> _resetPassword(
+      String email, String otp, String newPassword) async {
     resetPasswordWithOtpUseCase.perform(
       (response) {
         emit(const ResetPasswordState.passwordResetSuccess());
       },
       (error) {
         print("Reset Password Bloc : Error $error");
-        emit(ResetPasswordState.error("Failed to reset password: ${error.toString()}"));
+        emit(ResetPasswordState.error(
+            "Failed to reset password: ${error.toString()}"));
       },
       () {
         print("Reset Password Bloc : On Done");
@@ -61,4 +64,4 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       ),
     );
   }
-} 
+}
