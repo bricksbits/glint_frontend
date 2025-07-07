@@ -22,8 +22,8 @@ class SuperAdminDashboardBloc
   final RejectPublishedEventUsecase rejectEventUseCase =
       getIt.get();
 
-  List<EventListDomainModel> liveEvents = [];
-  List<EventListDomainModel> requestEvents = [];
+  List<AdminEventListDomainModel> liveEvents = [];
+  List<AdminEventListDomainModel> requestEvents = [];
 
   SuperAdminDashboardBloc() : super(const SuperAdminDashboardState()) {
     on<_Fetch>((event, emit) async {

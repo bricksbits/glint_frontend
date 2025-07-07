@@ -1,18 +1,18 @@
 import 'dart:async';
 
-import 'package:glint_frontend/data/remote/model/response/event/event_details_response.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_detail_domain.dart';
 import 'package:glint_frontend/domain/business_logic/repo/event/events_repo.dart';
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
-class FetchEventDetailsUseCase extends UseCase<EventDetailsResponse, int> {
+class FetchEventDetailsUseCase extends UseCase<EventDetailsDomainModel, int> {
   final EventRepo eventRepo;
 
   FetchEventDetailsUseCase(this.eventRepo);
 
   @override
-  Future<Stream<EventDetailsResponse?>> buildUseCaseStream(int? params) async {
-    final StreamController<EventDetailsResponse?> controller =
+  Future<Stream<EventDetailsDomainModel?>> buildUseCaseStream(int? params) async {
+    final StreamController<EventDetailsDomainModel?> controller =
         StreamController();
     try {
       final eventDetailsResponse = await eventRepo.getEventDetails(params);

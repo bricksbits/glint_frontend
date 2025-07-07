@@ -160,7 +160,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   /// MAPPING NEEDED MORE DATA
   /// DATA MISSING
   @override
-  Future<Result<List<EventListDomainModel>>> getAllEvents() async {
+  Future<Result<List<AdminEventListDomainModel>>> getAllEvents() async {
     final allEventsResponse = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
@@ -214,7 +214,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   }
 
   @override
-  Future<Result<List<EventListDomainModel>>> getAllPublishEvents() async {
+  Future<Result<List<AdminEventListDomainModel>>> getAllPublishEvents() async {
     final allEventsResponse = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,

@@ -7,9 +7,9 @@ import 'package:glint_frontend/domain/business_logic/models/admin/create_event_r
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class AdminDashboardRepo {
-  Future<Result<List<EventListDomainModel>>> getAllEvents();
+  Future<Result<List<AdminEventListDomainModel>>> getAllEvents();
 
-  Future<Result<List<EventListDomainModel>>> getAllPublishEvents();
+  Future<Result<List<AdminEventListDomainModel>>> getAllPublishEvents();
 
   Future<Result<void>> createEvent(CreateEventRequestDomainModel createEventRequest);
 

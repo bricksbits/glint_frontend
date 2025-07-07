@@ -6,6 +6,6 @@ class SuperAdminDashboardState with _$SuperAdminDashboardState {
     @Default(false) bool isLoading,
     String? errorMessage,
     @Default(EventDisplayType.live) EventDisplayType currentTab,
-    @Default([]) List<EventListDomainModel> currentSelectedList,
+    @Default([]) List<AdminEventListDomainModel> currentSelectedList,
   }) = _SuperAdminDashboardState;
 }

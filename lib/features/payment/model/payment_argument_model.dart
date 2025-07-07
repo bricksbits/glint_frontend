@@ -1,3 +1,5 @@
+import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
+
 class PaymentArgumentModel {
   // Membership
   final MembershipType? membershipType;
@@ -26,16 +28,4 @@ class PaymentArgumentModel {
 enum MembershipType {
   GOLD,
   PLATINUM,
-}
-
-class UserTicketHolderModel {
-  final String userId;
-  final String username;
-  final String imageUrl;
-
-  UserTicketHolderModel({
-    required this.userId,
-    required this.username,
-    required this.imageUrl,
-  });
 }

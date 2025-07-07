@@ -131,10 +131,10 @@ class Response {
 }
 
 extension PublishedEventMapper on GetPublishedEventResponse {
-  List<EventListDomainModel> mapToDomain() {
+  List<AdminEventListDomainModel> mapToDomain() {
     if (response != null) {
       return response!
-          .map((eventResponse) => EventListDomainModel(
+          .map((eventResponse) => AdminEventListDomainModel(
               eventName: eventResponse.eventName ?? "Event Name",
               eventId: eventResponse.eventId.toString() ?? "0",
               eventThumbnail: eventResponse.eventName ?? "NO_URL",
