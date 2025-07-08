@@ -1,4 +1,6 @@
 import 'package:encrypt_shared_preferences/provider.dart';
+import 'package:glint_frontend/data/local/db/dao/event_like_dao.dart';
+import 'package:glint_frontend/data/local/db/entities/user_event_like_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
@@ -16,9 +18,11 @@ import 'package:injectable/injectable.dart';
 @Injectable(as: EventRepo)
 class EventRepoImpl extends EventRepo {
   final MyDioClient httpClient;
+  final EventLikeDao eventLikeDao;
 
   EventRepoImpl(
     this.httpClient,
+    this.eventLikeDao,
   );
 
   @override
@@ -83,23 +87,39 @@ class EventRepoImpl extends EventRepo {
     }
   }
 
+  /// A Weak try to optimize the Event Interested Request again and again
+  /// If the event already exists in the Local DB Avoid the API call altogether
   @override
   Future<Result<void>> userInterested(int? eventId) async {
+    //Todo: Get the User Id, from Shared Pref and provide it here
     if (eventId == null) return Result.failure(Exception("Event Id is null"));
+    var userEventEntities = await eventLikeDao.getLikedEvents("");
+    var filterList = userEventEntities
+        .where((entity) => entity.eventId == eventId.toString())
+        .toList();
+    if (filterList.isEmpty) {
+      final response = await apiCallHandler(
+        httpClient: httpClient,
+        requestType: HttpRequestEnum.POST,
+        endpoint: "/event/$eventId/like",
+        requestBody: null,
+        passedQueryParameters: null,
+      );
 
-    final response = await apiCallHandler(
-      httpClient: httpClient,
-      requestType: HttpRequestEnum.POST,
-      endpoint: "/event/$eventId/like",
-      requestBody: null,
-      passedQueryParameters: null,
-    );
-
-    switch (response) {
-      case Success():
-        return Success(response.data);
-      case Failure():
-        return Failure(Exception(response.error));
+      switch (response) {
+        case Success():
+          await eventLikeDao.likeEvent(
+            UserEventLikeEntity(
+              userId: "",
+              eventId: eventId.toString(),
+            ),
+          );
+          return Success(response.data);
+        case Failure():
+          return Failure(Exception(response.error));
+      }
+    } else {
+      return const Success("User Already liked the event");
     }
   }
 }

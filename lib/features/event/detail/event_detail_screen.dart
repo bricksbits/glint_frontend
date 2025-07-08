@@ -1,217 +1,205 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
+import 'package:glint_frontend/features/event/detail/event_detail_cubit.dart';
 
 class EventDetailScreen extends StatelessWidget {
   const EventDetailScreen({
     super.key,
     required this.isEventPreviewType,
     this.isSuperAdmin = false,
+    this.eventListDomainModel,
   });
 
   final bool isEventPreviewType;
   final bool isSuperAdmin;
+  final EventListDomainModel? eventListDomainModel;
 
   @override
   Widget build(BuildContext context) {
-    final isEventPreview = isEventPreviewType;
-    const eventName = 'Taste Dubs';
-    const eventDate = '20 May 2023';
-    const eventTime = '12:00 PM';
-    const oldPrice = 349;
-    const newPrice = 199;
-    const daysLeft = 7;
-    const eventOrganiser = 'Abhishek Verma';
-    const eventLocation = 'New Delhi, India';
-    const imageUrl =
-        'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cmVzdGF1cmFudHxlbnwwfHwwfHx8MA%3D%3D';
     const interactedUsers = [
       'https://avatars.githubusercontent.com/u/70279771?v=4',
       'https://avatars.githubusercontent.com/u/70279771?v=4',
       'https://avatars.githubusercontent.com/u/70279771?v=4',
     ];
-    const eventDescription =
-        """Get ready to experience the most delicius and diverse flavors at the Local Food Fest! This is the ultimate event for food lovers in Raipur!\n
-Join us on 4th Jan at Shriram Business Park to enjoy mouth-watering street foods, regional spacialities, and exotic dishes from across India. From spicy chaats to sweet jalebis, there's something for every foodie's taste buds.
-
-With live music, fun activites, and cooking workshops, this fest promises a memorable day for families, friends, and food enthusiasts. Don't miss out on the chance to discover new favourites and meet local food heros.
-
-Mark your calender, bring your appetite, and let’s make this fest a celebration to remember!""";
-
-    return Scaffold(
-      backgroundColor: AppColours.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        backgroundColor: AppColours.white,
-        centerTitle: isEventPreview ? false : true,
-        scrolledUnderElevation: 0,
-        title: Text(
-          isEventPreview
-              ? isSuperAdmin
-                  ? 'Event Request'
-                  : 'Event Preview'
-              : 'Event',
-          style: (isEventPreview || isSuperAdmin)
-              ? AppTheme.heavyBodyText
-              : AppTheme.headingTwo.copyWith(fontSize: 20.0),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            if (isEventPreview) const Gap(12.0),
-            // event image
-            if (!isEventPreview) const _EventImage(imageUrl: imageUrl),
-
-            // event Details
-
-            // todo - Implement state here for admin event profile
-            CarouselSlider(
-              options: CarouselOptions(
-                height: 264,
-                enlargeCenterPage: true,
-                autoPlay: true,
+    return BlocProvider(
+      create: (context) => EventDetailCubit(),
+      child: BlocBuilder<EventDetailCubit, EventDetailState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColours.white,
+            appBar: AppBar(
+              automaticallyImplyLeading: true,
+              backgroundColor: AppColours.white,
+              centerTitle: state.isEventPreviewForAdmin ? false : true,
+              scrolledUnderElevation: 0,
+              title: Text(
+                state.isEventPreviewForAdmin
+                    ? isSuperAdmin
+                        ? 'Event Request'
+                        : 'Event Preview'
+                    : 'Event',
+                style: (state.isEventPreviewForAdmin || isSuperAdmin)
+                    ? AppTheme.heavyBodyText
+                    : AppTheme.headingTwo.copyWith(fontSize: 20.0),
               ),
-              items: [
-                Image.network(
-                  imageUrl,
-                ),
-                Image.network(
-                  imageUrl,
-                ),
-                Image.network(
-                  imageUrl,
-                ),
-                Image.network(
-                  imageUrl,
-                ),
-              ],
             ),
-
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
+            body: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Gap(40.0),
-                  _EventTitle(title: eventName),
-                  Gap(20.0),
-                  _EventDetails(
-                    date: eventDate,
-                    time: eventTime,
-                    location: eventLocation,
+                  if (state.isEventPreviewForAdmin) const Gap(12.0),
+                  // event image
+                  if (!state.isEventPreviewForAdmin)
+                    _EventImage(
+                        imageUrl:
+                            state.eventDetails?.eventCoverImageUrl.first ?? ""),
+
+                  // todo - Implement state here for admin event profile
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      height: 264,
+                      enlargeCenterPage: true,
+                      autoPlay: true,
+                    ),
+                    items:
+                        state.eventDetails?.eventCoverImageUrl.map((imageUrl) {
+                      return Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      );
+                    }).toList(),
                   ),
-                  Gap(24.0),
-                  _EventPricing(
-                    oldPrice: oldPrice,
-                    newPrice: newPrice,
-                    daysLeft: daysLeft,
-                  ),
-                ],
-              ),
-            ),
 
-            const Gap(32.0),
-
-            // interested profiles
-            _BuildInterestedProfiles(
-              interestedProfiles: interactedUsers,
-              showProfileIconsOnly: isEventPreview,
-            ),
-
-            const Gap(32.0),
-
-            // about event
-            const _AboutEvent(
-              eventDescription: eventDescription,
-            ),
-
-            // todo - implement Map (event location) ui here
-
-            const Gap(32.0),
-
-            // event by
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      const TextSpan(
-                        text: 'Event by ',
-                        style: AppTheme.simpleText,
-                      ),
-                      TextSpan(
-                        text: eventOrganiser,
-                        style: AppTheme.simpleText.copyWith(
-                          fontWeight: FontWeight.w700,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Gap(40.0),
+                        _EventTitle(title: state.eventDetails?.eventName ?? ""),
+                        const Gap(20.0),
+                        _EventDetails(
+                          date: state.eventDetails?.eventdate ?? "",
+                          time: state.eventDetails?.eventTime ?? "",
+                          location: state.eventDetails?.eventLocation ?? "",
                         ),
-                      ),
-                    ],
+                        const Gap(24.0),
+                        _EventPricing(
+                          oldPrice: state.eventDetails?.eventOldPrice ?? "",
+                          newPrice: state.eventDetails?.eventCurrentPrice ?? "",
+                          daysLeft: state.eventDetails?.daysLeft ?? "",
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ),
-            ),
-            if (isSuperAdmin) ...[
-              const Gap(12.0),
-              const Divider(
-                color: AppColours.mediumGray,
-                thickness: 0.5,
-              ),
-              const Gap(8.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 44.0,
-                        child: GlintElevatedButton(
-                          label: 'Accept',
-                          customBorderRadius: 10.0,
-                          customTextStyle: AppTheme.simpleText.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: AppColours.white,
-                          ),
-                          onPressed: () {
-                            // todo - implement super admin accept functionality
-                          },
+
+                  const Gap(32.0),
+
+                  // interested profiles
+                  _BuildInterestedProfiles(
+                    interestedProfiles: interactedUsers,
+                    showProfileIconsOnly: state.isEventPreviewForAdmin,
+                  ),
+
+                  const Gap(32.0),
+
+                  // about event
+                  _AboutEvent(
+                    eventDescription: state.eventDetails?.aboutEvent ?? "",
+                  ),
+
+                  // todo - implement Map (event location) ui here
+
+                  const Gap(32.0),
+
+                  // event by
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Event by ',
+                              style: AppTheme.simpleText,
+                            ),
+                            TextSpan(
+                              text: state.eventDetails?.eventBy,
+                              style: AppTheme.simpleText.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
+                  ),
+                  if (isSuperAdmin) ...[
                     const Gap(12.0),
-                    Expanded(
-                      child: SizedBox(
-                        height: 44.0,
-                        child: GlintElevatedButton(
-                          label: 'Reject',
-                          customBorderRadius: 10.0,
-                          backgroundColor: AppColours.white,
-                          customBorderSide: const BorderSide(
-                            color: AppColours.rejectedColor,
-                            width: 1.0,
+                    const Divider(
+                      color: AppColours.mediumGray,
+                      thickness: 0.5,
+                    ),
+                    const Gap(8.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 44.0,
+                              child: GlintElevatedButton(
+                                label: 'Accept',
+                                customBorderRadius: 10.0,
+                                customTextStyle: AppTheme.simpleText.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColours.white,
+                                ),
+                                onPressed: () {
+                                  // todo - implement super admin accept functionality
+                                },
+                              ),
+                            ),
                           ),
-                          customTextStyle: AppTheme.simpleText.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: AppColours.rejectedColor,
+                          const Gap(12.0),
+                          Expanded(
+                            child: SizedBox(
+                              height: 44.0,
+                              child: GlintElevatedButton(
+                                label: 'Reject',
+                                customBorderRadius: 10.0,
+                                backgroundColor: AppColours.white,
+                                customBorderSide: const BorderSide(
+                                  color: AppColours.rejectedColor,
+                                  width: 1.0,
+                                ),
+                                customTextStyle: AppTheme.simpleText.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColours.rejectedColor,
+                                ),
+                                onPressed: () {
+                                  // todo - implement super admin reject functionality
+                                },
+                              ),
+                            ),
                           ),
-                          onPressed: () {
-                            // todo - implement super admin reject functionality
-                          },
-                        ),
+                        ],
                       ),
                     ),
                   ],
-                ),
+                  // end of the page gap for design replication purpose
+                  const Gap(20.0),
+                ],
               ),
-            ],
-            // end of the page gap for design replication purpose
-            const Gap(20.0),
-          ],
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -285,9 +273,9 @@ class _EventDetails extends StatelessWidget {
 }
 
 class _EventPricing extends StatelessWidget {
-  final int oldPrice;
-  final int newPrice;
-  final int daysLeft;
+  final String oldPrice;
+  final String newPrice;
+  final String daysLeft;
 
   const _EventPricing({
     required this.oldPrice,
@@ -304,7 +292,7 @@ class _EventPricing extends StatelessWidget {
           children: [
             const Text('₹ ', style: AppTheme.simpleText),
             Text(
-              oldPrice.toString(),
+              oldPrice,
               style: AppTheme.simpleText.copyWith(
                 decoration: TextDecoration.lineThrough,
                 fontWeight: FontWeight.w300,

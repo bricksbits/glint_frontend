@@ -6,30 +6,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/event/bloc/interaction/event_interaction_bloc.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 
 class HotEvent extends StatelessWidget {
   const HotEvent({
     super.key,
-    required this.eventId,
-    this.showDiscount = true,
+    required this.eventModel,
   });
 
-  final int eventId;
-  final bool showDiscount;
+  final EventListDomainModel eventModel;
 
   @override
   Widget build(BuildContext context) {
-    final cardHeight = showDiscount ? 220.0 : 128.0;
     final screenSize = MediaQuery.of(context).size;
-    const eventName = 'The Local Food Fest';
-    const eventDate = '20 Feb 2023';
-    const eventImage =
-        'https://media.istockphoto.com/id/1806011581/photo/overjoyed-happy-young-people-dancing-jumping-and-singing-during-concert-of-favorite-group.jpg?s=612x612&w=0&k=20&c=cMFdhX403-yKneupEN-VWSfFdy6UWf1H0zqo6QBChP4%3D';
-    const eventLocation = 'Shriram business park';
-    const eventOldPrice = 150;
-    const eventNewPrice = 200;
-    const eventDiscountDaysLeft = 7;
     const interactedUsers = [
       'https://avatars.githubusercontent.com/u/70279771?v=4',
       'https://avatars.githubusercontent.com/u/70279771?v=4',
@@ -40,11 +29,11 @@ class HotEvent extends StatelessWidget {
         // Blurred background image
         Container(
           width: double.infinity,
-          height: cardHeight,
+          height: 220,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
-            image: const DecorationImage(
-              image: NetworkImage(eventImage),
+            image: DecorationImage(
+              image: NetworkImage(eventModel.eventCoverImageUrl),
               fit: BoxFit.cover,
             ),
           ),
@@ -67,7 +56,7 @@ class HotEvent extends StatelessWidget {
                   children: [
                     // event name
                     Text(
-                      eventName,
+                      eventModel.eventName,
                       style: AppTheme.headingFour.copyWith(
                         fontStyle: FontStyle.normal,
                         color: AppColours.white,
@@ -82,7 +71,7 @@ class HotEvent extends StatelessWidget {
                         GlintIconLabel(
                           iconPath: 'lib/assets/icons/calendar_icon.svg',
                           svgColor: AppColours.vibrantYellow,
-                          label: eventDate,
+                          label: eventModel.eventdate,
                           style: AppTheme.simpleText.copyWith(
                             fontSize: 12.0,
                             color: AppColours.white,
@@ -92,7 +81,7 @@ class HotEvent extends StatelessWidget {
                         GlintIconLabel(
                           iconPath: 'lib/assets/icons/location_icon.svg',
                           svgColor: AppColours.vibrantYellow,
-                          label: eventLocation,
+                          label: eventModel.eventLocation,
                           style: AppTheme.simpleText.copyWith(
                             fontSize: 12.0,
                             color: AppColours.white,
@@ -102,14 +91,13 @@ class HotEvent extends StatelessWidget {
                     ),
 
                     // pricing and interested profiles
-                    if (showDiscount)
-                      _HotEventDiscountAndInterestedProfiles(
-                        eventId: eventId,
-                        eventOldPrice: eventOldPrice,
-                        eventNewPrice: eventNewPrice,
-                        eventDiscountDaysLeft: eventDiscountDaysLeft,
-                        interactedUsers: interactedUsers,
-                      ),
+                    _HotEventDiscountAndInterestedProfiles(
+                      eventId: eventModel.eventId,
+                      eventOldPrice: eventModel.eventOldPrice,
+                      eventNewPrice: eventModel.eventCurrentPrice,
+                      eventDiscountDaysLeft: eventModel.daysLeft,
+                      interactedUsers: interactedUsers,
+                    ),
                   ],
                 ),
               ),
@@ -128,19 +116,19 @@ class HotEvent extends StatelessWidget {
                         ? 60.0
                         : 140.0
                 : screenSize.width * 0.35,
-            height: cardHeight,
-            decoration: const BoxDecoration(
+            height: 220,
+            decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(eventImage),
+                image: NetworkImage(eventModel.eventCoverImageUrl),
                 fit: BoxFit.cover,
               ),
-              border: Border(
+              border: const Border(
                 left: BorderSide(
                   color: AppColours.white,
                   width: 1.5,
                 ),
               ),
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topRight: Radius.circular(20.0),
                 bottomRight: Radius.circular(20.0),
               ),
@@ -170,10 +158,10 @@ class _HotEventDiscountAndInterestedProfiles extends StatelessWidget {
     required this.interactedUsers,
   });
 
-  final int eventId;
-  final int eventOldPrice;
-  final int eventNewPrice;
-  final int eventDiscountDaysLeft;
+  final String eventId;
+  final String eventOldPrice;
+  final String eventNewPrice;
+  final String eventDiscountDaysLeft;
   final List<String> interactedUsers;
 
   @override
@@ -249,9 +237,6 @@ class _HotEventDiscountAndInterestedProfiles extends StatelessWidget {
         // when clicked here, it will mark user as interested in event
         GestureDetector(
           onTap: () {
-            context.read<EventInteractionBloc>().add(
-                  MarkUserInterestedEvent(eventId),
-                );
             debugPrint('user as interested clicked for event $eventId');
             debugPrint('user as interested clicked');
           },

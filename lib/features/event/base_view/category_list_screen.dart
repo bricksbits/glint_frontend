@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
-class MainExploreScreen extends StatelessWidget {
-  const MainExploreScreen({super.key});
+class CategoryListScreen extends StatelessWidget {
+  const CategoryListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

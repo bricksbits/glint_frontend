@@ -5,7 +5,7 @@ import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
 import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
-import 'package:glint_frontend/features/event/event_main_screen.dart';
+import 'package:glint_frontend/features/event/base/event_base_screen.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 2;
   static final List<Widget> _bottomNavScreens = [
     const ProfileScreen(),
-    const EventMainScreen(),
+    const EventBaseScreen(),
     const PeopleScreen(),
     PaymentScreen(
       paymentArgumentModel: PaymentArgumentModel(

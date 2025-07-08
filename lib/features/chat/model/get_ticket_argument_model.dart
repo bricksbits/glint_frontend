@@ -1,4 +1,4 @@
-import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
 
 class GetTicketArgumentModel {
   final String eventId;
