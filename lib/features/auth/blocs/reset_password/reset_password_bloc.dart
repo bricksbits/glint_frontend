@@ -35,7 +35,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   Future<void> _sendOtp(String email, Emitter<ResetPasswordState> emit) async {
     sendOtpUseCase.perform(
       (response) {
-        print("BLoC: OTP sent success!");
+        debugPrint("BLoC: OTP sent success!");
 
         add(
           const ResetPasswordEvent.emitNewState(
@@ -44,30 +44,45 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
         );
       },
       (error) {
-        print("BLoC: OTP send error: $error");
-        emit(ResetPasswordState.error(
-            "Failed to send OTP: ${error.toString()}"));
+        debugPrint("BLoC: OTP send error: $error");
+
+        add(
+          ResetPasswordEvent.emitNewState(
+            ResetPasswordState.error(
+              "Failed to send OTP: ${error.toString()}",
+            ),
+          ),
+        );
       },
       () {
-        print("BLoC: OTP send done");
+        debugPrint("BLoC: OTP send done");
       },
       SendOtpRequestBody(emailId: email),
     );
   }
 
-  Future<void> _resetPassword(
-      String email, String otp, String newPassword) async {
+  Future<void> _resetPassword(String email, String otp, String newPassword) async {
     resetPasswordWithOtpUseCase.perform(
       (response) {
-        emit(const ResetPasswordState.passwordResetSuccess());
+        debugPrint('RESET PASSWORD');
+        add(
+          const ResetPasswordEvent.emitNewState(
+            ResetPasswordState.passwordResetSuccess(),
+          ),
+        );
       },
       (error) {
-        print("Reset Password Bloc : Error $error");
-        emit(ResetPasswordState.error(
-            "Failed to reset password: ${error.toString()}"));
+        debugPrint("Reset Password Bloc : Error $error");
+        add(
+          ResetPasswordEvent.emitNewState(
+            ResetPasswordState.error(
+              "Failed to reset password: ${error.toString()}",
+            ),
+          ),
+        );
       },
       () {
-        print("Reset Password Bloc : On Done");
+        debugPrint("Reset Password Bloc : On Done");
       },
       ResetPasswordWithOtpRequestBody(
         emailId: email,
