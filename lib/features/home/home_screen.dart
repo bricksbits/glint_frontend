@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static final List<Widget> _bottomNavScreens = [
     const ProfileScreen(),
     const EventBaseScreen(),
-    const PeopleScreen(),
+    PeopleScreen(),
     PaymentScreen(
       paymentArgumentModel: PaymentArgumentModel(
         membershipType: null,

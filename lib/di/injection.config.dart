@@ -20,7 +20,7 @@ import '../data/local/db/dao/swipe_action_dao.dart' as _i1004;
 import '../data/local/db/database/glint_database.dart' as _i160;
 import '../data/local/persist/async_encrypted_shared_preference_helper.dart'
     as _i274;
-import '../data/local/swipe_cache_manager.dart' as _i350;
+import '../services/swipe_cache_manager.dart' as _i350;
 import '../data/remote/client/my_dio_client.dart' as _i368;
 import '../data/repo/admin/admin_dash_board_repo_impl.dart' as _i72;
 import '../data/repo/auth/authentication_repo_impl.dart' as _i840;

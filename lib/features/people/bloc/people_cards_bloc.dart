@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/data/local/db/entities/swipe_action_entity.dart';
-import 'package:glint_frontend/data/local/swipe_cache_manager.dart';
+import 'package:glint_frontend/services/swipe_cache_manager.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/swipe_action_type.dart';
 import 'package:glint_frontend/domain/business_logic/repo/people/people_repo.dart';

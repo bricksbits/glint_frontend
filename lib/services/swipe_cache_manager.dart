@@ -3,14 +3,21 @@ import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/db/dao/swipe_action_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/swipe_action_entity.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/data/remote/model/request/people/user_action_request_model.dart';
+import 'package:glint_frontend/data/remote/model/response/people/user_action_response.dart';
+import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/swipe_action_type.dart';
 import 'package:injectable/injectable.dart';
+
+import '../data/remote/client/http_request_enum.dart';
+import '../utils/result_sealed.dart';
 
 /// A service to buffer swipe actions in local DB and batch-send them to server.
 /// Handles:
 /// - Debounced flushing every 10 seconds
 /// - Early flush if 10 swipes are reached
 /// - Safe retry logic if app is paused
-
+//Todo: Call the Flush Buffer on app Pause and when dispose
 @singleton
 class SwipeBufferManager {
   final SwipeActionDao swipeActionDao;
@@ -88,14 +95,40 @@ class SwipeBufferManager {
   }
 
   /// Todo: Send the Batches of the files here
+  /// Todo: Add Analytics when number of matches missed,
   Future<bool> _sendBatchToServer(List<SwipeActionEntity> batch) async {
-    try {
-      print("Sending ${batch.length} swipes to server...");
-      // Simulate success response
-      await Future.delayed(const Duration(milliseconds: 300));
-      return true;
-    } catch (e) {
-      return false;
+    var userActionRequestModel = batch
+        .map((item) => Actions(
+            onUserId: int.parse(item.swipedOnUserId),
+            action: switch (item.action) {
+              SwipeActionType.RIGHT => "right swipe",
+              SwipeActionType.LEFT => "left swipe",
+              SwipeActionType.SUPER_LIKE => "super like",
+            }))
+        .toList();
+
+    var requestModel = UserActionRequestModel(actions: userActionRequestModel);
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.POST,
+      endpoint: "user/action",
+      requestBody: requestModel,
+    );
+
+    switch (response) {
+      case Success():
+        final postActions = UserActionResponse.fromJson(response.data);
+        if (postActions.message?.actionResponseList != null) {
+          var actionSuccessfulOn = postActions.message?.actionResponseList
+              ?.map((action) => action.userId);
+          if (actionSuccessfulOn?.length != batch.length) {
+            print("SWIPE Actions : Few Id's swipe missed");
+          }
+          return true;
+        }
+        return false;
+      case Failure():
+        return false;
     }
   }
 
