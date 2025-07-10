@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/starter_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
@@ -11,14 +11,12 @@ import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
 import 'package:glint_frontend/features/chat/get_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
 import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
-import 'package:glint_frontend/features/event/event_detail_screen.dart';
-import 'package:glint_frontend/features/event/event_main_screen.dart';
-import 'package:glint_frontend/features/event/event_people_screen.dart';
+import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
+import 'package:glint_frontend/features/event/base/event_base_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 import 'package:glint_frontend/features/likes/likes_screen.dart';
 import 'package:glint_frontend/features/notifications/notification_screen.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
-import 'package:glint_frontend/features/onboarding/setup_glint_onboarding_screen.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:glint_frontend/features/payment/payment_screen.dart';
@@ -146,19 +144,23 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintMainRoutes.event.name}',
       name: GlintMainRoutes.event.name,
-      builder: (context, state) => const EventMainScreen(),
+      builder: (context, state) => const EventBaseScreen(),
       routes: [
         GoRoute(
           path: '/${GlintEventRoutes.eventDetails.name}',
           name: GlintEventRoutes.eventDetails.name,
-          builder: (context, state) => const EventDetailScreen(
-            isEventPreviewType: false,
-          ),
+          builder: (context, state) {
+            var eventListDomainModel = state.extra as EventListDomainModel;
+            return EventDetailScreen(
+              isEventPreviewType: false,
+              eventListDomainModel: eventListDomainModel,
+            );
+          },
         ),
         GoRoute(
           path: '/${GlintEventRoutes.peopleInterested.name}',
           name: GlintEventRoutes.peopleInterested.name,
-          builder: (context, state) => const EventPeopleScreen(),
+          builder: (context, state) => const PeopleScreen(),
         ),
       ],
     ),

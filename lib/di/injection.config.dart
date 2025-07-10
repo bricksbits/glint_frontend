@@ -14,6 +14,7 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' as _i981;
 
+import '../data/local/db/dao/event_like_dao.dart' as _i863;
 import '../data/local/db/dao/profile_dao.dart' as _i719;
 import '../data/local/db/dao/swipe_action_dao.dart' as _i1004;
 import '../data/local/db/database/glint_database.dart' as _i160;
@@ -25,6 +26,7 @@ import '../data/repo/admin/admin_dash_board_repo_impl.dart' as _i72;
 import '../data/repo/auth/authentication_repo_impl.dart' as _i840;
 import '../data/repo/auth/forgot_password_repo_impl.dart' as _i509;
 import '../data/repo/chat/chat_main/chat_repo_impl.dart' as _i651;
+import '../data/repo/event/event_repo_impl.dart' as _i390;
 import '../data/repo/onBoard/on_boarding_repo_impl.dart' as _i359;
 import '../data/repo/payment/payment_repo_impl.dart' as _i854;
 import '../data/repo/people/people_repo_impl.dart' as _i955;
@@ -43,6 +45,7 @@ import '../domain/business_logic/repo/auth/authentication_repo.dart' as _i873;
 import '../domain/business_logic/repo/auth/forgot_password_repo.dart' as _i995;
 import '../domain/business_logic/repo/boarding/on_boarding_repo.dart' as _i330;
 import '../domain/business_logic/repo/chat/chat_repo.dart' as _i849;
+import '../domain/business_logic/repo/event/events_repo.dart' as _i757;
 import '../domain/business_logic/repo/payment/payment_repo.dart' as _i235;
 import '../domain/business_logic/repo/people/people_repo.dart' as _i678;
 import '../domain/business_logic/repo/story/story_repo.dart' as _i762;
@@ -76,6 +79,8 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i719.ProfileDao>(
         () => localModule.getProfileDao(gh<_i160.GlintDatabase>()));
+    gh.singleton<_i863.EventLikeDao>(
+        () => localModule.getUserEventLikeDao(gh<_i160.GlintDatabase>()));
     gh.singleton<_i1004.SwipeActionDao>(
         () => localModule.getSwipeActionDao(gh<_i160.GlintDatabase>()));
     gh.lazySingleton<_i274.AsyncEncryptedSharedPreferenceHelper>(() =>
@@ -83,6 +88,11 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i930.EncryptedSharedPreferencesAsync>()));
     gh.factory<_i368.MyDioClient>(() => _i368.MyDioClient(
           gh<_i361.Dio>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+        ));
+    gh.factory<_i757.EventRepo>(() => _i390.EventRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i863.EventLikeDao>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
     gh.singleton<_i350.SwipeBufferManager>(() => _i350.SwipeBufferManager(

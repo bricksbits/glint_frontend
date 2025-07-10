@@ -6,7 +6,7 @@ import 'package:glint_frontend/features/admin/screen/super_admin_dashboard_scree
 import 'package:glint_frontend/features/admin/screen/track_event_interested_people_screen.dart';
 import 'package:glint_frontend/features/admin/screen/track_event_tickets_bought_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
-import 'package:glint_frontend/features/event/event_detail_screen.dart';
+import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
 import 'package:glint_frontend/features/splash/splash_screen.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';

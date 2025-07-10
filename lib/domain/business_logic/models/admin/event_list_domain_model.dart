@@ -1,4 +1,4 @@
-class EventListDomainModel {
+class AdminEventListDomainModel {
   final String eventName;
   final String eventId;
   final String eventThumbnail;
@@ -6,7 +6,7 @@ class EventListDomainModel {
   final String eventBy;
   final AdminEventState eventState;
 
-  EventListDomainModel({
+  AdminEventListDomainModel({
     required this.eventName,
     required this.eventId,
     required this.eventThumbnail,

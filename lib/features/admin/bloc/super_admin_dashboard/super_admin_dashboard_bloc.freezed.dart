@@ -951,7 +951,7 @@ mixin _$SuperAdminDashboardState {
   bool get isLoading => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
   EventDisplayType get currentTab => throw _privateConstructorUsedError;
-  List<EventListDomainModel> get currentSelectedList =>
+  List<AdminEventListDomainModel> get currentSelectedList =>
       throw _privateConstructorUsedError;
 
   /// Create a copy of SuperAdminDashboardState
@@ -971,7 +971,7 @@ abstract class $SuperAdminDashboardStateCopyWith<$Res> {
       {bool isLoading,
       String? errorMessage,
       EventDisplayType currentTab,
-      List<EventListDomainModel> currentSelectedList});
+      List<AdminEventListDomainModel> currentSelectedList});
 }
 
 /// @nodoc
@@ -1011,7 +1011,7 @@ class _$SuperAdminDashboardStateCopyWithImpl<$Res,
       currentSelectedList: null == currentSelectedList
           ? _value.currentSelectedList
           : currentSelectedList // ignore: cast_nullable_to_non_nullable
-              as List<EventListDomainModel>,
+              as List<AdminEventListDomainModel>,
     ) as $Val);
   }
 }
@@ -1029,7 +1029,7 @@ abstract class _$$SuperAdminDashboardStateImplCopyWith<$Res>
       {bool isLoading,
       String? errorMessage,
       EventDisplayType currentTab,
-      List<EventListDomainModel> currentSelectedList});
+      List<AdminEventListDomainModel> currentSelectedList});
 }
 
 /// @nodoc
@@ -1068,7 +1068,7 @@ class __$$SuperAdminDashboardStateImplCopyWithImpl<$Res>
       currentSelectedList: null == currentSelectedList
           ? _value._currentSelectedList
           : currentSelectedList // ignore: cast_nullable_to_non_nullable
-              as List<EventListDomainModel>,
+              as List<AdminEventListDomainModel>,
     ));
   }
 }
@@ -1080,7 +1080,7 @@ class _$SuperAdminDashboardStateImpl implements _SuperAdminDashboardState {
       {this.isLoading = false,
       this.errorMessage,
       this.currentTab = EventDisplayType.live,
-      final List<EventListDomainModel> currentSelectedList = const []})
+      final List<AdminEventListDomainModel> currentSelectedList = const []})
       : _currentSelectedList = currentSelectedList;
 
   @override
@@ -1091,10 +1091,10 @@ class _$SuperAdminDashboardStateImpl implements _SuperAdminDashboardState {
   @override
   @JsonKey()
   final EventDisplayType currentTab;
-  final List<EventListDomainModel> _currentSelectedList;
+  final List<AdminEventListDomainModel> _currentSelectedList;
   @override
   @JsonKey()
-  List<EventListDomainModel> get currentSelectedList {
+  List<AdminEventListDomainModel> get currentSelectedList {
     if (_currentSelectedList is EqualUnmodifiableListView)
       return _currentSelectedList;
     // ignore: implicit_dynamic_type
@@ -1140,7 +1140,7 @@ abstract class _SuperAdminDashboardState implements SuperAdminDashboardState {
           {final bool isLoading,
           final String? errorMessage,
           final EventDisplayType currentTab,
-          final List<EventListDomainModel> currentSelectedList}) =
+          final List<AdminEventListDomainModel> currentSelectedList}) =
       _$SuperAdminDashboardStateImpl;
 
   @override
@@ -1150,7 +1150,7 @@ abstract class _SuperAdminDashboardState implements SuperAdminDashboardState {
   @override
   EventDisplayType get currentTab;
   @override
-  List<EventListDomainModel> get currentSelectedList;
+  List<AdminEventListDomainModel> get currentSelectedList;
 
   /// Create a copy of SuperAdminDashboardState
   /// with the given fields replaced by the non-null parameter values.

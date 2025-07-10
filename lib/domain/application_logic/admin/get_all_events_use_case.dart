@@ -7,15 +7,15 @@ import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class GetAllEventsUsecase extends UseCase<List<EventListDomainModel>, void> {
+class GetAllEventsUsecase extends UseCase<List<AdminEventListDomainModel>, void> {
   final AdminDashboardRepo adminDashboardRepo;
 
   GetAllEventsUsecase(this.adminDashboardRepo);
 
   @override
-  Future<Stream<List<EventListDomainModel>>> buildUseCaseStream(
+  Future<Stream<List<AdminEventListDomainModel>>> buildUseCaseStream(
       void params) async {
-    final StreamController<List<EventListDomainModel>> controller =
+    final StreamController<List<AdminEventListDomainModel>> controller =
         StreamController();
     try {
       adminDashboardRepo.getAllEvents().then((result) {

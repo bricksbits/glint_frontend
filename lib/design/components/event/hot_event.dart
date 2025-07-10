@@ -1,35 +1,29 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/features/event/bloc/interaction/event_interaction_bloc.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 
 class HotEvent extends StatelessWidget {
   const HotEvent({
     super.key,
-    required this.eventId,
-    this.showDiscount = true,
+    required this.eventModel,
+    required this.getEventInfo,
+    required this.fetchProfiles,
   });
 
-  final int eventId;
-  final bool showDiscount;
+  final EventListDomainModel eventModel;
+  final Function(String) getEventInfo;
+  final Function(String) fetchProfiles;
 
   @override
   Widget build(BuildContext context) {
-    final cardHeight = showDiscount ? 220.0 : 128.0;
     final screenSize = MediaQuery.of(context).size;
-    const eventName = 'The Local Food Fest';
-    const eventDate = '20 Feb 2023';
-    const eventImage =
-        'https://media.istockphoto.com/id/1806011581/photo/overjoyed-happy-young-people-dancing-jumping-and-singing-during-concert-of-favorite-group.jpg?s=612x612&w=0&k=20&c=cMFdhX403-yKneupEN-VWSfFdy6UWf1H0zqo6QBChP4%3D';
-    const eventLocation = 'Shriram business park';
-    const eventOldPrice = 150;
-    const eventNewPrice = 200;
-    const eventDiscountDaysLeft = 7;
     const interactedUsers = [
       'https://avatars.githubusercontent.com/u/70279771?v=4',
       'https://avatars.githubusercontent.com/u/70279771?v=4',
@@ -38,81 +32,102 @@ class HotEvent extends StatelessWidget {
     return Stack(
       children: [
         // Blurred background image
-        Container(
-          width: double.infinity,
-          height: cardHeight,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
-            image: const DecorationImage(
-              image: NetworkImage(eventImage),
-              fit: BoxFit.cover,
-            ),
-          ),
+        GestureDetector(
+          onTap: () {
+            fetchProfiles(eventModel.eventId);
+          },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0,
-                  vertical: 20.0,
-                ),
-                color: Colors.black.withAlpha(
-                  160,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // event name
-                    Text(
-                      eventName,
-                      style: AppTheme.headingFour.copyWith(
-                        fontStyle: FontStyle.normal,
-                        color: AppColours.white,
-                        fontWeight: FontWeight.w900,
-                      ),
+            child: Stack(
+              children: [
+                // Background image
+                SizedBox(
+                  width: double.infinity,
+                  height: 220,
+                  child: CachedNetworkImage(
+                    imageUrl: eventModel.eventCoverImageUrl,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Image.asset(
+                      "lib/assets/images/event/event_banner_placeholder.png",
+                      fit: BoxFit.cover,
+                      height: 200,
                     ),
+                    errorWidget: (context, url, error) => Image.asset(
+                      "lib/assets/images/event/event_banner_placeholder.png",
+                      fit: BoxFit.cover,
+                      height: 200,
+                    ),
+                  ),
+                ),
 
-                    // event Location and Date
-                    Column(
+                // Blur & overlay
+                Positioned.fill(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      color: Colors.black.withAlpha(160),
+                    ),
+                  ),
+                ),
+
+                // Content
+                Positioned.fill(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GlintIconLabel(
-                          iconPath: 'lib/assets/icons/calendar_icon.svg',
-                          svgColor: AppColours.vibrantYellow,
-                          label: eventDate,
-                          style: AppTheme.simpleText.copyWith(
-                            fontSize: 12.0,
+                        // Event name
+                        Text(
+                          eventModel.eventName,
+                          style: AppTheme.headingFour.copyWith(
+                            fontStyle: FontStyle.normal,
                             color: AppColours.white,
+                            fontWeight: FontWeight.w900,
                           ),
                         ),
-                        const Gap(10.0),
-                        GlintIconLabel(
-                          iconPath: 'lib/assets/icons/location_icon.svg',
-                          svgColor: AppColours.vibrantYellow,
-                          label: eventLocation,
-                          style: AppTheme.simpleText.copyWith(
-                            fontSize: 12.0,
-                            color: AppColours.white,
-                          ),
+
+                        // Date and location
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GlintIconLabel(
+                              iconPath: 'lib/assets/icons/calendar_icon.svg',
+                              svgColor: AppColours.vibrantYellow,
+                              label: eventModel.eventdate,
+                              style: AppTheme.simpleText.copyWith(
+                                fontSize: 12.0,
+                                color: AppColours.white,
+                              ),
+                            ),
+                            const Gap(10.0),
+                            GlintIconLabel(
+                              iconPath: 'lib/assets/icons/location_icon.svg',
+                              svgColor: AppColours.vibrantYellow,
+                              label: eventModel.eventLocation,
+                              style: AppTheme.simpleText.copyWith(
+                                fontSize: 12.0,
+                                color: AppColours.white,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Pricing and interested profiles
+                        _HotEventDiscountAndInterestedProfiles(
+                          eventId: eventModel.eventId,
+                          eventOldPrice: eventModel.eventOldPrice,
+                          eventNewPrice: eventModel.eventCurrentPrice,
+                          eventDiscountDaysLeft: eventModel.daysLeft,
+                          interactedUsers: interactedUsers,
                         ),
                       ],
                     ),
-
-                    // pricing and interested profiles
-                    if (showDiscount)
-                      _HotEventDiscountAndInterestedProfiles(
-                        eventId: eventId,
-                        eventOldPrice: eventOldPrice,
-                        eventNewPrice: eventNewPrice,
-                        eventDiscountDaysLeft: eventDiscountDaysLeft,
-                        interactedUsers: interactedUsers,
-                      ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -121,39 +136,53 @@ class HotEvent extends StatelessWidget {
         Positioned(
           right: 0,
           child: Container(
-            width: kIsWeb
-                ? screenSize.width > 560
-                    ? 300.0
-                    : screenSize.width < 360
-                        ? 60.0
-                        : 140.0
-                : screenSize.width * 0.35,
-            height: cardHeight,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(eventImage),
-                fit: BoxFit.cover,
-              ),
-              border: Border(
-                left: BorderSide(
-                  color: AppColours.white,
-                  width: 1.5,
+              width: kIsWeb
+                  ? screenSize.width > 560
+                      ? 300.0
+                      : screenSize.width < 360
+                          ? 60.0
+                          : 140.0
+                  : screenSize.width * 0.35,
+              height: 220,
+              decoration: const BoxDecoration(
+                border: Border(
+                  left: BorderSide(
+                    color: AppColours.white,
+                    width: 1.5,
+                  ),
+                ),
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(20.0),
+                  bottomRight: Radius.circular(20.0),
                 ),
               ),
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20.0),
-                bottomRight: Radius.circular(20.0),
-              ),
-            ),
-          ),
+              child: FadeInImage.assetNetwork(
+                placeholder: 'lib/assets/images/event/event_banner_placeholder.png',
+                // Local placeholder
+                image: eventModel.eventCoverImageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 220,
+                imageErrorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'lib/assets/images/event/event_banner_placeholder.png',
+                    fit: BoxFit.cover,
+                  );
+                },
+              )),
         ),
 
         // info icon button
-        Positioned(
-          top: 12.0,
-          right: 14.0,
-          child: SvgPicture.asset(
-            'lib/assets/icons/info_icon.svg',
+        GestureDetector(
+          onTap: () {
+            getEventInfo(eventModel.eventId);
+          },
+          child: Positioned(
+            top: 12.0,
+            right: 14.0,
+            child: SvgPicture.asset(
+              'lib/assets/icons/info_icon.svg',
+            ),
           ),
         ),
       ],
@@ -170,10 +199,10 @@ class _HotEventDiscountAndInterestedProfiles extends StatelessWidget {
     required this.interactedUsers,
   });
 
-  final int eventId;
-  final int eventOldPrice;
-  final int eventNewPrice;
-  final int eventDiscountDaysLeft;
+  final String eventId;
+  final String eventOldPrice;
+  final String eventNewPrice;
+  final String eventDiscountDaysLeft;
   final List<String> interactedUsers;
 
   @override
@@ -249,9 +278,6 @@ class _HotEventDiscountAndInterestedProfiles extends StatelessWidget {
         // when clicked here, it will mark user as interested in event
         GestureDetector(
           onTap: () {
-            context.read<EventInteractionBloc>().add(
-                  MarkUserInterestedEvent(eventId),
-                );
             debugPrint('user as interested clicked for event $eventId');
             debugPrint('user as interested clicked');
           },

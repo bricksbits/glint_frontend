@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 
 class NearbyEventCard extends StatelessWidget {
-  const NearbyEventCard({super.key});
+  const NearbyEventCard({
+    super.key,
+    required this.eventModel,
+  });
+
+  final EventListDomainModel eventModel;
 
   @override
   Widget build(BuildContext context) {
-    const eventName = 'Taste Dubs';
-    const eventDate = '20 May 2023';
-    const daysLeft = 10;
-    const eventLocation = 'New Delhi, India';
-    const imageUrl =
-        'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cmVzdGF1cmFudHxlbnwwfHwwfHx8MA%3D%3D';
-
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 24.0,
@@ -36,7 +35,7 @@ class NearbyEventCard extends StatelessWidget {
             children: [
               // Event name
               Text(
-                eventName,
+                eventModel.eventName,
                 style: AppTheme.headingFour.copyWith(
                   fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.normal,
@@ -47,7 +46,7 @@ class NearbyEventCard extends StatelessWidget {
 
               GlintIconLabel(
                 iconPath: 'lib/assets/icons/calendar_icon.svg',
-                label: eventDate,
+                label: eventModel.eventdate,
                 style: AppTheme.simpleText.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
@@ -55,9 +54,9 @@ class NearbyEventCard extends StatelessWidget {
 
               const Gap(8.0),
 
-              const GlintIconLabel(
+              GlintIconLabel(
                 iconPath: 'lib/assets/icons/location_icon.svg',
-                label: eventLocation,
+                label: eventModel.eventLocation,
                 style: AppTheme.simpleText,
               )
             ],
@@ -67,8 +66,8 @@ class NearbyEventCard extends StatelessWidget {
 
           // Event image
           _buildImage(
-            imageUrl: imageUrl,
-            daysLeft: daysLeft,
+            imageUrl: eventModel.eventCoverImageUrl,
+            daysLeft: eventModel.daysLeft,
           ),
         ],
       ),
@@ -77,7 +76,7 @@ class NearbyEventCard extends StatelessWidget {
 
   Widget _buildImage({
     required String imageUrl,
-    required int daysLeft,
+    required String daysLeft,
   }) {
     return Stack(
       alignment: Alignment.bottomCenter,

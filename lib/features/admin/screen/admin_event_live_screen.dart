@@ -40,9 +40,9 @@ class AdminEventLiveScreen extends StatelessWidget {
                     : double.infinity,
                 child: Column(
                   children: [
-                    const HotEvent(
-                      eventId: 1,
-                    ),
+                    // const HotEvent(
+                    //   eventId: 1,
+                    // ),
                     const Gap(40.0),
                     SizedBox(
                       height: 52.0,

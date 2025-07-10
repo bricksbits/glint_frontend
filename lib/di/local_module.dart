@@ -2,6 +2,7 @@ import 'dart:convert' show base64UrlEncode, utf8;
 import 'package:crypto/crypto.dart' show sha256;
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:floor/floor.dart';
+import 'package:glint_frontend/data/local/db/dao/event_like_dao.dart';
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/db/dao/swipe_action_dao.dart';
 import 'package:glint_frontend/data/local/db/database/glint_database.dart';
@@ -22,6 +23,10 @@ abstract class LocalModule {
 
   @singleton
   ProfileDao getProfileDao(GlintDatabase database) => database.profileDao;
+
+  @singleton
+  EventLikeDao getUserEventLikeDao(GlintDatabase database) =>
+      database.eventLikeDao;
 
   @singleton
   SwipeActionDao getSwipeActionDao(GlintDatabase database) =>

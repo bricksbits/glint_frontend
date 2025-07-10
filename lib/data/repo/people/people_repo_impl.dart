@@ -54,7 +54,7 @@ class PeopleRepoImpl extends PeopleRepo {
   /// Get Profiles only from DB as source of Truth here.
   /// Todo: Save the current user Id and pass it from here
   @override
-  Stream<Result<List<PeopleCardModel>>> getProfilesFromDB() {
+  Stream<Result<List<PeopleCardModel>>> getProfilesFromDB(){
     return profileDao.getAllProfiles("1").map((profileEntityList) {
       try {
         final uiModels = profileEntityList

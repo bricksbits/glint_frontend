@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
+import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 enum FilterChipEnum {
   recent,
@@ -9,14 +14,14 @@ enum FilterChipEnum {
   saved,
 }
 
-class MainEventScreen extends StatefulWidget {
-  const MainEventScreen({super.key});
+class EventsListScreen extends StatefulWidget {
+  const EventsListScreen({super.key});
 
   @override
-  State<MainEventScreen> createState() => _MainEventScreenState();
+  State<EventsListScreen> createState() => _EventsListScreenState();
 }
 
-class _MainEventScreenState extends State<MainEventScreen> {
+class _EventsListScreenState extends State<EventsListScreen> {
   FilterChipEnum _selectedChip = FilterChipEnum.mostPopular;
   final List<Map<FilterChipEnum, String>> filterOptions = [
     {
@@ -32,84 +37,70 @@ class _MainEventScreenState extends State<MainEventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20.0,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Gap(30.0),
-            // event banner
-            _buildEventBanner(),
-            const Gap(20.0),
-
-            // filter chips
-            _buildFilterChips(),
-            const Gap(24.0),
-
-            // hot events
-            _buildHotEvents(),
-            const Gap(24.0),
-
-            // nearby events
-            _buildNearbyEvents(),
-
-            //end padding bottom
-            const Gap(16.0),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNearbyEvents() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Events Nearby',
-          style: AppTheme.headingOne.copyWith(
-            fontWeight: FontWeight.w900,
+    return BlocBuilder<EventBaseCubit, EventBaseState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
           ),
-        ),
-        const Gap(16.0),
-        const Column(
-          children: [
-            NearbyEventCard(),
-            Gap(16.0),
-            NearbyEventCard(),
-          ],
-        )
-      ],
-    );
-  }
+          child: CustomScrollView(
+            slivers: [
+              // Add top spacing
+              const SliverToBoxAdapter(child: SizedBox(height: 30.0)),
 
-  Widget _buildHotEvents() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Hot Events',
-          style: AppTheme.headingOne.copyWith(
-            fontWeight: FontWeight.w900,
+              // Event banner
+              SliverToBoxAdapter(child: _buildEventBanner()),
+              const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
+
+              // Filter chips
+              SliverToBoxAdapter(child: _buildFilterChips()),
+              const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
+
+              // Hot Events List
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final event = state.hotEvents[index];
+                    return HotEvent(
+                      eventModel: event,
+                      getEventInfo: (eventId) {
+                        context.pushNamed(
+                          "/${GlintMainRoutes.event.name}/${GlintEventRoutes.eventDetails.name}",
+                          extra: event,
+                        );
+                      },
+                      fetchProfiles: (eventId) {
+                        context
+                            .read<EventBaseCubit>()
+                            .fetchSelectedEventProfiles(eventId);
+                      },
+                    );
+                  },
+                  childCount: state.hotEvents.length,
+                ),
+              ),
+
+              const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
+
+              // Nearby Events List
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final event = state.normalEvents[index];
+                    return NearbyEventCard(
+                      eventModel: event,
+                    );
+                  },
+                  childCount: state.normalEvents.length,
+                ),
+              ),
+
+              // Bottom padding
+              const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
+            ],
           ),
-        ),
-        const Gap(16.0),
-        const Column(
-          children: [
-            HotEvent(
-              eventId: 1,
-            ),
-            Gap(16.0),
-            HotEvent(
-              showDiscount: false,
-              eventId: 2,
-            ),
-          ],
-        )
-      ],
+        );
+      },
     );
   }
 
