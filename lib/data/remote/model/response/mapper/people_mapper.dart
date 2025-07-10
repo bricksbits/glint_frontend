@@ -25,11 +25,9 @@ extension GetPeopleResponseMapper on GetPeopleResponse {
             profileViews: element.profileViews.toString(),
             profileLikes: element.profileLikes.toString(),
             pictureUrlList: element.pictureUrlList
-                    ?.where((picture) =>
-                        picture.fileExtension != null &&
-                        picture.presignedUrl != null)
+                    ?.where((picture) => picture.presignedUrl != null)
                     .map((filterPicture) =>
-                        "${filterPicture.presignedUrl}.${filterPicture.fileExtension}")
+                        "${filterPicture.presignedUrl}")
                     .toList() ??
                 [],
             profileTag: "NO PROFILE TAG",

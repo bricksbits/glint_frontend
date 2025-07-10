@@ -84,6 +84,14 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
           }
         }
 
+        final userId = successResponse.profile?.userId;
+        if (userId != null) {
+          await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.userIdKey,
+            userId.toString(),
+          );
+        }
+
         final tokenBufferTime = DateTime.now()
             .add(const Duration(minutes: 55))
             .microsecondsSinceEpoch;

@@ -2,6 +2,7 @@ import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:glint_frontend/data/local/db/dao/event_like_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/user_event_like_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_all_events_response.dart';
@@ -19,10 +20,12 @@ import 'package:injectable/injectable.dart';
 class EventRepoImpl extends EventRepo {
   final MyDioClient httpClient;
   final EventLikeDao eventLikeDao;
+  final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
 
   EventRepoImpl(
     this.httpClient,
     this.eventLikeDao,
+    this.sharedPreferenceHelper,
   );
 
   @override
@@ -91,9 +94,10 @@ class EventRepoImpl extends EventRepo {
   /// If the event already exists in the Local DB Avoid the API call altogether
   @override
   Future<Result<void>> userInterested(int? eventId) async {
-    //Todo: Get the User Id, from Shared Pref and provide it here
+    var userId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
     if (eventId == null) return Result.failure(Exception("Event Id is null"));
-    var userEventEntities = await eventLikeDao.getLikedEvents("");
+    var userEventEntities = await eventLikeDao.getLikedEvents(userId);
     var filterList = userEventEntities
         .where((entity) => entity.eventId == eventId.toString())
         .toList();
@@ -110,7 +114,7 @@ class EventRepoImpl extends EventRepo {
         case Success():
           await eventLikeDao.likeEvent(
             UserEventLikeEntity(
-              userId: "",
+              userId: userId,
               eventId: eventId.toString(),
             ),
           );

@@ -90,6 +90,11 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i361.Dio>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
+    gh.factory<_i757.EventRepo>(() => _i390.EventRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i863.EventLikeDao>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+        ));
     gh.singleton<_i350.SwipeBufferManager>(() => _i350.SwipeBufferManager(
           gh<_i368.MyDioClient>(),
           profileDao: gh<_i719.ProfileDao>(),
@@ -105,10 +110,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i143.IsUserLoggedInUsecase>(() =>
         _i143.IsUserLoggedInUsecase(
             gh<_i274.AsyncEncryptedSharedPreferenceHelper>()));
-    gh.factory<_i757.EventRepo>(() => _i390.EventRepoImpl(
-          gh<_i368.MyDioClient>(),
-          gh<_i863.EventLikeDao>(),
-        ));
     gh.lazySingleton<_i873.AuthenticationRepo>(
         () => _i840.AuthenticationRepoImpl(
               gh<_i368.MyDioClient>(),

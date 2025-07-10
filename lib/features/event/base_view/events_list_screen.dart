@@ -5,6 +5,8 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 enum FilterChipEnum {
   recent,
@@ -61,6 +63,17 @@ class _EventsListScreenState extends State<EventsListScreen> {
                     final event = state.hotEvents[index];
                     return HotEvent(
                       eventModel: event,
+                      getEventInfo: (eventId) {
+                        context.pushNamed(
+                          "/${GlintMainRoutes.event.name}/${GlintEventRoutes.eventDetails.name}",
+                          extra: event,
+                        );
+                      },
+                      fetchProfiles: (eventId) {
+                        context
+                            .read<EventBaseCubit>()
+                            .fetchSelectedEventProfiles(eventId);
+                      },
                     );
                   },
                   childCount: state.hotEvents.length,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/starter_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
@@ -148,9 +149,13 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintEventRoutes.eventDetails.name}',
           name: GlintEventRoutes.eventDetails.name,
-          builder: (context, state) => const EventDetailScreen(
-            isEventPreviewType: false,
-          ),
+          builder: (context, state) {
+            var eventListDomainModel = state.extra as EventListDomainModel;
+            return EventDetailScreen(
+              isEventPreviewType: false,
+              eventListDomainModel: eventListDomainModel,
+            );
+          },
         ),
         GoRoute(
           path: '/${GlintEventRoutes.peopleInterested.name}',
