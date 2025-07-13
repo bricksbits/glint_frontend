@@ -19,7 +19,6 @@ part 'people_cards_bloc.freezed.dart';
 class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
   final PeopleRepo peopleRepo = getIt.get<PeopleRepo>();
   final SwipeBufferManager swipeBufferManager = getIt.get<SwipeBufferManager>();
-  final assumingFetchedCurrentUserId = 0;
 
   StreamSubscription<Result<List<PeopleCardModel>>>? _peopleCardStream;
 
@@ -29,6 +28,7 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
 
     on<_Started>((event, emit) async {
 
+      var userId = await peopleRepo.getUserId();
       // final adsList = await peopleRepo.fetchAds();
       // Fetch Cards
       await peopleRepo.fetchProfiles();
@@ -44,6 +44,7 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
                     cardList: cardsList,
                     error: "",
                     isLoading: false,
+                    userId: userId,
                   ),
                 ),
               );
@@ -82,9 +83,10 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
 
     on<_RightSwiped>((event, emit) async {
       final passedId = event.onUserId;
+      final currentUserId = state.userId;
       swipeBufferManager.bufferSwipe(SwipeActionEntity(
-        collabId: assumingFetchedCurrentUserId + int.parse(passedId),
-        currentUserId: assumingFetchedCurrentUserId.toString(),
+        collabId: int.parse(currentUserId) + int.parse(passedId),
+        currentUserId: currentUserId.toString(),
         swipedOnUserId: passedId,
         action: SwipeActionType.RIGHT,
         timestamp: DateTime.now(),
@@ -93,9 +95,10 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
 
     on<_LeftSwiped>((event, emit) async {
       final passedId = event.onUserId;
+      final currentUserId = state.userId;
       swipeBufferManager.bufferSwipe(SwipeActionEntity(
-        collabId: assumingFetchedCurrentUserId + int.parse(passedId),
-        currentUserId: assumingFetchedCurrentUserId.toString(),
+        collabId: int.parse(currentUserId) + int.parse(passedId),
+        currentUserId: currentUserId.toString(),
         swipedOnUserId: passedId,
         action: SwipeActionType.LEFT,
         timestamp: DateTime.now(),
@@ -104,9 +107,10 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
 
     on<_SuperLiked>((event, emit) async {
       final passedId = event.onUserId;
+      final currentUserId = state.userId;
       swipeBufferManager.bufferSwipe(SwipeActionEntity(
-        collabId: assumingFetchedCurrentUserId + int.parse(passedId),
-        currentUserId: assumingFetchedCurrentUserId.toString(),
+        collabId: int.parse(currentUserId) + int.parse(passedId),
+        currentUserId: currentUserId.toString(),
         swipedOnUserId: passedId,
         action: SwipeActionType.SUPER_LIKE,
         timestamp: DateTime.now(),

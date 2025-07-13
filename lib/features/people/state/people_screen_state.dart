@@ -205,10 +205,13 @@ List<Map<String, String>> mapInterestsToLabelIconList({
   required List<String> userInterests,
 }) {
   return userInterests
-      .where((interest) => interestEmojisMap.containsKey(interest))
-      .map((interest) => {
-    'label': interest,
-    'icon': interestEmojisMap[interest]!,
+      .map((interest) =>
+  interest[0].toUpperCase() + interest.substring(1).toLowerCase())
+      .where((capitalizedInterest) => interestEmojisMap.containsKey(capitalizedInterest))
+      .map((capitalizedInterest) => {
+    'label': capitalizedInterest,
+    'icon': interestEmojisMap[capitalizedInterest]!,
   })
       .toList();
 }
+

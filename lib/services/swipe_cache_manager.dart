@@ -7,6 +7,7 @@ import 'package:glint_frontend/data/remote/model/request/people/user_action_requ
 import 'package:glint_frontend/data/remote/model/response/people/user_action_response.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/swipe_action_type.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:injectable/injectable.dart';
 
 import '../data/remote/client/http_request_enum.dart';
@@ -27,7 +28,8 @@ class SwipeBufferManager {
   Timer? _debounceTimer;
   bool _isProcessing = false;
   Duration debounceDuration = const Duration(seconds: 10);
-  int batchSize = 10;
+  int batchSize = 5;
+  String logPrefix = "BUFFER_MANAGER_SWIPES";
 
   SwipeBufferManager(
     this.httpClient, {
@@ -39,6 +41,7 @@ class SwipeBufferManager {
   /// Add the Swipe Item to SwipeAction Entity and
   /// Remove the item from the Profile Entity
   Future<void> bufferSwipe(SwipeActionEntity swipe) async {
+    debugLogger(logPrefix, "Item added to buffer, ${swipe.swipedOnUserId}");
     await swipeActionDao.insertSwipe(swipe);
     await profileDao.deleteAlreadySwipedOnProfile(
       int.parse(
@@ -58,6 +61,7 @@ class SwipeBufferManager {
   }
 
   /// Should be called on app pause (e.g., in dispose or app lifecycle event)
+  /// Todo: Should be called from parent Layout of Home Screen
   Future<void> flushOnAppPause() async {
     _debounceTimer?.cancel();
     await _flushBuffer();
@@ -97,6 +101,7 @@ class SwipeBufferManager {
   /// Todo: Send the Batches of the files here
   /// Todo: Add Analytics when number of matches missed,
   Future<bool> _sendBatchToServer(List<SwipeActionEntity> batch) async {
+    debugLogger(logPrefix, "${batch.length} Items Processing to Server");
     var userActionRequestModel = batch
         .map((item) => Actions(
             onUserId: int.parse(item.swipedOnUserId),
@@ -112,7 +117,7 @@ class SwipeBufferManager {
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
       endpoint: "user/action",
-      requestBody: requestModel,
+      requestBody: requestModel.toJson(),
     );
 
     switch (response) {
@@ -122,12 +127,14 @@ class SwipeBufferManager {
           var actionSuccessfulOn = postActions.message?.actionResponseList
               ?.map((action) => action.userId);
           if (actionSuccessfulOn?.length != batch.length) {
-            print("SWIPE Actions : Few Id's swipe missed");
+            debugLogger(logPrefix, "SWIPE Actions : Few Id's swipe missed");
           }
+          debugLogger(logPrefix, "${batch.length} Process Completed");
           return true;
         }
         return false;
       case Failure():
+        debugLogger(logPrefix, "${batch.length} Process Failed");
         return false;
     }
   }

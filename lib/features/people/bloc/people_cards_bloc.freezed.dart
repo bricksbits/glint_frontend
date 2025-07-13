@@ -1970,6 +1970,7 @@ abstract class _flushSwipeCards implements PeopleCardsEvent {
 mixin _$PeopleCardsState {
   bool get isLoading => throw _privateConstructorUsedError;
   List<PeopleCardModel> get cardList => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
   String get error => throw _privateConstructorUsedError;
   int get currentPaginatedIndex => throw _privateConstructorUsedError;
   int get currentPaginatedPage => throw _privateConstructorUsedError;
@@ -1980,6 +1981,7 @@ mixin _$PeopleCardsState {
     required TResult Function(
             bool isLoading,
             List<PeopleCardModel> cardList,
+            String userId,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
@@ -1993,6 +1995,7 @@ mixin _$PeopleCardsState {
     TResult? Function(
             bool isLoading,
             List<PeopleCardModel> cardList,
+            String userId,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
@@ -2006,6 +2009,7 @@ mixin _$PeopleCardsState {
     TResult Function(
             bool isLoading,
             List<PeopleCardModel> cardList,
+            String userId,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
@@ -2048,6 +2052,7 @@ abstract class $PeopleCardsStateCopyWith<$Res> {
   $Res call(
       {bool isLoading,
       List<PeopleCardModel> cardList,
+      String userId,
       String error,
       int currentPaginatedIndex,
       int currentPaginatedPage,
@@ -2072,6 +2077,7 @@ class _$PeopleCardsStateCopyWithImpl<$Res, $Val extends PeopleCardsState>
   $Res call({
     Object? isLoading = null,
     Object? cardList = null,
+    Object? userId = null,
     Object? error = null,
     Object? currentPaginatedIndex = null,
     Object? currentPaginatedPage = null,
@@ -2087,6 +2093,10 @@ class _$PeopleCardsStateCopyWithImpl<$Res, $Val extends PeopleCardsState>
           ? _value.cardList
           : cardList // ignore: cast_nullable_to_non_nullable
               as List<PeopleCardModel>,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       error: null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -2122,6 +2132,7 @@ abstract class _$$IgniteImplCopyWith<$Res>
   $Res call(
       {bool isLoading,
       List<PeopleCardModel> cardList,
+      String userId,
       String error,
       int currentPaginatedIndex,
       int currentPaginatedPage,
@@ -2144,6 +2155,7 @@ class __$$IgniteImplCopyWithImpl<$Res>
   $Res call({
     Object? isLoading = null,
     Object? cardList = null,
+    Object? userId = null,
     Object? error = null,
     Object? currentPaginatedIndex = null,
     Object? currentPaginatedPage = null,
@@ -2159,6 +2171,10 @@ class __$$IgniteImplCopyWithImpl<$Res>
           ? _value._cardList
           : cardList // ignore: cast_nullable_to_non_nullable
               as List<PeopleCardModel>,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       error: null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -2189,6 +2205,7 @@ class _$IgniteImpl implements _Ignite {
   const _$IgniteImpl(
       {this.isLoading = true,
       final List<PeopleCardModel> cardList = const [],
+      this.userId = "",
       this.error = "",
       this.currentPaginatedIndex = 1,
       this.currentPaginatedPage = 0,
@@ -2210,6 +2227,9 @@ class _$IgniteImpl implements _Ignite {
 
   @override
   @JsonKey()
+  final String userId;
+  @override
+  @JsonKey()
   final String error;
   @override
   @JsonKey()
@@ -2226,7 +2246,7 @@ class _$IgniteImpl implements _Ignite {
 
   @override
   String toString() {
-    return 'PeopleCardsState.ignite(isLoading: $isLoading, cardList: $cardList, error: $error, currentPaginatedIndex: $currentPaginatedIndex, currentPaginatedPage: $currentPaginatedPage, lastSwipedProfile: $lastSwipedProfile, matchUpProfile: $matchUpProfile)';
+    return 'PeopleCardsState.ignite(isLoading: $isLoading, cardList: $cardList, userId: $userId, error: $error, currentPaginatedIndex: $currentPaginatedIndex, currentPaginatedPage: $currentPaginatedPage, lastSwipedProfile: $lastSwipedProfile, matchUpProfile: $matchUpProfile)';
   }
 
   @override
@@ -2237,6 +2257,7 @@ class _$IgniteImpl implements _Ignite {
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             const DeepCollectionEquality().equals(other._cardList, _cardList) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.currentPaginatedIndex, currentPaginatedIndex) ||
                 other.currentPaginatedIndex == currentPaginatedIndex) &&
@@ -2253,6 +2274,7 @@ class _$IgniteImpl implements _Ignite {
       runtimeType,
       isLoading,
       const DeepCollectionEquality().hash(_cardList),
+      userId,
       error,
       currentPaginatedIndex,
       currentPaginatedPage,
@@ -2273,6 +2295,7 @@ class _$IgniteImpl implements _Ignite {
     required TResult Function(
             bool isLoading,
             List<PeopleCardModel> cardList,
+            String userId,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
@@ -2280,7 +2303,7 @@ class _$IgniteImpl implements _Ignite {
             PeopleCardModel? matchUpProfile)
         ignite,
   }) {
-    return ignite(isLoading, cardList, error, currentPaginatedIndex,
+    return ignite(isLoading, cardList, userId, error, currentPaginatedIndex,
         currentPaginatedPage, lastSwipedProfile, matchUpProfile);
   }
 
@@ -2290,6 +2313,7 @@ class _$IgniteImpl implements _Ignite {
     TResult? Function(
             bool isLoading,
             List<PeopleCardModel> cardList,
+            String userId,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
@@ -2297,8 +2321,15 @@ class _$IgniteImpl implements _Ignite {
             PeopleCardModel? matchUpProfile)?
         ignite,
   }) {
-    return ignite?.call(isLoading, cardList, error, currentPaginatedIndex,
-        currentPaginatedPage, lastSwipedProfile, matchUpProfile);
+    return ignite?.call(
+        isLoading,
+        cardList,
+        userId,
+        error,
+        currentPaginatedIndex,
+        currentPaginatedPage,
+        lastSwipedProfile,
+        matchUpProfile);
   }
 
   @override
@@ -2307,6 +2338,7 @@ class _$IgniteImpl implements _Ignite {
     TResult Function(
             bool isLoading,
             List<PeopleCardModel> cardList,
+            String userId,
             String error,
             int currentPaginatedIndex,
             int currentPaginatedPage,
@@ -2316,7 +2348,7 @@ class _$IgniteImpl implements _Ignite {
     required TResult orElse(),
   }) {
     if (ignite != null) {
-      return ignite(isLoading, cardList, error, currentPaginatedIndex,
+      return ignite(isLoading, cardList, userId, error, currentPaginatedIndex,
           currentPaginatedPage, lastSwipedProfile, matchUpProfile);
     }
     return orElse();
@@ -2355,6 +2387,7 @@ abstract class _Ignite implements PeopleCardsState {
   const factory _Ignite(
       {final bool isLoading,
       final List<PeopleCardModel> cardList,
+      final String userId,
       final String error,
       final int currentPaginatedIndex,
       final int currentPaginatedPage,
@@ -2365,6 +2398,8 @@ abstract class _Ignite implements PeopleCardsState {
   bool get isLoading;
   @override
   List<PeopleCardModel> get cardList;
+  @override
+  String get userId;
   @override
   String get error;
   @override
