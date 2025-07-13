@@ -15,28 +15,39 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
+  String? _pendingNavigationRoute;
   static const Duration _animationDuration = Duration(seconds: 2);
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this);
+    _controller = AnimationController(
+      vsync: this,
+      duration: _animationDuration,
+    );
 
     _controller.addStatusListener((status) {
-      print("Splash Screen Animation Completed");
+      if (status == AnimationStatus.completed) {
+        if (_pendingNavigationRoute != null && context.mounted) {
+          context.goNamed(_pendingNavigationRoute!);
+        }
+      }
     });
-  }
-
-  void _navigateToRespectedRoutes(String newRoute) {
-    if (context.mounted) {
-      context.goNamed(newRoute);
-    }
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _handleNavigationRequest(String newRoute) {
+    _pendingNavigationRoute = newRoute;
+    if (_controller.isAnimating) {
+      // Already animating — just wait.
+      return;
+    }
+    _controller.forward(); // If animation wasn't started yet.
   }
 
   @override
@@ -52,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen>
           state.when(
             initial: () {},
             navigateTo: (newDestination) {
-              _navigateToRespectedRoutes(newDestination);
+              _handleNavigationRequest(newDestination);
             },
             splashSuccess: () {
               context

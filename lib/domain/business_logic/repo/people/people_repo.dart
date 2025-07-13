@@ -11,4 +11,6 @@ abstract class PeopleRepo {
   Future<Result<void>> fetchProfiles();
 
   Future<Result<bool>> userSwipeGesture(SwipeGestureType gestureType);
+
+  Future<String> getUserId();
 }

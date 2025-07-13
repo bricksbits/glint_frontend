@@ -43,6 +43,7 @@ final Map<String, String> interestEmojisMap = {
   // 💡 Additional Interests (Inspired by Tinder/Bumble)
   'Pets': '🐶',
   'Books': '📚',
+  'Education': '📚',
   'Fashion': '👗',
   'Spirituality': '🕉️',
   'Memes': '😹',

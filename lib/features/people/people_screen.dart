@@ -5,7 +5,9 @@ import 'package:glint_frontend/design/components/people/scrollable_profile_view.
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 
 class PeopleScreen extends StatelessWidget {
-  const PeopleScreen({super.key});
+  PeopleScreen({super.key});
+
+  final CardSwiperController cardSwiperController = CardSwiperController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,32 @@ class PeopleScreen extends StatelessWidget {
                         up: false,
                         down: false,
                       ),
+                      onSwipe: (prev, current, swipeDirection) {
+                        if (current != null) {
+                          var fetchedUser = state.cardList.elementAt(current);
+                          switch (swipeDirection) {
+                            case CardSwiperDirection.none:
+                              return false;
+                            case CardSwiperDirection.left:
+                              context.read<PeopleCardsBloc>().add(
+                                  PeopleCardsEvent.onLeftSwiped(
+                                      fetchedUser.userId));
+                              return true;
+                            case CardSwiperDirection.right:
+                              context.read<PeopleCardsBloc>().add(
+                                  PeopleCardsEvent.onRightSwiped(
+                                      fetchedUser.userId));
+                              return true;
+                            case CardSwiperDirection.top:
+                              return false;
+                            case CardSwiperDirection.bottom:
+                              return false;
+                          }
+                        } else {
+                          return false;
+                        }
+                      },
+                      controller: cardSwiperController,
                       numberOfCardsDisplayed: 1,
                       onUndo:
                           (previousIndex, currentIndex, cardSwipeDirection) {
@@ -41,7 +69,12 @@ class PeopleScreen extends StatelessWidget {
                       cardBuilder: (context, index, percentThresholdX,
                               percentThresholdY) =>
                           ScrollableProfileView(
-                              peopleUiModel: state.cardList[index]),
+                        peopleUiModel: state.cardList[index],
+                        onLiked: (userId) {},
+                        onDisLiked: (userId) {},
+                        onDm: (userId) {},
+                        onSuperLiked: (userId) {},
+                      ),
                     )
                   : const Center(
                       child: Text("Its a little quiet here"),

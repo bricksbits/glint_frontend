@@ -1,6 +1,7 @@
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/profile_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/ads/advertiisment_response.dart';
@@ -54,8 +55,10 @@ class PeopleRepoImpl extends PeopleRepo {
   /// Get Profiles only from DB as source of Truth here.
   /// Todo: Save the current user Id and pass it from here
   @override
-  Stream<Result<List<PeopleCardModel>>> getProfilesFromDB(){
-    return profileDao.getAllProfiles("1").map((profileEntityList) {
+  Stream<Result<List<PeopleCardModel>>> getProfilesFromDB() async* {
+    var userId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
+    yield* profileDao.getAllProfiles(userId).map((profileEntityList) {
       try {
         final uiModels = profileEntityList
             .map((profileEntity) => profileEntity.mapToPeopleUiModel())
@@ -78,7 +81,6 @@ class PeopleRepoImpl extends PeopleRepo {
   }
 
   /// Fetch More profiles and save it to DB
-  /// Todo: Create matching entity and models for consistent data flow
   /// Todo: Queries for Pagination
   @override
   Future<Result<void>> fetchProfiles() async {
@@ -103,5 +105,12 @@ class PeopleRepoImpl extends PeopleRepo {
         return Failure(
             Exception("No more profiles available : ${response.error}"));
     }
+  }
+
+  @override
+  Future<String> getUserId() async {
+    var userId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
+    return userId;
   }
 }

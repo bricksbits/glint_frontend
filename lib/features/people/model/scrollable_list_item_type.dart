@@ -9,7 +9,7 @@ enum ScrollableListItemType {
 
 class PeopleListModelData {
   final ScrollableListItemType itemType;
-  final Map<String, String?>? about;
+  final Map<String, String>? about;
   final String? bio;
   final String? lookingFor;
   final List<String>? interests;

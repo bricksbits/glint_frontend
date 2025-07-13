@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:glint_frontend/features/people/model/emojis_mega_map.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/features/people/model/scrollable_list_item_type.dart';
 
@@ -176,3 +178,40 @@ PeopleScreenState convertPeopleUiModelToPeopleScreenState(
 
   return PeopleScreenState(listModel, topCardModel);
 }
+
+List<Map<String, dynamic>> mapAboutSectionToIconTextList(Map<String, String> aboutSection) {
+  final iconMapping = {
+    'height': Icons.straighten,
+    'workoutHabits': Icons.fitness_center,
+    'drinkingHabits': Icons.local_bar,
+    'smokingHabits': Icons.smoking_rooms,
+  };
+
+  List<Map<String, dynamic>> result = [];
+
+  aboutSection.forEach((key, value) {
+    if (value.isNotEmpty && iconMapping.containsKey(key)) {
+      result.add({
+        'icon': iconMapping[key],
+        'text': value,
+      });
+    }
+  });
+
+  return result;
+}
+
+List<Map<String, String>> mapInterestsToLabelIconList({
+  required List<String> userInterests,
+}) {
+  return userInterests
+      .map((interest) =>
+  interest[0].toUpperCase() + interest.substring(1).toLowerCase())
+      .where((capitalizedInterest) => interestEmojisMap.containsKey(capitalizedInterest))
+      .map((capitalizedInterest) => {
+    'label': capitalizedInterest,
+    'icon': interestEmojisMap[capitalizedInterest]!,
+  })
+      .toList();
+}
+

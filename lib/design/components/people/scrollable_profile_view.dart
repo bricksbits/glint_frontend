@@ -6,13 +6,20 @@ import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/features/people/model/scrollable_list_item_type.dart';
 import 'package:glint_frontend/features/people/state/people_screen_state.dart';
 
-//TODO(Nike): Use proper Exports
 class ScrollableProfileView extends StatelessWidget {
   final PeopleCardModel peopleUiModel;
+  final Function(String) onLiked;
+  final Function(String) onDisLiked;
+  final Function(String) onDm;
+  final Function(String) onSuperLiked;
 
   const ScrollableProfileView({
     super.key,
     required this.peopleUiModel,
+    required this.onLiked,
+    required this.onDisLiked,
+    required this.onDm,
+    required this.onSuperLiked,
   });
 
   @override
@@ -34,7 +41,7 @@ class ScrollableProfileView extends StatelessWidget {
                 imageUrl: peopleUiModel.convert().topCardModel.imageUrl,
                 recentActive: "New",
                 shareProfile: () {},
-                designation: "Fashion Designer",
+                designation: peopleUiModel.occupation,
                 sendMessage: () {},
                 sendSuperLike: () {},
               ),
@@ -54,6 +61,7 @@ class ScrollableProfileView extends StatelessWidget {
                       peopleUiModel.convert().listModel[index],
                       screenWidth,
                       screenHeight,
+                      peopleUiModel.username,
                     )
                   ],
                 );
@@ -74,6 +82,7 @@ class ScrollableProfileView extends StatelessWidget {
     PeopleListModelData item,
     double screenHeight,
     double screenWidth,
+    String userName,
   ) {
     switch (item.itemType) {
       case ScrollableListItemType.IMAGE:
@@ -88,86 +97,35 @@ class ScrollableProfileView extends StatelessWidget {
             : const SizedBox.shrink(); // Handle null imageUrl
       case ScrollableListItemType.ABOUT:
         return item.about != null
-            ? const ProfileCardAboutBox(
+            ? ProfileCardAboutBox(
                 title: 'About',
-                tags: [
-                  {
-                    'icon': Icons.school,
-                    'text': 'Graduate',
-                  },
-                  {
-                    'icon': Icons.wc,
-                    'text': 'She/Her',
-                  },
-                  {
-                    'icon': Icons.straighten,
-                    'text': '5\'10',
-                  },
-                  {
-                    'icon': Icons.fitness_center,
-                    'text': 'Gym freak',
-                  },
-                  {
-                    'icon': Icons.local_bar,
-                    'text': 'Never',
-                  },
-                  {
-                    'icon': Icons.smoking_rooms,
-                    'text': 'Never',
-                  }
-                ],
-                name: 'Abhishek',
+                tags: mapAboutSectionToIconTextList(item.about!),
+                name: userName,
               )
             : const SizedBox.shrink();
       case ScrollableListItemType.BIO:
         return item.bio != null
-            ? const ProfileCardBioBox(
-                content: 'Hey there, just a chill person here')
+            ? ProfileCardBioBox(
+                content: item.bio!,
+              )
             : const SizedBox.shrink();
       case ScrollableListItemType.LOOKING_FOR:
         return item.lookingFor != null
-            ? const ProfileCardLookingForBox(lookingFor: 'Something Casual')
+            ? ProfileCardLookingForBox(lookingFor: item.lookingFor!)
             : const SizedBox.shrink();
       case ScrollableListItemType.INTEREST:
         return item.interests != null
-            ? const ProfileInterestVibeBox(
-                interests: [
-                  {
-                    'label': 'Photography',
-                    'icon': '📸',
-                  },
-                  {
-                    'label': 'Stand-Up Comedy',
-                    'icon': '🎙',
-                  },
-                  {
-                    'label': 'Bollywood',
-                    'icon': '💃🏻',
-                  },
-                  {
-                    'label': 'Music',
-                    'icon': '🎧',
-                  },
-                  {
-                    'label': 'Yoga',
-                    'icon': '🧘',
-                  },
-                  {
-                    'label': 'Festivals',
-                    'icon': '🎊',
-                  },
-                  {
-                    'label': 'Travelling',
-                    'icon': '✈️',
-                  },
-                ],
+            ? ProfileInterestVibeBox(
+                interests: mapInterestsToLabelIconList(
+                  userInterests: item.interests!,
+                ),
               )
             : const SizedBox.shrink();
       case ScrollableListItemType.LOCATION:
         return item.location != null
-            ? const ProfileLocationBox(
-                location: 'Karnal, Haryana',
-                distance: '9',
+            ? ProfileLocationBox(
+                location: item.location!,
+                distance: "Near you",
               )
             : const SizedBox.shrink();
     }

@@ -20,7 +20,6 @@ import '../data/local/db/dao/swipe_action_dao.dart' as _i1004;
 import '../data/local/db/database/glint_database.dart' as _i160;
 import '../data/local/persist/async_encrypted_shared_preference_helper.dart'
     as _i274;
-import '../data/local/swipe_cache_manager.dart' as _i350;
 import '../data/remote/client/my_dio_client.dart' as _i368;
 import '../data/repo/admin/admin_dash_board_repo_impl.dart' as _i72;
 import '../data/repo/auth/authentication_repo_impl.dart' as _i840;
@@ -50,6 +49,7 @@ import '../domain/business_logic/repo/payment/payment_repo.dart' as _i235;
 import '../domain/business_logic/repo/people/people_repo.dart' as _i678;
 import '../domain/business_logic/repo/story/story_repo.dart' as _i762;
 import '../services/image_manager_service.dart' as _i43;
+import '../services/swipe_cache_manager.dart' as _i517;
 import 'local_module.dart' as _i519;
 import 'network_module.dart' as _i567;
 
@@ -95,7 +95,7 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i863.EventLikeDao>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
-    gh.singleton<_i350.SwipeBufferManager>(() => _i350.SwipeBufferManager(
+    gh.singleton<_i517.SwipeBufferManager>(() => _i517.SwipeBufferManager(
           gh<_i368.MyDioClient>(),
           profileDao: gh<_i719.ProfileDao>(),
           swipeActionDao: gh<_i1004.SwipeActionDao>(),
