@@ -79,8 +79,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               label: 'Get OTP',
               onPressed: () {
                 context.go(
-                    "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.otp.name}"
-                );
+                    "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.otp.name}");
                 debugPrint('Get otp button pressed');
               },
             ),

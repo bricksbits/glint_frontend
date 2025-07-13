@@ -1,0 +1,94 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:glint_frontend/data/remote/model/request/auth/reset_password_with_otp_request_body.dart';
+import 'package:glint_frontend/data/remote/model/request/auth/send_otp_request_body.dart';
+import 'package:glint_frontend/di/injection.dart';
+import 'package:glint_frontend/domain/application_logic/auth/reset_password_with_otp_use_case.dart';
+import 'package:glint_frontend/domain/application_logic/auth/send_otp_use_case.dart';
+
+part 'reset_password_bloc.freezed.dart';
+part 'reset_password_event.dart';
+part 'reset_password_state.dart';
+
+class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
+  final SendOtpUseCase sendOtpUseCase = getIt.get();
+  final ResetPasswordWithOtpUseCase resetPasswordWithOtpUseCase = getIt.get();
+
+  ResetPasswordBloc() : super(const ResetPasswordState.initial()) {
+    on<_SendOtp>((event, emit) async {
+      debugPrint('SEND OTP IS CALLED');
+      emit(const ResetPasswordState.loading());
+      await _sendOtp(event.email, emit);
+    });
+
+    on<_ResetPassword>((event, emit) async {
+      emit(const ResetPasswordState.loading());
+      await _resetPassword(event.email, event.otp, event.newPassword);
+    });
+
+    on<_EmitNewState>((event, emit) {
+      emit(event.newState);
+    });
+  }
+
+  Future<void> _sendOtp(String email, Emitter<ResetPasswordState> emit) async {
+    sendOtpUseCase.perform(
+      (response) {
+        debugPrint("BLoC: OTP sent success!");
+
+        add(
+          const ResetPasswordEvent.emitNewState(
+            ResetPasswordState.otpSent(),
+          ),
+        );
+      },
+      (error) {
+        debugPrint("BLoC: OTP send error: $error");
+
+        add(
+          ResetPasswordEvent.emitNewState(
+            ResetPasswordState.error(
+              "Failed to send OTP: ${error.toString()}",
+            ),
+          ),
+        );
+      },
+      () {
+        debugPrint("BLoC: OTP send done");
+      },
+      SendOtpRequestBody(emailId: email),
+    );
+  }
+
+  Future<void> _resetPassword(String email, String otp, String newPassword) async {
+    resetPasswordWithOtpUseCase.perform(
+      (response) {
+        debugPrint('RESET PASSWORD');
+        add(
+          const ResetPasswordEvent.emitNewState(
+            ResetPasswordState.passwordResetSuccess(),
+          ),
+        );
+      },
+      (error) {
+        debugPrint("Reset Password Bloc : Error $error");
+        add(
+          ResetPasswordEvent.emitNewState(
+            ResetPasswordState.error(
+              "Failed to reset password: ${error.toString()}",
+            ),
+          ),
+        );
+      },
+      () {
+        debugPrint("Reset Password Bloc : On Done");
+      },
+      ResetPasswordWithOtpRequestBody(
+        emailId: email,
+        passwordResetOtp: otp,
+        newPassword: newPassword,
+      ),
+    );
+  }
+}

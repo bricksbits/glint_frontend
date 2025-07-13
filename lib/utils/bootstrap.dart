@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:logging/logging.dart';
 
+import '../features/auth/blocs/reset_password/reset_password_bloc.dart';
 import 'internet/internet_status_checker_cubit.dart';
 
 Future<void> bootstrap(
@@ -17,8 +18,15 @@ Future<void> bootstrap(
   await configureDependencies();
   final connectivity = Connectivity();
   runApp(
-    BlocProvider(
-      create: (context) => InternetStatusCheckerCubit(connectivity),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<ResetPasswordBloc>(
+          create: (_) => ResetPasswordBloc(),
+        ),
+        BlocProvider<InternetStatusCheckerCubit>(
+          create: (_) => InternetStatusCheckerCubit(connectivity),
+        )
+      ],
       child: await builder(),
     ),
   );

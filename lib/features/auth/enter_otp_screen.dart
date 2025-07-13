@@ -8,17 +8,24 @@ import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
 class EnterOtpScreen extends StatefulWidget {
-  const EnterOtpScreen({super.key});
+  const EnterOtpScreen({super.key, required this.email});
+
+  final String? email;
 
   @override
   State<EnterOtpScreen> createState() => _EnterOtpScreenState();
 }
 
 class _EnterOtpScreenState extends State<EnterOtpScreen> {
-  final bool isAdmin = true;
+  final bool isAdmin = false;
 
   final _codeController = TextEditingController();
   bool buttonDisabled = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {

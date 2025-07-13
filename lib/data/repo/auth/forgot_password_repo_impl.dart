@@ -1,8 +1,8 @@
-import 'package:encrypt_shared_preferences/provider.dart';
-import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/reset_password_request_body.dart';
+import 'package:glint_frontend/data/remote/model/request/auth/reset_password_with_otp_request_body.dart';
+import 'package:glint_frontend/data/remote/model/request/auth/send_otp_request_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/forgot_password_repo.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
@@ -29,11 +29,48 @@ class ForgotPasswordRepoImpl extends ForgotPasswordRepo {
   }
 
   @override
-  Future<Result<void>> resetPassword(ResetPasswordRequestBody body) {
-    final response = apiCallHandler(
+  Future<Result<void>> resetPassword(ResetPasswordRequestBody body) async {
+    final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
       endpoint: "/reset-password",
+      requestBody: body.toJson(),
+      passedQueryParameters: null,
+    );
+
+    switch (response) {
+      case Success():
+        return const Success(true);
+      case Failure():
+        return Failure(Exception());
+    }
+  }
+
+  @override
+  Future<Result<void>> sendOtp(SendOtpRequestBody body) async {
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.POST,
+      endpoint: "/auth/v1/reset-password/generate-otp",
+      requestBody: body.toJson(),
+      passedQueryParameters: null,
+    );
+
+    switch (response) {
+      case Success():
+        return const Success(true);
+      case Failure():
+        return Failure(Exception());
+    }
+  }
+
+  @override
+  Future<Result<void>> resetPasswordWithOtp(
+      ResetPasswordWithOtpRequestBody body) {
+    final response = apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.PUT,
+      endpoint: "/reset-password-with-otp",
       requestBody: body.toJson(),
       passedQueryParameters: null,
     );
