@@ -8,5 +8,5 @@ abstract class StoryRepo {
 
   Future<Result<bool>> uploadStory(File newlyUploadedStoryFile);
 
-  Future<void> deleteStory(File selectedStory);
+  Future<Result<void>> deleteStory(File selectedStory);
 }

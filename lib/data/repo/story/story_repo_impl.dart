@@ -51,9 +51,37 @@ class StoryRepoImpl extends StoryRepo {
   }
 
   @override
-  Future<void> deleteStory(File selectedStory) {
-    // TODO: implement deleteStory
-    throw UnimplementedError();
+  Future<Result<void>> deleteStory(File selectedStory) async {
+    String fileName = selectedStory.path.split('/').last;
+    FormData formData = FormData.fromMap({
+      'story': await MultipartFile.fromFile(
+        selectedStory.path,
+        filename: fileName,
+      ),
+    });
+
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.DELETE,
+      endpoint: "user/content/story",
+      uploadFilesFormData: formData,
+    );
+
+    switch (response) {
+      case Success():
+        final storiesResponse = StoryUploadResponse.fromJson(response.data);
+        if (storiesResponse.filesUploaded?.isNotEmpty == true) {
+          return const Success(true);
+        } else {
+          return Failure(
+            Exception("Story ${selectedStory.path} failed to delete"),
+          );
+        }
+      case Failure():
+        return Failure(
+          Exception("Not able to delete stories currently, please try again."),
+        );
+    }
   }
 
   @override

@@ -17,36 +17,6 @@ class ForgotPasswordRepoImpl extends ForgotPasswordRepo {
   );
 
   @override
-  Future<Result<void>> provideEmailId() {
-    // TODO: implement provideEmailId
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Result<void>> provideOtp() {
-    // TODO: implement provideOtp
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Result<void>> resetPassword(ResetPasswordRequestBody body) async {
-    final response = await apiCallHandler(
-      httpClient: httpClient,
-      requestType: HttpRequestEnum.POST,
-      endpoint: "/reset-password",
-      requestBody: body.toJson(),
-      passedQueryParameters: null,
-    );
-
-    switch (response) {
-      case Success():
-        return const Success(true);
-      case Failure():
-        return Failure(Exception());
-    }
-  }
-
-  @override
   Future<Result<void>> sendOtp(SendOtpRequestBody body) async {
     final response = await apiCallHandler(
       httpClient: httpClient,
@@ -60,28 +30,31 @@ class ForgotPasswordRepoImpl extends ForgotPasswordRepo {
       case Success():
         return const Success(true);
       case Failure():
-        return Failure(Exception());
+        return Failure(
+          Exception("Error : ${response.error} something went wrong,"),
+        );
     }
   }
 
   @override
   Future<Result<void>> resetPasswordWithOtp(
-      ResetPasswordWithOtpRequestBody body) {
-    final response = apiCallHandler(
+    ResetPasswordWithOtpRequestBody body,
+  ) async {
+    final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.PUT,
-      endpoint: "/reset-password-with-otp",
+      endpoint: "auth/v1/reset-password/confirm",
       requestBody: body.toJson(),
       passedQueryParameters: null,
     );
 
     switch (response) {
       case Success():
-        return Future.value(Success(response));
+        return Success(response);
       case Failure():
-        return Future.value(Failure(Exception()));
+        return Failure(
+          Exception("Error : Something went wrong, ${response.error}"),
+        );
     }
-
-    return Future.value(Failure(Exception()));
   }
 }
