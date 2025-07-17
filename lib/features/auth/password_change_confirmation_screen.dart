@@ -37,7 +37,7 @@ class PasswordChangeConfirmationScreen extends StatelessWidget {
             GlintAuthActionButton(
               label: 'Login Now',
               onPressed: () {
-                context.go("/${GlintAdminDasboardRoutes.home.name}");
+                context.goNamed(GlintMainRoutes.auth.name);
               },
             ),
           ],
