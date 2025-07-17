@@ -118,6 +118,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
               focusNode: _passwordFocusNode,
               hintText: 'Create Password',
               isTextFieldFocused: _passwordFocusNode.hasFocus,
+              onChanged: (_) => _validateForm(),
               onTap: () {
                 setState(() {
                   _passwordFocusNode.requestFocus();
