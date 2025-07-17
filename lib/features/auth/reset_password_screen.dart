@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,12 +23,72 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   final _emailFocusNode = FocusNode();
 
+  StreamSubscription<ResetPasswordState>? _blocSubscription;
+
   @override
   void dispose() {
     // TODO: implement dispose
     _emailController.dispose();
     _emailFocusNode.dispose();
+    _blocSubscription?.cancel();
     super.dispose();
+  }
+
+  void _handleGetOtp() {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) return;
+    if (!mounted) return;
+
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    // Cancel previous subscription if exists
+    _blocSubscription?.cancel();
+
+    final bloc = context.read<ResetPasswordBloc>();
+    bloc.add(ResetPasswordEvent.sendOtp(email));
+
+    // Listen to bloc stream
+    _blocSubscription = bloc.stream.listen(
+      (state) {
+        state.maybeWhen(
+          otpSent: () {
+            // Dismiss loading dialog
+            if (Navigator.of(context, rootNavigator: true).canPop()) {
+              Navigator.of(context, rootNavigator: true).pop();
+            }
+
+            if (!context.mounted) return;
+
+            context.pushNamed(
+              GlintAuthRoutes.otp.name,
+              pathParameters: {'email': email},
+            );
+          },
+          error: (message) {
+            // Dismiss loading dialog
+            if (Navigator.of(context, rootNavigator: true).canPop()) {
+              Navigator.of(context, rootNavigator: true).pop();
+            }
+
+            if (!context.mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(message)),
+            );
+          },
+          orElse: () {
+            debugPrint('Other state received');
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -81,59 +143,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               // create account button
               GlintAuthActionButton(
                 label: 'Get OTP',
-                onPressed: () {
-                  final email = _emailController.text.trim();
-
-                  if (email.isEmpty) return;
-
-                  if (!mounted) return;
-
-                  // Show loading spinner
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) => const Center(
-                      child: SizedBox.square(
-                        dimension: 20.0,
-                        child: CircularProgressIndicator(
-                          color: AppColours.primaryBlue,
-                        ),
-                      ),
-                    ),
-                  );
-
-                  context.read<ResetPasswordBloc>().add(
-                        ResetPasswordEvent.sendOtp(email),
-                      );
-
-                  // Listen for the next state from bloc
-                  final bloc = context.read<ResetPasswordBloc>();
-                  bloc.stream.listen(
-                    (state) {
-                      state.maybeWhen(
-                        otpSent: () {
-                          if (!context.mounted) return;
-
-                          context.pushNamed(
-                            GlintAuthRoutes.otp.name,
-                            pathParameters: {'email': email},
-                          );
-                        },
-                        error: (message) {
-                          Navigator.of(context).pop();
-                          if (!context.mounted) return;
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(message)),
-                          );
-                        },
-                        orElse: () {
-                          debugPrint('SOMETHINS ELSE HAPPENED');
-                        },
-                      );
-                    },
-                  );
-                },
+                onPressed: _handleGetOtp,
               ),
               const Spacer(
                 flex: 5,

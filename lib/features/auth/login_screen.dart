@@ -238,7 +238,11 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: TextDecoration.underline,
               fontWeight: FontWeight.w600,
             ),
-            recognizer: TapGestureRecognizer()..onTap = () {},
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                const targetScreen = GlintMainRoutes.register;
+                context.goNamed(targetScreen.name);
+              },
           ),
         ],
       ),
