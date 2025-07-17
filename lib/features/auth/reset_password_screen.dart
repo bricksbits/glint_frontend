@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/auth/blocs/reset_password/reset_password_bloc.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -36,57 +38,108 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           : AppBar(
               backgroundColor: AppColours.white,
             ),
-      body: AuthStackedIllustrationScreen(
-        isAdmin: isAdmin,
-        body: Column(
-          children: [
-            // create account heading
-            if (isAdmin) const Spacer(),
-            if (!isAdmin)
-              Center(
-                child: SvgPicture.asset(
-                  'lib/assets/images/auth/glint_reset_password.svg',
+      body: BlocProvider(
+        create: (context) => ResetPasswordBloc(),
+        child: AuthStackedIllustrationScreen(
+          isAdmin: isAdmin,
+          body: Column(
+            children: [
+              // create account heading
+              if (isAdmin) const Spacer(),
+              if (!isAdmin)
+                Center(
+                  child: SvgPicture.asset(
+                    'lib/assets/images/auth/glint_reset_password.svg',
+                  ),
                 ),
-              ),
-            if (isAdmin)
-              Text(
-                'Reset Password',
-                style: AppTheme.headingThree.copyWith(
-                  fontStyle: FontStyle.normal,
+              if (isAdmin)
+                Text(
+                  'Reset Password',
+                  style: AppTheme.headingThree.copyWith(
+                    fontStyle: FontStyle.normal,
+                  ),
                 ),
+
+              const Gap(40.0),
+
+              // text fields
+              AuthIconTextField(
+                controller: _emailController,
+                type: IconTextFieldType.email,
+                focusNode: _emailFocusNode,
+                hintText: 'Enter Email',
+                isTextFieldFocused: _emailFocusNode.hasFocus,
+                onTap: () {
+                  setState(() {
+                    _emailFocusNode.requestFocus();
+                  });
+                },
               ),
 
-            const Gap(40.0),
+              const Gap(50.0),
 
-            // text fields
-            AuthIconTextField(
-              controller: _emailController,
-              type: IconTextFieldType.email,
-              focusNode: _emailFocusNode,
-              hintText: 'Enter Email',
-              isTextFieldFocused: _emailFocusNode.hasFocus,
-              onTap: () {
-                setState(() {
-                  _emailFocusNode.requestFocus();
-                });
-              },
-            ),
+              // create account button
+              GlintAuthActionButton(
+                label: 'Get OTP',
+                onPressed: () {
+                  final email = _emailController.text.trim();
 
-            const Gap(50.0),
+                  if (email.isEmpty) return;
 
-            // create account button
-            GlintAuthActionButton(
-              label: 'Get OTP',
-              onPressed: () {
-                context.go(
-                    "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.otp.name}");
-                debugPrint('Get otp button pressed');
-              },
-            ),
-            const Spacer(
-              flex: 5,
-            ),
-          ],
+                  if (!mounted) return;
+
+                  // Show loading spinner
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) => const Center(
+                      child: SizedBox.square(
+                        dimension: 20.0,
+                        child: CircularProgressIndicator(
+                          color: AppColours.primaryBlue,
+                        ),
+                      ),
+                    ),
+                  );
+
+                  context.read<ResetPasswordBloc>().add(
+                        ResetPasswordEvent.sendOtp(email),
+                      );
+
+                  // Listen for the next state from bloc
+                  final bloc = context.read<ResetPasswordBloc>();
+                  bloc.stream.listen(
+                    (state) {
+                      state.maybeWhen(
+                        otpSent: () {
+                          if (!context.mounted) return;
+
+                          context.pushNamed(
+                            GlintAuthRoutes.otp.name,
+                            pathParameters: {'email': email},
+                          );
+                        },
+                        error: (message) {
+                          Navigator.of(context).pop();
+                          if (!context.mounted) return;
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(message)),
+                          );
+                        },
+                        orElse: () {
+                          debugPrint('SOMETHINS ELSE HAPPENED');
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+              const Spacer(
+                flex: 5,
+              ),
+            ],
+          ),
         ),
       ),
     );
