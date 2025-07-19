@@ -30,7 +30,9 @@ class LocationPermissionService {
     }
 
     return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
+        locationSettings: const LocationSettings(
+      accuracy: LocationAccuracy.best,
+      distanceFilter: 200,
+    ));
   }
 }
