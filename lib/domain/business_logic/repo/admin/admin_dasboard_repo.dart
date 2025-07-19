@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:glint_frontend/domain/business_logic/models/admin/event_approve_reject_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_detail_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_interested_user_domain_model.dart';
@@ -25,4 +27,9 @@ abstract class AdminDashboardRepo {
   Future<Result<void>> rejectEvent(EventApproveOrRejectDomainModel rejectList);
 
   Future<Result<AdminEventDetailDomainModel>> getEventDetailsForAdmin();
+
+  Future<Result<void>> uploadEventMediaFiles(
+      String eventId,
+      List<File> event
+      );
 }

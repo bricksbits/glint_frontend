@@ -21,4 +21,6 @@ abstract class PaymentRepo {
   );
 
   Future<Result<void>> cancelOrder(String orderId);
+
+  Future<Result<void>> fetchPaymentHistory();
 }

@@ -85,4 +85,29 @@ class MyDioClient {
       return Failure(exception);
     }
   }
+
+  Future<Result<dynamic>> deleteFiles({
+    required String endpoint,
+    required FormData? formData,
+  }) async {
+    if (formData == null) {
+      return Failure(
+        Exception("Can't delete, if there are no files."),
+      );
+    }
+
+    if (formData.files.isEmpty) {
+      return Failure(
+        Exception("Can't delete, if there are no files."),
+      );
+    }
+
+    try {
+      final deletedFilesResponse =
+          await dioHttpClient.delete(endpoint, data: formData);
+      return networkResponseHandler(deletedFilesResponse);
+    } on Exception catch (exception) {
+      return Failure(exception);
+    }
+  }
 }

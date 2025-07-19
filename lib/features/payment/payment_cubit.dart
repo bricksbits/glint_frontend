@@ -89,7 +89,7 @@ class PaymentCubit extends Cubit<PaymentState> {
           }
         case Failure<BuyMembershipResponse>():
           emit(state.copyWith(
-              error: "Can't verify the membership request, try again please,"));
+              error: "Can't verify the background request, try again please,"));
       }
     } else {
       emit(state.copyWith(

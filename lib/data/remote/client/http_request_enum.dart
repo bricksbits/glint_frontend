@@ -3,4 +3,5 @@ enum HttpRequestEnum {
   POST,
   PUT,
   UPLOAD,
+  DELETE,
 }
