@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
-import 'package:glint_frontend/features/auth/starter_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
+import 'package:glint_frontend/features/auth/starter_screen.dart';
 import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
-import 'package:glint_frontend/features/chat/confirm_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
+import 'package:glint_frontend/features/chat/confirm_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/get_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
 import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
-import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_screen.dart';
+import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 import 'package:glint_frontend/features/likes/likes_screen.dart';
 import 'package:glint_frontend/features/notifications/notification_screen.dart';
@@ -29,11 +29,12 @@ import 'package:glint_frontend/navigation/glint_authentication_routes.dart';
 import 'package:glint_frontend/navigation/glint_user_on_boarding_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+
 import '../features/chat/chat_screen.dart';
 import '../features/home/home_screen.dart';
 
 final glintMainRoutes = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/${GlintBoardingRoutes.location.name}',
   debugLogDiagnostics: true,
   navigatorKey: rootNavigatorKey,
   routes: [
