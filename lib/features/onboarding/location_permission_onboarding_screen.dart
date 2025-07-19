@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:get_it/get_it.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
+
+import '../../data/local/persist/async_encrypted_shared_preference_helper.dart';
+import '../../data/local/persist/shared_pref_key.dart';
+import '../../services/location_permission_service.dart';
 
 class LocationPermissionOnboardingScreen extends StatelessWidget {
   const LocationPermissionOnboardingScreen({super.key});
@@ -92,11 +97,34 @@ class LocationPermissionOnboardingScreen extends StatelessWidget {
             width: double.infinity,
             child: GlintElevatedButton(
               label: 'Enable Location',
-              onPressed: () {
-                //todo - add location permission setup
-                context
-                    .read<OnBoardingCubit>()
-                    .setUpLastBoardingState(OnBoardingCompletedTill.COMPLETED);
+              onPressed: () async {
+                //location permission setup
+
+                final permissionService = LocationPermissionService();
+                final sharedPrefHelper = GetIt.I<AsyncEncryptedSharedPreferenceHelper>();
+
+                final isGranted = await permissionService.requestPermission();
+
+                if (isGranted) {
+                  final position = await permissionService.getCurrentLocation();
+
+                  if (position != null) {
+                    await sharedPrefHelper.saveString(
+                        SharedPreferenceKeys.userLatitudeKey, position.latitude.toString());
+                    await sharedPrefHelper.saveString(
+                        SharedPreferenceKeys.userLongitudeKey, position.longitude.toString());
+
+                    if (!context.mounted) return;
+                    context.read<OnBoardingCubit>().setUpLastBoardingState(OnBoardingCompletedTill.COMPLETED);
+                  } else {
+                    debugPrint('Failed to get current location');
+                  }
+                } else {
+                  debugPrint('Location permission is required');
+                }
+
+                if (!context.mounted) return;
+                context.read<OnBoardingCubit>().setUpLastBoardingState(OnBoardingCompletedTill.COMPLETED);
               },
             ),
           )
