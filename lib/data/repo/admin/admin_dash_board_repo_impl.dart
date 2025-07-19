@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/approve_or_reject_request_body.dart';
@@ -233,6 +236,51 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
         }
       case Failure():
         return Failure(Exception("Something Went wrong"));
+    }
+  }
+
+  @override
+  Future<Result<void>> uploadEventMediaFiles(
+      String eventId, List<File> event) async {
+    FormData formData = FormData();
+    for (int i = 0; i < event.length; i++) {
+      final file = event[i];
+      if (file != null) {
+        formData.files.add(
+          MapEntry(
+            "picture_$i",
+            await MultipartFile.fromFile(
+              file.path,
+              filename: file.path.split('/').last, // or keep your custom name
+            ),
+          ),
+        );
+      }
+    }
+
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.POST,
+      endpoint: "event/{$eventId}/content",
+      uploadFilesFormData: formData,
+    );
+
+    switch (response) {
+      case Success():
+        // final storiesResponse = StoryUploadResponse.fromJson(response.data);
+        // if (storiesResponse.filesUploaded?.isNotEmpty == true) {
+        //   return const Success(true);
+        // } else {
+        //   return Failure(
+        //     Exception(
+        //         "Files ${storiesResponse.filesNotUploaded} failed to upload"),
+        //   );
+        // }
+        return Success("File Uploaded successfully");
+      case Failure():
+        return Failure(
+          Exception("Not able to upload files currently, please try again."),
+        );
     }
   }
 }

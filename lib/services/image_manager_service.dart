@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
@@ -89,6 +88,52 @@ class ImageService {
     }
 
     return null;
+  }
+
+  //Todo: Test and Verify the behaviour
+  Future<List<ImageManagerData>> pickImagesForEvent({
+    required String eventId,
+    int maxCount = 6,
+  }) async {
+    // Only for mobile
+    final images = await _picker.pickMultiImage();
+    if (images.isEmpty) return [];
+
+    // Define custom directory: .../eventId/files/
+    final appDir = await getApplicationDocumentsDirectory();
+    final eventDir = Directory(p.join(appDir.path, eventId, 'files'));
+
+    // Ensure the directory exists
+    if (!await eventDir.exists()) {
+      await eventDir.create(recursive: true);
+    }
+
+    // Get existing image indices in this directory
+    final existing = await _loadSavedImageNames(eventDir);
+    final availableSlots = _getAvailableSlots(existing);
+
+    List<ImageManagerData> result = [];
+
+    for (int i = 0; i < images.length && i < availableSlots.length; i++) {
+      final pickedFile = images[i];
+
+      final compressedBytes = await FlutterImageCompress.compressWithFile(
+        pickedFile.path,
+        quality: 75,
+      );
+
+      final filename = 'picture_${availableSlots[i]}.jpg';
+      final filePath = p.join(eventDir.path, filename);
+      final file = File(filePath);
+      await file.writeAsBytes(compressedBytes!);
+
+      result.add(ImageManagerData(
+        name: filename,
+        file: file,
+      ));
+    }
+
+    return result;
   }
 
   Future<List<ImageManagerData>> loadSavedImages() async {

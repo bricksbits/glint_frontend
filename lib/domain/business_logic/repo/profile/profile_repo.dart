@@ -12,4 +12,8 @@ abstract class ProfileRepo {
 
   // Verify the User but will be in backlog for later
   Future<Result<void>> verifyUser();
+
+  Future<Result<void>> deleteUserMedia(
+    List<String> fileNames,
+  );
 }
