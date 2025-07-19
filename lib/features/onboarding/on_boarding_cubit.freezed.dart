@@ -22,6 +22,8 @@ mixin _$OnBoardingState {
   String get error => throw _privateConstructorUsedError;
   List<File?> get uploadedFilePaths => throw _privateConstructorUsedError;
   String? get currentDestination => throw _privateConstructorUsedError;
+  bool? get isLocationLoading => throw _privateConstructorUsedError;
+  bool? get locationPermissionDenied => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -29,7 +31,9 @@ mixin _$OnBoardingState {
             OnBoardingCompletedTill onBoardingStatus,
             String error,
             List<File?> uploadedFilePaths,
-            String? currentDestination)
+            String? currentDestination,
+            bool? isLocationLoading,
+            bool? locationPermissionDenied)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -40,7 +44,9 @@ mixin _$OnBoardingState {
             OnBoardingCompletedTill onBoardingStatus,
             String error,
             List<File?> uploadedFilePaths,
-            String? currentDestination)?
+            String? currentDestination,
+            bool? isLocationLoading,
+            bool? locationPermissionDenied)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -51,7 +57,9 @@ mixin _$OnBoardingState {
             OnBoardingCompletedTill onBoardingStatus,
             String error,
             List<File?> uploadedFilePaths,
-            String? currentDestination)?
+            String? currentDestination,
+            bool? isLocationLoading,
+            bool? locationPermissionDenied)?
         initial,
     required TResult orElse(),
   }) =>
@@ -91,7 +99,9 @@ abstract class $OnBoardingStateCopyWith<$Res> {
       OnBoardingCompletedTill onBoardingStatus,
       String error,
       List<File?> uploadedFilePaths,
-      String? currentDestination});
+      String? currentDestination,
+      bool? isLocationLoading,
+      bool? locationPermissionDenied});
 }
 
 /// @nodoc
@@ -114,6 +124,8 @@ class _$OnBoardingStateCopyWithImpl<$Res, $Val extends OnBoardingState>
     Object? error = null,
     Object? uploadedFilePaths = null,
     Object? currentDestination = freezed,
+    Object? isLocationLoading = freezed,
+    Object? locationPermissionDenied = freezed,
   }) {
     return _then(_value.copyWith(
       currentState: freezed == currentState
@@ -136,6 +148,14 @@ class _$OnBoardingStateCopyWithImpl<$Res, $Val extends OnBoardingState>
           ? _value.currentDestination
           : currentDestination // ignore: cast_nullable_to_non_nullable
               as String?,
+      isLocationLoading: freezed == isLocationLoading
+          ? _value.isLocationLoading
+          : isLocationLoading // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      locationPermissionDenied: freezed == locationPermissionDenied
+          ? _value.locationPermissionDenied
+          : locationPermissionDenied // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -153,7 +173,9 @@ abstract class _$$InitialImplCopyWith<$Res>
       OnBoardingCompletedTill onBoardingStatus,
       String error,
       List<File?> uploadedFilePaths,
-      String? currentDestination});
+      String? currentDestination,
+      bool? isLocationLoading,
+      bool? locationPermissionDenied});
 }
 
 /// @nodoc
@@ -174,6 +196,8 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? error = null,
     Object? uploadedFilePaths = null,
     Object? currentDestination = freezed,
+    Object? isLocationLoading = freezed,
+    Object? locationPermissionDenied = freezed,
   }) {
     return _then(_$InitialImpl(
       currentState: freezed == currentState
@@ -196,6 +220,14 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.currentDestination
           : currentDestination // ignore: cast_nullable_to_non_nullable
               as String?,
+      isLocationLoading: freezed == isLocationLoading
+          ? _value.isLocationLoading
+          : isLocationLoading // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      locationPermissionDenied: freezed == locationPermissionDenied
+          ? _value.locationPermissionDenied
+          : locationPermissionDenied // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -208,7 +240,9 @@ class _$InitialImpl implements _Initial {
       this.onBoardingStatus = OnBoardingCompletedTill.NOT_STARTED,
       this.error = "",
       final List<File?> uploadedFilePaths = const [],
-      this.currentDestination = null})
+      this.currentDestination = null,
+      this.isLocationLoading,
+      this.locationPermissionDenied})
       : _uploadedFilePaths = uploadedFilePaths;
 
   @override
@@ -233,10 +267,14 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final String? currentDestination;
+  @override
+  final bool? isLocationLoading;
+  @override
+  final bool? locationPermissionDenied;
 
   @override
   String toString() {
-    return 'OnBoardingState.initial(currentState: $currentState, onBoardingStatus: $onBoardingStatus, error: $error, uploadedFilePaths: $uploadedFilePaths, currentDestination: $currentDestination)';
+    return 'OnBoardingState.initial(currentState: $currentState, onBoardingStatus: $onBoardingStatus, error: $error, uploadedFilePaths: $uploadedFilePaths, currentDestination: $currentDestination, isLocationLoading: $isLocationLoading, locationPermissionDenied: $locationPermissionDenied)';
   }
 
   @override
@@ -252,7 +290,12 @@ class _$InitialImpl implements _Initial {
             const DeepCollectionEquality()
                 .equals(other._uploadedFilePaths, _uploadedFilePaths) &&
             (identical(other.currentDestination, currentDestination) ||
-                other.currentDestination == currentDestination));
+                other.currentDestination == currentDestination) &&
+            (identical(other.isLocationLoading, isLocationLoading) ||
+                other.isLocationLoading == isLocationLoading) &&
+            (identical(
+                    other.locationPermissionDenied, locationPermissionDenied) ||
+                other.locationPermissionDenied == locationPermissionDenied));
   }
 
   @override
@@ -262,7 +305,9 @@ class _$InitialImpl implements _Initial {
       onBoardingStatus,
       error,
       const DeepCollectionEquality().hash(_uploadedFilePaths),
-      currentDestination);
+      currentDestination,
+      isLocationLoading,
+      locationPermissionDenied);
 
   /// Create a copy of OnBoardingState
   /// with the given fields replaced by the non-null parameter values.
@@ -280,11 +325,13 @@ class _$InitialImpl implements _Initial {
             OnBoardingCompletedTill onBoardingStatus,
             String error,
             List<File?> uploadedFilePaths,
-            String? currentDestination)
+            String? currentDestination,
+            bool? isLocationLoading,
+            bool? locationPermissionDenied)
         initial,
   }) {
     return initial(currentState, onBoardingStatus, error, uploadedFilePaths,
-        currentDestination);
+        currentDestination, isLocationLoading, locationPermissionDenied);
   }
 
   @override
@@ -295,11 +342,19 @@ class _$InitialImpl implements _Initial {
             OnBoardingCompletedTill onBoardingStatus,
             String error,
             List<File?> uploadedFilePaths,
-            String? currentDestination)?
+            String? currentDestination,
+            bool? isLocationLoading,
+            bool? locationPermissionDenied)?
         initial,
   }) {
-    return initial?.call(currentState, onBoardingStatus, error,
-        uploadedFilePaths, currentDestination);
+    return initial?.call(
+        currentState,
+        onBoardingStatus,
+        error,
+        uploadedFilePaths,
+        currentDestination,
+        isLocationLoading,
+        locationPermissionDenied);
   }
 
   @override
@@ -310,13 +365,15 @@ class _$InitialImpl implements _Initial {
             OnBoardingCompletedTill onBoardingStatus,
             String error,
             List<File?> uploadedFilePaths,
-            String? currentDestination)?
+            String? currentDestination,
+            bool? isLocationLoading,
+            bool? locationPermissionDenied)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
       return initial(currentState, onBoardingStatus, error, uploadedFilePaths,
-          currentDestination);
+          currentDestination, isLocationLoading, locationPermissionDenied);
     }
     return orElse();
   }
@@ -356,7 +413,9 @@ abstract class _Initial implements OnBoardingState {
       final OnBoardingCompletedTill onBoardingStatus,
       final String error,
       final List<File?> uploadedFilePaths,
-      final String? currentDestination}) = _$InitialImpl;
+      final String? currentDestination,
+      final bool? isLocationLoading,
+      final bool? locationPermissionDenied}) = _$InitialImpl;
 
   @override
   RegisterUserRequest? get currentState;
@@ -368,6 +427,10 @@ abstract class _Initial implements OnBoardingState {
   List<File?> get uploadedFilePaths;
   @override
   String? get currentDestination;
+  @override
+  bool? get isLocationLoading;
+  @override
+  bool? get locationPermissionDenied;
 
   /// Create a copy of OnBoardingState
   /// with the given fields replaced by the non-null parameter values.

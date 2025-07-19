@@ -2,16 +2,18 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
 import 'package:glint_frontend/domain/business_logic/repo/boarding/on_boarding_repo.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
+import 'package:glint_frontend/services/location_permission_service.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
-part 'on_boarding_state.dart';
-
 part 'on_boarding_cubit.freezed.dart';
+part 'on_boarding_state.dart';
 
 class OnBoardingCubit extends Cubit<OnBoardingState> {
   final OnBoardingRepo boardingRepo = getIt.get<OnBoardingRepo>();
@@ -75,7 +77,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
         break;
       case OnBoardingCompletedTill.COMPLETED:
         //Todo: Update this Logic as per Bio screen only
-         emitNewState(state.copyWith(
+        emitNewState(state.copyWith(
           currentDestination: GlintMainRoutes.register.name,
         ));
         break;
@@ -91,23 +93,19 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   String? get currentName => _getCurrentRegisterUserState()?.username;
 
-  String? get currentAge =>
-      _getCurrentRegisterUserState()?.dateOfBirthWithDateFormat;
+  String? get currentAge => _getCurrentRegisterUserState()?.dateOfBirthWithDateFormat;
 
   String? get currentDesignation => _getCurrentRegisterUserState()?.occupation;
 
   String? get currentBio => _getCurrentRegisterUserState()?.bio;
 
-  String? get currentLookingFor =>
-      _getCurrentRegisterUserState()?.relationShipGoals;
+  String? get currentLookingFor => _getCurrentRegisterUserState()?.relationShipGoals;
 
-  List<String>? get currentInterests =>
-      _getCurrentRegisterUserState()?.interests;
+  List<String>? get currentInterests => _getCurrentRegisterUserState()?.interests;
 
   String? get currentGender => _getCurrentRegisterUserState()?.gender;
 
-  String? get currentGenderPreferences =>
-      _getCurrentRegisterUserState()?.genderPreference;
+  String? get currentGenderPreferences => _getCurrentRegisterUserState()?.genderPreference;
 
   String? get currentHeight => _getCurrentRegisterUserState()?.height;
 
@@ -115,22 +113,18 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   String? get currentEducation => _getCurrentRegisterUserState()?.education;
 
-  String? get currentWorkingHabit =>
-      _getCurrentRegisterUserState()?.workoutHabit;
+  String? get currentWorkingHabit => _getCurrentRegisterUserState()?.workoutHabit;
 
-  String? get currentDrinkingHabit =>
-      _getCurrentRegisterUserState()?.drinkingHabit;
+  String? get currentDrinkingHabit => _getCurrentRegisterUserState()?.drinkingHabit;
 
-  String? get currentSmokingHabit =>
-      _getCurrentRegisterUserState()?.smokingHabit;
+  String? get currentSmokingHabit => _getCurrentRegisterUserState()?.smokingHabit;
 
   void setGender(String gender) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(gender: gender)));
+          emit(state.copyWith(currentState: currentState.copyWith(gender: gender)));
         } else {
           _handleNullCurrentState("setGender");
         }
@@ -140,12 +134,10 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setGenderPreferences(String genderPreferences) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState:
-                  currentState.copyWith(genderPreference: genderPreferences)));
+          emit(state.copyWith(currentState: currentState.copyWith(genderPreference: genderPreferences)));
         } else {
           _handleNullCurrentState("setGenderPreferences");
         }
@@ -155,8 +147,8 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setHeight(String height) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
           emit(
             state.copyWith(
@@ -174,11 +166,10 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setOccupation(String occupation) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(occupation: occupation)));
+          emit(state.copyWith(currentState: currentState.copyWith(occupation: occupation)));
         } else {
           _handleNullCurrentState("setOccupation");
         }
@@ -188,11 +179,10 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setEducation(String education) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(education: education)));
+          emit(state.copyWith(currentState: currentState.copyWith(education: education)));
         } else {
           _handleNullCurrentState("setEducation");
         }
@@ -202,11 +192,10 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setWorkingHabit(String workingHabit) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(workoutHabit: workingHabit)));
+          emit(state.copyWith(currentState: currentState.copyWith(workoutHabit: workingHabit)));
         } else {
           _handleNullCurrentState("setWorkingHabit");
         }
@@ -216,12 +205,10 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setDrinkingHabit(String drinkingHabit) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState:
-                  currentState.copyWith(drinkingHabit: drinkingHabit)));
+          emit(state.copyWith(currentState: currentState.copyWith(drinkingHabit: drinkingHabit)));
         } else {
           _handleNullCurrentState("setDrinkingHabit");
         }
@@ -231,11 +218,10 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setSmokingHabit(String smokingHabit) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(smokingHabit: smokingHabit)));
+          emit(state.copyWith(currentState: currentState.copyWith(smokingHabit: smokingHabit)));
         } else {
           _handleNullCurrentState("setSmokingHabit");
         }
@@ -245,12 +231,11 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setName(String name) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
           if (name.isNotEmpty) {
-            emit(state.copyWith(
-                currentState: currentState.copyWith(username: name)));
+            emit(state.copyWith(currentState: currentState.copyWith(username: name)));
           }
         } else {
           _handleNullCurrentState("setName");
@@ -261,8 +246,8 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setAge(String age) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
           emit(state.copyWith(currentState: currentState.copyWith(dob: age)));
         } else {
@@ -274,11 +259,10 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setDesignation(String designation) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState: currentState.copyWith(occupation: designation)));
+          emit(state.copyWith(currentState: currentState.copyWith(occupation: designation)));
         } else {
           _handleNullCurrentState("setDesignation");
         }
@@ -288,8 +272,8 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setBio(String bio) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
           emit(state.copyWith(currentState: currentState.copyWith(bio: bio)));
         } else {
@@ -301,12 +285,10 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setLookingFor(String lookingFor) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState:
-                  currentState.copyWith(relationShipGoals: lookingFor)));
+          emit(state.copyWith(currentState: currentState.copyWith(relationShipGoals: lookingFor)));
         } else {
           _handleNullCurrentState("setLookingFor");
         }
@@ -316,12 +298,10 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void setInterests(List<String> interests) {
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
-          emit(state.copyWith(
-              currentState:
-                  currentState.copyWith(interests: List.from(interests))));
+          emit(state.copyWith(currentState: currentState.copyWith(interests: List.from(interests))));
         } else {
           _handleNullCurrentState("setInterests");
         }
@@ -332,13 +312,11 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   Future<void> onPickImage() async {
     final pickedImages = await imageService.pickImages();
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (pickedImages.isNotEmpty) {
           emit(
-            state.copyWith(
-                uploadedFilePaths:
-                    pickedImages.map((image) => image.file).toList()),
+            state.copyWith(uploadedFilePaths: pickedImages.map((image) => image.file).toList()),
           );
         } else {
           _handleNullCurrentState("setImages");
@@ -351,8 +329,8 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     final currentImagesList = state.uploadedFilePaths;
     currentImagesList.removeAt(index);
     state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles,
-          currentDestination) {
+      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
+          locationPermissionDenied) {
         if (currentState != null) {
           emit(
             state.copyWith(
@@ -384,8 +362,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   void _handleNullCurrentState(String methodName) {
     // You can choose to log this, throw an error, or emit a specific error state
     print("Warning: $methodName called when currentState is null.");
-    emit(state.copyWith(
-        error: "Cannot update $methodName: PeopleUiModel is null."));
+    emit(state.copyWith(error: "Cannot update $methodName: PeopleUiModel is null."));
   }
 
   Future<void> initializePersonWithAllDetails() async {
@@ -423,6 +400,47 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
             onBoardingStatus: state.onBoardingStatus,
           ),
         );
+    }
+  }
+
+  Future<void> enableLocationAndCompleteOnboarding() async {
+    emit(state.copyWith(isLocationLoading: true, locationPermissionDenied: false));
+
+    final permissionService = getIt<LocationPermissionService>();
+    final sharedPrefHelper = getIt<AsyncEncryptedSharedPreferenceHelper>();
+
+    final isGranted = await permissionService.requestPermission();
+
+    if (!isGranted) {
+      emit(state.copyWith(
+        isLocationLoading: false,
+        locationPermissionDenied: true,
+      ));
+      return;
+    }
+
+    final position = await permissionService.getCurrentLocation();
+
+    if (position != null) {
+      await sharedPrefHelper.saveString(
+        SharedPreferenceKeys.userLatitudeKey,
+        position.latitude.toString(),
+      );
+      await sharedPrefHelper.saveString(
+        SharedPreferenceKeys.userLongitudeKey,
+        position.longitude.toString(),
+      );
+
+      await setUpLastBoardingState(OnBoardingCompletedTill.COMPLETED);
+      emit(state.copyWith(
+        isLocationLoading: false,
+        onBoardingStatus: OnBoardingCompletedTill.COMPLETED,
+      ));
+    } else {
+      emit(state.copyWith(
+        isLocationLoading: false,
+        error: 'Unable to fetch location',
+      ));
     }
   }
 
