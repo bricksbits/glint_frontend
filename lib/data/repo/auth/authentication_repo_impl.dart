@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:glint_frontend/data/local/db/dao/membership_dao.dart';
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/profile_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
@@ -9,6 +10,7 @@ import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/login_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/register_account_request_body.dart';
+import 'package:glint_frontend/data/remote/model/response/auth/login_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/auth/login_response.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/story_upload_response.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
@@ -24,11 +26,13 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
   final MyDioClient httpClient;
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
   final ProfileDao profileDao;
+  final MembershipDao membershipDao;
 
   AuthenticationRepoImpl(
     this.httpClient,
     this.sharedPreferenceHelper,
     this.profileDao,
+    this.membershipDao,
   );
 
   //Todo: Save the new Data to the Local \
@@ -69,57 +73,15 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
     switch (response) {
       case Success():
         final successResponse = LoginResponse.fromJson(response.data);
+        await profileDao.insertProfile(successResponse.mapToEntity());
         final accessToken = successResponse.profile?.authToken;
-        if (accessToken != null) {
-          if (accessToken.isNotEmpty) {
-            await sharedPreferenceHelper.saveString(
-                SharedPreferenceKeys.accessTokenKey, accessToken);
-          }
-        }
-
         final refreshToken = successResponse.profile?.refreshToken;
-        if (refreshToken != null) {
-          if (refreshToken.isNotEmpty) {
-            await sharedPreferenceHelper.saveString(
-                SharedPreferenceKeys.refreshTokenKey, refreshToken);
-          }
-        }
-
+        final streamToken = successResponse.profile?.streamAuthToken;
         final userId = successResponse.profile?.userId;
-        if (userId != null) {
-          await sharedPreferenceHelper.saveString(
-            SharedPreferenceKeys.userIdKey,
-            userId.toString(),
-          );
-        }
+        final userName = successResponse.profile?.username;
 
-        var typeFound = successResponse.profile?.userRole ?? "user";
-        late final UsersType userType;
-        switch (typeFound) {
-          case 'user':
-            userType = UsersType.USER;
-            break;
-          case 'admin':
-            userType = UsersType.ADMIN;
-            break;
-          case 'super admin':
-            userType = UsersType.SUPER_ADMIN;
-            break;
-          default:
-            userType = UsersType.USER;
-        }
-
-        await sharedPreferenceHelper.saveString(
-            SharedPreferenceKeys.userRoleKey, userType.name);
-
-        final tokenBufferTime = DateTime.now()
-            .add(
-              const Duration(days: 1, hours: 15, minutes: 30),
-            )
-            .microsecondsSinceEpoch;
-
-        await sharedPreferenceHelper.saveInt(
-            SharedPreferenceKeys.lastSavedTimeKey, tokenBufferTime);
+        sharedPreferenceHelper.saveUserData(accessToken, refreshToken,
+            streamToken, userId.toString(), userName);
 
         return Success(successResponse);
 
@@ -161,7 +123,7 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
       if (file != null) {
         formData.files.add(
           MapEntry(
-            "picture_$i",
+            "profile-picture",
             await MultipartFile.fromFile(
               file.path,
               filename: file.path.split('/').last, // or keep your custom name

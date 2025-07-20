@@ -106,132 +106,143 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterCubit, RegisterState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: AppColours.white,
-          appBar: isAdmin
-              ? const GlintEventAuthAppbar()
-              : AppBar(backgroundColor: AppColours.white),
-          body: state.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : AuthStackedIllustrationScreen(
-                  isAdmin: isAdmin,
-                  body: Column(
-                    children: [
-                      if (!isAdmin)
-                        Center(
-                          child: SvgPicture.asset(
-                              'lib/assets/images/auth/glint_create_account.svg'),
-                        ),
-                      const Gap(40.0),
-                      if (isAdmin)
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 40.0),
-                            child: Column(
-                              children: [
-                                const Spacer(),
-                                Text(
-                                  'Create Account',
-                                  style: AppTheme.headingThree.copyWith(
-                                    fontStyle: FontStyle.normal,
+    return BlocListener<RegisterCubit, RegisterState>(
+      listener: (context, state) {
+        if (state.isRegisteredSuccessfully) {
+          if (context.mounted) {
+            context.goNamed(GlintMainRoutes.home.name);
+          }
+        } else {
+          print("Listening to RegisterCubit, ${state.toString()}");
+        }
+      },
+      child: BlocBuilder<RegisterCubit, RegisterState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColours.white,
+            appBar: isAdmin
+                ? const GlintEventAuthAppbar()
+                : AppBar(backgroundColor: AppColours.white),
+            body: state.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : AuthStackedIllustrationScreen(
+                    isAdmin: isAdmin,
+                    body: Column(
+                      children: [
+                        if (!isAdmin)
+                          Center(
+                            child: SvgPicture.asset(
+                                'lib/assets/images/auth/glint_create_account.svg'),
+                          ),
+                        const Gap(40.0),
+                        if (isAdmin)
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 40.0),
+                              child: Column(
+                                children: [
+                                  const Spacer(),
+                                  Text(
+                                    'Create Account',
+                                    style: AppTheme.headingThree.copyWith(
+                                      fontStyle: FontStyle.normal,
+                                    ),
                                   ),
-                                ),
-                                const Gap(32.0),
-                                _buildTextField(
-                                  controller: _nameController,
-                                  type: IconTextFieldType.user,
-                                  focusNode: _nameFocusNode,
-                                  hintText: 'Enter Your Name',
-                                ),
-                                const Gap(20.0),
-                                _buildTextField(
-                                  controller: _emailController,
-                                  type: IconTextFieldType.email,
-                                  focusNode: _emailFocusNode,
-                                  hintText: 'Enter Email',
-                                ),
-                                const Gap(20.0),
-                                _buildTextField(
-                                  controller: _organizationController,
-                                  type: IconTextFieldType.organization,
-                                  focusNode: _organizationFocusNode,
-                                  hintText:
-                                      'Organization (ex: Hotel Vistara)',
-                                ),
-                                const Gap(20.0),
-                                _buildTextField(
-                                  controller: _contactController,
-                                  type: IconTextFieldType.contact,
-                                  focusNode: _contactFocusNode,
-                                  hintText: 'Contact Number',
-                                ),
-                                const Gap(20.0),
-                                _buildTextField(
-                                  controller: _passwordController,
-                                  type: IconTextFieldType.password,
-                                  focusNode: _passwordFocusNode,
-                                  hintText: 'Create Password',
-                                ),
-                                const Gap(48.0),
-                                GlintAuthActionButton(
-                                  label: 'Register',
-                                  onPressed: () {
-                                    context.go(
-                                        "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}");
-                                    debugPrint(
-                                      'register button pressed',
-                                    );
-                                  },
-                                ),
-                                const Gap(16.0),
-                                _buildLoginText(),
-                                const Spacer(
-                                  flex: 4,
-                                )
-                              ],
+                                  const Gap(32.0),
+                                  _buildTextField(
+                                    controller: _nameController,
+                                    type: IconTextFieldType.user,
+                                    focusNode: _nameFocusNode,
+                                    hintText: 'Enter Your Name',
+                                  ),
+                                  const Gap(20.0),
+                                  _buildTextField(
+                                    controller: _emailController,
+                                    type: IconTextFieldType.email,
+                                    focusNode: _emailFocusNode,
+                                    hintText: 'Enter Email',
+                                  ),
+                                  const Gap(20.0),
+                                  _buildTextField(
+                                    controller: _organizationController,
+                                    type: IconTextFieldType.organization,
+                                    focusNode: _organizationFocusNode,
+                                    hintText:
+                                        'Organization (ex: Hotel Vistara)',
+                                  ),
+                                  const Gap(20.0),
+                                  _buildTextField(
+                                    controller: _contactController,
+                                    type: IconTextFieldType.contact,
+                                    focusNode: _contactFocusNode,
+                                    hintText: 'Contact Number',
+                                  ),
+                                  const Gap(20.0),
+                                  _buildTextField(
+                                    controller: _passwordController,
+                                    type: IconTextFieldType.password,
+                                    focusNode: _passwordFocusNode,
+                                    hintText: 'Create Password',
+                                  ),
+                                  const Gap(48.0),
+                                  GlintAuthActionButton(
+                                    label: 'Register',
+                                    onPressed: () {
+                                      context.go(
+                                          "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}");
+                                      debugPrint(
+                                        'register button pressed',
+                                      );
+                                    },
+                                  ),
+                                  const Gap(16.0),
+                                  _buildLoginText(),
+                                  const Spacer(
+                                    flex: 4,
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      if (!isAdmin) ...[
-                        _buildTextField(
-                          controller: _emailController,
-                          type: IconTextFieldType.email,
-                          focusNode: _emailFocusNode,
-                          hintText: 'Enter Email',
-                        ),
-                        const Gap(20.0),
-                        _buildTextField(
-                          controller: _passwordController,
-                          type: IconTextFieldType.password,
-                          focusNode: _passwordFocusNode,
-                          hintText: 'Create Password',
-                        ),
-                        const Gap(20.0),
-                        _buildTextField(
-                          controller: _confirmPasswordController,
-                          type: IconTextFieldType.password,
-                          focusNode: _confirmPasswordFocusNode,
-                          hintText: 'Confirm Password',
-                        ),
-                        const Gap(60.0),
-                        GlintAuthActionButton(
-                          label: 'Sign up',
-                          onPressed: () {
-                            context.read<RegisterCubit>().registerUser();
-                          },
-                        ),
-                        const Gap(16.0),
-                        _buildLoginText(),
+                        if (!isAdmin) ...[
+                          _buildTextField(
+                            controller: _emailController,
+                            type: IconTextFieldType.email,
+                            focusNode: _emailFocusNode,
+                            hintText: 'Enter Email',
+                          ),
+                          const Gap(20.0),
+                          _buildTextField(
+                            controller: _passwordController,
+                            type: IconTextFieldType.password,
+                            focusNode: _passwordFocusNode,
+                            hintText: 'Create Password',
+                          ),
+                          const Gap(20.0),
+                          _buildTextField(
+                            controller: _confirmPasswordController,
+                            type: IconTextFieldType.password,
+                            focusNode: _confirmPasswordFocusNode,
+                            hintText: 'Confirm Password',
+                          ),
+                          const Gap(60.0),
+                          GlintAuthActionButton(
+                            label: 'Sign up',
+                            onPressed: () {
+                              context.read<RegisterCubit>().registerUser();
+                            },
+                          ),
+                          const Gap(16.0),
+                          _buildLoginText(),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

@@ -65,4 +65,49 @@ class AsyncEncryptedSharedPreferenceHelper {
         .getString(SharedPreferenceKeys.refreshTokenKey);
     return token;
   }
+
+  Future<void> saveUserData(
+    String? accessToken,
+    String? refreshToken,
+    String? streamAuthToken,
+    String? userId,
+    String? userName,
+  ) async {
+    if (accessToken != null) {
+      if (accessToken.isNotEmpty) {
+        await saveString(SharedPreferenceKeys.accessTokenKey, accessToken);
+      }
+    }
+
+    if (refreshToken != null) {
+      if (refreshToken.isNotEmpty) {
+        await saveString(SharedPreferenceKeys.refreshTokenKey, refreshToken);
+      }
+    }
+
+    if (streamAuthToken != null) {
+      if (streamAuthToken.isNotEmpty) {
+        await saveString(SharedPreferenceKeys.streamTokenKey, streamAuthToken);
+      }
+    }
+
+    if (userId != null) {
+      await saveString(
+        SharedPreferenceKeys.userIdKey,
+        userId,
+      );
+    }
+
+    if (userName != null) {
+      await saveString(
+        SharedPreferenceKeys.userNameKey,
+        userName,
+      );
+    }
+
+    final tokenBufferTime =
+        DateTime.now().add(const Duration(minutes: 55)).microsecondsSinceEpoch;
+
+    await saveInt(SharedPreferenceKeys.lastSavedTimeKey, tokenBufferTime);
+  }
 }

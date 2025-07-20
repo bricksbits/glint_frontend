@@ -42,8 +42,9 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                                   : null
                               : null,
                           // pass the image if available
-                          onImagePick:
-                              context.read<OnBoardingCubit>().onPickImage,
+                          onImagePick: () {
+                            context.read<OnBoardingCubit>().onPickImage();
+                          },
                           onRemoveImage: () {
                             context
                                 .read<OnBoardingCubit>()

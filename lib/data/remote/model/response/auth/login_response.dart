@@ -75,8 +75,18 @@ class Profile {
     smokingHabit = json['smoking_habit'];
     profileViews = json['profile_views'];
     profileLikes = json['profile_likes'];
-    pictureUrlList = json['picture_url_list'];
-    videoUrlList = json['video_url_list'];
+    if (json['picture_url_list'] != null) {
+      pictureUrlList = [];
+      json['picture_url_list'].forEach((v) {
+        pictureUrlList?.add(PictureUrlList.fromJson(v));
+      });
+    }
+    if (json['video_url_list'] != null) {
+      videoUrlList = [];
+      json['video_url_list'].forEach((v) {
+        videoUrlList?.add(VideoUrlList.fromJson(v));
+      });
+    }
     isPremiumUser = json['is_premium_user'];
     aiMessagesRemaining = json['ai_messages_remaining'];
     rewindsRemaining = json['rewinds_remaining'];
@@ -103,8 +113,8 @@ class Profile {
   String? smokingHabit;
   int? profileViews;
   int? profileLikes;
-  dynamic pictureUrlList;
-  dynamic videoUrlList;
+  List<PictureUrlList>? pictureUrlList;
+  List<VideoUrlList>? videoUrlList;
   bool? isPremiumUser;
   int? aiMessagesRemaining;
   int? rewindsRemaining;
@@ -130,8 +140,8 @@ Profile copyWith({  String? authToken,
   String? smokingHabit,
   int? profileViews,
   int? profileLikes,
-  dynamic pictureUrlList,
-  dynamic videoUrlList,
+  List<PictureUrlList>? pictureUrlList,
+  List<VideoUrlList>? videoUrlList,
   bool? isPremiumUser,
   int? aiMessagesRemaining,
   int? rewindsRemaining,
@@ -187,13 +197,71 @@ Profile copyWith({  String? authToken,
     map['smoking_habit'] = smokingHabit;
     map['profile_views'] = profileViews;
     map['profile_likes'] = profileLikes;
-    map['picture_url_list'] = pictureUrlList;
-    map['video_url_list'] = videoUrlList;
+    if (pictureUrlList != null) {
+      map['picture_url_list'] = pictureUrlList?.map((v) => v.toJson()).toList();
+    }
+    if (videoUrlList != null) {
+      map['video_url_list'] = videoUrlList?.map((v) => v.toJson()).toList();
+    }
     map['is_premium_user'] = isPremiumUser;
     map['ai_messages_remaining'] = aiMessagesRemaining;
     map['rewinds_remaining'] = rewindsRemaining;
     map['super_likes_left'] = superLikesLeft;
     map['direct_dm_remaining'] = directDmRemaining;
+    return map;
+  }
+
+}
+
+VideoUrlList videoUrlListFromJson(String str) => VideoUrlList.fromJson(json.decode(str));
+String videoUrlListToJson(VideoUrlList data) => json.encode(data.toJson());
+class VideoUrlList {
+  VideoUrlList({
+      this.presignedUrl, 
+      this.fileExtension,});
+
+  VideoUrlList.fromJson(dynamic json) {
+    presignedUrl = json['presigned_url'];
+    fileExtension = json['file_extension'];
+  }
+  String? presignedUrl;
+  String? fileExtension;
+VideoUrlList copyWith({  String? presignedUrl,
+  String? fileExtension,
+}) => VideoUrlList(  presignedUrl: presignedUrl ?? this.presignedUrl,
+  fileExtension: fileExtension ?? this.fileExtension,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['presigned_url'] = presignedUrl;
+    map['file_extension'] = fileExtension;
+    return map;
+  }
+
+}
+
+PictureUrlList pictureUrlListFromJson(String str) => PictureUrlList.fromJson(json.decode(str));
+String pictureUrlListToJson(PictureUrlList data) => json.encode(data.toJson());
+class PictureUrlList {
+  PictureUrlList({
+      this.presignedUrl, 
+      this.fileExtension,});
+
+  PictureUrlList.fromJson(dynamic json) {
+    presignedUrl = json['presigned_url'];
+    fileExtension = json['file_extension'];
+  }
+  String? presignedUrl;
+  String? fileExtension;
+PictureUrlList copyWith({  String? presignedUrl,
+  String? fileExtension,
+}) => PictureUrlList(  presignedUrl: presignedUrl ?? this.presignedUrl,
+  fileExtension: fileExtension ?? this.fileExtension,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['presigned_url'] = presignedUrl;
+    map['file_extension'] = fileExtension;
     return map;
   }
 
