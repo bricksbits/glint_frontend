@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 
@@ -9,6 +10,7 @@ class LocationPermissionOnboardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AsyncEncryptedSharedPreferenceHelper asyncHelper;
     return BlocBuilder<OnBoardingCubit, OnBoardingState>(
       builder: (context, state) {
         return Scaffold(
@@ -88,17 +90,34 @@ class LocationPermissionOnboardingScreen extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const Gap(40.0),
-          SizedBox(
-            width: double.infinity,
-            child: GlintElevatedButton(
-              label: 'Enable Location',
-              onPressed: () {
-                //todo - add location permission setup
-                context
-                    .read<OnBoardingCubit>()
-                    .setUpLastBoardingState(OnBoardingCompletedTill.COMPLETED);
-              },
-            ),
+          BlocConsumer<OnBoardingCubit, OnBoardingState>(
+            listener: (context, state) {
+              if (state.locationPermissionDenied == true) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Location permission is required")),
+                );
+              }
+
+              if (state.onBoardingStatus == OnBoardingCompletedTill.COMPLETED) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Navigating to next screen.")),
+                );
+              }
+            },
+            builder: (context, state) {
+              final isLoading = state.isLocationLoading ?? false;
+              return SizedBox(
+                width: double.infinity,
+                child: GlintElevatedButton(
+                  label: isLoading ? 'Enabling...' : 'Enable Location',
+                  onPressed: isLoading
+                      ? null
+                      : () async {
+                          context.read<OnBoardingCubit>().enableLocationAndCompleteOnboarding();
+                        },
+                ),
+              );
+            },
           )
         ],
       ),

@@ -8,6 +8,8 @@ class OnBoardingState with _$OnBoardingState {
     @Default("") String error,
     @Default([]) List<File?> uploadedFilePaths,
     @Default(null) String? currentDestination,
+    bool? isLocationLoading,
+    bool? locationPermissionDenied,
   }) = _Initial;
 }
 
