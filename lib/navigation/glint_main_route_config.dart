@@ -39,6 +39,7 @@ import '../features/admin/screen/admin_event_live_screen.dart';
 import '../features/admin/screen/admin_track_specific_event.dart';
 import '../features/admin/screen/track_event_interested_people_screen.dart';
 import '../features/admin/screen/track_event_tickets_bought_screen.dart';
+import '../features/auth/blocs/register/register_cubit.dart';
 import '../features/chat/chat_screen.dart';
 import '../features/home/home_screen.dart';
 
@@ -71,7 +72,10 @@ final glintMainRoutes = GoRouter(
       path: '/${GlintMainRoutes.register.name}',
       name: GlintMainRoutes.register.name,
       builder: (context, state) {
-        return const CreateAccounScreen();
+        return BlocProvider(
+          create: (context) => RegisterCubit(),
+          child: const CreateAccounScreen(),
+        );
       },
     ),
     GoRoute(

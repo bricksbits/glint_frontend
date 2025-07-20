@@ -217,11 +217,15 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     }
   }
 
-  void setAge(String age) {
+  void setAge(
+    String age,
+    String selectedDate,
+  ) {
     emit(
       state.copyWith(
         currentState: _getCurrentRegisterUserState()?.copyWith(
-          dob: age,
+          calculatedAge: age,
+          dob: selectedDate
         ),
       ),
     );

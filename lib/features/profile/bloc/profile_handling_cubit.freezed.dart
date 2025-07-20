@@ -16,20 +16,21 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ProfileHandlingState {
-  PeopleCardModel get previewProfileModel => throw _privateConstructorUsedError;
+  PeopleCardModel? get previewProfileModel =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(PeopleCardModel previewProfileModel) initial,
+    required TResult Function(PeopleCardModel? previewProfileModel) initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(PeopleCardModel previewProfileModel)? initial,
+    TResult? Function(PeopleCardModel? previewProfileModel)? initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(PeopleCardModel previewProfileModel)? initial,
+    TResult Function(PeopleCardModel? previewProfileModel)? initial,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -63,7 +64,7 @@ abstract class $ProfileHandlingStateCopyWith<$Res> {
           $Res Function(ProfileHandlingState) then) =
       _$ProfileHandlingStateCopyWithImpl<$Res, ProfileHandlingState>;
   @useResult
-  $Res call({PeopleCardModel previewProfileModel});
+  $Res call({PeopleCardModel? previewProfileModel});
 }
 
 /// @nodoc
@@ -82,13 +83,13 @@ class _$ProfileHandlingStateCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? previewProfileModel = null,
+    Object? previewProfileModel = freezed,
   }) {
     return _then(_value.copyWith(
-      previewProfileModel: null == previewProfileModel
+      previewProfileModel: freezed == previewProfileModel
           ? _value.previewProfileModel
           : previewProfileModel // ignore: cast_nullable_to_non_nullable
-              as PeopleCardModel,
+              as PeopleCardModel?,
     ) as $Val);
   }
 }
@@ -101,7 +102,7 @@ abstract class _$$InitialImplCopyWith<$Res>
       __$$InitialImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({PeopleCardModel previewProfileModel});
+  $Res call({PeopleCardModel? previewProfileModel});
 }
 
 /// @nodoc
@@ -117,13 +118,13 @@ class __$$InitialImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? previewProfileModel = null,
+    Object? previewProfileModel = freezed,
   }) {
     return _then(_$InitialImpl(
-      previewProfileModel: null == previewProfileModel
+      previewProfileModel: freezed == previewProfileModel
           ? _value.previewProfileModel
           : previewProfileModel // ignore: cast_nullable_to_non_nullable
-              as PeopleCardModel,
+              as PeopleCardModel?,
     ));
   }
 }
@@ -135,7 +136,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   @JsonKey()
-  final PeopleCardModel previewProfileModel;
+  final PeopleCardModel? previewProfileModel;
 
   @override
   String toString() {
@@ -165,7 +166,7 @@ class _$InitialImpl implements _Initial {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(PeopleCardModel previewProfileModel) initial,
+    required TResult Function(PeopleCardModel? previewProfileModel) initial,
   }) {
     return initial(previewProfileModel);
   }
@@ -173,7 +174,7 @@ class _$InitialImpl implements _Initial {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(PeopleCardModel previewProfileModel)? initial,
+    TResult? Function(PeopleCardModel? previewProfileModel)? initial,
   }) {
     return initial?.call(previewProfileModel);
   }
@@ -181,7 +182,7 @@ class _$InitialImpl implements _Initial {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(PeopleCardModel previewProfileModel)? initial,
+    TResult Function(PeopleCardModel? previewProfileModel)? initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -220,11 +221,11 @@ class _$InitialImpl implements _Initial {
 }
 
 abstract class _Initial implements ProfileHandlingState {
-  const factory _Initial({final PeopleCardModel previewProfileModel}) =
+  const factory _Initial({final PeopleCardModel? previewProfileModel}) =
       _$InitialImpl;
 
   @override
-  PeopleCardModel get previewProfileModel;
+  PeopleCardModel? get previewProfileModel;
 
   /// Create a copy of ProfileHandlingState
   /// with the given fields replaced by the non-null parameter values.

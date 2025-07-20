@@ -59,23 +59,24 @@ class RegisterUserRequest {
     String? calculatedAge,
   }) {
     return RegisterUserRequest(
-        tempUserId ?? this.tempUserId,
-        username ?? this.username,
-        email ?? this.email,
-        password ?? this.password,
-        bio ?? this.bio,
-        dob ?? this.dateOfBirthWithDateFormat,
-        height ?? this.height,
-        education ?? this.education,
-        occupation ?? this.occupation,
-        gender ?? this.gender,
-        genderPreference ?? this.genderPreference,
-        workoutHabit ?? this.workoutHabit,
-        drinkingHabit ?? this.drinkingHabit,
-        smokingHabit ?? this.smokingHabit,
-        relationShipGoals ?? this.relationShipGoals,
-        interests ?? this.interests,
-        calculatedAge = calculatedAge);
+      tempUserId ?? this.tempUserId,
+      username ?? this.username,
+      email ?? this.email,
+      password ?? this.password,
+      bio ?? this.bio,
+      dob ?? this.dateOfBirthWithDateFormat,
+      height ?? this.height,
+      education ?? this.education,
+      occupation ?? this.occupation,
+      gender ?? this.gender,
+      genderPreference ?? this.genderPreference,
+      workoutHabit ?? this.workoutHabit,
+      drinkingHabit ?? this.drinkingHabit,
+      smokingHabit ?? this.smokingHabit,
+      relationShipGoals ?? this.relationShipGoals,
+      interests ?? this.interests,
+      calculatedAge = calculatedAge,
+    );
   }
 
   @override
@@ -125,6 +126,7 @@ extension RegisterRequestToEntityMapper on RegisterUserRequest {
       profileTag: "",
       lastLocation: "",
       location: "",
+      dateOfBirthFormatted: dateOfBirthWithDateFormat,
     );
   }
 }

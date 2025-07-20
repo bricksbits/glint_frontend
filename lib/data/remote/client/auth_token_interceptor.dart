@@ -25,6 +25,7 @@ class AuthInterceptor extends Interceptor {
   }
 
   /// Todo: Handle the Errors properly,
+  /// Based on the App Status, Navigate to Specific Error Screen
   /// Todo: Check with Wrong Credentials this will fail the onError Case
   /// Handle the Navigation effectively
   /// Remove Constants.

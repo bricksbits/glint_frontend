@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import 'on_boarding_cubit.dart';
 
@@ -27,7 +28,8 @@ class _DateOfBirthOnboardingScreenState
   @override
   void initState() {
     super.initState();
-    context.read<OnBoardingCubit>()
+    context
+        .read<OnBoardingCubit>()
         .setUpLastBoardingState(OnBoardingCompletedTill.NAME_PROVIDED);
 
     final now = DateTime.now();
@@ -93,11 +95,16 @@ class _DateOfBirthOnboardingScreenState
                         backgroundColor: AppColours.primaryBlue,
                         onPressed: () {
                           if (calculateAge() >= 18) {
-                            context
-                                .read<OnBoardingCubit>()
-                                .setAge(calculateAge().toString());
+                            context.read<OnBoardingCubit>().setAge(
+                                  calculateAge().toString(),
+                                  DateFormat("yyyy-MM-dd HH:mm:ss")
+                                      .format(_selectedDate),
+                                );
+
+                            context.pop();
                           }
-                          final currentAge = state.currentState?.dateOfBirthWithDateFormat;
+                          final currentAge =
+                              state.currentState?.dateOfBirthWithDateFormat;
                           if (currentAge != null && calculateAge() >= 18) {
                             context
                                 .read<OnBoardingCubit>()

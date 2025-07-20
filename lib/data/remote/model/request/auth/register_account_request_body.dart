@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
 
@@ -27,6 +28,8 @@ class RegisterAccountRequestBody {
     this.relationshipGoals,
     this.interests,
     this.role,
+    this.approvedByAdmin,
+    this.fcmToken,
   });
 
   RegisterAccountRequestBody.fromJson(dynamic json) {
@@ -48,8 +51,10 @@ class RegisterAccountRequestBody {
         ? json['relationship_goals'].cast<String>()
         : [];
     interests =
-        json['interests'] != null ? json['interests'].cast<String>() : [];
+    json['interests'] != null ? json['interests'].cast<String>() : [];
     role = json['role'];
+    approvedByAdmin = json['approved_by_admin'];
+    fcmToken = json['fcm_token'];
   }
 
   String? username;
@@ -69,6 +74,8 @@ class RegisterAccountRequestBody {
   List<String>? relationshipGoals;
   List<String>? interests;
   String? role;
+  bool? approvedByAdmin;
+  String? fcmToken;
 
   RegisterAccountRequestBody copyWith({
     String? username,
@@ -88,6 +95,8 @@ class RegisterAccountRequestBody {
     List<String>? relationshipGoals,
     List<String>? interests,
     String? role,
+    bool? approvedByAdmin,
+    String? fcmToken,
   }) =>
       RegisterAccountRequestBody(
         username: username ?? this.username,
@@ -107,6 +116,8 @@ class RegisterAccountRequestBody {
         relationshipGoals: relationshipGoals ?? this.relationshipGoals,
         interests: interests ?? this.interests,
         role: role ?? this.role,
+        approvedByAdmin: approvedByAdmin ?? this.approvedByAdmin,
+        fcmToken: fcmToken ?? this.fcmToken,
       );
 
   Map<String, dynamic> toJson() {
@@ -128,32 +139,42 @@ class RegisterAccountRequestBody {
     map['relationship_goals'] = relationshipGoals;
     map['interests'] = interests;
     map['role'] = role;
+    map['approved_by_admin'] = approvedByAdmin;
+    map['fcm_token'] = fcmToken;
     return map;
   }
 }
 
+//Todo: Remove this Random with passed value
+var _random = Random().nextInt(999999);
+
+//Todo: Implement the Bottom Sheet and Fix those predefined placeholder values
+// height, Occupation, Designation, workout, smoking, drinking,
 extension RegisterUserRequestMapper on RegisterUserRequest {
   RegisterAccountRequestBody mapToData(String userType) {
+    // var parsedHeight = height != null ? double.parse(height ?? "0.00") : 0.00;
     return RegisterAccountRequestBody(
       username: username,
       password: password,
       email: email,
-      phoneNumber: "+910000000000",
+      phoneNumber: "9876543210",
       bio: bio,
       dateOfBirth: dateOfBirthWithDateFormat,
-      height: double.parse(height ?? "0.0"),
-      education: education,
-      occupation: occupation,
-      genderPreference: genderPreference,
-      gender: gender,
-      workoutHabit: workoutHabit,
-      drinkingHabit: drinkingHabit,
-      smokingHabit: smokingHabit,
+      height: 5.9,
+      education: "education",
+      occupation: "occupation",
+      genderPreference: genderPreference?.toLowerCase(),
+      gender: gender?.toLowerCase(),
+      workoutHabit: "never",
+      drinkingHabit: "never",
+      smokingHabit: "never",
       relationshipGoals: [
         relationShipGoals ?? "Friend",
       ],
       interests: interests,
       role: userType,
+      approvedByAdmin: true,
+      fcmToken: "fcm_test_${_random}_${_random}",
     );
   }
 }

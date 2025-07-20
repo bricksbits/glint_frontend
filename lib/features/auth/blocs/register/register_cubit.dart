@@ -25,7 +25,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   void enteredPassword(String password) {
     emit(
       state.copyWith(
-        email: password,
+        password: password,
         isPassWordValid: true,
       ),
     );
