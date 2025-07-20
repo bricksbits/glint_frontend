@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/di/injection.dart';
-import 'package:glint_frontend/navigation/glint_main_route_config.dart';
+import 'package:glint_frontend/navigation/glint_admin_route_config.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:stream_chat_localizations/stream_chat_localizations.dart';
 
@@ -17,7 +17,7 @@ class MyGlintApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
       // routerConfig: kIsWeb ? glintAdminRoutes : glintMainRoutes,
-      routerConfig: glintMainRoutes,
+      routerConfig: glintAdminRoutes,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

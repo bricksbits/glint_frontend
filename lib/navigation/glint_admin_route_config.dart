@@ -1,4 +1,5 @@
 import 'package:glint_frontend/features/admin/screen/admin_create_event_screen.dart';
+import 'package:glint_frontend/features/admin/screen/admin_dashboard_screen.dart';
 import 'package:glint_frontend/features/admin/screen/admin_edit_profile_screen.dart';
 import 'package:glint_frontend/features/admin/screen/admin_event_live_screen.dart';
 import 'package:glint_frontend/features/admin/screen/admin_track_specific_event.dart';
@@ -14,7 +15,7 @@ import 'package:go_router/go_router.dart';
 import 'glint_authentication_routes.dart';
 
 final glintAdminRoutes = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/${GlintAdminDasboardRoutes.home.name}',
   debugLogDiagnostics: true,
   navigatorKey: rootNavigatorKey,
   routes: [
@@ -35,11 +36,9 @@ final glintAdminRoutes = GoRouter(
       path: '/${GlintAdminDasboardRoutes.home.name}',
       name: GlintAdminDasboardRoutes.home.name,
       builder: (context, state) {
-        return const SuperAdminDashboardScreen();
-        // final isSuperAdmin = false;
-        // return isSuperAdmin
-        //     ?
-        //     : const AdminDashboardScreen();
+        // return const SuperAdminDashboardScreen();
+        const isSuperAdmin = false;
+        return isSuperAdmin ? SuperAdminDashboardScreen() : const AdminDashboardScreen();
       },
     ),
     GoRoute(
