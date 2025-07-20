@@ -19,6 +19,7 @@ class AuthIconTextField extends StatefulWidget {
     required this.isTextFieldFocused,
     required this.onTap,
     this.focusNode,
+    this.onChanged,
   });
 
   final TextEditingController controller;
@@ -27,6 +28,7 @@ class AuthIconTextField extends StatefulWidget {
   final bool isTextFieldFocused;
   final VoidCallback? onTap;
   final FocusNode? focusNode;
+  final ValueChanged<String>? onChanged;
 
   @override
   State<AuthIconTextField> createState() => _AuthIconTextFieldState();
@@ -84,9 +86,7 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
                 decoration: BoxDecoration(
                   border: Border(
                     right: BorderSide(
-                      color: widget.isTextFieldFocused
-                          ? AppColours.primaryBlue
-                          : AppColours.gray60,
+                      color: widget.isTextFieldFocused ? AppColours.primaryBlue : AppColours.gray60,
                       width: 1.0,
                     ),
                   ),
@@ -105,6 +105,7 @@ class _AuthIconTextFieldState extends State<AuthIconTextField> {
                 controller: widget.controller,
                 onTap: widget.onTap,
                 focusNode: widget.focusNode,
+                onChanged: widget.onChanged,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
                   hintStyle: const TextStyle(

@@ -9,8 +9,6 @@ import 'package:glint_frontend/features/auth/blocs/login/login_bloc.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
-import 'blocs/reset_password/reset_password_bloc.dart';
-
 class LoginScreen extends StatefulWidget {
   final bool isAdmin;
 
@@ -37,8 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
       body: BlocProvider<LoginBloc>(
         create: (context) => LoginBloc(),
-        child:
-            BlocListener<LoginBloc, LoginState>(listener: (myContext, state) {
+        child: BlocListener<LoginBloc, LoginState>(listener: (myContext, state) {
           state.when(
               initial: () {},
               loading: () {},
@@ -69,8 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       if (!widget.isAdmin)
                         Center(
-                          child: SvgPicture.asset(
-                              'lib/assets/images/auth/glint_login.svg'),
+                          child: SvgPicture.asset('lib/assets/images/auth/glint_login.svg'),
                         ),
                       const Gap(40.0),
                       if (widget.isAdmin)
@@ -82,19 +78,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const Spacer(),
                                 Text(
                                   'Login',
-                                  style: AppTheme.headingThree
-                                      .copyWith(fontStyle: FontStyle.normal),
+                                  style: AppTheme.headingThree.copyWith(fontStyle: FontStyle.normal),
                                 ),
                                 const Gap(32.0),
                                 _buildAuthFields(),
                                 const Gap(60.0),
                                 _buildActionButton('Log In', () {
                                   context.read<LoginBloc>()
-                                    ..add(LoginEvent.emailInput(
-                                        _emailController.text))
+                                    ..add(LoginEvent.emailInput(_emailController.text))
                                     ..add(
-                                      LoginEvent.passwordInput(
-                                          _passwordController.text),
+                                      LoginEvent.passwordInput(_passwordController.text),
                                     )
                                     ..add(
                                       const LoginEvent.login(),
@@ -117,11 +110,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           'Login',
                           () {
                             context.read<LoginBloc>()
+                              ..add(LoginEvent.emailInput(_emailController.text))
                               ..add(
-                                  LoginEvent.emailInput(_emailController.text))
-                              ..add(
-                                LoginEvent.passwordInput(
-                                    _passwordController.text),
+                                LoginEvent.passwordInput(_passwordController.text),
                               )
                               ..add(
                                 const LoginEvent.login(),
@@ -201,80 +192,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildForgotPassword() {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () async {
-        final emailController =
-            TextEditingController(text: _emailController.text);
+      onTap: () {
+        const targetScreen = GlintAuthRoutes.resetPassword;
 
-        final result = await showDialog<String>(
-          context: context,
-          builder: (context) => AlertDialog(
-            backgroundColor: AppColours.white,
-            title: const Text('Forgot Password'),
-            content: TextField(
-              controller: emailController,
-              decoration: const InputDecoration(hintText: 'Enter your email'),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(emailController.text);
-                },
-                child: const Text('Send OTP'),
-              ),
-            ],
-          ),
-        );
-
-        // Proceed if user entered something
-        if (result != null && result.trim().isNotEmpty) {
-          final email = result.trim();
-
-          if (!mounted) return;
-
-          // Show loading spinner
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => const Center(child: CircularProgressIndicator()),
-          );
-
-          // Send the OTP via bloc
-          context.read<ResetPasswordBloc>().add(
-                ResetPasswordEvent.sendOtp(email),
-              );
-
-          // Listen for the next state from bloc
-          final bloc = context.read<ResetPasswordBloc>();
-          final subscription = bloc.stream.listen((state) {
-            state.maybeWhen(
-              otpSent: () {
-                Navigator.of(context).pop(); // Dismiss loading
-                if (!context.mounted) return;
-
-                context.pushNamed(
-                  GlintAuthRoutes.otp.name,
-                  pathParameters: {'email': email},
-                );
-              },
-              error: (message) {
-                Navigator.of(context).pop(); // Dismiss loading
-                if (!context.mounted) return;
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(message)),
-                );
-              },
-              orElse: () {
-                debugPrint('SOMETHINS ELSE HAPPENED');
-              },
-            );
-          });
-        }
+        context.pushNamed(targetScreen.name);
       },
       child: Align(
         alignment: widget.isAdmin ? Alignment.center : Alignment.centerRight,
@@ -317,7 +238,11 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: TextDecoration.underline,
               fontWeight: FontWeight.w600,
             ),
-            recognizer: TapGestureRecognizer()..onTap = () {},
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                const targetScreen = GlintMainRoutes.register;
+                context.goNamed(targetScreen.name);
+              },
           ),
         ],
       ),

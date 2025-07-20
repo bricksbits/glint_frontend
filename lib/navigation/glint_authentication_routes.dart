@@ -21,7 +21,15 @@ final glintAuthenticationRoutesBase = [
   GoRoute(
     path: '/${GlintAuthRoutes.recreatePassword.name}',
     name: GlintAuthRoutes.recreatePassword.name,
-    builder: (context, state) => const CreatePasswordScreen(),
+    builder: (context, state) {
+      final extra = state.extra as Map<String, dynamic>;
+      final email = extra['email'] ?? '';
+      final otp = extra['otp'] ?? '';
+      return CreatePasswordScreen(
+        email: email,
+        otp: otp,
+      );
+    },
   ),
   GoRoute(
     path: '/${GlintAuthRoutes.passwordSuccess.name}',

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
+
+import 'blocs/reset_password/reset_password_bloc.dart';
 
 class EnterOtpScreen extends StatefulWidget {
   const EnterOtpScreen({super.key, required this.email});
@@ -114,8 +117,15 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
                 onPressed: buttonDisabled
                     ? null
                     : () {
+                        final otp = _codeController.text;
+
                         context.go(
-                            "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.recreatePassword.name}");
+                          "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.recreatePassword.name}",
+                          extra: {
+                            'email': widget.email!,
+                            'otp': otp,
+                          },
+                        );
                         debugPrint('confirm otp button pressed');
                       },
               ),
@@ -127,7 +137,13 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
             GestureDetector(
               onDoubleTap: () {},
               onTap: () {
-                // TODO - add resend otp functionality
+                if (widget.email != null) {
+                  context.read<ResetPasswordBloc>().add(
+                        ResetPasswordEvent.sendOtp(
+                          widget.email!,
+                        ),
+                      );
+                }
                 debugPrint('resend otp button pressed');
               },
               child: Text(
