@@ -34,7 +34,7 @@ import '../features/chat/chat_screen.dart';
 import '../features/home/home_screen.dart';
 
 final glintMainRoutes = GoRouter(
-  initialLocation: '/${GlintBoardingRoutes.location.name}',
+  initialLocation: '/',
   debugLogDiagnostics: true,
   navigatorKey: rootNavigatorKey,
   routes: [

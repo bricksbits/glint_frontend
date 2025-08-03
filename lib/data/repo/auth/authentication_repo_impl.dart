@@ -93,7 +93,9 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
         }
 
         final tokenBufferTime = DateTime.now()
-            .add(const Duration(minutes: 55))
+            .add(
+              const Duration(days: 1, hours: 15, minutes: 30),
+            )
             .microsecondsSinceEpoch;
 
         await sharedPreferenceHelper.saveInt(
