@@ -36,7 +36,7 @@ class AuthInterceptor extends Interceptor {
 
       if (refreshToken.isEmpty) {
         if (authState != null) {
-          authState.pushNamed(GlintAdminDasboardRoutes.home.name);
+          authState.pushNamed(GlintMainRoutes.splash.name);
           return;
         }
         return;
@@ -47,27 +47,34 @@ class AuthInterceptor extends Interceptor {
           'refresh_token': refreshToken,
         });
 
-        final successResponse =
-            RefreshAuthTokenResponse.fromJson(response.data);
-        final newRequest = err.requestOptions;
-        if (successResponse.accessToken != null &&
-            successResponse.refreshToken != null) {
-          newRequest.headers['Auth'] = successResponse.accessToken;
-          await sharedPreferenceHelper.saveString(
+        if (response.statusCode == 200) {
+          final successResponse =
+              RefreshAuthTokenResponse.fromJson(response.data);
+          final newRequest = err.requestOptions;
+          if (successResponse.accessToken != null &&
+              successResponse.refreshToken != null) {
+            newRequest.headers['Auth'] = successResponse.accessToken;
+            await sharedPreferenceHelper.saveString(
               SharedPreferenceKeys.accessTokenKey,
-              successResponse.accessToken!);
-          await sharedPreferenceHelper.saveString(
+              successResponse.accessToken!,
+            );
+            await sharedPreferenceHelper.saveString(
               SharedPreferenceKeys.refreshTokenKey,
-              successResponse.refreshToken!);
-        }
+              successResponse.refreshToken!,
+            );
+          }
 
-        final clone = await authClient.fetch(newRequest);
-        return handler.resolve(clone);
+          final clone = await authClient.fetch(newRequest);
+          return handler.resolve(clone);
+        } else {
+          await sharedPreferenceHelper.clearEncryptedPrefs();
+          authState?.pushNamed(GlintMainRoutes.splash.name);
+        }
       } catch (e) {
         // Token refresh failed, logout user
         await sharedPreferenceHelper.clearEncryptedPrefs();
         if (authState != null) {
-          authState.pushNamed(GlintAdminDasboardRoutes.home.name);
+          authState.pushNamed(GlintMainRoutes.splash.name);
           return;
         }
         return handler.next(err);

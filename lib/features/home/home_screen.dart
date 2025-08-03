@@ -4,10 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
+import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
+import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/base/event_base_screen.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
+import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/profile_screen.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
@@ -29,20 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const ProfileScreen(),
     const EventBaseScreen(),
     PeopleScreen(),
-    PaymentScreen(
-      paymentArgumentModel: PaymentArgumentModel(
-        membershipType: null,
-        amountOfSelectedMembership: null,
-        timePeriod: null,
-        eventId: "3",
-        matchId: "2",
-        userOne: UserTicketHolderModel(
-            userId: "1", username: "bricksBits", imageUrl: "https://picsum.photos/id/1/200/300"),
-        userTwo: UserTicketHolderModel(
-            userId: "2", username: "Female", imageUrl: "https://picsum.photos/id/1/200/300"),
-        eventTicketPrice: "42",
-      ),
-    ),
+    const ServiceScreen(),
     const ChatScreen(),
   ];
 
@@ -97,8 +87,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => PaymentCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => PeopleCardsBloc()),
+        BlocProvider(create: (context) => ChatScreenCubit()),
+        BlocProvider(create: (context) => EventBaseCubit()),
+      ],
       child:
           BlocBuilder<InternetStatusCheckerCubit, InternetStatusCheckerState>(
         builder: (context, state) {
@@ -118,7 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 : GlintAppBar(
                     appBarAction: appBarAction(_selectedIndex),
                   ),
-            body: _bottomNavScreens[_selectedIndex],
+            body: IndexedStack(
+              index: _selectedIndex,
+              children: _bottomNavScreens,
+            ),
             bottomNavigationBar: Container(
               height: 70.0,
               width: double.infinity,
