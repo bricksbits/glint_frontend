@@ -24,6 +24,7 @@ mixin _$SuperAdminDashboardEvent {
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
     required TResult Function() updateList,
+    required TResult Function(SuperAdminDashboardState state) updateStates,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -34,6 +35,7 @@ mixin _$SuperAdminDashboardEvent {
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
     TResult? Function()? updateList,
+    TResult? Function(SuperAdminDashboardState state)? updateStates,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -44,6 +46,7 @@ mixin _$SuperAdminDashboardEvent {
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
     TResult Function()? updateList,
+    TResult Function(SuperAdminDashboardState state)? updateStates,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -55,6 +58,7 @@ mixin _$SuperAdminDashboardEvent {
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
     required TResult Function(_UpdateList value) updateList,
+    required TResult Function(_UpdateStates value) updateStates,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -65,6 +69,7 @@ mixin _$SuperAdminDashboardEvent {
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
     TResult? Function(_UpdateList value)? updateList,
+    TResult? Function(_UpdateStates value)? updateStates,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -75,6 +80,7 @@ mixin _$SuperAdminDashboardEvent {
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
     TResult Function(_UpdateList value)? updateList,
+    TResult Function(_UpdateStates value)? updateStates,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -149,6 +155,7 @@ class _$FetchImpl implements _Fetch {
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
     required TResult Function() updateList,
+    required TResult Function(SuperAdminDashboardState state) updateStates,
   }) {
     return fetch();
   }
@@ -162,6 +169,7 @@ class _$FetchImpl implements _Fetch {
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
     TResult? Function()? updateList,
+    TResult? Function(SuperAdminDashboardState state)? updateStates,
   }) {
     return fetch?.call();
   }
@@ -175,6 +183,7 @@ class _$FetchImpl implements _Fetch {
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
     TResult Function()? updateList,
+    TResult Function(SuperAdminDashboardState state)? updateStates,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -192,6 +201,7 @@ class _$FetchImpl implements _Fetch {
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
     required TResult Function(_UpdateList value) updateList,
+    required TResult Function(_UpdateStates value) updateStates,
   }) {
     return fetch(this);
   }
@@ -205,6 +215,7 @@ class _$FetchImpl implements _Fetch {
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
     TResult? Function(_UpdateList value)? updateList,
+    TResult? Function(_UpdateStates value)? updateStates,
   }) {
     return fetch?.call(this);
   }
@@ -218,6 +229,7 @@ class _$FetchImpl implements _Fetch {
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
     TResult Function(_UpdateList value)? updateList,
+    TResult Function(_UpdateStates value)? updateStates,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -305,6 +317,7 @@ class _$ApproveEventImpl implements _ApproveEvent {
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
     required TResult Function() updateList,
+    required TResult Function(SuperAdminDashboardState state) updateStates,
   }) {
     return approveEvent(eventId);
   }
@@ -318,6 +331,7 @@ class _$ApproveEventImpl implements _ApproveEvent {
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
     TResult? Function()? updateList,
+    TResult? Function(SuperAdminDashboardState state)? updateStates,
   }) {
     return approveEvent?.call(eventId);
   }
@@ -331,6 +345,7 @@ class _$ApproveEventImpl implements _ApproveEvent {
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
     TResult Function()? updateList,
+    TResult Function(SuperAdminDashboardState state)? updateStates,
     required TResult orElse(),
   }) {
     if (approveEvent != null) {
@@ -348,6 +363,7 @@ class _$ApproveEventImpl implements _ApproveEvent {
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
     required TResult Function(_UpdateList value) updateList,
+    required TResult Function(_UpdateStates value) updateStates,
   }) {
     return approveEvent(this);
   }
@@ -361,6 +377,7 @@ class _$ApproveEventImpl implements _ApproveEvent {
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
     TResult? Function(_UpdateList value)? updateList,
+    TResult? Function(_UpdateStates value)? updateStates,
   }) {
     return approveEvent?.call(this);
   }
@@ -374,6 +391,7 @@ class _$ApproveEventImpl implements _ApproveEvent {
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
     TResult Function(_UpdateList value)? updateList,
+    TResult Function(_UpdateStates value)? updateStates,
     required TResult orElse(),
   }) {
     if (approveEvent != null) {
@@ -469,6 +487,7 @@ class _$RejectEventImpl implements _RejectEvent {
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
     required TResult Function() updateList,
+    required TResult Function(SuperAdminDashboardState state) updateStates,
   }) {
     return rejectEvent(eventId);
   }
@@ -482,6 +501,7 @@ class _$RejectEventImpl implements _RejectEvent {
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
     TResult? Function()? updateList,
+    TResult? Function(SuperAdminDashboardState state)? updateStates,
   }) {
     return rejectEvent?.call(eventId);
   }
@@ -495,6 +515,7 @@ class _$RejectEventImpl implements _RejectEvent {
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
     TResult Function()? updateList,
+    TResult Function(SuperAdminDashboardState state)? updateStates,
     required TResult orElse(),
   }) {
     if (rejectEvent != null) {
@@ -512,6 +533,7 @@ class _$RejectEventImpl implements _RejectEvent {
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
     required TResult Function(_UpdateList value) updateList,
+    required TResult Function(_UpdateStates value) updateStates,
   }) {
     return rejectEvent(this);
   }
@@ -525,6 +547,7 @@ class _$RejectEventImpl implements _RejectEvent {
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
     TResult? Function(_UpdateList value)? updateList,
+    TResult? Function(_UpdateStates value)? updateStates,
   }) {
     return rejectEvent?.call(this);
   }
@@ -538,6 +561,7 @@ class _$RejectEventImpl implements _RejectEvent {
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
     TResult Function(_UpdateList value)? updateList,
+    TResult Function(_UpdateStates value)? updateStates,
     required TResult orElse(),
   }) {
     if (rejectEvent != null) {
@@ -606,6 +630,7 @@ class _$SelectLiveImpl implements _SelectLive {
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
     required TResult Function() updateList,
+    required TResult Function(SuperAdminDashboardState state) updateStates,
   }) {
     return selectLive();
   }
@@ -619,6 +644,7 @@ class _$SelectLiveImpl implements _SelectLive {
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
     TResult? Function()? updateList,
+    TResult? Function(SuperAdminDashboardState state)? updateStates,
   }) {
     return selectLive?.call();
   }
@@ -632,6 +658,7 @@ class _$SelectLiveImpl implements _SelectLive {
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
     TResult Function()? updateList,
+    TResult Function(SuperAdminDashboardState state)? updateStates,
     required TResult orElse(),
   }) {
     if (selectLive != null) {
@@ -649,6 +676,7 @@ class _$SelectLiveImpl implements _SelectLive {
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
     required TResult Function(_UpdateList value) updateList,
+    required TResult Function(_UpdateStates value) updateStates,
   }) {
     return selectLive(this);
   }
@@ -662,6 +690,7 @@ class _$SelectLiveImpl implements _SelectLive {
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
     TResult? Function(_UpdateList value)? updateList,
+    TResult? Function(_UpdateStates value)? updateStates,
   }) {
     return selectLive?.call(this);
   }
@@ -675,6 +704,7 @@ class _$SelectLiveImpl implements _SelectLive {
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
     TResult Function(_UpdateList value)? updateList,
+    TResult Function(_UpdateStates value)? updateStates,
     required TResult orElse(),
   }) {
     if (selectLive != null) {
@@ -735,6 +765,7 @@ class _$selectRequestsImpl implements selectRequests {
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
     required TResult Function() updateList,
+    required TResult Function(SuperAdminDashboardState state) updateStates,
   }) {
     return selectRequests();
   }
@@ -748,6 +779,7 @@ class _$selectRequestsImpl implements selectRequests {
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
     TResult? Function()? updateList,
+    TResult? Function(SuperAdminDashboardState state)? updateStates,
   }) {
     return selectRequests?.call();
   }
@@ -761,6 +793,7 @@ class _$selectRequestsImpl implements selectRequests {
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
     TResult Function()? updateList,
+    TResult Function(SuperAdminDashboardState state)? updateStates,
     required TResult orElse(),
   }) {
     if (selectRequests != null) {
@@ -778,6 +811,7 @@ class _$selectRequestsImpl implements selectRequests {
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
     required TResult Function(_UpdateList value) updateList,
+    required TResult Function(_UpdateStates value) updateStates,
   }) {
     return selectRequests(this);
   }
@@ -791,6 +825,7 @@ class _$selectRequestsImpl implements selectRequests {
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
     TResult? Function(_UpdateList value)? updateList,
+    TResult? Function(_UpdateStates value)? updateStates,
   }) {
     return selectRequests?.call(this);
   }
@@ -804,6 +839,7 @@ class _$selectRequestsImpl implements selectRequests {
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
     TResult Function(_UpdateList value)? updateList,
+    TResult Function(_UpdateStates value)? updateStates,
     required TResult orElse(),
   }) {
     if (selectRequests != null) {
@@ -864,6 +900,7 @@ class _$UpdateListImpl implements _UpdateList {
     required TResult Function() selectLive,
     required TResult Function() selectRequests,
     required TResult Function() updateList,
+    required TResult Function(SuperAdminDashboardState state) updateStates,
   }) {
     return updateList();
   }
@@ -877,6 +914,7 @@ class _$UpdateListImpl implements _UpdateList {
     TResult? Function()? selectLive,
     TResult? Function()? selectRequests,
     TResult? Function()? updateList,
+    TResult? Function(SuperAdminDashboardState state)? updateStates,
   }) {
     return updateList?.call();
   }
@@ -890,6 +928,7 @@ class _$UpdateListImpl implements _UpdateList {
     TResult Function()? selectLive,
     TResult Function()? selectRequests,
     TResult Function()? updateList,
+    TResult Function(SuperAdminDashboardState state)? updateStates,
     required TResult orElse(),
   }) {
     if (updateList != null) {
@@ -907,6 +946,7 @@ class _$UpdateListImpl implements _UpdateList {
     required TResult Function(_SelectLive value) selectLive,
     required TResult Function(selectRequests value) selectRequests,
     required TResult Function(_UpdateList value) updateList,
+    required TResult Function(_UpdateStates value) updateStates,
   }) {
     return updateList(this);
   }
@@ -920,6 +960,7 @@ class _$UpdateListImpl implements _UpdateList {
     TResult? Function(_SelectLive value)? selectLive,
     TResult? Function(selectRequests value)? selectRequests,
     TResult? Function(_UpdateList value)? updateList,
+    TResult? Function(_UpdateStates value)? updateStates,
   }) {
     return updateList?.call(this);
   }
@@ -933,6 +974,7 @@ class _$UpdateListImpl implements _UpdateList {
     TResult Function(_SelectLive value)? selectLive,
     TResult Function(selectRequests value)? selectRequests,
     TResult Function(_UpdateList value)? updateList,
+    TResult Function(_UpdateStates value)? updateStates,
     required TResult orElse(),
   }) {
     if (updateList != null) {
@@ -947,10 +989,197 @@ abstract class _UpdateList implements SuperAdminDashboardEvent {
 }
 
 /// @nodoc
+abstract class _$$UpdateStatesImplCopyWith<$Res> {
+  factory _$$UpdateStatesImplCopyWith(
+          _$UpdateStatesImpl value, $Res Function(_$UpdateStatesImpl) then) =
+      __$$UpdateStatesImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({SuperAdminDashboardState state});
+
+  $SuperAdminDashboardStateCopyWith<$Res> get state;
+}
+
+/// @nodoc
+class __$$UpdateStatesImplCopyWithImpl<$Res>
+    extends _$SuperAdminDashboardEventCopyWithImpl<$Res, _$UpdateStatesImpl>
+    implements _$$UpdateStatesImplCopyWith<$Res> {
+  __$$UpdateStatesImplCopyWithImpl(
+      _$UpdateStatesImpl _value, $Res Function(_$UpdateStatesImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SuperAdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? state = null,
+  }) {
+    return _then(_$UpdateStatesImpl(
+      null == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as SuperAdminDashboardState,
+    ));
+  }
+
+  /// Create a copy of SuperAdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SuperAdminDashboardStateCopyWith<$Res> get state {
+    return $SuperAdminDashboardStateCopyWith<$Res>(_value.state, (value) {
+      return _then(_value.copyWith(state: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$UpdateStatesImpl implements _UpdateStates {
+  const _$UpdateStatesImpl(this.state);
+
+  @override
+  final SuperAdminDashboardState state;
+
+  @override
+  String toString() {
+    return 'SuperAdminDashboardEvent.updateStates(state: $state)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UpdateStatesImpl &&
+            (identical(other.state, state) || other.state == state));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, state);
+
+  /// Create a copy of SuperAdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UpdateStatesImplCopyWith<_$UpdateStatesImpl> get copyWith =>
+      __$$UpdateStatesImplCopyWithImpl<_$UpdateStatesImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() fetch,
+    required TResult Function(String eventId) approveEvent,
+    required TResult Function(String eventId) rejectEvent,
+    required TResult Function() selectLive,
+    required TResult Function() selectRequests,
+    required TResult Function() updateList,
+    required TResult Function(SuperAdminDashboardState state) updateStates,
+  }) {
+    return updateStates(state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? fetch,
+    TResult? Function(String eventId)? approveEvent,
+    TResult? Function(String eventId)? rejectEvent,
+    TResult? Function()? selectLive,
+    TResult? Function()? selectRequests,
+    TResult? Function()? updateList,
+    TResult? Function(SuperAdminDashboardState state)? updateStates,
+  }) {
+    return updateStates?.call(state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? fetch,
+    TResult Function(String eventId)? approveEvent,
+    TResult Function(String eventId)? rejectEvent,
+    TResult Function()? selectLive,
+    TResult Function()? selectRequests,
+    TResult Function()? updateList,
+    TResult Function(SuperAdminDashboardState state)? updateStates,
+    required TResult orElse(),
+  }) {
+    if (updateStates != null) {
+      return updateStates(state);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Fetch value) fetch,
+    required TResult Function(_ApproveEvent value) approveEvent,
+    required TResult Function(_RejectEvent value) rejectEvent,
+    required TResult Function(_SelectLive value) selectLive,
+    required TResult Function(selectRequests value) selectRequests,
+    required TResult Function(_UpdateList value) updateList,
+    required TResult Function(_UpdateStates value) updateStates,
+  }) {
+    return updateStates(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Fetch value)? fetch,
+    TResult? Function(_ApproveEvent value)? approveEvent,
+    TResult? Function(_RejectEvent value)? rejectEvent,
+    TResult? Function(_SelectLive value)? selectLive,
+    TResult? Function(selectRequests value)? selectRequests,
+    TResult? Function(_UpdateList value)? updateList,
+    TResult? Function(_UpdateStates value)? updateStates,
+  }) {
+    return updateStates?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Fetch value)? fetch,
+    TResult Function(_ApproveEvent value)? approveEvent,
+    TResult Function(_RejectEvent value)? rejectEvent,
+    TResult Function(_SelectLive value)? selectLive,
+    TResult Function(selectRequests value)? selectRequests,
+    TResult Function(_UpdateList value)? updateList,
+    TResult Function(_UpdateStates value)? updateStates,
+    required TResult orElse(),
+  }) {
+    if (updateStates != null) {
+      return updateStates(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _UpdateStates implements SuperAdminDashboardEvent {
+  const factory _UpdateStates(final SuperAdminDashboardState state) =
+      _$UpdateStatesImpl;
+
+  SuperAdminDashboardState get state;
+
+  /// Create a copy of SuperAdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UpdateStatesImplCopyWith<_$UpdateStatesImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$SuperAdminDashboardState {
   bool get isLoading => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
   EventDisplayType get currentTab => throw _privateConstructorUsedError;
+  List<AdminEventListDomainModel> get liveEvents =>
+      throw _privateConstructorUsedError;
+  List<AdminEventListDomainModel> get requestEvents =>
+      throw _privateConstructorUsedError;
   List<AdminEventListDomainModel> get currentSelectedList =>
       throw _privateConstructorUsedError;
 
@@ -971,6 +1200,8 @@ abstract class $SuperAdminDashboardStateCopyWith<$Res> {
       {bool isLoading,
       String? errorMessage,
       EventDisplayType currentTab,
+      List<AdminEventListDomainModel> liveEvents,
+      List<AdminEventListDomainModel> requestEvents,
       List<AdminEventListDomainModel> currentSelectedList});
 }
 
@@ -993,6 +1224,8 @@ class _$SuperAdminDashboardStateCopyWithImpl<$Res,
     Object? isLoading = null,
     Object? errorMessage = freezed,
     Object? currentTab = null,
+    Object? liveEvents = null,
+    Object? requestEvents = null,
     Object? currentSelectedList = null,
   }) {
     return _then(_value.copyWith(
@@ -1008,6 +1241,14 @@ class _$SuperAdminDashboardStateCopyWithImpl<$Res,
           ? _value.currentTab
           : currentTab // ignore: cast_nullable_to_non_nullable
               as EventDisplayType,
+      liveEvents: null == liveEvents
+          ? _value.liveEvents
+          : liveEvents // ignore: cast_nullable_to_non_nullable
+              as List<AdminEventListDomainModel>,
+      requestEvents: null == requestEvents
+          ? _value.requestEvents
+          : requestEvents // ignore: cast_nullable_to_non_nullable
+              as List<AdminEventListDomainModel>,
       currentSelectedList: null == currentSelectedList
           ? _value.currentSelectedList
           : currentSelectedList // ignore: cast_nullable_to_non_nullable
@@ -1029,6 +1270,8 @@ abstract class _$$SuperAdminDashboardStateImplCopyWith<$Res>
       {bool isLoading,
       String? errorMessage,
       EventDisplayType currentTab,
+      List<AdminEventListDomainModel> liveEvents,
+      List<AdminEventListDomainModel> requestEvents,
       List<AdminEventListDomainModel> currentSelectedList});
 }
 
@@ -1050,6 +1293,8 @@ class __$$SuperAdminDashboardStateImplCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? errorMessage = freezed,
     Object? currentTab = null,
+    Object? liveEvents = null,
+    Object? requestEvents = null,
     Object? currentSelectedList = null,
   }) {
     return _then(_$SuperAdminDashboardStateImpl(
@@ -1065,6 +1310,14 @@ class __$$SuperAdminDashboardStateImplCopyWithImpl<$Res>
           ? _value.currentTab
           : currentTab // ignore: cast_nullable_to_non_nullable
               as EventDisplayType,
+      liveEvents: null == liveEvents
+          ? _value._liveEvents
+          : liveEvents // ignore: cast_nullable_to_non_nullable
+              as List<AdminEventListDomainModel>,
+      requestEvents: null == requestEvents
+          ? _value._requestEvents
+          : requestEvents // ignore: cast_nullable_to_non_nullable
+              as List<AdminEventListDomainModel>,
       currentSelectedList: null == currentSelectedList
           ? _value._currentSelectedList
           : currentSelectedList // ignore: cast_nullable_to_non_nullable
@@ -1080,8 +1333,12 @@ class _$SuperAdminDashboardStateImpl implements _SuperAdminDashboardState {
       {this.isLoading = false,
       this.errorMessage,
       this.currentTab = EventDisplayType.live,
+      final List<AdminEventListDomainModel> liveEvents = const [],
+      final List<AdminEventListDomainModel> requestEvents = const [],
       final List<AdminEventListDomainModel> currentSelectedList = const []})
-      : _currentSelectedList = currentSelectedList;
+      : _liveEvents = liveEvents,
+        _requestEvents = requestEvents,
+        _currentSelectedList = currentSelectedList;
 
   @override
   @JsonKey()
@@ -1091,6 +1348,24 @@ class _$SuperAdminDashboardStateImpl implements _SuperAdminDashboardState {
   @override
   @JsonKey()
   final EventDisplayType currentTab;
+  final List<AdminEventListDomainModel> _liveEvents;
+  @override
+  @JsonKey()
+  List<AdminEventListDomainModel> get liveEvents {
+    if (_liveEvents is EqualUnmodifiableListView) return _liveEvents;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_liveEvents);
+  }
+
+  final List<AdminEventListDomainModel> _requestEvents;
+  @override
+  @JsonKey()
+  List<AdminEventListDomainModel> get requestEvents {
+    if (_requestEvents is EqualUnmodifiableListView) return _requestEvents;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_requestEvents);
+  }
+
   final List<AdminEventListDomainModel> _currentSelectedList;
   @override
   @JsonKey()
@@ -1103,7 +1378,7 @@ class _$SuperAdminDashboardStateImpl implements _SuperAdminDashboardState {
 
   @override
   String toString() {
-    return 'SuperAdminDashboardState(isLoading: $isLoading, errorMessage: $errorMessage, currentTab: $currentTab, currentSelectedList: $currentSelectedList)';
+    return 'SuperAdminDashboardState(isLoading: $isLoading, errorMessage: $errorMessage, currentTab: $currentTab, liveEvents: $liveEvents, requestEvents: $requestEvents, currentSelectedList: $currentSelectedList)';
   }
 
   @override
@@ -1118,12 +1393,22 @@ class _$SuperAdminDashboardStateImpl implements _SuperAdminDashboardState {
             (identical(other.currentTab, currentTab) ||
                 other.currentTab == currentTab) &&
             const DeepCollectionEquality()
+                .equals(other._liveEvents, _liveEvents) &&
+            const DeepCollectionEquality()
+                .equals(other._requestEvents, _requestEvents) &&
+            const DeepCollectionEquality()
                 .equals(other._currentSelectedList, _currentSelectedList));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isLoading, errorMessage,
-      currentTab, const DeepCollectionEquality().hash(_currentSelectedList));
+  int get hashCode => Object.hash(
+      runtimeType,
+      isLoading,
+      errorMessage,
+      currentTab,
+      const DeepCollectionEquality().hash(_liveEvents),
+      const DeepCollectionEquality().hash(_requestEvents),
+      const DeepCollectionEquality().hash(_currentSelectedList));
 
   /// Create a copy of SuperAdminDashboardState
   /// with the given fields replaced by the non-null parameter values.
@@ -1140,6 +1425,8 @@ abstract class _SuperAdminDashboardState implements SuperAdminDashboardState {
           {final bool isLoading,
           final String? errorMessage,
           final EventDisplayType currentTab,
+          final List<AdminEventListDomainModel> liveEvents,
+          final List<AdminEventListDomainModel> requestEvents,
           final List<AdminEventListDomainModel> currentSelectedList}) =
       _$SuperAdminDashboardStateImpl;
 
@@ -1149,6 +1436,10 @@ abstract class _SuperAdminDashboardState implements SuperAdminDashboardState {
   String? get errorMessage;
   @override
   EventDisplayType get currentTab;
+  @override
+  List<AdminEventListDomainModel> get liveEvents;
+  @override
+  List<AdminEventListDomainModel> get requestEvents;
   @override
   List<AdminEventListDomainModel> get currentSelectedList;
 

@@ -65,15 +65,15 @@ enum GlintBoardingRoutes {
 
 enum GlintAdminDasboardRoutes {
   splash,
-  auth,
-  home,
+  adminAuth,
+  adminHome,
   createEvent,
   previewEvent,
   trackEvent,
   liveEvent,
   interestedUsers,
   ticketBought,
-  profile,
+  authProfile,
 }
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();

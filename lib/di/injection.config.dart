@@ -24,11 +24,14 @@ import '../data/remote/client/my_dio_client.dart' as _i368;
 import '../data/repo/admin/admin_dash_board_repo_impl.dart' as _i72;
 import '../data/repo/auth/authentication_repo_impl.dart' as _i840;
 import '../data/repo/auth/forgot_password_repo_impl.dart' as _i509;
+import '../data/repo/background/user_info_repo_impl.dart' as _i321;
 import '../data/repo/chat/chat_main/chat_repo_impl.dart' as _i651;
 import '../data/repo/event/event_repo_impl.dart' as _i390;
+import '../data/repo/likes/likes_data_repo_impl.dart' as _i503;
 import '../data/repo/onBoard/on_boarding_repo_impl.dart' as _i359;
 import '../data/repo/payment/payment_repo_impl.dart' as _i854;
 import '../data/repo/people/people_repo_impl.dart' as _i955;
+import '../data/repo/profile/ProfileRepoImpl.dart' as _i760;
 import '../data/repo/story/story_repo_impl.dart' as _i946;
 import '../domain/application_logic/admin/approve_published_event_usecase.dart'
     as _i839;
@@ -45,11 +48,15 @@ import '../domain/application_logic/auth/sign_in_user_use_case.dart' as _i972;
 import '../domain/business_logic/repo/admin/admin_dasboard_repo.dart' as _i1000;
 import '../domain/business_logic/repo/auth/authentication_repo.dart' as _i873;
 import '../domain/business_logic/repo/auth/forgot_password_repo.dart' as _i995;
+import '../domain/business_logic/repo/background/info/user_info_repo.dart'
+    as _i661;
 import '../domain/business_logic/repo/boarding/on_boarding_repo.dart' as _i330;
 import '../domain/business_logic/repo/chat/chat_repo.dart' as _i849;
 import '../domain/business_logic/repo/event/events_repo.dart' as _i757;
+import '../domain/business_logic/repo/likes/likes_data_repo.dart' as _i427;
 import '../domain/business_logic/repo/payment/payment_repo.dart' as _i235;
 import '../domain/business_logic/repo/people/people_repo.dart' as _i678;
+import '../domain/business_logic/repo/profile/profile_repo.dart' as _i662;
 import '../domain/business_logic/repo/story/story_repo.dart' as _i762;
 import '../services/image_manager_service.dart' as _i43;
 import '../services/swipe_cache_manager.dart' as _i517;
@@ -89,7 +96,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i274.AsyncEncryptedSharedPreferenceHelper>(() =>
         _i274.AsyncEncryptedSharedPreferenceHelper(
             gh<_i930.EncryptedSharedPreferencesAsync>()));
-    gh.factory<_i368.MyDioClient>(() => _i368.MyDioClient(
+    gh.lazySingleton<_i368.MyDioClient>(() => _i368.MyDioClient(
           gh<_i361.Dio>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
@@ -113,6 +120,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i143.IsUserLoggedInUsecase>(() =>
         _i143.IsUserLoggedInUsecase(
             gh<_i274.AsyncEncryptedSharedPreferenceHelper>()));
+    gh.singleton<_i661.UserInfoRepo>(
+        () => _i321.UserInfoRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i873.AuthenticationRepo>(
         () => _i840.AuthenticationRepoImpl(
               gh<_i368.MyDioClient>(),
@@ -121,13 +130,19 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.factory<_i972.SignInUserUseCase>(
         () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
+    gh.factory<_i427.LikesDataRepo>(() => _i503.LikesDataRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+        ));
     gh.factory<_i762.StoryRepo>(() => _i946.StoryRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
+    gh.singleton<_i662.ProfileRepo>(
+        () => _i760.ProfileRepoImpl(gh<_i368.MyDioClient>()));
     gh.factory<_i235.PaymentRepo>(
         () => _i854.PaymentRepoImpl(gh<_i368.MyDioClient>()));
-    gh.factory<_i1000.AdminDashboardRepo>(
+    gh.singleton<_i1000.AdminDashboardRepo>(
         () => _i72.AdminDashBoardRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i678.PeopleRepo>(() => _i955.PeopleRepoImpl(
           gh<_i368.MyDioClient>(),
@@ -136,15 +151,15 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i849.ChatRepo>(
         () => _i651.ChatRepoImpl(gh<_i368.MyDioClient>()));
-    gh.factory<_i579.RejectPublishedEventUsecase>(() =>
+    gh.lazySingleton<_i579.RejectPublishedEventUsecase>(() =>
         _i579.RejectPublishedEventUsecase(gh<_i1000.AdminDashboardRepo>()));
-    gh.factory<_i839.ApprovePublishedEventUsecase>(() =>
+    gh.lazySingleton<_i839.ApprovePublishedEventUsecase>(() =>
         _i839.ApprovePublishedEventUsecase(gh<_i1000.AdminDashboardRepo>()));
     gh.factory<_i786.SendOtpUseCase>(
         () => _i786.SendOtpUseCase(gh<_i995.ForgotPasswordRepo>()));
     gh.factory<_i804.ResetPasswordWithOtpUseCase>(() =>
         _i804.ResetPasswordWithOtpUseCase(gh<_i995.ForgotPasswordRepo>()));
-    gh.factory<_i1027.GetAllEventsUsecase>(
+    gh.lazySingleton<_i1027.GetAllEventsUsecase>(
         () => _i1027.GetAllEventsUsecase(gh<_i1000.AdminDashboardRepo>()));
     return this;
   }

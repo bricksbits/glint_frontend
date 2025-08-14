@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/application_logic/auth/is_user_logged_in_use_case.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -20,23 +21,44 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
       isUserLoggedInUsecase.perform(
         (isLoggedIn) {
           if (isLoggedIn != null) {
-            if (isLoggedIn) {
-              add(
-                SplashScreenEvent.emitNewStates(
-                  SplashScreenState.navigateTo(
-                    GlintMainRoutes.home.name,
+            var type = getUserTypeFromName(isLoggedIn);
+            switch (type) {
+              case UsersType.USER:
+                add(
+                  SplashScreenEvent.emitNewStates(
+                    SplashScreenState.navigateTo(
+                      GlintMainRoutes.home.name,
+                    ),
                   ),
-                ),
-              );
-            } else {
-              add(
-                SplashScreenEvent.emitNewStates(
-                  SplashScreenState.navigateTo(
-                    GlintMainRoutes.starter.name,
+                );
+                break;
+              case UsersType.ADMIN:
+                add(
+                  SplashScreenEvent.emitNewStates(
+                    SplashScreenState.navigateTo(
+                      GlintAdminDasboardRoutes.liveEvent.name,
+                    ),
                   ),
-                ),
-              );
+                );
+                break;
+              case UsersType.SUPER_ADMIN:
+                add(
+                  SplashScreenEvent.emitNewStates(
+                    SplashScreenState.navigateTo(
+                      GlintAdminDasboardRoutes.adminHome.name,
+                    ),
+                  ),
+                );
+                break;
             }
+          } else {
+            add(
+              SplashScreenEvent.emitNewStates(
+                SplashScreenState.navigateTo(
+                  GlintMainRoutes.auth.name,
+                ),
+              ),
+            );
           }
         },
         (onError) {

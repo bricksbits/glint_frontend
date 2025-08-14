@@ -19,7 +19,7 @@ import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_r
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: AdminDashboardRepo)
+@Singleton(as: AdminDashboardRepo)
 class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   final MyDioClient httpClient;
 

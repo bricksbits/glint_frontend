@@ -8,12 +8,7 @@ class ProfileDeleteMediaRequestBody {
 
   ProfileDeleteMediaRequestBody.fromJson(dynamic json) {
     pictureList = json['picture_list'] != null ? json['picture_list'].cast<String>() : [];
-    if (json['video_list'] != null) {
-      videoList = [];
-      json['video_list'].forEach((v) {
-        videoList?.add(Dynamic.fromJson(v));
-      });
-    }
+    videoList = [];
   }
   List<String>? pictureList;
   List<dynamic>? videoList;

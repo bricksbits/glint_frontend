@@ -120,7 +120,7 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
                         final otp = _codeController.text;
 
                         context.go(
-                          "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.recreatePassword.name}",
+                          "/${GlintAdminDasboardRoutes.adminAuth.name}/${GlintAuthRoutes.recreatePassword.name}",
                           extra: {
                             'email': widget.email!,
                             'otp': otp,

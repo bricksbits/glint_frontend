@@ -236,8 +236,8 @@ final glintMainRoutes = GoRouter(
       },
     ),
     GoRoute(
-      path: '/${GlintAdminDasboardRoutes.home.name}',
-      name: GlintAdminDasboardRoutes.home.name,
+      path: '/${GlintAdminDasboardRoutes.adminHome.name}',
+      name: GlintAdminDasboardRoutes.adminHome.name,
       builder: (context, state) {
         return const SuperAdminDashboardScreen();
         // final isSuperAdmin = false;
@@ -267,8 +267,8 @@ final glintMainRoutes = GoRouter(
       builder: (context, state) => const AdminCreateEventScreen(),
     ),
     GoRoute(
-      path: '/${GlintAdminDasboardRoutes.profile.name}',
-      name: GlintAdminDasboardRoutes.profile.name,
+      path: '/${GlintAdminDasboardRoutes.authProfile.name}',
+      name: GlintAdminDasboardRoutes.authProfile.name,
       builder: (context, state) => const AdminEditProfileScreen(),
     ),
     GoRoute(
