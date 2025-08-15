@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/admin/bloc/track_specific_event/track_admin_event_cubit.dart';
 
 class TicketsBoughtListTiles extends StatefulWidget {
   const TicketsBoughtListTiles({
@@ -15,140 +17,30 @@ class TicketsBoughtListTiles extends StatefulWidget {
 }
 
 class _TicketsBoughtListTilesState extends State<TicketsBoughtListTiles> {
-  final List<Map<String, String>> ticketsBought = [
-    {
-      'name1': 'Aashima',
-      'name2': 'Abhishek',
-      'imageUrl1':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'imageUrl2':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'date': '2023-01-01',
-      'time': '12:00 PM',
-    },
-    {
-      'name1': 'Aashima',
-      'name2': 'Abhishek',
-      'imageUrl1':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'imageUrl2':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'date': '2023-01-01',
-      'time': '12:00 PM',
-    },
-    {
-      'name1': 'Aashima',
-      'name2': 'Abhishek',
-      'imageUrl1':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'imageUrl2':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'date': '2023-01-01',
-      'time': '12:00 PM',
-    },
-    {
-      'name1': 'Aashima',
-      'name2': 'Abhishek',
-      'imageUrl1':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'imageUrl2':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'date': '2023-01-01',
-      'time': '12:00 PM',
-    },
-    {
-      'name1': 'Aashima',
-      'name2': 'Abhishek',
-      'imageUrl1':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'imageUrl2':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'date': '2023-01-01',
-      'time': '12:00 PM',
-    },
-    {
-      'name1': 'Aashima',
-      'name2': 'Abhishek',
-      'imageUrl1':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'imageUrl2':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'date': '2023-01-01',
-      'time': '12:00 PM',
-    },
-    {
-      'name1': 'Aashima',
-      'name2': 'Abhishek',
-      'imageUrl1':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'imageUrl2':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'date': '2023-01-01',
-      'time': '12:00 PM',
-    },
-    {
-      'name1': 'Aashima',
-      'name2': 'Abhishek',
-      'imageUrl1':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'imageUrl2':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'date': '2023-01-01',
-      'time': '12:00 PM',
-    },
-    {
-      'name1': 'Aashima',
-      'name2': 'Abhishek',
-      'imageUrl1':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'imageUrl2':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'date': '2023-01-01',
-      'time': '12:00 PM',
-    },
-    {
-      'name1': 'Aashima',
-      'name2': 'Abhishek',
-      'imageUrl1':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'imageUrl2':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'date': '2023-01-01',
-      'time': '12:00 PM',
-    },
-    {
-      'name1': 'Aashima',
-      'name2': 'Abhishek',
-      'imageUrl1':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'imageUrl2':
-          'https://s3-alpha-sig.figma.com/img/97eb/4576/f36dff298370a405985626df3e035acd?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=rFIfXC~b2ZB2ah-KlHr2TPs2OKSkuZKLZdRNDwfVBnkM5OpMa3C7dOi~GpRj7RC9WMKlR0gt1kDzFiLKmnPihmIX0u-R2J2InRE7v8Ad1BrGxra6TOU1KGswmw1SSJ9KuBrx8BAvK-Wvx4kBFVPUGSjlm6btI~Ltz9GAvDToKMt85g5~~fni8AneGgUs-Q~YT~DJN2HpBmEKvgtmBmmN9-QdBOcC6lZ2ZGulbGD9mgIn15bkIbYqc3TLK9H5gMe7T~hT5~H1gGqaqfMXi7zxxmMLii7gkfRRXGNZrqF7c~EvhMLMGyMQNurEwjWt-Odn150SJNgijlnxwG8SKMzZWw__',
-      'date': '2023-01-01',
-      'time': '12:00 PM',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: widget.limitCount == null
-          ? null
-          : const NeverScrollableScrollPhysics(),
-      itemCount: widget.limitCount ?? ticketsBought.length,
-      itemBuilder: (context, index) {
-        print(index);
-        final person = ticketsBought[index];
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: _buildProfileRow(
-            profileImageUrl1: person['imageUrl1']!,
-            profileImageUrl2: person['imageUrl2']!,
-            name1: person['name1']!,
-            name2: person['name2']!,
-            date: person['date']!,
-            time: person['time']!,
-          ),
+    return BlocBuilder<TrackAdminEventCubit, TrackAdminEventState>(
+      builder: (context, state) {
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: widget.limitCount == null
+              ? null
+              : const NeverScrollableScrollPhysics(),
+          itemCount: widget.limitCount ?? state.ticketBoughtUsers.length,
+          itemBuilder: (context, index) {
+            final person = state.ticketBoughtUsers.elementAt(index);
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: _buildProfileRow(
+                profileImageUrl1: person.userOne.thumbnailUrl,
+                profileImageUrl2: person.userTwo.thumbnailUrl,
+                name1: person.userOne.name,
+                name2: person.userOne.name,
+                date: "Date --,--,----",
+                time: "Time --,--,--",
+              ),
+            );
+          },
         );
       },
     );

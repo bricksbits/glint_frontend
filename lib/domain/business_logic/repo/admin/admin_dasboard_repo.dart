@@ -17,9 +17,9 @@ abstract class AdminDashboardRepo {
 
   Future<Result<void>> editEvent(CreateEventRequestDomainModel createEventRequest);
 
-  Future<Result<EventInterestedUserDomainModel>> fetchInterestedProfiles(int eventId);
+  Future<Result<List<EventInterestedUserDomainModel>>> fetchInterestedProfiles(int eventId);
 
-  Future<Result<EventTicketBoughtDomainModel>> fetchBookedTicketList(int eventId);
+  Future<Result<List<EventTicketBoughtDomainModel>>> fetchBookedTicketList(int eventId);
 
   Future<Result<void>> approveEvent(
       EventApproveOrRejectDomainModel approveList);

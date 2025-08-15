@@ -60,7 +60,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                                         .selectLive());
                               },
                               selected:
-                              state.currentTab == EventDisplayType.live,
+                                  state.currentTab == EventDisplayType.live,
                               showCheckmark: false,
                               labelStyle: AppTheme.simpleText,
                               selectedColor: AppColours.backgroundShade,
@@ -137,91 +137,39 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                   ),
                 ),
                 SliverList(
-                  delegate: SliverChildListDelegate(
-                      state.currentSelectedList.map((item) =>
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0),
+                  delegate: SliverChildListDelegate(state.currentSelectedList
+                      .map((item) => Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
                             child: SuperAdminEventPreviewCard(
                               eventDisplayType: state.currentTab,
                               onAcceptEvent: () {
                                 context.read<SuperAdminDashboardBloc>().add(
-                                  SuperAdminDashboardEvent.approveEvent(
-                                      item.eventId),
-                                );
+                                      SuperAdminDashboardEvent.approveEvent(
+                                        item.eventId,
+                                      ),
+                                    );
                               },
                               onRejectEvent: () {
                                 context.read<SuperAdminDashboardBloc>().add(
-                                  SuperAdminDashboardEvent.rejectEvent(
-                                      item.eventId),
-                                );
+                                      SuperAdminDashboardEvent.rejectEvent(
+                                        item.eventId,
+                                      ),
+                                    );
                               },
                               eventName: item.eventName,
                               eventDate: item.eventDate,
                               eventOrganiser: item.eventBy,
+                              eventId: item.eventId,
                             ),
-                          )
-                      ).toList()
-                  ),
+                          ))
+                      .toList()),
                 )
               ],
             );
           },
         ),
       ),
-    );
-  }
-
-  Widget _buildCreateEventContainer() {
-    return Column(
-      children: [
-        // icon container
-        Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: 24.0,
-          ),
-          decoration: const BoxDecoration(
-            color: AppColours.backgroundShade,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10.0),
-              topRight: Radius.circular(10.0),
-            ),
-          ),
-          child: Center(
-            child: IconButton(
-              onPressed: () {
-                // todo - add create event redirect here
-              },
-              icon: const Icon(
-                Icons.add,
-                size: 32.0,
-                color: AppColours.primaryBlue,
-              ),
-            ),
-          ),
-        ),
-
-        // text container
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          decoration: const BoxDecoration(
-            color: AppColours.primaryBlue,
-            borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(10.0),
-              bottomLeft: Radius.circular(10.0),
-            ),
-          ),
-          child: Center(
-            child: Text(
-              'Create Event',
-              style: AppTheme.simpleText.copyWith(
-                color: AppColours.white,
-                fontSize: 12.0,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

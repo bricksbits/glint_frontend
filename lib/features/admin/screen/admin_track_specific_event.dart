@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/admin/bloc/track_specific_event/track_admin_event_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
 class AdminTrackSpecificEvent extends StatefulWidget {
-  const AdminTrackSpecificEvent({super.key});
+  final int eventId;
+  final String eventTitle;
+  final String eventDate;
+
+  const AdminTrackSpecificEvent({
+    super.key,
+    required this.eventId,
+    required this.eventTitle,
+    required this.eventDate,
+  });
 
   @override
   State<AdminTrackSpecificEvent> createState() =>
@@ -14,11 +25,79 @@ class AdminTrackSpecificEvent extends StatefulWidget {
 
 class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
   final GlobalKey _menuKey = GlobalKey();
-
-  final interestedPeople = 895;
-  final revenueGenerated = 8600;
-
   bool eventPaused = false;
+
+  @override
+  void initState() {
+    context.read<TrackAdminEventCubit>().collectTheArguments(
+          widget.eventId,
+          widget.eventTitle,
+          widget.eventDate,
+        );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<TrackAdminEventCubit, TrackAdminEventState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: AppColours.white,
+          appBar: const GlintEventAuthAppbar(
+            hasAdminActions: true,
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28.0).copyWith(
+                bottom: 20.0,
+              ),
+              child: state.isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Column(
+                      children: [
+                        const Gap(32.0),
+                        // event details
+                        EventInfoImageContainer(
+                          eventName: widget.eventTitle,
+                          eventDate: widget.eventDate,
+                          eventLocation: "--",
+                          eventTime: "--,--",
+                        ),
+
+                        const Gap(36.0),
+
+                        // action buttons
+                        _buildEventActionButtons(context),
+
+                        const Gap(24.0),
+
+                        // event stats
+                        TrackEventStats(
+                          interestedUsers: state.interestedUsers.length,
+                          revenueGenerated: int.parse(state.revenueGenerated),
+                        ),
+
+                        const Gap(20.0),
+
+                        // interested people
+                        const InterestedPeopleWidget(),
+
+                        const Gap(20.0),
+
+                        // tickets bought
+                        const TicketsBoughtWidget(),
+
+                        const Gap(32.0), // bottom spacing
+                      ],
+                    ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   void _showMenuItems(BuildContext context, RelativeRect position) {
     showMenu(
@@ -163,55 +242,6 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
           ),
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColours.white,
-      appBar: const GlintEventAuthAppbar(
-        hasAdminActions: true,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28.0).copyWith(
-            bottom: 20.0,
-          ),
-          child: Column(
-            children: [
-              const Gap(32.0),
-              // event details
-              const EventInfoImageContainer(),
-
-              const Gap(36.0),
-
-              // action buttons
-              _buildEventActionButtons(context),
-
-              const Gap(24.0),
-
-              // event stats
-              TrackEventStats(
-                interestedUsers: interestedPeople,
-                revenueGenerated: revenueGenerated,
-              ),
-
-              const Gap(20.0),
-
-              // interested people
-              const InterestedPeopleWidget(),
-
-              const Gap(20.0),
-
-              // tickets bought
-              const TicketsBoughtWidget(),
-
-              const Gap(32.0), // bottom spacing
-            ],
-          ),
-        ),
-      ),
     );
   }
 

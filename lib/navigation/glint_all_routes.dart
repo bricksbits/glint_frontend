@@ -78,3 +78,4 @@ enum GlintAdminDasboardRoutes {
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> onBoardingKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> trackAdminEventKey = GlobalKey<NavigatorState>();
