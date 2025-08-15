@@ -13,6 +13,7 @@ import 'package:glint_frontend/data/remote/model/response/auth/login_response.da
 import 'package:glint_frontend/data/remote/model/response/chat/story_upload_response.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
 import 'package:glint_frontend/domain/business_logic/repo/boarding/on_boarding_repo.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
@@ -92,6 +93,25 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
           );
         }
 
+        var typeFound = successResponse.profile?.userRole ?? "user";
+        late final UsersType userType;
+        switch (typeFound) {
+          case 'user':
+            userType = UsersType.USER;
+            break;
+          case 'admin':
+            userType = UsersType.ADMIN;
+            break;
+          case 'super admin':
+            userType = UsersType.SUPER_ADMIN;
+            break;
+          default:
+            userType = UsersType.USER;
+        }
+
+        await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.userRoleKey, userType.name);
+
         final tokenBufferTime = DateTime.now()
             .add(
               const Duration(days: 1, hours: 15, minutes: 30),
@@ -101,10 +121,10 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
         await sharedPreferenceHelper.saveInt(
             SharedPreferenceKeys.lastSavedTimeKey, tokenBufferTime);
 
-        return Future.value(Success(successResponse));
+        return Success(successResponse);
 
       case Failure():
-        return Future.value(Failure(Exception()));
+        return Failure(Exception());
     }
   }
 

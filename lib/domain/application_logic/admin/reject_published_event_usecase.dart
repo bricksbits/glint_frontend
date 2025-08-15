@@ -7,7 +7,7 @@ import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@LazySingleton()
 class RejectPublishedEventUsecase
     extends UseCase<bool, EventApproveOrRejectDomainModel> {
   final AdminDashboardRepo adminDashBoardRepo;

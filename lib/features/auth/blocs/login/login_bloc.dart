@@ -5,6 +5,7 @@ import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/application_logic/auth/sign_in_user_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
+import 'package:glint_frontend/utils/result_sealed.dart';
 
 part 'login_event.dart';
 
@@ -34,6 +35,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
       },
     );
+
+    on<_EmitState>(
+      (event, emit) {
+        var newState = event.state;
+        emit(newState);
+      },
+    );
   }
 
   Future<void> loginUser(
@@ -42,11 +50,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     signInUserUseCase.perform(
       (response) {
-        emit(const LoginState.success(UsersType.USER));
+        switch (response) {
+          case null:
+            add(const _EmitState(LoginState.error("Something went wrong")));
+          case Success<UsersType>():
+            add(_EmitState(LoginState.success(response.data)));
+          case Failure<UsersType>():
+            add(const _EmitState(LoginState.error("Something went wrong")));
+        }
       },
       (error) {
-        print("Login Bloc : Error $error");
-        emit(LoginState.error("Eroor ${error.toString()}"));
+        add(_EmitState(LoginState.error("Something went wrong,$error")));
       },
       () {
         print("Login Bloc : On Done");

@@ -157,7 +157,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                 onPressed: _isButtonEnabled
                     ? () {
                         _handleResetPassword();
-                        context.go("/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.passwordSuccess.name}");
+                        context.go("/${GlintAdminDasboardRoutes.adminAuth.name}/${GlintAuthRoutes.passwordSuccess.name}");
                         debugPrint('login (create password) button pressed');
                       }
                     : null, // null disables the button

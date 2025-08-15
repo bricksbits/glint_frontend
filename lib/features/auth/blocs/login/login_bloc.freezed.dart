@@ -21,6 +21,7 @@ mixin _$LoginEvent {
     required TResult Function() login,
     required TResult Function(String email) emailInput,
     required TResult Function(String password) passwordInput,
+    required TResult Function(LoginState state) emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -28,6 +29,7 @@ mixin _$LoginEvent {
     TResult? Function()? login,
     TResult? Function(String email)? emailInput,
     TResult? Function(String password)? passwordInput,
+    TResult? Function(LoginState state)? emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -35,6 +37,7 @@ mixin _$LoginEvent {
     TResult Function()? login,
     TResult Function(String email)? emailInput,
     TResult Function(String password)? passwordInput,
+    TResult Function(LoginState state)? emitNewState,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -43,6 +46,7 @@ mixin _$LoginEvent {
     required TResult Function(_Login value) login,
     required TResult Function(_EmailInput value) emailInput,
     required TResult Function(_PasswordInput value) passwordInput,
+    required TResult Function(_EmitState value) emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -50,6 +54,7 @@ mixin _$LoginEvent {
     TResult? Function(_Login value)? login,
     TResult? Function(_EmailInput value)? emailInput,
     TResult? Function(_PasswordInput value)? passwordInput,
+    TResult? Function(_EmitState value)? emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -57,6 +62,7 @@ mixin _$LoginEvent {
     TResult Function(_Login value)? login,
     TResult Function(_EmailInput value)? emailInput,
     TResult Function(_PasswordInput value)? passwordInput,
+    TResult Function(_EmitState value)? emitNewState,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -127,6 +133,7 @@ class _$LoginImpl implements _Login {
     required TResult Function() login,
     required TResult Function(String email) emailInput,
     required TResult Function(String password) passwordInput,
+    required TResult Function(LoginState state) emitNewState,
   }) {
     return login();
   }
@@ -137,6 +144,7 @@ class _$LoginImpl implements _Login {
     TResult? Function()? login,
     TResult? Function(String email)? emailInput,
     TResult? Function(String password)? passwordInput,
+    TResult? Function(LoginState state)? emitNewState,
   }) {
     return login?.call();
   }
@@ -147,6 +155,7 @@ class _$LoginImpl implements _Login {
     TResult Function()? login,
     TResult Function(String email)? emailInput,
     TResult Function(String password)? passwordInput,
+    TResult Function(LoginState state)? emitNewState,
     required TResult orElse(),
   }) {
     if (login != null) {
@@ -161,6 +170,7 @@ class _$LoginImpl implements _Login {
     required TResult Function(_Login value) login,
     required TResult Function(_EmailInput value) emailInput,
     required TResult Function(_PasswordInput value) passwordInput,
+    required TResult Function(_EmitState value) emitNewState,
   }) {
     return login(this);
   }
@@ -171,6 +181,7 @@ class _$LoginImpl implements _Login {
     TResult? Function(_Login value)? login,
     TResult? Function(_EmailInput value)? emailInput,
     TResult? Function(_PasswordInput value)? passwordInput,
+    TResult? Function(_EmitState value)? emitNewState,
   }) {
     return login?.call(this);
   }
@@ -181,6 +192,7 @@ class _$LoginImpl implements _Login {
     TResult Function(_Login value)? login,
     TResult Function(_EmailInput value)? emailInput,
     TResult Function(_PasswordInput value)? passwordInput,
+    TResult Function(_EmitState value)? emitNewState,
     required TResult orElse(),
   }) {
     if (login != null) {
@@ -265,6 +277,7 @@ class _$EmailInputImpl implements _EmailInput {
     required TResult Function() login,
     required TResult Function(String email) emailInput,
     required TResult Function(String password) passwordInput,
+    required TResult Function(LoginState state) emitNewState,
   }) {
     return emailInput(email);
   }
@@ -275,6 +288,7 @@ class _$EmailInputImpl implements _EmailInput {
     TResult? Function()? login,
     TResult? Function(String email)? emailInput,
     TResult? Function(String password)? passwordInput,
+    TResult? Function(LoginState state)? emitNewState,
   }) {
     return emailInput?.call(email);
   }
@@ -285,6 +299,7 @@ class _$EmailInputImpl implements _EmailInput {
     TResult Function()? login,
     TResult Function(String email)? emailInput,
     TResult Function(String password)? passwordInput,
+    TResult Function(LoginState state)? emitNewState,
     required TResult orElse(),
   }) {
     if (emailInput != null) {
@@ -299,6 +314,7 @@ class _$EmailInputImpl implements _EmailInput {
     required TResult Function(_Login value) login,
     required TResult Function(_EmailInput value) emailInput,
     required TResult Function(_PasswordInput value) passwordInput,
+    required TResult Function(_EmitState value) emitNewState,
   }) {
     return emailInput(this);
   }
@@ -309,6 +325,7 @@ class _$EmailInputImpl implements _EmailInput {
     TResult? Function(_Login value)? login,
     TResult? Function(_EmailInput value)? emailInput,
     TResult? Function(_PasswordInput value)? passwordInput,
+    TResult? Function(_EmitState value)? emitNewState,
   }) {
     return emailInput?.call(this);
   }
@@ -319,6 +336,7 @@ class _$EmailInputImpl implements _EmailInput {
     TResult Function(_Login value)? login,
     TResult Function(_EmailInput value)? emailInput,
     TResult Function(_PasswordInput value)? passwordInput,
+    TResult Function(_EmitState value)? emitNewState,
     required TResult orElse(),
   }) {
     if (emailInput != null) {
@@ -412,6 +430,7 @@ class _$PasswordInputImpl implements _PasswordInput {
     required TResult Function() login,
     required TResult Function(String email) emailInput,
     required TResult Function(String password) passwordInput,
+    required TResult Function(LoginState state) emitNewState,
   }) {
     return passwordInput(password);
   }
@@ -422,6 +441,7 @@ class _$PasswordInputImpl implements _PasswordInput {
     TResult? Function()? login,
     TResult? Function(String email)? emailInput,
     TResult? Function(String password)? passwordInput,
+    TResult? Function(LoginState state)? emitNewState,
   }) {
     return passwordInput?.call(password);
   }
@@ -432,6 +452,7 @@ class _$PasswordInputImpl implements _PasswordInput {
     TResult Function()? login,
     TResult Function(String email)? emailInput,
     TResult Function(String password)? passwordInput,
+    TResult Function(LoginState state)? emitNewState,
     required TResult orElse(),
   }) {
     if (passwordInput != null) {
@@ -446,6 +467,7 @@ class _$PasswordInputImpl implements _PasswordInput {
     required TResult Function(_Login value) login,
     required TResult Function(_EmailInput value) emailInput,
     required TResult Function(_PasswordInput value) passwordInput,
+    required TResult Function(_EmitState value) emitNewState,
   }) {
     return passwordInput(this);
   }
@@ -456,6 +478,7 @@ class _$PasswordInputImpl implements _PasswordInput {
     TResult? Function(_Login value)? login,
     TResult? Function(_EmailInput value)? emailInput,
     TResult? Function(_PasswordInput value)? passwordInput,
+    TResult? Function(_EmitState value)? emitNewState,
   }) {
     return passwordInput?.call(this);
   }
@@ -466,6 +489,7 @@ class _$PasswordInputImpl implements _PasswordInput {
     TResult Function(_Login value)? login,
     TResult Function(_EmailInput value)? emailInput,
     TResult Function(_PasswordInput value)? passwordInput,
+    TResult Function(_EmitState value)? emitNewState,
     required TResult orElse(),
   }) {
     if (passwordInput != null) {
@@ -484,6 +508,170 @@ abstract class _PasswordInput implements LoginEvent {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PasswordInputImplCopyWith<_$PasswordInputImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$EmitStateImplCopyWith<$Res> {
+  factory _$$EmitStateImplCopyWith(
+          _$EmitStateImpl value, $Res Function(_$EmitStateImpl) then) =
+      __$$EmitStateImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({LoginState state});
+
+  $LoginStateCopyWith<$Res> get state;
+}
+
+/// @nodoc
+class __$$EmitStateImplCopyWithImpl<$Res>
+    extends _$LoginEventCopyWithImpl<$Res, _$EmitStateImpl>
+    implements _$$EmitStateImplCopyWith<$Res> {
+  __$$EmitStateImplCopyWithImpl(
+      _$EmitStateImpl _value, $Res Function(_$EmitStateImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of LoginEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? state = null,
+  }) {
+    return _then(_$EmitStateImpl(
+      null == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as LoginState,
+    ));
+  }
+
+  /// Create a copy of LoginEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LoginStateCopyWith<$Res> get state {
+    return $LoginStateCopyWith<$Res>(_value.state, (value) {
+      return _then(_value.copyWith(state: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$EmitStateImpl implements _EmitState {
+  const _$EmitStateImpl(this.state);
+
+  @override
+  final LoginState state;
+
+  @override
+  String toString() {
+    return 'LoginEvent.emitNewState(state: $state)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$EmitStateImpl &&
+            (identical(other.state, state) || other.state == state));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, state);
+
+  /// Create a copy of LoginEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$EmitStateImplCopyWith<_$EmitStateImpl> get copyWith =>
+      __$$EmitStateImplCopyWithImpl<_$EmitStateImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() login,
+    required TResult Function(String email) emailInput,
+    required TResult Function(String password) passwordInput,
+    required TResult Function(LoginState state) emitNewState,
+  }) {
+    return emitNewState(state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? login,
+    TResult? Function(String email)? emailInput,
+    TResult? Function(String password)? passwordInput,
+    TResult? Function(LoginState state)? emitNewState,
+  }) {
+    return emitNewState?.call(state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? login,
+    TResult Function(String email)? emailInput,
+    TResult Function(String password)? passwordInput,
+    TResult Function(LoginState state)? emitNewState,
+    required TResult orElse(),
+  }) {
+    if (emitNewState != null) {
+      return emitNewState(state);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Login value) login,
+    required TResult Function(_EmailInput value) emailInput,
+    required TResult Function(_PasswordInput value) passwordInput,
+    required TResult Function(_EmitState value) emitNewState,
+  }) {
+    return emitNewState(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Login value)? login,
+    TResult? Function(_EmailInput value)? emailInput,
+    TResult? Function(_PasswordInput value)? passwordInput,
+    TResult? Function(_EmitState value)? emitNewState,
+  }) {
+    return emitNewState?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Login value)? login,
+    TResult Function(_EmailInput value)? emailInput,
+    TResult Function(_PasswordInput value)? passwordInput,
+    TResult Function(_EmitState value)? emitNewState,
+    required TResult orElse(),
+  }) {
+    if (emitNewState != null) {
+      return emitNewState(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _EmitState implements LoginEvent {
+  const factory _EmitState(final LoginState state) = _$EmitStateImpl;
+
+  LoginState get state;
+
+  /// Create a copy of LoginEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$EmitStateImplCopyWith<_$EmitStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

@@ -5,6 +5,7 @@ import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/approve_or_reject_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/create_event_request_body.dart';
+import 'package:glint_frontend/data/remote/model/response/admin/admin_mappers.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_interested_users_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_published_event_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_ticket_booked_response.dart';
@@ -19,7 +20,7 @@ import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_r
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: AdminDashboardRepo)
+@Singleton(as: AdminDashboardRepo)
 class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   final MyDioClient httpClient;
 
@@ -122,8 +123,9 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
 
   /// TODO: HOW TO PASS THE QUERY PARAMETERS
   @override
-  Future<Result<EventTicketBoughtDomainModel>> fetchBookedTicketList(
-      int eventId) async {
+  Future<Result<List<EventTicketBoughtDomainModel>>> fetchBookedTicketList(
+    int eventId,
+  ) async {
     final ticketBookedUsers = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
@@ -141,7 +143,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   }
 
   @override
-  Future<Result<EventInterestedUserDomainModel>> fetchInterestedProfiles(
+  Future<Result<List<EventInterestedUserDomainModel>>> fetchInterestedProfiles(
       int eventId) async {
     final interestedProfiles = await apiCallHandler(
       httpClient: httpClient,
@@ -197,8 +199,9 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     final requestBody = ApproveOrRejectRequestBody(
       approvals: [
         Approvals(
-            eventId: int.parse(rejectList.eventId),
-            isApproved: rejectList.isApproved)
+          eventId: int.parse(rejectList.eventId),
+          isApproved: rejectList.isApproved,
+        )
       ],
     );
 

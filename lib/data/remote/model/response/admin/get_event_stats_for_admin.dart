@@ -1,26 +1,21 @@
 import 'dart:convert';
-GetTicketBookedResponse getTicketBookedResponseFromJson(String str) => GetTicketBookedResponse.fromJson(json.decode(str));
-String getTicketBookedResponseToJson(GetTicketBookedResponse data) => json.encode(data.toJson());
-class GetTicketBookedResponse {
-  GetTicketBookedResponse({
+GetEventStatsForAdmin getEventStatsForAdminFromJson(String str) => GetEventStatsForAdmin.fromJson(json.decode(str));
+String getEventStatsForAdminToJson(GetEventStatsForAdmin data) => json.encode(data.toJson());
+class GetEventStatsForAdmin {
+  GetEventStatsForAdmin({
       this.response,});
 
-  GetTicketBookedResponse.fromJson(dynamic json) {
-    if (json['response'] != null) {
-      response = [];
-      json['response'].forEach((v) {
-        response?.add(Response.fromJson(v));
-      });
-    }
+  GetEventStatsForAdmin.fromJson(dynamic json) {
+    response = json['response'] != null ? Response.fromJson(json['response']) : null;
   }
-  List<Response>? response;
-GetTicketBookedResponse copyWith({  List<Response>? response,
-}) => GetTicketBookedResponse(  response: response ?? this.response,
+  Response? response;
+GetEventStatsForAdmin copyWith({  Response? response,
+}) => GetEventStatsForAdmin(  response: response ?? this.response,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     if (response != null) {
-      map['response'] = response?.map((v) => v.toJson()).toList();
+      map['response'] = response?.toJson();
     }
     return map;
   }
@@ -31,6 +26,53 @@ Response responseFromJson(String str) => Response.fromJson(json.decode(str));
 String responseToJson(Response data) => json.encode(data.toJson());
 class Response {
   Response({
+      this.interestedUserInfo, 
+      this.revenueGenerated, 
+      this.ticketsBooked,});
+
+  Response.fromJson(dynamic json) {
+    if (json['interested_user_info'] != null) {
+      interestedUserInfo = [];
+      json['interested_user_info'].forEach((v) {
+        interestedUserInfo?.add(InterestedUserInfo.fromJson(v));
+      });
+    }
+    revenueGenerated = json['revenue_generated'];
+    if (json['tickets_booked'] != null) {
+      ticketsBooked = [];
+      json['tickets_booked'].forEach((v) {
+        ticketsBooked?.add(TicketsBooked.fromJson(v));
+      });
+    }
+  }
+  List<InterestedUserInfo>? interestedUserInfo;
+  int? revenueGenerated;
+  List<TicketsBooked>? ticketsBooked;
+Response copyWith({  List<InterestedUserInfo>? interestedUserInfo,
+  int? revenueGenerated,
+  List<TicketsBooked>? ticketsBooked,
+}) => Response(  interestedUserInfo: interestedUserInfo ?? this.interestedUserInfo,
+  revenueGenerated: revenueGenerated ?? this.revenueGenerated,
+  ticketsBooked: ticketsBooked ?? this.ticketsBooked,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (interestedUserInfo != null) {
+      map['interested_user_info'] = interestedUserInfo?.map((v) => v.toJson()).toList();
+    }
+    map['revenue_generated'] = revenueGenerated;
+    if (ticketsBooked != null) {
+      map['tickets_booked'] = ticketsBooked?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+
+}
+
+TicketsBooked ticketsBookedFromJson(String str) => TicketsBooked.fromJson(json.decode(str));
+String ticketsBookedToJson(TicketsBooked data) => json.encode(data.toJson());
+class TicketsBooked {
+  TicketsBooked({
       this.user1Id, 
       this.user1Username, 
       this.user1EmailId, 
@@ -42,7 +84,7 @@ class Response {
       this.matchId, 
       this.bookedAtTime,});
 
-  Response.fromJson(dynamic json) {
+  TicketsBooked.fromJson(dynamic json) {
     user1Id = json['user_1_id'];
     user1Username = json['user_1_username'];
     user1EmailId = json['user_1_email_id'];
@@ -64,7 +106,7 @@ class Response {
   User2ProfilePictureUrl? user2ProfilePictureUrl;
   int? matchId;
   String? bookedAtTime;
-Response copyWith({  int? user1Id,
+TicketsBooked copyWith({  int? user1Id,
   String? user1Username,
   String? user1EmailId,
   User1ProfilePictureUrl? user1ProfilePictureUrl,
@@ -74,7 +116,7 @@ Response copyWith({  int? user1Id,
   User2ProfilePictureUrl? user2ProfilePictureUrl,
   int? matchId,
   String? bookedAtTime,
-}) => Response(  user1Id: user1Id ?? this.user1Id,
+}) => TicketsBooked(  user1Id: user1Id ?? this.user1Id,
   user1Username: user1Username ?? this.user1Username,
   user1EmailId: user1EmailId ?? this.user1EmailId,
   user1ProfilePictureUrl: user1ProfilePictureUrl ?? this.user1ProfilePictureUrl,
@@ -149,6 +191,74 @@ class User1ProfilePictureUrl {
 User1ProfilePictureUrl copyWith({  String? presignedUrl,
   String? fileExtension,
 }) => User1ProfilePictureUrl(  presignedUrl: presignedUrl ?? this.presignedUrl,
+  fileExtension: fileExtension ?? this.fileExtension,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['presigned_url'] = presignedUrl;
+    map['file_extension'] = fileExtension;
+    return map;
+  }
+
+}
+
+InterestedUserInfo interestedUserInfoFromJson(String str) => InterestedUserInfo.fromJson(json.decode(str));
+String interestedUserInfoToJson(InterestedUserInfo data) => json.encode(data.toJson());
+class InterestedUserInfo {
+  InterestedUserInfo({
+      this.userId, 
+      this.username, 
+      this.emailId, 
+      this.profilePicture,});
+
+  InterestedUserInfo.fromJson(dynamic json) {
+    userId = json['user_id'];
+    username = json['username'];
+    emailId = json['email_id'];
+    profilePicture = json['profile_picture'] != null ? ProfilePicture.fromJson(json['profile_picture']) : null;
+  }
+  int? userId;
+  String? username;
+  String? emailId;
+  ProfilePicture? profilePicture;
+InterestedUserInfo copyWith({  int? userId,
+  String? username,
+  String? emailId,
+  ProfilePicture? profilePicture,
+}) => InterestedUserInfo(  userId: userId ?? this.userId,
+  username: username ?? this.username,
+  emailId: emailId ?? this.emailId,
+  profilePicture: profilePicture ?? this.profilePicture,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['user_id'] = userId;
+    map['username'] = username;
+    map['email_id'] = emailId;
+    if (profilePicture != null) {
+      map['profile_picture'] = profilePicture?.toJson();
+    }
+    return map;
+  }
+
+}
+
+ProfilePicture profilePictureFromJson(String str) => ProfilePicture.fromJson(json.decode(str));
+String profilePictureToJson(ProfilePicture data) => json.encode(data.toJson());
+class ProfilePicture {
+  ProfilePicture({
+      this.presignedUrl, 
+      this.fileExtension,});
+
+  ProfilePicture.fromJson(dynamic json) {
+    presignedUrl = json['presigned_url'];
+    fileExtension = json['file_extension'];
+  }
+  String? presignedUrl;
+  String? fileExtension;
+ProfilePicture copyWith({  String? presignedUrl,
+  String? fileExtension,
+}) => ProfilePicture(  presignedUrl: presignedUrl ?? this.presignedUrl,
   fileExtension: fileExtension ?? this.fileExtension,
 );
   Map<String, dynamic> toJson() {

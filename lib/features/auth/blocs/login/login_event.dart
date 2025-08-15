@@ -7,4 +7,6 @@ class LoginEvent with _$LoginEvent {
   const factory LoginEvent.emailInput(String email) = _EmailInput;
 
   const factory LoginEvent.passwordInput(String password) = _PasswordInput;
+
+  const factory LoginEvent.emitNewState(LoginState state) = _EmitState;
 }

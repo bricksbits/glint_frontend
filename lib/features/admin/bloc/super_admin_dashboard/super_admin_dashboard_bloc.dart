@@ -17,76 +17,75 @@ part 'super_admin_dashboard_bloc.freezed.dart';
 class SuperAdminDashboardBloc
     extends Bloc<SuperAdminDashboardEvent, SuperAdminDashboardState> {
   final GetAllEventsUsecase allEventsUseCase = getIt.get();
-  final ApprovePublishedEventUsecase approveEventUseCase =
-      getIt.get();
-  final RejectPublishedEventUsecase rejectEventUseCase =
-      getIt.get();
-
-  List<AdminEventListDomainModel> liveEvents = [];
-  List<AdminEventListDomainModel> requestEvents = [];
+  final ApprovePublishedEventUsecase approveEventUseCase = getIt.get();
+  final RejectPublishedEventUsecase rejectEventUseCase = getIt.get();
 
   SuperAdminDashboardBloc() : super(const SuperAdminDashboardState()) {
-    on<_Fetch>((event, emit) async {
-      final allEvents = allEventsUseCase;
-      allEvents.perform((allEvents) async {
-        if (allEvents != null && allEvents.isNotEmpty) {
-          liveEvents = allEvents
-              .where((element) => element.eventState == AdminEventState.LIVE)
-              .toList();
-          requestEvents = allEvents
-              .where((e) => e.eventState == AdminEventState.PENDING)
-              .toList();
-        }
-      }, (error) {
-        emit(state.copyWith(errorMessage: "Can't Fetch Event List, $error"));
-      }, () {
-        add(const SuperAdminDashboardEvent.updateList());
-        emit.isDone;
-      });
-    });
+    _fetchPublishEvents();
 
     on<_ApproveEvent>(
       (event, emit) async {
-        emit(state.copyWith(isLoading: true));
+        add(_UpdateStates((state.copyWith(isLoading: true))));
         final selectedEventId = event.eventId;
-        final usecase = approveEventUseCase;
-        usecase.perform((isApproved) {
+        approveEventUseCase.perform((isApproved) {
           if (isApproved != null && isApproved) {
-            final itemSelected = requestEvents
-                .where((eventModel) => eventModel.eventId == selectedEventId);
+            final itemSelected = state.requestEvents
+                .where((eventModel) => eventModel.eventId == selectedEventId)
+                .toList(growable: false);
             if (itemSelected.isNotEmpty) {
-              requestEvents.remove(itemSelected.first);
-              liveEvents.add(itemSelected.first);
+              var requestEventModified = state.requestEvents.toList();
+              requestEventModified.remove(itemSelected.first);
+              var liveEventModified = state.liveEvents.toList();
+              liveEventModified.add(itemSelected.first);
+              add(
+                _UpdateStates(
+                  state.copyWith(
+                    liveEvents: liveEventModified,
+                    requestEvents: requestEventModified,
+                  ),
+                ),
+              );
             }
-            add(const SuperAdminDashboardEvent.fetch());
           } else {
-            emit(
-              state.copyWith(
-                  errorMessage: "Can't Approve the request, please try again"),
+            add(
+              _UpdateStates(
+                state.copyWith(
+                    errorMessage:
+                        "Can't Approve the request, please try again"),
+              ),
             );
           }
         }, (approvedError) {
-          emit(state.copyWith(
-              errorMessage:
-                  "Can't Approve the request, check your internet connections"));
+          add(_UpdateStates(
+            (state.copyWith(
+                errorMessage:
+                    "Can't Approve the request, check your internet connections")),
+          ));
         }, () {
-          emit.isDone;
+          // On Done
+          add(_UpdateStates(state.copyWith(isLoading: false)));
         }, EventApproveOrRejectDomainModel(selectedEventId, true));
       },
     );
 
     on<_RejectEvent>((event, emit) async {
       final selectedEventId = event.eventId;
-      final usecase = rejectEventUseCase;
-      usecase.perform(
+      rejectEventUseCase.perform(
         (isRejected) {
           if (isRejected != null && isRejected) {
-            final itemSelected = requestEvents
-                .where((eventModel) => eventModel.eventId == selectedEventId);
+            final itemSelected = state.requestEvents
+                .where((eventModel) => eventModel.eventId == selectedEventId)
+                .toList(growable: false);
+
             if (itemSelected.isNotEmpty) {
-              requestEvents.remove(itemSelected.first);
+              var requestEventListModified = state.requestEvents.toList();
+              requestEventListModified.remove(itemSelected.first);
+              add(
+                _UpdateStates(
+                  state.copyWith(requestEvents: requestEventListModified),
+                ),
+              );
             }
-            add(const SuperAdminDashboardEvent.fetch());
           } else {
             emit(
               state.copyWith(
@@ -123,12 +122,53 @@ class SuperAdminDashboardBloc
         final currentTab = state.currentTab;
         switch (currentTab) {
           case EventDisplayType.live:
-            emit(state.copyWith(currentSelectedList: liveEvents));
+            emit(
+              state.copyWith(currentSelectedList: state.liveEvents),
+            );
           case EventDisplayType.requested:
-            emit(state.copyWith(currentSelectedList: requestEvents));
+            emit(
+              state.copyWith(currentSelectedList: state.requestEvents),
+            );
         }
       },
     );
+
+    on<_UpdateStates>(
+      (event, emit) {
+        final newState = event.state;
+        emit(newState);
+      },
+    );
+  }
+
+  Future<void> _fetchPublishEvents() async {
+    allEventsUseCase.perform((allEvents) async {
+      if (allEvents != null && allEvents.isNotEmpty) {
+        var liveEvents = allEvents
+            .where((element) => element.eventState == AdminEventState.LIVE)
+            .toList();
+        var requestEvents = allEvents
+            .where((e) => e.eventState == AdminEventState.PENDING)
+            .toList();
+
+        add(
+          _UpdateStates(
+            state.copyWith(
+                liveEvents: liveEvents,
+                requestEvents: requestEvents,
+                currentSelectedList: liveEvents),
+          ),
+        );
+      }
+    }, (error) {
+      add(
+        _UpdateStates(
+          state.copyWith(errorMessage: "Can't Fetch Event List, $error"),
+        ),
+      );
+    }, () {
+      add(const SuperAdminDashboardEvent.updateList());
+    });
   }
 }
 

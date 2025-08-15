@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/business_logic/models/admin/pass_event_details_argument_model.dart';
 import 'package:glint_frontend/features/admin/bloc/super_admin_dashboard/super_admin_dashboard_bloc.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -14,6 +15,7 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
     required this.eventName,
     required this.eventDate,
     required this.eventOrganiser,
+    required this.eventId,
   });
 
   final EventDisplayType eventDisplayType;
@@ -22,6 +24,7 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
   final String eventName;
   final String eventDate;
   final String eventOrganiser;
+  final String eventId;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +82,6 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
                             eventName,
                             overflow: TextOverflow.clip,
                             style: AppTheme.simpleBodyText,
-
                           ),
                           GlintIconLabel(
                             iconPath: 'lib/assets/icons/calendar_icon.svg',
@@ -93,20 +95,29 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
                   ],
                 ),
 
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    onPressed: () {
-                      context
-                          .pushNamed(GlintAdminDasboardRoutes.trackEvent.name);
-                    },
-                    icon: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: AppColours.primaryBlue,
-                      size: 16.0,
-                    ),
-                  ),
-                ),
+                eventDisplayType != EventDisplayType.requested
+                    ? Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          onPressed: () {
+                            context.pushNamed(
+                              GlintAdminDasboardRoutes.trackEvent.name,
+                              extra: PassEventDetailsArgumentModel(
+                                eventId: eventId,
+                                eventTitle: eventName,
+                                eventDateAndTime: eventDate,
+                                eventLocation: eventOrganiser,
+                              ),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColours.primaryBlue,
+                            size: 16.0,
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
               ],
             ),
           ),

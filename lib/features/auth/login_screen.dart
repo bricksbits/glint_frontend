@@ -35,18 +35,26 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
       body: BlocProvider<LoginBloc>(
         create: (context) => LoginBloc(),
-        child: BlocListener<LoginBloc, LoginState>(listener: (myContext, state) {
+        child:
+            BlocListener<LoginBloc, LoginState>(listener: (myContext, state) {
           state.when(
               initial: () {},
               loading: () {},
               success: (type) {
-                switch (type) {
-                  case UsersType.USER:
-                    myContext.go("/${GlintMainRoutes.home.name}");
-                  case UsersType.ADMIN:
-                    myContext.go("/${GlintAdminDasboardRoutes.home.name}");
-                  case UsersType.SUPER_ADMIN:
-                    myContext.go("/${GlintAdminDasboardRoutes.home.name}");
+                if (myContext.mounted) {
+                  switch (type) {
+                    case UsersType.USER:
+                      myContext.go("/${GlintMainRoutes.home.name}");
+                      break;
+                    case UsersType.ADMIN:
+                      myContext
+                          .go("/${GlintAdminDasboardRoutes.adminHome.name}");
+                      break;
+                    case UsersType.SUPER_ADMIN:
+                      myContext
+                          .go("/${GlintAdminDasboardRoutes.adminHome.name}");
+                      break;
+                  }
                 }
               },
               error: (error) {
@@ -66,7 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       if (!widget.isAdmin)
                         Center(
-                          child: SvgPicture.asset('lib/assets/images/auth/glint_login.svg'),
+                          child: SvgPicture.asset(
+                              'lib/assets/images/auth/glint_login.svg'),
                         ),
                       const Gap(40.0),
                       if (widget.isAdmin)
@@ -78,16 +87,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const Spacer(),
                                 Text(
                                   'Login',
-                                  style: AppTheme.headingThree.copyWith(fontStyle: FontStyle.normal),
+                                  style: AppTheme.headingThree
+                                      .copyWith(fontStyle: FontStyle.normal),
                                 ),
                                 const Gap(32.0),
                                 _buildAuthFields(),
                                 const Gap(60.0),
                                 _buildActionButton('Log In', () {
                                   context.read<LoginBloc>()
-                                    ..add(LoginEvent.emailInput(_emailController.text))
+                                    ..add(LoginEvent.emailInput(
+                                        _emailController.text))
                                     ..add(
-                                      LoginEvent.passwordInput(_passwordController.text),
+                                      LoginEvent.passwordInput(
+                                          _passwordController.text),
                                     )
                                     ..add(
                                       const LoginEvent.login(),
@@ -110,9 +122,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           'Login',
                           () {
                             context.read<LoginBloc>()
-                              ..add(LoginEvent.emailInput(_emailController.text))
                               ..add(
-                                LoginEvent.passwordInput(_passwordController.text),
+                                  LoginEvent.emailInput(_emailController.text))
+                              ..add(
+                                LoginEvent.passwordInput(
+                                    _passwordController.text),
                               )
                               ..add(
                                 const LoginEvent.login(),

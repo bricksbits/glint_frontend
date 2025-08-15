@@ -3,16 +3,17 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class EventInfoImageContainer extends StatelessWidget {
-  const EventInfoImageContainer({super.key});
+  const EventInfoImageContainer({super.key, required this.eventName, required this.eventDate, required this.eventLocation, required this.eventTime});
+
+  final String eventName;
+  final String eventDate;
+  final String eventLocation;
+  final String eventTime;
 
   @override
   Widget build(BuildContext context) {
-    const eventName = 'The Local Food Fest';
-    const eventDate = '20 Feb 2023';
     const eventImage =
         'https://media.istockphoto.com/id/1806011581/photo/overjoyed-happy-young-people-dancing-jumping-and-singing-during-concert-of-favorite-group.jpg?s=612x612&w=0&k=20&c=cMFdhX403-yKneupEN-VWSfFdy6UWf1H0zqo6QBChP4%3D';
-    const eventLocation = 'Shriram business park, Raipur';
-    const eventTime = '5:00 Pm';
 
     final screenSize = MediaQuery.of(context).size;
     return SizedBox(
@@ -43,7 +44,7 @@ class EventInfoImageContainer extends StatelessWidget {
               const Gap(24.0),
 
               // event Location and Date
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GlintIconLabel(
@@ -52,7 +53,7 @@ class EventInfoImageContainer extends StatelessWidget {
                     label: '$eventDate • $eventTime',
                     style: AppTheme.simpleText,
                   ),
-                  Gap(10.0),
+                  const Gap(10.0),
                   GlintIconLabel(
                     iconPath: 'lib/assets/icons/location_icon.svg',
                     svgColor: AppColours.primaryBlue,
