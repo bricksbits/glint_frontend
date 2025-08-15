@@ -52,10 +52,12 @@ class InterestedPeopleWidget extends StatelessWidget {
                 ),
                 child: Stack(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: InterestedPeopleListTiles(
-                        limitCount: 5,
+                        limitCount: state.interestedUsers.length >= 5
+                            ? 5
+                            : state.interestedUsers.length,
                       ),
                     ),
 

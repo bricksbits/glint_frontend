@@ -22,11 +22,14 @@ class TrackAdminEventCubit extends Cubit<TrackAdminEventState> {
     String eventTitle,
     String eventDate,
   ) {
-    emit(state.copyWith(
+    emit(
+      state.copyWith(
         eventId: eventId,
         eventDate: eventDate,
         eventTitle: eventTitle,
-        isLoading: true));
+        isLoading: true,
+      ),
+    );
     fetchUsersList(eventId);
   }
 

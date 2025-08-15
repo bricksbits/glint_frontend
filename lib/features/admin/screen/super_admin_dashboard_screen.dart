@@ -16,8 +16,6 @@ class SuperAdminDashboardScreen extends StatefulWidget {
 }
 
 class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
-  int requestEventsCount = 12;
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -48,8 +46,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                           ),
                         ),
                         const Gap(24.0),
-
-                        // event display chips
+                        // Event display chips
                         Row(
                           children: [
                             // live event chip
@@ -102,7 +99,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                                     radius: 10.0,
                                     backgroundColor: AppColours.primaryBlue,
                                     child: Text(
-                                      requestEventsCount.toString(),
+                                      state.requestEvents.length.toString(),
                                       style: AppTheme.simpleText.copyWith(
                                         color: AppColours.white,
                                         fontSize: 12.0,
@@ -136,35 +133,52 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                     ],
                   ),
                 ),
-                SliverList(
-                  delegate: SliverChildListDelegate(state.currentSelectedList
-                      .map((item) => Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: SuperAdminEventPreviewCard(
-                              eventDisplayType: state.currentTab,
-                              onAcceptEvent: () {
-                                context.read<SuperAdminDashboardBloc>().add(
-                                      SuperAdminDashboardEvent.approveEvent(
-                                        item.eventId,
-                                      ),
-                                    );
-                              },
-                              onRejectEvent: () {
-                                context.read<SuperAdminDashboardBloc>().add(
-                                      SuperAdminDashboardEvent.rejectEvent(
-                                        item.eventId,
-                                      ),
-                                    );
-                              },
-                              eventName: item.eventName,
-                              eventDate: item.eventDate,
-                              eventOrganiser: item.eventBy,
-                              eventId: item.eventId,
-                            ),
-                          ))
-                      .toList()),
-                )
+                state.currentSelectedList.isEmpty
+                    ? const SliverToBoxAdapter(
+                      child: Center(
+                          child: Text(
+                              "No Data available, wait for Admins to create more events."),
+                        ),
+                    )
+                    : SliverList(
+                        delegate: SliverChildListDelegate(
+                          state.currentSelectedList
+                              .map(
+                                (item) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0),
+                                  child: SuperAdminEventPreviewCard(
+                                    eventDisplayType: state.currentTab,
+                                    onAcceptEvent: () {
+                                      context
+                                          .read<SuperAdminDashboardBloc>()
+                                          .add(
+                                            SuperAdminDashboardEvent
+                                                .approveEvent(
+                                              item.eventId,
+                                            ),
+                                          );
+                                    },
+                                    onRejectEvent: () {
+                                      context
+                                          .read<SuperAdminDashboardBloc>()
+                                          .add(
+                                            SuperAdminDashboardEvent
+                                                .rejectEvent(
+                                              item.eventId,
+                                            ),
+                                          );
+                                    },
+                                    eventName: item.eventName,
+                                    eventDate: item.eventDate,
+                                    eventOrganiser: item.eventBy,
+                                    eventId: item.eventId,
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      )
               ],
             );
           },

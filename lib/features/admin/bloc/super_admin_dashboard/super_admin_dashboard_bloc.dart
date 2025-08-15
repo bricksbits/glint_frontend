@@ -33,8 +33,18 @@ class SuperAdminDashboardBloc
                 .where((eventModel) => eventModel.eventId == selectedEventId)
                 .toList(growable: false);
             if (itemSelected.isNotEmpty) {
-              state.requestEvents.remove(itemSelected.first);
-              state.liveEvents.add(itemSelected.first);
+              var requestEventModified = state.requestEvents.toList();
+              requestEventModified.remove(itemSelected.first);
+              var liveEventModified = state.liveEvents.toList();
+              liveEventModified.add(itemSelected.first);
+              add(
+                _UpdateStates(
+                  state.copyWith(
+                    liveEvents: liveEventModified,
+                    requestEvents: requestEventModified,
+                  ),
+                ),
+              );
             }
           } else {
             add(
@@ -68,7 +78,13 @@ class SuperAdminDashboardBloc
                 .toList(growable: false);
 
             if (itemSelected.isNotEmpty) {
-              state.requestEvents.remove(itemSelected.first);
+              var requestEventListModified = state.requestEvents.toList();
+              requestEventListModified.remove(itemSelected.first);
+              add(
+                _UpdateStates(
+                  state.copyWith(requestEvents: requestEventListModified),
+                ),
+              );
             }
           } else {
             emit(
@@ -138,10 +154,9 @@ class SuperAdminDashboardBloc
         add(
           _UpdateStates(
             state.copyWith(
-              liveEvents: liveEvents,
-              requestEvents: requestEvents,
-              currentSelectedList: liveEvents
-            ),
+                liveEvents: liveEvents,
+                requestEvents: requestEvents,
+                currentSelectedList: liveEvents),
           ),
         );
       }

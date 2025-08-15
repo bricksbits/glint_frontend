@@ -22,24 +22,29 @@ class _InterestedPeopleListTilesState extends State<InterestedPeopleListTiles> {
   Widget build(BuildContext context) {
     return BlocBuilder<TrackAdminEventCubit, TrackAdminEventState>(
       builder: (context, state) {
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: widget.limitCount == null
-              ? null
-              : const NeverScrollableScrollPhysics(),
-          itemCount: widget.limitCount ?? int.parse(state.interestedUserCount),
-          itemBuilder: (context, index) {
-            final person = state.interestedUsers.elementAt(index);
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: _buildProfileRow(
-                profileImageUrl: person.thumbnailUrl,
-                name: person.name,
-                email: person.emailId,
-              ),
-            );
-          },
-        );
+        return state.interestedUsers.isEmpty
+            ? const Center(
+                child: Text(
+                  "None of the users have show interest yet,\n wait for few moments",
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount:
+                    widget.limitCount ?? int.parse(state.interestedUserCount),
+                itemBuilder: (context, index) {
+                  final person = state.interestedUsers.elementAt(index);
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: _buildProfileRow(
+                      profileImageUrl: person.thumbnailUrl,
+                      name: person.name,
+                      email: person.emailId,
+                    ),
+                  );
+                },
+              );
       },
     );
   }

@@ -21,27 +21,30 @@ class _TicketsBoughtListTilesState extends State<TicketsBoughtListTiles> {
   Widget build(BuildContext context) {
     return BlocBuilder<TrackAdminEventCubit, TrackAdminEventState>(
       builder: (context, state) {
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: widget.limitCount == null
-              ? null
-              : const NeverScrollableScrollPhysics(),
-          itemCount: widget.limitCount ?? state.ticketBoughtUsers.length,
-          itemBuilder: (context, index) {
-            final person = state.ticketBoughtUsers.elementAt(index);
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: _buildProfileRow(
-                profileImageUrl1: person.userOne.thumbnailUrl,
-                profileImageUrl2: person.userTwo.thumbnailUrl,
-                name1: person.userOne.name,
-                name2: person.userOne.name,
-                date: "Date --,--,----",
-                time: "Time --,--,--",
-              ),
-            );
-          },
-        );
+        return state.ticketBoughtUsers.isEmpty
+            ? const Center(
+                child: Text(
+                    "None of the users have bought the ticket yet,\n wait for few moments"),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.limitCount ?? state.ticketBoughtUsers.length,
+                itemBuilder: (context, index) {
+                  final person = state.ticketBoughtUsers.elementAt(index);
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: _buildProfileRow(
+                      profileImageUrl1: person.userOne.thumbnailUrl,
+                      profileImageUrl2: person.userTwo.thumbnailUrl,
+                      name1: person.userOne.name,
+                      name2: person.userOne.name,
+                      date: "Date --,--,----",
+                      time: "Time --,--,--",
+                    ),
+                  );
+                },
+              );
       },
     );
   }
@@ -77,7 +80,9 @@ class _TicketsBoughtListTilesState extends State<TicketsBoughtListTiles> {
                   padding: const EdgeInsets.only(left: 6),
                   child: CircleAvatar(
                     radius: 14.0,
-                    backgroundImage: NetworkImage(userImage),
+                    backgroundImage: NetworkImage(
+                      userImage,
+                    ),
                   ),
                 ),
               ),

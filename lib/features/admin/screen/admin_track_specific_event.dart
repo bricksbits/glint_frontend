@@ -46,16 +46,17 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
           appBar: const GlintEventAuthAppbar(
             hasAdminActions: true,
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28.0).copyWith(
-                bottom: 20.0,
-              ),
-              child: state.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Column(
+          body: state.isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 28.0).copyWith(
+                      bottom: 20.0,
+                    ),
+                    child: Column(
                       children: [
                         const Gap(32.0),
                         // event details
@@ -92,8 +93,8 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
                         const Gap(32.0), // bottom spacing
                       ],
                     ),
-            ),
-          ),
+                  ),
+                ),
         );
       },
     );
