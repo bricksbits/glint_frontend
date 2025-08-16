@@ -11,15 +11,14 @@ import 'package:go_router/go_router.dart';
 import '../onboarding/on_boarding_cubit.dart';
 
 class CreateAccounScreen extends StatefulWidget {
-  const CreateAccounScreen({super.key});
+  final bool isAdmin;
+  const CreateAccounScreen({super.key, required this.isAdmin});
 
   @override
   State<CreateAccounScreen> createState() => _CreateAccounScreenState();
 }
 
 class _CreateAccounScreenState extends State<CreateAccounScreen> {
-  final bool isAdmin = false;
-
   final _nameController = TextEditingController();
   final _contactController = TextEditingController();
   final _emailController = TextEditingController();
@@ -120,7 +119,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: AppColours.white,
-            appBar: isAdmin
+            appBar: widget.isAdmin
                 ? const GlintEventAuthAppbar()
                 : AppBar(backgroundColor: AppColours.white),
             body: state.isLoading
@@ -128,16 +127,16 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                     child: CircularProgressIndicator(),
                   )
                 : AuthStackedIllustrationScreen(
-                    isAdmin: isAdmin,
+                    isAdmin: widget.isAdmin,
                     body: Column(
                       children: [
-                        if (!isAdmin)
+                        if (!widget.isAdmin)
                           Center(
                             child: SvgPicture.asset(
                                 'lib/assets/images/auth/glint_create_account.svg'),
                           ),
                         const Gap(40.0),
-                        if (isAdmin)
+                        if (widget.isAdmin)
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 40.0),
@@ -206,7 +205,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                               ),
                             ),
                           ),
-                        if (!isAdmin) ...[
+                        if (!widget.isAdmin) ...[
                           _buildTextField(
                             controller: _emailController,
                             type: IconTextFieldType.email,

@@ -74,9 +74,12 @@ final glintMainRoutes = GoRouter(
       path: '/${GlintMainRoutes.register.name}',
       name: GlintMainRoutes.register.name,
       builder: (context, state) {
+        var isAdmin = state.extra as bool?;
         return BlocProvider(
           create: (context) => RegisterCubit(),
-          child: const CreateAccounScreen(),
+          child: const CreateAccounScreen(
+            isAdmin: isAdmin ?? false,
+          ),
         );
       },
     ),

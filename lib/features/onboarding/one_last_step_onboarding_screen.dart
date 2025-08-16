@@ -91,7 +91,7 @@ class _OneLastStepOnboardingScreenState
                               .read<OnBoardingCubit>()
                               .updateProfileLocally();
                           final target = GlintMainRoutes.register.name;
-                          context.go("/$target");
+                          context.go("/$target",extra: false);
                         } else {
                           //Todo: Show Error
                         }

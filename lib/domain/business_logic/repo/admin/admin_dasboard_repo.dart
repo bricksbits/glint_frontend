@@ -13,23 +13,24 @@ abstract class AdminDashboardRepo {
 
   Future<Result<List<AdminEventListDomainModel>>> getAllPublishEvents();
 
-  Future<Result<void>> createEvent(CreateEventRequestDomainModel createEventRequest);
+  Future<Result<void>> createEvent(
+    CreateEventRequestDomainModel createEventRequest,
+  );
 
-  Future<Result<void>> editEvent(CreateEventRequestDomainModel createEventRequest);
+  Future<Result<void>> editEvent(
+    CreateEventRequestDomainModel createEventRequest,
+  );
 
-  Future<Result<List<EventInterestedUserDomainModel>>> fetchInterestedProfiles(int eventId);
+  Future<Result<List<EventInterestedUserDomainModel>>> fetchInterestedProfiles(
+      int eventId);
 
-  Future<Result<List<EventTicketBoughtDomainModel>>> fetchBookedTicketList(int eventId);
+  Future<Result<List<EventTicketBoughtDomainModel>>> fetchBookedTicketList(
+      int eventId);
 
   Future<Result<void>> approveEvent(
       EventApproveOrRejectDomainModel approveList);
 
   Future<Result<void>> rejectEvent(EventApproveOrRejectDomainModel rejectList);
 
-  Future<Result<AdminEventDetailDomainModel>> getEventDetailsForAdmin();
-
-  Future<Result<void>> uploadEventMediaFiles(
-      String eventId,
-      List<File> event
-      );
+  Future<Result<void>> uploadEventMediaFiles(String eventId, List<File> event);
 }

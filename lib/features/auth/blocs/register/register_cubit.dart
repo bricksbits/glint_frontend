@@ -4,7 +4,6 @@ import 'package:glint_frontend/data/remote/model/request/auth/login_request_body
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/application_logic/auth/sign_in_user_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
-import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
@@ -34,11 +33,39 @@ class RegisterCubit extends Cubit<RegisterState> {
     );
   }
 
+  //Todo: Do the Verification here
+  void enteredOrganization(String organization) {
+    emit(
+      state.copyWith(
+        organization: organization,
+      ),
+    );
+  }
+
+  //Todo: Do the Verification here
+  void enteredContactNumber(String contactNumber) {
+    emit(
+      state.copyWith(
+        contactNumber: contactNumber
+      ),
+    );
+  }
+
+  //Todo: Do the Verification here
+  void enteredUserName(String fullName) {
+    emit(
+      state.copyWith(
+        name: fullName
+      ),
+    );
+  }
+
   // Get Data from DB
   // Get Email and Password from User
   // Hit the Register User API
   // Delete everything from persistence
   //Todo: handle the Role as per the type of registration
+  //Todo: Update the FCM token
   Future<void> registerUser() async {
     emitNewState(state.copyWith(isLoading: true));
     final userRequestModel = await authenticationRepo.getOnBoardedUser();

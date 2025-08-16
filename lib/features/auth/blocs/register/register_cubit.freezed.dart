@@ -18,6 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$RegisterState {
   String get email => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  String get organization => throw _privateConstructorUsedError;
+  String get contactNumber => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   String get confirmPassword => throw _privateConstructorUsedError;
   bool get isEmailValid => throw _privateConstructorUsedError;
@@ -29,6 +32,9 @@ mixin _$RegisterState {
     required TResult Function(
             String email,
             String password,
+            String name,
+            String organization,
+            String contactNumber,
             bool isLoading,
             String confirmPassword,
             bool isEmailValid,
@@ -43,6 +49,9 @@ mixin _$RegisterState {
     TResult? Function(
             String email,
             String password,
+            String name,
+            String organization,
+            String contactNumber,
             bool isLoading,
             String confirmPassword,
             bool isEmailValid,
@@ -57,6 +66,9 @@ mixin _$RegisterState {
     TResult Function(
             String email,
             String password,
+            String name,
+            String organization,
+            String contactNumber,
             bool isLoading,
             String confirmPassword,
             bool isEmailValid,
@@ -100,6 +112,9 @@ abstract class $RegisterStateCopyWith<$Res> {
   $Res call(
       {String email,
       String password,
+      String name,
+      String organization,
+      String contactNumber,
       bool isLoading,
       String confirmPassword,
       bool isEmailValid,
@@ -125,6 +140,9 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
   $Res call({
     Object? email = null,
     Object? password = null,
+    Object? name = null,
+    Object? organization = null,
+    Object? contactNumber = null,
     Object? isLoading = null,
     Object? confirmPassword = null,
     Object? isEmailValid = null,
@@ -140,6 +158,18 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
       password: null == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      organization: null == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as String,
+      contactNumber: null == contactNumber
+          ? _value.contactNumber
+          : contactNumber // ignore: cast_nullable_to_non_nullable
               as String,
       isLoading: null == isLoading
           ? _value.isLoading
@@ -180,6 +210,9 @@ abstract class _$$InitialImplCopyWith<$Res>
   $Res call(
       {String email,
       String password,
+      String name,
+      String organization,
+      String contactNumber,
       bool isLoading,
       String confirmPassword,
       bool isEmailValid,
@@ -203,6 +236,9 @@ class __$$InitialImplCopyWithImpl<$Res>
   $Res call({
     Object? email = null,
     Object? password = null,
+    Object? name = null,
+    Object? organization = null,
+    Object? contactNumber = null,
     Object? isLoading = null,
     Object? confirmPassword = null,
     Object? isEmailValid = null,
@@ -218,6 +254,18 @@ class __$$InitialImplCopyWithImpl<$Res>
       password: null == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      organization: null == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as String,
+      contactNumber: null == contactNumber
+          ? _value.contactNumber
+          : contactNumber // ignore: cast_nullable_to_non_nullable
               as String,
       isLoading: null == isLoading
           ? _value.isLoading
@@ -253,6 +301,9 @@ class _$InitialImpl implements _Initial {
   const _$InitialImpl(
       {this.email = "",
       this.password = "",
+      this.name = "",
+      this.organization = "",
+      this.contactNumber = "",
       this.isLoading = false,
       this.confirmPassword = "",
       this.isEmailValid = true,
@@ -266,6 +317,15 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final String password;
+  @override
+  @JsonKey()
+  final String name;
+  @override
+  @JsonKey()
+  final String organization;
+  @override
+  @JsonKey()
+  final String contactNumber;
   @override
   @JsonKey()
   final bool isLoading;
@@ -287,7 +347,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'RegisterState.initial(email: $email, password: $password, isLoading: $isLoading, confirmPassword: $confirmPassword, isEmailValid: $isEmailValid, isPassWordValid: $isPassWordValid, isConfirmPassword: $isConfirmPassword, isRegisteredSuccessfully: $isRegisteredSuccessfully)';
+    return 'RegisterState.initial(email: $email, password: $password, name: $name, organization: $organization, contactNumber: $contactNumber, isLoading: $isLoading, confirmPassword: $confirmPassword, isEmailValid: $isEmailValid, isPassWordValid: $isPassWordValid, isConfirmPassword: $isConfirmPassword, isRegisteredSuccessfully: $isRegisteredSuccessfully)';
   }
 
   @override
@@ -298,6 +358,11 @@ class _$InitialImpl implements _Initial {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization) &&
+            (identical(other.contactNumber, contactNumber) ||
+                other.contactNumber == contactNumber) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.confirmPassword, confirmPassword) ||
@@ -318,6 +383,9 @@ class _$InitialImpl implements _Initial {
       runtimeType,
       email,
       password,
+      name,
+      organization,
+      contactNumber,
       isLoading,
       confirmPassword,
       isEmailValid,
@@ -339,6 +407,9 @@ class _$InitialImpl implements _Initial {
     required TResult Function(
             String email,
             String password,
+            String name,
+            String organization,
+            String contactNumber,
             bool isLoading,
             String confirmPassword,
             bool isEmailValid,
@@ -347,8 +418,18 @@ class _$InitialImpl implements _Initial {
             bool isRegisteredSuccessfully)
         initial,
   }) {
-    return initial(email, password, isLoading, confirmPassword, isEmailValid,
-        isPassWordValid, isConfirmPassword, isRegisteredSuccessfully);
+    return initial(
+        email,
+        password,
+        name,
+        organization,
+        contactNumber,
+        isLoading,
+        confirmPassword,
+        isEmailValid,
+        isPassWordValid,
+        isConfirmPassword,
+        isRegisteredSuccessfully);
   }
 
   @override
@@ -357,6 +438,9 @@ class _$InitialImpl implements _Initial {
     TResult? Function(
             String email,
             String password,
+            String name,
+            String organization,
+            String contactNumber,
             bool isLoading,
             String confirmPassword,
             bool isEmailValid,
@@ -368,6 +452,9 @@ class _$InitialImpl implements _Initial {
     return initial?.call(
         email,
         password,
+        name,
+        organization,
+        contactNumber,
         isLoading,
         confirmPassword,
         isEmailValid,
@@ -382,6 +469,9 @@ class _$InitialImpl implements _Initial {
     TResult Function(
             String email,
             String password,
+            String name,
+            String organization,
+            String contactNumber,
             bool isLoading,
             String confirmPassword,
             bool isEmailValid,
@@ -392,8 +482,18 @@ class _$InitialImpl implements _Initial {
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(email, password, isLoading, confirmPassword, isEmailValid,
-          isPassWordValid, isConfirmPassword, isRegisteredSuccessfully);
+      return initial(
+          email,
+          password,
+          name,
+          organization,
+          contactNumber,
+          isLoading,
+          confirmPassword,
+          isEmailValid,
+          isPassWordValid,
+          isConfirmPassword,
+          isRegisteredSuccessfully);
     }
     return orElse();
   }
@@ -431,6 +531,9 @@ abstract class _Initial implements RegisterState {
   const factory _Initial(
       {final String email,
       final String password,
+      final String name,
+      final String organization,
+      final String contactNumber,
       final bool isLoading,
       final String confirmPassword,
       final bool isEmailValid,
@@ -442,6 +545,12 @@ abstract class _Initial implements RegisterState {
   String get email;
   @override
   String get password;
+  @override
+  String get name;
+  @override
+  String get organization;
+  @override
+  String get contactNumber;
   @override
   bool get isLoading;
   @override

@@ -55,7 +55,8 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   /// TODO: MAKE USAGE OF THE CREATE EVENT REQUEST MODEL
   @override
   Future<Result<void>> createEvent(
-      CreateEventRequestDomainModel createEventRequest) async {
+    CreateEventRequestDomainModel createEventRequest,
+  ) async {
     final event1 = CreateEventRequestBody(
       eventName: "Glint Tech Conference",
       isHotEvent: true,
@@ -161,9 +162,6 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     }
   }
 
-  /// TODO: THE MODEL IS DIFFERENT AS EXPECTED
-  /// MAPPING NEEDED MORE DATA
-  /// DATA MISSING
   @override
   Future<Result<List<AdminEventListDomainModel>>> getAllEvents() async {
     final allEventsResponse = await apiCallHandler(
@@ -177,7 +175,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
         final response =
             GetPublishedEventResponse.fromJson(allEventsResponse.data);
         final mappedResponse = response.mapToDomain();
-        if (mappedResponse != null && mappedResponse.isNotEmpty) {
+        if (mappedResponse.isNotEmpty) {
           return Success(mappedResponse);
         } else {
           return Failure(Exception("Response is Empty"));
@@ -185,12 +183,6 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       case Failure():
         return Failure(Exception("Something Went wrong"));
     }
-  }
-
-  @override
-  Future<Result<AdminEventDetailDomainModel>> getEventDetailsForAdmin() {
-    // TODO: implement getEventDetailsForAdmin
-    throw UnimplementedError();
   }
 
   @override
@@ -232,7 +224,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
         final response =
             GetPublishedEventResponse.fromJson(allEventsResponse.data);
         final mappedResponse = response.mapToDomain();
-        if (mappedResponse != null && mappedResponse.isNotEmpty) {
+        if (mappedResponse.isNotEmpty) {
           return Success(mappedResponse);
         } else {
           return Failure(Exception("Response is Empty"));
