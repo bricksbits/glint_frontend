@@ -67,6 +67,7 @@ class _OneLastStepOnboardingScreenState
                     onBioCompleted: (bioValue) {
                       context.read<OnBoardingCubit>().setBio(bioValue);
                     },
+                    bio: "",
                   ),
 
                   // Additional info

@@ -14,7 +14,7 @@ import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: OnBoardingRepo)
+@LazySingleton(as: OnBoardingRepo)
 class OnBoardRepoImpl extends OnBoardingRepo {
   final ProfileDao profileDao;
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;

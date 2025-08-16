@@ -4,7 +4,10 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class FeaturesLeftCountContainer extends StatelessWidget {
-  const FeaturesLeftCountContainer({super.key});
+  const FeaturesLeftCountContainer({super.key, required this.superLikeCounts, required this.rewindCounts, required this.superDmCounts});
+  final int superLikeCounts;
+  final int rewindCounts;
+  final int superDmCounts;
 
   @override
   Widget build(BuildContext context) {

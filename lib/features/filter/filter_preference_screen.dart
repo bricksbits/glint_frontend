@@ -196,7 +196,7 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
             ),
           ),
           const Gap(16.0),
-          const GlintInterestsSelection(),
+          const GlintInterestsSelection(selectedInterests: [],),
         ],
       ),
     );

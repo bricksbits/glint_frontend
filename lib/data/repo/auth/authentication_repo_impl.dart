@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/local/db/dao/membership_dao.dart';
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/profile_entity.dart';
+import 'package:glint_frontend/data/local/db/entities/profile_membership_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
@@ -79,12 +80,21 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
         final streamToken = successResponse.profile?.streamAuthToken;
         final userId = successResponse.profile?.userId;
         final userName = successResponse.profile?.username;
-
+        if (successResponse.profile != null) {
+          saveMembershipDetails(
+            ProfileMembershipEntity(
+              userId: successResponse.profile!.userId.toString(),
+              superLikes: successResponse.profile!.superLikesLeft ?? 0,
+              aiMessages: successResponse.profile!.aiMessagesRemaining ?? 0,
+              rewinds: successResponse.profile!.rewindsRemaining ?? 0,
+              superDm: successResponse.profile!.directDmRemaining ?? 0,
+            ),
+          );
+        }
         sharedPreferenceHelper.saveUserData(accessToken, refreshToken,
             streamToken, userId.toString(), userName);
 
         return Success(successResponse);
-
       case Failure():
         return Failure(Exception());
     }
@@ -156,5 +166,9 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
           Exception("Not able to upload files currently, please try again."),
         );
     }
+  }
+
+  Future<void> saveMembershipDetails(ProfileMembershipEntity entity) async {
+    await membershipDao.insertMembership(entity);
   }
 }

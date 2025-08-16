@@ -4,7 +4,21 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class AdditionalInfoContainer extends StatefulWidget {
-  const AdditionalInfoContainer({super.key});
+  const AdditionalInfoContainer(
+      {super.key,
+      this.occupation,
+      this.education,
+      this.height,
+      this.workoutHabits,
+      this.drinkingHabits,
+      this.smokingHabits});
+
+  final String? occupation;
+  final String? education;
+  final String? height;
+  final String? workoutHabits;
+  final String? drinkingHabits;
+  final String? smokingHabits;
 
   @override
   State<AdditionalInfoContainer> createState() =>
@@ -37,17 +51,17 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          _buildAdditionalInfoItem(
-            context,
-            icon: Icons.work_outline,
-            label: 'Occupation',
-            onTap: () => _showBottomSheet(context),
-          ),
+          _buildAdditionalInfoItem(context,
+              icon: Icons.work_outline,
+              label: 'Occupation',
+              onTap: () => _showBottomSheet(context),
+              trailingText: widget.occupation),
           _buildAdditionalInfoItem(
             context,
             icon: Icons.school_outlined,
             label: 'Education',
             onTap: () => _showBottomSheet(context),
+            trailingText: widget.education,
           ),
           const Gap(8.0),
           const DottedLine(
@@ -60,24 +74,28 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
             icon: Icons.straighten,
             label: 'Height',
             onTap: () => _showBottomSheet(context),
+            trailingText: widget.height,
           ),
           _buildAdditionalInfoItem(
             context,
             icon: Icons.fitness_center,
             label: 'Workout',
             onTap: () => _showBottomSheet(context),
+            trailingText: widget.workoutHabits,
           ),
           _buildAdditionalInfoItem(
             context,
             icon: Icons.local_bar,
             label: 'Drinking',
             onTap: () => _showBottomSheet(context),
+            trailingText: widget.drinkingHabits,
           ),
           _buildAdditionalInfoItem(
             context,
             icon: Icons.smoking_rooms,
             label: 'Smoking',
             onTap: () => _showBottomSheet(context),
+            trailingText: widget.smokingHabits,
           ),
         ],
       ),
@@ -89,6 +107,7 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
     required IconData icon,
     required String label,
     required VoidCallback onTap,
+    required String? trailingText,
   }) {
     return ListTile(
       dense: true,
@@ -109,7 +128,7 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
         ),
       ),
       trailing: Text(
-        '+ Add'.toUpperCase(),
+        trailingText ?? '+ Add'.toUpperCase(),
         style: AppTheme.simpleText.copyWith(
           fontWeight: FontWeight.w400,
           color: AppColours.primaryBlue,

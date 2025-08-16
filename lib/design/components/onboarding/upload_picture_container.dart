@@ -11,7 +11,8 @@ class UploadPictureContainer extends StatelessWidget {
     this.imageFile,
     this.imageBytes, // Uint8List for web images
     this.onImagePick,
-    this.onRemoveImage, // New callback to remove image
+    this.onRemoveImage,
+    this.imageUrl, // New callback to remove image
   });
 
   final bool isDP;
@@ -19,6 +20,7 @@ class UploadPictureContainer extends StatelessWidget {
   final Uint8List? imageBytes; // Web image data
   final VoidCallback? onImagePick;
   final VoidCallback? onRemoveImage; // Callback for removing the image
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +53,13 @@ class UploadPictureContainer extends StatelessWidget {
               color: AppColours.white,
               image: hasImage
                   ? DecorationImage(
-                      image: kIsWeb
-                          ? MemoryImage(imageBytes!) // Web image
-                          : FileImage(imageFile!)
-                              as ImageProvider, // Mobile image
+                      image: imageFile != null
+                          ? FileImage(imageFile!) as ImageProvider
+                          : NetworkImage(imageUrl ?? ""), // Mobile image
                       fit: BoxFit.cover,
-                    )
+                      onError: (exception, stackTrace) {
+                        //Todo: Add the Analytics here
+                      })
                   : null,
               borderRadius: BorderRadius.circular(16.0),
               border: Border(
