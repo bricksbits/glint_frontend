@@ -6,7 +6,7 @@ import 'package:glint_frontend/data/remote/utils/network_response_handler.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
-@LazySingleton()
+@Singleton()
 class MyDioClient {
   final Dio dioHttpClient;
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;

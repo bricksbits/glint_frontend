@@ -10,6 +10,7 @@ import 'package:glint_frontend/domain/business_logic/repo/boarding/on_boarding_r
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/services/location_permission_service.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 part 'on_boarding_cubit.freezed.dart';
@@ -20,8 +21,9 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   final ImageService imageService = getIt.get<ImageService>();
 
   OnBoardingCubit() : super(const OnBoardingState.initial()) {
-    getLatestUpdatedState();
-    getCurrentBoardingStatus();
+    getLatestUpdatedState().then((currentBoardingState) {
+      getCurrentBoardingStatus(currentBoardingState);
+    });
     initializePersonWithAllDetails();
   }
 
@@ -32,8 +34,8 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   /// This method will be called when create account is clicked
   /// And will decide which screen to display
-  void getCurrentBoardingStatus() {
-    final currentStatus = state.onBoardingStatus;
+  void getCurrentBoardingStatus(OnBoardingCompletedTill currentStatus) {
+    debugLogger("Boarding State", currentStatus.name);
     switch (currentStatus) {
       case OnBoardingCompletedTill.NOT_STARTED:
         emitNewState(state.copyWith(
@@ -120,228 +122,179 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   String? get currentSmokingHabit => _getCurrentRegisterUserState()?.smokingHabit;
 
   void setGender(String gender) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(gender: gender)));
-        } else {
-          _handleNullCurrentState("setGender");
-        }
-      },
+    emit(
+      state.copyWith(
+          currentState:
+              _getCurrentRegisterUserState()?.copyWith(gender: gender)),
     );
+    updateProfileLocally();
   }
 
   void setGenderPreferences(String genderPreferences) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(genderPreference: genderPreferences)));
-        } else {
-          _handleNullCurrentState("setGenderPreferences");
-        }
-      },
+    emit(
+      state.copyWith(
+          currentState: _getCurrentRegisterUserState()
+              ?.copyWith(genderPreference: genderPreferences)),
     );
+    updateProfileLocally();
   }
 
   void setHeight(String height) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(
-            state.copyWith(
-              currentState: currentState.copyWith(
-                height: height,
-              ),
-            ),
-          );
-        } else {
-          _handleNullCurrentState("setHeight");
-        }
-      },
+    emit(
+      state.copyWith(
+          currentState: _getCurrentRegisterUserState()?.copyWith(
+        height: height,
+      )),
     );
+    updateProfileLocally();
   }
 
   void setOccupation(String occupation) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(occupation: occupation)));
-        } else {
-          _handleNullCurrentState("setOccupation");
-        }
-      },
+    emit(
+      state.copyWith(
+        currentState: _getCurrentRegisterUserState()?.copyWith(
+          occupation: occupation,
+        ),
+      ),
     );
+    updateProfileLocally();
   }
 
   void setEducation(String education) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(education: education)));
-        } else {
-          _handleNullCurrentState("setEducation");
-        }
-      },
+    emit(
+      state.copyWith(
+        currentState: _getCurrentRegisterUserState()?.copyWith(
+          education: education,
+        ),
+      ),
     );
+    updateProfileLocally();
   }
 
   void setWorkingHabit(String workingHabit) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(workoutHabit: workingHabit)));
-        } else {
-          _handleNullCurrentState("setWorkingHabit");
-        }
-      },
+    emit(
+      state.copyWith(
+        currentState: _getCurrentRegisterUserState()?.copyWith(
+          workoutHabit: workingHabit,
+        ),
+      ),
     );
+    updateProfileLocally();
   }
 
   void setDrinkingHabit(String drinkingHabit) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(drinkingHabit: drinkingHabit)));
-        } else {
-          _handleNullCurrentState("setDrinkingHabit");
-        }
-      },
+    emit(
+      state.copyWith(
+        currentState: _getCurrentRegisterUserState()?.copyWith(
+          drinkingHabit: drinkingHabit,
+        ),
+      ),
     );
+    updateProfileLocally();
   }
 
   void setSmokingHabit(String smokingHabit) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(smokingHabit: smokingHabit)));
-        } else {
-          _handleNullCurrentState("setSmokingHabit");
-        }
-      },
+    emit(
+      state.copyWith(
+        currentState: _getCurrentRegisterUserState()?.copyWith(
+          smokingHabit: smokingHabit,
+        ),
+      ),
     );
+    updateProfileLocally();
   }
 
   void setName(String name) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          if (name.isNotEmpty) {
-            emit(state.copyWith(currentState: currentState.copyWith(username: name)));
-          }
-        } else {
-          _handleNullCurrentState("setName");
-        }
-      },
+    emit(
+      state.copyWith(
+        currentState: _getCurrentRegisterUserState()?.copyWith(
+          username: name,
+        ),
+      ),
     );
+    if (name.length > 3) {
+      updateProfileLocally();
+    }
   }
 
-  void setAge(String age) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(dob: age)));
-        } else {
-          _handleNullCurrentState("setAge");
-        }
-      },
+  void setAge(
+    String age,
+    String selectedDate,
+  ) {
+    emit(
+      state.copyWith(
+        currentState: _getCurrentRegisterUserState()?.copyWith(
+          calculatedAge: age,
+          dob: selectedDate
+        ),
+      ),
     );
+    updateProfileLocally();
   }
 
   void setDesignation(String designation) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(occupation: designation)));
-        } else {
-          _handleNullCurrentState("setDesignation");
-        }
-      },
+    emit(
+      state.copyWith(
+        currentState: _getCurrentRegisterUserState()?.copyWith(
+          occupation: designation,
+        ),
+      ),
     );
+    updateProfileLocally();
   }
 
   void setBio(String bio) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(bio: bio)));
-        } else {
-          _handleNullCurrentState("setBio");
-        }
-      },
+    emit(
+      state.copyWith(
+        currentState: _getCurrentRegisterUserState()?.copyWith(
+          bio: bio,
+        ),
+      ),
     );
+    updateProfileLocally();
   }
 
   void setLookingFor(String lookingFor) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(relationShipGoals: lookingFor)));
-        } else {
-          _handleNullCurrentState("setLookingFor");
-        }
-      },
+    emit(
+      state.copyWith(
+        currentState: _getCurrentRegisterUserState()?.copyWith(
+          relationShipGoals: lookingFor,
+        ),
+      ),
     );
+    updateProfileLocally();
   }
 
   void setInterests(List<String> interests) {
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(state.copyWith(currentState: currentState.copyWith(interests: List.from(interests))));
-        } else {
-          _handleNullCurrentState("setInterests");
-        }
-      },
+    emit(
+      state.copyWith(
+        currentState: _getCurrentRegisterUserState()?.copyWith(
+          interests: List.from(interests),
+        ),
+      ),
     );
+    updateProfileLocally();
   }
 
   Future<void> onPickImage() async {
     final pickedImages = await imageService.pickImages();
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (pickedImages.isNotEmpty) {
-          emit(
-            state.copyWith(uploadedFilePaths: pickedImages.map((image) => image.file).toList()),
-          );
-        } else {
-          _handleNullCurrentState("setImages");
-        }
-      },
+    emitNewState(
+      state.copyWith(
+        uploadedFilePaths: pickedImages.map((image) => image.file).toList(),
+      ),
     );
+    updateProfileLocally();
   }
 
   void removeImageAt(int index) {
     final currentImagesList = state.uploadedFilePaths;
     currentImagesList.removeAt(index);
-    state.when(
-      initial: (currentState, onBoardingStatus, error, uploadedFiles, currentDestination, isLocationLoading,
-          locationPermissionDenied) {
-        if (currentState != null) {
-          emit(
-            state.copyWith(
-              uploadedFilePaths: currentImagesList,
-            ),
-          );
-        } else {
-          _handleNullCurrentState("setImages");
-        }
-      },
+    emitNewState(
+      state.copyWith(
+        uploadedFilePaths: currentImagesList,
+      ),
     );
+    updateProfileLocally();
   }
 
   Future<void> updateProfileLocally() async {
@@ -351,11 +304,12 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     }
   }
 
-  Future<void> getLatestUpdatedState() async {
+  Future<OnBoardingCompletedTill> getLatestUpdatedState() async {
     final currentStage = await boardingRepo.getCurrentBoardingState();
     emitNewState(
       state.copyWith(onBoardingStatus: currentStage),
     );
+    return currentStage;
   }
 
   // Helper for when currentState is null
@@ -365,41 +319,51 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     emit(state.copyWith(error: "Cannot update $methodName: PeopleUiModel is null."));
   }
 
+  Future<void> insertFakeUserInitially() async {
+    var currentUser = _getCurrentRegisterUserState();
+    if (currentUser != null) {
+      await boardingRepo.insertUser(currentUser);
+    }
+  }
+
   Future<void> initializePersonWithAllDetails() async {
     final currentProgress = await boardingRepo.getCurrentUserState();
     switch (currentProgress) {
       case Success<RegisterUserRequest>():
         final currentUser = currentProgress.data;
+        debugLogger("OnBoardingCubit", currentUser.toString());
         emitNewState(
           state.copyWith(
             currentState: currentUser,
           ),
         );
       case Failure<RegisterUserRequest>():
+        var tempUser = RegisterUserRequest(
+          NEW_ON_BOARD_USER_ID,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+        );
         emitNewState(
           state.copyWith(
-            currentState: RegisterUserRequest(
-              NEW_ON_BOARD_USER_ID,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-            ),
-            onBoardingStatus: state.onBoardingStatus,
+            currentState: tempUser,
+            onBoardingStatus: OnBoardingCompletedTill.NOT_STARTED,
           ),
         );
+        insertFakeUserInitially();
     }
   }
 

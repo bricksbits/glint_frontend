@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:glint_frontend/data/remote/model/request/auth/login_request_body.dart';
 import 'package:glint_frontend/di/injection.dart';
+import 'package:glint_frontend/domain/application_logic/auth/sign_in_user_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
@@ -13,6 +15,7 @@ part 'register_cubit.freezed.dart';
 class RegisterCubit extends Cubit<RegisterState> {
   final ImageService imageService = getIt.get<ImageService>();
   final AuthenticationRepo authenticationRepo = getIt.get<AuthenticationRepo>();
+  final SignInUserUseCase signInUserUseCase = getIt.get<SignInUserUseCase>();
 
   RegisterCubit() : super(const RegisterState.initial());
 
@@ -25,7 +28,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   void enteredPassword(String password) {
     emit(
       state.copyWith(
-        email: password,
+        password: password,
         isPassWordValid: true,
       ),
     );
@@ -53,7 +56,10 @@ class RegisterCubit extends Cubit<RegisterState> {
           //todo: Emit Success state
           case Success<void>():
             await authenticationRepo.clearTheDbAfterRegistration();
-            await _uploadMediaFiles();
+            await _loginUser(
+              state.email,
+              state.password,
+            );
           case Failure<void>():
             //todo: Emit Failure state and let them try again.
             emitNewState(state.copyWith(isLoading: false));
@@ -65,6 +71,26 @@ class RegisterCubit extends Cubit<RegisterState> {
         isEmailValid: false,
       ));
     }
+  }
+
+  //Todo: Showcase in the UI the various state happening here.
+  Future<void> _loginUser(
+    String validEmail,
+    String validPassword,
+  ) async {
+    signInUserUseCase.perform(
+      (response) {
+        _uploadMediaFiles();
+      },
+      (error) {
+        print("Login : Error $error");
+        emit(state.copyWith(isLoading: false, isRegisteredSuccessfully: false));
+      },
+      () {
+        print("Login : On Done");
+      },
+      LoginRequestBody(email: validEmail, password: validPassword),
+    );
   }
 
   Future<void> _uploadMediaFiles() async {
@@ -82,6 +108,7 @@ class RegisterCubit extends Cubit<RegisterState> {
           ),
         );
       case Failure<void>():
+        print("Files not uploaded");
         emitNewState(state.copyWith(isLoading: false));
     }
   }

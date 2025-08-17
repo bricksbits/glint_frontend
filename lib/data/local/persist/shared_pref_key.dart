@@ -1,6 +1,7 @@
 class SharedPreferenceKeys {
   static const String accessTokenKey = "accessToken";
   static const String refreshTokenKey = "refreshToken";
+  static const String streamTokenKey = "streamToken";
   static const String userRoleKey = "userRole";
   static const String premiumUserKey = "premiumUser";
   static const String userNameKey = "userName";

@@ -102,7 +102,7 @@ class _$GlintDatabase extends GlintDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `profiles` (`userId` TEXT NOT NULL, `username` TEXT NOT NULL, `age` TEXT NOT NULL, `gender` TEXT NOT NULL, `genderPreference` TEXT NOT NULL, `interests` TEXT NOT NULL, `lookingFor` TEXT NOT NULL, `bio` TEXT NOT NULL, `height` TEXT, `occupation` TEXT, `education` TEXT, `workoutHabit` TEXT, `drinkingHabit` TEXT, `smokingHabit` TEXT, `profileViews` TEXT NOT NULL, `profileLikes` TEXT NOT NULL, `pictureUrlList` TEXT NOT NULL, `profileTag` TEXT, `lastLocation` TEXT, `location` TEXT, PRIMARY KEY (`userId`))');
+            'CREATE TABLE IF NOT EXISTS `profiles` (`userId` TEXT NOT NULL, `username` TEXT NOT NULL, `age` TEXT NOT NULL, `gender` TEXT NOT NULL, `genderPreference` TEXT NOT NULL, `interests` TEXT NOT NULL, `lookingFor` TEXT NOT NULL, `bio` TEXT NOT NULL, `height` TEXT, `occupation` TEXT, `education` TEXT, `workoutHabit` TEXT, `drinkingHabit` TEXT, `smokingHabit` TEXT, `profileViews` TEXT NOT NULL, `profileLikes` TEXT NOT NULL, `pictureUrlList` TEXT NOT NULL, `profileTag` TEXT, `lastLocation` TEXT, `location` TEXT, `dateOfBirthFormatted` TEXT, PRIMARY KEY (`userId`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `swipe_actions` (`collabId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `currentUserId` TEXT NOT NULL, `swipedOnUserId` TEXT NOT NULL, `isUnsent` INTEGER NOT NULL, `action` TEXT NOT NULL, `timestamp` INTEGER NOT NULL)');
         await database.execute(
@@ -167,7 +167,8 @@ class _$ProfileDao extends ProfileDao {
                       _stringTypeConverter.encode(item.pictureUrlList),
                   'profileTag': item.profileTag,
                   'lastLocation': item.lastLocation,
-                  'location': item.location
+                  'location': item.location,
+                  'dateOfBirthFormatted': item.dateOfBirthFormatted
                 },
             changeListener),
         _profileEntityUpdateAdapter = UpdateAdapter(
@@ -195,7 +196,8 @@ class _$ProfileDao extends ProfileDao {
                       _stringTypeConverter.encode(item.pictureUrlList),
                   'profileTag': item.profileTag,
                   'lastLocation': item.lastLocation,
-                  'location': item.location
+                  'location': item.location,
+                  'dateOfBirthFormatted': item.dateOfBirthFormatted
                 },
             changeListener);
 
@@ -233,7 +235,8 @@ class _$ProfileDao extends ProfileDao {
                 _stringTypeConverter.decode(row['pictureUrlList'] as String),
             profileTag: row['profileTag'] as String?,
             lastLocation: row['lastLocation'] as String?,
-            location: row['location'] as String?),
+            location: row['location'] as String?,
+            dateOfBirthFormatted: row['dateOfBirthFormatted'] as String?),
         arguments: [passedId]);
   }
 
@@ -262,7 +265,8 @@ class _$ProfileDao extends ProfileDao {
                 _stringTypeConverter.decode(row['pictureUrlList'] as String),
             profileTag: row['profileTag'] as String?,
             lastLocation: row['lastLocation'] as String?,
-            location: row['location'] as String?),
+            location: row['location'] as String?,
+            dateOfBirthFormatted: row['dateOfBirthFormatted'] as String?),
         arguments: [currentUserId],
         queryableName: 'profiles',
         isView: false);

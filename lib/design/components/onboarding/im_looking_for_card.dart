@@ -3,8 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class ImLookingForCard extends StatefulWidget {
-  const ImLookingForCard({super.key, required this.lookingForCallback});
+  const ImLookingForCard({super.key, required this.lookingForCallback, required this.lookingFor});
 
+  final String? lookingFor;
   final Function(String) lookingForCallback;
 
   @override

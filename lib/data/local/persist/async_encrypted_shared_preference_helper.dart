@@ -1,5 +1,6 @@
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
@@ -64,5 +65,68 @@ class AsyncEncryptedSharedPreferenceHelper {
     final token = await sharedPreferencesAsync
         .getString(SharedPreferenceKeys.refreshTokenKey);
     return token;
+  }
+
+  Future<void> saveUserData(
+    String? accessToken,
+    String? refreshToken,
+    String? streamAuthToken,
+    String? userId,
+    String? userName,
+  ) async {
+    if (accessToken != null) {
+      if (accessToken.isNotEmpty) {
+        await saveString(SharedPreferenceKeys.accessTokenKey, accessToken);
+      }
+    }
+
+    if (refreshToken != null) {
+      if (refreshToken.isNotEmpty) {
+        await saveString(SharedPreferenceKeys.refreshTokenKey, refreshToken);
+      }
+    }
+
+    if (streamAuthToken != null) {
+      if (streamAuthToken.isNotEmpty) {
+        await saveString(SharedPreferenceKeys.streamTokenKey, streamAuthToken);
+      }
+    }
+
+    if (userId != null) {
+      await saveString(
+        SharedPreferenceKeys.userIdKey,
+        userId,
+      );
+    }
+
+    if (userName != null) {
+      await saveString(
+        SharedPreferenceKeys.userNameKey,
+        userName,
+      );
+    }
+
+    final tokenBufferTime =
+        DateTime.now().add(const Duration(minutes: 55)).microsecondsSinceEpoch;
+
+    await saveInt(SharedPreferenceKeys.lastSavedTimeKey, tokenBufferTime);
+  }
+
+  Future<void> saveUserType(String typeFound) async {
+    late final UsersType userType;
+    switch (typeFound) {
+      case 'user':
+        userType = UsersType.USER;
+        break;
+      case 'admin':
+        userType = UsersType.ADMIN;
+        break;
+      case 'super admin':
+        userType = UsersType.SUPER_ADMIN;
+        break;
+      default:
+        userType = UsersType.USER;
+    }
+    await saveString(SharedPreferenceKeys.userRoleKey, userType.name);
   }
 }

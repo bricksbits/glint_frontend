@@ -19,7 +19,9 @@ class OnBoardRequestBody {
       this.smokingHabit, 
       this.relationshipGoals, 
       this.interests, 
-      this.role,});
+      this.role, 
+      this.approvedByAdmin, 
+      this.fcmToken,});
 
   OnBoardRequestBody.fromJson(dynamic json) {
     username = json['username'];
@@ -39,6 +41,8 @@ class OnBoardRequestBody {
     relationshipGoals = json['relationship_goals'] != null ? json['relationship_goals'].cast<String>() : [];
     interests = json['interests'] != null ? json['interests'].cast<String>() : [];
     role = json['role'];
+    approvedByAdmin = json['approved_by_admin'];
+    fcmToken = json['fcm_token'];
   }
   String? username;
   String? password;
@@ -57,6 +61,8 @@ class OnBoardRequestBody {
   List<String>? relationshipGoals;
   List<String>? interests;
   String? role;
+  bool? approvedByAdmin;
+  String? fcmToken;
 OnBoardRequestBody copyWith({  String? username,
   String? password,
   String? email,
@@ -74,6 +80,8 @@ OnBoardRequestBody copyWith({  String? username,
   List<String>? relationshipGoals,
   List<String>? interests,
   String? role,
+  bool? approvedByAdmin,
+  String? fcmToken,
 }) => OnBoardRequestBody(  username: username ?? this.username,
   password: password ?? this.password,
   email: email ?? this.email,
@@ -91,6 +99,8 @@ OnBoardRequestBody copyWith({  String? username,
   relationshipGoals: relationshipGoals ?? this.relationshipGoals,
   interests: interests ?? this.interests,
   role: role ?? this.role,
+  approvedByAdmin: approvedByAdmin ?? this.approvedByAdmin,
+  fcmToken: fcmToken ?? this.fcmToken,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -111,6 +121,8 @@ OnBoardRequestBody copyWith({  String? username,
     map['relationship_goals'] = relationshipGoals;
     map['interests'] = interests;
     map['role'] = role;
+    map['approved_by_admin'] = approvedByAdmin;
+    map['fcm_token'] = fcmToken;
     return map;
   }
 

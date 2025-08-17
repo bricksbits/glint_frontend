@@ -106,8 +106,16 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => RegisterCubit(),
+    return BlocListener<RegisterCubit, RegisterState>(
+      listener: (context, state) {
+        if (state.isRegisteredSuccessfully) {
+          if (context.mounted) {
+            context.goNamed(GlintMainRoutes.home.name);
+          }
+        } else {
+          print("Listening to RegisterCubit, ${state.toString()}");
+        }
+      },
       child: BlocBuilder<RegisterCubit, RegisterState>(
         builder: (context, state) {
           return Scaffold(
@@ -183,7 +191,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                                     label: 'Register',
                                     onPressed: () {
                                       context.go(
-                                          "/${GlintAdminDasboardRoutes.adminAuth.name}/${GlintAuthRoutes.resetPassword.name}");
+                                          "/${GlintMainRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}");
                                       debugPrint(
                                         'register button pressed',
                                       );

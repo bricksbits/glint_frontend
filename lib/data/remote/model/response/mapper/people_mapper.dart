@@ -33,6 +33,7 @@ extension GetPeopleResponseMapper on GetPeopleResponse {
             profileTag: "NO PROFILE TAG",
             lastLocation: "NO LOCATION",
             location: "NO LOCATION",
+            dateOfBirthFormatted: element.dateOfBirth,
           ),
         )
         .toList();

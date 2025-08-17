@@ -14,8 +14,9 @@ import 'package:glint_frontend/features/chat/confirm_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/get_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
 import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
-import 'package:glint_frontend/features/event/base/event_base_screen.dart';
+import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
+import 'package:glint_frontend/features/event/base/event_base_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 import 'package:glint_frontend/features/likes/likes_screen.dart';
 import 'package:glint_frontend/features/notifications/notification_screen.dart';
@@ -23,6 +24,7 @@ import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:glint_frontend/features/payment/payment_screen.dart';
+import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/exports.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
@@ -39,6 +41,7 @@ import '../features/admin/screen/admin_event_live_screen.dart';
 import '../features/admin/screen/admin_track_specific_event.dart';
 import '../features/admin/screen/track_event_interested_people_screen.dart';
 import '../features/admin/screen/track_event_tickets_bought_screen.dart';
+import '../features/auth/blocs/register/register_cubit.dart';
 import '../features/chat/chat_screen.dart';
 import '../features/home/home_screen.dart';
 
@@ -63,7 +66,7 @@ final glintMainRoutes = GoRouter(
       builder: (context, state, child) {
         return BlocProvider(
           create: (_) => OnBoardingCubit(),
-          child: child,
+          child: child, // <-- Here it goes
         );
       },
     ),
@@ -71,7 +74,10 @@ final glintMainRoutes = GoRouter(
       path: '/${GlintMainRoutes.register.name}',
       name: GlintMainRoutes.register.name,
       builder: (context, state) {
-        return const CreateAccounScreen();
+        return BlocProvider(
+          create: (context) => RegisterCubit(),
+          child: const CreateAccounScreen(),
+        );
       },
     ),
     GoRoute(
@@ -85,7 +91,24 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintMainRoutes.home.name}',
       name: GlintMainRoutes.home.name,
-      builder: (context, state) => const HomeScreen(),
+      builder: (context, state) => MultiBlocProvider(
+        providers: [
+          BlocProvider<PeopleCardsBloc>(
+            create: (_) =>
+                PeopleCardsBloc()..add(const PeopleCardsEvent.started()),
+          ),
+          BlocProvider<ChatScreenCubit>(
+            create: (_) => ChatScreenCubit(),
+          ),
+          BlocProvider<EventBaseCubit>(
+            create: (_) => EventBaseCubit(),
+          ),
+          BlocProvider<PaymentCubit>(
+            create: (_) => PaymentCubit(),
+          ),
+        ],
+        child: const HomeScreen(),
+      ),
     ),
     GoRoute(
       path: '/${GlintMainRoutes.chat.name}',
@@ -194,17 +217,12 @@ final glintMainRoutes = GoRouter(
           name: GlintProfileRoutes.ticketHistory.name,
           builder: (context, state) => const ProfileHistoryTicketsScreen(),
         ),
-        GoRoute(
-          path: '/${GlintProfileRoutes.settings.name}',
-          name: GlintProfileRoutes.settings.name,
-          builder: (context, state) => const ProfileSettingsScreen(),
-        ),
-        GoRoute(
-          path: '/${GlintProfileRoutes.subscription.name}',
-          name: GlintProfileRoutes.subscription.name,
-          builder: (context, state) => const SettingsScreen(),
-        ),
       ],
+    ),
+    GoRoute(
+      path: '/${GlintMainRoutes.settings.name}',
+      name: GlintMainRoutes.settings.name,
+      builder: (context, state) => const ProfileSettingsScreen(),
     ),
     GoRoute(
       path: '/${GlintMainRoutes.notifications.name}',

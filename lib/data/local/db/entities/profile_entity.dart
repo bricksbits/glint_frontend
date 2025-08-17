@@ -47,6 +47,7 @@ class ProfileEntity {
   final String? profileTag;
   final String? lastLocation;
   final String? location;
+  final String? dateOfBirthFormatted;
 
   ProfileEntity({
     required this.userId,
@@ -69,6 +70,7 @@ class ProfileEntity {
     required this.profileTag,
     required this.lastLocation,
     required this.location,
+    required this.dateOfBirthFormatted,
   });
 }
 
@@ -110,7 +112,7 @@ extension ProfileToPeopleMapper on ProfileEntity {
       "",
       "",
       bio,
-      "",
+      dateOfBirthFormatted,
       height ?? "",
       education ?? "",
       occupation ?? "",

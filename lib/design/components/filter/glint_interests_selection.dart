@@ -1,59 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/components/exports.dart';
+import 'package:glint_frontend/features/people/model/emojis_mega_map.dart';
 
 class GlintInterestsSelection extends StatefulWidget {
-  const GlintInterestsSelection({super.key});
+  const GlintInterestsSelection({super.key, required this.selectedInterests});
+  final List<Map<String, String>> selectedInterests;
 
   @override
   State<GlintInterestsSelection> createState() => _InterestsSelectionState();
 }
 
 class _InterestsSelectionState extends State<GlintInterestsSelection> {
-  Set<String> selectedInterests = {
-    'Photography',
-    'Yoga',
-    'Travelling',
-  };
-
-  final List<Map<String, String>> interests = [
-    {
-      'label': 'Photography',
-      'icon': '📸',
-    },
-    {
-      'label': 'Stand-Up Comedy',
-      'icon': '🎙',
-    },
-    {
-      'label': 'Bollywood',
-      'icon': '💃🏻',
-    },
-    {
-      'label': 'Music',
-      'icon': '🎧',
-    },
-    {
-      'label': 'Yoga',
-      'icon': '🧘',
-    },
-    {
-      'label': 'Festivals',
-      'icon': '🎊',
-    },
-    {
-      'label': 'Travelling',
-      'icon': '✈️',
-    },
-  ];
 
   void toggleInterest(String interest) {
-    setState(() {
-      if (selectedInterests.contains(interest)) {
-        selectedInterests.remove(interest);
-      } else {
-        selectedInterests.add(interest);
-      }
-    });
+    //Todo: better scalable logic to handle new Interests
   }
 
   @override
@@ -61,11 +21,11 @@ class _InterestsSelectionState extends State<GlintInterestsSelection> {
     return Wrap(
       spacing: 12,
       runSpacing: 12,
-      children: interests.map((interest) {
+      children: widget.selectedInterests.map((interest) {
         return GlintEmojiSelectionChip(
           label: interest['label']!,
           icon: interest['icon']!,
-          isSelected: selectedInterests.contains(interest['label']),
+          isSelected: true,
           onTap: () => toggleInterest(interest['label']!),
         );
       }).toList(),

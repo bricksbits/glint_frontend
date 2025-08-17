@@ -44,9 +44,6 @@ class _ChatScreenState extends State<ChatScreen> {
         BlocProvider(
           create: (context) => UploadStoryBloc(),
         ),
-        BlocProvider(
-          create: (context) => ChatScreenCubit(),
-        ),
       ],
       child: BlocBuilder<ChatScreenCubit, ChatScreenState>(
         builder: (context, state) {
@@ -112,9 +109,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                     state.stories ?? [],
                                     (index) {
                                       context.pushNamed(
-                                        GlintChatRoutes.stories.name,
-                                        extra: index
-                                      );
+                                          GlintChatRoutes.stories.name,
+                                          extra: index);
                                     },
                                   )
                                 : const Text("No Stories found,"),

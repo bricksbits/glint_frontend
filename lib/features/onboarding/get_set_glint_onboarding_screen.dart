@@ -69,9 +69,12 @@ class _GetSetGlintOnboardingScreenState
                   const Gap(60.0),
 
                   //im looking for card
-                  ImLookingForCard(lookingForCallback: (value) {
-                    context.read<OnBoardingCubit>().setLookingFor(value);
-                  }),
+                  ImLookingForCard(
+                    lookingFor: null,
+                    lookingForCallback: (value) {
+                      context.read<OnBoardingCubit>().setLookingFor(value);
+                    },
+                  ),
 
                   const Gap(16.0),
 

@@ -8,14 +8,19 @@ import 'package:go_router/go_router.dart';
 import 'package:gradient_circular_progress_indicator/gradient_circular_progress_indicator.dart';
 
 class ProfileInfoColumn extends StatelessWidget {
-  const ProfileInfoColumn({super.key});
+  final double profileProgress;
+  final String userName;
+  final String userAge;
+
+  const ProfileInfoColumn({
+    super.key,
+    required this.profileProgress,
+    required this.userName,
+    required this.userAge,
+  });
 
   @override
   Widget build(BuildContext context) {
-    const progress = 0.7;
-    const name = 'Shubham';
-    const age = 25;
-
     return Column(
       children: [
         const Gap(20.0),
@@ -23,8 +28,8 @@ class ProfileInfoColumn extends StatelessWidget {
         Stack(
           alignment: Alignment.center,
           children: [
-            const GradientCircularProgressIndicator(
-              progress: progress,
+            GradientCircularProgressIndicator(
+              progress: profileProgress,
               gradient: AppColours.circularProgressGradient,
               backgroundColor: Colors.transparent,
               stroke: 8.0,
@@ -46,7 +51,7 @@ class ProfileInfoColumn extends StatelessWidget {
 
         // Profile edit button
         _buildProfileEditButton(
-          progress,
+          profileProgress,
           context,
         ),
 
@@ -59,13 +64,13 @@ class ProfileInfoColumn extends StatelessWidget {
           children: [
             RichText(
               text: TextSpan(
-                text: '$name,',
+                text: '$userName,',
                 style: AppTheme.headingTwo.copyWith(
                   fontStyle: FontStyle.normal,
                 ),
                 children: [
                   TextSpan(
-                    text: ' $age',
+                    text: ' $userAge',
                     style: AppTheme.headingTwo.copyWith(
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,

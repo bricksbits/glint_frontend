@@ -15,6 +15,7 @@ import 'package:injectable/injectable.dart' as _i526;
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' as _i981;
 
 import '../data/local/db/dao/event_like_dao.dart' as _i863;
+import '../data/local/db/dao/membership_dao.dart' as _i1011;
 import '../data/local/db/dao/profile_dao.dart' as _i719;
 import '../data/local/db/dao/swipe_action_dao.dart' as _i1004;
 import '../data/local/db/database/glint_database.dart' as _i160;
@@ -31,7 +32,7 @@ import '../data/repo/likes/likes_data_repo_impl.dart' as _i503;
 import '../data/repo/onBoard/on_boarding_repo_impl.dart' as _i359;
 import '../data/repo/payment/payment_repo_impl.dart' as _i854;
 import '../data/repo/people/people_repo_impl.dart' as _i955;
-import '../data/repo/profile/ProfileRepoImpl.dart' as _i760;
+import '../data/repo/profile/profile_repo_impl.dart' as _i548;
 import '../data/repo/story/story_repo_impl.dart' as _i946;
 import '../domain/application_logic/admin/approve_published_event_usecase.dart'
     as _i839;
@@ -93,6 +94,8 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i719.ProfileDao>(
         () => localModule.getProfileDao(gh<_i160.GlintDatabase>()));
+    gh.singleton<_i1011.MembershipDao>(
+        () => localModule.getMembershipDao(gh<_i160.GlintDatabase>()));
     gh.singleton<_i863.EventLikeDao>(
         () => localModule.getUserEventLikeDao(gh<_i160.GlintDatabase>()));
     gh.singleton<_i1004.SwipeActionDao>(
@@ -100,10 +103,24 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i274.AsyncEncryptedSharedPreferenceHelper>(() =>
         _i274.AsyncEncryptedSharedPreferenceHelper(
             gh<_i930.EncryptedSharedPreferencesAsync>()));
-    gh.lazySingleton<_i368.MyDioClient>(() => _i368.MyDioClient(
+    gh.singleton<_i368.MyDioClient>(() => _i368.MyDioClient(
           gh<_i361.Dio>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
+    gh.lazySingleton<_i662.ProfileRepo>(() => _i548.ProfileRepoImpl(
+          httpClient: gh<_i368.MyDioClient>(),
+          sharedPreferenceHelper:
+              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          profileDao: gh<_i719.ProfileDao>(),
+          membershipDao: gh<_i1011.MembershipDao>(),
+        ));
+    gh.lazySingleton<_i873.AuthenticationRepo>(
+        () => _i840.AuthenticationRepoImpl(
+              gh<_i368.MyDioClient>(),
+              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+              gh<_i719.ProfileDao>(),
+              gh<_i1011.MembershipDao>(),
+            ));
     gh.factory<_i757.EventRepo>(() => _i390.EventRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i863.EventLikeDao>(),
@@ -114,7 +131,7 @@ extension GetItInjectableX on _i174.GetIt {
           profileDao: gh<_i719.ProfileDao>(),
           swipeActionDao: gh<_i1004.SwipeActionDao>(),
         ));
-    gh.factory<_i330.OnBoardingRepo>(() => _i359.OnBoardRepoImpl(
+    gh.lazySingleton<_i330.OnBoardingRepo>(() => _i359.OnBoardRepoImpl(
           gh<_i719.ProfileDao>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           gh<_i368.MyDioClient>(),
@@ -126,12 +143,6 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i274.AsyncEncryptedSharedPreferenceHelper>()));
     gh.singleton<_i661.UserInfoRepo>(
         () => _i321.UserInfoRepoImpl(gh<_i368.MyDioClient>()));
-    gh.lazySingleton<_i873.AuthenticationRepo>(
-        () => _i840.AuthenticationRepoImpl(
-              gh<_i368.MyDioClient>(),
-              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-              gh<_i719.ProfileDao>(),
-            ));
     gh.factory<_i972.SignInUserUseCase>(
         () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
     gh.factory<_i427.LikesDataRepo>(() => _i503.LikesDataRepoImpl(
@@ -142,8 +153,6 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
-    gh.singleton<_i662.ProfileRepo>(
-        () => _i760.ProfileRepoImpl(gh<_i368.MyDioClient>()));
     gh.factory<_i235.PaymentRepo>(
         () => _i854.PaymentRepoImpl(gh<_i368.MyDioClient>()));
     gh.singleton<_i1000.AdminDashboardRepo>(

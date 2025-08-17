@@ -9,16 +9,23 @@ import 'package:go_router/go_router.dart';
 import '../../exports.dart';
 
 class ProfileSubscriptionColumn extends StatelessWidget {
-  const ProfileSubscriptionColumn({super.key});
+  const ProfileSubscriptionColumn({super.key, required this.superLikeCounts, required this.rewindCounts, required this.superDmCounts});
+  final int superLikeCounts;
+  final int rewindCounts;
+  final int superDmCounts;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         // Displays the remaining features count
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: FeaturesLeftCountContainer(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: FeaturesLeftCountContainer(
+            superLikeCounts: superLikeCounts,
+            rewindCounts: rewindCounts,
+            superDmCounts: superDmCounts,
+          ),
         ),
 
         // Carousel for subscription cards
