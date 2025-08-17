@@ -27,6 +27,7 @@ mixin _$RegisterState {
   bool get isPassWordValid => throw _privateConstructorUsedError;
   bool get isConfirmPassword => throw _privateConstructorUsedError;
   bool get isRegisteredSuccessfully => throw _privateConstructorUsedError;
+  String get navigateToRoute => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -40,7 +41,8 @@ mixin _$RegisterState {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
-            bool isRegisteredSuccessfully)
+            bool isRegisteredSuccessfully,
+            String navigateToRoute)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -57,7 +59,8 @@ mixin _$RegisterState {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
-            bool isRegisteredSuccessfully)?
+            bool isRegisteredSuccessfully,
+            String navigateToRoute)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -74,7 +77,8 @@ mixin _$RegisterState {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
-            bool isRegisteredSuccessfully)?
+            bool isRegisteredSuccessfully,
+            String navigateToRoute)?
         initial,
     required TResult orElse(),
   }) =>
@@ -120,7 +124,8 @@ abstract class $RegisterStateCopyWith<$Res> {
       bool isEmailValid,
       bool isPassWordValid,
       bool isConfirmPassword,
-      bool isRegisteredSuccessfully});
+      bool isRegisteredSuccessfully,
+      String navigateToRoute});
 }
 
 /// @nodoc
@@ -149,6 +154,7 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
     Object? isPassWordValid = null,
     Object? isConfirmPassword = null,
     Object? isRegisteredSuccessfully = null,
+    Object? navigateToRoute = null,
   }) {
     return _then(_value.copyWith(
       email: null == email
@@ -195,6 +201,10 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
           ? _value.isRegisteredSuccessfully
           : isRegisteredSuccessfully // ignore: cast_nullable_to_non_nullable
               as bool,
+      navigateToRoute: null == navigateToRoute
+          ? _value.navigateToRoute
+          : navigateToRoute // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -218,7 +228,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       bool isEmailValid,
       bool isPassWordValid,
       bool isConfirmPassword,
-      bool isRegisteredSuccessfully});
+      bool isRegisteredSuccessfully,
+      String navigateToRoute});
 }
 
 /// @nodoc
@@ -245,6 +256,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? isPassWordValid = null,
     Object? isConfirmPassword = null,
     Object? isRegisteredSuccessfully = null,
+    Object? navigateToRoute = null,
   }) {
     return _then(_$InitialImpl(
       email: null == email
@@ -291,6 +303,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.isRegisteredSuccessfully
           : isRegisteredSuccessfully // ignore: cast_nullable_to_non_nullable
               as bool,
+      navigateToRoute: null == navigateToRoute
+          ? _value.navigateToRoute
+          : navigateToRoute // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -309,7 +325,8 @@ class _$InitialImpl implements _Initial {
       this.isEmailValid = true,
       this.isPassWordValid = true,
       this.isConfirmPassword = true,
-      this.isRegisteredSuccessfully = false});
+      this.isRegisteredSuccessfully = false,
+      this.navigateToRoute = ""});
 
   @override
   @JsonKey()
@@ -344,10 +361,13 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final bool isRegisteredSuccessfully;
+  @override
+  @JsonKey()
+  final String navigateToRoute;
 
   @override
   String toString() {
-    return 'RegisterState.initial(email: $email, password: $password, name: $name, organization: $organization, contactNumber: $contactNumber, isLoading: $isLoading, confirmPassword: $confirmPassword, isEmailValid: $isEmailValid, isPassWordValid: $isPassWordValid, isConfirmPassword: $isConfirmPassword, isRegisteredSuccessfully: $isRegisteredSuccessfully)';
+    return 'RegisterState.initial(email: $email, password: $password, name: $name, organization: $organization, contactNumber: $contactNumber, isLoading: $isLoading, confirmPassword: $confirmPassword, isEmailValid: $isEmailValid, isPassWordValid: $isPassWordValid, isConfirmPassword: $isConfirmPassword, isRegisteredSuccessfully: $isRegisteredSuccessfully, navigateToRoute: $navigateToRoute)';
   }
 
   @override
@@ -375,7 +395,9 @@ class _$InitialImpl implements _Initial {
                 other.isConfirmPassword == isConfirmPassword) &&
             (identical(
                     other.isRegisteredSuccessfully, isRegisteredSuccessfully) ||
-                other.isRegisteredSuccessfully == isRegisteredSuccessfully));
+                other.isRegisteredSuccessfully == isRegisteredSuccessfully) &&
+            (identical(other.navigateToRoute, navigateToRoute) ||
+                other.navigateToRoute == navigateToRoute));
   }
 
   @override
@@ -391,7 +413,8 @@ class _$InitialImpl implements _Initial {
       isEmailValid,
       isPassWordValid,
       isConfirmPassword,
-      isRegisteredSuccessfully);
+      isRegisteredSuccessfully,
+      navigateToRoute);
 
   /// Create a copy of RegisterState
   /// with the given fields replaced by the non-null parameter values.
@@ -415,7 +438,8 @@ class _$InitialImpl implements _Initial {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
-            bool isRegisteredSuccessfully)
+            bool isRegisteredSuccessfully,
+            String navigateToRoute)
         initial,
   }) {
     return initial(
@@ -429,7 +453,8 @@ class _$InitialImpl implements _Initial {
         isEmailValid,
         isPassWordValid,
         isConfirmPassword,
-        isRegisteredSuccessfully);
+        isRegisteredSuccessfully,
+        navigateToRoute);
   }
 
   @override
@@ -446,7 +471,8 @@ class _$InitialImpl implements _Initial {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
-            bool isRegisteredSuccessfully)?
+            bool isRegisteredSuccessfully,
+            String navigateToRoute)?
         initial,
   }) {
     return initial?.call(
@@ -460,7 +486,8 @@ class _$InitialImpl implements _Initial {
         isEmailValid,
         isPassWordValid,
         isConfirmPassword,
-        isRegisteredSuccessfully);
+        isRegisteredSuccessfully,
+        navigateToRoute);
   }
 
   @override
@@ -477,7 +504,8 @@ class _$InitialImpl implements _Initial {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
-            bool isRegisteredSuccessfully)?
+            bool isRegisteredSuccessfully,
+            String navigateToRoute)?
         initial,
     required TResult orElse(),
   }) {
@@ -493,7 +521,8 @@ class _$InitialImpl implements _Initial {
           isEmailValid,
           isPassWordValid,
           isConfirmPassword,
-          isRegisteredSuccessfully);
+          isRegisteredSuccessfully,
+          navigateToRoute);
     }
     return orElse();
   }
@@ -539,7 +568,8 @@ abstract class _Initial implements RegisterState {
       final bool isEmailValid,
       final bool isPassWordValid,
       final bool isConfirmPassword,
-      final bool isRegisteredSuccessfully}) = _$InitialImpl;
+      final bool isRegisteredSuccessfully,
+      final String navigateToRoute}) = _$InitialImpl;
 
   @override
   String get email;
@@ -563,6 +593,8 @@ abstract class _Initial implements RegisterState {
   bool get isConfirmPassword;
   @override
   bool get isRegisteredSuccessfully;
+  @override
+  String get navigateToRoute;
 
   /// Create a copy of RegisterState
   /// with the given fields replaced by the non-null parameter values.

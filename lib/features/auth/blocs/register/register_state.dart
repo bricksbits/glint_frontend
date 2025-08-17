@@ -14,5 +14,6 @@ class RegisterState with _$RegisterState {
     @Default(true) bool isPassWordValid,
     @Default(true) bool isConfirmPassword,
     @Default(false) bool isRegisteredSuccessfully,
+    @Default("") String navigateToRoute,
   }) = _Initial;
 }

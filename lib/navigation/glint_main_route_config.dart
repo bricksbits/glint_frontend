@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/pass_event_details_argument_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 import 'package:glint_frontend/features/admin/bloc/track_specific_event/track_admin_event_cubit.dart';
+import 'package:glint_frontend/features/admin/screen/admin_dashboard_screen.dart';
 import 'package:glint_frontend/features/admin/screen/super_admin_dashboard_screen.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
@@ -77,7 +78,7 @@ final glintMainRoutes = GoRouter(
         var isAdmin = state.extra as bool?;
         return BlocProvider(
           create: (context) => RegisterCubit(),
-          child: const CreateAccounScreen(
+          child: CreateAccounScreen(
             isAdmin: isAdmin ?? false,
           ),
         );
@@ -259,14 +260,17 @@ final glintMainRoutes = GoRouter(
       },
     ),
     GoRoute(
+      path: '/${GlintAdminDasboardRoutes.superAdminHome.name}',
+      name: GlintAdminDasboardRoutes.superAdminHome.name,
+      builder: (context, state) {
+        return const SuperAdminDashboardScreen();
+      },
+    ),
+    GoRoute(
       path: '/${GlintAdminDasboardRoutes.adminHome.name}',
       name: GlintAdminDasboardRoutes.adminHome.name,
       builder: (context, state) {
-        return const SuperAdminDashboardScreen();
-        // final isSuperAdmin = false;
-        // return isSuperAdmin
-        //     ?
-        //     : const AdminDashboardScreen();
+        return const AdminDashboardScreen();
       },
     ),
     ShellRoute(

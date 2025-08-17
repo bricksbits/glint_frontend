@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       break;
                     case UsersType.SUPER_ADMIN:
                       myContext
-                          .go("/${GlintAdminDasboardRoutes.adminHome.name}");
+                          .go("/${GlintAdminDasboardRoutes.superAdminHome.name}");
                       break;
                   }
                 }

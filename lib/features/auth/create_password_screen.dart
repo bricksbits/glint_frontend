@@ -59,12 +59,15 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
     final confirmPassword = _confirmPasswordController.text.trim();
 
     setState(() {
-      _isButtonEnabled = password.isNotEmpty && confirmPassword.isNotEmpty && password == confirmPassword;
+      _isButtonEnabled = password.isNotEmpty &&
+          confirmPassword.isNotEmpty &&
+          password == confirmPassword;
     });
   }
 
   void _handleResetPassword() {
-    if (_passwordController.text.trim() != _confirmPasswordController.text.trim()) return;
+    if (_passwordController.text.trim() !=
+        _confirmPasswordController.text.trim()) return;
 
     final newPassword = _passwordController.text.trim();
     if (widget.email == null || widget.otp == null) return;
@@ -157,8 +160,9 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                 onPressed: _isButtonEnabled
                     ? () {
                         _handleResetPassword();
-                        context.go("/${GlintAdminDasboardRoutes.adminAuth.name}/${GlintAuthRoutes.passwordSuccess.name}");
-                        debugPrint('login (create password) button pressed');
+                        //Todo: Handle the Navigation here.
+                        // context.go("/${GlintAdminDasboardRoutes.adminAuth.name}/${GlintAuthRoutes.passwordSuccess.name}");
+                        // debugPrint('login (create password) button pressed');
                       }
                     : null, // null disables the button
               ),

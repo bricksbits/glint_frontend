@@ -12,6 +12,7 @@ import '../onboarding/on_boarding_cubit.dart';
 
 class CreateAccounScreen extends StatefulWidget {
   final bool isAdmin;
+
   const CreateAccounScreen({super.key, required this.isAdmin});
 
   @override
@@ -83,7 +84,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 // Handle Login tap
-                context.read<RegisterCubit>().registerUser();
+                // context.read<RegisterCubit>().registerUser();
               },
           ),
         ],
@@ -100,6 +101,10 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
     _passwordController.addListener(() {
       context.read<RegisterCubit>().enteredPassword(_passwordController.text);
     });
+
+    _nameController.addListener((){
+      context.read<RegisterCubit>().enteredUserName(_nameController.text);
+    });
     super.initState();
   }
 
@@ -109,7 +114,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
       listener: (context, state) {
         if (state.isRegisteredSuccessfully) {
           if (context.mounted) {
-            context.goNamed(GlintMainRoutes.home.name);
+            context.goNamed(state.navigateToRoute);
           }
         } else {
           print("Listening to RegisterCubit, ${state.toString()}");
@@ -189,10 +194,11 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                                   GlintAuthActionButton(
                                     label: 'Register',
                                     onPressed: () {
-                                      context.go(
-                                          "/${GlintMainRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}");
+                                      context
+                                          .read<RegisterCubit>()
+                                          .registerAsAAdmin();
                                       debugPrint(
-                                        'register button pressed',
+                                        'Admin register button pressed',
                                       );
                                     },
                                   ),

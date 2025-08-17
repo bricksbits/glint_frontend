@@ -36,7 +36,7 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
                 add(
                   SplashScreenEvent.emitNewStates(
                     SplashScreenState.navigateTo(
-                      GlintAdminDasboardRoutes.liveEvent.name,
+                      GlintAdminDasboardRoutes.adminHome.name,
                     ),
                   ),
                 );
@@ -45,7 +45,7 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
                 add(
                   SplashScreenEvent.emitNewStates(
                     SplashScreenState.navigateTo(
-                      GlintAdminDasboardRoutes.adminHome.name,
+                      GlintAdminDasboardRoutes.superAdminHome.name,
                     ),
                   ),
                 );
