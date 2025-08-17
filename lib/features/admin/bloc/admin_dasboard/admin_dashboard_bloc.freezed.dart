@@ -20,18 +20,21 @@ mixin _$AdminDashboardEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function(String id) trackEventWithId,
+    required TResult Function(AdminDashboardState newState) emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function(String id)? trackEventWithId,
+    TResult? Function(AdminDashboardState newState)? emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function(String id)? trackEventWithId,
+    TResult Function(AdminDashboardState newState)? emitNewState,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -39,18 +42,21 @@ mixin _$AdminDashboardEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
     required TResult Function(_TrackEventWithId value) trackEventWithId,
+    required TResult Function(_EmitNewState value) emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
     TResult? Function(_TrackEventWithId value)? trackEventWithId,
+    TResult? Function(_EmitNewState value)? emitNewState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
     TResult Function(_TrackEventWithId value)? trackEventWithId,
+    TResult Function(_EmitNewState value)? emitNewState,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -120,6 +126,7 @@ class _$StartedImpl implements _Started {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function(String id) trackEventWithId,
+    required TResult Function(AdminDashboardState newState) emitNewState,
   }) {
     return started();
   }
@@ -129,6 +136,7 @@ class _$StartedImpl implements _Started {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function(String id)? trackEventWithId,
+    TResult? Function(AdminDashboardState newState)? emitNewState,
   }) {
     return started?.call();
   }
@@ -138,6 +146,7 @@ class _$StartedImpl implements _Started {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function(String id)? trackEventWithId,
+    TResult Function(AdminDashboardState newState)? emitNewState,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -151,6 +160,7 @@ class _$StartedImpl implements _Started {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
     required TResult Function(_TrackEventWithId value) trackEventWithId,
+    required TResult Function(_EmitNewState value) emitNewState,
   }) {
     return started(this);
   }
@@ -160,6 +170,7 @@ class _$StartedImpl implements _Started {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
     TResult? Function(_TrackEventWithId value)? trackEventWithId,
+    TResult? Function(_EmitNewState value)? emitNewState,
   }) {
     return started?.call(this);
   }
@@ -169,6 +180,7 @@ class _$StartedImpl implements _Started {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
     TResult Function(_TrackEventWithId value)? trackEventWithId,
+    TResult Function(_EmitNewState value)? emitNewState,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -253,6 +265,7 @@ class _$TrackEventWithIdImpl implements _TrackEventWithId {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function(String id) trackEventWithId,
+    required TResult Function(AdminDashboardState newState) emitNewState,
   }) {
     return trackEventWithId(id);
   }
@@ -262,6 +275,7 @@ class _$TrackEventWithIdImpl implements _TrackEventWithId {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function(String id)? trackEventWithId,
+    TResult? Function(AdminDashboardState newState)? emitNewState,
   }) {
     return trackEventWithId?.call(id);
   }
@@ -271,6 +285,7 @@ class _$TrackEventWithIdImpl implements _TrackEventWithId {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function(String id)? trackEventWithId,
+    TResult Function(AdminDashboardState newState)? emitNewState,
     required TResult orElse(),
   }) {
     if (trackEventWithId != null) {
@@ -284,6 +299,7 @@ class _$TrackEventWithIdImpl implements _TrackEventWithId {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
     required TResult Function(_TrackEventWithId value) trackEventWithId,
+    required TResult Function(_EmitNewState value) emitNewState,
   }) {
     return trackEventWithId(this);
   }
@@ -293,6 +309,7 @@ class _$TrackEventWithIdImpl implements _TrackEventWithId {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
     TResult? Function(_TrackEventWithId value)? trackEventWithId,
+    TResult? Function(_EmitNewState value)? emitNewState,
   }) {
     return trackEventWithId?.call(this);
   }
@@ -302,6 +319,7 @@ class _$TrackEventWithIdImpl implements _TrackEventWithId {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
     TResult Function(_TrackEventWithId value)? trackEventWithId,
+    TResult Function(_EmitNewState value)? emitNewState,
     required TResult orElse(),
   }) {
     if (trackEventWithId != null) {
@@ -324,26 +342,200 @@ abstract class _TrackEventWithId implements AdminDashboardEvent {
 }
 
 /// @nodoc
+abstract class _$$EmitNewStateImplCopyWith<$Res> {
+  factory _$$EmitNewStateImplCopyWith(
+          _$EmitNewStateImpl value, $Res Function(_$EmitNewStateImpl) then) =
+      __$$EmitNewStateImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({AdminDashboardState newState});
+
+  $AdminDashboardStateCopyWith<$Res> get newState;
+}
+
+/// @nodoc
+class __$$EmitNewStateImplCopyWithImpl<$Res>
+    extends _$AdminDashboardEventCopyWithImpl<$Res, _$EmitNewStateImpl>
+    implements _$$EmitNewStateImplCopyWith<$Res> {
+  __$$EmitNewStateImplCopyWithImpl(
+      _$EmitNewStateImpl _value, $Res Function(_$EmitNewStateImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? newState = null,
+  }) {
+    return _then(_$EmitNewStateImpl(
+      null == newState
+          ? _value.newState
+          : newState // ignore: cast_nullable_to_non_nullable
+              as AdminDashboardState,
+    ));
+  }
+
+  /// Create a copy of AdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AdminDashboardStateCopyWith<$Res> get newState {
+    return $AdminDashboardStateCopyWith<$Res>(_value.newState, (value) {
+      return _then(_value.copyWith(newState: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$EmitNewStateImpl implements _EmitNewState {
+  const _$EmitNewStateImpl(this.newState);
+
+  @override
+  final AdminDashboardState newState;
+
+  @override
+  String toString() {
+    return 'AdminDashboardEvent.emitNewState(newState: $newState)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$EmitNewStateImpl &&
+            (identical(other.newState, newState) ||
+                other.newState == newState));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, newState);
+
+  /// Create a copy of AdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$EmitNewStateImplCopyWith<_$EmitNewStateImpl> get copyWith =>
+      __$$EmitNewStateImplCopyWithImpl<_$EmitNewStateImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function(String id) trackEventWithId,
+    required TResult Function(AdminDashboardState newState) emitNewState,
+  }) {
+    return emitNewState(newState);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function(String id)? trackEventWithId,
+    TResult? Function(AdminDashboardState newState)? emitNewState,
+  }) {
+    return emitNewState?.call(newState);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function(String id)? trackEventWithId,
+    TResult Function(AdminDashboardState newState)? emitNewState,
+    required TResult orElse(),
+  }) {
+    if (emitNewState != null) {
+      return emitNewState(newState);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) started,
+    required TResult Function(_TrackEventWithId value) trackEventWithId,
+    required TResult Function(_EmitNewState value) emitNewState,
+  }) {
+    return emitNewState(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? started,
+    TResult? Function(_TrackEventWithId value)? trackEventWithId,
+    TResult? Function(_EmitNewState value)? emitNewState,
+  }) {
+    return emitNewState?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? started,
+    TResult Function(_TrackEventWithId value)? trackEventWithId,
+    TResult Function(_EmitNewState value)? emitNewState,
+    required TResult orElse(),
+  }) {
+    if (emitNewState != null) {
+      return emitNewState(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _EmitNewState implements AdminDashboardEvent {
+  const factory _EmitNewState(final AdminDashboardState newState) =
+      _$EmitNewStateImpl;
+
+  AdminDashboardState get newState;
+
+  /// Create a copy of AdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$EmitNewStateImplCopyWith<_$EmitNewStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$AdminDashboardState {
   bool get isLoading => throw _privateConstructorUsedError;
-  List<String> get recentEvents => throw _privateConstructorUsedError;
+  List<AdminEventListDomainModel> get recentEvents =>
+      throw _privateConstructorUsedError;
+  List<AdminEventListDomainModel> get allPublishedEvents =>
+      throw _privateConstructorUsedError;
   String get error => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool isLoading, List<String> recentEvents, String error)
+            bool isLoading,
+            List<AdminEventListDomainModel> recentEvents,
+            List<AdminEventListDomainModel> allPublishedEvents,
+            String error)
         initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(bool isLoading, List<String> recentEvents, String error)?
+    TResult? Function(
+            bool isLoading,
+            List<AdminEventListDomainModel> recentEvents,
+            List<AdminEventListDomainModel> allPublishedEvents,
+            String error)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool isLoading, List<String> recentEvents, String error)?
+    TResult Function(
+            bool isLoading,
+            List<AdminEventListDomainModel> recentEvents,
+            List<AdminEventListDomainModel> allPublishedEvents,
+            String error)?
         initial,
     required TResult orElse(),
   }) =>
@@ -378,7 +570,11 @@ abstract class $AdminDashboardStateCopyWith<$Res> {
           AdminDashboardState value, $Res Function(AdminDashboardState) then) =
       _$AdminDashboardStateCopyWithImpl<$Res, AdminDashboardState>;
   @useResult
-  $Res call({bool isLoading, List<String> recentEvents, String error});
+  $Res call(
+      {bool isLoading,
+      List<AdminEventListDomainModel> recentEvents,
+      List<AdminEventListDomainModel> allPublishedEvents,
+      String error});
 }
 
 /// @nodoc
@@ -398,6 +594,7 @@ class _$AdminDashboardStateCopyWithImpl<$Res, $Val extends AdminDashboardState>
   $Res call({
     Object? isLoading = null,
     Object? recentEvents = null,
+    Object? allPublishedEvents = null,
     Object? error = null,
   }) {
     return _then(_value.copyWith(
@@ -408,7 +605,11 @@ class _$AdminDashboardStateCopyWithImpl<$Res, $Val extends AdminDashboardState>
       recentEvents: null == recentEvents
           ? _value.recentEvents
           : recentEvents // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<AdminEventListDomainModel>,
+      allPublishedEvents: null == allPublishedEvents
+          ? _value.allPublishedEvents
+          : allPublishedEvents // ignore: cast_nullable_to_non_nullable
+              as List<AdminEventListDomainModel>,
       error: null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -425,7 +626,11 @@ abstract class _$$InitialImplCopyWith<$Res>
       __$$InitialImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLoading, List<String> recentEvents, String error});
+  $Res call(
+      {bool isLoading,
+      List<AdminEventListDomainModel> recentEvents,
+      List<AdminEventListDomainModel> allPublishedEvents,
+      String error});
 }
 
 /// @nodoc
@@ -443,6 +648,7 @@ class __$$InitialImplCopyWithImpl<$Res>
   $Res call({
     Object? isLoading = null,
     Object? recentEvents = null,
+    Object? allPublishedEvents = null,
     Object? error = null,
   }) {
     return _then(_$InitialImpl(
@@ -453,7 +659,11 @@ class __$$InitialImplCopyWithImpl<$Res>
       recentEvents: null == recentEvents
           ? _value._recentEvents
           : recentEvents // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<AdminEventListDomainModel>,
+      allPublishedEvents: null == allPublishedEvents
+          ? _value._allPublishedEvents
+          : allPublishedEvents // ignore: cast_nullable_to_non_nullable
+              as List<AdminEventListDomainModel>,
       error: null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -466,21 +676,33 @@ class __$$InitialImplCopyWithImpl<$Res>
 
 class _$InitialImpl implements _Initial {
   const _$InitialImpl(
-      {this.isLoading = false,
-      final List<String> recentEvents = const [],
+      {this.isLoading = true,
+      final List<AdminEventListDomainModel> recentEvents = const [],
+      final List<AdminEventListDomainModel> allPublishedEvents = const [],
       this.error = ""})
-      : _recentEvents = recentEvents;
+      : _recentEvents = recentEvents,
+        _allPublishedEvents = allPublishedEvents;
 
   @override
   @JsonKey()
   final bool isLoading;
-  final List<String> _recentEvents;
+  final List<AdminEventListDomainModel> _recentEvents;
   @override
   @JsonKey()
-  List<String> get recentEvents {
+  List<AdminEventListDomainModel> get recentEvents {
     if (_recentEvents is EqualUnmodifiableListView) return _recentEvents;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_recentEvents);
+  }
+
+  final List<AdminEventListDomainModel> _allPublishedEvents;
+  @override
+  @JsonKey()
+  List<AdminEventListDomainModel> get allPublishedEvents {
+    if (_allPublishedEvents is EqualUnmodifiableListView)
+      return _allPublishedEvents;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_allPublishedEvents);
   }
 
   @override
@@ -489,7 +711,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'AdminDashboardState.initial(isLoading: $isLoading, recentEvents: $recentEvents, error: $error)';
+    return 'AdminDashboardState.initial(isLoading: $isLoading, recentEvents: $recentEvents, allPublishedEvents: $allPublishedEvents, error: $error)';
   }
 
   @override
@@ -501,12 +723,18 @@ class _$InitialImpl implements _Initial {
                 other.isLoading == isLoading) &&
             const DeepCollectionEquality()
                 .equals(other._recentEvents, _recentEvents) &&
+            const DeepCollectionEquality()
+                .equals(other._allPublishedEvents, _allPublishedEvents) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isLoading,
-      const DeepCollectionEquality().hash(_recentEvents), error);
+  int get hashCode => Object.hash(
+      runtimeType,
+      isLoading,
+      const DeepCollectionEquality().hash(_recentEvents),
+      const DeepCollectionEquality().hash(_allPublishedEvents),
+      error);
 
   /// Create a copy of AdminDashboardState
   /// with the given fields replaced by the non-null parameter values.
@@ -520,30 +748,41 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool isLoading, List<String> recentEvents, String error)
+            bool isLoading,
+            List<AdminEventListDomainModel> recentEvents,
+            List<AdminEventListDomainModel> allPublishedEvents,
+            String error)
         initial,
   }) {
-    return initial(isLoading, recentEvents, error);
+    return initial(isLoading, recentEvents, allPublishedEvents, error);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(bool isLoading, List<String> recentEvents, String error)?
+    TResult? Function(
+            bool isLoading,
+            List<AdminEventListDomainModel> recentEvents,
+            List<AdminEventListDomainModel> allPublishedEvents,
+            String error)?
         initial,
   }) {
-    return initial?.call(isLoading, recentEvents, error);
+    return initial?.call(isLoading, recentEvents, allPublishedEvents, error);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool isLoading, List<String> recentEvents, String error)?
+    TResult Function(
+            bool isLoading,
+            List<AdminEventListDomainModel> recentEvents,
+            List<AdminEventListDomainModel> allPublishedEvents,
+            String error)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(isLoading, recentEvents, error);
+      return initial(isLoading, recentEvents, allPublishedEvents, error);
     }
     return orElse();
   }
@@ -580,13 +819,16 @@ class _$InitialImpl implements _Initial {
 abstract class _Initial implements AdminDashboardState {
   const factory _Initial(
       {final bool isLoading,
-      final List<String> recentEvents,
+      final List<AdminEventListDomainModel> recentEvents,
+      final List<AdminEventListDomainModel> allPublishedEvents,
       final String error}) = _$InitialImpl;
 
   @override
   bool get isLoading;
   @override
-  List<String> get recentEvents;
+  List<AdminEventListDomainModel> get recentEvents;
+  @override
+  List<AdminEventListDomainModel> get allPublishedEvents;
   @override
   String get error;
 

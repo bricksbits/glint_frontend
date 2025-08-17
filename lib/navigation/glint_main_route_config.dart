@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/pass_event_details_argument_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
+import 'package:glint_frontend/features/admin/bloc/admin_dasboard/admin_dashboard_bloc.dart';
 import 'package:glint_frontend/features/admin/bloc/track_specific_event/track_admin_event_cubit.dart';
 import 'package:glint_frontend/features/admin/screen/admin_dashboard_screen.dart';
+import 'package:glint_frontend/features/admin/screen/admin_track_event_screen.dart';
 import 'package:glint_frontend/features/admin/screen/super_admin_dashboard_screen.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
@@ -266,11 +268,52 @@ final glintMainRoutes = GoRouter(
         return const SuperAdminDashboardScreen();
       },
     ),
-    GoRoute(
-      path: '/${GlintAdminDasboardRoutes.adminHome.name}',
-      name: GlintAdminDasboardRoutes.adminHome.name,
-      builder: (context, state) {
-        return const AdminDashboardScreen();
+    ShellRoute(
+      navigatorKey: adminDashboardKey,
+      routes: [
+        GoRoute(
+          path: '/${GlintAdminDasboardRoutes.adminHome.name}',
+          name: GlintAdminDasboardRoutes.adminHome.name,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: BlocProvider.value(
+                value: context.read<AdminDashboardBloc>(),
+                child: const AdminDashboardScreen(),
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/${GlintAdminDasboardRoutes.adminPublishedEvents.name}',
+          name: GlintAdminDasboardRoutes.adminPublishedEvents.name,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: BlocProvider.value(
+                value: context.read<AdminDashboardBloc>(),
+                child: const AdminTrackEventScreen(),
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/${GlintAdminDasboardRoutes.authProfile.name}',
+          name: GlintAdminDasboardRoutes.authProfile.name,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: BlocProvider.value(
+                value: context.read<AdminDashboardBloc>(),
+                child: const AdminEditProfileScreen(),
+              ),
+            );
+          },
+        ),
+      ],
+      builder: (context, state, child) {
+        return BlocProvider(
+          create: (context) =>
+              AdminDashboardBloc()..add(const AdminDashboardEvent.started()),
+          child: child,
+        );
       },
     ),
     ShellRoute(
@@ -341,11 +384,6 @@ final glintMainRoutes = GoRouter(
       path: '/${GlintAdminDasboardRoutes.createEvent.name}',
       name: GlintAdminDasboardRoutes.createEvent.name,
       builder: (context, state) => const AdminCreateEventScreen(),
-    ),
-    GoRoute(
-      path: '/${GlintAdminDasboardRoutes.authProfile.name}',
-      name: GlintAdminDasboardRoutes.authProfile.name,
-      builder: (context, state) => const AdminEditProfileScreen(),
     ),
     GoRoute(
       path: '/${GlintAdminDasboardRoutes.liveEvent.name}',

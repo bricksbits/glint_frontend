@@ -11,7 +11,6 @@ import 'package:glint_frontend/data/remote/model/response/admin/get_published_ev
 import 'package:glint_frontend/data/remote/model/response/admin/get_ticket_booked_response.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_approve_reject_domain_model.dart';
-import 'package:glint_frontend/domain/business_logic/models/admin/event_detail_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_interested_user_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_list_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_ticket_bought_domain_model.dart';

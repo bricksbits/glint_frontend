@@ -1,138 +1,172 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/components/admin/recent_event_card.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/business_logic/models/admin/event_list_domain_model.dart';
+import 'package:glint_frontend/features/admin/bloc/admin_dasboard/admin_dashboard_bloc.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    String eventManagerName = 'Abhishek';
-    String eventOrganizationName = 'Invisible Studios';
-    return Scaffold(
-      backgroundColor: AppColours.white,
-      appBar: const GlintEventAuthAppbar(
-        hasAdminActions: true,
-      ),
-      body: SizedBox(
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // top spacing
-                    const Gap(32.0),
-                    // event manager greeting
-                    Text(
-                      'Hello $eventManagerName',
-                      style: AppTheme.headingThree.copyWith(
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                    const Gap(8.0),
+    String eventManagerName = 'EVENT USERNAME';
+    String eventOrganizationName = 'EVENT ORGANIZATION NAME';
 
-                    // event manager details
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                          'lib/assets/icons/organization.svg',
-                          colorFilter: const ColorFilter.mode(
-                            AppColours.primaryBlue,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                        const Gap(10.0),
-                        SizedBox(
-                          height: 22.0,
-                          child: VerticalDivider(
-                            width: 2.0,
-                            color: AppColours.gray60,
-                          ),
-                        ),
-                        const Gap(10.0),
-                        Text(
-                          eventOrganizationName,
-                          style: AppTheme.simpleBodyText.copyWith(
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const Gap(48.0),
-
-                    // Redirect Options
-                    Row(
+    return BlocBuilder<AdminDashboardBloc, AdminDashboardState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: AppColours.white,
+          appBar: const GlintEventAuthAppbar(
+            hasAdminActions: true,
+          ),
+          body: state.isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SizedBox(
+                  width: double.infinity,
+                  child: SingleChildScrollView(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Flexible(
-                          child: _buildRedirectOption(
-                            label: 'Create Event',
-                            icon: Icons.add,
-                            onPressed: () {
-                              // todo - redirect create event
-                            },
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // top spacing
+                              const Gap(32.0),
+                              // event manager greeting
+                              Text(
+                                'Hello $eventManagerName',
+                                style: AppTheme.headingThree.copyWith(
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                              const Gap(8.0),
+                              // event manager details
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                    'lib/assets/icons/organization.svg',
+                                    colorFilter: const ColorFilter.mode(
+                                      AppColours.primaryBlue,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                  const Gap(10.0),
+                                  SizedBox(
+                                    height: 22.0,
+                                    child: VerticalDivider(
+                                      width: 2.0,
+                                      color: AppColours.gray60,
+                                    ),
+                                  ),
+                                  const Gap(10.0),
+                                  Text(
+                                    eventOrganizationName,
+                                    style: AppTheme.simpleBodyText.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              const Gap(48.0),
+
+                              // Redirect Options
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    child: _buildRedirectOption(
+                                      label: 'Create Event',
+                                      icon: Icons.add,
+                                      onPressed: () {
+                                        context.pushNamed(
+                                          GlintAdminDasboardRoutes
+                                              .createEvent.name,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const Gap(24.0),
+                                  Flexible(
+                                    child: _buildRedirectOption(
+                                      label: 'Track Event',
+                                      icon: Icons.graphic_eq,
+                                      onPressed: () {
+                                        context.pushNamed(
+                                          GlintAdminDasboardRoutes
+                                              .adminPublishedEvents.name,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
                         ),
-                        const Gap(24.0),
-                        Flexible(
-                          child: _buildRedirectOption(
-                            label: 'Track Event',
-                            icon: Icons.graphic_eq,
-                            onPressed: () {
-                              // todo - redirect track event
-                            },
+                        const Gap(40.0),
+                        const Divider(
+                          color: AppColours.backgroundShade,
+                        ),
+                        const Gap(40.0),
+
+                        // recent events
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                          child: Column(
+                            children: [
+                              // heading
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Recent Events',
+                                  style: AppTheme.headingThree.copyWith(
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ),
+                              const Gap(24.0),
+
+                              // recent event cards
+                              state.recentEvents.isNotEmpty
+                                  ? ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: state.recentEvents.length,
+                                      itemBuilder: (context, index) {
+                                        var item =
+                                            state.recentEvents.elementAt(index);
+                                        return RecentEventCard(
+                                          eventId: item.eventId,
+                                          isTrackEventScreen: false,
+                                          eventStatus: convertToEventStatus(
+                                              item.eventState),
+                                          eventDate: item.eventDate,
+                                          eventName: item.eventName,
+                                          eventLocationOrBy: item.eventBy,
+                                        );
+                                      },
+                                    )
+                                  : const SizedBox(),
+                            ],
                           ),
                         ),
                       ],
-                    )
-                  ],
-                ),
-              ),
-              const Gap(40.0),
-              const Divider(
-                color: AppColours.backgroundShade,
-              ),
-              const Gap(40.0),
-
-              // recent events
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                child: Column(
-                  children: [
-                    // heading
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Recent Events',
-                        style: AppTheme.headingThree.copyWith(
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
                     ),
-                    const Gap(24.0),
-
-                    // recent event cards
-                    ...List.generate(
-                      5,
-                      (index) => const RecentEventCard(),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
