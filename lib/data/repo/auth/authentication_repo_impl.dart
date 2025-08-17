@@ -93,6 +93,8 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
         }
         sharedPreferenceHelper.saveUserData(accessToken, refreshToken,
             streamToken, userId.toString(), userName);
+        sharedPreferenceHelper
+            .saveUserType(successResponse.profile?.userRole ?? "user");
 
         return Success(successResponse);
       case Failure():

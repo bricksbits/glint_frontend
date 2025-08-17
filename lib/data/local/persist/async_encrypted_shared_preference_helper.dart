@@ -1,5 +1,6 @@
 import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
@@ -109,5 +110,23 @@ class AsyncEncryptedSharedPreferenceHelper {
         DateTime.now().add(const Duration(minutes: 55)).microsecondsSinceEpoch;
 
     await saveInt(SharedPreferenceKeys.lastSavedTimeKey, tokenBufferTime);
+  }
+
+  Future<void> saveUserType(String typeFound) async {
+    late final UsersType userType;
+    switch (typeFound) {
+      case 'user':
+        userType = UsersType.USER;
+        break;
+      case 'admin':
+        userType = UsersType.ADMIN;
+        break;
+      case 'super admin':
+        userType = UsersType.SUPER_ADMIN;
+        break;
+      default:
+        userType = UsersType.USER;
+    }
+    await saveString(SharedPreferenceKeys.userRoleKey, userType.name);
   }
 }

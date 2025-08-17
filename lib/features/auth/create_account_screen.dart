@@ -191,7 +191,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                                     label: 'Register',
                                     onPressed: () {
                                       context.go(
-                                          "/${GlintAdminDasboardRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}");
+                                          "/${GlintMainRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}");
                                       debugPrint(
                                         'register button pressed',
                                       );

@@ -164,7 +164,7 @@ class _$InitialImpl implements _Initial {
   const _$InitialImpl(
       {this.previewProfileModel = null,
       this.error = "",
-      this.isLoading = false});
+      this.isLoading = true});
 
   @override
   @JsonKey()
