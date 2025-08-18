@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/approve_or_reject_request_body.dart';
@@ -10,11 +12,13 @@ import 'package:glint_frontend/data/remote/model/response/admin/get_interested_u
 import 'package:glint_frontend/data/remote/model/response/admin/get_published_event_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_ticket_booked_response.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
+import 'package:glint_frontend/domain/application_logic/auth/is_user_logged_in_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_approve_reject_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_interested_user_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_list_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_ticket_bought_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_repo.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
@@ -22,8 +26,12 @@ import 'package:injectable/injectable.dart';
 @Singleton(as: AdminDashboardRepo)
 class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   final MyDioClient httpClient;
+  final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
 
-  AdminDashBoardRepoImpl(this.httpClient);
+  AdminDashBoardRepoImpl(
+    this.httpClient,
+    this.sharedPreferenceHelper,
+  );
 
   @override
   Future<Result<void>> approveEvent(
@@ -126,10 +134,29 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   Future<Result<List<EventTicketBoughtDomainModel>>> fetchBookedTicketList(
     int eventId,
   ) async {
+    late String fetchTicketBoughtUserEndpoint;
+    var currentUserKey = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.userRoleKey);
+
+    var userRole = getUserTypeFromName(currentUserKey);
+    switch (userRole) {
+      case UsersType.USER:
+        fetchTicketBoughtUserEndpoint = "";
+        break;
+      case UsersType.ADMIN:
+        fetchTicketBoughtUserEndpoint =
+            "event/$eventId/manage/event-admin/booked-tickets";
+        break;
+      case UsersType.SUPER_ADMIN:
+        fetchTicketBoughtUserEndpoint =
+            "event/$eventId/manage/super-admin/booked-tickets";
+        break;
+    }
+
     final ticketBookedUsers = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      endpoint: "event/$eventId/manage/super-admin/booked-tickets",
+      endpoint: fetchTicketBoughtUserEndpoint,
     );
 
     switch (ticketBookedUsers) {
@@ -145,10 +172,29 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   @override
   Future<Result<List<EventInterestedUserDomainModel>>> fetchInterestedProfiles(
       int eventId) async {
+    late String fetchInterestedUserEndpoint;
+    var currentUserKey = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.userRoleKey);
+
+    var userRole = getUserTypeFromName(currentUserKey);
+    switch (userRole) {
+      case UsersType.USER:
+        fetchInterestedUserEndpoint = "";
+        break;
+      case UsersType.ADMIN:
+        fetchInterestedUserEndpoint =
+            "/event/$eventId/manage/event-admin/interested-users";
+        break;
+      case UsersType.SUPER_ADMIN:
+        fetchInterestedUserEndpoint =
+            "/event/$eventId/manage/super-admin/interested-users";
+        break;
+    }
+
     final interestedProfiles = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
-      endpoint: "/event/$eventId/manage/super-admin/interested-users",
+      endpoint: fetchInterestedUserEndpoint,
     );
 
     switch (interestedProfiles) {
