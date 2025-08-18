@@ -36,9 +36,10 @@ class AdminTrackEventScreen extends StatelessWidget {
                 state.allPublishedEvents.isNotEmpty
                     ? ListView.builder(
                         shrinkWrap: true,
-                        itemCount: state.recentEvents.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: state.allPublishedEvents.length,
                         itemBuilder: (context, index) {
-                          var item = state.recentEvents.elementAt(index);
+                          var item = state.allPublishedEvents.elementAt(index);
                           return RecentEventCard(
                             eventId: item.eventId,
                             isTrackEventScreen: true,

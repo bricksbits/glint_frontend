@@ -24,11 +24,13 @@ class AdminDashboardBloc
         case Success<List<AdminEventListDomainModel>>():
           var allPublishedEvents = publishedEventResult.data;
           var recentEvents = allPublishedEvents
-              .where((event) =>
-                  event.eventState == AdminEventState.LIVE ||
-                  event.eventState == AdminEventState.PENDING)
+              .where(
+                (event) =>
+                    event.eventState == AdminEventState.LIVE ||
+                    event.eventState == AdminEventState.PENDING,
+              )
               .toList()
-              .take(20)
+              .take(5)
               .toList();
           add(
             _EmitNewState(

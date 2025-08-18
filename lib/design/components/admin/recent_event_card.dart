@@ -9,17 +9,16 @@ import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
 class RecentEventCard extends StatelessWidget {
-  const RecentEventCard({
-    super.key,
-    this.isTrackEventScreen = false,
-    this.eventStatus = EventStatus.live,
-    this.eventName = "",
-    this.eventDate = "",
-    this.eventImage =
-        'https://media.istockphoto.com/id/1806011581/photo/overjoyed-happy-young-people-dancing-jumping-and-singing-during-concert-of-favorite-group.jpg?s=612x612&w=0&k=20&c=cMFdhX403-yKneupEN-VWSfFdy6UWf1H0zqo6QBChP4%3D',
-    this.eventLocationOrBy = "",
-    required this.eventId
-  });
+  const RecentEventCard(
+      {super.key,
+      this.isTrackEventScreen = false,
+      this.eventStatus = EventStatus.live,
+      this.eventName = "",
+      this.eventDate = "",
+      this.eventImage =
+          'https://media.istockphoto.com/id/1806011581/photo/overjoyed-happy-young-people-dancing-jumping-and-singing-during-concert-of-favorite-group.jpg?s=612x612&w=0&k=20&c=cMFdhX403-yKneupEN-VWSfFdy6UWf1H0zqo6QBChP4%3D',
+      this.eventLocationOrBy = "",
+      required this.eventId});
 
   final bool isTrackEventScreen; // to show color for diff status
   final EventStatus eventStatus;
@@ -28,7 +27,6 @@ class RecentEventCard extends StatelessWidget {
   final String eventImage;
   final String eventLocationOrBy;
   final String eventId;
-
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +47,10 @@ class RecentEventCard extends StatelessWidget {
             context.pushNamed(
               GlintAdminDasboardRoutes.trackEvent.name,
               extra: PassEventDetailsArgumentModel(
-                  eventId: eventId,
-                  eventTitle: eventName,
-                  eventDateAndTime: eventDate,
-                  eventLocation: eventLocationOrBy,
+                eventId: eventId,
+                eventTitle: eventName,
+                eventDateAndTime: eventDate,
+                eventLocation: eventLocationOrBy,
               ),
             );
           },
@@ -139,64 +137,67 @@ class RecentEventCard extends StatelessWidget {
           ),
         ),
 
-        // if track event show stats of events
-        if (isTrackEventScreen && eventStatus == EventStatus.rejected)
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(bottom: 16.0),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 20.0,
-            ),
-            decoration: const BoxDecoration(
-              color: AppColours.white,
-              border: Border(
-                left: defaultBorderSide,
-                right: defaultBorderSide,
-                bottom: defaultBorderSide,
-              ),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10.0),
-                bottomRight: Radius.circular(10.0),
-              ),
-            ),
-            child: Row(
-              children: [
-                // event stats
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildTrackEventStats(
-                      assetPath: 'lib/assets/icons/admin/users_two.svg',
-                      label: 'Interested',
-                      count: 0,
-                    ),
-                    const Gap(8.0),
-                    _buildTrackEventStats(
-                      assetPath: 'lib/assets/icons/admin/money_stats.svg',
-                      label: 'Revenue Generated',
-                      count: 0,
-                      isRevenue: true,
-                    ),
-                  ],
-                ),
-                const Spacer(),
-
-                // navigate arrow
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: AppColours.primaryBlue,
-                      size: 16.0,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        // Todo: Get the API To return the stats with the event list
+        // Todo: To make this feature work
+        //  if track event show stats of events
+        // if (isTrackEventScreen && eventStatus == EventStatus.rejected)
+        //   Container(
+        //     width: double.infinity,
+        //     margin: const EdgeInsets.only(bottom: 16.0),
+        //     padding: const EdgeInsets.symmetric(
+        //       horizontal: 20.0,
+        //       vertical: 20.0,
+        //     ),
+        //     decoration: const BoxDecoration(
+        //       color: AppColours.white,
+        //       border: Border(
+        //         left: defaultBorderSide,
+        //         right: defaultBorderSide,
+        //         bottom: defaultBorderSide,
+        //       ),
+        //       borderRadius: BorderRadius.only(
+        //         bottomLeft: Radius.circular(10.0),
+        //         bottomRight: Radius.circular(10.0),
+        //       ),
+        //     ),
+        //     child: Row(
+        //       children: [
+        //         // event stats
+        //         Column(
+        //           crossAxisAlignment: CrossAxisAlignment.start,
+        //           children: [
+        //             _buildTrackEventStats(
+        //               assetPath: 'lib/assets/icons/admin/users_two.svg',
+        //               label: 'Interested',
+        //               count: 0,
+        //             ),
+        //             const Gap(8.0),
+        //             _buildTrackEventStats(
+        //               assetPath: 'lib/assets/icons/admin/money_stats.svg',
+        //               label: 'Revenue Generated',
+        //               count: 0,
+        //               isRevenue: true,
+        //             ),
+        //           ],
+        //         ),
+        //         const Spacer(),
+        //
+        //         // navigate arrow
+        //         Align(
+        //           alignment: Alignment.bottomRight,
+        //           child: IconButton(
+        //             onPressed: () {},
+        //             icon: const Icon(
+        //               Icons.arrow_forward_ios,
+        //               color: AppColours.primaryBlue,
+        //               size: 16.0,
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   )
+        // ,
       ],
     );
   }

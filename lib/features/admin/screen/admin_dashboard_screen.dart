@@ -79,7 +79,7 @@ class AdminDashboardScreen extends StatelessWidget {
                                 ],
                               ),
 
-                              const Gap(48.0),
+                              const Gap(24.0),
 
                               // Redirect Options
                               Row(
@@ -115,11 +115,11 @@ class AdminDashboardScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const Gap(40.0),
+                        const Gap(20.0),
                         const Divider(
                           color: AppColours.backgroundShade,
                         ),
-                        const Gap(40.0),
+                        const Gap(20.0),
 
                         // recent events
                         Padding(
@@ -142,6 +142,7 @@ class AdminDashboardScreen extends StatelessWidget {
                               state.recentEvents.isNotEmpty
                                   ? ListView.builder(
                                       shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
                                       itemCount: state.recentEvents.length,
                                       itemBuilder: (context, index) {
                                         var item =
