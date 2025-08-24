@@ -59,35 +59,35 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     }
   }
 
-  /// TODO: MAKE USAGE OF THE CREATE EVENT REQUEST MODEL
   @override
   Future<Result<void>> createEvent(
     CreateEventRequestDomainModel createEventRequest,
   ) async {
-    final event1 = CreateEventRequestBody(
-      eventName: "Glint Tech Conference",
-      isHotEvent: true,
-      eventDescription: "A conference for tech enthusiasts.",
-      eventLocationLongitude: -74.0060,
-      eventLocationLatitude: 40.7128,
-      createdTime: "2023-10-26T10:00:00Z",
-      bookByTime: "2023-11-20T23:59:59Z",
-      startTime: "2023-12-01T09:00:00Z",
-      endTime: "2023-12-03T18:00:00Z",
-      ticketPrice: 150,
-      ticketsRemaining: 500,
-      totalTickets: 1000,
-      categoryList: ["Technology", "Conference", "Innovation"],
+    final createRequestBody = CreateEventRequestBody(
+      eventName: createEventRequest.eventName,
+      isHotEvent: createEventRequest.isHotEvent,
+      eventDescription: createEventRequest.eventDescription,
+      eventLocationLongitude: createEventRequest.eventLocationLong,
+      eventLocationLatitude: createEventRequest.eventLocationLong,
+      createdTime: createEventRequest.createdTime,
+      bookByTime: createEventRequest.bookTime,
+      startTime: createEventRequest.startDateAndTime,
+      endTime: createEventRequest.endDateAndTime,
+      ticketPrice: createEventRequest.originalPrice,
+      ticketsRemaining: createEventRequest.ticketsRemaining,
+      totalTickets: createEventRequest.totalTicket,
+      eventLocationName: createEventRequest.eventLocationName,
+      categoryList: ["Basic"],
     );
 
-    final createEventRequest = await apiCallHandler(
+    final createEventResponse = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
       endpoint: "/event/manage/event-admin/create",
-      passedQueryParameters: event1.toJson(),
+      requestBody: createRequestBody.toJson()
     );
 
-    switch (createEventRequest) {
+    switch (createEventResponse) {
       case Success():
         return const Success(true);
       case Failure():
@@ -282,13 +282,14 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   @override
   Future<Result<void>> uploadEventMediaFiles(
       String eventId, List<File> event) async {
+    //Todo: Update the FormData Key Value.
     FormData formData = FormData();
     for (int i = 0; i < event.length; i++) {
       final file = event[i];
       if (file != null) {
         formData.files.add(
           MapEntry(
-            "picture_$i",
+            "picture",
             await MultipartFile.fromFile(
               file.path,
               filename: file.path.split('/').last, // or keep your custom name
@@ -307,16 +308,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
 
     switch (response) {
       case Success():
-        // final storiesResponse = StoryUploadResponse.fromJson(response.data);
-        // if (storiesResponse.filesUploaded?.isNotEmpty == true) {
-        //   return const Success(true);
-        // } else {
-        //   return Failure(
-        //     Exception(
-        //         "Files ${storiesResponse.filesNotUploaded} failed to upload"),
-        //   );
-        // }
-        return Success("File Uploaded successfully");
+        return const Success("File Uploaded successfully");
       case Failure():
         return Failure(
           Exception("Not able to upload files currently, please try again."),

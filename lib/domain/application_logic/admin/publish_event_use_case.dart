@@ -6,6 +6,7 @@ import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
+/// Was Meant to be used with the AdminCreateEvent Cubit
 @LazySingleton()
 class PublishEventUseCase extends UseCase<bool, CreateEventRequestDomainModel> {
   final AdminDashboardRepo adminDashboardRepo;

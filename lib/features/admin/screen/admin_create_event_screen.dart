@@ -2,15 +2,21 @@ import 'package:bottom_picker/bottom_picker.dart';
 import 'package:bottom_picker/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/admin/bloc/create/admin_create_event_cubit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-enum EventType { hot, normal }
+enum EventType { hot, normal, notMentioned }
 
 class AdminCreateEventScreen extends StatefulWidget {
-  const AdminCreateEventScreen({super.key});
+  const AdminCreateEventScreen(
+      {super.key, required this.updateExistingEventId});
+
+  final int? updateExistingEventId;
 
   @override
   State<AdminCreateEventScreen> createState() => _AdminCreateEventScreenState();
@@ -18,15 +24,15 @@ class AdminCreateEventScreen extends StatefulWidget {
 
 class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
   // data we need from manager
-  final _eventNameController = TextEditingController();
-  EventType _selectedChip = EventType.hot;
+  late final _eventNameController;
+  late final _actualPriceController;
+  late final _discountPriceController;
+  late final _locationController;
+  late final _eventDescriptionController;
+  EventType _selectedChip = EventType.normal;
   int _selectedNumberOfPerson = 10;
-  final _actualPriceController = TextEditingController();
-  final _discountPriceController = TextEditingController();
   String? _selectedDate;
   String? _selectedTime;
-  final _locationController = TextEditingController();
-  final _eventDescriptionController = TextEditingController();
 
 // functions or static vars
   final List<Map<EventType, String>> eventTypeOptions = [
@@ -82,6 +88,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         DateTime.now().day - 1,
       ),
       onSubmit: (date) {
+        context.read<AdminCreateEventCubit>().eventDate(date);
         String formattedDate = DateFormat('dd/MMM/yyyy').format(date);
         setState(() {
           _selectedDate = formattedDate;
@@ -102,123 +109,212 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
   @override
   void dispose() {
     _eventNameController.dispose();
+    _actualPriceController.dispose();
+    _discountPriceController.dispose();
+    _locationController.dispose();
+    _eventDescriptionController.dispose();
     super.dispose();
   }
 
   @override
+  void initState() {
+    final state = context.read<AdminCreateEventCubit>().state.createEventBody;
+    _eventNameController = TextEditingController(text: state?.eventName);
+    _actualPriceController =
+        TextEditingController(text: state?.originalPrice.toString());
+    _discountPriceController =
+        TextEditingController(text: state?.discountedPrice.toString());
+    _locationController = TextEditingController(
+        text:
+            "Lat : ${state?.eventLocationLat}, Long: ${state?.eventLocationLong}");
+    _eventDescriptionController =
+        TextEditingController(text: state?.eventDescription);
+
+    _selectedChip =
+        state?.isHotEvent ?? false ? EventType.hot : EventType.normal;
+
+    _selectedNumberOfPerson = state?.totalTicket ?? 10;
+
+    _selectedDate = state?.createdTime;
+
+    _selectedTime = state?.startDateAndTime;
+
+    context
+        .read<AdminCreateEventCubit>()
+        .getEventDetailsAndUpdateTheCreateEventBody(
+            widget.updateExistingEventId);
+
+    _eventNameController.addListener(() {
+      context
+          .read<AdminCreateEventCubit>()
+          .observeEventTitle(_eventNameController.text);
+    });
+
+    _actualPriceController.addListener(() {
+      context
+          .read<AdminCreateEventCubit>()
+          .enterEventActualPrice(int.parse(_actualPriceController.text));
+    });
+
+    _discountPriceController.addListener(() {
+      context
+          .read<AdminCreateEventCubit>()
+          .enterEventActualPrice(int.parse(_discountPriceController.text));
+    });
+
+    _eventDescriptionController.addListener(() {
+      context
+          .read<AdminCreateEventCubit>()
+          .enterEventDescription(_eventDescriptionController.text);
+    });
+
+    _locationController.addListener(() {
+      context.read<AdminCreateEventCubit>().enterEventLatLongValue(
+            38.89,
+            77.03,
+            _locationController.text,
+          );
+    });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColours.white,
-      appBar: AppBar(
-        titleSpacing: 32.0,
-        scrolledUnderElevation: 0,
-        title: const Text(
-          'Create Event',
-          style: AppTheme.heavyBodyText,
-        ),
-        centerTitle: false,
-        backgroundColor: AppColours.white,
-        actions: [
-          // save icon
-          GestureDetector(
-            onTap: () {
-              // todo - add event publish functionality
-            },
-            child: Container(
-              height: 40.0,
-              width: 40.0,
-              padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: AppColours.black,
+    return BlocListener<AdminCreateEventCubit, AdminCreateEventState>(
+      listener: (context, state) {
+        if (state.eventPublished) {
+          context.pop();
+        }
+
+        if (state.eventUpdated) {
+          context.pop();
+        }
+      },
+      child: BlocBuilder<AdminCreateEventCubit, AdminCreateEventState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColours.white,
+            appBar: AppBar(
+              titleSpacing: 32.0,
+              scrolledUnderElevation: 0,
+              title: const Text(
+                'Create Event',
+                style: AppTheme.heavyBodyText,
               ),
-              child: SvgPicture.asset(
-                'lib/assets/icons/profile/save_icon.svg',
-              ),
-            ),
-          ),
+              centerTitle: false,
+              backgroundColor: AppColours.white,
+              actions: [
+                // save icon
+                GestureDetector(
+                  onTap: () {
+                    context
+                        .read<AdminCreateEventCubit>()
+                        .publishEvent(widget.updateExistingEventId);
+                  },
+                  child: Container(
+                    height: 40.0,
+                    width: 40.0,
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: AppColours.black,
+                    ),
+                    child: SvgPicture.asset(
+                      'lib/assets/icons/profile/save_icon.svg',
+                    ),
+                  ),
+                ),
 
-          //gap
-          const Gap(12.0),
-
-          // preview icon
-          GestureDetector(
-            onTap: () {
-              // todo - add event preview functionality
-            },
-            child: Container(
-              height: 40.0,
-              width: 40.0,
-              padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: AppColours.primaryBlue,
-              ),
-              child: SvgPicture.asset(
-                'lib/assets/icons/profile/eye_icon.svg',
-              ),
-            ),
-          ),
-
-          const Gap(32.0),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28.0).copyWith(
-            bottom: 28.0,
-          ),
-          child: SizedBox(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(20.0),
-                // event name text input field
-                _buildEventNameTextField(),
-
-                const Gap(24.0),
-
-                // event type selector
-                _buildEventTypeSelector(),
-
-                const Gap(20.0),
-                // no. of person selector
-                _builtNumberOfPersonSelector(),
-
-                const Gap(24.0),
-
-                //actual price
-                _buildActualPriceField(),
-
+                //gap
                 const Gap(12.0),
 
-                //discount price
-                _buildDiscountPriceField(),
+                // preview icon
+                GestureDetector(
+                  onTap: () {
+                    // todo - add event preview functionality
+                  },
+                  child: Container(
+                    height: 40.0,
+                    width: 40.0,
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: AppColours.primaryBlue,
+                    ),
+                    child: SvgPicture.asset(
+                      'lib/assets/icons/profile/eye_icon.svg',
+                    ),
+                  ),
+                ),
 
-                const Gap(24.0),
-                // event date picker
-                _buildEventDatePicker(),
-
-                const Gap(12.0),
-                //event time picker
-                _buildEventTimePicker(),
-
-                const Gap(12.0),
-                //event location picker
-                _buildEventLocationField(),
-
-                const Gap(24.0),
-                // event images upload container
-                _buildEventImagesUploadContainer(),
-
-                const Gap(36.0),
-                // enter event description
-                _buildEventDescriptionField(),
+                const Gap(32.0),
               ],
             ),
-          ),
-        ),
+            body: state.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : SingleChildScrollView(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 28.0).copyWith(
+                        bottom: 28.0,
+                      ),
+                      child: SizedBox(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Gap(20.0),
+                            // event name text input field
+                            _buildEventNameTextField(),
+
+                            const Gap(24.0),
+
+                            // event type selector
+                            _buildEventTypeSelector(),
+
+                            const Gap(20.0),
+                            // no. of person selector
+                            _builtNumberOfPersonSelector(),
+
+                            const Gap(24.0),
+
+                            //actual price
+                            _buildActualPriceField(),
+
+                            const Gap(12.0),
+
+                            //discount price
+                            _buildDiscountPriceField(),
+
+                            const Gap(24.0),
+                            // event date picker
+                            _buildEventDatePicker(),
+
+                            const Gap(12.0),
+                            //event time picker
+                            _buildEventTimePicker(),
+
+                            const Gap(12.0),
+                            //event location picker
+                            _buildEventLocationField(),
+
+                            const Gap(24.0),
+                            // event images upload container
+                            widget.updateExistingEventId != null
+                                ? _buildEventImagesUploadContainer()
+                                : const SizedBox.shrink(),
+
+                            const Gap(36.0),
+                            // enter event description
+                            _buildEventDescriptionField(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+          );
+        },
       ),
     );
   }
@@ -275,6 +371,9 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
 
               return GestureDetector(
                 onTap: () {
+                  context
+                      .read<AdminCreateEventCubit>()
+                      .enterEventTyped(chipEnum);
                   setState(() {
                     _selectedChip = chipEnum;
                   });
@@ -318,6 +417,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         NumberOfPersonSelector(
           initialValue: _selectedNumberOfPerson,
           onChanged: (int selected) {
+            context.read<AdminCreateEventCubit>().enterNumberOfPerson(selected);
             setState(() {
               _selectedNumberOfPerson = selected;
             });

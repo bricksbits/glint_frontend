@@ -1,3 +1,5 @@
+import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
+
 class EventDetailsDomainModel {
   final String eventId;
   final String eventName;
@@ -78,5 +80,26 @@ class EventDetailsDomainModel {
         'location: $location, '
         'eventBy: $eventBy'
         ')';
+  }
+}
+
+extension EventDetailsToCreateEventMapper on EventDetailsDomainModel {
+  CreateEventRequestDomainModel mapToCreateEvent() {
+    return CreateEventRequestDomainModel(eventName: eventName,
+        isHotEvent: false,
+        eventDescription: aboutEvent,
+        eventLocationLat: 53.03,
+        eventLocationLong: 36.80,
+        createdTime: eventdate,
+        bookTime: eventTime,
+        startDateAndTime: eventdate,
+        endDateAndTime: eventTime,
+        originalPrice: int.parse(eventOldPrice),
+        discountedPrice: int.parse(eventCurrentPrice),
+        ticketsRemaining: 30,
+        totalTicket: 100,
+        eventLocationName: eventLocation,
+        categoryList: [],
+    );
   }
 }

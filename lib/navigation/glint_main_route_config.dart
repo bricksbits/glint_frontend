@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/pass_event_details_argument_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 import 'package:glint_frontend/features/admin/bloc/admin_dasboard/admin_dashboard_bloc.dart';
+import 'package:glint_frontend/features/admin/bloc/create/admin_create_event_cubit.dart';
 import 'package:glint_frontend/features/admin/bloc/track_specific_event/track_admin_event_cubit.dart';
 import 'package:glint_frontend/features/admin/screen/admin_dashboard_screen.dart';
 import 'package:glint_frontend/features/admin/screen/admin_track_event_screen.dart';
@@ -383,7 +384,15 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintAdminDasboardRoutes.createEvent.name}',
       name: GlintAdminDasboardRoutes.createEvent.name,
-      builder: (context, state) => const AdminCreateEventScreen(),
+      builder: (context, state) {
+        var isExistingEvent = state.extra as int?;
+        return BlocProvider(
+          create: (context) => AdminCreateEventCubit(),
+          child: AdminCreateEventScreen(
+            updateExistingEventId: isExistingEvent,
+          ),
+        );
+      },
     ),
     GoRoute(
       path: '/${GlintAdminDasboardRoutes.liveEvent.name}',

@@ -15,7 +15,9 @@ class CreateEventRequestBody {
       this.ticketPrice, 
       this.ticketsRemaining, 
       this.totalTickets, 
-      this.categoryList,});
+      this.categoryList,
+      this.eventLocationName,
+  });
 
   CreateEventRequestBody.fromJson(dynamic json) {
     eventName = json['event_name'];
@@ -30,6 +32,7 @@ class CreateEventRequestBody {
     ticketPrice = json['ticket_price'];
     ticketsRemaining = json['tickets_remaining'];
     totalTickets = json['total_tickets'];
+    eventLocationName = json['event_location_name'];
     categoryList = json['category_list'] != null ? json['category_list'].cast<String>() : [];
   }
   String? eventName;
@@ -45,6 +48,8 @@ class CreateEventRequestBody {
   int? ticketsRemaining;
   int? totalTickets;
   List<String>? categoryList;
+  String? eventLocationName;
+
 CreateEventRequestBody copyWith({  String? eventName,
   bool? isHotEvent,
   String? eventDescription,
@@ -58,6 +63,7 @@ CreateEventRequestBody copyWith({  String? eventName,
   int? ticketsRemaining,
   int? totalTickets,
   List<String>? categoryList,
+  String? eventLocationName,
 }) => CreateEventRequestBody(  eventName: eventName ?? this.eventName,
   isHotEvent: isHotEvent ?? this.isHotEvent,
   eventDescription: eventDescription ?? this.eventDescription,
@@ -71,6 +77,7 @@ CreateEventRequestBody copyWith({  String? eventName,
   ticketsRemaining: ticketsRemaining ?? this.ticketsRemaining,
   totalTickets: totalTickets ?? this.totalTickets,
   categoryList: categoryList ?? this.categoryList,
+  eventLocationName: eventLocationName ?? this.eventLocationName,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -87,6 +94,7 @@ CreateEventRequestBody copyWith({  String? eventName,
     map['tickets_remaining'] = ticketsRemaining;
     map['total_tickets'] = totalTickets;
     map['category_list'] = categoryList;
+    map['event_location_name'] = eventLocationName;
     return map;
   }
 
