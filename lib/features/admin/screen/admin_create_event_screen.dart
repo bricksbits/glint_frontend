@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:bottom_picker/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,12 +25,11 @@ class AdminCreateEventScreen extends StatefulWidget {
 }
 
 class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
-  // data we need from manager
-  late final _eventNameController;
-  late final _actualPriceController;
-  late final _discountPriceController;
-  late final _locationController;
-  late final _eventDescriptionController;
+  final _eventNameController = TextEditingController();
+  final _actualPriceController = TextEditingController();
+  final _discountPriceController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _eventDescriptionController = TextEditingController();
   EventType _selectedChip = EventType.normal;
   int _selectedNumberOfPerson = 10;
   String? _selectedDate;
@@ -118,31 +119,11 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
 
   @override
   void initState() {
-    final state = context.read<AdminCreateEventCubit>().state.createEventBody;
-    _eventNameController = TextEditingController(text: state?.eventName);
-    _actualPriceController =
-        TextEditingController(text: state?.originalPrice.toString());
-    _discountPriceController =
-        TextEditingController(text: state?.discountedPrice.toString());
-    _locationController = TextEditingController(
-        text:
-            "Lat : ${state?.eventLocationLat}, Long: ${state?.eventLocationLong}");
-    _eventDescriptionController =
-        TextEditingController(text: state?.eventDescription);
-
-    _selectedChip =
-        state?.isHotEvent ?? false ? EventType.hot : EventType.normal;
-
-    _selectedNumberOfPerson = state?.totalTicket ?? 10;
-
-    _selectedDate = state?.createdTime;
-
-    _selectedTime = state?.startDateAndTime;
-
     context
         .read<AdminCreateEventCubit>()
         .getEventDetailsAndUpdateTheCreateEventBody(
-            widget.updateExistingEventId);
+          widget.updateExistingEventId,
+        );
 
     _eventNameController.addListener(() {
       context
@@ -189,6 +170,25 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
 
         if (state.eventUpdated) {
           context.pop();
+        }
+
+        if (state.createEventBody != null) {
+          final currentEventState = state.createEventBody;
+          _eventNameController.text = currentEventState?.eventName ?? "";
+          _actualPriceController.text =
+              currentEventState?.originalPrice.toString() ?? "";
+          _discountPriceController.text =
+              currentEventState?.discountedPrice.toString() ?? "";
+          _eventDescriptionController.text =
+              currentEventState?.eventDescription ?? "";
+          _locationController.text = currentEventState?.eventLocationName ?? "";
+          _selectedChip = currentEventState?.isHotEvent ?? false
+              ? EventType.hot
+              : EventType.normal;
+
+          _selectedNumberOfPerson = currentEventState?.totalTicket ?? 10;
+          _selectedDate = currentEventState?.createdTime;
+          _selectedTime = currentEventState?.startDateAndTime;
         }
       },
       child: BlocBuilder<AdminCreateEventCubit, AdminCreateEventState>(
@@ -300,9 +300,30 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                             _buildEventLocationField(),
 
                             const Gap(24.0),
+
                             // event images upload container
                             widget.updateExistingEventId != null
-                                ? _buildEventImagesUploadContainer()
+                                ? _buildEventImagesUploadContainer(
+                                    () {
+                                      context
+                                          .read<AdminCreateEventCubit>()
+                                          .pickUpImages();
+                                    },
+                                    (fileToRemove) {
+                                      // context
+                                      //     .read<AdminCreateEventCubit>()
+                                      //     .pickUpImages();
+                                    },
+                                    context
+                                        .read<AdminCreateEventCubit>()
+                                        .state
+                                        .pictureUploaded,
+                                    context
+                                        .read<AdminCreateEventCubit>()
+                                        .state
+                                        .eventDetailModel
+                                        ?.eventCoverImageUrl,
+                                  )
                                 : const SizedBox.shrink(),
 
                             const Gap(36.0),
@@ -553,16 +574,26 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     );
   }
 
-  Widget _buildEventImagesUploadContainer() {
-    return const Column(
+  Widget _buildEventImagesUploadContainer(
+    VoidCallback onImagePickUp,
+    Function(File) onImageRemoved,
+    List<File?>? selectedImagesFileList,
+    List<String?>? fetchedEventImagesList,
+  ) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Upload Event Images*',
           style: AppTheme.smallBodyText,
         ),
-        Gap(16.0),
-        UploadEventImagesContainers(),
+        const Gap(16.0),
+        UploadEventImagesContainers(
+          onImagePickUp: onImagePickUp,
+          onImageRemoved: onImageRemoved,
+          selectedImagesFileList: selectedImagesFileList,
+          fetchedEventImagesList: fetchedEventImagesList,
+        ),
       ],
     );
   }

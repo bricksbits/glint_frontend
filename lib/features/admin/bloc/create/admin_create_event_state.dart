@@ -10,6 +10,7 @@ class AdminCreateEventState with _$AdminCreateEventState {
     @Default([]) List<File?> pictureUploaded,
     @Default(false) bool eventPublished,
     @Default(false) bool eventUpdated,
+    @Default(null) int? passedEventId,
   }) = _Initial;
 
   factory AdminCreateEventState.withDefaults() {

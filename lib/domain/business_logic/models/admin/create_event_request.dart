@@ -1,3 +1,5 @@
+import 'package:glint_frontend/data/remote/model/request/admin/create_event_request_body.dart';
+
 class CreateEventRequestDomainModel {
   String eventName;
   bool isHotEvent;
@@ -86,6 +88,27 @@ class CreateEventRequestDomainModel {
       totalTicket: totalTicket ?? this.totalTicket,
       eventLocationName: eventLocationName ?? this.eventLocationName,
       categoryList: categoryList ?? List<String>.from(this.categoryList),
+    );
+  }
+}
+
+extension CreateEventRequestMapper on CreateEventRequestDomainModel {
+  CreateEventRequestBody mapToRequestBody() {
+    return CreateEventRequestBody(
+      eventName: eventName,
+      isHotEvent: isHotEvent,
+      eventDescription: eventDescription,
+      eventLocationLongitude: eventLocationLong,
+      eventLocationLatitude: eventLocationLong,
+      createdTime: createdTime,
+      bookByTime: bookTime,
+      startTime: startDateAndTime,
+      endTime: endDateAndTime,
+      ticketPrice: originalPrice,
+      ticketsRemaining: ticketsRemaining,
+      totalTickets: totalTicket,
+      eventLocationName: eventLocationName,
+      categoryList: ["Basic"],
     );
   }
 }

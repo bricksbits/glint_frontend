@@ -70,7 +70,10 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
                         const Gap(36.0),
 
                         // action buttons
-                        _buildEventActionButtons(context),
+                        _buildEventActionButtons(
+                          context,
+                          widget.eventId,
+                        ),
 
                         const Gap(24.0),
 
@@ -246,8 +249,12 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
     );
   }
 
-  Widget _buildEventActionButtons(BuildContext context) {
+  Widget _buildEventActionButtons(
+    BuildContext context,
+    int? eventId,
+  ) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
           child: SizedBox(
@@ -287,71 +294,106 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
           ),
         ),
         const Gap(16.0),
-        if (eventPaused)
-          Expanded(
-            child: SizedBox(
-              height: 48.0,
-              child: GlintIconElevatedButton(
-                customBorderRadius: 10.0,
-                backgroundColor: AppColours.primaryBlue,
-                onPressed: () {
-                  // todo - edit event functionality
-                  setState(() {
-                    eventPaused = false;
-                  });
-                },
-                label: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.play_arrow_sharp,
-                      size: 18.0,
+        Expanded(
+          child: SizedBox(
+            height: 48.0,
+            child: GlintIconElevatedButton(
+              customBorderRadius: 10.0,
+              backgroundColor: AppColours.black,
+              onPressed: () {
+                context.pushNamed(
+                  GlintAdminDasboardRoutes.createEvent.name,
+                  extra: eventId,
+                );
+              },
+              label: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.edit,
+                    size: 18.0,
+                    color: AppColours.white,
+                  ),
+                  const Gap(8.0),
+                  Text(
+                    'Edit Event',
+                    style: AppTheme.simpleText.copyWith(
+                      fontWeight: FontWeight.w600,
                       color: AppColours.white,
                     ),
-                    const Gap(8.0),
-                    Text(
-                      'Resume Event',
-                      style: AppTheme.simpleText.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: AppColours.white,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        if (!eventPaused)
-          Expanded(
-            child: SizedBox(
-              height: 48.0,
-              child: GlintIconElevatedButton(
-                customBorderRadius: 10.0,
-                backgroundColor: AppColours.black,
-                onPressed: () {
-                  // todo - edit event functionality
-                },
-                label: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.edit,
-                      size: 18.0,
-                      color: AppColours.white,
-                    ),
-                    const Gap(8.0),
-                    Text(
-                      'Edit Event',
-                      style: AppTheme.simpleText.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: AppColours.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+        ),
+        // if (eventPaused)
+        //   Expanded(
+        //     child: SizedBox(
+        //       height: 48.0,
+        //       child: GlintIconElevatedButton(
+        //         customBorderRadius: 10.0,
+        //         backgroundColor: AppColours.primaryBlue,
+        //         onPressed: () {
+        //           setState(() {
+        //             eventPaused = false;
+        //           });
+        //         },
+        //         label: Row(
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           children: [
+        //             const Icon(
+        //               Icons.play_arrow_sharp,
+        //               size: 18.0,
+        //               color: AppColours.white,
+        //             ),
+        //             const Gap(8.0),
+        //             Text(
+        //               'Resume Event',
+        //               style: AppTheme.simpleText.copyWith(
+        //                 fontWeight: FontWeight.w600,
+        //                 color: AppColours.white,
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // if (!eventPaused)
+        //   Expanded(
+        //     child: SizedBox(
+        //       height: 48.0,
+        //       child: GlintIconElevatedButton(
+        //         customBorderRadius: 10.0,
+        //         backgroundColor: AppColours.black,
+        //         onPressed: () {
+        //           context.pushNamed(
+        //             GlintAdminDasboardRoutes.createEvent.name,
+        //             extra: eventId,
+        //           );
+        //         },
+        //         label: Row(
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           children: [
+        //             const Icon(
+        //               Icons.edit,
+        //               size: 18.0,
+        //               color: AppColours.white,
+        //             ),
+        //             const Gap(8.0),
+        //             Text(
+        //               'Edit Event',
+        //               style: AppTheme.simpleText.copyWith(
+        //                 fontWeight: FontWeight.w600,
+        //                 color: AppColours.white,
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   ),
         const Gap(16.0),
         IconButton(
           key: _menuKey,

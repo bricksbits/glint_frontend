@@ -63,23 +63,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   Future<Result<void>> createEvent(
     CreateEventRequestDomainModel createEventRequest,
   ) async {
-    final createRequestBody = CreateEventRequestBody(
-      eventName: createEventRequest.eventName,
-      isHotEvent: createEventRequest.isHotEvent,
-      eventDescription: createEventRequest.eventDescription,
-      eventLocationLongitude: createEventRequest.eventLocationLong,
-      eventLocationLatitude: createEventRequest.eventLocationLong,
-      createdTime: createEventRequest.createdTime,
-      bookByTime: createEventRequest.bookTime,
-      startTime: createEventRequest.startDateAndTime,
-      endTime: createEventRequest.endDateAndTime,
-      ticketPrice: createEventRequest.originalPrice,
-      ticketsRemaining: createEventRequest.ticketsRemaining,
-      totalTickets: createEventRequest.totalTicket,
-      eventLocationName: createEventRequest.eventLocationName,
-      categoryList: ["Basic"],
-    );
-
+    final createRequestBody = createEventRequest.mapToRequestBody();
     final createEventResponse = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
@@ -98,30 +82,15 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   @override
   Future<Result<void>> editEvent(
       CreateEventRequestDomainModel createEventRequest) async {
-    final event1 = CreateEventRequestBody(
-      eventName: "Glint Tech Conference",
-      isHotEvent: true,
-      eventDescription: "A conference for tech enthusiasts.",
-      eventLocationLongitude: -74.0060,
-      eventLocationLatitude: 40.7128,
-      createdTime: "2023-10-26T10:00:00Z",
-      bookByTime: "2023-11-20T23:59:59Z",
-      startTime: "2023-12-01T09:00:00Z",
-      endTime: "2023-12-03T18:00:00Z",
-      ticketPrice: 150,
-      ticketsRemaining: 500,
-      totalTickets: 1000,
-      categoryList: ["Technology", "Conference", "Innovation"],
-    );
-
-    final createEventRequest = await apiCallHandler(
+    final eventRequestBody = createEventRequest.mapToRequestBody();
+    final createEventRequestResponse = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
       endpoint: "/event/manage/event-admin/edit",
-      passedQueryParameters: event1.toJson(),
+      passedQueryParameters: eventRequestBody.toJson(),
     );
 
-    switch (createEventRequest) {
+    switch (createEventRequestResponse) {
       case Success():
         return const Success(true);
       case Failure():
@@ -282,7 +251,6 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   @override
   Future<Result<void>> uploadEventMediaFiles(
       String eventId, List<File> event) async {
-    //Todo: Update the FormData Key Value.
     FormData formData = FormData();
     for (int i = 0; i < event.length; i++) {
       final file = event[i];
@@ -301,8 +269,8 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
 
     final response = await apiCallHandler(
       httpClient: httpClient,
-      requestType: HttpRequestEnum.POST,
-      endpoint: "event/{$eventId}/content",
+      requestType: HttpRequestEnum.UPLOAD,
+      endpoint: "event/$eventId/content",
       uploadFilesFormData: formData,
     );
 

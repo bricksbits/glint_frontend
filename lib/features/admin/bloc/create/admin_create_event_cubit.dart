@@ -26,12 +26,19 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
 
   Future<void> getEventDetailsAndUpdateTheCreateEventBody(int? eventId) async {
     if (eventId == null) return;
+    emitNewState(
+      state.copyWith(
+        passedEventId: eventId,
+        isLoading: true,
+      ),
+    );
     final eventResponse = await eventRepo.getEventDetails(eventId);
     switch (eventResponse) {
       case Success<EventDetailsDomainModel>():
         final createEventBody = eventResponse.data.mapToCreateEvent();
         emitNewState(state.copyWith(
           createEventBody: createEventBody,
+          eventDetailModel: eventResponse.data,
           isLoading: false,
         ));
         break;
@@ -47,7 +54,7 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
   }
 
   void publishEvent(int? eventId) {
-    eventId != null ? updateEvent(eventId) : createEvent();
+    eventId != null ? uploadMedia() : createEvent();
   }
 
   Future<void> createEvent() async {
@@ -82,13 +89,14 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
     }
   }
 
+  //Todo: This API Is not working as expected
   Future<void> updateEvent(int eventId) async {
     var createEventBody = state.createEventBody;
     if (createEventBody != null) {
-      final response = await adminDashboardRepo.createEvent(createEventBody);
+      final response = await adminDashboardRepo.editEvent(createEventBody);
       switch (response) {
         case Success<void>():
-          emitNewState(state.copyWith(eventPublished: true));
+          uploadMedia();
           break;
         case Failure<void>():
           emitNewState(
@@ -103,25 +111,30 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
   }
 
   Future<void> pickUpImages() async {
-    final pickedImages = await imageService.pickImages(maxCount: 6);
-    emitNewState(
-      state.copyWith(
-        pictureUploaded: pickedImages.map((image) => image.file).toList(),
-      ),
-    );
+    if (state.passedEventId != null) {
+      final pickedImages = await imageService.pickImagesForEvent(
+          eventId: state.passedEventId.toString(), maxCount: 6);
+      emitNewState(
+        state.copyWith(
+          pictureUploaded: pickedImages.map((image) => image.file).toList(),
+        ),
+      );
+    }
   }
 
   Future<void> uploadMedia() async {
     var images = state.pictureUploaded.map((item) => item!).toList();
-    final imageUploadResponse =
-        await adminDashboardRepo.uploadEventMediaFiles("2", images);
-    switch (imageUploadResponse) {
-      case Success<void>():
-        emit(state.copyWith(eventPublished: true, isLoading: false));
-      case Failure<void>():
-        emit(state.copyWith(
-            isLoading: false,
-            error: "${imageUploadResponse.error}, Can't upload the media"));
+    if (state.passedEventId != null) {
+      final imageUploadResponse = await adminDashboardRepo
+          .uploadEventMediaFiles(state.passedEventId.toString(), images);
+      switch (imageUploadResponse) {
+        case Success<void>():
+          emit(state.copyWith(eventPublished: true, isLoading: false));
+        case Failure<void>():
+          emit(state.copyWith(
+              isLoading: false,
+              error: "${imageUploadResponse.error}, Can't upload the media"));
+      }
     }
   }
 

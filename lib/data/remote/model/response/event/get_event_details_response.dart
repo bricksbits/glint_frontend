@@ -73,8 +73,8 @@ class EventDetails {
     discountActivated = json['discount_activated'];
     ticketsBought = json['tickets_bought'];
     interestedUsersCount = json['interested_users_count'];
-    eventLongitude = json['event_longitude'];
-    eventLatitude = json['event_latitude'];
+    eventLongitude = (json['event_longitude'] as num).toDouble();
+    eventLatitude = (json['event_latitude'] as num).toDouble();
     startTime = json['start_time'];
     endTime = json['end_time'];
     pictureUrlList = json['picture_url_list'] != null

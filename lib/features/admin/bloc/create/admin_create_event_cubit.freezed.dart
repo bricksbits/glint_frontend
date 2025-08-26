@@ -25,6 +25,7 @@ mixin _$AdminCreateEventState {
   List<File?> get pictureUploaded => throw _privateConstructorUsedError;
   bool get eventPublished => throw _privateConstructorUsedError;
   bool get eventUpdated => throw _privateConstructorUsedError;
+  int? get passedEventId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -34,7 +35,8 @@ mixin _$AdminCreateEventState {
             EventDetailsDomainModel? eventDetailModel,
             List<File?> pictureUploaded,
             bool eventPublished,
-            bool eventUpdated)
+            bool eventUpdated,
+            int? passedEventId)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -47,7 +49,8 @@ mixin _$AdminCreateEventState {
             EventDetailsDomainModel? eventDetailModel,
             List<File?> pictureUploaded,
             bool eventPublished,
-            bool eventUpdated)?
+            bool eventUpdated,
+            int? passedEventId)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -60,7 +63,8 @@ mixin _$AdminCreateEventState {
             EventDetailsDomainModel? eventDetailModel,
             List<File?> pictureUploaded,
             bool eventPublished,
-            bool eventUpdated)?
+            bool eventUpdated,
+            int? passedEventId)?
         initial,
     required TResult orElse(),
   }) =>
@@ -102,7 +106,8 @@ abstract class $AdminCreateEventStateCopyWith<$Res> {
       EventDetailsDomainModel? eventDetailModel,
       List<File?> pictureUploaded,
       bool eventPublished,
-      bool eventUpdated});
+      bool eventUpdated,
+      int? passedEventId});
 }
 
 /// @nodoc
@@ -128,6 +133,7 @@ class _$AdminCreateEventStateCopyWithImpl<$Res,
     Object? pictureUploaded = null,
     Object? eventPublished = null,
     Object? eventUpdated = null,
+    Object? passedEventId = freezed,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -158,6 +164,10 @@ class _$AdminCreateEventStateCopyWithImpl<$Res,
           ? _value.eventUpdated
           : eventUpdated // ignore: cast_nullable_to_non_nullable
               as bool,
+      passedEventId: freezed == passedEventId
+          ? _value.passedEventId
+          : passedEventId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -177,7 +187,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       EventDetailsDomainModel? eventDetailModel,
       List<File?> pictureUploaded,
       bool eventPublished,
-      bool eventUpdated});
+      bool eventUpdated,
+      int? passedEventId});
 }
 
 /// @nodoc
@@ -200,6 +211,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? pictureUploaded = null,
     Object? eventPublished = null,
     Object? eventUpdated = null,
+    Object? passedEventId = freezed,
   }) {
     return _then(_$InitialImpl(
       isLoading: null == isLoading
@@ -230,6 +242,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.eventUpdated
           : eventUpdated // ignore: cast_nullable_to_non_nullable
               as bool,
+      passedEventId: freezed == passedEventId
+          ? _value.passedEventId
+          : passedEventId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -244,7 +260,8 @@ class _$InitialImpl implements _Initial {
       this.eventDetailModel = null,
       final List<File?> pictureUploaded = const [],
       this.eventPublished = false,
-      this.eventUpdated = false})
+      this.eventUpdated = false,
+      this.passedEventId = null})
       : _pictureUploaded = pictureUploaded;
 
   @override
@@ -274,10 +291,13 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final bool eventUpdated;
+  @override
+  @JsonKey()
+  final int? passedEventId;
 
   @override
   String toString() {
-    return 'AdminCreateEventState.initial(isLoading: $isLoading, error: $error, createEventBody: $createEventBody, eventDetailModel: $eventDetailModel, pictureUploaded: $pictureUploaded, eventPublished: $eventPublished, eventUpdated: $eventUpdated)';
+    return 'AdminCreateEventState.initial(isLoading: $isLoading, error: $error, createEventBody: $createEventBody, eventDetailModel: $eventDetailModel, pictureUploaded: $pictureUploaded, eventPublished: $eventPublished, eventUpdated: $eventUpdated, passedEventId: $passedEventId)';
   }
 
   @override
@@ -297,7 +317,9 @@ class _$InitialImpl implements _Initial {
             (identical(other.eventPublished, eventPublished) ||
                 other.eventPublished == eventPublished) &&
             (identical(other.eventUpdated, eventUpdated) ||
-                other.eventUpdated == eventUpdated));
+                other.eventUpdated == eventUpdated) &&
+            (identical(other.passedEventId, passedEventId) ||
+                other.passedEventId == passedEventId));
   }
 
   @override
@@ -309,7 +331,8 @@ class _$InitialImpl implements _Initial {
       eventDetailModel,
       const DeepCollectionEquality().hash(_pictureUploaded),
       eventPublished,
-      eventUpdated);
+      eventUpdated,
+      passedEventId);
 
   /// Create a copy of AdminCreateEventState
   /// with the given fields replaced by the non-null parameter values.
@@ -329,11 +352,12 @@ class _$InitialImpl implements _Initial {
             EventDetailsDomainModel? eventDetailModel,
             List<File?> pictureUploaded,
             bool eventPublished,
-            bool eventUpdated)
+            bool eventUpdated,
+            int? passedEventId)
         initial,
   }) {
     return initial(isLoading, error, createEventBody, eventDetailModel,
-        pictureUploaded, eventPublished, eventUpdated);
+        pictureUploaded, eventPublished, eventUpdated, passedEventId);
   }
 
   @override
@@ -346,11 +370,12 @@ class _$InitialImpl implements _Initial {
             EventDetailsDomainModel? eventDetailModel,
             List<File?> pictureUploaded,
             bool eventPublished,
-            bool eventUpdated)?
+            bool eventUpdated,
+            int? passedEventId)?
         initial,
   }) {
     return initial?.call(isLoading, error, createEventBody, eventDetailModel,
-        pictureUploaded, eventPublished, eventUpdated);
+        pictureUploaded, eventPublished, eventUpdated, passedEventId);
   }
 
   @override
@@ -363,13 +388,14 @@ class _$InitialImpl implements _Initial {
             EventDetailsDomainModel? eventDetailModel,
             List<File?> pictureUploaded,
             bool eventPublished,
-            bool eventUpdated)?
+            bool eventUpdated,
+            int? passedEventId)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
       return initial(isLoading, error, createEventBody, eventDetailModel,
-          pictureUploaded, eventPublished, eventUpdated);
+          pictureUploaded, eventPublished, eventUpdated, passedEventId);
     }
     return orElse();
   }
@@ -411,7 +437,8 @@ abstract class _Initial implements AdminCreateEventState {
       final EventDetailsDomainModel? eventDetailModel,
       final List<File?> pictureUploaded,
       final bool eventPublished,
-      final bool eventUpdated}) = _$InitialImpl;
+      final bool eventUpdated,
+      final int? passedEventId}) = _$InitialImpl;
 
   @override
   bool get isLoading;
@@ -427,6 +454,8 @@ abstract class _Initial implements AdminCreateEventState {
   bool get eventPublished;
   @override
   bool get eventUpdated;
+  @override
+  int? get passedEventId;
 
   /// Create a copy of AdminCreateEventState
   /// with the given fields replaced by the non-null parameter values.
