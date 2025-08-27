@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class AdminEventLiveScreen extends StatelessWidget {
-  const AdminEventLiveScreen({super.key});
+  const AdminEventLiveScreen({super.key, required this.eventModelArgs});
+
+  final EventListDomainModel eventModelArgs;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +45,11 @@ class AdminEventLiveScreen extends StatelessWidget {
                     : double.infinity,
                 child: Column(
                   children: [
-                    // const HotEvent(
-                    //   eventId: 1,
-                    // ),
+                    HotEvent(
+                      eventModel: eventModelArgs,
+                      getEventInfo: (eventId) {},
+                      fetchProfiles: (eventId) {},
+                    ),
                     const Gap(40.0),
                     SizedBox(
                       height: 52.0,
@@ -50,7 +57,9 @@ class AdminEventLiveScreen extends StatelessWidget {
                         customBorderRadius: 10.0,
                         backgroundColor: AppColours.primaryBlue,
                         onPressed: () {
-                          //todo - handle track event admin click
+                          context.goNamed(
+                            GlintAdminDasboardRoutes.adminPublishedEvents.name,
+                          );
                         },
                         label: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -78,7 +87,9 @@ class AdminEventLiveScreen extends StatelessWidget {
                         customBorderRadius: 10.0,
                         backgroundColor: AppColours.backgroundShade,
                         onPressed: () {
-                          //todo - handle go back event admin click
+                          context.goNamed(
+                            GlintAdminDasboardRoutes.adminHome.name,
+                          );
                         },
                         label: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

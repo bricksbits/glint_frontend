@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/features/admin/bloc/create/admin_create_event_cubit.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
@@ -83,6 +84,10 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
 
         if (state.eventUpdated) {
           context.pop();
+          context.goNamed(
+            GlintAdminDasboardRoutes.liveEvent.name,
+            extra: state.createEventBody?.mapToDomainModel(),
+          );
         }
 
         if (state.createEventBody != null) {
@@ -164,7 +169,8 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                           unUploadedFiles:
                               state.eventDetailModel?.eventCoverImageUrl !=
                                           null &&
-                                      state.eventDetailModel!.eventCoverImageUrl.isEmpty
+                                      state.eventDetailModel!.eventCoverImageUrl
+                                          .isEmpty
                                   ? state.pictureUploaded
                                   : [],
                         ),
@@ -240,17 +246,15 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
 
                             // event images upload container
                             widget.updateExistingEventId != null
-                                ? _buildEventImagesUploadContainer(
-                                    () {
-                                      context
-                                          .read<AdminCreateEventCubit>()
-                                          .pickUpImages();
-                                    },
-                                    (fileToRemove) {
-                                      // context
-                                      //     .read<AdminCreateEventCubit>()
-                                      //     .pickUpImages();
-                                    },
+                                ? _buildEventImagesUploadContainer(() {
+                                    context
+                                        .read<AdminCreateEventCubit>()
+                                        .pickUpImages();
+                                  }, (fileToRemove) {
+                                    // context
+                                    //     .read<AdminCreateEventCubit>()
+                                    //     .pickUpImages();
+                                  },
                                     context
                                         .read<AdminCreateEventCubit>()
                                         .state

@@ -401,7 +401,12 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintAdminDasboardRoutes.liveEvent.name}',
       name: GlintAdminDasboardRoutes.liveEvent.name,
-      builder: (context, state) => const AdminEventLiveScreen(),
+      builder: (context, state) {
+        final eventModel = state.extra as EventListDomainModel;
+        return AdminEventLiveScreen(
+          eventModelArgs: eventModel,
+        );
+      },
     ),
     GoRoute(
       path: '/${GlintAdminDasboardRoutes.previewEvent.name}',

@@ -23,15 +23,13 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
   final eventRepo = getIt.get<EventRepo>();
   final ImageService imageService = getIt.get<ImageService>();
 
-  AdminCreateEventCubit() : super(AdminCreateEventState.withDefaults()){
+  AdminCreateEventCubit() : super(AdminCreateEventState.withDefaults()) {
     getCurrentUser();
   }
 
-  Future<void> getCurrentUser() async{
+  Future<void> getCurrentUser() async {
     final userType = await adminDashboardRepo.getCurrentUserType();
-    emitNewState(state.copyWith(
-      currentUserType: userType
-    ));
+    emitNewState(state.copyWith(currentUserType: userType));
   }
 
   Future<void> getEventDetailsAndUpdateTheCreateEventBody(int? eventId) async {
@@ -139,7 +137,9 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
           .uploadEventMediaFiles(state.passedEventId.toString(), images);
       switch (imageUploadResponse) {
         case Success<void>():
-          emit(state.copyWith(eventPublished: true, isLoading: false));
+          emit(
+            state.copyWith(eventUpdated: true, isLoading: false),
+          );
         case Failure<void>():
           emit(state.copyWith(
               isLoading: false,
