@@ -14,9 +14,6 @@ class AdminDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String eventManagerName = 'EVENT USERNAME';
-    String eventOrganizationName = 'EVENT ORGANIZATION NAME';
-
     return BlocBuilder<AdminDashboardBloc, AdminDashboardState>(
       builder: (context, state) {
         return Scaffold(
@@ -44,7 +41,7 @@ class AdminDashboardScreen extends StatelessWidget {
                               const Gap(32.0),
                               // event manager greeting
                               Text(
-                                'Hello $eventManagerName',
+                                'Hello ${state.adminUserName}',
                                 style: AppTheme.headingThree.copyWith(
                                   fontStyle: FontStyle.italic,
                                 ),
@@ -71,7 +68,7 @@ class AdminDashboardScreen extends StatelessWidget {
                                   ),
                                   const Gap(10.0),
                                   Text(
-                                    eventOrganizationName,
+                                    state.adminOrganization,
                                     style: AppTheme.simpleBodyText.copyWith(
                                       fontWeight: FontWeight.w400,
                                     ),

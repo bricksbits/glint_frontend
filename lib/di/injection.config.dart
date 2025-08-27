@@ -152,12 +152,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i143.IsUserLoggedInUsecase>(() =>
         _i143.IsUserLoggedInUsecase(
             gh<_i274.AsyncEncryptedSharedPreferenceHelper>()));
-    gh.singleton<_i661.UserInfoRepo>(
-        () => _i321.UserInfoRepoImpl(gh<_i368.MyDioClient>()));
     gh.singleton<_i1000.AdminDashboardRepo>(() => _i72.AdminDashBoardRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          gh<_i719.ProfileDao>(),
         ));
+    gh.singleton<_i661.UserInfoRepo>(
+        () => _i321.UserInfoRepoImpl(gh<_i368.MyDioClient>()));
     gh.factory<_i972.SignInUserUseCase>(
         () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
     gh.factory<_i427.LikesDataRepo>(() => _i503.LikesDataRepoImpl(

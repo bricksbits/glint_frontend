@@ -49,7 +49,9 @@ class _GlintEventAuthAppbarState extends State<GlintEventAuthAppbar> {
             ],
           ),
           onTap: () {
-            //todo - Handle navigation edit profile
+            context.pushNamed(
+              GlintAdminDasboardRoutes.authProfile.name,
+            );
           },
         ),
         PopupMenuItem(

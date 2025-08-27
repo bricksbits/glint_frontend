@@ -4,6 +4,7 @@ import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_list_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_repo.dart';
 import 'package:glint_frontend/features/admin/bloc/super_admin_dashboard/super_admin_dashboard_bloc.dart';
+import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 part 'admin_dashboard_event.dart';
@@ -18,7 +19,7 @@ class AdminDashboardBloc
 
   AdminDashboardBloc() : super(const AdminDashboardState.initial()) {
     on<_Started>((event, emit) async {
-      // TODO: Fetch the data for the Admin Dashboard and the Edit Profile as well.
+      add(const AdminDashboardEvent.fetchAdminProfile());
       final publishedEventResult = await adminRepo.getAllPublishEvents();
       switch (publishedEventResult) {
         case Success<List<AdminEventListDomainModel>>():
@@ -55,6 +56,20 @@ class AdminDashboardBloc
           break;
       }
     });
+
+    on<_FetchAdminProfile>(
+      (event, emit) async {
+        final adminProfile = await adminRepo.getCurrentUserDetails();
+        add(
+          _EmitNewState(
+            state.copyWith(
+                adminUserName: adminProfile?.username ?? "",
+                adminOrganization: adminProfile?.occupation ?? "",
+                currentUser: adminProfile),
+          ),
+        );
+      },
+    );
 
     on<_EmitNewState>(
       (event, emit) {

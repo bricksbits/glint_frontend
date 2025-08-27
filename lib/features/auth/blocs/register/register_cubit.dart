@@ -175,7 +175,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       calculateMockDob(),
       "6.0",
       "education",
-      "occupation",
+      state.organization,
       "male",
       "female",
       "never",

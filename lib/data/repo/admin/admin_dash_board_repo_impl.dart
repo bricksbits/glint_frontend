@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
+import 'package:glint_frontend/data/local/db/entities/profile_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
@@ -19,6 +21,8 @@ import 'package:glint_frontend/domain/business_logic/models/admin/event_ticket_b
 import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_repo.dart';
+import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
+import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
@@ -26,10 +30,12 @@ import 'package:injectable/injectable.dart';
 class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   final MyDioClient httpClient;
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
+  final ProfileDao profileDao;
 
   AdminDashBoardRepoImpl(
     this.httpClient,
     this.sharedPreferenceHelper,
+    this.profileDao,
   );
 
   @override
@@ -64,11 +70,10 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   ) async {
     final createRequestBody = createEventRequest.mapToRequestBody();
     final createEventResponse = await apiCallHandler(
-      httpClient: httpClient,
-      requestType: HttpRequestEnum.POST,
-      endpoint: "/event/manage/event-admin/create",
-      requestBody: createRequestBody.toJson()
-    );
+        httpClient: httpClient,
+        requestType: HttpRequestEnum.POST,
+        endpoint: "/event/manage/event-admin/create",
+        requestBody: createRequestBody.toJson());
 
     switch (createEventResponse) {
       case Success():
@@ -284,8 +289,17 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   }
 
   @override
-  Future<UsersType> getCurrentUserType() async{
-    final currentUser = await sharedPreferenceHelper.getString(SharedPreferenceKeys.userRoleKey);
+  Future<UsersType> getCurrentUserType() async {
+    final currentUser = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.userRoleKey);
     return getUserTypeFromName(currentUser);
+  }
+
+  @override
+  Future<PeopleCardModel?> getCurrentUserDetails() async{
+    var currentUserId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
+    var currentUser = await profileDao.getProfileData(currentUserId);
+    return currentUser?.mapToPeopleUiModel();
   }
 }
