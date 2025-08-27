@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/create_event_request_body.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_detail_domain.dart';
 import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_repo.dart';
 import 'package:glint_frontend/domain/business_logic/repo/event/events_repo.dart';
@@ -22,7 +23,16 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
   final eventRepo = getIt.get<EventRepo>();
   final ImageService imageService = getIt.get<ImageService>();
 
-  AdminCreateEventCubit() : super(AdminCreateEventState.withDefaults());
+  AdminCreateEventCubit() : super(AdminCreateEventState.withDefaults()){
+    getCurrentUser();
+  }
+
+  Future<void> getCurrentUser() async{
+    final userType = await adminDashboardRepo.getCurrentUserType();
+    emitNewState(state.copyWith(
+      currentUserType: userType
+    ));
+  }
 
   Future<void> getEventDetailsAndUpdateTheCreateEventBody(int? eventId) async {
     if (eventId == null) return;

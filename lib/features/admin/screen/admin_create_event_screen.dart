@@ -8,7 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/features/admin/bloc/create/admin_create_event_cubit.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
@@ -25,11 +28,16 @@ class AdminCreateEventScreen extends StatefulWidget {
 }
 
 class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
-  final _eventNameController = TextEditingController();
-  final _actualPriceController = TextEditingController();
-  final _discountPriceController = TextEditingController();
-  final _locationController = TextEditingController();
-  final _eventDescriptionController = TextEditingController();
+  late final TextEditingController _eventNameController =
+      TextEditingController();
+  late final TextEditingController _actualPriceController =
+      TextEditingController();
+  late final TextEditingController _discountPriceController =
+      TextEditingController();
+  late final TextEditingController _locationController =
+      TextEditingController();
+  late final TextEditingController _eventDescriptionController =
+      TextEditingController();
   EventType _selectedChip = EventType.normal;
   int _selectedNumberOfPerson = 10;
   String? _selectedDate;
@@ -44,68 +52,6 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
       EventType.normal: 'Normal',
     },
   ];
-
-  void showBottomTimePicker() {
-    BottomPicker.time(
-      use24hFormat: false,
-      onSubmit: (time) {
-        String formattedTime = DateFormat('hh:mm a').format(time);
-        setState(() {
-          _selectedTime = formattedTime;
-        });
-      },
-      dismissable: true,
-      displayCloseIcon: false,
-      bottomPickerTheme: BottomPickerTheme.plumPlate,
-      pickerTitle: const SizedBox.shrink(),
-      buttonWidth: 200.0,
-      gradientColors: const [
-        AppColours.primaryBlue,
-        AppColours.purpleShade,
-      ],
-      initialTime: Time.now(),
-    ).show(context);
-  }
-
-  void showBottomDatePicker() {
-    BottomPicker.date(
-      dateOrder: DatePickerDateOrder.dmy,
-      initialDateTime: DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day + 1,
-      ),
-      pickerTextStyle: AppTheme.simpleText.copyWith(
-        fontSize: 16.0,
-      ),
-      maxDateTime: DateTime(
-        DateTime.now().year + 10,
-        DateTime.now().month,
-        DateTime.now().day,
-      ),
-      minDateTime: DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day - 1,
-      ),
-      onSubmit: (date) {
-        context.read<AdminCreateEventCubit>().eventDate(date);
-        String formattedDate = DateFormat('dd/MMM/yyyy').format(date);
-        setState(() {
-          _selectedDate = formattedDate;
-        });
-      },
-      dismissable: true,
-      displayCloseIcon: false,
-      bottomPickerTheme: BottomPickerTheme.plumPlate,
-      pickerTitle: const SizedBox.shrink(),
-      buttonWidth: 200.0,
-      gradientColors: const [
-        AppColours.primaryBlue,
-        AppColours.purpleShade,
-      ],
-    ).show(context);
-  }
 
   @override
   void dispose() {
@@ -124,39 +70,6 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         .getEventDetailsAndUpdateTheCreateEventBody(
           widget.updateExistingEventId,
         );
-
-    _eventNameController.addListener(() {
-      context
-          .read<AdminCreateEventCubit>()
-          .observeEventTitle(_eventNameController.text);
-    });
-
-    _actualPriceController.addListener(() {
-      context
-          .read<AdminCreateEventCubit>()
-          .enterEventActualPrice(int.parse(_actualPriceController.text));
-    });
-
-    _discountPriceController.addListener(() {
-      context
-          .read<AdminCreateEventCubit>()
-          .enterEventActualPrice(int.parse(_discountPriceController.text));
-    });
-
-    _eventDescriptionController.addListener(() {
-      context
-          .read<AdminCreateEventCubit>()
-          .enterEventDescription(_eventDescriptionController.text);
-    });
-
-    _locationController.addListener(() {
-      context.read<AdminCreateEventCubit>().enterEventLatLongValue(
-            38.89,
-            77.03,
-            _locationController.text,
-          );
-    });
-
     super.initState();
   }
 
@@ -232,7 +145,31 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                 // preview icon
                 GestureDetector(
                   onTap: () {
-                    // todo - add event preview functionality
+                    if (state.currentUserType == UsersType.SUPER_ADMIN) {
+                      context.pushNamed(
+                        GlintAdminDasboardRoutes.previewEvent.name,
+                        extra: EventDetailsNavArguments(
+                          eventId: null,
+                          eventDetails: state.eventDetailModel,
+                          unUploadedFiles: null,
+                        ),
+                      );
+                    }
+                    if (state.currentUserType == UsersType.ADMIN) {
+                      context.pushNamed(
+                        GlintAdminDasboardRoutes.previewEvent.name,
+                        extra: EventDetailsNavArguments(
+                          eventId: null,
+                          eventDetails: state.eventDetailModel,
+                          unUploadedFiles:
+                              state.eventDetailModel?.eventCoverImageUrl !=
+                                          null &&
+                                      state.eventDetailModel!.eventCoverImageUrl.isEmpty
+                                  ? state.pictureUploaded
+                                  : [],
+                        ),
+                      );
+                    }
                   },
                   child: Container(
                     height: 40.0,
@@ -323,7 +260,10 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                                         .state
                                         .eventDetailModel
                                         ?.eventCoverImageUrl,
-                                  )
+                                    state.eventDetailModel?.eventCoverImageUrl
+                                            .length
+                                            .toString() ??
+                                        "")
                                 : const SizedBox.shrink(),
 
                             const Gap(36.0),
@@ -367,6 +307,11 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
           controller: _eventNameController,
           borderRadius: 10.0,
           hintText: 'The Indian Food Festival',
+          onChanged: (newValue) {
+            context
+                .read<AdminCreateEventCubit>()
+                .observeEventTitle(_eventNameController.text);
+          },
         ),
       ],
     );
@@ -471,6 +416,11 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         const Gap(10.0),
         PriceInputField(
           controller: _actualPriceController,
+          onChanged: (newValue) {
+            context
+                .read<AdminCreateEventCubit>()
+                .enterEventActualPrice(int.parse(newValue));
+          },
         ),
       ],
     );
@@ -498,6 +448,10 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         const Gap(10.0),
         PriceInputField(
           controller: _discountPriceController,
+          onChanged: (discountPrice) {
+            context.read<AdminCreateEventCubit>().enterEventActualPrice(
+                int.parse(_discountPriceController.text));
+          },
         ),
       ],
     );
@@ -561,13 +515,21 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         CreateEventSuffixIconField(
           icon: Icons.location_on_outlined,
           child: TextField(
-            maxLength: 70, // todo - check if needs change
+            maxLength: 70,
+            // todo - check if needs change
             style: AppTheme.simpleText,
             decoration: const InputDecoration(
               border: InputBorder.none,
               counter: SizedBox.shrink(),
             ),
             controller: _locationController,
+            onChanged: (newLocationName) {
+              context.read<AdminCreateEventCubit>().enterEventLatLongValue(
+                    38.89,
+                    77.03,
+                    _locationController.text,
+                  );
+            },
           ),
         ),
       ],
@@ -579,6 +541,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     Function(File) onImageRemoved,
     List<File?>? selectedImagesFileList,
     List<String?>? fetchedEventImagesList,
+    String tempText,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -589,10 +552,10 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         ),
         const Gap(16.0),
         UploadEventImagesContainers(
-          onImagePickUp: onImagePickUp,
-          onImageRemoved: onImageRemoved,
           selectedImagesFileList: selectedImagesFileList,
           fetchedEventImagesList: fetchedEventImagesList,
+          onImagePickUp: onImagePickUp,
+          onImageRemoved: onImageRemoved,
         ),
       ],
     );
@@ -621,6 +584,11 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
             keyboardType: TextInputType.multiline,
             maxLines: null,
             autocorrect: true,
+            onChanged: (eventDescription) {
+              context
+                  .read<AdminCreateEventCubit>()
+                  .enterEventDescription(eventDescription);
+            },
             controller: _eventDescriptionController,
             cursorColor: AppColours.primaryBlue,
             style: AppTheme.simpleText,
@@ -636,5 +604,67 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         ),
       ],
     );
+  }
+
+  void showBottomTimePicker() {
+    BottomPicker.time(
+      use24hFormat: false,
+      onSubmit: (time) {
+        String formattedTime = DateFormat('hh:mm a').format(time);
+        setState(() {
+          _selectedTime = formattedTime;
+        });
+      },
+      dismissable: true,
+      displayCloseIcon: false,
+      bottomPickerTheme: BottomPickerTheme.plumPlate,
+      pickerTitle: const SizedBox.shrink(),
+      buttonWidth: 200.0,
+      gradientColors: const [
+        AppColours.primaryBlue,
+        AppColours.purpleShade,
+      ],
+      initialTime: Time.now(),
+    ).show(context);
+  }
+
+  void showBottomDatePicker() {
+    BottomPicker.date(
+      dateOrder: DatePickerDateOrder.dmy,
+      initialDateTime: DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day + 1,
+      ),
+      pickerTextStyle: AppTheme.simpleText.copyWith(
+        fontSize: 16.0,
+      ),
+      maxDateTime: DateTime(
+        DateTime.now().year + 10,
+        DateTime.now().month,
+        DateTime.now().day,
+      ),
+      minDateTime: DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day - 1,
+      ),
+      onSubmit: (date) {
+        context.read<AdminCreateEventCubit>().eventDate(date);
+        String formattedDate = DateFormat('dd/MMM/yyyy').format(date);
+        setState(() {
+          _selectedDate = formattedDate;
+        });
+      },
+      dismissable: true,
+      displayCloseIcon: false,
+      bottomPickerTheme: BottomPickerTheme.plumPlate,
+      pickerTitle: const SizedBox.shrink(),
+      buttonWidth: 200.0,
+      gradientColors: const [
+        AppColours.primaryBlue,
+        AppColours.purpleShade,
+      ],
+    ).show(context);
   }
 }

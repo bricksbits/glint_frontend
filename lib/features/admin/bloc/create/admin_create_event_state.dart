@@ -11,6 +11,7 @@ class AdminCreateEventState with _$AdminCreateEventState {
     @Default(false) bool eventPublished,
     @Default(false) bool eventUpdated,
     @Default(null) int? passedEventId,
+    @Default(null) UsersType? currentUserType,
   }) = _Initial;
 
   factory AdminCreateEventState.withDefaults() {

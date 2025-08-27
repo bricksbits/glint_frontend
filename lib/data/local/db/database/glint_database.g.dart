@@ -285,6 +285,11 @@ class _$ProfileDao extends ProfileDao {
   }
 
   @override
+  Future<void> clearProfileTable() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM profiles');
+  }
+
+  @override
   Future<void> insertProfile(ProfileEntity profile) async {
     await _profileEntityInsertionAdapter.insert(
         profile, OnConflictStrategy.replace);

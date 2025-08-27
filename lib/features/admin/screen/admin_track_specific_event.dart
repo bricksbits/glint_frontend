@@ -256,43 +256,6 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          child: SizedBox(
-            height: 48.0,
-            child: GlintIconElevatedButton(
-              customBorderRadius: 10.0,
-              backgroundColor: AppColours.white,
-              customBorderSide: const BorderSide(
-                color: AppColours.primaryBlue,
-                width: 1.0,
-              ),
-              onPressed: () {
-                // todo - pause event functionality
-                setState(() {
-                  eventPaused = true;
-                });
-              },
-              label: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.pause,
-                    size: 18.0,
-                    color: AppColours.primaryBlue,
-                  ),
-                  const Gap(8.0),
-                  Text(
-                    'Pause Event',
-                    style: AppTheme.simpleText.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: AppColours.primaryBlue,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
         const Gap(16.0),
         Expanded(
           child: SizedBox(
@@ -327,73 +290,6 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
             ),
           ),
         ),
-        // if (eventPaused)
-        //   Expanded(
-        //     child: SizedBox(
-        //       height: 48.0,
-        //       child: GlintIconElevatedButton(
-        //         customBorderRadius: 10.0,
-        //         backgroundColor: AppColours.primaryBlue,
-        //         onPressed: () {
-        //           setState(() {
-        //             eventPaused = false;
-        //           });
-        //         },
-        //         label: Row(
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           children: [
-        //             const Icon(
-        //               Icons.play_arrow_sharp,
-        //               size: 18.0,
-        //               color: AppColours.white,
-        //             ),
-        //             const Gap(8.0),
-        //             Text(
-        //               'Resume Event',
-        //               style: AppTheme.simpleText.copyWith(
-        //                 fontWeight: FontWeight.w600,
-        //                 color: AppColours.white,
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // if (!eventPaused)
-        //   Expanded(
-        //     child: SizedBox(
-        //       height: 48.0,
-        //       child: GlintIconElevatedButton(
-        //         customBorderRadius: 10.0,
-        //         backgroundColor: AppColours.black,
-        //         onPressed: () {
-        //           context.pushNamed(
-        //             GlintAdminDasboardRoutes.createEvent.name,
-        //             extra: eventId,
-        //           );
-        //         },
-        //         label: Row(
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           children: [
-        //             const Icon(
-        //               Icons.edit,
-        //               size: 18.0,
-        //               color: AppColours.white,
-        //             ),
-        //             const Gap(8.0),
-        //             Text(
-        //               'Edit Event',
-        //               style: AppTheme.simpleText.copyWith(
-        //                 fontWeight: FontWeight.w600,
-        //                 color: AppColours.white,
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   ),
         const Gap(16.0),
         IconButton(
           key: _menuKey,

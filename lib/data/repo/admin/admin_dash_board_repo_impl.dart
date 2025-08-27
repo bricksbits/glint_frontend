@@ -6,7 +6,6 @@ import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/approve_or_reject_request_body.dart';
-import 'package:glint_frontend/data/remote/model/request/admin/create_event_request_body.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/admin_mappers.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_interested_users_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_published_event_response.dart';
@@ -282,5 +281,11 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
           Exception("Not able to upload files currently, please try again."),
         );
     }
+  }
+
+  @override
+  Future<UsersType> getCurrentUserType() async{
+    final currentUser = await sharedPreferenceHelper.getString(SharedPreferenceKeys.userRoleKey);
+    return getUserTypeFromName(currentUser);
   }
 }

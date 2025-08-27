@@ -6,6 +6,7 @@ import 'package:glint_frontend/domain/business_logic/models/admin/event_interest
 import 'package:glint_frontend/domain/business_logic/models/admin/event_list_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_ticket_bought_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class AdminDashboardRepo {
@@ -33,4 +34,6 @@ abstract class AdminDashboardRepo {
   Future<Result<void>> rejectEvent(EventApproveOrRejectDomainModel rejectList);
 
   Future<Result<void>> uploadEventMediaFiles(String eventId, List<File> event);
+
+  Future<UsersType> getCurrentUserType();
 }

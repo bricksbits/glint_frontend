@@ -55,6 +55,7 @@ import '../domain/application_logic/auth/reset_password_with_otp_use_case.dart'
     as _i804;
 import '../domain/application_logic/auth/send_otp_use_case.dart' as _i786;
 import '../domain/application_logic/auth/sign_in_user_use_case.dart' as _i972;
+import '../domain/application_logic/logout_usecase.dart' as _i789;
 import '../domain/business_logic/repo/admin/admin_dasboard_repo.dart' as _i1000;
 import '../domain/business_logic/repo/auth/authentication_repo.dart' as _i873;
 import '../domain/business_logic/repo/auth/forgot_password_repo.dart' as _i995;
@@ -143,6 +144,11 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i995.ForgotPasswordRepo>(
         () => _i509.ForgotPasswordRepoImpl(gh<_i368.MyDioClient>()));
+    gh.lazySingleton<_i789.LogoutUserUsecase>(() => _i789.LogoutUserUsecase(
+          asyncEncryptedSharedPreferenceHelper:
+              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          dao: gh<_i719.ProfileDao>(),
+        ));
     gh.lazySingleton<_i143.IsUserLoggedInUsecase>(() =>
         _i143.IsUserLoggedInUsecase(
             gh<_i274.AsyncEncryptedSharedPreferenceHelper>()));

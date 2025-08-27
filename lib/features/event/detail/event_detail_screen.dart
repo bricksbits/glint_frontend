@@ -4,20 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 import 'package:glint_frontend/features/event/detail/event_detail_cubit.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 
+/// For User Type Users : Just pass the event Id
+/// For User Type Admin : pass the event Detail Model and file paths
+/// For User Super Admin : pass the event Id,
 class EventDetailScreen extends StatelessWidget {
   const EventDetailScreen({
     super.key,
-    required this.isEventPreviewType,
-    this.isSuperAdmin = false,
-    this.eventListDomainModel,
+    required this.eventArguments,
   });
 
-  final bool isEventPreviewType;
-  final bool isSuperAdmin;
-  final EventListDomainModel? eventListDomainModel;
+  final EventDetailsNavArguments eventArguments;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,8 @@ class EventDetailScreen extends StatelessWidget {
       'https://avatars.githubusercontent.com/u/70279771?v=4',
     ];
     return BlocProvider(
-      create: (context) => EventDetailCubit(),
+      create: (context) =>
+          EventDetailCubit()..getDetailsViaArguments(eventArguments),
       child: BlocBuilder<EventDetailCubit, EventDetailState>(
         builder: (context, state) {
           return Scaffold(
@@ -38,166 +38,181 @@ class EventDetailScreen extends StatelessWidget {
               centerTitle: state.isEventPreviewForAdmin ? false : true,
               scrolledUnderElevation: 0,
               title: Text(
-                state.isEventPreviewForAdmin
-                    ? isSuperAdmin
-                        ? 'Event Request'
-                        : 'Event Preview'
-                    : 'Event',
-                style: (state.isEventPreviewForAdmin || isSuperAdmin)
+                'Event Preview',
+                style: eventArguments.unUploadedFiles != null
                     ? AppTheme.heavyBodyText
                     : AppTheme.headingTwo.copyWith(fontSize: 20.0),
               ),
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  if (state.isEventPreviewForAdmin) const Gap(12.0),
-                  // event image
-                  if (!state.isEventPreviewForAdmin)
-                    _EventImage(
-                        imageUrl:
-                            state.eventDetails?.eventCoverImageUrl.first ?? ""),
-
-                  // todo - Implement state here for admin event profile
-                  CarouselSlider(
-                    options: CarouselOptions(
-                      height: 264,
-                      enlargeCenterPage: true,
-                      autoPlay: true,
-                    ),
-                    items:
-                        state.eventDetails?.eventCoverImageUrl.map((imageUrl) {
-                      return Image.network(
-                        imageUrl,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      );
-                    }).toList(),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            body: state.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : SingleChildScrollView(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Gap(40.0),
-                        _EventTitle(title: state.eventDetails?.eventName ?? ""),
+                        eventArguments.unUploadedFiles == null
+                            ? CarouselSlider(
+                                options: CarouselOptions(
+                                  height: 264,
+                                  enlargeCenterPage: true,
+                                  autoPlay: true,
+                                ),
+                                items: state.eventDetails?.eventCoverImageUrl
+                                    .map((imageUrl) {
+                                  return Image.network(
+                                    imageUrl,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  );
+                                }).toList(),
+                              )
+                            : const SizedBox.shrink(),
+                        eventArguments.unUploadedFiles != null
+                            ? CarouselSlider(
+                                options: CarouselOptions(
+                                  height: 264,
+                                  enlargeCenterPage: true,
+                                  autoPlay: true,
+                                ),
+                                items: eventArguments.unUploadedFiles
+                                    ?.where((item) => item != null)
+                                    .map((imageUrl) {
+                                  return Image.file(
+                                    imageUrl!,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  );
+                                }).toList(),
+                              )
+                            : const SizedBox.shrink(),
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Gap(40.0),
+                              _EventTitle(
+                                  title: state.eventDetails?.eventName ?? ""),
+                              const Gap(20.0),
+                              _EventDetails(
+                                date: state.eventDetails?.eventdate ?? "",
+                                time: state.eventDetails?.eventTime ?? "",
+                                location:
+                                    state.eventDetails?.eventLocation ?? "",
+                              ),
+                              const Gap(24.0),
+                              _EventPricing(
+                                oldPrice:
+                                    state.eventDetails?.eventOldPrice ?? "",
+                                newPrice:
+                                    state.eventDetails?.eventCurrentPrice ?? "",
+                                daysLeft: state.eventDetails?.daysLeft ?? "",
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const Gap(32.0),
+
+                        // interested profiles
+                        _BuildInterestedProfiles(
+                          interestedProfiles: interactedUsers,
+                          showProfileIconsOnly: state.isEventPreviewForAdmin,
+                        ),
+
+                        const Gap(32.0),
+
+                        // about event
+                        _AboutEvent(
+                          eventDescription:
+                              state.eventDetails?.aboutEvent ?? "",
+                        ),
+
+                        const Gap(32.0),
+
+                        // event by
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  const TextSpan(
+                                    text: 'Event by ',
+                                    style: AppTheme.simpleText,
+                                  ),
+                                  TextSpan(
+                                    text: state.eventDetails?.eventBy,
+                                    style: AppTheme.simpleText.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        // if (isSuperAdmin) ...[
+                        //   const Gap(12.0),
+                        //   const Divider(
+                        //     color: AppColours.mediumGray,
+                        //     thickness: 0.5,
+                        //   ),
+                        //   const Gap(8.0),
+                        //   Padding(
+                        //     padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        //     child: Row(
+                        //       children: [
+                        //         Expanded(
+                        //           child: SizedBox(
+                        //             height: 44.0,
+                        //             child: GlintElevatedButton(
+                        //               label: 'Accept',
+                        //               customBorderRadius: 10.0,
+                        //               customTextStyle: AppTheme.simpleText.copyWith(
+                        //                 fontWeight: FontWeight.w700,
+                        //                 color: AppColours.white,
+                        //               ),
+                        //               onPressed: () {
+                        //                 // todo - implement super admin accept functionality
+                        //               },
+                        //             ),
+                        //           ),
+                        //         ),
+                        //         const Gap(12.0),
+                        //         Expanded(
+                        //           child: SizedBox(
+                        //             height: 44.0,
+                        //             child: GlintElevatedButton(
+                        //               label: 'Reject',
+                        //               customBorderRadius: 10.0,
+                        //               backgroundColor: AppColours.white,
+                        //               customBorderSide: const BorderSide(
+                        //                 color: AppColours.rejectedColor,
+                        //                 width: 1.0,
+                        //               ),
+                        //               customTextStyle: AppTheme.simpleText.copyWith(
+                        //                 fontWeight: FontWeight.w700,
+                        //                 color: AppColours.rejectedColor,
+                        //               ),
+                        //               onPressed: () {
+                        //                 // todo - implement super admin reject functionality
+                        //               },
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ],
+                        // end of the page gap for design replication purpose
                         const Gap(20.0),
-                        _EventDetails(
-                          date: state.eventDetails?.eventdate ?? "",
-                          time: state.eventDetails?.eventTime ?? "",
-                          location: state.eventDetails?.eventLocation ?? "",
-                        ),
-                        const Gap(24.0),
-                        _EventPricing(
-                          oldPrice: state.eventDetails?.eventOldPrice ?? "",
-                          newPrice: state.eventDetails?.eventCurrentPrice ?? "",
-                          daysLeft: state.eventDetails?.daysLeft ?? "",
-                        ),
                       ],
                     ),
                   ),
-
-                  const Gap(32.0),
-
-                  // interested profiles
-                  _BuildInterestedProfiles(
-                    interestedProfiles: interactedUsers,
-                    showProfileIconsOnly: state.isEventPreviewForAdmin,
-                  ),
-
-                  const Gap(32.0),
-
-                  // about event
-                  _AboutEvent(
-                    eventDescription: state.eventDetails?.aboutEvent ?? "",
-                  ),
-
-                  // todo - implement Map (event location) ui here
-
-                  const Gap(32.0),
-
-                  // event by
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Event by ',
-                              style: AppTheme.simpleText,
-                            ),
-                            TextSpan(
-                              text: state.eventDetails?.eventBy,
-                              style: AppTheme.simpleText.copyWith(
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (isSuperAdmin) ...[
-                    const Gap(12.0),
-                    const Divider(
-                      color: AppColours.mediumGray,
-                      thickness: 0.5,
-                    ),
-                    const Gap(8.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: 44.0,
-                              child: GlintElevatedButton(
-                                label: 'Accept',
-                                customBorderRadius: 10.0,
-                                customTextStyle: AppTheme.simpleText.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColours.white,
-                                ),
-                                onPressed: () {
-                                  // todo - implement super admin accept functionality
-                                },
-                              ),
-                            ),
-                          ),
-                          const Gap(12.0),
-                          Expanded(
-                            child: SizedBox(
-                              height: 44.0,
-                              child: GlintElevatedButton(
-                                label: 'Reject',
-                                customBorderRadius: 10.0,
-                                backgroundColor: AppColours.white,
-                                customBorderSide: const BorderSide(
-                                  color: AppColours.rejectedColor,
-                                  width: 1.0,
-                                ),
-                                customTextStyle: AppTheme.simpleText.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColours.rejectedColor,
-                                ),
-                                onPressed: () {
-                                  // todo - implement super admin reject functionality
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  // end of the page gap for design replication purpose
-                  const Gap(20.0),
-                ],
-              ),
-            ),
           );
         },
       ),

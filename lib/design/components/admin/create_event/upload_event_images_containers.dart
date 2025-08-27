@@ -6,10 +6,11 @@ import 'package:glint_frontend/design/exports.dart';
 class UploadEventImagesContainers extends StatefulWidget {
   const UploadEventImagesContainers(
       {super.key,
+      required this.selectedImagesFileList,
+      required this.fetchedEventImagesList,
       required this.onImagePickUp,
       required this.onImageRemoved,
-      this.selectedImagesFileList,
-      this.fetchedEventImagesList});
+      });
 
   final VoidCallback onImagePickUp;
   final Function(File) onImageRemoved;
@@ -42,6 +43,11 @@ class UploadEventImagesContainersState
                             ? widget.selectedImagesFileList![index]
                             : null
                         : null,
+                    imageUrl: widget.fetchedEventImagesList != null
+                        ? widget.fetchedEventImagesList!.length > index
+                            ? widget.fetchedEventImagesList![index]
+                            : null
+                        : null,
                     onImagePick: () {
                       widget.onImagePickUp();
                     },
@@ -72,6 +78,11 @@ class UploadEventImagesContainersState
                   offset: Offset(index == 1 ? 0 : (index == 0 ? 4 : -4), 0),
                   child: UploadPictureContainer(
                     imageBytes: null,
+                    imageUrl: widget.fetchedEventImagesList != null
+                        ? widget.fetchedEventImagesList!.length > containerIndex
+                            ? widget.fetchedEventImagesList![containerIndex]
+                            : null
+                        : null,
                     imageFile: widget.selectedImagesFileList != null
                         ? widget.selectedImagesFileList!.length > containerIndex
                             ? widget.selectedImagesFileList![containerIndex]

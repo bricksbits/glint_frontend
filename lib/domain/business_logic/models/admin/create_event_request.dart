@@ -1,4 +1,5 @@
 import 'package:glint_frontend/data/remote/model/request/admin/create_event_request_body.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 
 class CreateEventRequestDomainModel {
   String eventName;
@@ -109,6 +110,23 @@ extension CreateEventRequestMapper on CreateEventRequestDomainModel {
       totalTickets: totalTicket,
       eventLocationName: eventLocationName,
       categoryList: ["Basic"],
+    );
+  }
+
+  EventListDomainModel mapToDomainModel() {
+    return EventListDomainModel(
+      eventId: "",
+      eventName: eventName,
+      eventCoverImageUrl: "",
+      eventdate: startDateAndTime,
+      eventTime: bookTime,
+      eventLocation: eventLocationName,
+      eventOldPrice: originalPrice.toString(),
+      eventCurrentPrice: discountedPrice.toString(),
+      daysLeft: "7",
+      peopleInterested: 0,
+      isHotEvent: isHotEvent,
+      location: {},
     );
   }
 }

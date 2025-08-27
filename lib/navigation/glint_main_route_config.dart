@@ -33,6 +33,7 @@ import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/exports.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
 import 'package:glint_frontend/features/splash/splash_screen.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/navigation/glint_authentication_routes.dart';
 import 'package:glint_frontend/navigation/glint_user_on_boarding_routes.dart';
@@ -190,10 +191,13 @@ final glintMainRoutes = GoRouter(
           path: '/${GlintEventRoutes.eventDetails.name}',
           name: GlintEventRoutes.eventDetails.name,
           builder: (context, state) {
-            var eventListDomainModel = state.extra as EventListDomainModel;
+            var eventId = state.extra as int?;
             return EventDetailScreen(
-              isEventPreviewType: false,
-              eventListDomainModel: eventListDomainModel,
+              eventArguments: EventDetailsNavArguments(
+                eventId: eventId,
+                eventDetails: null,
+                unUploadedFiles: null,
+              ),
             );
           },
         ),
@@ -402,9 +406,12 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintAdminDasboardRoutes.previewEvent.name}',
       name: GlintAdminDasboardRoutes.previewEvent.name,
-      builder: (context, state) => const EventDetailScreen(
-        isEventPreviewType: true,
-      ),
+      builder: (context, state) {
+        var eventDetailsNavArgs = state.extra as EventDetailsNavArguments;
+        return EventDetailScreen(
+          eventArguments: eventDetailsNavArgs,
+        );
+      },
     ),
   ],
 );
