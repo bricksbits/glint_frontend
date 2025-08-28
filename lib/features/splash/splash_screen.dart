@@ -26,6 +26,12 @@ class _SplashScreenState extends State<SplashScreen>
       duration: _animationDuration,
     );
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_controller.isAnimating) {
+        _controller.forward(); // Start animation only after first frame
+      }
+    });
+
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         if (_pendingNavigationRoute != null && context.mounted) {
@@ -56,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen>
       create: (context) => SplashScreenBloc()
         ..add(const SplashScreenEvent.startSplashAnimation()),
       child: BlocListener<SplashScreenBloc, SplashScreenState>(
-        listenWhen: (previous, current){
+        listenWhen: (previous, current) {
           return true;
         },
         listener: (context, state) {
