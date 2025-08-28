@@ -13,3 +13,10 @@ class EventDetailsNavArguments {
     required this.unUploadedFiles,
   });
 }
+
+class AdminCreateEventNavArguments{
+  final int? updateExistingEventId;
+  final Function(String) onReturn;
+
+  AdminCreateEventNavArguments(this.updateExistingEventId, this.onReturn);
+}

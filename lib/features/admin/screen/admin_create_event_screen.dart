@@ -19,10 +19,12 @@ import 'package:intl/intl.dart';
 enum EventType { hot, normal, notMentioned }
 
 class AdminCreateEventScreen extends StatefulWidget {
-  const AdminCreateEventScreen(
-      {super.key, required this.updateExistingEventId});
+  const AdminCreateEventScreen({
+    super.key,
+    required this.navArguments,
+  });
 
-  final int? updateExistingEventId;
+  final AdminCreateEventNavArguments? navArguments;
 
   @override
   State<AdminCreateEventScreen> createState() => _AdminCreateEventScreenState();
@@ -72,7 +74,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     context
         .read<AdminCreateEventCubit>()
         .getEventDetailsAndUpdateTheCreateEventBody(
-          widget.updateExistingEventId,
+          widget.navArguments?.updateExistingEventId,
         );
     super.initState();
   }
@@ -82,7 +84,9 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     return BlocListener<AdminCreateEventCubit, AdminCreateEventState>(
       listener: (context, state) {
         if (state.eventPublished) {
-          context.pop<bool>(true);
+          print("CALL BACK CALLED");
+          widget.navArguments?.onReturn.call("updated");
+          context.pop();
         }
 
         if (state.eventUpdated) {
@@ -138,9 +142,8 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                   // save icon
                   GestureDetector(
                     onTap: () {
-                      context
-                          .read<AdminCreateEventCubit>()
-                          .publishEvent(widget.updateExistingEventId);
+                      context.read<AdminCreateEventCubit>().publishEvent(
+                          widget.navArguments?.updateExistingEventId);
                     },
                     child: Container(
                       height: 40.0,
@@ -265,7 +268,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                               const Gap(24.0),
 
                               // event images upload container
-                              widget.updateExistingEventId != null
+                              widget.navArguments?.updateExistingEventId != null
                                   ? _buildEventImagesUploadContainer(() {
                                       context
                                           .read<AdminCreateEventCubit>()

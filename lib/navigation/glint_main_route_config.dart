@@ -397,12 +397,12 @@ final glintMainRoutes = GoRouter(
       path: '/${GlintAdminDasboardRoutes.createEvent.name}',
       name: GlintAdminDasboardRoutes.createEvent.name,
       builder: (context, state) {
-        var isExistingEvent = state.extra as int?;
+        var navArguments = state.extra as AdminCreateEventNavArguments?;
         return BlocProvider(
           lazy: true,
           create: (context) => AdminCreateEventCubit(),
           child: AdminCreateEventScreen(
-            updateExistingEventId: isExistingEvent,
+            navArguments: navArguments,
           ),
         );
       },

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/admin/bloc/track_specific_event/track_admin_event_cubit.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -264,7 +265,12 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
               onPressed: () {
                 context.pushNamed(
                   GlintAdminDasboardRoutes.createEvent.name,
-                  extra: eventId,
+                  extra: AdminCreateEventNavArguments(
+                    eventId,
+                    (_) {
+                      // Ignore this callback
+                    },
+                  ),
                 );
               },
               label: Row(

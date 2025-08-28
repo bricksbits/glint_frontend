@@ -6,6 +6,7 @@ import 'package:glint_frontend/design/components/admin/recent_event_card.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_list_domain_model.dart';
 import 'package:glint_frontend/features/admin/bloc/admin_dasboard/admin_dashboard_bloc.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -89,21 +90,23 @@ class AdminDashboardScreen extends StatelessWidget {
                                       onPressed: () async {
                                         // Popping the screen back when new event created
                                         // Should Refresh the Screen.
-                                        var shouldRefreshScreen =
-                                            await context.pushNamed<bool>(
+                                        context.pushNamed<bool>(
                                           GlintAdminDasboardRoutes
                                               .createEvent.name,
+                                          extra: AdminCreateEventNavArguments(
+                                            null,
+                                            (value) {
+                                              print(
+                                                  "REFRESH ADMIN DASHBOARD CALLED");
+                                              context
+                                                  .read<AdminDashboardBloc>()
+                                                  .add(
+                                                    const AdminDashboardEvent
+                                                        .started(),
+                                                  );
+                                            },
+                                          ),
                                         );
-
-                                        if (shouldRefreshScreen != null &&
-                                            shouldRefreshScreen) {
-                                          if (context.mounted) {
-                                            context
-                                                .read<AdminDashboardBloc>()
-                                                .add(const AdminDashboardEvent
-                                                    .fetchAdminProfile());
-                                          }
-                                        }
                                       },
                                     ),
                                   ),
