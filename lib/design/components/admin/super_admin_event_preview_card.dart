@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/pass_event_details_argument_model.dart';
 import 'package:glint_frontend/features/admin/bloc/super_admin_dashboard/super_admin_dashboard_bloc.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -95,12 +96,12 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
                   ],
                 ),
 
-                eventDisplayType != EventDisplayType.requested
-                    ? Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                          onPressed: () {
-                            context.pushNamed(
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    onPressed: () {
+                      eventDisplayType != EventDisplayType.requested
+                          ? context.pushNamed(
                               GlintAdminDasboardRoutes.trackEvent.name,
                               extra: PassEventDetailsArgumentModel(
                                 eventId: eventId,
@@ -108,16 +109,23 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
                                 eventDateAndTime: eventDate,
                                 eventLocation: eventOrganiser,
                               ),
+                            )
+                          : context.pushNamed(
+                              GlintAdminDasboardRoutes.previewEvent.name,
+                              extra: EventDetailsNavArguments(
+                                eventId: int.parse(eventId),
+                                eventDetails: null,
+                                unUploadedFiles: null,
+                              ),
                             );
-                          },
-                          icon: const Icon(
-                            Icons.arrow_forward_ios,
-                            color: AppColours.primaryBlue,
-                            size: 16.0,
-                          ),
-                        ),
-                      )
-                    : const SizedBox(),
+                    },
+                    icon: const Icon(
+                      Icons.arrow_forward_ios,
+                      color: AppColours.primaryBlue,
+                      size: 16.0,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

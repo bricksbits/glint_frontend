@@ -217,12 +217,10 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
     );
   }
 
-  void enterEventLatLongValue(
-    double? latitude,
-    double? longitude,
+  void enterEventLocationName(
     String? eventLocationName,
   ) {
-    if (latitude != null && longitude != null) {
+    if (eventLocationName != null) {
       emitNewState(
         state.copyWith(
           createEventBody: getCurrentBodyState()?.copyWith(

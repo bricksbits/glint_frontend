@@ -85,11 +85,12 @@ class EventDetailsDomainModel {
 
 extension EventDetailsToCreateEventMapper on EventDetailsDomainModel {
   CreateEventRequestDomainModel mapToCreateEvent() {
-    return CreateEventRequestDomainModel(eventName: eventName,
+    return CreateEventRequestDomainModel(
+      eventName: eventName,
         isHotEvent: false,
         eventDescription: aboutEvent,
-        eventLocationLat: 53.03,
-        eventLocationLong: 36.80,
+        eventLocationLat: 00.00,
+        eventLocationLong: 00.00,
         createdTime: eventdate,
         bookTime: eventTime,
         startDateAndTime: eventdate,

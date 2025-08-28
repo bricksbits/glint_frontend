@@ -70,6 +70,7 @@ final glintMainRoutes = GoRouter(
       routes: glintUserOnBoardingInnerRoutes,
       builder: (context, state, child) {
         return BlocProvider(
+          lazy: true,
           create: (_) => OnBoardingCubit(),
           child: child, // <-- Here it goes
         );
@@ -81,6 +82,7 @@ final glintMainRoutes = GoRouter(
       builder: (context, state) {
         var isAdmin = state.extra as bool?;
         return BlocProvider(
+          lazy: true,
           create: (context) => RegisterCubit(),
           child: CreateAccounScreen(
             isAdmin: isAdmin ?? false,
@@ -102,16 +104,20 @@ final glintMainRoutes = GoRouter(
       builder: (context, state) => MultiBlocProvider(
         providers: [
           BlocProvider<PeopleCardsBloc>(
+            lazy: true,
             create: (_) =>
                 PeopleCardsBloc()..add(const PeopleCardsEvent.started()),
           ),
           BlocProvider<ChatScreenCubit>(
+            lazy: true,
             create: (_) => ChatScreenCubit(),
           ),
           BlocProvider<EventBaseCubit>(
+            lazy: true,
             create: (_) => EventBaseCubit(),
           ),
           BlocProvider<PaymentCubit>(
+            lazy: true,
             create: (_) => PaymentCubit(),
           ),
         ],
@@ -315,6 +321,7 @@ final glintMainRoutes = GoRouter(
       ],
       builder: (context, state, child) {
         return BlocProvider(
+          lazy: true,
           create: (context) =>
               AdminDashboardBloc()..add(const AdminDashboardEvent.started()),
           child: child,
@@ -380,6 +387,7 @@ final glintMainRoutes = GoRouter(
       ],
       builder: (context, state, child) {
         return BlocProvider(
+          lazy: true,
           create: (context) => TrackAdminEventCubit(),
           child: child,
         );
@@ -391,6 +399,7 @@ final glintMainRoutes = GoRouter(
       builder: (context, state) {
         var isExistingEvent = state.extra as int?;
         return BlocProvider(
+          lazy: true,
           create: (context) => AdminCreateEventCubit(),
           child: AdminCreateEventScreen(
             updateExistingEventId: isExistingEvent,

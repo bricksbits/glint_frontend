@@ -127,7 +127,6 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
             ],
           ),
           onTap: () {
-            //todo - Handle navigation to preview event screen
             context.pushNamed(GlintAdminDasboardRoutes.previewEvent.name);
           },
         ),
@@ -147,7 +146,6 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
             ],
           ),
           onTap: () {
-            // todo - Handle end event functionality
             _showEndEventDialog(context);
           },
         ),
@@ -291,25 +289,25 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
           ),
         ),
         const Gap(16.0),
-        IconButton(
-          key: _menuKey,
-          onPressed: () {
-            final RenderBox renderBox =
-                _menuKey.currentContext!.findRenderObject() as RenderBox;
-            final Offset offset = renderBox.localToGlobal(Offset.zero);
-
-            _showMenuItems(
-              context,
-              RelativeRect.fromLTRB(
-                offset.dx,
-                offset.dy + renderBox.size.height + 12,
-                offset.dx + renderBox.size.width,
-                offset.dy + renderBox.size.height,
-              ),
-            );
-          },
-          icon: const Icon(Icons.more_vert),
-        )
+        // IconButton(
+        //   key: _menuKey,
+        //   onPressed: () {
+        //     final RenderBox renderBox =
+        //         _menuKey.currentContext!.findRenderObject() as RenderBox;
+        //     final Offset offset = renderBox.localToGlobal(Offset.zero);
+        //
+        //     _showMenuItems(
+        //       context,
+        //       RelativeRect.fromLTRB(
+        //         offset.dx,
+        //         offset.dy + renderBox.size.height + 12,
+        //         offset.dx + renderBox.size.width,
+        //         offset.dy + renderBox.size.height,
+        //       ),
+        //     );
+        //   },
+        //   icon: const Icon(Icons.more_vert),
+        // )
       ],
     );
   }

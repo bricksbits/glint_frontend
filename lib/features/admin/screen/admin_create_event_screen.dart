@@ -528,9 +528,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
             ),
             controller: _locationController,
             onChanged: (newLocationName) {
-              context.read<AdminCreateEventCubit>().enterEventLatLongValue(
-                    38.89,
-                    77.03,
+              context.read<AdminCreateEventCubit>().enterEventLocationName(
                     _locationController.text,
                   );
             },

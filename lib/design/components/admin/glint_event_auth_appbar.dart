@@ -25,7 +25,10 @@ class GlintEventAuthAppbar extends StatefulWidget
 
 class _GlintEventAuthAppbarState extends State<GlintEventAuthAppbar> {
   // show edit profile and logout popup
-  void _showProfileMenu(BuildContext context, RelativeRect position) {
+  void _showProfileMenu(
+    BuildContext context,
+    RelativeRect position,
+  ) {
     showMenu(
       context: context,
       position: position,
