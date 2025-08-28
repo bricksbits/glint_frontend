@@ -86,11 +86,24 @@ class AdminDashboardScreen extends StatelessWidget {
                                     child: _buildRedirectOption(
                                       label: 'Create Event',
                                       icon: Icons.add,
-                                      onPressed: () {
-                                        context.pushNamed(
+                                      onPressed: () async {
+                                        // Popping the screen back when new event created
+                                        // Should Refresh the Screen.
+                                        var shouldRefreshScreen =
+                                            await context.pushNamed<bool>(
                                           GlintAdminDasboardRoutes
                                               .createEvent.name,
                                         );
+
+                                        if (shouldRefreshScreen != null &&
+                                            shouldRefreshScreen) {
+                                          if (context.mounted) {
+                                            context
+                                                .read<AdminDashboardBloc>()
+                                                .add(const AdminDashboardEvent
+                                                    .fetchAdminProfile());
+                                          }
+                                        }
                                       },
                                     ),
                                   ),
@@ -139,7 +152,8 @@ class AdminDashboardScreen extends StatelessWidget {
                               state.recentEvents.isNotEmpty
                                   ? ListView.builder(
                                       shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemCount: state.recentEvents.length,
                                       itemBuilder: (context, index) {
                                         var item =

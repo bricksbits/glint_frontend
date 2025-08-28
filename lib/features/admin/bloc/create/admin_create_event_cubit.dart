@@ -200,21 +200,59 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
     );
   }
 
-  void eventDate(DateTime passedTime) {
-    var createdTime = DateTime.now().formatToStandard();
-    var bookByTime = passedTime.addAndFormat(hours: 6);
-    var startTime = passedTime.formatToStandard();
-    var endByTime = passedTime.addAndFormat(days: 2);
+  void collectEventStartDate(DateTime passedTime) {
     emitNewState(
       state.copyWith(
+        selectedStartTime: passedTime,
+      ),
+    );
+  }
+
+  void collectEventStartTime(DateTime passedTime) {
+    var currentTime = state.selectedStartTime;
+    if (currentTime != null) {
+      var newStartDateAndTime = DateTime(currentTime.year, currentTime.month,
+          currentTime.day, passedTime.hour, passedTime.minute);
+
+      emit(
+        state.copyWith(
+          selectedStartTime: newStartDateAndTime,
+          createEventBody: getCurrentBodyState()?.copyWith(
+            createdTime: DateTime.now().formatToStandard(),
+            startDateAndTime: newStartDateAndTime.formatToStandard(),
+            bookTime: newStartDateAndTime.formatToStandard(),
+          ),
+        ),
+      );
+    }
+  }
+
+  void collectEventEndDate(DateTime passedTime) {
+    emitNewState(
+      state.copyWith(
+        selectedEntTime: passedTime,
         createEventBody: getCurrentBodyState()?.copyWith(
-          createdTime: createdTime,
-          startDateAndTime: startTime,
-          bookTime: bookByTime,
-          endDateAndTime: endByTime,
+          endDateAndTime: passedTime.formatToStandard(),
         ),
       ),
     );
+  }
+
+  void collectEventEndTime(DateTime passedTime) {
+    var currentTime = state.selectedEntTime;
+    if (currentTime != null) {
+      var newEndDateAndTime = DateTime(currentTime.year, currentTime.month,
+          currentTime.day, passedTime.hour, passedTime.minute);
+
+      emit(
+        state.copyWith(
+          selectedEntTime: newEndDateAndTime,
+          createEventBody: getCurrentBodyState()?.copyWith(
+            endDateAndTime: newEndDateAndTime.formatToStandard(),
+          ),
+        ),
+      );
+    }
   }
 
   void enterEventLocationName(

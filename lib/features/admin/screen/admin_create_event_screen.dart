@@ -39,12 +39,15 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
       TextEditingController();
   late final TextEditingController _eventDescriptionController =
       TextEditingController();
+
   EventType _selectedChip = EventType.normal;
   int _selectedNumberOfPerson = 10;
-  String? _selectedDate;
-  String? _selectedTime;
 
-// functions or static vars
+  String? _selectedStartDate;
+  String? _selectedStartTime;
+  String? _selectedEndDate;
+  String? _selectedEndTime;
+
   final List<Map<EventType, String>> eventTypeOptions = [
     {
       EventType.hot: '🔥 Hot Event',
@@ -79,7 +82,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     return BlocListener<AdminCreateEventCubit, AdminCreateEventState>(
       listener: (context, state) {
         if (state.eventPublished) {
-          context.pop();
+          context.pop<bool>(true);
         }
 
         if (state.eventUpdated) {
@@ -105,179 +108,197 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
               : EventType.normal;
 
           _selectedNumberOfPerson = currentEventState?.totalTicket ?? 10;
-          _selectedDate = currentEventState?.createdTime;
-          _selectedTime = currentEventState?.startDateAndTime;
+
+          _selectedStartDate = currentEventState?.startDateAndTime;
+          _selectedStartTime = currentEventState?.startDateAndTime;
+
+          _selectedEndDate = currentEventState?.endDateAndTime;
+          _selectedEndTime = currentEventState?.endDateAndTime;
         }
       },
       child: BlocBuilder<AdminCreateEventCubit, AdminCreateEventState>(
         builder: (context, state) {
-          return Scaffold(
-            backgroundColor: AppColours.white,
-            appBar: AppBar(
-              titleSpacing: 32.0,
-              scrolledUnderElevation: 0,
-              title: const Text(
-                'Create Event',
-                style: AppTheme.heavyBodyText,
-              ),
-              centerTitle: false,
+          return GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Scaffold(
               backgroundColor: AppColours.white,
-              actions: [
-                // save icon
-                GestureDetector(
-                  onTap: () {
-                    context
-                        .read<AdminCreateEventCubit>()
-                        .publishEvent(widget.updateExistingEventId);
-                  },
-                  child: Container(
-                    height: 40.0,
-                    width: 40.0,
-                    padding: const EdgeInsets.all(12.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: AppColours.black,
-                    ),
-                    child: SvgPicture.asset(
-                      'lib/assets/icons/profile/save_icon.svg',
+              appBar: AppBar(
+                titleSpacing: 32.0,
+                scrolledUnderElevation: 0,
+                title: const Text(
+                  'Create Event',
+                  style: AppTheme.heavyBodyText,
+                ),
+                centerTitle: false,
+                backgroundColor: AppColours.white,
+                actions: [
+                  // save icon
+                  GestureDetector(
+                    onTap: () {
+                      context
+                          .read<AdminCreateEventCubit>()
+                          .publishEvent(widget.updateExistingEventId);
+                    },
+                    child: Container(
+                      height: 40.0,
+                      width: 40.0,
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: AppColours.black,
+                      ),
+                      child: SvgPicture.asset(
+                        'lib/assets/icons/profile/save_icon.svg',
+                      ),
                     ),
                   ),
-                ),
 
-                //gap
-                const Gap(12.0),
+                  //gap
+                  const Gap(12.0),
 
-                // preview icon
-                GestureDetector(
-                  onTap: () {
-                    if (state.currentUserType == UsersType.SUPER_ADMIN) {
-                      context.pushNamed(
-                        GlintAdminDasboardRoutes.previewEvent.name,
-                        extra: EventDetailsNavArguments(
-                          eventId: null,
-                          eventDetails: state.eventDetailModel,
-                          unUploadedFiles: null,
-                        ),
-                      );
-                    }
-                    if (state.currentUserType == UsersType.ADMIN) {
-                      context.pushNamed(
-                        GlintAdminDasboardRoutes.previewEvent.name,
-                        extra: EventDetailsNavArguments(
-                          eventId: null,
-                          eventDetails: state.eventDetailModel,
-                          unUploadedFiles:
-                              state.eventDetailModel?.eventCoverImageUrl !=
-                                          null &&
-                                      state.eventDetailModel!.eventCoverImageUrl
-                                          .isEmpty
-                                  ? state.pictureUploaded
-                                  : [],
-                        ),
-                      );
-                    }
-                  },
-                  child: Container(
-                    height: 40.0,
-                    width: 40.0,
-                    padding: const EdgeInsets.all(12.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: AppColours.primaryBlue,
-                    ),
-                    child: SvgPicture.asset(
-                      'lib/assets/icons/profile/eye_icon.svg',
+                  // preview icon
+                  GestureDetector(
+                    onTap: () {
+                      if (state.currentUserType == UsersType.SUPER_ADMIN) {
+                        context.pushNamed(
+                          GlintAdminDasboardRoutes.previewEvent.name,
+                          extra: EventDetailsNavArguments(
+                            eventId: null,
+                            eventDetails: state.eventDetailModel,
+                            unUploadedFiles: null,
+                          ),
+                        );
+                      }
+                      if (state.currentUserType == UsersType.ADMIN) {
+                        context.pushNamed(
+                          GlintAdminDasboardRoutes.previewEvent.name,
+                          extra: EventDetailsNavArguments(
+                            eventId: null,
+                            eventDetails: state.eventDetailModel,
+                            unUploadedFiles:
+                                state.eventDetailModel?.eventCoverImageUrl !=
+                                            null &&
+                                        state.eventDetailModel!
+                                            .eventCoverImageUrl.isEmpty
+                                    ? state.pictureUploaded
+                                    : [],
+                          ),
+                        );
+                      }
+                    },
+                    child: Container(
+                      height: 40.0,
+                      width: 40.0,
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: AppColours.primaryBlue,
+                      ),
+                      child: SvgPicture.asset(
+                        'lib/assets/icons/profile/eye_icon.svg',
+                      ),
                     ),
                   ),
-                ),
 
-                const Gap(32.0),
-              ],
+                  const Gap(32.0),
+                ],
+              ),
+              body: state.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 28.0)
+                            .copyWith(
+                          bottom: 28.0,
+                        ),
+                        child: SizedBox(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Gap(20.0),
+                              // event name text input field
+                              _buildEventNameTextField(),
+
+                              const Gap(24.0),
+
+                              // event type selector
+                              _buildEventTypeSelector(),
+
+                              const Gap(20.0),
+                              // no. of person selector
+                              _builtNumberOfPersonSelector(),
+
+                              const Gap(24.0),
+
+                              //actual price
+                              _buildActualPriceField(),
+
+                              const Gap(12.0),
+
+                              //discount price
+                              _buildDiscountPriceField(),
+
+                              const Gap(24.0),
+                              // event date picker
+                              _buildEventStartDatePicker(),
+
+                              const Gap(12.0),
+                              //event time picker
+                              _buildEventStartTimePicker(),
+
+                              const Gap(24.0),
+                              // event date picker
+                              _buildEventEndDatePicker(),
+
+                              const Gap(12.0),
+                              //event time picker
+                              _buildEventEndTimePicker(),
+
+                              const Gap(12.0),
+                              //event location picker
+                              _buildEventLocationField(),
+
+                              const Gap(24.0),
+
+                              // event images upload container
+                              widget.updateExistingEventId != null
+                                  ? _buildEventImagesUploadContainer(() {
+                                      context
+                                          .read<AdminCreateEventCubit>()
+                                          .pickUpImages();
+                                    }, (fileToRemove) {
+                                      // context
+                                      //     .read<AdminCreateEventCubit>()
+                                      //     .pickUpImages();
+                                    },
+                                      context
+                                          .read<AdminCreateEventCubit>()
+                                          .state
+                                          .pictureUploaded,
+                                      context
+                                          .read<AdminCreateEventCubit>()
+                                          .state
+                                          .eventDetailModel
+                                          ?.eventCoverImageUrl,
+                                      state.eventDetailModel?.eventCoverImageUrl
+                                              .length
+                                              .toString() ??
+                                          "")
+                                  : const SizedBox.shrink(),
+
+                              const Gap(36.0),
+                              // enter event description
+                              _buildEventDescriptionField(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
             ),
-            body: state.isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : SingleChildScrollView(
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 28.0).copyWith(
-                        bottom: 28.0,
-                      ),
-                      child: SizedBox(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Gap(20.0),
-                            // event name text input field
-                            _buildEventNameTextField(),
-
-                            const Gap(24.0),
-
-                            // event type selector
-                            _buildEventTypeSelector(),
-
-                            const Gap(20.0),
-                            // no. of person selector
-                            _builtNumberOfPersonSelector(),
-
-                            const Gap(24.0),
-
-                            //actual price
-                            _buildActualPriceField(),
-
-                            const Gap(12.0),
-
-                            //discount price
-                            _buildDiscountPriceField(),
-
-                            const Gap(24.0),
-                            // event date picker
-                            _buildEventDatePicker(),
-
-                            const Gap(12.0),
-                            //event time picker
-                            _buildEventTimePicker(),
-
-                            const Gap(12.0),
-                            //event location picker
-                            _buildEventLocationField(),
-
-                            const Gap(24.0),
-
-                            // event images upload container
-                            widget.updateExistingEventId != null
-                                ? _buildEventImagesUploadContainer(() {
-                                    context
-                                        .read<AdminCreateEventCubit>()
-                                        .pickUpImages();
-                                  }, (fileToRemove) {
-                                    // context
-                                    //     .read<AdminCreateEventCubit>()
-                                    //     .pickUpImages();
-                                  },
-                                    context
-                                        .read<AdminCreateEventCubit>()
-                                        .state
-                                        .pictureUploaded,
-                                    context
-                                        .read<AdminCreateEventCubit>()
-                                        .state
-                                        .eventDetailModel
-                                        ?.eventCoverImageUrl,
-                                    state.eventDetailModel?.eventCoverImageUrl
-                                            .length
-                                            .toString() ??
-                                        "")
-                                : const SizedBox.shrink(),
-
-                            const Gap(36.0),
-                            // enter event description
-                            _buildEventDescriptionField(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
           );
         },
       ),
@@ -453,7 +474,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         PriceInputField(
           controller: _discountPriceController,
           onChanged: (discountPrice) {
-            context.read<AdminCreateEventCubit>().enterEventActualPrice(
+            context.read<AdminCreateEventCubit>().enterEventDiscountedPrice(
                 int.parse(_discountPriceController.text));
           },
         ),
@@ -461,22 +482,33 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     );
   }
 
-  Widget _buildEventDatePicker() {
+  Widget _buildEventStartDatePicker() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Select Event Date*',
+          'Select Event Start Date*',
           style: AppTheme.smallBodyText,
         ),
         const Gap(10.0),
         CreateEventSuffixIconField(
-          onPressed: showBottomDatePicker,
+          onPressed: () {
+            showBottomDatePicker((startDate) {
+              context
+                  .read<AdminCreateEventCubit>()
+                  .collectEventStartDate(startDate);
+              String formattedDate =
+                  DateFormat('dd/MMM/yyyy').format(startDate);
+              setState(() {
+                _selectedStartDate = formattedDate;
+              });
+            });
+          },
           assetPath: 'lib/assets/icons/calendar_icon.svg',
-          child: _selectedDate == null
+          child: _selectedStartDate == null
               ? const SizedBox.shrink()
               : Text(
-                  _selectedDate!,
+                  _selectedStartDate!,
                   style: AppTheme.simpleText,
                 ),
         ),
@@ -484,22 +516,98 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     );
   }
 
-  Widget _buildEventTimePicker() {
+  Widget _buildEventStartTimePicker() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Select Event Time*',
+          'Select Event Start Time*',
           style: AppTheme.smallBodyText,
         ),
         const Gap(10.0),
         CreateEventSuffixIconField(
-          onPressed: showBottomTimePicker,
+          onPressed: () {
+            showBottomTimePicker((timeSelected) {
+              context.read<AdminCreateEventCubit>().collectEventStartTime(
+                    timeSelected,
+                  );
+              String formattedTime = DateFormat('hh:mm a').format(timeSelected);
+              setState(() {
+                _selectedStartTime = formattedTime;
+              });
+            });
+          },
           icon: Icons.timelapse_rounded,
-          child: _selectedTime == null
+          child: _selectedStartTime == null
               ? const SizedBox.shrink()
               : Text(
-                  _selectedTime!,
+                  _selectedStartTime!,
+                  style: AppTheme.simpleText,
+                ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEventEndDatePicker() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Select Event End Date*',
+          style: AppTheme.smallBodyText,
+        ),
+        const Gap(10.0),
+        CreateEventSuffixIconField(
+          onPressed: () {
+            showBottomDatePicker((endDate) {
+              context
+                  .read<AdminCreateEventCubit>()
+                  .collectEventEndDate(endDate);
+              String formattedDate = DateFormat('dd/MMM/yyyy').format(endDate);
+              setState(() {
+                _selectedEndDate = formattedDate;
+              });
+            });
+          },
+          assetPath: 'lib/assets/icons/calendar_icon.svg',
+          child: _selectedEndDate == null
+              ? const SizedBox.shrink()
+              : Text(
+                  _selectedEndDate!,
+                  style: AppTheme.simpleText,
+                ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEventEndTimePicker() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Select Event Start Time*',
+          style: AppTheme.smallBodyText,
+        ),
+        const Gap(10.0),
+        CreateEventSuffixIconField(
+          onPressed: () {
+            showBottomTimePicker((endTime) {
+              context
+                  .read<AdminCreateEventCubit>()
+                  .collectEventEndTime(endTime);
+              String formattedTime = DateFormat('hh:mm a').format(endTime);
+              setState(() {
+                _selectedEndTime = formattedTime;
+              });
+            });
+          },
+          icon: Icons.timelapse_rounded,
+          child: _selectedEndTime == null
+              ? const SizedBox.shrink()
+              : Text(
+                  _selectedEndTime!,
                   style: AppTheme.simpleText,
                 ),
         ),
@@ -584,7 +692,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
           ),
           child: TextField(
             keyboardType: TextInputType.multiline,
-            maxLines: null,
+            maxLines: 20,
             autocorrect: true,
             onChanged: (eventDescription) {
               context
@@ -608,14 +716,13 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     );
   }
 
-  void showBottomTimePicker() {
+  void showBottomTimePicker(
+    Function(DateTime) onTimeSelected,
+  ) {
     BottomPicker.time(
       use24hFormat: false,
       onSubmit: (time) {
-        String formattedTime = DateFormat('hh:mm a').format(time);
-        setState(() {
-          _selectedTime = formattedTime;
-        });
+        onTimeSelected(time);
       },
       dismissable: true,
       displayCloseIcon: false,
@@ -630,7 +737,9 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     ).show(context);
   }
 
-  void showBottomDatePicker() {
+  void showBottomDatePicker(
+    Function(DateTime) onDateSelected,
+  ) {
     BottomPicker.date(
       dateOrder: DatePickerDateOrder.dmy,
       initialDateTime: DateTime(
@@ -652,11 +761,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         DateTime.now().day - 1,
       ),
       onSubmit: (date) {
-        context.read<AdminCreateEventCubit>().eventDate(date);
-        String formattedDate = DateFormat('dd/MMM/yyyy').format(date);
-        setState(() {
-          _selectedDate = formattedDate;
-        });
+        onDateSelected(date);
       },
       dismissable: true,
       displayCloseIcon: false,

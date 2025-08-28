@@ -92,7 +92,7 @@ extension EventDetailsToCreateEventMapper on EventDetailsDomainModel {
         eventLocationLat: 00.00,
         eventLocationLong: 00.00,
         createdTime: eventdate,
-        bookTime: eventTime,
+        bookTime: eventdate,
         startDateAndTime: eventdate,
         endDateAndTime: eventTime,
         originalPrice: int.parse(eventOldPrice),

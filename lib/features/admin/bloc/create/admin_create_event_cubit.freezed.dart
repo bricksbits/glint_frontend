@@ -27,6 +27,8 @@ mixin _$AdminCreateEventState {
   bool get eventUpdated => throw _privateConstructorUsedError;
   int? get passedEventId => throw _privateConstructorUsedError;
   UsersType? get currentUserType => throw _privateConstructorUsedError;
+  DateTime? get selectedStartTime => throw _privateConstructorUsedError;
+  DateTime? get selectedEntTime => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -38,7 +40,9 @@ mixin _$AdminCreateEventState {
             bool eventPublished,
             bool eventUpdated,
             int? passedEventId,
-            UsersType? currentUserType)
+            UsersType? currentUserType,
+            DateTime? selectedStartTime,
+            DateTime? selectedEntTime)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -53,7 +57,9 @@ mixin _$AdminCreateEventState {
             bool eventPublished,
             bool eventUpdated,
             int? passedEventId,
-            UsersType? currentUserType)?
+            UsersType? currentUserType,
+            DateTime? selectedStartTime,
+            DateTime? selectedEntTime)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -68,7 +74,9 @@ mixin _$AdminCreateEventState {
             bool eventPublished,
             bool eventUpdated,
             int? passedEventId,
-            UsersType? currentUserType)?
+            UsersType? currentUserType,
+            DateTime? selectedStartTime,
+            DateTime? selectedEntTime)?
         initial,
     required TResult orElse(),
   }) =>
@@ -112,7 +120,9 @@ abstract class $AdminCreateEventStateCopyWith<$Res> {
       bool eventPublished,
       bool eventUpdated,
       int? passedEventId,
-      UsersType? currentUserType});
+      UsersType? currentUserType,
+      DateTime? selectedStartTime,
+      DateTime? selectedEntTime});
 }
 
 /// @nodoc
@@ -140,6 +150,8 @@ class _$AdminCreateEventStateCopyWithImpl<$Res,
     Object? eventUpdated = null,
     Object? passedEventId = freezed,
     Object? currentUserType = freezed,
+    Object? selectedStartTime = freezed,
+    Object? selectedEntTime = freezed,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -178,6 +190,14 @@ class _$AdminCreateEventStateCopyWithImpl<$Res,
           ? _value.currentUserType
           : currentUserType // ignore: cast_nullable_to_non_nullable
               as UsersType?,
+      selectedStartTime: freezed == selectedStartTime
+          ? _value.selectedStartTime
+          : selectedStartTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      selectedEntTime: freezed == selectedEntTime
+          ? _value.selectedEntTime
+          : selectedEntTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -199,7 +219,9 @@ abstract class _$$InitialImplCopyWith<$Res>
       bool eventPublished,
       bool eventUpdated,
       int? passedEventId,
-      UsersType? currentUserType});
+      UsersType? currentUserType,
+      DateTime? selectedStartTime,
+      DateTime? selectedEntTime});
 }
 
 /// @nodoc
@@ -224,6 +246,8 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? eventUpdated = null,
     Object? passedEventId = freezed,
     Object? currentUserType = freezed,
+    Object? selectedStartTime = freezed,
+    Object? selectedEntTime = freezed,
   }) {
     return _then(_$InitialImpl(
       isLoading: null == isLoading
@@ -262,6 +286,14 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.currentUserType
           : currentUserType // ignore: cast_nullable_to_non_nullable
               as UsersType?,
+      selectedStartTime: freezed == selectedStartTime
+          ? _value.selectedStartTime
+          : selectedStartTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      selectedEntTime: freezed == selectedEntTime
+          ? _value.selectedEntTime
+          : selectedEntTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -278,7 +310,9 @@ class _$InitialImpl implements _Initial {
       this.eventPublished = false,
       this.eventUpdated = false,
       this.passedEventId = null,
-      this.currentUserType = null})
+      this.currentUserType = null,
+      this.selectedStartTime = null,
+      this.selectedEntTime = null})
       : _pictureUploaded = pictureUploaded;
 
   @override
@@ -314,10 +348,16 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final UsersType? currentUserType;
+  @override
+  @JsonKey()
+  final DateTime? selectedStartTime;
+  @override
+  @JsonKey()
+  final DateTime? selectedEntTime;
 
   @override
   String toString() {
-    return 'AdminCreateEventState.initial(isLoading: $isLoading, error: $error, createEventBody: $createEventBody, eventDetailModel: $eventDetailModel, pictureUploaded: $pictureUploaded, eventPublished: $eventPublished, eventUpdated: $eventUpdated, passedEventId: $passedEventId, currentUserType: $currentUserType)';
+    return 'AdminCreateEventState.initial(isLoading: $isLoading, error: $error, createEventBody: $createEventBody, eventDetailModel: $eventDetailModel, pictureUploaded: $pictureUploaded, eventPublished: $eventPublished, eventUpdated: $eventUpdated, passedEventId: $passedEventId, currentUserType: $currentUserType, selectedStartTime: $selectedStartTime, selectedEntTime: $selectedEntTime)';
   }
 
   @override
@@ -341,7 +381,11 @@ class _$InitialImpl implements _Initial {
             (identical(other.passedEventId, passedEventId) ||
                 other.passedEventId == passedEventId) &&
             (identical(other.currentUserType, currentUserType) ||
-                other.currentUserType == currentUserType));
+                other.currentUserType == currentUserType) &&
+            (identical(other.selectedStartTime, selectedStartTime) ||
+                other.selectedStartTime == selectedStartTime) &&
+            (identical(other.selectedEntTime, selectedEntTime) ||
+                other.selectedEntTime == selectedEntTime));
   }
 
   @override
@@ -355,7 +399,9 @@ class _$InitialImpl implements _Initial {
       eventPublished,
       eventUpdated,
       passedEventId,
-      currentUserType);
+      currentUserType,
+      selectedStartTime,
+      selectedEntTime);
 
   /// Create a copy of AdminCreateEventState
   /// with the given fields replaced by the non-null parameter values.
@@ -377,7 +423,9 @@ class _$InitialImpl implements _Initial {
             bool eventPublished,
             bool eventUpdated,
             int? passedEventId,
-            UsersType? currentUserType)
+            UsersType? currentUserType,
+            DateTime? selectedStartTime,
+            DateTime? selectedEntTime)
         initial,
   }) {
     return initial(
@@ -389,7 +437,9 @@ class _$InitialImpl implements _Initial {
         eventPublished,
         eventUpdated,
         passedEventId,
-        currentUserType);
+        currentUserType,
+        selectedStartTime,
+        selectedEntTime);
   }
 
   @override
@@ -404,7 +454,9 @@ class _$InitialImpl implements _Initial {
             bool eventPublished,
             bool eventUpdated,
             int? passedEventId,
-            UsersType? currentUserType)?
+            UsersType? currentUserType,
+            DateTime? selectedStartTime,
+            DateTime? selectedEntTime)?
         initial,
   }) {
     return initial?.call(
@@ -416,7 +468,9 @@ class _$InitialImpl implements _Initial {
         eventPublished,
         eventUpdated,
         passedEventId,
-        currentUserType);
+        currentUserType,
+        selectedStartTime,
+        selectedEntTime);
   }
 
   @override
@@ -431,7 +485,9 @@ class _$InitialImpl implements _Initial {
             bool eventPublished,
             bool eventUpdated,
             int? passedEventId,
-            UsersType? currentUserType)?
+            UsersType? currentUserType,
+            DateTime? selectedStartTime,
+            DateTime? selectedEntTime)?
         initial,
     required TResult orElse(),
   }) {
@@ -445,7 +501,9 @@ class _$InitialImpl implements _Initial {
           eventPublished,
           eventUpdated,
           passedEventId,
-          currentUserType);
+          currentUserType,
+          selectedStartTime,
+          selectedEntTime);
     }
     return orElse();
   }
@@ -489,7 +547,9 @@ abstract class _Initial implements AdminCreateEventState {
       final bool eventPublished,
       final bool eventUpdated,
       final int? passedEventId,
-      final UsersType? currentUserType}) = _$InitialImpl;
+      final UsersType? currentUserType,
+      final DateTime? selectedStartTime,
+      final DateTime? selectedEntTime}) = _$InitialImpl;
 
   @override
   bool get isLoading;
@@ -509,6 +569,10 @@ abstract class _Initial implements AdminCreateEventState {
   int? get passedEventId;
   @override
   UsersType? get currentUserType;
+  @override
+  DateTime? get selectedStartTime;
+  @override
+  DateTime? get selectedEntTime;
 
   /// Create a copy of AdminCreateEventState
   /// with the given fields replaced by the non-null parameter values.
