@@ -118,7 +118,7 @@ class AsyncEncryptedSharedPreferenceHelper {
       case 'user':
         userType = UsersType.USER;
         break;
-      case 'admin':
+      case 'event admin':
         userType = UsersType.ADMIN;
         break;
       case 'super admin':

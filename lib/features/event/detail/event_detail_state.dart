@@ -7,5 +7,6 @@ class EventDetailState with _$EventDetailState {
     @Default(null) EventDetailsDomainModel? eventDetails,
     @Default(true) bool isLoading,
     @Default(false) bool isEventPreviewForAdmin,
+    @Default(null) List<File>? unUploadFiles,
   }) = _Initial;
 }

@@ -66,7 +66,7 @@ class _EventsListScreenState extends State<EventsListScreen> {
                       getEventInfo: (eventId) {
                         context.pushNamed(
                           "/${GlintMainRoutes.event.name}/${GlintEventRoutes.eventDetails.name}",
-                          extra: event,
+                          extra: event.eventId,
                         );
                       },
                       fetchProfiles: (eventId) {

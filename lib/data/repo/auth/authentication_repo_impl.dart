@@ -91,10 +91,26 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
             ),
           );
         }
-        sharedPreferenceHelper.saveUserData(accessToken, refreshToken,
-            streamToken, userId.toString(), userName);
-        sharedPreferenceHelper
+        await sharedPreferenceHelper.saveUserData(
+          accessToken,
+          refreshToken,
+          streamToken,
+          userId.toString(),
+          userName,
+        );
+
+        await sharedPreferenceHelper
             .saveUserType(successResponse.profile?.userRole ?? "user");
+
+        await sharedPreferenceHelper.saveString(
+          SharedPreferenceKeys.adminUserOrganizationKey,
+          successResponse.profile?.occupation ?? "Event Manager",
+        );
+
+        await sharedPreferenceHelper.saveString(
+          SharedPreferenceKeys.adminUserEmailKey,
+          loginRequestBody.email ?? "",
+        );
 
         return Success(successResponse);
       case Failure():

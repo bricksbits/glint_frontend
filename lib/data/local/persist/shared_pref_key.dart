@@ -14,4 +14,9 @@ class SharedPreferenceKeys {
   // location
   static const String userLatitudeKey = 'userLatitude';
   static const String userLongitudeKey = 'userLongitude';
+
+  // Admin
+  static const String adminUserOrganizationKey = "adminOrganization";
+  static const String adminUserEmailKey = "adminEmail";
+  static const String adminUserContactKey = "adminContact";
 }

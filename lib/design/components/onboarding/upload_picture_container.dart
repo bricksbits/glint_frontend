@@ -25,7 +25,7 @@ class UploadPictureContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final bool hasImage = imageFile != null || imageBytes != null;
+    final bool hasImage = imageFile != null || imageUrl != null;
 
     final defaultBorder = BorderSide(
       color: isDP

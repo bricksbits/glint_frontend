@@ -1,11 +1,21 @@
-import 'dart:typed_data'; // Import for Uint8List
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
-import 'package:image_picker/image_picker.dart';
 
 class UploadEventImagesContainers extends StatefulWidget {
-  const UploadEventImagesContainers({super.key});
+  const UploadEventImagesContainers(
+      {super.key,
+      required this.selectedImagesFileList,
+      required this.fetchedEventImagesList,
+      required this.onImagePickUp,
+      required this.onImageRemoved,
+      });
+
+  final VoidCallback onImagePickUp;
+  final Function(File) onImageRemoved;
+  final List<File?>? selectedImagesFileList;
+  final List<String?>? fetchedEventImagesList;
 
   @override
   State createState() => UploadEventImagesContainersState();
@@ -13,32 +23,6 @@ class UploadEventImagesContainers extends StatefulWidget {
 
 class UploadEventImagesContainersState
     extends State<UploadEventImagesContainers> {
-  final ImagePicker _picker = ImagePicker();
-  final List<Uint8List> _images = [];
-
-  Future<void> _pickImages() async {
-    final List<XFile> pickedFiles = await _picker.pickMultiImage(limit: 6);
-
-    if (pickedFiles.isNotEmpty) {
-      int maxImages = 6;
-      List<Uint8List> newImages = List.from(_images);
-
-      for (var file in pickedFiles) {
-        if (newImages.length < maxImages) {
-          Uint8List bytes = await file.readAsBytes();
-          newImages.add(bytes);
-        } else {
-          break;
-        }
-      }
-
-      setState(() {
-        _images.clear();
-        _images.addAll(newImages);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -53,12 +37,28 @@ class UploadEventImagesContainersState
                 child: Transform.translate(
                   offset: Offset(index == 1 ? 0 : (index == 0 ? 4 : -4), 0),
                   child: UploadPictureContainer(
-                    imageBytes: _images.length > index ? _images[index] : null,
-                    onImagePick: _pickImages,
+                    imageBytes: null,
+                    imageFile: widget.selectedImagesFileList != null
+                        ? widget.selectedImagesFileList!.length > index
+                            ? widget.selectedImagesFileList![index]
+                            : null
+                        : null,
+                    imageUrl: widget.fetchedEventImagesList != null
+                        ? widget.fetchedEventImagesList!.length > index
+                            ? widget.fetchedEventImagesList![index]
+                            : null
+                        : null,
+                    onImagePick: () {
+                      widget.onImagePickUp();
+                    },
                     onRemoveImage: () {
-                      setState(() {
-                        _images.removeAt(index);
-                      });
+                      var file =
+                          widget.selectedImagesFileList!.elementAt(index);
+                      if (file != null) {
+                        widget.onImageRemoved(
+                          file,
+                        );
+                      }
                     },
                   ),
                 ),
@@ -77,16 +77,28 @@ class UploadEventImagesContainersState
                 child: Transform.translate(
                   offset: Offset(index == 1 ? 0 : (index == 0 ? 4 : -4), 0),
                   child: UploadPictureContainer(
-                    imageBytes: _images.length > containerIndex
-                        ? _images[containerIndex]
+                    imageBytes: null,
+                    imageUrl: widget.fetchedEventImagesList != null
+                        ? widget.fetchedEventImagesList!.length > containerIndex
+                            ? widget.fetchedEventImagesList![containerIndex]
+                            : null
                         : null,
-                    onImagePick: _pickImages,
+                    imageFile: widget.selectedImagesFileList != null
+                        ? widget.selectedImagesFileList!.length > containerIndex
+                            ? widget.selectedImagesFileList![containerIndex]
+                            : null
+                        : null,
+                    onImagePick: () {
+                      widget.onImagePickUp();
+                    },
                     onRemoveImage: () {
-                      setState(
-                        () {
-                          _images.removeAt(index);
-                        },
-                      );
+                      var file = widget.selectedImagesFileList!
+                          .elementAt(containerIndex);
+                      if (file != null) {
+                        widget.onImageRemoved(
+                          file,
+                        );
+                      }
                     },
                   ),
                 ),

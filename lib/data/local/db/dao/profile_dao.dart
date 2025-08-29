@@ -26,4 +26,6 @@ abstract class ProfileDao {
   @Query("DELETE FROM profiles WHERE userId is :passedId")
   Future<void> deleteOnBoardingProfile(String passedId);
 
+  @Query('DELETE FROM profiles')
+  Future<void> clearProfileTable();
 }

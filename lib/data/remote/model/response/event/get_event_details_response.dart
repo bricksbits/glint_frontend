@@ -73,13 +73,16 @@ class EventDetails {
     discountActivated = json['discount_activated'];
     ticketsBought = json['tickets_bought'];
     interestedUsersCount = json['interested_users_count'];
-    eventLongitude = json['event_longitude'];
-    eventLatitude = json['event_latitude'];
+    eventLongitude = (json['event_longitude'] as num).toDouble();
+    eventLatitude = (json['event_latitude'] as num).toDouble();
     startTime = json['start_time'];
     endTime = json['end_time'];
-    pictureUrlList = json['picture_url_list'] != null
-        ? json['picture_url_list'].cast<String>()
-        : [];
+    if (json['picture_url_list'] != null) {
+      pictureUrlList = [];
+      json['picture_url_list'].forEach((v) {
+        pictureUrlList?.add(PictureUrlList.fromJson(v));
+      });
+    }
     videoUrlList = json['video_url_list'] != null
         ? json['video_url_list'].cast<String>()
         : [];
@@ -99,7 +102,7 @@ class EventDetails {
   double? eventLatitude;
   String? startTime;
   String? endTime;
-  List<String>? pictureUrlList;
+  List<PictureUrlList>? pictureUrlList;
   List<String>? videoUrlList;
 
   EventDetails copyWith({
@@ -117,7 +120,7 @@ class EventDetails {
     double? eventLatitude,
     String? startTime,
     String? endTime,
-    List<String>? pictureUrlList,
+    List<PictureUrlList>? pictureUrlList,
     List<String>? videoUrlList,
   }) =>
       EventDetails(
@@ -157,7 +160,9 @@ class EventDetails {
     map['event_latitude'] = eventLatitude;
     map['start_time'] = startTime;
     map['end_time'] = endTime;
-    map['picture_url_list'] = pictureUrlList;
+    if (pictureUrlList != null) {
+      map['picture_url_list'] = pictureUrlList?.map((v) => v.toJson()).toList();
+    }
     map['video_url_list'] = videoUrlList;
     return map;
   }
@@ -166,12 +171,16 @@ class EventDetails {
 extension EventDetailsMapper on GetEventDetailsResponse {
   EventDetailsDomainModel mapToDomain() {
     final detail = eventDetails;
+    var images = detail?.pictureUrlList
+        ?.where((item) => item.presignedUrl != null)
+        .map((item) => item.presignedUrl!)
+        .toList();
     return EventDetailsDomainModel(
         eventId: detail?.coordinatorUserId.toString() ?? "",
         eventName: detail?.eventName ?? "",
-        eventCoverImageUrl: detail?.pictureUrlList ?? [],
-        eventdate: detail?.endTime ?? "",
-        eventTime: detail?.startTime ?? "",
+        eventCoverImageUrl: images ?? [],
+        eventdate: detail?.startTime ?? "",
+        eventTime: detail?.endTime ?? "",
         eventLocation: "Location - ",
         eventOldPrice: detail?.ticketPrice.toString() ?? "",
         eventCurrentPrice: detail?.discountTicketPrice.toString() ?? "",
@@ -183,6 +192,42 @@ extension EventDetailsMapper on GetEventDetailsResponse {
           "long": detail?.eventLongitude.toString() ?? ""
         },
         eventBy: "Event By - ");
+  }
+}
+
+PictureUrlList pictureUrlListFromJson(String str) =>
+    PictureUrlList.fromJson(json.decode(str));
+
+String pictureUrlListToJson(PictureUrlList data) => json.encode(data.toJson());
+
+class PictureUrlList {
+  PictureUrlList({
+    this.presignedUrl,
+    this.fileExtension,
+  });
+
+  PictureUrlList.fromJson(dynamic json) {
+    presignedUrl = json['presigned_url'];
+    fileExtension = json['file_extension'];
+  }
+
+  String? presignedUrl;
+  String? fileExtension;
+
+  PictureUrlList copyWith({
+    String? presignedUrl,
+    String? fileExtension,
+  }) =>
+      PictureUrlList(
+        presignedUrl: presignedUrl ?? this.presignedUrl,
+        fileExtension: fileExtension ?? this.fileExtension,
+      );
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['presigned_url'] = presignedUrl;
+    map['file_extension'] = fileExtension;
+    return map;
   }
 }
 

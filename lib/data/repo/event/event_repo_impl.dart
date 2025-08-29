@@ -1,4 +1,3 @@
-import 'package:encrypt_shared_preferences/provider.dart';
 import 'package:glint_frontend/data/local/db/dao/event_like_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/user_event_like_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';

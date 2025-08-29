@@ -21,13 +21,15 @@ mixin _$EventDetailState {
       throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   bool get isEventPreviewForAdmin => throw _privateConstructorUsedError;
+  List<File>? get unUploadFiles => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
             int? selectedEventId,
             EventDetailsDomainModel? eventDetails,
             bool isLoading,
-            bool isEventPreviewForAdmin)
+            bool isEventPreviewForAdmin,
+            List<File>? unUploadFiles)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -37,7 +39,8 @@ mixin _$EventDetailState {
             int? selectedEventId,
             EventDetailsDomainModel? eventDetails,
             bool isLoading,
-            bool isEventPreviewForAdmin)?
+            bool isEventPreviewForAdmin,
+            List<File>? unUploadFiles)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -47,7 +50,8 @@ mixin _$EventDetailState {
             int? selectedEventId,
             EventDetailsDomainModel? eventDetails,
             bool isLoading,
-            bool isEventPreviewForAdmin)?
+            bool isEventPreviewForAdmin,
+            List<File>? unUploadFiles)?
         initial,
     required TResult orElse(),
   }) =>
@@ -86,7 +90,8 @@ abstract class $EventDetailStateCopyWith<$Res> {
       {int? selectedEventId,
       EventDetailsDomainModel? eventDetails,
       bool isLoading,
-      bool isEventPreviewForAdmin});
+      bool isEventPreviewForAdmin,
+      List<File>? unUploadFiles});
 }
 
 /// @nodoc
@@ -108,6 +113,7 @@ class _$EventDetailStateCopyWithImpl<$Res, $Val extends EventDetailState>
     Object? eventDetails = freezed,
     Object? isLoading = null,
     Object? isEventPreviewForAdmin = null,
+    Object? unUploadFiles = freezed,
   }) {
     return _then(_value.copyWith(
       selectedEventId: freezed == selectedEventId
@@ -126,6 +132,10 @@ class _$EventDetailStateCopyWithImpl<$Res, $Val extends EventDetailState>
           ? _value.isEventPreviewForAdmin
           : isEventPreviewForAdmin // ignore: cast_nullable_to_non_nullable
               as bool,
+      unUploadFiles: freezed == unUploadFiles
+          ? _value.unUploadFiles
+          : unUploadFiles // ignore: cast_nullable_to_non_nullable
+              as List<File>?,
     ) as $Val);
   }
 }
@@ -142,7 +152,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       {int? selectedEventId,
       EventDetailsDomainModel? eventDetails,
       bool isLoading,
-      bool isEventPreviewForAdmin});
+      bool isEventPreviewForAdmin,
+      List<File>? unUploadFiles});
 }
 
 /// @nodoc
@@ -162,6 +173,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? eventDetails = freezed,
     Object? isLoading = null,
     Object? isEventPreviewForAdmin = null,
+    Object? unUploadFiles = freezed,
   }) {
     return _then(_$InitialImpl(
       selectedEventId: freezed == selectedEventId
@@ -180,6 +192,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.isEventPreviewForAdmin
           : isEventPreviewForAdmin // ignore: cast_nullable_to_non_nullable
               as bool,
+      unUploadFiles: freezed == unUploadFiles
+          ? _value._unUploadFiles
+          : unUploadFiles // ignore: cast_nullable_to_non_nullable
+              as List<File>?,
     ));
   }
 }
@@ -191,7 +207,9 @@ class _$InitialImpl implements _Initial {
       {this.selectedEventId = null,
       this.eventDetails = null,
       this.isLoading = true,
-      this.isEventPreviewForAdmin = false});
+      this.isEventPreviewForAdmin = false,
+      final List<File>? unUploadFiles = null})
+      : _unUploadFiles = unUploadFiles;
 
   @override
   @JsonKey()
@@ -205,10 +223,20 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final bool isEventPreviewForAdmin;
+  final List<File>? _unUploadFiles;
+  @override
+  @JsonKey()
+  List<File>? get unUploadFiles {
+    final value = _unUploadFiles;
+    if (value == null) return null;
+    if (_unUploadFiles is EqualUnmodifiableListView) return _unUploadFiles;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'EventDetailState.initial(selectedEventId: $selectedEventId, eventDetails: $eventDetails, isLoading: $isLoading, isEventPreviewForAdmin: $isEventPreviewForAdmin)';
+    return 'EventDetailState.initial(selectedEventId: $selectedEventId, eventDetails: $eventDetails, isLoading: $isLoading, isEventPreviewForAdmin: $isEventPreviewForAdmin, unUploadFiles: $unUploadFiles)';
   }
 
   @override
@@ -223,12 +251,19 @@ class _$InitialImpl implements _Initial {
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.isEventPreviewForAdmin, isEventPreviewForAdmin) ||
-                other.isEventPreviewForAdmin == isEventPreviewForAdmin));
+                other.isEventPreviewForAdmin == isEventPreviewForAdmin) &&
+            const DeepCollectionEquality()
+                .equals(other._unUploadFiles, _unUploadFiles));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, selectedEventId, eventDetails,
-      isLoading, isEventPreviewForAdmin);
+  int get hashCode => Object.hash(
+      runtimeType,
+      selectedEventId,
+      eventDetails,
+      isLoading,
+      isEventPreviewForAdmin,
+      const DeepCollectionEquality().hash(_unUploadFiles));
 
   /// Create a copy of EventDetailState
   /// with the given fields replaced by the non-null parameter values.
@@ -245,11 +280,12 @@ class _$InitialImpl implements _Initial {
             int? selectedEventId,
             EventDetailsDomainModel? eventDetails,
             bool isLoading,
-            bool isEventPreviewForAdmin)
+            bool isEventPreviewForAdmin,
+            List<File>? unUploadFiles)
         initial,
   }) {
-    return initial(
-        selectedEventId, eventDetails, isLoading, isEventPreviewForAdmin);
+    return initial(selectedEventId, eventDetails, isLoading,
+        isEventPreviewForAdmin, unUploadFiles);
   }
 
   @override
@@ -259,11 +295,12 @@ class _$InitialImpl implements _Initial {
             int? selectedEventId,
             EventDetailsDomainModel? eventDetails,
             bool isLoading,
-            bool isEventPreviewForAdmin)?
+            bool isEventPreviewForAdmin,
+            List<File>? unUploadFiles)?
         initial,
   }) {
-    return initial?.call(
-        selectedEventId, eventDetails, isLoading, isEventPreviewForAdmin);
+    return initial?.call(selectedEventId, eventDetails, isLoading,
+        isEventPreviewForAdmin, unUploadFiles);
   }
 
   @override
@@ -273,13 +310,14 @@ class _$InitialImpl implements _Initial {
             int? selectedEventId,
             EventDetailsDomainModel? eventDetails,
             bool isLoading,
-            bool isEventPreviewForAdmin)?
+            bool isEventPreviewForAdmin,
+            List<File>? unUploadFiles)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(
-          selectedEventId, eventDetails, isLoading, isEventPreviewForAdmin);
+      return initial(selectedEventId, eventDetails, isLoading,
+          isEventPreviewForAdmin, unUploadFiles);
     }
     return orElse();
   }
@@ -318,7 +356,8 @@ abstract class _Initial implements EventDetailState {
       {final int? selectedEventId,
       final EventDetailsDomainModel? eventDetails,
       final bool isLoading,
-      final bool isEventPreviewForAdmin}) = _$InitialImpl;
+      final bool isEventPreviewForAdmin,
+      final List<File>? unUploadFiles}) = _$InitialImpl;
 
   @override
   int? get selectedEventId;
@@ -328,6 +367,8 @@ abstract class _Initial implements EventDetailState {
   bool get isLoading;
   @override
   bool get isEventPreviewForAdmin;
+  @override
+  List<File>? get unUploadFiles;
 
   /// Create a copy of EventDetailState
   /// with the given fields replaced by the non-null parameter values.

@@ -16,10 +16,8 @@ class StarterScreen extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 20.0),
         child: Column(
           children: [
-            // picture asset here
-            // todo - glint (fix this image rendering)
-            SvgPicture.asset(
-              'lib/assets/images/auth/auth-screen-grouped.svg',
+            Image.asset(
+              'lib/assets/images/auth/auth-screen-grouped.png',
             ),
             const Expanded(
               child: Padding(
@@ -29,10 +27,6 @@ class StarterScreen extends StatelessWidget {
                   children: [
                     _AuthHeader(),
                     Gap(16.0),
-                    Text(
-                      'Why wait? Dive into a world of potential matches and discover the chemistry you\'ve been looking for',
-                      style: AppTheme.simpleText,
-                    ),
                     Spacer(),
                     _AuthButtons(),
                   ],
@@ -123,6 +117,22 @@ class _AuthButtons extends StatelessWidget {
               customTextStyle: AppTheme.simpleBodyText,
               onPressed: () {
                 context.go("/${GlintBoardingRoutes.boarding.name}");
+              },
+            ),
+          ),
+          const Gap(12.0),
+          SizedBox(
+            width: double.infinity,
+            child: GlintElevatedButton(
+              label: 'Create Admin Account',
+              backgroundColor: AppColours.white,
+              customBorderRadius: 30.0,
+              customTextStyle: AppTheme.simpleBodyText,
+              onPressed: () {
+                context.go(
+                  "/${GlintMainRoutes.register.name}",
+                  extra: true,
+                );
               },
             ),
           ),

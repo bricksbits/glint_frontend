@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/pass_event_details_argument_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
+import 'package:glint_frontend/features/admin/bloc/admin_dasboard/admin_dashboard_bloc.dart';
+import 'package:glint_frontend/features/admin/bloc/create/admin_create_event_cubit.dart';
 import 'package:glint_frontend/features/admin/bloc/track_specific_event/track_admin_event_cubit.dart';
+import 'package:glint_frontend/features/admin/screen/admin_dashboard_screen.dart';
+import 'package:glint_frontend/features/admin/screen/admin_track_event_screen.dart';
 import 'package:glint_frontend/features/admin/screen/super_admin_dashboard_screen.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
@@ -29,6 +33,7 @@ import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/exports.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
 import 'package:glint_frontend/features/splash/splash_screen.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/navigation/glint_authentication_routes.dart';
 import 'package:glint_frontend/navigation/glint_user_on_boarding_routes.dart';
@@ -65,6 +70,7 @@ final glintMainRoutes = GoRouter(
       routes: glintUserOnBoardingInnerRoutes,
       builder: (context, state, child) {
         return BlocProvider(
+          lazy: true,
           create: (_) => OnBoardingCubit(),
           child: child, // <-- Here it goes
         );
@@ -74,9 +80,13 @@ final glintMainRoutes = GoRouter(
       path: '/${GlintMainRoutes.register.name}',
       name: GlintMainRoutes.register.name,
       builder: (context, state) {
+        var isAdmin = state.extra as bool?;
         return BlocProvider(
+          lazy: true,
           create: (context) => RegisterCubit(),
-          child: const CreateAccounScreen(),
+          child: CreateAccounScreen(
+            isAdmin: isAdmin ?? false,
+          ),
         );
       },
     ),
@@ -94,16 +104,20 @@ final glintMainRoutes = GoRouter(
       builder: (context, state) => MultiBlocProvider(
         providers: [
           BlocProvider<PeopleCardsBloc>(
+            lazy: true,
             create: (_) =>
                 PeopleCardsBloc()..add(const PeopleCardsEvent.started()),
           ),
           BlocProvider<ChatScreenCubit>(
+            lazy: true,
             create: (_) => ChatScreenCubit(),
           ),
           BlocProvider<EventBaseCubit>(
+            lazy: true,
             create: (_) => EventBaseCubit(),
           ),
           BlocProvider<PaymentCubit>(
+            lazy: true,
             create: (_) => PaymentCubit(),
           ),
         ],
@@ -183,10 +197,13 @@ final glintMainRoutes = GoRouter(
           path: '/${GlintEventRoutes.eventDetails.name}',
           name: GlintEventRoutes.eventDetails.name,
           builder: (context, state) {
-            var eventListDomainModel = state.extra as EventListDomainModel;
+            var eventId = state.extra as int?;
             return EventDetailScreen(
-              isEventPreviewType: false,
-              eventListDomainModel: eventListDomainModel,
+              eventArguments: EventDetailsNavArguments(
+                eventId: eventId,
+                eventDetails: null,
+                unUploadedFiles: null,
+              ),
             );
           },
         ),
@@ -256,14 +273,59 @@ final glintMainRoutes = GoRouter(
       },
     ),
     GoRoute(
-      path: '/${GlintAdminDasboardRoutes.adminHome.name}',
-      name: GlintAdminDasboardRoutes.adminHome.name,
+      path: '/${GlintAdminDasboardRoutes.superAdminHome.name}',
+      name: GlintAdminDasboardRoutes.superAdminHome.name,
       builder: (context, state) {
         return const SuperAdminDashboardScreen();
-        // final isSuperAdmin = false;
-        // return isSuperAdmin
-        //     ?
-        //     : const AdminDashboardScreen();
+      },
+    ),
+    ShellRoute(
+      navigatorKey: adminDashboardKey,
+      routes: [
+        GoRoute(
+          path: '/${GlintAdminDasboardRoutes.adminHome.name}',
+          name: GlintAdminDasboardRoutes.adminHome.name,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: BlocProvider.value(
+                value: context.read<AdminDashboardBloc>(),
+                child: const AdminDashboardScreen(),
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/${GlintAdminDasboardRoutes.adminPublishedEvents.name}',
+          name: GlintAdminDasboardRoutes.adminPublishedEvents.name,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: BlocProvider.value(
+                value: context.read<AdminDashboardBloc>(),
+                child: const AdminTrackEventScreen(),
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/${GlintAdminDasboardRoutes.authProfile.name}',
+          name: GlintAdminDasboardRoutes.authProfile.name,
+          pageBuilder: (context, state) {
+            return MaterialPage(
+              child: BlocProvider.value(
+                value: context.read<AdminDashboardBloc>(),
+                child: const AdminEditProfileScreen(),
+              ),
+            );
+          },
+        ),
+      ],
+      builder: (context, state, child) {
+        return BlocProvider(
+          lazy: true,
+          create: (context) =>
+              AdminDashboardBloc()..add(const AdminDashboardEvent.started()),
+          child: child,
+        );
       },
     ),
     ShellRoute(
@@ -325,6 +387,7 @@ final glintMainRoutes = GoRouter(
       ],
       builder: (context, state, child) {
         return BlocProvider(
+          lazy: true,
           create: (context) => TrackAdminEventCubit(),
           child: child,
         );
@@ -333,24 +396,36 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintAdminDasboardRoutes.createEvent.name}',
       name: GlintAdminDasboardRoutes.createEvent.name,
-      builder: (context, state) => const AdminCreateEventScreen(),
-    ),
-    GoRoute(
-      path: '/${GlintAdminDasboardRoutes.authProfile.name}',
-      name: GlintAdminDasboardRoutes.authProfile.name,
-      builder: (context, state) => const AdminEditProfileScreen(),
+      builder: (context, state) {
+        var navArguments = state.extra as AdminCreateEventNavArguments?;
+        return BlocProvider(
+          lazy: true,
+          create: (context) => AdminCreateEventCubit(),
+          child: AdminCreateEventScreen(
+            navArguments: navArguments,
+          ),
+        );
+      },
     ),
     GoRoute(
       path: '/${GlintAdminDasboardRoutes.liveEvent.name}',
       name: GlintAdminDasboardRoutes.liveEvent.name,
-      builder: (context, state) => const AdminEventLiveScreen(),
+      builder: (context, state) {
+        final eventModel = state.extra as EventListDomainModel;
+        return AdminEventLiveScreen(
+          eventModelArgs: eventModel,
+        );
+      },
     ),
     GoRoute(
       path: '/${GlintAdminDasboardRoutes.previewEvent.name}',
       name: GlintAdminDasboardRoutes.previewEvent.name,
-      builder: (context, state) => const EventDetailScreen(
-        isEventPreviewType: true,
-      ),
+      builder: (context, state) {
+        var eventDetailsNavArgs = state.extra as EventDetailsNavArguments;
+        return EventDetailScreen(
+          eventArguments: eventDetailsNavArgs,
+        );
+      },
     ),
   ],
 );

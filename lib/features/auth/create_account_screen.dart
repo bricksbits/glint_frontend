@@ -11,15 +11,15 @@ import 'package:go_router/go_router.dart';
 import '../onboarding/on_boarding_cubit.dart';
 
 class CreateAccounScreen extends StatefulWidget {
-  const CreateAccounScreen({super.key});
+  final bool isAdmin;
+
+  const CreateAccounScreen({super.key, required this.isAdmin});
 
   @override
   State<CreateAccounScreen> createState() => _CreateAccounScreenState();
 }
 
 class _CreateAccounScreenState extends State<CreateAccounScreen> {
-  final bool isAdmin = false;
-
   final _nameController = TextEditingController();
   final _contactController = TextEditingController();
   final _emailController = TextEditingController();
@@ -84,7 +84,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 // Handle Login tap
-                context.read<RegisterCubit>().registerUser();
+                // context.read<RegisterCubit>().registerUser();
               },
           ),
         ],
@@ -101,6 +101,10 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
     _passwordController.addListener(() {
       context.read<RegisterCubit>().enteredPassword(_passwordController.text);
     });
+
+    _nameController.addListener((){
+      context.read<RegisterCubit>().enteredUserName(_nameController.text);
+    });
     super.initState();
   }
 
@@ -110,7 +114,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
       listener: (context, state) {
         if (state.isRegisteredSuccessfully) {
           if (context.mounted) {
-            context.goNamed(GlintMainRoutes.home.name);
+            context.goNamed(state.navigateToRoute);
           }
         } else {
           print("Listening to RegisterCubit, ${state.toString()}");
@@ -120,7 +124,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: AppColours.white,
-            appBar: isAdmin
+            appBar: widget.isAdmin
                 ? const GlintEventAuthAppbar()
                 : AppBar(backgroundColor: AppColours.white),
             body: state.isLoading
@@ -128,16 +132,16 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                     child: CircularProgressIndicator(),
                   )
                 : AuthStackedIllustrationScreen(
-                    isAdmin: isAdmin,
+                    isAdmin: widget.isAdmin,
                     body: Column(
                       children: [
-                        if (!isAdmin)
+                        if (!widget.isAdmin)
                           Center(
                             child: SvgPicture.asset(
                                 'lib/assets/images/auth/glint_create_account.svg'),
                           ),
                         const Gap(40.0),
-                        if (isAdmin)
+                        if (widget.isAdmin)
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 40.0),
@@ -190,10 +194,11 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                                   GlintAuthActionButton(
                                     label: 'Register',
                                     onPressed: () {
-                                      context.go(
-                                          "/${GlintMainRoutes.auth.name}/${GlintAuthRoutes.resetPassword.name}");
+                                      context
+                                          .read<RegisterCubit>()
+                                          .registerAsAAdmin();
                                       debugPrint(
-                                        'register button pressed',
+                                        'Admin register button pressed',
                                       );
                                     },
                                   ),
@@ -206,7 +211,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                               ),
                             ),
                           ),
-                        if (!isAdmin) ...[
+                        if (!widget.isAdmin) ...[
                           _buildTextField(
                             controller: _emailController,
                             type: IconTextFieldType.email,

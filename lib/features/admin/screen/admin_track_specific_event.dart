@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/admin/bloc/track_specific_event/track_admin_event_cubit.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -70,7 +71,10 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
                         const Gap(36.0),
 
                         // action buttons
-                        _buildEventActionButtons(context),
+                        _buildEventActionButtons(
+                          context,
+                          widget.eventId,
+                        ),
 
                         const Gap(24.0),
 
@@ -124,7 +128,6 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
             ],
           ),
           onTap: () {
-            //todo - Handle navigation to preview event screen
             context.pushNamed(GlintAdminDasboardRoutes.previewEvent.name);
           },
         ),
@@ -144,7 +147,6 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
             ],
           ),
           onTap: () {
-            // todo - Handle end event functionality
             _showEndEventDialog(context);
           },
         ),
@@ -246,39 +248,45 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
     );
   }
 
-  Widget _buildEventActionButtons(BuildContext context) {
+  Widget _buildEventActionButtons(
+    BuildContext context,
+    int? eventId,
+  ) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        const Gap(16.0),
         Expanded(
           child: SizedBox(
             height: 48.0,
             child: GlintIconElevatedButton(
               customBorderRadius: 10.0,
-              backgroundColor: AppColours.white,
-              customBorderSide: const BorderSide(
-                color: AppColours.primaryBlue,
-                width: 1.0,
-              ),
+              backgroundColor: AppColours.black,
               onPressed: () {
-                // todo - pause event functionality
-                setState(() {
-                  eventPaused = true;
-                });
+                context.pushNamed(
+                  GlintAdminDasboardRoutes.createEvent.name,
+                  extra: AdminCreateEventNavArguments(
+                    eventId,
+                    (_) {
+                      // Ignore this callback
+                    },
+                  ),
+                );
               },
               label: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(
-                    Icons.pause,
+                    Icons.edit,
                     size: 18.0,
-                    color: AppColours.primaryBlue,
+                    color: AppColours.white,
                   ),
                   const Gap(8.0),
                   Text(
-                    'Pause Event',
+                    'Edit Event',
                     style: AppTheme.simpleText.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: AppColours.primaryBlue,
+                      fontWeight: FontWeight.w600,
+                      color: AppColours.white,
                     ),
                   ),
                 ],
@@ -287,91 +295,25 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
           ),
         ),
         const Gap(16.0),
-        if (eventPaused)
-          Expanded(
-            child: SizedBox(
-              height: 48.0,
-              child: GlintIconElevatedButton(
-                customBorderRadius: 10.0,
-                backgroundColor: AppColours.primaryBlue,
-                onPressed: () {
-                  // todo - edit event functionality
-                  setState(() {
-                    eventPaused = false;
-                  });
-                },
-                label: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.play_arrow_sharp,
-                      size: 18.0,
-                      color: AppColours.white,
-                    ),
-                    const Gap(8.0),
-                    Text(
-                      'Resume Event',
-                      style: AppTheme.simpleText.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: AppColours.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        if (!eventPaused)
-          Expanded(
-            child: SizedBox(
-              height: 48.0,
-              child: GlintIconElevatedButton(
-                customBorderRadius: 10.0,
-                backgroundColor: AppColours.black,
-                onPressed: () {
-                  // todo - edit event functionality
-                },
-                label: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.edit,
-                      size: 18.0,
-                      color: AppColours.white,
-                    ),
-                    const Gap(8.0),
-                    Text(
-                      'Edit Event',
-                      style: AppTheme.simpleText.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: AppColours.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        const Gap(16.0),
-        IconButton(
-          key: _menuKey,
-          onPressed: () {
-            final RenderBox renderBox =
-                _menuKey.currentContext!.findRenderObject() as RenderBox;
-            final Offset offset = renderBox.localToGlobal(Offset.zero);
-
-            _showMenuItems(
-              context,
-              RelativeRect.fromLTRB(
-                offset.dx,
-                offset.dy + renderBox.size.height + 12,
-                offset.dx + renderBox.size.width,
-                offset.dy + renderBox.size.height,
-              ),
-            );
-          },
-          icon: const Icon(Icons.more_vert),
-        )
+        // IconButton(
+        //   key: _menuKey,
+        //   onPressed: () {
+        //     final RenderBox renderBox =
+        //         _menuKey.currentContext!.findRenderObject() as RenderBox;
+        //     final Offset offset = renderBox.localToGlobal(Offset.zero);
+        //
+        //     _showMenuItems(
+        //       context,
+        //       RelativeRect.fromLTRB(
+        //         offset.dx,
+        //         offset.dy + renderBox.size.height + 12,
+        //         offset.dx + renderBox.size.width,
+        //         offset.dy + renderBox.size.height,
+        //       ),
+        //     );
+        //   },
+        //   icon: const Icon(Icons.more_vert),
+        // )
       ],
     );
   }

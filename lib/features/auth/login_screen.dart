@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       break;
                     case UsersType.SUPER_ADMIN:
                       myContext
-                          .go("/${GlintAdminDasboardRoutes.adminHome.name}");
+                          .go("/${GlintAdminDasboardRoutes.superAdminHome.name}");
                       break;
                   }
                 }
@@ -255,7 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 const targetScreen = GlintMainRoutes.register;
-                context.goNamed(targetScreen.name);
+                context.goNamed(targetScreen.name,extra: false);
               },
           ),
         ],

@@ -40,16 +40,22 @@ import '../domain/application_logic/admin/get_all_events_use_case.dart'
     as _i1027;
 import '../domain/application_logic/admin/get_all_interested_users_use_case.dart'
     as _i386;
+import '../domain/application_logic/admin/get_all_publish_events_use_case.dart'
+    as _i38;
 import '../domain/application_logic/admin/get_all_ticket_bought_users_use_case.dart'
     as _i907;
+import '../domain/application_logic/admin/publish_event_use_case.dart' as _i354;
 import '../domain/application_logic/admin/reject_published_event_usecase.dart'
     as _i579;
+import '../domain/application_logic/admin/update_publish_event_use_case.dart'
+    as _i130;
 import '../domain/application_logic/auth/is_user_logged_in_use_case.dart'
     as _i143;
 import '../domain/application_logic/auth/reset_password_with_otp_use_case.dart'
     as _i804;
 import '../domain/application_logic/auth/send_otp_use_case.dart' as _i786;
 import '../domain/application_logic/auth/sign_in_user_use_case.dart' as _i972;
+import '../domain/application_logic/logout_usecase.dart' as _i789;
 import '../domain/business_logic/repo/admin/admin_dasboard_repo.dart' as _i1000;
 import '../domain/business_logic/repo/auth/authentication_repo.dart' as _i873;
 import '../domain/business_logic/repo/auth/forgot_password_repo.dart' as _i995;
@@ -138,9 +144,19 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i995.ForgotPasswordRepo>(
         () => _i509.ForgotPasswordRepoImpl(gh<_i368.MyDioClient>()));
+    gh.lazySingleton<_i789.LogoutUserUsecase>(() => _i789.LogoutUserUsecase(
+          asyncEncryptedSharedPreferenceHelper:
+              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          dao: gh<_i719.ProfileDao>(),
+        ));
     gh.lazySingleton<_i143.IsUserLoggedInUsecase>(() =>
         _i143.IsUserLoggedInUsecase(
             gh<_i274.AsyncEncryptedSharedPreferenceHelper>()));
+    gh.singleton<_i1000.AdminDashboardRepo>(() => _i72.AdminDashBoardRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          gh<_i719.ProfileDao>(),
+        ));
     gh.singleton<_i661.UserInfoRepo>(
         () => _i321.UserInfoRepoImpl(gh<_i368.MyDioClient>()));
     gh.factory<_i972.SignInUserUseCase>(
@@ -155,8 +171,6 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i235.PaymentRepo>(
         () => _i854.PaymentRepoImpl(gh<_i368.MyDioClient>()));
-    gh.singleton<_i1000.AdminDashboardRepo>(
-        () => _i72.AdminDashBoardRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i678.PeopleRepo>(() => _i955.PeopleRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
@@ -172,6 +186,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i786.SendOtpUseCase(gh<_i995.ForgotPasswordRepo>()));
     gh.factory<_i804.ResetPasswordWithOtpUseCase>(() =>
         _i804.ResetPasswordWithOtpUseCase(gh<_i995.ForgotPasswordRepo>()));
+    gh.lazySingleton<_i130.PublishEventUseCase>(
+        () => _i130.PublishEventUseCase(gh<_i1000.AdminDashboardRepo>()));
+    gh.lazySingleton<_i38.GetAllPublishEventsUsecase>(
+        () => _i38.GetAllPublishEventsUsecase(gh<_i1000.AdminDashboardRepo>()));
+    gh.lazySingleton<_i354.PublishEventUseCase>(
+        () => _i354.PublishEventUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i1027.GetAllEventsUsecase>(
         () => _i1027.GetAllEventsUsecase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i907.GetAllTicketBoughtUsersUseCase>(() =>

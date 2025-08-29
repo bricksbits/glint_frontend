@@ -118,14 +118,14 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
                     ? null
                     : () {
                         final otp = _codeController.text;
-
-                        context.go(
-                          "/${GlintAdminDasboardRoutes.adminAuth.name}/${GlintAuthRoutes.recreatePassword.name}",
-                          extra: {
-                            'email': widget.email!,
-                            'otp': otp,
-                          },
-                        );
+                        // Todo: Handle the Navigation here
+                        // context.go(
+                        //   "/${GlintAdminDasboardRoutes.adminAuth.name}/${GlintAuthRoutes.recreatePassword.name}",
+                        //   extra: {
+                        //     'email': widget.email!,
+                        //     'otp': otp,
+                        //   },
+                        // );
                         debugPrint('confirm otp button pressed');
                       },
               ),

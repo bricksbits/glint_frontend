@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:get_it/get_it.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/application_logic/logout_usecase.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class GlintEventAuthAppbar extends StatefulWidget
     implements PreferredSizeWidget {
@@ -21,7 +25,10 @@ class GlintEventAuthAppbar extends StatefulWidget
 
 class _GlintEventAuthAppbarState extends State<GlintEventAuthAppbar> {
   // show edit profile and logout popup
-  void _showProfileMenu(BuildContext context, RelativeRect position) {
+  void _showProfileMenu(
+    BuildContext context,
+    RelativeRect position,
+  ) {
     showMenu(
       context: context,
       position: position,
@@ -45,7 +52,9 @@ class _GlintEventAuthAppbarState extends State<GlintEventAuthAppbar> {
             ],
           ),
           onTap: () {
-            //todo - Handle navigation edit profile
+            context.pushNamed(
+              GlintAdminDasboardRoutes.authProfile.name,
+            );
           },
         ),
         PopupMenuItem(
@@ -71,8 +80,13 @@ class _GlintEventAuthAppbarState extends State<GlintEventAuthAppbar> {
               title: 'Logout Account?',
               subtitle: 'Are you sure you want to logout?',
               buttonText: 'Yes, Logout',
-              onAccept: () {
-                // todo - handle logout
+              onAccept: () async {
+                final loginUseCase = GetIt.instance.get<LogoutUserUsecase>();
+                loginUseCase.perform((success) {
+                  if (success != null && success) {
+                    context.goNamed(GlintMainRoutes.auth.name);
+                  }
+                }, (error) {}, () {});
               },
             );
           },

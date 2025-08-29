@@ -30,7 +30,9 @@ class SuperAdminDashboardBloc
         approveEventUseCase.perform((isApproved) {
           if (isApproved != null && isApproved) {
             final itemSelected = state.requestEvents
-                .where((eventModel) => eventModel.eventId == selectedEventId)
+                .where(
+                  (eventModel) => eventModel.eventId == selectedEventId,
+                )
                 .toList(growable: false);
             if (itemSelected.isNotEmpty) {
               var requestEventModified = state.requestEvents.toList();
@@ -40,9 +42,9 @@ class SuperAdminDashboardBloc
               add(
                 _UpdateStates(
                   state.copyWith(
-                    liveEvents: liveEventModified,
-                    requestEvents: requestEventModified,
-                  ),
+                      liveEvents: liveEventModified,
+                      requestEvents: requestEventModified,
+                      currentSelectedList: requestEventModified),
                 ),
               );
             }
@@ -82,7 +84,10 @@ class SuperAdminDashboardBloc
               requestEventListModified.remove(itemSelected.first);
               add(
                 _UpdateStates(
-                  state.copyWith(requestEvents: requestEventListModified),
+                  state.copyWith(
+                    requestEvents: requestEventListModified,
+                    currentSelectedList: requestEventListModified,
+                  ),
                 ),
               );
             }
