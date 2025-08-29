@@ -1,16 +1,32 @@
-# glint_frontend
+# Flutter Project - Developer Build Guide
 
-FE works for the Glint Products
+All builds are now provided as **runnable shell scripts** (`.sh`) inside the `scripts/` folder.  
+Open any script in Android Studio / IntelliJ, and you will see the ▶️ run button in the gutter.  
+Alternatively, run them from terminal with `./scripts/<script>.sh`.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🔹 Android Builds
+- Debug APK → [`scripts/android_debug.sh`](scripts/android_debug.sh)
+- Release APK (Optimized & Obfuscated) → [`scripts/android_release.sh`](scripts/android_release.sh)
+- Release App Bundle (Play Store) → [`scripts/android_bundle.sh`](scripts/android_bundle.sh)
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🔹 iOS Builds
+- Debug → [`scripts/ios_debug.sh`](scripts/ios_debug.sh)
+- Release (Optimized & Obfuscated) → [`scripts/ios_release.sh`](scripts/ios_release.sh)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 🔧 Utility
+- Clean Build Artifacts → [`scripts/clean.sh`](scripts/clean.sh)
+- Get Dependencies → [`scripts/pub_get.sh`](scripts/pub_get.sh)
+- Run App on Device → [`scripts/run.sh`](scripts/run.sh)
+
+---
+
+## ⚡ Setup
+1. Make all scripts executable:
+   ```zsh
+   chmod +x scripts/*.sh
