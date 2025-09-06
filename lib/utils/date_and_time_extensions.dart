@@ -19,6 +19,12 @@ extension DateTimeFormatter on DateTime {
     return _formatter.parse(dateStr);
   }
 
+  String toDayAndMonth() {
+    return DateFormat('dd MMMM').format(this);
+  }
+
+  String formattedTime12Hour() => DateFormat('hh:mm a').format(this);
+
   /// Returns the date formatted as "25 Jun".
   String toFormattedDate() {
     return DateFormat('d MMM').format(this);
