@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:glint_frontend/design/components/glint_app_bar.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_view.dart';
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 
 class PeopleInterestedForEventScreen extends StatefulWidget {
-  const PeopleInterestedForEventScreen({super.key});
+  const PeopleInterestedForEventScreen({
+    super.key,
+    required this.navArguments,
+  });
+
+  final ToEventPeopleScreenNavArguments navArguments;
 
   @override
   State<PeopleInterestedForEventScreen> createState() =>
@@ -19,8 +26,10 @@ class _PeopleInterestedForEventScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Title to be passed"),
+      appBar: GlintAppBar(
+        appBarAction: GlintAppBarActions.eventProfile,
+        eventName: widget.navArguments.eventName,
+        eventTimeLeft: widget.navArguments.eventDaysLeft,
       ),
       body: BlocBuilder<PeopleCardsBloc, PeopleCardsState>(
         builder: (context, state) {

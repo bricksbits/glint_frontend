@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -80,7 +81,11 @@ class _EventsListScreenState extends State<EventsListScreen> {
 
                         context.push(
                           "/${GlintMainRoutes.event.name}/${GlintEventRoutes.peopleInterested.name}",
-                          extra: int.parse(eventId)
+                          extra: ToEventPeopleScreenNavArguments(
+                            eventId: int.parse(event.eventId),
+                            eventName: event.eventName,
+                            eventDaysLeft: event.daysLeft,
+                          ),
                         );
                       },
                     );
@@ -98,7 +103,7 @@ class _EventsListScreenState extends State<EventsListScreen> {
                     final event = state.normalEvents[index];
                     return NearbyEventCard(
                       eventModel: event,
-                      fetchProfiles: (eventId){
+                      fetchProfiles: (eventId) {
                         context
                             .read<EventBaseCubit>()
                             .fetchSelectedEventProfiles(eventId);
@@ -109,8 +114,7 @@ class _EventsListScreenState extends State<EventsListScreen> {
 
                         context.push(
                             "/${GlintMainRoutes.event.name}/${GlintEventRoutes.peopleInterested.name}",
-                            extra: int.parse(eventId)
-                        );
+                            extra: int.parse(eventId));
                       },
                     );
                   },

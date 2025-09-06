@@ -212,12 +212,15 @@ final glintMainRoutes = GoRouter(
           path: '/${GlintEventRoutes.peopleInterested.name}',
           name: GlintEventRoutes.peopleInterested.name,
           builder: (context, state) {
-            final eventId = state.extra as int;
+            final arguments = state.extra as ToEventPeopleScreenNavArguments;
             return BlocProvider(
               lazy: true,
               create: (context) => PeopleCardsBloc()
-                ..add(PeopleCardsEvent.fetchInterestedUserForTheEvent(eventId)),
-              child: const PeopleInterestedForEventScreen(),
+                ..add(PeopleCardsEvent.fetchInterestedUserForTheEvent(
+                    arguments.eventId)),
+              child: PeopleInterestedForEventScreen(
+                navArguments: arguments,
+              ),
             );
           },
         ),

@@ -9,16 +9,20 @@ enum GlintAppBarActions {
   defaultActions,
   profile,
   event,
+  eventProfile,
 }
 
 //Todo : Create a GlintAppBar State Handler
 class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const GlintAppBar({
-    super.key,
-    this.appBarAction = GlintAppBarActions.defaultActions,
-  });
+  const GlintAppBar(
+      {super.key,
+      this.appBarAction = GlintAppBarActions.defaultActions,
+      this.eventName,
+      this.eventTimeLeft});
 
   final GlintAppBarActions appBarAction;
+  final String? eventName;
+  final String? eventTimeLeft;
 
   List<Widget> getAppBarActions(BuildContext context) {
     switch (appBarAction) {
@@ -85,6 +89,27 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           const Gap(20.0),
         ];
+      case GlintAppBarActions.eventProfile:
+        return [
+          GestureDetector(
+            onTap: () {
+              // Replace with rollback functionality
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/glint_rollback.svg',
+            ),
+          ),
+          const Gap(18.0),
+          GestureDetector(
+            onTap: () {
+              context.pushNamed(GlintMainRoutes.filter.name);
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/glint_filter.svg',
+            ),
+          ),
+          const Gap(20.0),
+        ];
     }
   }
 
@@ -95,12 +120,34 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
       scrolledUnderElevation: 0,
       centerTitle: false,
       titleSpacing: 0,
-      title: Padding(
-        padding: const EdgeInsets.only(left: 20.0),
-        child: SvgPicture.asset(
-          'lib/assets/icons/glint_logo.svg',
-        ),
-      ),
+      title: eventName != null && eventTimeLeft != null
+          ? Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "$eventName",
+                        style: AppTheme.simpleBodyText,
+                      ),
+                      Text(
+                        "$eventTimeLeft days remaining...",
+                        style: AppTheme.smallBodyText,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
+          : Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: SvgPicture.asset(
+                'lib/assets/icons/glint_logo.svg',
+              ),
+            ),
       //bottom border for event screen
       bottom: (appBarAction == GlintAppBarActions.event ||
               appBarAction == GlintAppBarActions.defaultActions)
