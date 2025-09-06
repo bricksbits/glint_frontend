@@ -21,7 +21,11 @@ class EventBaseCubit extends Cubit<EventBaseState> {
     final allEvents = await eventRepo.getAllEvents();
     switch (allEvents) {
       case Success<List<EventListDomainModel>>():
-        emitNewState(state.copyWith(allEvents: allEvents.data));
+        emitNewState(
+          state.copyWith(
+            allEvents: allEvents.data,
+          ),
+        );
         _splitAllEventsToRespectiveLists();
       case Failure<List<EventListDomainModel>>():
         emitNewState(
@@ -39,7 +43,9 @@ class EventBaseCubit extends Cubit<EventBaseState> {
         events.where((event) => !event.isHotEvent).toList();
     emitNewState(
       state.copyWith(
-          hotEvents: hotEventsFiltered, normalEvents: normalEventsFiltered),
+        hotEvents: hotEventsFiltered,
+        normalEvents: normalEventsFiltered,
+      ),
     );
   }
 

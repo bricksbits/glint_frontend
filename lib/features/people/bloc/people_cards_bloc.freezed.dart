@@ -28,6 +28,7 @@ mixin _$PeopleCardsEvent {
     required TResult Function(String onUserId) shareProfile,
     required TResult Function(PeopleCardsState newState) emitNewState,
     required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -42,6 +43,7 @@ mixin _$PeopleCardsEvent {
     TResult? Function(String onUserId)? shareProfile,
     TResult? Function(PeopleCardsState newState)? emitNewState,
     TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -56,6 +58,7 @@ mixin _$PeopleCardsEvent {
     TResult Function(String onUserId)? shareProfile,
     TResult Function(PeopleCardsState newState)? emitNewState,
     TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -71,6 +74,8 @@ mixin _$PeopleCardsEvent {
     required TResult Function(_shareProfile value) shareProfile,
     required TResult Function(_emitNewState value) emitNewState,
     required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -85,6 +90,8 @@ mixin _$PeopleCardsEvent {
     TResult? Function(_shareProfile value)? shareProfile,
     TResult? Function(_emitNewState value)? emitNewState,
     TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -99,6 +106,8 @@ mixin _$PeopleCardsEvent {
     TResult Function(_shareProfile value)? shareProfile,
     TResult Function(_emitNewState value)? emitNewState,
     TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -176,6 +185,7 @@ class _$StartedImpl implements _Started {
     required TResult Function(String onUserId) shareProfile,
     required TResult Function(PeopleCardsState newState) emitNewState,
     required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
   }) {
     return started();
   }
@@ -193,6 +203,7 @@ class _$StartedImpl implements _Started {
     TResult? Function(String onUserId)? shareProfile,
     TResult? Function(PeopleCardsState newState)? emitNewState,
     TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
   }) {
     return started?.call();
   }
@@ -210,6 +221,7 @@ class _$StartedImpl implements _Started {
     TResult Function(String onUserId)? shareProfile,
     TResult Function(PeopleCardsState newState)? emitNewState,
     TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -231,6 +243,8 @@ class _$StartedImpl implements _Started {
     required TResult Function(_shareProfile value) shareProfile,
     required TResult Function(_emitNewState value) emitNewState,
     required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
   }) {
     return started(this);
   }
@@ -248,6 +262,8 @@ class _$StartedImpl implements _Started {
     TResult? Function(_shareProfile value)? shareProfile,
     TResult? Function(_emitNewState value)? emitNewState,
     TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
   }) {
     return started?.call(this);
   }
@@ -265,6 +281,8 @@ class _$StartedImpl implements _Started {
     TResult Function(_shareProfile value)? shareProfile,
     TResult Function(_emitNewState value)? emitNewState,
     TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -357,6 +375,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(String onUserId) shareProfile,
     required TResult Function(PeopleCardsState newState) emitNewState,
     required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
   }) {
     return loading(isLoading);
   }
@@ -374,6 +393,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(String onUserId)? shareProfile,
     TResult? Function(PeopleCardsState newState)? emitNewState,
     TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
   }) {
     return loading?.call(isLoading);
   }
@@ -391,6 +411,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(String onUserId)? shareProfile,
     TResult Function(PeopleCardsState newState)? emitNewState,
     TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -412,6 +433,8 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_shareProfile value) shareProfile,
     required TResult Function(_emitNewState value) emitNewState,
     required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
   }) {
     return loading(this);
   }
@@ -429,6 +452,8 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_shareProfile value)? shareProfile,
     TResult? Function(_emitNewState value)? emitNewState,
     TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
   }) {
     return loading?.call(this);
   }
@@ -446,6 +471,8 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_shareProfile value)? shareProfile,
     TResult Function(_emitNewState value)? emitNewState,
     TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -554,6 +581,7 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     required TResult Function(String onUserId) shareProfile,
     required TResult Function(PeopleCardsState newState) emitNewState,
     required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
   }) {
     return fetchNextCards(page, index);
   }
@@ -571,6 +599,7 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     TResult? Function(String onUserId)? shareProfile,
     TResult? Function(PeopleCardsState newState)? emitNewState,
     TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
   }) {
     return fetchNextCards?.call(page, index);
   }
@@ -588,6 +617,7 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     TResult Function(String onUserId)? shareProfile,
     TResult Function(PeopleCardsState newState)? emitNewState,
     TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (fetchNextCards != null) {
@@ -609,6 +639,8 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     required TResult Function(_shareProfile value) shareProfile,
     required TResult Function(_emitNewState value) emitNewState,
     required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
   }) {
     return fetchNextCards(this);
   }
@@ -626,6 +658,8 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     TResult? Function(_shareProfile value)? shareProfile,
     TResult? Function(_emitNewState value)? emitNewState,
     TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
   }) {
     return fetchNextCards?.call(this);
   }
@@ -643,6 +677,8 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     TResult Function(_shareProfile value)? shareProfile,
     TResult Function(_emitNewState value)? emitNewState,
     TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (fetchNextCards != null) {
@@ -745,6 +781,7 @@ class _$SuperLikedImpl implements _SuperLiked {
     required TResult Function(String onUserId) shareProfile,
     required TResult Function(PeopleCardsState newState) emitNewState,
     required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
   }) {
     return onSuperLiked(onUserId);
   }
@@ -762,6 +799,7 @@ class _$SuperLikedImpl implements _SuperLiked {
     TResult? Function(String onUserId)? shareProfile,
     TResult? Function(PeopleCardsState newState)? emitNewState,
     TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
   }) {
     return onSuperLiked?.call(onUserId);
   }
@@ -779,6 +817,7 @@ class _$SuperLikedImpl implements _SuperLiked {
     TResult Function(String onUserId)? shareProfile,
     TResult Function(PeopleCardsState newState)? emitNewState,
     TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (onSuperLiked != null) {
@@ -800,6 +839,8 @@ class _$SuperLikedImpl implements _SuperLiked {
     required TResult Function(_shareProfile value) shareProfile,
     required TResult Function(_emitNewState value) emitNewState,
     required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
   }) {
     return onSuperLiked(this);
   }
@@ -817,6 +858,8 @@ class _$SuperLikedImpl implements _SuperLiked {
     TResult? Function(_shareProfile value)? shareProfile,
     TResult? Function(_emitNewState value)? emitNewState,
     TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
   }) {
     return onSuperLiked?.call(this);
   }
@@ -834,6 +877,8 @@ class _$SuperLikedImpl implements _SuperLiked {
     TResult Function(_shareProfile value)? shareProfile,
     TResult Function(_emitNewState value)? emitNewState,
     TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (onSuperLiked != null) {
@@ -934,6 +979,7 @@ class _$RightSwipedImpl implements _RightSwiped {
     required TResult Function(String onUserId) shareProfile,
     required TResult Function(PeopleCardsState newState) emitNewState,
     required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
   }) {
     return onRightSwiped(onUserId);
   }
@@ -951,6 +997,7 @@ class _$RightSwipedImpl implements _RightSwiped {
     TResult? Function(String onUserId)? shareProfile,
     TResult? Function(PeopleCardsState newState)? emitNewState,
     TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
   }) {
     return onRightSwiped?.call(onUserId);
   }
@@ -968,6 +1015,7 @@ class _$RightSwipedImpl implements _RightSwiped {
     TResult Function(String onUserId)? shareProfile,
     TResult Function(PeopleCardsState newState)? emitNewState,
     TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (onRightSwiped != null) {
@@ -989,6 +1037,8 @@ class _$RightSwipedImpl implements _RightSwiped {
     required TResult Function(_shareProfile value) shareProfile,
     required TResult Function(_emitNewState value) emitNewState,
     required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
   }) {
     return onRightSwiped(this);
   }
@@ -1006,6 +1056,8 @@ class _$RightSwipedImpl implements _RightSwiped {
     TResult? Function(_shareProfile value)? shareProfile,
     TResult? Function(_emitNewState value)? emitNewState,
     TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
   }) {
     return onRightSwiped?.call(this);
   }
@@ -1023,6 +1075,8 @@ class _$RightSwipedImpl implements _RightSwiped {
     TResult Function(_shareProfile value)? shareProfile,
     TResult Function(_emitNewState value)? emitNewState,
     TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (onRightSwiped != null) {
@@ -1123,6 +1177,7 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     required TResult Function(String onUserId) shareProfile,
     required TResult Function(PeopleCardsState newState) emitNewState,
     required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
   }) {
     return onLeftSwiped(onUserId);
   }
@@ -1140,6 +1195,7 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     TResult? Function(String onUserId)? shareProfile,
     TResult? Function(PeopleCardsState newState)? emitNewState,
     TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
   }) {
     return onLeftSwiped?.call(onUserId);
   }
@@ -1157,6 +1213,7 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     TResult Function(String onUserId)? shareProfile,
     TResult Function(PeopleCardsState newState)? emitNewState,
     TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (onLeftSwiped != null) {
@@ -1178,6 +1235,8 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     required TResult Function(_shareProfile value) shareProfile,
     required TResult Function(_emitNewState value) emitNewState,
     required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
   }) {
     return onLeftSwiped(this);
   }
@@ -1195,6 +1254,8 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     TResult? Function(_shareProfile value)? shareProfile,
     TResult? Function(_emitNewState value)? emitNewState,
     TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
   }) {
     return onLeftSwiped?.call(this);
   }
@@ -1212,6 +1273,8 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     TResult Function(_shareProfile value)? shareProfile,
     TResult Function(_emitNewState value)? emitNewState,
     TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (onLeftSwiped != null) {
@@ -1312,6 +1375,7 @@ class _$onMatchMadeImpl implements _onMatchMade {
     required TResult Function(String onUserId) shareProfile,
     required TResult Function(PeopleCardsState newState) emitNewState,
     required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
   }) {
     return onMatchMade(onUserId);
   }
@@ -1329,6 +1393,7 @@ class _$onMatchMadeImpl implements _onMatchMade {
     TResult? Function(String onUserId)? shareProfile,
     TResult? Function(PeopleCardsState newState)? emitNewState,
     TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
   }) {
     return onMatchMade?.call(onUserId);
   }
@@ -1346,6 +1411,7 @@ class _$onMatchMadeImpl implements _onMatchMade {
     TResult Function(String onUserId)? shareProfile,
     TResult Function(PeopleCardsState newState)? emitNewState,
     TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (onMatchMade != null) {
@@ -1367,6 +1433,8 @@ class _$onMatchMadeImpl implements _onMatchMade {
     required TResult Function(_shareProfile value) shareProfile,
     required TResult Function(_emitNewState value) emitNewState,
     required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
   }) {
     return onMatchMade(this);
   }
@@ -1384,6 +1452,8 @@ class _$onMatchMadeImpl implements _onMatchMade {
     TResult? Function(_shareProfile value)? shareProfile,
     TResult? Function(_emitNewState value)? emitNewState,
     TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
   }) {
     return onMatchMade?.call(this);
   }
@@ -1401,6 +1471,8 @@ class _$onMatchMadeImpl implements _onMatchMade {
     TResult Function(_shareProfile value)? shareProfile,
     TResult Function(_emitNewState value)? emitNewState,
     TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (onMatchMade != null) {
@@ -1501,6 +1573,7 @@ class _$shareProfileImpl implements _shareProfile {
     required TResult Function(String onUserId) shareProfile,
     required TResult Function(PeopleCardsState newState) emitNewState,
     required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
   }) {
     return shareProfile(onUserId);
   }
@@ -1518,6 +1591,7 @@ class _$shareProfileImpl implements _shareProfile {
     TResult? Function(String onUserId)? shareProfile,
     TResult? Function(PeopleCardsState newState)? emitNewState,
     TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
   }) {
     return shareProfile?.call(onUserId);
   }
@@ -1535,6 +1609,7 @@ class _$shareProfileImpl implements _shareProfile {
     TResult Function(String onUserId)? shareProfile,
     TResult Function(PeopleCardsState newState)? emitNewState,
     TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (shareProfile != null) {
@@ -1556,6 +1631,8 @@ class _$shareProfileImpl implements _shareProfile {
     required TResult Function(_shareProfile value) shareProfile,
     required TResult Function(_emitNewState value) emitNewState,
     required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
   }) {
     return shareProfile(this);
   }
@@ -1573,6 +1650,8 @@ class _$shareProfileImpl implements _shareProfile {
     TResult? Function(_shareProfile value)? shareProfile,
     TResult? Function(_emitNewState value)? emitNewState,
     TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
   }) {
     return shareProfile?.call(this);
   }
@@ -1590,6 +1669,8 @@ class _$shareProfileImpl implements _shareProfile {
     TResult Function(_shareProfile value)? shareProfile,
     TResult Function(_emitNewState value)? emitNewState,
     TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (shareProfile != null) {
@@ -1702,6 +1783,7 @@ class _$emitNewStateImpl implements _emitNewState {
     required TResult Function(String onUserId) shareProfile,
     required TResult Function(PeopleCardsState newState) emitNewState,
     required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
   }) {
     return emitNewState(newState);
   }
@@ -1719,6 +1801,7 @@ class _$emitNewStateImpl implements _emitNewState {
     TResult? Function(String onUserId)? shareProfile,
     TResult? Function(PeopleCardsState newState)? emitNewState,
     TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
   }) {
     return emitNewState?.call(newState);
   }
@@ -1736,6 +1819,7 @@ class _$emitNewStateImpl implements _emitNewState {
     TResult Function(String onUserId)? shareProfile,
     TResult Function(PeopleCardsState newState)? emitNewState,
     TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (emitNewState != null) {
@@ -1757,6 +1841,8 @@ class _$emitNewStateImpl implements _emitNewState {
     required TResult Function(_shareProfile value) shareProfile,
     required TResult Function(_emitNewState value) emitNewState,
     required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
   }) {
     return emitNewState(this);
   }
@@ -1774,6 +1860,8 @@ class _$emitNewStateImpl implements _emitNewState {
     TResult? Function(_shareProfile value)? shareProfile,
     TResult? Function(_emitNewState value)? emitNewState,
     TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
   }) {
     return emitNewState?.call(this);
   }
@@ -1791,6 +1879,8 @@ class _$emitNewStateImpl implements _emitNewState {
     TResult Function(_shareProfile value)? shareProfile,
     TResult Function(_emitNewState value)? emitNewState,
     TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (emitNewState != null) {
@@ -1864,6 +1954,7 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     required TResult Function(String onUserId) shareProfile,
     required TResult Function(PeopleCardsState newState) emitNewState,
     required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
   }) {
     return flushSwipeCards();
   }
@@ -1881,6 +1972,7 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     TResult? Function(String onUserId)? shareProfile,
     TResult? Function(PeopleCardsState newState)? emitNewState,
     TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
   }) {
     return flushSwipeCards?.call();
   }
@@ -1898,6 +1990,7 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     TResult Function(String onUserId)? shareProfile,
     TResult Function(PeopleCardsState newState)? emitNewState,
     TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (flushSwipeCards != null) {
@@ -1919,6 +2012,8 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     required TResult Function(_shareProfile value) shareProfile,
     required TResult Function(_emitNewState value) emitNewState,
     required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
   }) {
     return flushSwipeCards(this);
   }
@@ -1936,6 +2031,8 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     TResult? Function(_shareProfile value)? shareProfile,
     TResult? Function(_emitNewState value)? emitNewState,
     TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
   }) {
     return flushSwipeCards?.call(this);
   }
@@ -1953,6 +2050,8 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     TResult Function(_shareProfile value)? shareProfile,
     TResult Function(_emitNewState value)? emitNewState,
     TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
     required TResult orElse(),
   }) {
     if (flushSwipeCards != null) {
@@ -1964,6 +2063,211 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
 
 abstract class _flushSwipeCards implements PeopleCardsEvent {
   const factory _flushSwipeCards() = _$flushSwipeCardsImpl;
+}
+
+/// @nodoc
+abstract class _$$fetchInterestedUsersForEventImplCopyWith<$Res> {
+  factory _$$fetchInterestedUsersForEventImplCopyWith(
+          _$fetchInterestedUsersForEventImpl value,
+          $Res Function(_$fetchInterestedUsersForEventImpl) then) =
+      __$$fetchInterestedUsersForEventImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int? eventId});
+}
+
+/// @nodoc
+class __$$fetchInterestedUsersForEventImplCopyWithImpl<$Res>
+    extends _$PeopleCardsEventCopyWithImpl<$Res,
+        _$fetchInterestedUsersForEventImpl>
+    implements _$$fetchInterestedUsersForEventImplCopyWith<$Res> {
+  __$$fetchInterestedUsersForEventImplCopyWithImpl(
+      _$fetchInterestedUsersForEventImpl _value,
+      $Res Function(_$fetchInterestedUsersForEventImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PeopleCardsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? eventId = freezed,
+  }) {
+    return _then(_$fetchInterestedUsersForEventImpl(
+      freezed == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$fetchInterestedUsersForEventImpl
+    implements _fetchInterestedUsersForEvent {
+  const _$fetchInterestedUsersForEventImpl(this.eventId);
+
+  @override
+  final int? eventId;
+
+  @override
+  String toString() {
+    return 'PeopleCardsEvent.fetchInterestedUserForTheEvent(eventId: $eventId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$fetchInterestedUsersForEventImpl &&
+            (identical(other.eventId, eventId) || other.eventId == eventId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, eventId);
+
+  /// Create a copy of PeopleCardsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$fetchInterestedUsersForEventImplCopyWith<
+          _$fetchInterestedUsersForEventImpl>
+      get copyWith => __$$fetchInterestedUsersForEventImplCopyWithImpl<
+          _$fetchInterestedUsersForEventImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function(bool isLoading) loading,
+    required TResult Function(int page, int index) fetchNextCards,
+    required TResult Function(String onUserId) onSuperLiked,
+    required TResult Function(String onUserId) onRightSwiped,
+    required TResult Function(String onUserId) onLeftSwiped,
+    required TResult Function(String onUserId) onMatchMade,
+    required TResult Function(String onUserId) shareProfile,
+    required TResult Function(PeopleCardsState newState) emitNewState,
+    required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
+  }) {
+    return fetchInterestedUserForTheEvent(eventId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function(bool isLoading)? loading,
+    TResult? Function(int page, int index)? fetchNextCards,
+    TResult? Function(String onUserId)? onSuperLiked,
+    TResult? Function(String onUserId)? onRightSwiped,
+    TResult? Function(String onUserId)? onLeftSwiped,
+    TResult? Function(String onUserId)? onMatchMade,
+    TResult? Function(String onUserId)? shareProfile,
+    TResult? Function(PeopleCardsState newState)? emitNewState,
+    TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
+  }) {
+    return fetchInterestedUserForTheEvent?.call(eventId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function(bool isLoading)? loading,
+    TResult Function(int page, int index)? fetchNextCards,
+    TResult Function(String onUserId)? onSuperLiked,
+    TResult Function(String onUserId)? onRightSwiped,
+    TResult Function(String onUserId)? onLeftSwiped,
+    TResult Function(String onUserId)? onMatchMade,
+    TResult Function(String onUserId)? shareProfile,
+    TResult Function(PeopleCardsState newState)? emitNewState,
+    TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
+    required TResult orElse(),
+  }) {
+    if (fetchInterestedUserForTheEvent != null) {
+      return fetchInterestedUserForTheEvent(eventId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) started,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_FetchNextCards value) fetchNextCards,
+    required TResult Function(_SuperLiked value) onSuperLiked,
+    required TResult Function(_RightSwiped value) onRightSwiped,
+    required TResult Function(_LeftSwiped value) onLeftSwiped,
+    required TResult Function(_onMatchMade value) onMatchMade,
+    required TResult Function(_shareProfile value) shareProfile,
+    required TResult Function(_emitNewState value) emitNewState,
+    required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
+  }) {
+    return fetchInterestedUserForTheEvent(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? started,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_FetchNextCards value)? fetchNextCards,
+    TResult? Function(_SuperLiked value)? onSuperLiked,
+    TResult? Function(_RightSwiped value)? onRightSwiped,
+    TResult? Function(_LeftSwiped value)? onLeftSwiped,
+    TResult? Function(_onMatchMade value)? onMatchMade,
+    TResult? Function(_shareProfile value)? shareProfile,
+    TResult? Function(_emitNewState value)? emitNewState,
+    TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
+  }) {
+    return fetchInterestedUserForTheEvent?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? started,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_FetchNextCards value)? fetchNextCards,
+    TResult Function(_SuperLiked value)? onSuperLiked,
+    TResult Function(_RightSwiped value)? onRightSwiped,
+    TResult Function(_LeftSwiped value)? onLeftSwiped,
+    TResult Function(_onMatchMade value)? onMatchMade,
+    TResult Function(_shareProfile value)? shareProfile,
+    TResult Function(_emitNewState value)? emitNewState,
+    TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
+    required TResult orElse(),
+  }) {
+    if (fetchInterestedUserForTheEvent != null) {
+      return fetchInterestedUserForTheEvent(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _fetchInterestedUsersForEvent implements PeopleCardsEvent {
+  const factory _fetchInterestedUsersForEvent(final int? eventId) =
+      _$fetchInterestedUsersForEventImpl;
+
+  int? get eventId;
+
+  /// Create a copy of PeopleCardsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$fetchInterestedUsersForEventImplCopyWith<
+          _$fetchInterestedUsersForEventImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc

@@ -64,15 +64,24 @@ class _EventsListScreenState extends State<EventsListScreen> {
                     return HotEvent(
                       eventModel: event,
                       getEventInfo: (eventId) {
-                        context.pushNamed(
+                        context.push(
                           "/${GlintMainRoutes.event.name}/${GlintEventRoutes.eventDetails.name}",
-                          extra: event.eventId,
+                          extra: int.parse(eventId),
                         );
                       },
                       fetchProfiles: (eventId) {
                         context
                             .read<EventBaseCubit>()
                             .fetchSelectedEventProfiles(eventId);
+
+                        context
+                            .read<EventBaseCubit>()
+                            .markInterestedUserIfNotAlready(eventId);
+
+                        context.push(
+                          "/${GlintMainRoutes.event.name}/${GlintEventRoutes.peopleInterested.name}",
+                          extra: int.parse(eventId)
+                        );
                       },
                     );
                   },
@@ -89,6 +98,20 @@ class _EventsListScreenState extends State<EventsListScreen> {
                     final event = state.normalEvents[index];
                     return NearbyEventCard(
                       eventModel: event,
+                      fetchProfiles: (eventId){
+                        context
+                            .read<EventBaseCubit>()
+                            .fetchSelectedEventProfiles(eventId);
+
+                        context
+                            .read<EventBaseCubit>()
+                            .markInterestedUserIfNotAlready(eventId);
+
+                        context.push(
+                            "/${GlintMainRoutes.event.name}/${GlintEventRoutes.peopleInterested.name}",
+                            extra: int.parse(eventId)
+                        );
+                      },
                     );
                   },
                   childCount: state.normalEvents.length,

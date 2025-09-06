@@ -60,8 +60,8 @@ class Events {
     eventId = json['event_id'];
     eventName = json['event_name'];
     isHotEvent = json['is_hot_event'];
-    locationLongitude = json['location_longitude'];
-    locationLatitude = json['location_latitude'];
+    locationLongitude = (json['location_longitude'] as num).toDouble();
+    locationLatitude = (json['location_latitude'] as num).toDouble();
     timeRemaining = json['time_remaining'] != null
         ? TimeRemaining.fromJson(json['time_remaining'])
         : null;
