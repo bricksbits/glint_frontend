@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_view.dart';
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
+import 'package:glint_frontend/features/people/model/people_card_model.dart';
 
 class PeopleScreen extends StatelessWidget {
   PeopleScreen({super.key});
@@ -11,6 +12,7 @@ class PeopleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late PeopleCardModel currentVisibleModel;
     return BlocBuilder<PeopleCardsBloc, PeopleCardsState>(
       builder: (context, state) {
         return state.isLoading
@@ -26,34 +28,39 @@ class PeopleScreen extends StatelessWidget {
                       down: false,
                     ),
                     onSwipe: (prev, current, swipeDirection) {
-                      if (current != null) {
-                        var fetchedUser = state.cardList.elementAt(current);
-                        switch (swipeDirection) {
-                          case CardSwiperDirection.none:
-                            return false;
-                          case CardSwiperDirection.left:
-                            context.read<PeopleCardsBloc>().add(
-                                PeopleCardsEvent.onLeftSwiped(
-                                    fetchedUser.userId));
-                            return true;
-                          case CardSwiperDirection.right:
-                            context.read<PeopleCardsBloc>().add(
-                                PeopleCardsEvent.onRightSwiped(
-                                    fetchedUser.userId));
-                            return true;
-                          case CardSwiperDirection.top:
-                            return false;
-                          case CardSwiperDirection.bottom:
-                            return false;
-                        }
-                      } else {
-                        return false;
+                      var lastUser = state.cardList.last;
+                      switch (swipeDirection) {
+                        case CardSwiperDirection.none:
+                          return false;
+                        case CardSwiperDirection.left:
+                          context.read<PeopleCardsBloc>().add(
+                              PeopleCardsEvent.onLeftSwiped(
+                                  currentVisibleModel.userId));
+                          if (currentVisibleModel.userId == lastUser.userId) {
+                            context
+                                .read<PeopleCardsBloc>()
+                                .add(const PeopleCardsEvent.emptyCardList());
+                          }
+                          return true;
+                        case CardSwiperDirection.right:
+                          context.read<PeopleCardsBloc>().add(
+                              PeopleCardsEvent.onRightSwiped(
+                                  currentVisibleModel.userId));
+                          if (currentVisibleModel.userId == lastUser.userId) {
+                            context
+                                .read<PeopleCardsBloc>()
+                                .add(const PeopleCardsEvent.emptyCardList());
+                          }
+                          return true;
+                        case CardSwiperDirection.top:
+                          return false;
+                        case CardSwiperDirection.bottom:
+                          return false;
                       }
                     },
                     controller: cardSwiperController,
-                    numberOfCardsDisplayed: 1,
-                    onUndo:
-                        (previousIndex, currentIndex, cardSwipeDirection) {
+                    numberOfCardsDisplayed: state.cardList.length > 3 ? 2 : 0,
+                    onUndo: (previousIndex, currentIndex, cardSwipeDirection) {
                       if (cardSwipeDirection == CardSwiperDirection.left &&
                           previousIndex != null) {}
                       return false;
@@ -63,19 +70,25 @@ class PeopleScreen extends StatelessWidget {
                     ),
                     isLoop: false,
                     cardsCount: state.cardList.length,
-                    cardBuilder: (context, index, percentThresholdX,
-                            percentThresholdY) =>
-                        ScrollableProfileView(
-                      peopleUiModel: state.cardList[index],
-                      onLiked: (userId) {},
-                      onDisLiked: (userId) {},
-                      onDm: (userId) {},
-                      onSuperLiked: (userId) {},
-                    ),
+                    cardBuilder:
+                        (context, index, percentThresholdX, percentThresholdY) {
+                      currentVisibleModel = state.cardList[index];
+                      return ScrollableProfileView(
+                        peopleUiModel: currentVisibleModel,
+                        onLiked: (userId) {},
+                        onDisLiked: (userId) {},
+                        onDm: (userId) {},
+                        onSuperLiked: (userId) {},
+                      );
+                    },
                   )
-                : const Center(
-                    child: Text("Its a little quiet here"),
-                  );
+                : state.isFetchingMoreProfile
+                    ? const Center(
+                        child: Text("Fetching more profiles just for you"),
+                      )
+                    : const Center(
+                        child: Text("Its a little quiet here"),
+                      );
       },
     );
   }

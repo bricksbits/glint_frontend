@@ -18,7 +18,7 @@ abstract class ProfileDao {
   Future<ProfileEntity?> getProfileData(String passedId);
 
   @Query("SELECT * FROM profiles WHERE userId != :currentUserId")
-  Stream<List<ProfileEntity>> getAllProfiles(String currentUserId);
+  Future<List<ProfileEntity>> getAllProfiles(String currentUserId);
 
   @Query("DELETE FROM profiles WHERE userId is :passedId")
   Future<void> deleteAlreadySwipedOnProfile(int passedId);

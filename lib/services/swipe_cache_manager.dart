@@ -27,7 +27,7 @@ class SwipeBufferManager {
 
   Timer? _debounceTimer;
   bool _isProcessing = false;
-  Duration debounceDuration = const Duration(seconds: 10);
+  Duration debounceDuration = const Duration(seconds: 5);
   int batchSize = 5;
   String logPrefix = "BUFFER_MANAGER_SWIPES";
 
