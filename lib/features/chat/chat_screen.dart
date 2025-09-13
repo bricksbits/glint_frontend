@@ -113,24 +113,20 @@ class _ChatScreenState extends State<ChatScreen> {
                                           extra: index);
                                     },
                                   )
-                                : const Text("No Stories found,"),
+                                : _emptyStoriesRowSection(),
                             const Gap(12.0),
-                            state.recentMatches?.isNotEmpty ?? false
-                                ? _buildRecentMatchesSection(
-                                    state.recentMatches ?? [],
-                                    (match) {
-                                      final client =
-                                          StreamChat.of(context).client;
-                                      final channelObj = client.channel(
-                                          'messaging',
-                                          id: match.chatChannelId);
-                                      context.pushNamed(
-                                        GlintChatRoutes.chatWith.name,
-                                        extra: channelObj,
-                                      );
-                                    },
-                                  )
-                                : const Text("No Recent Matches,"),
+                            _buildRecentMatchesSection(
+                                state.recentMatches ?? [], (match) {
+                              final client = StreamChat.of(context).client;
+                              final channelObj = client.channel('messaging',
+                                  id: match.chatChannelId);
+                              context.pushNamed(
+                                GlintChatRoutes.chatWith.name,
+                                extra: channelObj,
+                              );
+                            },
+                                noRecentMatches:
+                                    state.recentMatches?.isEmpty ?? false),
                             const Gap(12.0),
                             Padding(
                               padding:
@@ -297,8 +293,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildRecentMatchesSection(
     List<RecentMatchesModel> recentMatches,
-    void Function(RecentMatchesModel match) onRecentMatchItemClicked,
-  ) {
+    void Function(RecentMatchesModel match) onRecentMatchItemClicked, {
+    bool noRecentMatches = true,
+  }) {
     return Container(
       decoration: const BoxDecoration(
         color: AppColours.white,
@@ -329,92 +326,103 @@ class _ChatScreenState extends State<ChatScreen> {
                   'Start conversation to find your spark',
                   style: AppTheme.simpleText,
                 ),
+                noRecentMatches ? const Gap(2.0) : const SizedBox.shrink(),
+                noRecentMatches
+                    ? const Text(
+                        'Aiyoo! No Matches, buy premium and try your luck.',
+                        style: AppTheme.simpleText,
+                      )
+                    : const SizedBox.shrink(),
               ],
             ),
           ),
           const Gap(20.0),
-          SizedBox(
-            height: 120.0,
-            child: Row(
-              children: [
-                const Gap(12.0),
-                Expanded(
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: recentMatches.length,
-                    itemBuilder: (context, index) {
-                      var match = recentMatches[index];
-                      return GestureDetector(
-                        onTap: () {
-                          onRecentMatchItemClicked(match);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Column(
-                            children: [
-                              Stack(
-                                clipBehavior: Clip.none,
-                                alignment: Alignment.center,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(22.0),
-                                    child: Image.asset(
-                                      match.matchUserImageUrl,
-                                      width: 72.0,
-                                      height: 72.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  if (match.matchedAtEvent)
-                                    Positioned.fill(
-                                      child: Container(
-                                        height: 72.0,
-                                        width: 72.0,
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: [
-                                              Colors.transparent,
-                                              Colors.transparent,
-                                              Colors.black
-                                                  .withValues(alpha: 0.8),
-                                            ],
-                                          ),
+          !noRecentMatches
+              ? SizedBox(
+                  height: 120.0,
+                  child: Row(
+                    children: [
+                      const Gap(12.0),
+                      Expanded(
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: recentMatches.length,
+                          itemBuilder: (context, index) {
+                            var match = recentMatches[index];
+                            return GestureDetector(
+                              onTap: () {
+                                onRecentMatchItemClicked(match);
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Column(
+                                  children: [
+                                    Stack(
+                                      clipBehavior: Clip.none,
+                                      alignment: Alignment.center,
+                                      children: [
+                                        ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(22.0),
+                                          child: Image.network(
+                                            match.matchUserImageUrl,
+                                            width: 72.0,
+                                            height: 72.0,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
+                                        if (match.matchedAtEvent)
+                                          Positioned.fill(
+                                            child: Container(
+                                              height: 72.0,
+                                              width: 72.0,
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Colors.transparent,
+                                                    Colors.transparent,
+                                                    Colors.black
+                                                        .withValues(alpha: 0.8),
+                                                  ],
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(22.0),
+                                              ),
+                                            ),
+                                          ),
+                                        if (match.matchedAtEvent)
+                                          const Positioned(
+                                            bottom: 8,
+                                            child: Icon(
+                                              Icons.favorite,
+                                              size: 16.0,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                    const Gap(8.0),
+                                    Text(
+                                      match.matchUserName,
+                                      style: AppTheme.simpleText.copyWith(
+                                        color: AppColours.black,
                                       ),
                                     ),
-                                  if (match.matchedAtEvent)
-                                    const Positioned(
-                                      bottom: 8,
-                                      child: Icon(
-                                        Icons.favorite,
-                                        size: 16.0,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              const Spacer(),
-                              Text(
-                                match.matchUserName,
-                                style: AppTheme.simpleText.copyWith(
-                                  color: AppColours.black,
+                                    const Gap(12.0),
+                                  ],
                                 ),
                               ),
-                              const Gap(12.0),
-                            ],
-                          ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          ),
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     );
@@ -516,6 +524,24 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               );
             },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _emptyStoriesRowSection() {
+    return GradientCircularProgressIndicator(
+      progress: 100,
+      stroke: 3.6,
+      gradient: AppColours.circularProgressGradient,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: CircleAvatar(
+          radius: 36,
+          maxRadius: 36,
+          backgroundImage: const NetworkImage(
+            "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
           ),
         ),
       ),

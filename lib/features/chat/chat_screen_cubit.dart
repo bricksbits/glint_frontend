@@ -39,7 +39,7 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
         updateState(state.copyWith(recentMatches: matches));
       case Failure<List<RecentMatchesModel>>():
         updateState(
-          state.copyWith(error: "Not able to fetch more stories, right now."),
+          state.copyWith(error: "Not able to fetch recent Matches, right now."),
         );
     }
   }
