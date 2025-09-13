@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/components/chat/story_comment_like.dart';
 import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
+import 'package:glint_frontend/features/chat/story/view/view_story_cubit.dart';
 import 'package:story/story_image.dart';
 import 'package:story/story_page_view.dart';
 
@@ -35,139 +36,143 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatScreenCubit, ChatScreenState>(
-      builder: (context, state) {
-        return Scaffold(
-          body: state.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : StoryPageView(
-                  itemBuilder: (context, pageIndex, storyIndex) {
-                    final currentVisibleUser = state.stories?[pageIndex];
-                    final currentVisibleStory =
-                        currentVisibleUser?.storiesUrl[storyIndex];
-                    return Stack(
-                      children: [
-                        Positioned.fill(
-                          child: Container(color: Colors.black),
-                        ),
-                        // TODO(GO): Put the Error Builder here
-                        Positioned.fill(
-                          child: StoryImage(
-                            key: ValueKey(currentVisibleStory),
-                            imageProvider: NetworkImage(
-                              currentVisibleStory ?? "",
-                            ),
-                            fit: BoxFit.cover,
+    return BlocProvider(
+      create: (context) => ViewStoryCubit(),
+      child: BlocBuilder<ViewStoryCubit, ViewStoryState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: state.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : StoryPageView(
+                    itemBuilder: (context, pageIndex, storyIndex) {
+                      final currentVisibleUser = state.stories?[pageIndex];
+                      final currentVisibleStory =
+                          currentVisibleUser?.storiesUrl[storyIndex];
+                      return Stack(
+                        children: [
+                          Positioned.fill(
+                            child: Container(color: Colors.black),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 44, left: 8),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 32,
-                                width: 32,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                        currentVisibleUser?.userImageUrl ?? ""),
-                                    fit: BoxFit.cover,
+                          // TODO(GO): Put the Error Builder here
+                          Positioned.fill(
+                            child: StoryImage(
+                              key: ValueKey(currentVisibleStory),
+                              imageProvider: NetworkImage(
+                                currentVisibleStory ?? "",
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 44, left: 8),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 32,
+                                  width: 32,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                          currentVisibleUser?.userImageUrl ??
+                                              ""),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    shape: BoxShape.circle,
                                   ),
-                                  shape: BoxShape.circle,
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                currentVisibleUser?.username ?? "User",
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "AlbertSans",
+                                const SizedBox(
+                                  width: 8,
                                 ),
-                              ),
-                              Container(
-                                decoration: const BoxDecoration(
-                                  color: AppColours.primaryBlue,
-                                  shape: BoxShape.circle,
+                                Text(
+                                  currentVisibleUser?.username ?? "User",
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "AlbertSans",
+                                  ),
                                 ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      padding: EdgeInsets.zero,
-                                      color: Colors.white,
-                                      icon: const Icon(Icons.bolt),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                    const Gap(4),
-                                    Text(
-                                      currentVisibleUser?.streakCount ?? "",
-                                      style: const TextStyle(
-                                        fontSize: 17,
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: AppColours.primaryBlue,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        padding: EdgeInsets.zero,
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "AlbertSans",
+                                        icon: const Icon(Icons.bolt),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                                      const Gap(4),
+                                      Text(
+                                        currentVisibleUser?.streakCount ?? "",
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "AlbertSans",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                  gestureItemBuilder: (context, pageIndex, storyIndex) {
-                    return LayoutBuilder(
-                      builder:
-                          (BuildContext context, BoxConstraints constraints) {
-                        return Stack(
-                          children: [
-                            Positioned(
-                              left: 32,
-                              top: 32,
-                              child: IconButton(
-                                padding: EdgeInsets.zero,
-                                color: Colors.white,
-                                icon: const Icon(Icons.close),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
+                        ],
+                      );
+                    },
+                    gestureItemBuilder: (context, pageIndex, storyIndex) {
+                      return LayoutBuilder(
+                        builder:
+                            (BuildContext context, BoxConstraints constraints) {
+                          return Stack(
+                            children: [
+                              Positioned(
+                                left: 32,
+                                top: 32,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  color: Colors.white,
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
                               ),
-                            ),
-                            const Positioned(
-                              bottom: 24,
-                              left: 24,
-                              right: 24,
-                              child: StoryCommentTextInput(),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  indicatorAnimationController: indicatorAnimationController,
-                  initialStoryIndex: (pageIndex) {
-                    return pageIndex;
-                  },
-                  pageLength: state.stories?.length ?? 0,
-                  storyLength: (int pageIndex) {
-                    return state.stories?[pageIndex].storiesUrl.length ?? 0;
-                  },
-                  onPageLimitReached: () {
-                    Navigator.pop(context);
-                  },
-                ),
-        );
-      },
+                              const Positioned(
+                                bottom: 24,
+                                left: 24,
+                                right: 24,
+                                child: StoryCommentTextInput(),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    indicatorAnimationController: indicatorAnimationController,
+                    initialStoryIndex: (pageIndex) {
+                      return pageIndex;
+                    },
+                    pageLength: state.stories?.length ?? 0,
+                    storyLength: (int pageIndex) {
+                      return state.stories?[pageIndex].storiesUrl.length ?? 0;
+                    },
+                    onPageLimitReached: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+          );
+        },
+      ),
     );
   }
 }

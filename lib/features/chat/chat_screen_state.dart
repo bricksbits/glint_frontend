@@ -6,10 +6,6 @@ class ChatScreenState with _$ChatScreenState {
     @Default(false) bool isLoading,
     @Default("") String error,
 
-    // For Stories
-    @Default([]) List<ViewStoryModel>? stories,
-    @Default(null) int? selectedIndex,
-
     // For Recent Matches
     @Default(null) List<RecentMatchesModel>? recentMatches,
   }) = _Initial;

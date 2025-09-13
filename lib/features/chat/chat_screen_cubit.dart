@@ -14,21 +14,7 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   final ChatRepo chatRepo = getIt.get<ChatRepo>();
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
-    _getStories();
     _getRecentMatches();
-  }
-
-  Future<void> _getStories() async {
-    final response = await chatRepo.fetchStories();
-    switch (response) {
-      case Success<List<ViewStoryModel>>():
-        final stories = response.data;
-        updateState(state.copyWith(stories: stories));
-      case Failure<List<ViewStoryModel>>():
-        updateState(
-          state.copyWith(error: "Not able to fetch more stories, right now."),
-        );
-    }
   }
 
   Future<void> _getRecentMatches() async {

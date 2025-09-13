@@ -21,7 +21,7 @@ extension ViewStoryModelMapper on StoryResponse {
       return ViewStoryModel(
           storiesUrl: item.value.storyUrlList
               .map((storyData) =>
-                  "${storyData.presignedUrl}${storyData.fileExtension}")
+                  storyData.presignedUrl)
               .toList(),
           username: "User, ${item.key}",
           userImageUrl: "",

@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
     const ProfileScreen(),
     const EventBaseScreen(),
     PeopleScreen(),
-    const ServiceScreen(),
     const ChatScreen(),
   ];
 
@@ -42,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'lib/assets/icons/user_icon.svg',
     'lib/assets/icons/event_icon.svg',
     'lib/assets/icons/logo_icon.svg',
-    'lib/assets/icons/handshake_icon.svg',
+    // 'lib/assets/icons/handshake_icon.svg',
     'lib/assets/icons/chat_icon.svg',
   ];
 
@@ -102,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // extendBody: true,
           backgroundColor: AppColours.white,
           // do not show app bar on chat screen
-          appBar: _selectedIndex == 4
+          appBar: _selectedIndex == 3
               ? null
               : GlintAppBar(
                   appBarAction: appBarAction(_selectedIndex),

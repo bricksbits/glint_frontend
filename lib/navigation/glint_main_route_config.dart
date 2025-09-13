@@ -17,6 +17,7 @@ import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
 import 'package:glint_frontend/features/chat/confirm_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/get_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
+import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
 import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
@@ -146,17 +147,18 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintChatRoutes.stories.name}',
           name: GlintChatRoutes.stories.name,
-          pageBuilder: (context, state) {
-            final chatCubit = context.read<ChatScreenCubit>();
+          builder: (context, state) {
             final passedIndex = state.extra as int?;
-            return MaterialPage(
-              child: BlocProvider.value(
-                value: chatCubit,
-                child: ViewStoryScreen(
-                  passedIndex: passedIndex ?? 0,
-                ),
-              ),
+            return ViewStoryScreen(
+              passedIndex: passedIndex ?? 0,
             );
+          },
+        ),
+        GoRoute(
+          path: '/${GlintChatRoutes.uploadStory.name}',
+          name: GlintChatRoutes.uploadStory.name,
+          builder: (context, state) {
+            return const UploadStoryScreen(isUploadStory: true,);
           },
         ),
         GoRoute(
