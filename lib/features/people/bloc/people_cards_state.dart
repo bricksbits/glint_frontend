@@ -11,5 +11,6 @@ class PeopleCardsState with _$PeopleCardsState {
     @Default(0) int currentOffset,
     @Default(null) PeopleCardModel? lastSwipedProfile,
     @Default(null) PeopleCardModel? matchUpProfile,
+    @Default({}) Set<String> alreadySwipedId,
   }) = _Ignite;
 }

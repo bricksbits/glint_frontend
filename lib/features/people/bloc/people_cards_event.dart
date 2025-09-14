@@ -4,7 +4,7 @@ part of 'people_cards_bloc.dart';
 class PeopleCardsEvent with _$PeopleCardsEvent {
   const factory PeopleCardsEvent.started() = _Started;
   const factory PeopleCardsEvent.loading(bool isLoading) = _Loading;
-  const factory PeopleCardsEvent.fetchNextCards(int currentOffset) = _FetchNextCards;
+  const factory PeopleCardsEvent.fetchNextCards() = _FetchNextCards;
   const factory PeopleCardsEvent.clearAndUpdateListFromDb() = _ClearAndUpdateListFromDb;
   const factory PeopleCardsEvent.onSuperLiked(String onUserId) = _SuperLiked;
   const factory PeopleCardsEvent.onRightSwiped(String onUserId) = _RightSwiped;

@@ -23,8 +23,6 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
   final SwipeBufferManager swipeBufferManager = getIt.get<SwipeBufferManager>();
 
   PeopleCardsBloc() : super(const PeopleCardsState.ignite()) {
-    List<PeopleCardModel> alreadyActionItem = [];
-
     on<_fetchInterestedUsersForEvent>(
       (event, emit) async {
         var userId = await peopleRepo.getUserId();
@@ -75,7 +73,7 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
         case Success<List<PeopleCardModel>>():
           add(PeopleCardsEvent.emitNewState(
             state.copyWith(
-              cardList: newUiModelsResult.data,
+              cardList: [...state.cardList, ...newUiModelsResult.data],
               isLoading: false,
               isFetchingMoreProfile: false,
             ),
@@ -96,17 +94,34 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
       emit(state.copyWith(isLoading: currentLoadingState));
     });
 
-    //todo: When Fetching profiles fails, update the UI as well.
     on<_FetchNextCards>((event, emit) async {
-      add(
-        _emitNewState(
-          state.copyWith(
-              isFetchingMoreProfile: true, cardList: [], isLoading: false),
-        ),
-      );
-      final passedCurrentOffset = event.currentOffset;
-      await peopleRepo.fetchProfiles(passedCurrentOffset);
-      add(const _ClearAndUpdateListFromDb());
+      final nextOffset = state.currentOffset + 5;
+      final moreProfileResult = await peopleRepo.fetchProfiles(nextOffset);
+      switch (moreProfileResult) {
+        case Success<void>():
+          add(
+            _emitNewState(
+              state.copyWith(
+                currentOffset: nextOffset,
+                isFetchingMoreProfile: true,
+                isLoading: false,
+              ),
+            ),
+          );
+          add(const _ClearAndUpdateListFromDb());
+          break;
+        case Failure<void>():
+          add(
+            _emitNewState(
+              state.copyWith(
+                currentOffset: state.currentOffset,
+                isFetchingMoreProfile: false,
+                isLoading: false,
+              ),
+            ),
+          );
+          break;
+      }
     });
 
     on<_RightSwiped>((event, emit) async {
@@ -175,19 +190,12 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
           .toList()
           .first;
 
-      alreadyActionItem.add(actionItem);
       add(PeopleCardsEvent.emitNewState(
         state.copyWith(
           lastSwipedProfile: actionItem,
+          alreadySwipedId: {...state.alreadySwipedId, event.passedId},
         ),
       ));
-      if (alreadyActionItem.length >= 5) {
-        final currentOffset = state.currentOffset;
-        final nextOffset = currentOffset + 5;
-        add(_emitNewState(state.copyWith(currentOffset: nextOffset)));
-        alreadyActionItem.clear();
-        add(_FetchNextCards(nextOffset));
-      }
     });
 
     on<_EmptyCardList>((event, emit) async {
