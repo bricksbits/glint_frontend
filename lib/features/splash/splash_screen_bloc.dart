@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/application_logic/auth/is_user_logged_in_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
@@ -14,16 +16,18 @@ part 'splash_screen_bloc.freezed.dart';
 
 class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
   final IsUserLoggedInUsecase isUserLoggedInUsecase = getIt.get();
+  final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper =
+      getIt.get();
 
   SplashScreenBloc() : super(const SplashScreenState.initial()) {
     on<_Started>((event, emit) async {
-      await _connectToStreamClient();
       isUserLoggedInUsecase.perform(
         (isLoggedIn) {
           if (isLoggedIn != null) {
             var type = getUserTypeFromName(isLoggedIn);
             switch (type) {
               case UsersType.USER:
+                add(const _ConnectToStreamClient());
                 add(
                   SplashScreenEvent.emitNewStates(
                     SplashScreenState.navigateTo(
@@ -76,26 +80,40 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
       final newState = event.passedState;
       emit(newState);
     });
+
+    on<_ConnectToStreamClient>((event, emit) {
+      _connectToStreamClient();
+    });
   }
 
   void emitStates(SplashScreenState states) {}
 
   Future<void> _connectToStreamClient() async {
-    final StreamChatClient chatClient = getIt.get();
+    final StreamChatClient chatClient = getIt.get<StreamChatClient>();
     final userId = await getUserId();
     final userToken = await getUserToken(userId);
+    final userName = await getUserName();
     await chatClient.connectUser(
-      User(id: userId),
+      User(id: userId, name: userName,),
       userToken,
     );
   }
 
-  // Todo: Fetch this from Data Layer
   Future<String> getUserId() async {
-    return 'tutorial-flutter';
+    final userId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
+    return "user_$userId";
+  }
+
+  Future<String> getUserName() async {
+    final userName = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.userNameKey);
+    return userName;
   }
 
   Future<String> getUserToken(String userId) async {
-    return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidHV0b3JpYWwtZmx1dHRlciJ9.S-MJpoSwDiqyXpUURgO5wVqJ4vKlIVFLSEyrFYCOE1c';
+    final userToken = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.streamTokenKey);
+    return userToken;
   }
 }

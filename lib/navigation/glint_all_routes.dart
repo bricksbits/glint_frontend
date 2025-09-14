@@ -35,6 +35,7 @@ enum GlintChatRoutes {
   tickets,
   getTicket,
   uploadStory,
+  oneTimePhotoView,
 }
 
 enum GlintEventRoutes {
