@@ -9,7 +9,7 @@ import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: LikesDataRepo)
+@LazySingleton(as: LikesDataRepo)
 class LikesDataRepoImpl extends LikesDataRepo {
   final MyDioClient httpClient;
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
