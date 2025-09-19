@@ -65,8 +65,6 @@ class GetVerifiedWidget extends StatelessWidget {
 
         const Spacer(),
 
-        // button
-
         SizedBox(
           height: 68.0,
           child: GlintElevatedButton(

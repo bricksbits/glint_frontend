@@ -18,4 +18,19 @@ extension DateTimeFormatter on DateTime {
   static DateTime fromStandardString(String dateStr) {
     return _formatter.parse(dateStr);
   }
+
+  /// Returns the date formatted as "25 Jun".
+  String toFormattedDate() {
+    return DateFormat('d MMM').format(this);
+  }
+
+  /// Returns the time formatted as "4:35 PM".
+  String toFormattedTime() {
+    return DateFormat('h:mm a').format(this);
+  }
+}
+
+DateTime dateFromStandardResponse(String date){
+  final format = DateFormat("yyyy-MM-dd HH:mm:ss");
+  return format.parse(date);
 }

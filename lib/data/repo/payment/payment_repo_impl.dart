@@ -108,7 +108,8 @@ class PaymentRepoImpl extends PaymentRepo {
   }
 
   @override
-  Future<Result<void>> fetchPaymentHistory() async {
+  Future<Result<(List<EventPaymentHistory>, List<MembershipPaymentHistory>)>>
+      fetchPaymentHistory() async {
     final historyResponse = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
@@ -121,10 +122,21 @@ class PaymentRepoImpl extends PaymentRepo {
       case Success():
         var historyModel =
             PaymentHistoryResponse.fromJson(historyResponse.data);
-        return Success(true);
+        if (historyModel.paymentHistory != null) {
+          final eventHistory =
+              historyModel.paymentHistory?.eventPaymentHistory ?? [];
+          final membershipHistory =
+              historyModel.paymentHistory?.membershipPaymentHistory ?? [];
+          return Success((eventHistory, membershipHistory));
+        } else {
+          return Failure(
+            Exception("Can't fetch history at the moment,"),
+          );
+        }
       case Failure():
         return Failure(
-            Exception("Something went wrong, not able to load history data."));
+          Exception("Something went wrong, not able to load history data."),
+        );
     }
   }
 }
