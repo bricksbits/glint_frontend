@@ -9,5 +9,6 @@ class LikesScreenState with _$LikesScreenState {
     @Default([]) List<PeopleCardModel> topProfiles,
     @Default([]) List<PeopleCardModel> superLikeProfiles,
     @Default([]) List<PeopleCardModel> likeProfiles,
+    @Default([]) List<PeopleCardModel> superLikedAndLikedProfiles,
   }) = _Initial;
 }

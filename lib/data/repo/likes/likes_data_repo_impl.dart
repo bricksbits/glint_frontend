@@ -95,8 +95,8 @@ class LikesDataRepoImpl extends LikesDataRepo {
   }
 
   @override
-  Future<Result<int>> getUserProfileViews() {
+  Future<Result<int>> getUserProfileViews() async {
     // TODO: Save the Profiles Views count while logging and Save it to the Shared pref.
-    throw UnimplementedError();
+    return const Success(45);
   }
 }

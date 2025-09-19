@@ -13,20 +13,28 @@ class LikesScreenCubit extends Cubit<LikesScreenState> {
   final likesRepo = getIt.get<LikesDataRepo>();
 
   LikesScreenCubit() : super(const LikesScreenState.initial()) {
-    _fetchProfileViewCount();
+    likedScreenFacade();
   }
 
   Future<void> likedScreenFacade() async {
     emitNewState(state.copyWith(isLoading: true));
     final requiredCalls = [
       _fetchLikedProfiles(),
-      _fetchLikedProfiles(),
+      _fetchProfileViewCount(),
       _fetchSuperLikedProfiles(),
       _fetchTopProfiles()
     ];
 
     await Future.wait(requiredCalls);
-    emitNewState(state.copyWith(isLoading: false));
+    emitNewState(
+      state.copyWith(
+        superLikedAndLikedProfiles: [
+          ...state.superLikeProfiles,
+          ...state.likeProfiles
+        ],
+        isLoading: false,
+      ),
+    );
   }
 
   Future<void> _fetchProfileViewCount() async {

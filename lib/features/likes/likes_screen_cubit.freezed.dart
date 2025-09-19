@@ -23,6 +23,8 @@ mixin _$LikesScreenState {
   List<PeopleCardModel> get superLikeProfiles =>
       throw _privateConstructorUsedError;
   List<PeopleCardModel> get likeProfiles => throw _privateConstructorUsedError;
+  List<PeopleCardModel> get superLikedAndLikedProfiles =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -31,7 +33,8 @@ mixin _$LikesScreenState {
             int profileViewCount,
             List<PeopleCardModel> topProfiles,
             List<PeopleCardModel> superLikeProfiles,
-            List<PeopleCardModel> likeProfiles)
+            List<PeopleCardModel> likeProfiles,
+            List<PeopleCardModel> superLikedAndLikedProfiles)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -43,7 +46,8 @@ mixin _$LikesScreenState {
             int profileViewCount,
             List<PeopleCardModel> topProfiles,
             List<PeopleCardModel> superLikeProfiles,
-            List<PeopleCardModel> likeProfiles)?
+            List<PeopleCardModel> likeProfiles,
+            List<PeopleCardModel> superLikedAndLikedProfiles)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -55,7 +59,8 @@ mixin _$LikesScreenState {
             int profileViewCount,
             List<PeopleCardModel> topProfiles,
             List<PeopleCardModel> superLikeProfiles,
-            List<PeopleCardModel> likeProfiles)?
+            List<PeopleCardModel> likeProfiles,
+            List<PeopleCardModel> superLikedAndLikedProfiles)?
         initial,
     required TResult orElse(),
   }) =>
@@ -96,7 +101,8 @@ abstract class $LikesScreenStateCopyWith<$Res> {
       int profileViewCount,
       List<PeopleCardModel> topProfiles,
       List<PeopleCardModel> superLikeProfiles,
-      List<PeopleCardModel> likeProfiles});
+      List<PeopleCardModel> likeProfiles,
+      List<PeopleCardModel> superLikedAndLikedProfiles});
 }
 
 /// @nodoc
@@ -120,6 +126,7 @@ class _$LikesScreenStateCopyWithImpl<$Res, $Val extends LikesScreenState>
     Object? topProfiles = null,
     Object? superLikeProfiles = null,
     Object? likeProfiles = null,
+    Object? superLikedAndLikedProfiles = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -146,6 +153,10 @@ class _$LikesScreenStateCopyWithImpl<$Res, $Val extends LikesScreenState>
           ? _value.likeProfiles
           : likeProfiles // ignore: cast_nullable_to_non_nullable
               as List<PeopleCardModel>,
+      superLikedAndLikedProfiles: null == superLikedAndLikedProfiles
+          ? _value.superLikedAndLikedProfiles
+          : superLikedAndLikedProfiles // ignore: cast_nullable_to_non_nullable
+              as List<PeopleCardModel>,
     ) as $Val);
   }
 }
@@ -164,7 +175,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       int profileViewCount,
       List<PeopleCardModel> topProfiles,
       List<PeopleCardModel> superLikeProfiles,
-      List<PeopleCardModel> likeProfiles});
+      List<PeopleCardModel> likeProfiles,
+      List<PeopleCardModel> superLikedAndLikedProfiles});
 }
 
 /// @nodoc
@@ -186,6 +198,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? topProfiles = null,
     Object? superLikeProfiles = null,
     Object? likeProfiles = null,
+    Object? superLikedAndLikedProfiles = null,
   }) {
     return _then(_$InitialImpl(
       isLoading: null == isLoading
@@ -212,6 +225,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value._likeProfiles
           : likeProfiles // ignore: cast_nullable_to_non_nullable
               as List<PeopleCardModel>,
+      superLikedAndLikedProfiles: null == superLikedAndLikedProfiles
+          ? _value._superLikedAndLikedProfiles
+          : superLikedAndLikedProfiles // ignore: cast_nullable_to_non_nullable
+              as List<PeopleCardModel>,
     ));
   }
 }
@@ -225,10 +242,12 @@ class _$InitialImpl implements _Initial {
       this.profileViewCount = 0,
       final List<PeopleCardModel> topProfiles = const [],
       final List<PeopleCardModel> superLikeProfiles = const [],
-      final List<PeopleCardModel> likeProfiles = const []})
+      final List<PeopleCardModel> likeProfiles = const [],
+      final List<PeopleCardModel> superLikedAndLikedProfiles = const []})
       : _topProfiles = topProfiles,
         _superLikeProfiles = superLikeProfiles,
-        _likeProfiles = likeProfiles;
+        _likeProfiles = likeProfiles,
+        _superLikedAndLikedProfiles = superLikedAndLikedProfiles;
 
   @override
   @JsonKey()
@@ -267,9 +286,19 @@ class _$InitialImpl implements _Initial {
     return EqualUnmodifiableListView(_likeProfiles);
   }
 
+  final List<PeopleCardModel> _superLikedAndLikedProfiles;
+  @override
+  @JsonKey()
+  List<PeopleCardModel> get superLikedAndLikedProfiles {
+    if (_superLikedAndLikedProfiles is EqualUnmodifiableListView)
+      return _superLikedAndLikedProfiles;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_superLikedAndLikedProfiles);
+  }
+
   @override
   String toString() {
-    return 'LikesScreenState.initial(isLoading: $isLoading, error: $error, profileViewCount: $profileViewCount, topProfiles: $topProfiles, superLikeProfiles: $superLikeProfiles, likeProfiles: $likeProfiles)';
+    return 'LikesScreenState.initial(isLoading: $isLoading, error: $error, profileViewCount: $profileViewCount, topProfiles: $topProfiles, superLikeProfiles: $superLikeProfiles, likeProfiles: $likeProfiles, superLikedAndLikedProfiles: $superLikedAndLikedProfiles)';
   }
 
   @override
@@ -287,7 +316,10 @@ class _$InitialImpl implements _Initial {
             const DeepCollectionEquality()
                 .equals(other._superLikeProfiles, _superLikeProfiles) &&
             const DeepCollectionEquality()
-                .equals(other._likeProfiles, _likeProfiles));
+                .equals(other._likeProfiles, _likeProfiles) &&
+            const DeepCollectionEquality().equals(
+                other._superLikedAndLikedProfiles,
+                _superLikedAndLikedProfiles));
   }
 
   @override
@@ -298,7 +330,8 @@ class _$InitialImpl implements _Initial {
       profileViewCount,
       const DeepCollectionEquality().hash(_topProfiles),
       const DeepCollectionEquality().hash(_superLikeProfiles),
-      const DeepCollectionEquality().hash(_likeProfiles));
+      const DeepCollectionEquality().hash(_likeProfiles),
+      const DeepCollectionEquality().hash(_superLikedAndLikedProfiles));
 
   /// Create a copy of LikesScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -317,11 +350,12 @@ class _$InitialImpl implements _Initial {
             int profileViewCount,
             List<PeopleCardModel> topProfiles,
             List<PeopleCardModel> superLikeProfiles,
-            List<PeopleCardModel> likeProfiles)
+            List<PeopleCardModel> likeProfiles,
+            List<PeopleCardModel> superLikedAndLikedProfiles)
         initial,
   }) {
     return initial(isLoading, error, profileViewCount, topProfiles,
-        superLikeProfiles, likeProfiles);
+        superLikeProfiles, likeProfiles, superLikedAndLikedProfiles);
   }
 
   @override
@@ -333,11 +367,12 @@ class _$InitialImpl implements _Initial {
             int profileViewCount,
             List<PeopleCardModel> topProfiles,
             List<PeopleCardModel> superLikeProfiles,
-            List<PeopleCardModel> likeProfiles)?
+            List<PeopleCardModel> likeProfiles,
+            List<PeopleCardModel> superLikedAndLikedProfiles)?
         initial,
   }) {
     return initial?.call(isLoading, error, profileViewCount, topProfiles,
-        superLikeProfiles, likeProfiles);
+        superLikeProfiles, likeProfiles, superLikedAndLikedProfiles);
   }
 
   @override
@@ -349,13 +384,14 @@ class _$InitialImpl implements _Initial {
             int profileViewCount,
             List<PeopleCardModel> topProfiles,
             List<PeopleCardModel> superLikeProfiles,
-            List<PeopleCardModel> likeProfiles)?
+            List<PeopleCardModel> likeProfiles,
+            List<PeopleCardModel> superLikedAndLikedProfiles)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
       return initial(isLoading, error, profileViewCount, topProfiles,
-          superLikeProfiles, likeProfiles);
+          superLikeProfiles, likeProfiles, superLikedAndLikedProfiles);
     }
     return orElse();
   }
@@ -396,7 +432,8 @@ abstract class _Initial implements LikesScreenState {
       final int profileViewCount,
       final List<PeopleCardModel> topProfiles,
       final List<PeopleCardModel> superLikeProfiles,
-      final List<PeopleCardModel> likeProfiles}) = _$InitialImpl;
+      final List<PeopleCardModel> likeProfiles,
+      final List<PeopleCardModel> superLikedAndLikedProfiles}) = _$InitialImpl;
 
   @override
   bool get isLoading;
@@ -410,6 +447,8 @@ abstract class _Initial implements LikesScreenState {
   List<PeopleCardModel> get superLikeProfiles;
   @override
   List<PeopleCardModel> get likeProfiles;
+  @override
+  List<PeopleCardModel> get superLikedAndLikedProfiles;
 
   /// Create a copy of LikesScreenState
   /// with the given fields replaced by the non-null parameter values.
