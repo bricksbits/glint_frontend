@@ -1,3 +1,3 @@
 #!/bin/zsh
 # Build iOS Debug
-flutter build ios --debug
+fvm flutter build ios --debug
