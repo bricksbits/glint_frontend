@@ -67,7 +67,7 @@ extension GetPeopleResponseMapper on GetPeopleResponse {
               location: "--",
               interests: element.interests ?? [],
               pictureUrlList: element.pictureUrlList
-                      ?.map((pic) => "${pic.presignedUrl}${pic.fileExtension}")
+                      ?.map((pic) => "${pic.presignedUrl}")
                       .toList() ??
                   [],
               gender: element.gender ?? "",

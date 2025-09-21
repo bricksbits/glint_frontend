@@ -9,7 +9,7 @@ import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: LikesDataRepo)
+@LazySingleton(as: LikesDataRepo)
 class LikesDataRepoImpl extends LikesDataRepo {
   final MyDioClient httpClient;
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
@@ -95,8 +95,8 @@ class LikesDataRepoImpl extends LikesDataRepo {
   }
 
   @override
-  Future<Result<int>> getUserProfileViews() {
+  Future<Result<int>> getUserProfileViews() async {
     // TODO: Save the Profiles Views count while logging and Save it to the Shared pref.
-    throw UnimplementedError();
+    return const Success(45);
   }
 }

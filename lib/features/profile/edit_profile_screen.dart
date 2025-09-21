@@ -81,7 +81,11 @@ class EditProfileScreen extends StatelessWidget {
                     GetVerifiedWidget(
                       name: state.previewProfileModel?.username ?? "Username",
                       age: int.parse(state.previewProfileModel?.age ?? "18"),
-                      onTap: () {},
+                      onTap: () {
+                        //Todo: Remove this navigation
+                        context
+                            .pushNamed(GlintProfileRoutes.ticketHistory.name);
+                      },
                     ),
 
                     const Gap(32.0),
