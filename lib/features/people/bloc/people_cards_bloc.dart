@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/data/local/db/entities/swipe_action_entity.dart';
+import 'package:glint_frontend/domain/business_logic/repo/event/events_repo.dart';
 import 'package:glint_frontend/services/swipe_cache_manager.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/swipe_action_type.dart';
@@ -18,6 +19,7 @@ part 'people_cards_bloc.freezed.dart';
 
 class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
   final PeopleRepo peopleRepo = getIt.get<PeopleRepo>();
+  final EventRepo eventRepo = getIt.get<EventRepo>();
   final SwipeBufferManager swipeBufferManager = getIt.get<SwipeBufferManager>();
 
   StreamSubscription<Result<List<PeopleCardModel>>>? _peopleCardStream;
@@ -26,8 +28,38 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
     List<String?> advertisementList = [];
     List<PeopleCardModel> cardsList = [];
 
-    on<_Started>((event, emit) async {
+    on<_fetchInterestedUsersForEvent>(
+      (event, emit) async {
+        var userId = await peopleRepo.getUserId();
+        var profileResult =
+            await eventRepo.fetchInterestedProfiles(event.eventId);
+        switch (profileResult) {
+          case Success<List<PeopleCardModel>>():
+            cardsList.addAll(profileResult.data);
+            add(
+              PeopleCardsEvent.emitNewState(
+                state.copyWith(
+                  cardList: cardsList,
+                  error: "",
+                  isLoading: false,
+                  userId: userId,
+                ),
+              ),
+            );
+          case Failure<List<PeopleCardModel>>():
+            add(
+              PeopleCardsEvent.emitNewState(
+                state.copyWith(
+                  error: "can't load more profiles. Try again",
+                  isLoading: false,
+                ),
+              ),
+            );
+        }
+      },
+    );
 
+    on<_Started>((event, emit) async {
       var userId = await peopleRepo.getUserId();
       // final adsList = await peopleRepo.fetchAds();
       // Fetch Cards
@@ -63,9 +95,7 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
         add(
           PeopleCardsEvent.emitNewState(
             state.copyWith(
-              error: "can't load more profiles. Try again",
-              isLoading: false
-            ),
+                error: "can't load more profiles. Try again", isLoading: false),
           ),
         );
       });

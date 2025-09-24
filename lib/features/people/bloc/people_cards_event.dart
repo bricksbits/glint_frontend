@@ -12,4 +12,5 @@ class PeopleCardsEvent with _$PeopleCardsEvent {
   const factory PeopleCardsEvent.shareProfile(String onUserId) = _shareProfile;
   const factory PeopleCardsEvent.emitNewState(PeopleCardsState newState) = _emitNewState;
   const factory PeopleCardsEvent.flushSwipeCards() = _flushSwipeCards;
+  const factory PeopleCardsEvent.fetchInterestedUserForTheEvent(int? eventId) = _fetchInterestedUsersForEvent;
 }

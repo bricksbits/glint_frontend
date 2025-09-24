@@ -14,9 +14,21 @@ class EventDetailsNavArguments {
   });
 }
 
-class AdminCreateEventNavArguments{
+class AdminCreateEventNavArguments {
   final int? updateExistingEventId;
   final Function(String) onReturn;
 
   AdminCreateEventNavArguments(this.updateExistingEventId, this.onReturn);
+}
+
+class ToEventPeopleScreenNavArguments {
+  final int? eventId;
+  final String? eventName;
+  final String? eventDaysLeft;
+
+  ToEventPeopleScreenNavArguments({
+    required this.eventId,
+    required this.eventName,
+    required this.eventDaysLeft,
+  });
 }

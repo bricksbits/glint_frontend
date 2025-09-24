@@ -7,69 +7,93 @@ class NearbyEventCard extends StatelessWidget {
   const NearbyEventCard({
     super.key,
     required this.eventModel,
+    required this.fetchProfiles,
   });
 
   final EventListDomainModel eventModel;
+  final Function(String) fetchProfiles;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24.0,
-        vertical: 20.0,
-      ),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: AppColours.chipBackgroundShade,
-        ),
-        color: AppColours.white,
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // details
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return GestureDetector(
+      onTap: () {
+        fetchProfiles(eventModel.eventId);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24.0,
+            vertical: 20.0,
+          ),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: AppColours.chipBackgroundShade,
+            ),
+            color: AppColours.white,
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Event name
-              Text(
-                eventModel.eventName,
-                style: AppTheme.headingFour.copyWith(
-                  fontWeight: FontWeight.w400,
-                  fontStyle: FontStyle.normal,
-                ),
+              // details
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Event name
+                  Text(
+                    eventModel.eventName,
+                    style: AppTheme.headingFour.copyWith(
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                    ),
+                  ),
+
+                  const Gap(16.0),
+
+                  GlintIconLabel(
+                    iconPath: 'lib/assets/icons/calendar_icon.svg',
+                    label: eventModel.eventdate,
+                    style: AppTheme.simpleText.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+
+                  const Gap(8.0),
+
+                  GlintIconLabel(
+                    iconPath: 'lib/assets/icons/location_icon.svg',
+                    label: eventModel.eventLocation,
+                    style: AppTheme.simpleText,
+                  ),
+
+                  // Pricing and interested profiles
+                  HotEventDiscountAndInterestedProfiles(
+                    eventId: eventModel.eventId,
+                    eventOldPrice: eventModel.eventOldPrice,
+                    eventNewPrice: eventModel.eventCurrentPrice,
+                    eventDiscountDaysLeft: eventModel.daysLeft,
+                    interactedUsers: const [
+                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                    ],
+                    isHotEvent: false,
+                  ),
+                ],
               ),
 
-              const Gap(16.0),
+              const Spacer(),
 
-              GlintIconLabel(
-                iconPath: 'lib/assets/icons/calendar_icon.svg',
-                label: eventModel.eventdate,
-                style: AppTheme.simpleText.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
+              // Event image
+              _buildImage(
+                imageUrl: eventModel.eventCoverImageUrl,
+                daysLeft: eventModel.daysLeft,
               ),
-
-              const Gap(8.0),
-
-              GlintIconLabel(
-                iconPath: 'lib/assets/icons/location_icon.svg',
-                label: eventModel.eventLocation,
-                style: AppTheme.simpleText,
-              )
             ],
           ),
-
-          const Spacer(),
-
-          // Event image
-          _buildImage(
-            imageUrl: eventModel.eventCoverImageUrl,
-            daysLeft: eventModel.daysLeft,
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -86,13 +110,24 @@ class NearbyEventCard extends StatelessWidget {
           width: 96.0,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14.0),
-            image: DecorationImage(
-              image: NetworkImage(imageUrl),
-              fit: BoxFit.cover,
-            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(14.0),
+            child: FadeInImage.assetNetwork(
+                image: imageUrl.isNotEmpty
+                    ? imageUrl
+                    : 'https://via.placeholder.com/96',
+                placeholder:
+                    'lib/assets/images/event/event_banner_placeholder.png',
+                fit: BoxFit.cover,
+                imageErrorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'lib/assets/images/event/event_banner_placeholder.png',
+                    fit: BoxFit.cover,
+                  );
+                }),
           ),
         ),
-
         // days left
         Positioned(
           bottom: 0,

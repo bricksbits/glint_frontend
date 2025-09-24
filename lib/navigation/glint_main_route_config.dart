@@ -21,6 +21,7 @@ import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_screen.dart';
+import 'package:glint_frontend/features/event/people/people_interested_for_event_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 import 'package:glint_frontend/features/likes/likes_screen.dart';
 import 'package:glint_frontend/features/notifications/notification_screen.dart';
@@ -210,7 +211,18 @@ final glintMainRoutes = GoRouter(
         GoRoute(
           path: '/${GlintEventRoutes.peopleInterested.name}',
           name: GlintEventRoutes.peopleInterested.name,
-          builder: (context, state) => PeopleScreen(),
+          builder: (context, state) {
+            final arguments = state.extra as ToEventPeopleScreenNavArguments;
+            return BlocProvider(
+              lazy: true,
+              create: (context) => PeopleCardsBloc()
+                ..add(PeopleCardsEvent.fetchInterestedUserForTheEvent(
+                    arguments.eventId)),
+              child: PeopleInterestedForEventScreen(
+                navArguments: arguments,
+              ),
+            );
+          },
         ),
       ],
     ),

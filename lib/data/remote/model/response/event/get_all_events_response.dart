@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
+import 'package:glint_frontend/utils/date_and_time_extensions.dart';
 
 GetAllEventsResponse getAllEventsResponseFromJson(String str) =>
     GetAllEventsResponse.fromJson(json.decode(str));
@@ -60,8 +61,8 @@ class Events {
     eventId = json['event_id'];
     eventName = json['event_name'];
     isHotEvent = json['is_hot_event'];
-    locationLongitude = json['location_longitude'];
-    locationLatitude = json['location_latitude'];
+    locationLongitude = (json['location_longitude'] as num).toDouble();
+    locationLatitude = (json['location_latitude'] as num).toDouble();
     timeRemaining = json['time_remaining'] != null
         ? TimeRemaining.fromJson(json['time_remaining'])
         : null;
@@ -206,16 +207,26 @@ class TimeRemaining {
 extension GetEventRequestMapper on GetAllEventsResponse {
   List<EventListDomainModel> mapToDomain() {
     return events?.map((event) {
-          var pictureUrl =
-              "${event.pictureUrl?.presignedUrl}${event.pictureUrl?.fileExtension}";
+          String? eventDate;
+          String? eventTime;
+          if (event.timeRemaining != null) {
+            var eventDateConverted =
+                convertToRequiredFormatDate(event.timeRemaining!);
+            eventDate = eventDateConverted.toDayAndMonth();
+            eventTime = eventDateConverted.formattedTime12Hour();
+          } else {
+            eventDate = "Not Provided";
+            eventTime = "Not Mentioned";
+          }
+          var pictureUrl = event.pictureUrl?.presignedUrl;
           return EventListDomainModel(
             eventId: event.eventId.toString(),
             eventName: event.eventName ?? "",
-            eventCoverImageUrl: pictureUrl,
-            eventdate: "Event Date - ",
-            eventTime: "Event Time - ",
-            eventLocation: "Event Location - ",
-            eventOldPrice: "Event Price ",
+            eventCoverImageUrl: pictureUrl ?? "",
+            eventdate: eventDate,
+            eventTime: eventTime,
+            eventLocation: "--",
+            eventOldPrice: event.ticketPrice.toString(),
             eventCurrentPrice: event.ticketPrice.toString() ?? "",
             daysLeft: event.timeRemaining?.days.toString() ?? "--",
             peopleInterested: 0,
@@ -228,4 +239,28 @@ extension GetEventRequestMapper on GetAllEventsResponse {
         }).toList() ??
         [];
   }
+}
+
+DateTime convertToRequiredFormatDate(TimeRemaining timeRemaining) {
+  DateTime now = DateTime.now();
+  var month = timeRemaining.months ?? 0;
+  var days = timeRemaining.days ?? 0;
+  var microSeconds = timeRemaining.microseconds ?? 0;
+  DateTime futureDateTimeWithMonths = DateTime(
+    now.year,
+    now.month + month,
+    now.day,
+    now.hour,
+    now.minute,
+    now.second,
+    now.millisecond,
+    now.microsecond,
+  );
+
+// 2. Create a Duration object for days and microseconds
+  Duration duration = Duration(days: days, microseconds: microSeconds);
+
+// 3. Add the remaining duration to the `futureDateTimeWithMonths`
+  DateTime finalFutureDateTime = futureDateTimeWithMonths.add(duration);
+  return finalFutureDateTime;
 }

@@ -12,6 +12,7 @@ import 'package:glint_frontend/domain/business_logic/models/event/event_detail_d
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/repo/event/events_repo.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
@@ -119,6 +120,10 @@ class EventRepoImpl extends EventRepo {
           );
           return Success(response.data);
         case Failure():
+          debugLogger(
+            "[MarkUserInterested]",
+            "Most probably User already marked as interested or ${response.error}",
+          );
           return Failure(Exception(response.error));
       }
     } else {

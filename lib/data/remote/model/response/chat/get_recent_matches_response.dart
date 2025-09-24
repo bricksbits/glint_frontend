@@ -262,7 +262,7 @@ extension RecentMatchesMapper on GetRecentMatchesResponse {
           (profile) {
             final userFirstImageObj = profile.pictureUrlList?.first;
             final imageUrl =
-                "${userFirstImageObj?.presignedUrl}${userFirstImageObj?.fileExtension}";
+                "${userFirstImageObj?.presignedUrl}";
             return RecentMatchesModel(
               matchUserId: profile.userId.toString(),
               matchUserName: profile.username ?? "",
