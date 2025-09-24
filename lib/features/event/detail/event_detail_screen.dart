@@ -20,11 +20,6 @@ class EventDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const interactedUsers = [
-      'https://avatars.githubusercontent.com/u/70279771?v=4',
-      'https://avatars.githubusercontent.com/u/70279771?v=4',
-      'https://avatars.githubusercontent.com/u/70279771?v=4',
-    ];
     return BlocProvider(
       create: (context) =>
           EventDetailCubit()..getDetailsViaArguments(eventArguments),
@@ -51,7 +46,9 @@ class EventDetailScreen extends StatelessWidget {
                 : SingleChildScrollView(
                     child: Column(
                       children: [
-                        eventArguments.unUploadedFiles == null
+                        state.eventDetails?.eventCoverImageUrl != null &&
+                                state
+                                    .eventDetails!.eventCoverImageUrl.isNotEmpty
                             ? CarouselSlider(
                                 options: CarouselOptions(
                                   height: 264,
@@ -60,32 +57,60 @@ class EventDetailScreen extends StatelessWidget {
                                 ),
                                 items: state.eventDetails?.eventCoverImageUrl
                                     .map((imageUrl) {
-                                  return Image.network(
-                                    imageUrl,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                  );
+                                  return Image.network(imageUrl,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity, errorBuilder:
+                                          (context, error, stackTrace) {
+                                    return Image.asset(
+                                      'lib/assets/images/event/event_banner_placeholder.png',
+                                      fit: BoxFit.cover,
+                                    );
+                                  });
                                 }).toList(),
                               )
-                            : const SizedBox.shrink(),
-                        eventArguments.unUploadedFiles != null
-                            ? CarouselSlider(
-                                options: CarouselOptions(
-                                  height: 264,
-                                  enlargeCenterPage: true,
-                                  autoPlay: true,
-                                ),
-                                items: eventArguments.unUploadedFiles
-                                    ?.where((item) => item != null)
-                                    .map((imageUrl) {
-                                  return Image.file(
-                                    imageUrl!,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                  );
-                                }).toList(),
-                              )
-                            : const SizedBox.shrink(),
+                            : eventArguments.unUploadedFiles == null
+                                ? CarouselSlider(
+                                    options: CarouselOptions(
+                                      height: 264,
+                                      enlargeCenterPage: true,
+                                      autoPlay: true,
+                                    ),
+                                    items: state
+                                        .eventDetails?.eventCoverImageUrl
+                                        .map((imageUrl) {
+                                      return Image.network(imageUrl,
+                                          fit: BoxFit.cover,
+                                          width: double.infinity, errorBuilder:
+                                              (context, error, stackTrace) {
+                                        return Image.asset(
+                                          'lib/assets/images/event/event_banner_placeholder.png',
+                                          fit: BoxFit.cover,
+                                        );
+                                      });
+                                    }).toList(),
+                                  )
+                                : eventArguments.unUploadedFiles != null
+                                    ? CarouselSlider(
+                                        options: CarouselOptions(
+                                          height: 264,
+                                          enlargeCenterPage: true,
+                                          autoPlay: true,
+                                        ),
+                                        items: eventArguments.unUploadedFiles
+                                            ?.where((item) => item != null)
+                                            .map((imageUrl) {
+                                          return Image.file(
+                                            imageUrl!,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                          );
+                                        }).toList(),
+                                      )
+                                    : Image.asset(
+                                        'lib/assets/images/event/main_event_banner.svg',
+                                        fit: BoxFit.fill,
+                                        height: 264,
+                                      ),
 
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -110,27 +135,25 @@ class EventDetailScreen extends StatelessWidget {
                                     state.eventDetails?.eventCurrentPrice ?? "",
                                 daysLeft: state.eventDetails?.daysLeft ?? "",
                               ),
+
+                              const Gap(24.0),
+
+                              // about event
+                              _AboutEvent(
+                                eventDescription:
+                                    state.eventDetails?.aboutEvent ?? "",
+                              ),
                             ],
                           ),
                         ),
 
-                        const Gap(32.0),
-
                         // interested profiles
-                        _BuildInterestedProfiles(
-                          interestedProfiles: interactedUsers,
-                          showProfileIconsOnly: state.isEventPreviewForAdmin,
-                        ),
+                        // _BuildInterestedProfiles(
+                        //   interestedProfiles: interactedUsers,
+                        //   showProfileIconsOnly: state.isEventPreviewForAdmin,
+                        // ),
 
-                        const Gap(32.0),
-
-                        // about event
-                        _AboutEvent(
-                          eventDescription:
-                              state.eventDetails?.aboutEvent ?? "",
-                        ),
-
-                        const Gap(32.0),
+                        const Gap(24.0),
 
                         // event by
                         Padding(
@@ -141,7 +164,7 @@ class EventDetailScreen extends StatelessWidget {
                               text: TextSpan(
                                 children: [
                                   const TextSpan(
-                                    text: 'Event by ',
+                                    text: 'Event is, ',
                                     style: AppTheme.simpleText,
                                   ),
                                   TextSpan(
@@ -437,24 +460,22 @@ class _AboutEvent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'About Event',
-            style: AppTheme.simpleBodyText.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          'About Event',
+          style: AppTheme.simpleBodyText.copyWith(
+            fontWeight: FontWeight.w700,
           ),
-          const Gap(6.0),
-          Text(
-            eventDescription,
-            style: AppTheme.simpleText,
-          ),
-        ],
-      ),
+        ),
+        const Gap(6.0),
+        Text(
+          eventDescription,
+          style: AppTheme.simpleText,
+        ),
+      ],
     );
   }
 }

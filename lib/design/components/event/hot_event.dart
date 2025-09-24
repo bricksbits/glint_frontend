@@ -74,7 +74,8 @@ class HotEvent extends StatelessWidget {
                   // Content
                   Positioned.fill(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24.0, vertical: 20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.max,
@@ -117,12 +118,13 @@ class HotEvent extends StatelessWidget {
                           ),
 
                           // Pricing and interested profiles
-                          _HotEventDiscountAndInterestedProfiles(
+                          HotEventDiscountAndInterestedProfiles(
                             eventId: eventModel.eventId,
                             eventOldPrice: eventModel.eventOldPrice,
                             eventNewPrice: eventModel.eventCurrentPrice,
                             eventDiscountDaysLeft: eventModel.daysLeft,
                             interactedUsers: interactedUsers,
+                            isHotEvent: true,
                           ),
                         ],
                       ),
@@ -158,7 +160,8 @@ class HotEvent extends StatelessWidget {
                   ),
                 ),
                 child: FadeInImage.assetNetwork(
-                  placeholder: 'lib/assets/images/event/event_banner_placeholder.png',
+                  placeholder:
+                      'lib/assets/images/event/event_banner_placeholder.png',
                   // Local placeholder
                   image: eventModel.eventCoverImageUrl,
                   fit: BoxFit.cover,
@@ -196,13 +199,15 @@ class HotEvent extends StatelessWidget {
   }
 }
 
-class _HotEventDiscountAndInterestedProfiles extends StatelessWidget {
-  const _HotEventDiscountAndInterestedProfiles({
+class HotEventDiscountAndInterestedProfiles extends StatelessWidget {
+  const HotEventDiscountAndInterestedProfiles({
+    super.key,
     required this.eventId,
     required this.eventOldPrice,
     required this.eventNewPrice,
     required this.eventDiscountDaysLeft,
     required this.interactedUsers,
+    required this.isHotEvent,
   });
 
   final String eventId;
@@ -210,6 +215,7 @@ class _HotEventDiscountAndInterestedProfiles extends StatelessWidget {
   final String eventNewPrice;
   final String eventDiscountDaysLeft;
   final List<String> interactedUsers;
+  final bool isHotEvent;
 
   @override
   Widget build(BuildContext context) {
@@ -220,24 +226,24 @@ class _HotEventDiscountAndInterestedProfiles extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text(
-                  '₹ ',
-                  style: AppTheme.simpleText.copyWith(
-                    color: AppColours.white,
-                  ),
-                ),
-                Text(
-                  eventOldPrice.toString(),
-                  style: AppTheme.simpleText.copyWith(
-                    decoration: TextDecoration.lineThrough,
-                    decorationColor: AppColours.white,
-                    color: AppColours.white,
-                  ),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Text(
+            //       '₹ ',
+            //       style: AppTheme.simpleText.copyWith(
+            //         color: AppColours.white,
+            //       ),
+            //     ),
+            //     Text(
+            //       eventOldPrice.toString(),
+            //       style: AppTheme.simpleText.copyWith(
+            //         decoration: TextDecoration.lineThrough,
+            //         decorationColor: AppColours.white,
+            //         color: AppColours.white,
+            //       ),
+            //     ),
+            //   ],
+            // ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -247,7 +253,7 @@ class _HotEventDiscountAndInterestedProfiles extends StatelessWidget {
                       TextSpan(
                         text: '₹ $eventNewPrice',
                         style: AppTheme.heavyBodyText.copyWith(
-                          color: AppColours.vibrantYellow,
+                          color: isHotEvent ? AppColours.vibrantYellow : AppColours.black,
                         ),
                       ),
                     ],

@@ -54,7 +54,7 @@ class _EventsListScreenState extends State<EventsListScreen> {
               const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
 
               // Filter chips
-              SliverToBoxAdapter(child: _buildFilterChips()),
+              // SliverToBoxAdapter(child: _buildFilterChips()),
               const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
 
               // Hot Events List
@@ -113,8 +113,13 @@ class _EventsListScreenState extends State<EventsListScreen> {
                             .markInterestedUserIfNotAlready(eventId);
 
                         context.push(
-                            "/${GlintMainRoutes.event.name}/${GlintEventRoutes.peopleInterested.name}",
-                            extra: int.parse(eventId));
+                          "/${GlintMainRoutes.event.name}/${GlintEventRoutes.peopleInterested.name}",
+                          extra: ToEventPeopleScreenNavArguments(
+                            eventId: int.parse(event.eventId),
+                            eventName: event.eventName,
+                            eventDaysLeft: event.daysLeft,
+                          ),
+                        );
                       },
                     );
                   },

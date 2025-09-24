@@ -36,7 +36,24 @@ extension DateTimeFormatter on DateTime {
   }
 }
 
-DateTime dateFromStandardResponse(String date){
+DateTime dateFromStandardResponse(String date) {
   final format = DateFormat("yyyy-MM-dd HH:mm:ss");
   return format.parse(date);
+}
+
+extension DateTimeFormatting on String {
+  String toFormattedDateTime() {
+    // 1. Parse the ISO 8601 string into a DateTime object.
+    // The Z at the end signifies that the time is in UTC.
+    final dateTime = DateTime.parse(this).toLocal();
+
+    // 2. Format the date part (Day/Month).
+    final date = DateFormat('dd/MM').format(dateTime);
+
+    // 3. Format the time part (05:00 PM).
+    final time = DateFormat('hh:mm a').format(dateTime);
+
+    // 4. Combine and return the final string.
+    return '$date - $time';
+  }
 }

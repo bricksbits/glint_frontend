@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:glint_frontend/domain/business_logic/models/event/event_detail_domain.dart';
+import 'package:glint_frontend/utils/date_and_time_extensions.dart';
 
 GetEventDetailsResponse getEventDetailsResponseFromJson(String str) =>
     GetEventDetailsResponse.fromJson(json.decode(str));
@@ -179,8 +180,8 @@ extension EventDetailsMapper on GetEventDetailsResponse {
         eventId: detail?.coordinatorUserId.toString() ?? "",
         eventName: detail?.eventName ?? "",
         eventCoverImageUrl: images ?? [],
-        eventdate: detail?.startTime ?? "",
-        eventTime: detail?.endTime ?? "",
+        eventdate: detail?.startTime?.toFormattedDateTime() ?? "",
+        eventTime: detail?.endTime?.toFormattedDateTime() ?? "",
         eventLocation: "Location - ",
         eventOldPrice: detail?.ticketPrice.toString() ?? "",
         eventCurrentPrice: detail?.discountTicketPrice.toString() ?? "",
@@ -191,7 +192,7 @@ extension EventDetailsMapper on GetEventDetailsResponse {
           "lat": detail?.eventLatitude.toString() ?? "",
           "long": detail?.eventLongitude.toString() ?? ""
         },
-        eventBy: "Event By - ");
+        eventBy: "Partner with Glint");
   }
 }
 

@@ -16,7 +16,7 @@ class NearbyEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         fetchProfiles(eventModel.eventId);
       },
       child: Padding(
@@ -66,7 +66,21 @@ class NearbyEventCard extends StatelessWidget {
                     iconPath: 'lib/assets/icons/location_icon.svg',
                     label: eventModel.eventLocation,
                     style: AppTheme.simpleText,
-                  )
+                  ),
+
+                  // Pricing and interested profiles
+                  HotEventDiscountAndInterestedProfiles(
+                    eventId: eventModel.eventId,
+                    eventOldPrice: eventModel.eventOldPrice,
+                    eventNewPrice: eventModel.eventCurrentPrice,
+                    eventDiscountDaysLeft: eventModel.daysLeft,
+                    interactedUsers: const [
+                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                      'https://avatars.githubusercontent.com/u/70279771?v=4',
+                    ],
+                    isHotEvent: false,
+                  ),
                 ],
               ),
 
@@ -96,13 +110,24 @@ class NearbyEventCard extends StatelessWidget {
           width: 96.0,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14.0),
-            image: DecorationImage(
-              image: NetworkImage(imageUrl),
-              fit: BoxFit.cover,
-            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(14.0),
+            child: FadeInImage.assetNetwork(
+                image: imageUrl.isNotEmpty
+                    ? imageUrl
+                    : 'https://via.placeholder.com/96',
+                placeholder:
+                    'lib/assets/images/event/event_banner_placeholder.png',
+                fit: BoxFit.cover,
+                imageErrorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'lib/assets/images/event/event_banner_placeholder.png',
+                    fit: BoxFit.cover,
+                  );
+                }),
           ),
         ),
-
         // days left
         Positioned(
           bottom: 0,
