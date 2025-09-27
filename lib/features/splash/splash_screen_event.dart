@@ -5,4 +5,5 @@ class SplashScreenEvent with _$SplashScreenEvent {
   const factory SplashScreenEvent.started() = _Started;
   const factory SplashScreenEvent.emitNewStates(SplashScreenState passedState) = _EmitStates;
   const factory SplashScreenEvent.startSplashAnimation() = _SplashAnimationStarted;
+  const factory SplashScreenEvent.connectToStreamClient() = _ConnectToStreamClient;
 }

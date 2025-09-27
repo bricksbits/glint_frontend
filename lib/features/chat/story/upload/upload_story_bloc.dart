@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/repo/story/story_repo.dart';
 import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
@@ -18,6 +20,8 @@ part 'upload_story_bloc.freezed.dart';
 class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
   final StoryRepo storyRepo = getIt.get<StoryRepo>();
   final ImageService imageService = getIt.get<ImageService>();
+  final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper =
+      getIt.get<AsyncEncryptedSharedPreferenceHelper>();
 
   UploadStoryBloc() : super(const UploadStoryState.uploadStoryState()) {
     on<_UploadStory>((event, emit) async {
@@ -39,6 +43,11 @@ class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
 
     //Todo: Check when there are no Current users stories.
     on<_CurrentUserStories>((event, emit) async {
+      final userName = await sharedPreferenceHelper
+          .getString(SharedPreferenceKeys.userNameKey);
+      final userImageUrl = await sharedPreferenceHelper
+          .getString(SharedPreferenceKeys.userPrimaryPicUrlKey);
+
       final storiesResponse = await storyRepo.getMyStories();
       switch (storiesResponse) {
         case Success<ViewStoryModel>():
@@ -47,9 +56,8 @@ class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
             _UpdateAndEmitNewState(
               state.copyWith(
                 uploadedStories: stories,
-                userName: "Current User",
-                userCircularAvatarUrl:
-                    "https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U",
+                userName: userName,
+                userCircularAvatarUrl: userImageUrl,
                 isVerified: false,
               ),
             ),
@@ -61,15 +69,19 @@ class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
     });
 
     on<_SelectStoryFromGallery>((event, emit) async {
+      final userName = await sharedPreferenceHelper
+          .getString(SharedPreferenceKeys.userNameKey);
+      final userImageUrl = await sharedPreferenceHelper
+          .getString(SharedPreferenceKeys.userPrimaryPicUrlKey);
+
       final selectedFile = await imageService.pickStory();
       if (selectedFile != null) {
         add(
           _UpdateAndEmitNewState(
             state.copyWith(
               currentUploadedFile: selectedFile.file,
-              userName: "Test User",
-              userCircularAvatarUrl:
-                  "https://images.unsplash.com/photo-1728577740843-5f29c7586afe?q=80&w=148&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              userName: userName,
+              userCircularAvatarUrl: userImageUrl,
               isVerified: false,
             ),
           ),

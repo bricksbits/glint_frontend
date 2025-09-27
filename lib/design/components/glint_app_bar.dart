@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:get_it/get_it.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/application_logic/logout_usecase.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,8 +31,14 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
       case GlintAppBarActions.profile:
         return [
           GestureDetector(
-            onTap: () {
-              // todo - add settings clicked functionality
+            onTap: () async {
+              //Todo: Remove this Action from here.
+              final loginUseCase = GetIt.instance.get<LogoutUserUsecase>();
+              loginUseCase.perform((success) {
+                if (success != null && success) {
+                  context.goNamed(GlintMainRoutes.auth.name);
+                }
+              }, (error) {}, () {});
             },
             child: SvgPicture.asset(
               'lib/assets/icons/settings_icon.svg',

@@ -6,9 +6,9 @@ import 'package:glint_frontend/utils/result_sealed.dart';
 abstract class PeopleRepo {
   Future<Result<List<AdsListDomainModel>>> fetchAds();
 
-  Stream<Result<List<PeopleCardModel>>> getProfilesFromDB();
+  Future<Result<List<PeopleCardModel>>> getProfilesFromDB();
 
-  Future<Result<void>> fetchProfiles();
+  Future<Result<void>> fetchProfiles(int currentOffset);
 
   Future<Result<bool>> userSwipeGesture(SwipeGestureType gestureType);
 

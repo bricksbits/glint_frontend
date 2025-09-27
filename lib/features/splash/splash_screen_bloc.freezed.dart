@@ -21,6 +21,7 @@ mixin _$SplashScreenEvent {
     required TResult Function() started,
     required TResult Function(SplashScreenState passedState) emitNewStates,
     required TResult Function() startSplashAnimation,
+    required TResult Function() connectToStreamClient,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -28,6 +29,7 @@ mixin _$SplashScreenEvent {
     TResult? Function()? started,
     TResult? Function(SplashScreenState passedState)? emitNewStates,
     TResult? Function()? startSplashAnimation,
+    TResult? Function()? connectToStreamClient,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -35,6 +37,7 @@ mixin _$SplashScreenEvent {
     TResult Function()? started,
     TResult Function(SplashScreenState passedState)? emitNewStates,
     TResult Function()? startSplashAnimation,
+    TResult Function()? connectToStreamClient,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -44,6 +47,8 @@ mixin _$SplashScreenEvent {
     required TResult Function(_EmitStates value) emitNewStates,
     required TResult Function(_SplashAnimationStarted value)
         startSplashAnimation,
+    required TResult Function(_ConnectToStreamClient value)
+        connectToStreamClient,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -51,6 +56,7 @@ mixin _$SplashScreenEvent {
     TResult? Function(_Started value)? started,
     TResult? Function(_EmitStates value)? emitNewStates,
     TResult? Function(_SplashAnimationStarted value)? startSplashAnimation,
+    TResult? Function(_ConnectToStreamClient value)? connectToStreamClient,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -58,6 +64,7 @@ mixin _$SplashScreenEvent {
     TResult Function(_Started value)? started,
     TResult Function(_EmitStates value)? emitNewStates,
     TResult Function(_SplashAnimationStarted value)? startSplashAnimation,
+    TResult Function(_ConnectToStreamClient value)? connectToStreamClient,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -128,6 +135,7 @@ class _$StartedImpl implements _Started {
     required TResult Function() started,
     required TResult Function(SplashScreenState passedState) emitNewStates,
     required TResult Function() startSplashAnimation,
+    required TResult Function() connectToStreamClient,
   }) {
     return started();
   }
@@ -138,6 +146,7 @@ class _$StartedImpl implements _Started {
     TResult? Function()? started,
     TResult? Function(SplashScreenState passedState)? emitNewStates,
     TResult? Function()? startSplashAnimation,
+    TResult? Function()? connectToStreamClient,
   }) {
     return started?.call();
   }
@@ -148,6 +157,7 @@ class _$StartedImpl implements _Started {
     TResult Function()? started,
     TResult Function(SplashScreenState passedState)? emitNewStates,
     TResult Function()? startSplashAnimation,
+    TResult Function()? connectToStreamClient,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -163,6 +173,8 @@ class _$StartedImpl implements _Started {
     required TResult Function(_EmitStates value) emitNewStates,
     required TResult Function(_SplashAnimationStarted value)
         startSplashAnimation,
+    required TResult Function(_ConnectToStreamClient value)
+        connectToStreamClient,
   }) {
     return started(this);
   }
@@ -173,6 +185,7 @@ class _$StartedImpl implements _Started {
     TResult? Function(_Started value)? started,
     TResult? Function(_EmitStates value)? emitNewStates,
     TResult? Function(_SplashAnimationStarted value)? startSplashAnimation,
+    TResult? Function(_ConnectToStreamClient value)? connectToStreamClient,
   }) {
     return started?.call(this);
   }
@@ -183,6 +196,7 @@ class _$StartedImpl implements _Started {
     TResult Function(_Started value)? started,
     TResult Function(_EmitStates value)? emitNewStates,
     TResult Function(_SplashAnimationStarted value)? startSplashAnimation,
+    TResult Function(_ConnectToStreamClient value)? connectToStreamClient,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -280,6 +294,7 @@ class _$EmitStatesImpl implements _EmitStates {
     required TResult Function() started,
     required TResult Function(SplashScreenState passedState) emitNewStates,
     required TResult Function() startSplashAnimation,
+    required TResult Function() connectToStreamClient,
   }) {
     return emitNewStates(passedState);
   }
@@ -290,6 +305,7 @@ class _$EmitStatesImpl implements _EmitStates {
     TResult? Function()? started,
     TResult? Function(SplashScreenState passedState)? emitNewStates,
     TResult? Function()? startSplashAnimation,
+    TResult? Function()? connectToStreamClient,
   }) {
     return emitNewStates?.call(passedState);
   }
@@ -300,6 +316,7 @@ class _$EmitStatesImpl implements _EmitStates {
     TResult Function()? started,
     TResult Function(SplashScreenState passedState)? emitNewStates,
     TResult Function()? startSplashAnimation,
+    TResult Function()? connectToStreamClient,
     required TResult orElse(),
   }) {
     if (emitNewStates != null) {
@@ -315,6 +332,8 @@ class _$EmitStatesImpl implements _EmitStates {
     required TResult Function(_EmitStates value) emitNewStates,
     required TResult Function(_SplashAnimationStarted value)
         startSplashAnimation,
+    required TResult Function(_ConnectToStreamClient value)
+        connectToStreamClient,
   }) {
     return emitNewStates(this);
   }
@@ -325,6 +344,7 @@ class _$EmitStatesImpl implements _EmitStates {
     TResult? Function(_Started value)? started,
     TResult? Function(_EmitStates value)? emitNewStates,
     TResult? Function(_SplashAnimationStarted value)? startSplashAnimation,
+    TResult? Function(_ConnectToStreamClient value)? connectToStreamClient,
   }) {
     return emitNewStates?.call(this);
   }
@@ -335,6 +355,7 @@ class _$EmitStatesImpl implements _EmitStates {
     TResult Function(_Started value)? started,
     TResult Function(_EmitStates value)? emitNewStates,
     TResult Function(_SplashAnimationStarted value)? startSplashAnimation,
+    TResult Function(_ConnectToStreamClient value)? connectToStreamClient,
     required TResult orElse(),
   }) {
     if (emitNewStates != null) {
@@ -404,6 +425,7 @@ class _$SplashAnimationStartedImpl implements _SplashAnimationStarted {
     required TResult Function() started,
     required TResult Function(SplashScreenState passedState) emitNewStates,
     required TResult Function() startSplashAnimation,
+    required TResult Function() connectToStreamClient,
   }) {
     return startSplashAnimation();
   }
@@ -414,6 +436,7 @@ class _$SplashAnimationStartedImpl implements _SplashAnimationStarted {
     TResult? Function()? started,
     TResult? Function(SplashScreenState passedState)? emitNewStates,
     TResult? Function()? startSplashAnimation,
+    TResult? Function()? connectToStreamClient,
   }) {
     return startSplashAnimation?.call();
   }
@@ -424,6 +447,7 @@ class _$SplashAnimationStartedImpl implements _SplashAnimationStarted {
     TResult Function()? started,
     TResult Function(SplashScreenState passedState)? emitNewStates,
     TResult Function()? startSplashAnimation,
+    TResult Function()? connectToStreamClient,
     required TResult orElse(),
   }) {
     if (startSplashAnimation != null) {
@@ -439,6 +463,8 @@ class _$SplashAnimationStartedImpl implements _SplashAnimationStarted {
     required TResult Function(_EmitStates value) emitNewStates,
     required TResult Function(_SplashAnimationStarted value)
         startSplashAnimation,
+    required TResult Function(_ConnectToStreamClient value)
+        connectToStreamClient,
   }) {
     return startSplashAnimation(this);
   }
@@ -449,6 +475,7 @@ class _$SplashAnimationStartedImpl implements _SplashAnimationStarted {
     TResult? Function(_Started value)? started,
     TResult? Function(_EmitStates value)? emitNewStates,
     TResult? Function(_SplashAnimationStarted value)? startSplashAnimation,
+    TResult? Function(_ConnectToStreamClient value)? connectToStreamClient,
   }) {
     return startSplashAnimation?.call(this);
   }
@@ -459,6 +486,7 @@ class _$SplashAnimationStartedImpl implements _SplashAnimationStarted {
     TResult Function(_Started value)? started,
     TResult Function(_EmitStates value)? emitNewStates,
     TResult Function(_SplashAnimationStarted value)? startSplashAnimation,
+    TResult Function(_ConnectToStreamClient value)? connectToStreamClient,
     required TResult orElse(),
   }) {
     if (startSplashAnimation != null) {
@@ -470,6 +498,127 @@ class _$SplashAnimationStartedImpl implements _SplashAnimationStarted {
 
 abstract class _SplashAnimationStarted implements SplashScreenEvent {
   const factory _SplashAnimationStarted() = _$SplashAnimationStartedImpl;
+}
+
+/// @nodoc
+abstract class _$$ConnectToStreamClientImplCopyWith<$Res> {
+  factory _$$ConnectToStreamClientImplCopyWith(
+          _$ConnectToStreamClientImpl value,
+          $Res Function(_$ConnectToStreamClientImpl) then) =
+      __$$ConnectToStreamClientImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$ConnectToStreamClientImplCopyWithImpl<$Res>
+    extends _$SplashScreenEventCopyWithImpl<$Res, _$ConnectToStreamClientImpl>
+    implements _$$ConnectToStreamClientImplCopyWith<$Res> {
+  __$$ConnectToStreamClientImplCopyWithImpl(_$ConnectToStreamClientImpl _value,
+      $Res Function(_$ConnectToStreamClientImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SplashScreenEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$ConnectToStreamClientImpl implements _ConnectToStreamClient {
+  const _$ConnectToStreamClientImpl();
+
+  @override
+  String toString() {
+    return 'SplashScreenEvent.connectToStreamClient()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ConnectToStreamClientImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function(SplashScreenState passedState) emitNewStates,
+    required TResult Function() startSplashAnimation,
+    required TResult Function() connectToStreamClient,
+  }) {
+    return connectToStreamClient();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function(SplashScreenState passedState)? emitNewStates,
+    TResult? Function()? startSplashAnimation,
+    TResult? Function()? connectToStreamClient,
+  }) {
+    return connectToStreamClient?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function(SplashScreenState passedState)? emitNewStates,
+    TResult Function()? startSplashAnimation,
+    TResult Function()? connectToStreamClient,
+    required TResult orElse(),
+  }) {
+    if (connectToStreamClient != null) {
+      return connectToStreamClient();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) started,
+    required TResult Function(_EmitStates value) emitNewStates,
+    required TResult Function(_SplashAnimationStarted value)
+        startSplashAnimation,
+    required TResult Function(_ConnectToStreamClient value)
+        connectToStreamClient,
+  }) {
+    return connectToStreamClient(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? started,
+    TResult? Function(_EmitStates value)? emitNewStates,
+    TResult? Function(_SplashAnimationStarted value)? startSplashAnimation,
+    TResult? Function(_ConnectToStreamClient value)? connectToStreamClient,
+  }) {
+    return connectToStreamClient?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? started,
+    TResult Function(_EmitStates value)? emitNewStates,
+    TResult Function(_SplashAnimationStarted value)? startSplashAnimation,
+    TResult Function(_ConnectToStreamClient value)? connectToStreamClient,
+    required TResult orElse(),
+  }) {
+    if (connectToStreamClient != null) {
+      return connectToStreamClient(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ConnectToStreamClient implements SplashScreenEvent {
+  const factory _ConnectToStreamClient() = _$ConnectToStreamClientImpl;
 }
 
 /// @nodoc

@@ -17,6 +17,8 @@ import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
 import 'package:glint_frontend/features/chat/confirm_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/get_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
+import 'package:glint_frontend/features/chat/oneTimeView/one_time_view_screen.dart';
+import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
 import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
@@ -134,28 +136,33 @@ final glintMainRoutes = GoRouter(
           path: '/${GlintChatRoutes.chatWith.name}',
           name: GlintChatRoutes.chatWith.name,
           builder: (context, state) {
-            final passedChannel = state.extra as Channel?;
-            if (passedChannel == null) {
+            final passedArguments = state.extra as ChatWithNavArguments?;
+            if (passedArguments == null) {
               return const Center(
                 child: Text("Chat Servers went out"),
               );
             }
-            return ChatWithScreen(passedChannel: passedChannel);
+            return ChatWithScreen(
+              chatWithNavArguments: passedArguments,
+            );
           },
         ),
         GoRoute(
           path: '/${GlintChatRoutes.stories.name}',
           name: GlintChatRoutes.stories.name,
-          pageBuilder: (context, state) {
-            final chatCubit = context.read<ChatScreenCubit>();
+          builder: (context, state) {
             final passedIndex = state.extra as int?;
-            return MaterialPage(
-              child: BlocProvider.value(
-                value: chatCubit,
-                child: ViewStoryScreen(
-                  passedIndex: passedIndex ?? 0,
-                ),
-              ),
+            return ViewStoryScreen(
+              passedIndex: passedIndex ?? 0,
+            );
+          },
+        ),
+        GoRoute(
+          path: '/${GlintChatRoutes.uploadStory.name}',
+          name: GlintChatRoutes.uploadStory.name,
+          builder: (context, state) {
+            return const UploadStoryScreen(
+              isUploadStory: true,
             );
           },
         ),
@@ -176,7 +183,15 @@ final glintMainRoutes = GoRouter(
           path: '/${GlintChatRoutes.tickets.name}',
           name: GlintChatRoutes.tickets.name,
           builder: (context, state) => const ConfirmTicketScreen(),
-        )
+        ),
+        GoRoute(
+          path: '/${GlintChatRoutes.oneTimePhotoView.name}',
+          name: GlintChatRoutes.oneTimePhotoView.name,
+          builder: (context, state) {
+            final imagePassed = state.extra as String?;
+            return OneTimeViewScreen(imageUrl: imagePassed);
+          },
+        ),
       ],
     ),
     GoRoute(

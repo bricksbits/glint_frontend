@@ -73,6 +73,7 @@ class AsyncEncryptedSharedPreferenceHelper {
     String? streamAuthToken,
     String? userId,
     String? userName,
+    String? userImageUrl,
   ) async {
     if (accessToken != null) {
       if (accessToken.isNotEmpty) {
@@ -103,6 +104,13 @@ class AsyncEncryptedSharedPreferenceHelper {
       await saveString(
         SharedPreferenceKeys.userNameKey,
         userName,
+      );
+    }
+
+    if (userImageUrl != null) {
+      await saveString(
+        SharedPreferenceKeys.userPrimaryPicUrlKey,
+        userImageUrl,
       );
     }
 

@@ -32,3 +32,17 @@ class ToEventPeopleScreenNavArguments {
     required this.eventDaysLeft,
   });
 }
+
+class ChatWithNavArguments {
+  final String channelId;
+  final String? eventId;
+  final String? eventName;
+  final String? eventStartTime;
+
+  ChatWithNavArguments({
+    required this.channelId,
+    this.eventId,
+    this.eventName,
+    this.eventStartTime,
+  });
+}

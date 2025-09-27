@@ -142,7 +142,7 @@ class _$ProfileDao extends ProfileDao {
   _$ProfileDao(
     this.database,
     this.changeListener,
-  )   : _queryAdapter = QueryAdapter(database, changeListener),
+  )   : _queryAdapter = QueryAdapter(database),
         _profileEntityInsertionAdapter = InsertionAdapter(
             database,
             'profiles',
@@ -169,8 +169,7 @@ class _$ProfileDao extends ProfileDao {
                   'lastLocation': item.lastLocation,
                   'location': item.location,
                   'dateOfBirthFormatted': item.dateOfBirthFormatted
-                },
-            changeListener),
+                }),
         _profileEntityUpdateAdapter = UpdateAdapter(
             database,
             'profiles',
@@ -198,8 +197,7 @@ class _$ProfileDao extends ProfileDao {
                   'lastLocation': item.lastLocation,
                   'location': item.location,
                   'dateOfBirthFormatted': item.dateOfBirthFormatted
-                },
-            changeListener);
+                });
 
   final sqflite.DatabaseExecutor database;
 
@@ -241,9 +239,8 @@ class _$ProfileDao extends ProfileDao {
   }
 
   @override
-  Stream<List<ProfileEntity>> getAllProfiles(String currentUserId) {
-    return _queryAdapter.queryListStream(
-        'SELECT * FROM profiles WHERE userId != ?1',
+  Future<List<ProfileEntity>> getAllProfiles(String currentUserId) async {
+    return _queryAdapter.queryList('SELECT * FROM profiles WHERE userId != ?1',
         mapper: (Map<String, Object?> row) => ProfileEntity(
             userId: row['userId'] as String,
             username: row['username'] as String,
@@ -267,9 +264,7 @@ class _$ProfileDao extends ProfileDao {
             lastLocation: row['lastLocation'] as String?,
             location: row['location'] as String?,
             dateOfBirthFormatted: row['dateOfBirthFormatted'] as String?),
-        arguments: [currentUserId],
-        queryableName: 'profiles',
-        isView: false);
+        arguments: [currentUserId]);
   }
 
   @override

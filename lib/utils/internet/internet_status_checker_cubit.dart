@@ -10,8 +10,7 @@ class InternetStatusCheckerCubit extends Cubit<InternetStatusCheckerState> {
 
   InternetStatusCheckerCubit(this._connectivity) : super(InternetStatusConnected()) {
     _connectivityStream = _connectivity.onConnectivityChanged;
-    _connectivityStream
-        .listen(_mapResultToStatus);
+    _connectivityStream.listen(_mapResultToStatus);
   }
 
   void _mapResultToStatus(List<ConnectivityResult> result) {

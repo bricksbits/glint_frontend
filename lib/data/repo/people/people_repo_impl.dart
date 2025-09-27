@@ -53,25 +53,20 @@ class PeopleRepoImpl extends PeopleRepo {
   }
 
   /// Get Profiles only from DB as source of Truth here.
-  /// Todo: Save the current user Id and pass it from here
   @override
-  Stream<Result<List<PeopleCardModel>>> getProfilesFromDB() async* {
-    var userId =
-        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
-    yield* profileDao.getAllProfiles(userId).map((profileEntityList) {
-      try {
-        final uiModels = profileEntityList
-            .map((profileEntity) => profileEntity.mapToPeopleUiModel())
-            .toList();
-        return Result.success(uiModels);
-      } catch (e) {
-        return Result<List<PeopleCardModel>>.failure(
-            Exception("Stream emission failed, $e"));
-      }
-    }).onErrorReturnWith((error, st) {
+  Future<Result<List<PeopleCardModel>>> getProfilesFromDB() async {
+    try {
+      var userId = await sharedPreferenceHelper
+          .getString(SharedPreferenceKeys.userIdKey);
+      var cacheProfiles = await profileDao.getAllProfiles(userId);
+      final uiModels = cacheProfiles.map((profileEntityItem) {
+        return profileEntityItem.mapToPeopleUiModel();
+      }).toList();
+      return Result.success(uiModels);
+    } catch (e) {
       return Result<List<PeopleCardModel>>.failure(
-          Exception("Stream emission failed, $error"));
-    });
+          Exception("Something Went wrong, Can't fetch from DB, $e"));
+    }
   }
 
   @override
@@ -81,14 +76,13 @@ class PeopleRepoImpl extends PeopleRepo {
   }
 
   /// Fetch More profiles and save it to DB
-  /// Todo: Queries for Pagination
   @override
-  Future<Result<void>> fetchProfiles() async {
+  Future<Result<void>> fetchProfiles(int currentOffset) async {
     final response = await apiCallHandler(
-      httpClient: httpClient,
-      requestType: HttpRequestEnum.GET,
-      endpoint: "user/profile",
-    );
+        httpClient: httpClient,
+        requestType: HttpRequestEnum.GET,
+        endpoint: "user/profile",
+        passedQueryParameters: {"offset": currentOffset});
 
     switch (response) {
       case Success():

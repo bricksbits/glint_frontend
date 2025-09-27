@@ -261,12 +261,10 @@ extension RecentMatchesMapper on GetRecentMatchesResponse {
     return profiles?.map(
           (profile) {
             final userFirstImageObj = profile.pictureUrlList?.first;
-            final imageUrl =
-                "${userFirstImageObj?.presignedUrl}";
             return RecentMatchesModel(
               matchUserId: profile.userId.toString(),
               matchUserName: profile.username ?? "",
-              matchUserImageUrl: imageUrl,
+              matchUserImageUrl: "${userFirstImageObj?.presignedUrl}",
               matchId: profile.matchId.toString(),
               chatChannelId: profile.streamChatChannelId ?? "",
               matchedAtEvent: profile.matchedAtEvent ?? false,

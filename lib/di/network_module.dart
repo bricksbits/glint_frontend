@@ -20,4 +20,4 @@ abstract class NetworkModule {
   StreamChatClient chatClient() => StreamChatClient(STREAM_API_KEY);
 }
 
-const STREAM_API_KEY = 'b67pax5b2wdq';
+const STREAM_API_KEY = '8w29vcuv56ny';
