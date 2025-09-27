@@ -27,14 +27,23 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
             var type = getUserTypeFromName(isLoggedIn);
             switch (type) {
               case UsersType.USER:
-                add(const _ConnectToStreamClient());
-                add(
-                  SplashScreenEvent.emitNewStates(
-                    SplashScreenState.navigateTo(
-                      GlintMainRoutes.home.name,
+                _connectToStreamClient().then((_) {
+                  add(
+                    SplashScreenEvent.emitNewStates(
+                      SplashScreenState.navigateTo(
+                        GlintMainRoutes.home.name,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }, onError: (e, st) {
+                  add(
+                    SplashScreenEvent.emitNewStates(
+                      SplashScreenState.navigateTo(
+                        GlintMainRoutes.home.name,
+                      ),
+                    ),
+                  );
+                });
                 break;
               case UsersType.ADMIN:
                 add(
@@ -93,10 +102,21 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
     final userId = await getUserId();
     final userToken = await getUserToken(userId);
     final userName = await getUserName();
+    final userImage = await getUserImage();
     await chatClient.connectUser(
-      User(id: userId, name: userName,),
+      User(
+        id: userId,
+        name: userName,
+        image: userImage
+      ),
       userToken,
     );
+  }
+
+  Future<String> getUserImage() async {
+    final pic =
+    await sharedPreferenceHelper.getString(SharedPreferenceKeys.userPrimaryPicUrlKey);
+    return pic;
   }
 
   Future<String> getUserId() async {

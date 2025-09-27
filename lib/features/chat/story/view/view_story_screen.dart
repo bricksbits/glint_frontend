@@ -19,17 +19,22 @@ class ViewStoryScreen extends StatefulWidget {
 
 class _ViewStoryScreenState extends State<ViewStoryScreen> {
   late ValueNotifier<IndicatorAnimationCommand> indicatorAnimationController;
-  final customPronounsController = TextEditingController();
+  final storyCommentTextController = TextEditingController();
+  final FocusNode _commentFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     indicatorAnimationController = ValueNotifier<IndicatorAnimationCommand>(
         IndicatorAnimationCommand.resume);
+
+    _commentFocusNode.addListener(_handleFocusChange);
   }
 
   @override
   void dispose() {
+    _commentFocusNode.removeListener(_handleFocusChange);
+    _commentFocusNode.dispose();
     indicatorAnimationController.dispose();
     super.dispose();
   }
@@ -85,20 +90,30 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                                 const SizedBox(
                                   width: 8,
                                 ),
-                                Text(
-                                  currentVisibleUser?.username ?? "User",
-                                  style: const TextStyle(
-                                    fontSize: 17,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "AlbertSans",
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: AppColours.black,
+                                      borderRadius:
+                                          BorderRadiusGeometry.circular(10.0)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      currentVisibleUser?.username ?? "User",
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "AlbertSans",
+                                      ),
+                                    ),
                                   ),
                                 ),
+                                const Gap(4),
                                 Container(
-                                  decoration: const BoxDecoration(
-                                    color: AppColours.primaryBlue,
-                                    shape: BoxShape.circle,
-                                  ),
+                                  decoration: BoxDecoration(
+                                      color: AppColours.primaryBlue,
+                                      borderRadius:
+                                          BorderRadiusGeometry.circular(10.0)),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -110,16 +125,16 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                                           Navigator.pop(context);
                                         },
                                       ),
-                                      const Gap(4),
                                       Text(
                                         currentVisibleUser?.streakCount ?? "",
                                         style: const TextStyle(
-                                          fontSize: 17,
+                                          fontSize: 14,
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                           fontFamily: "AlbertSans",
                                         ),
                                       ),
+                                      const Gap(16),
                                     ],
                                   ),
                                 )
@@ -136,22 +151,31 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                           return Stack(
                             children: [
                               Positioned(
-                                left: 32,
-                                top: 32,
+                                left: 8,
+                                top: 44,
                                 child: IconButton(
                                   padding: EdgeInsets.zero,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   icon: const Icon(Icons.close),
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
                                 ),
                               ),
-                              const Positioned(
+                              Positioned(
                                 bottom: 24,
                                 left: 24,
                                 right: 24,
-                                child: StoryCommentTextInput(),
+                                child: StoryCommentTextInput(
+                                  focusNode: _commentFocusNode,
+                                  storyCommentController:
+                                      storyCommentTextController,
+                                  onCommentSend: () {
+                                    //Todo: Send the Message to Stream
+                                    // Call the Cubit Method here
+                                    _commentFocusNode.unfocus();
+                                  },
+                                ),
                               ),
                             ],
                           );
@@ -174,5 +198,23 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
         },
       ),
     );
+  }
+
+  void _handleFocusChange() {
+    if (_commentFocusNode.hasFocus) {
+      // If the TextField gains focus (user starts typing) -> PAUSE the story
+      if (indicatorAnimationController.value !=
+          IndicatorAnimationCommand.pause) {
+        indicatorAnimationController.value = IndicatorAnimationCommand.pause;
+        print('Comment box focused. Story PAUSED.');
+      }
+    } else {
+      // If the TextField loses focus (user submits, taps outside) -> RESUME the story
+      if (indicatorAnimationController.value !=
+          IndicatorAnimationCommand.resume) {
+        indicatorAnimationController.value = IndicatorAnimationCommand.resume;
+        print('Comment box unfocused. Story RESUMED.');
+      }
+    }
   }
 }

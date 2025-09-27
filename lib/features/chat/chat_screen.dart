@@ -6,7 +6,9 @@ import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
 import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
 import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:glint_frontend/utils/date_and_time_extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gradient_circular_progress_indicator/gradient_circular_progress_indicator.dart';
 import 'package:intl/intl.dart';
@@ -20,11 +22,13 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  // Todo: Move this Logic to the Bloc Start
+  // Get the Client and CurrentUser from inside the Build method,
   late final _listController = StreamChannelListController(
     client: StreamChat.of(context).client,
     filter: Filter.in_(
       'members',
-      [StreamChat.of(context).currentUser!.id],
+      [StreamChat.of(context).currentUser?.id ?? 0],
     ),
     channelStateSort: const [SortOption('last_message_at')],
     limit: 20,
@@ -86,7 +90,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       (match) {
                     context.pushNamed(
                       GlintChatRoutes.chatWith.name,
-                      extra: match.chatChannelId,
+                      extra: ChatWithNavArguments(
+                          channelId: match.chatChannelId,
+                          eventId: match.eventId,
+                          eventName: match.eventName,
+                          eventStartTime: match.eventStartTime),
                     );
                   }, noRecentMatches: state.recentMatches?.isEmpty ?? false),
                   const Gap(12.0),
@@ -106,14 +114,29 @@ class _ChatScreenState extends State<ChatScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, channels, index, defaultTile) {
-                      // final lastMessage = channels[index].state?.messages.last;
-                      // final unreadCount = channels[index].state?.unreadCount ?? 0;
-                      // final myUserId = StreamChat.of(context).currentUser?.id ?? 0;
-                      // //
-                      // // // Determine if the last message was sent by the opposite user and is unread
-                      // final isUnreadFromOtherUser = lastMessage != null &&
-                      //     lastMessage.user?.id != myUserId &&
-                      //     unreadCount > 0;
+                      final currentUserId =
+                          StreamChat.of(context).currentUser!.id;
+                      final oppositeUser =
+                          channels[index].state!.members.firstWhere(
+                                (member) => member.user!.id != currentUserId,
+                              );
+                      final oppositeUserName = oppositeUser.user!.name;
+                      final oppositeUserImage = oppositeUser.user?.image;
+
+                      final lastMessage = channels[index].state?.messages.last;
+                      final isLastMessageAMedia =
+                          lastMessage?.attachments.isNotEmpty ?? false;
+                      final lastMessageDate =
+                          lastMessage?.createdAt ?? DateTime.now();
+                      final unreadCount =
+                          channels[index].state?.unreadCount ?? 0;
+                      final myUserId =
+                          StreamChat.of(context).currentUser?.id ?? 0;
+
+                      // // Determine if the last message was sent by the opposite user and is unread
+                      final isUnreadFromOtherUser = lastMessage != null &&
+                          lastMessage.user?.id != myUserId &&
+                          unreadCount > 0;
 
                       return ListTile(
                         contentPadding: const EdgeInsets.symmetric(
@@ -124,62 +147,88 @@ class _ChatScreenState extends State<ChatScreen> {
                           clipBehavior: Clip.none,
                           alignment: Alignment.center,
                           children: [
-                            Container(
-                              height: 52.0,
-                              width: 48.0,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    'lib/assets/images/temp_place_holder.png',
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            if (true)
-                              Positioned(
-                                bottom: -8.0,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5.2, vertical: 2.0),
-                                  decoration: BoxDecoration(
-                                    color: AppColours.primaryBlue,
-                                    borderRadius: BorderRadius.circular(24),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(
-                                        Icons.local_fire_department,
-                                        size: 11,
-                                        color: AppColours.white,
+                            oppositeUserImage != null
+                                ? SizedBox(
+                                    height: 52.0,
+                                    width: 48.0,
+                                    child: ClipRRect(
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(8.0),
                                       ),
-                                      const Gap(2.0),
-                                      Text(
-                                        '3',
-                                        style: AppTheme.smallBodyText.copyWith(
-                                          color: AppColours.white,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 11.0,
-                                        ),
+                                      child: FadeInImage.assetNetwork(
+                                        placeholder:
+                                            'lib/assets/images/temp_place_holder.png',
+                                        // Local placeholder
+                                        image: oppositeUserImage,
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: 220,
+                                        imageErrorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Image.asset(
+                                            'lib/assets/images/temp_place_holder.png',
+                                            fit: BoxFit.cover,
+                                          );
+                                        },
                                       ),
-                                    ],
+                                    ),
+                                  )
+                                : Container(
+                                    height: 52.0,
+                                    width: 48.0,
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8.0),
+                                      ),
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'lib/assets/images/temp_place_holder.png'),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
+                            // if (true)
+                            //   Positioned(
+                            //     bottom: -8.0,
+                            //     child: Container(
+                            //       padding: const EdgeInsets.symmetric(
+                            //           horizontal: 5.2, vertical: 2.0),
+                            //       decoration: BoxDecoration(
+                            //         color: AppColours.primaryBlue,
+                            //         borderRadius: BorderRadius.circular(24),
+                            //       ),
+                            //       child: Row(
+                            //         mainAxisSize: MainAxisSize.min,
+                            //         children: [
+                            //           const Icon(
+                            //             Icons.local_fire_department,
+                            //             size: 11,
+                            //             color: AppColours.white,
+                            //           ),
+                            //           const Gap(2.0),
+                            //           Text(
+                            //             '3',
+                            //             style: AppTheme.smallBodyText.copyWith(
+                            //               color: AppColours.white,
+                            //               fontWeight: FontWeight.w600,
+                            //               fontSize: 11.0,
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
                           ],
                         ),
                         title: Text(
-                          channels[index].name ?? 'Chat',
+                          oppositeUserName,
                           style: AppTheme.simpleBodyText.copyWith(
                             color: AppColours.black,
                           ),
                         ),
                         subtitle: Text(
-                          'No messages yet',
+                          isLastMessageAMedia
+                              ? "Checkout this Image"
+                              : lastMessage?.text ?? "You got a new msg",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: AppTheme.simpleText.copyWith(
@@ -190,7 +239,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           padding: const EdgeInsets.only(top: 5.0),
                           child: Column(
                             children: [
-                              if (true)
+                              if (isUnreadFromOtherUser)
                                 // your turn if message received
                                 Container(
                                   padding: const EdgeInsets.symmetric(
@@ -211,9 +260,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                 ),
                               const Gap(8.0),
-                              // time of last message
+                              // Todo: Fix the format of the date
                               Text(
-                                formatDateTime('2025-04-08T10:15:00.000Z'),
+                                lastMessageDate.formatToStandard(),
                                 style: AppTheme.smallBodyText.copyWith(
                                   color: AppColours.darkGray,
                                 ),
@@ -224,7 +273,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         onTap: () {
                           context.pushNamed(
                             GlintChatRoutes.chatWith.name,
-                            extra: channels[index].id,
+                            extra: ChatWithNavArguments(
+                              channelId: channels[index].id ?? "0",
+                            ),
                           );
                         },
                       );

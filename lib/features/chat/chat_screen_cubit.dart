@@ -43,14 +43,22 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
       final userId = await getUserId();
       final userToken = await getUserToken(userId);
       final userName = await getUserName();
+      final userImage = await getUserImage();
       await chatClient.connectUser(
         User(
           id: userId,
           name: userName,
+          image: userImage
         ),
         userToken,
       );
     }
+  }
+
+  Future<String> getUserImage() async {
+    final pic =
+    await sharedPreferenceHelper.getString(SharedPreferenceKeys.userPrimaryPicUrlKey);
+    return pic;
   }
 
   Future<String> getUserId() async {

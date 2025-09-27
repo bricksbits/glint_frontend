@@ -80,6 +80,7 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
         final streamToken = successResponse.profile?.streamAuthToken;
         final userId = successResponse.profile?.userId;
         final userName = successResponse.profile?.username;
+        final userImageUrl = successResponse.profile?.pictureUrlList?.first.presignedUrl;
         if (successResponse.profile != null) {
           saveMembershipDetails(
             ProfileMembershipEntity(
@@ -97,6 +98,7 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
           streamToken,
           userId.toString(),
           userName,
+          userImageUrl
         );
 
         await sharedPreferenceHelper

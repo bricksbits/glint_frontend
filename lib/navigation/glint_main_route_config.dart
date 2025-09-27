@@ -136,14 +136,14 @@ final glintMainRoutes = GoRouter(
           path: '/${GlintChatRoutes.chatWith.name}',
           name: GlintChatRoutes.chatWith.name,
           builder: (context, state) {
-            final passedChannelId = state.extra as String?;
-            if (passedChannelId == null) {
+            final passedArguments = state.extra as ChatWithNavArguments?;
+            if (passedArguments == null) {
               return const Center(
                 child: Text("Chat Servers went out"),
               );
             }
             return ChatWithScreen(
-              channelId: passedChannelId,
+              chatWithNavArguments: passedArguments,
             );
           },
         ),
