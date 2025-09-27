@@ -27,6 +27,7 @@ import '../data/repo/auth/authentication_repo_impl.dart' as _i840;
 import '../data/repo/auth/forgot_password_repo_impl.dart' as _i509;
 import '../data/repo/background/user_info_repo_impl.dart' as _i321;
 import '../data/repo/chat/chat_main/chat_repo_impl.dart' as _i651;
+import '../data/repo/chat/chat_with/chat_with_repo_impl.dart' as _i112;
 import '../data/repo/event/event_repo_impl.dart' as _i390;
 import '../data/repo/likes/likes_data_repo_impl.dart' as _i503;
 import '../data/repo/onBoard/on_boarding_repo_impl.dart' as _i359;
@@ -63,6 +64,7 @@ import '../domain/business_logic/repo/background/info/user_info_repo.dart'
     as _i661;
 import '../domain/business_logic/repo/boarding/on_boarding_repo.dart' as _i330;
 import '../domain/business_logic/repo/chat/chat_repo.dart' as _i849;
+import '../domain/business_logic/repo/chat/chat_with_repo.dart' as _i38;
 import '../domain/business_logic/repo/event/events_repo.dart' as _i757;
 import '../domain/business_logic/repo/likes/likes_data_repo.dart' as _i427;
 import '../domain/business_logic/repo/payment/payment_repo.dart' as _i235;
@@ -109,6 +111,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i274.AsyncEncryptedSharedPreferenceHelper>(() =>
         _i274.AsyncEncryptedSharedPreferenceHelper(
             gh<_i930.EncryptedSharedPreferencesAsync>()));
+    gh.lazySingleton<_i38.ChatWithRepo>(() => _i112.ChatWithRepoImpl());
     gh.singleton<_i368.MyDioClient>(() => _i368.MyDioClient(
           gh<_i361.Dio>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),

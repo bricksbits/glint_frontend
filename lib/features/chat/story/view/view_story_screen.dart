@@ -7,6 +7,7 @@ import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/story/view/view_story_cubit.dart';
 import 'package:story/story_image.dart';
 import 'package:story/story_page_view.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class ViewStoryScreen extends StatefulWidget {
   const ViewStoryScreen({super.key, required this.passedIndex});
@@ -21,6 +22,8 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
   late ValueNotifier<IndicatorAnimationCommand> indicatorAnimationController;
   final storyCommentTextController = TextEditingController();
   final FocusNode _commentFocusNode = FocusNode();
+
+  String? currentChannel;
 
   @override
   void initState() {
@@ -41,6 +44,7 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final streamClient = StreamChat.of(context).client;
     return BlocProvider(
       create: (context) => ViewStoryCubit(),
       child: BlocBuilder<ViewStoryCubit, ViewStoryState>(
@@ -53,6 +57,7 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                 : StoryPageView(
                     itemBuilder: (context, pageIndex, storyIndex) {
                       final currentVisibleUser = state.stories?[pageIndex];
+                      currentChannel = currentVisibleUser?.streamChannelId;
                       final currentVisibleStory =
                           currentVisibleUser?.storiesUrl[storyIndex];
                       return Stack(
@@ -74,19 +79,19 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                             padding: const EdgeInsets.only(top: 44, left: 8),
                             child: Row(
                               children: [
-                                Container(
-                                  height: 32,
-                                  width: 32,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage(
-                                          currentVisibleUser?.userImageUrl ??
-                                              ""),
-                                      fit: BoxFit.cover,
-                                    ),
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
+                                // Container(
+                                //   height: 32,
+                                //   width: 32,
+                                //   decoration: BoxDecoration(
+                                //     image: DecorationImage(
+                                //       image: NetworkImage(
+                                //           currentVisibleUser?.userImageUrl ??
+                                //               ""),
+                                //       fit: BoxFit.cover,
+                                //     ),
+                                //     shape: BoxShape.circle,
+                                //   ),
+                                // ),
                                 const SizedBox(
                                   width: 8,
                                 ),
@@ -171,8 +176,20 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                                   storyCommentController:
                                       storyCommentTextController,
                                   onCommentSend: () {
-                                    //Todo: Send the Message to Stream
-                                    // Call the Cubit Method here
+                                    if (currentChannel != null) {
+                                      final channel = streamClient.channel(
+                                        'messaging',
+                                        id: currentChannel,
+                                      );
+                                      context
+                                          .read<ViewStoryCubit>()
+                                          .replyToStory(
+                                            streamClient,
+                                            channel,
+                                            storyCommentTextController.text,
+                                          );
+                                    }
+                                    storyCommentTextController.clear();
                                     _commentFocusNode.unfocus();
                                   },
                                 ),

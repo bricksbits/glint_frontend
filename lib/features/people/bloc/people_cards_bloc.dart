@@ -30,11 +30,10 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
             await eventRepo.fetchInterestedProfiles(event.eventId);
         switch (profileResult) {
           case Success<List<PeopleCardModel>>():
-            cardsList.addAll(profileResult.data);
             add(
               PeopleCardsEvent.emitNewState(
                 state.copyWith(
-                  cardList: cardsList,
+                  cardList: profileResult.data,
                   error: "",
                   isLoading: false,
                   userId: userId,

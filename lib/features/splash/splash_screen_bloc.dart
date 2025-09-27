@@ -103,26 +103,32 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
     final userToken = await getUserToken(userId);
     final userName = await getUserName();
     final userImage = await getUserImage();
+    if (userToken.isEmpty || userId.isEmpty || userImage.isEmpty || userName.isEmpty) {
+      add(
+        SplashScreenEvent.emitNewStates(
+          SplashScreenState.navigateTo(
+            GlintMainRoutes.home.name,
+          ),
+        ),
+      );
+      return;
+    }
     await chatClient.connectUser(
-      User(
-        id: userId,
-        name: userName,
-        image: userImage
-      ),
+      User(id: userId, name: userName, image: userImage),
       userToken,
     );
   }
 
   Future<String> getUserImage() async {
-    final pic =
-    await sharedPreferenceHelper.getString(SharedPreferenceKeys.userPrimaryPicUrlKey);
+    final pic = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.userPrimaryPicUrlKey);
     return pic;
   }
 
   Future<String> getUserId() async {
     final userId =
         await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
-    return "user_$userId";
+    return userId;
   }
 
   Future<String> getUserName() async {
