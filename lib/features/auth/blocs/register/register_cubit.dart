@@ -110,7 +110,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         _uploadMediaFiles();
       },
       (error) {
-        print("Login : Error $error");
+        print("Login : Error ${error.toString()}");
         emit(state.copyWith(isLoading: false, isRegisteredSuccessfully: false));
       },
       () {

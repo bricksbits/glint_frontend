@@ -19,6 +19,7 @@ import 'package:glint_frontend/domain/business_logic/models/auth/register_user_r
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
 import 'package:glint_frontend/domain/business_logic/repo/boarding/on_boarding_repo.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
@@ -80,7 +81,8 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
         final streamToken = successResponse.profile?.streamAuthToken;
         final userId = successResponse.profile?.userId;
         final userName = successResponse.profile?.username;
-        final userImageUrl = successResponse.profile?.pictureUrlList?.first.presignedUrl;
+        final userImageUrl =
+            successResponse.profile?.pictureUrlList?.first.presignedUrl;
         if (successResponse.profile != null) {
           saveMembershipDetails(
             ProfileMembershipEntity(
@@ -92,14 +94,8 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
             ),
           );
         }
-        await sharedPreferenceHelper.saveUserData(
-          accessToken,
-          refreshToken,
-          streamToken,
-          userId.toString(),
-          userName,
-          userImageUrl
-        );
+        await sharedPreferenceHelper.saveUserData(accessToken, refreshToken,
+            streamToken, userId.toString(), userName, userImageUrl);
 
         await sharedPreferenceHelper
             .saveUserType(successResponse.profile?.userRole ?? "user");
@@ -116,6 +112,7 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
 
         return Success(successResponse);
       case Failure():
+        debugLogger("LOGIN_FAILED", "Reason : ${response.error}");
         return Failure(Exception());
     }
   }

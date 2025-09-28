@@ -1,6 +1,7 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/components/onboarding/height_slider_component.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class AdditionalInfoContainer extends StatefulWidget {
@@ -26,15 +27,11 @@ class AdditionalInfoContainer extends StatefulWidget {
 }
 
 class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
-  // generic bottom sheet function
   void _showBottomSheet(BuildContext context) {
     context.showBottomSheet(
-      isDismissible: false,
+      isDismissible: true,
       (context) {
-        return const SizedBox(
-          width: double.infinity,
-          height: 240.0,
-        );
+        return const HeightInputComponent();
       },
     );
   }
