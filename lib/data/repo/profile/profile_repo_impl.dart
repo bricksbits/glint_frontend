@@ -68,9 +68,11 @@ class ProfileRepoImpl extends ProfileRepo {
   }
 
   @override
-  Future<Result<void>> updateProfileData() {
-    // TODO: implement updateProfileData
-    throw UnimplementedError();
+  Future<Result<void>> updateProfileData(
+      PeopleCardModel updatedPeopleCardModel) async {
+    var peopleEntity = updatedPeopleCardModel.mapToEntity();
+    await profileDao.updateProfileData(peopleEntity);
+    return const Success("");
   }
 
   @override

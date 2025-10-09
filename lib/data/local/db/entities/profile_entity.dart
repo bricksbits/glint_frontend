@@ -68,9 +68,9 @@ class ProfileEntity {
     required this.profileLikes,
     required this.pictureUrlList,
     required this.profileTag,
-    required this.lastLocation,
+    this.lastLocation,
     required this.location,
-    required this.dateOfBirthFormatted,
+    this.dateOfBirthFormatted,
   });
 }
 

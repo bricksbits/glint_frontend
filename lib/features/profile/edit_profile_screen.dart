@@ -93,7 +93,11 @@ class EditProfileScreen extends StatelessWidget {
                     //im looking for card
                     ImLookingForCard(
                       lookingFor: state.previewProfileModel?.lookingFor ?? "",
-                      lookingForCallback: (lookingFor) {},
+                      lookingForCallback: (lookingFor) {
+                        context
+                            .read<ProfileEditCubit>()
+                            .updateRelationshipGoal(lookingFor);
+                      },
                     ),
 
                     const Gap(16.0),
@@ -101,14 +105,19 @@ class EditProfileScreen extends StatelessWidget {
                     // pronouns card
                     YourPronounsCard(
                       pronouns: state.previewProfileModel?.gender,
-                      pronounsSelected: (pronouns) {},
+                      pronounsSelected: (pronouns) {
+                        context
+                            .read<ProfileEditCubit>()
+                            .updatePronouns(pronouns);
+                      },
                     ),
 
                     const Gap(20.0),
 
                     // Interests and Vibe
                     _buildInterestsAndVibeSections(
-                        state.previewProfileModel?.interests ?? []),
+                      state.previewProfileModel?.interests ?? [],
+                    ),
 
                     const Gap(20.0),
 
@@ -120,7 +129,47 @@ class EditProfileScreen extends StatelessWidget {
 
                     // Additional info
                     const Gap(24.0),
-                    const AdditionalInfoContainer(),
+                    AdditionalInfoContainer(
+                      occupation: state.previewProfileModel?.occupation,
+                      education: state.previewProfileModel?.about["education"],
+                      height: state.previewProfileModel?.about["height"],
+                      workoutHabits:
+                          state.previewProfileModel?.about["workout"],
+                      drinkingHabits:
+                          state.previewProfileModel?.about["drinking"],
+                      smokingHabits:
+                          state.previewProfileModel?.about["smoking"],
+                      occupationProvided: (occupation) {
+                        context
+                            .read<ProfileEditCubit>()
+                            .updateOccupation(occupation);
+                      },
+                      educationSelected: (education) {
+                        context
+                            .read<ProfileEditCubit>()
+                            .updateOccupation(education);
+                      },
+                      heightProvided: (height) {
+                        context.read<ProfileEditCubit>().updateHeight(
+                              height.toString(),
+                            );
+                      },
+                      workoutHabitSelected: (workout) {
+                        context
+                            .read<ProfileEditCubit>()
+                            .updateWorkoutHabits(workout);
+                      },
+                      drinkingHabitSelected: (drinking) {
+                        context
+                            .read<ProfileEditCubit>()
+                            .updateWorkoutHabits(drinking);
+                      },
+                      smokingHabitSelected: (smoking) {
+                        context
+                            .read<ProfileEditCubit>()
+                            .updateWorkoutHabits(smoking);
+                      },
+                    ),
                   ],
                 ),
               ),

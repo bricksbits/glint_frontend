@@ -73,7 +73,6 @@ class OnBoardRepoImpl extends OnBoardingRepo {
   }
 }
 
-//Todo: How to Manage the password here
 //Todo: How to manage the Date of Birth here,
 //todo: New request body is needed to be used here,
 extension ProfileEntityToRequestMapper on ProfileEntity {

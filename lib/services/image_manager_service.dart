@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
@@ -58,6 +59,10 @@ class ImageService {
             file: file,
           ));
         }
+        debugLogger(
+          "IMAGE_SERVICE",
+          "Images Picked successfully : ${result.first.file}",
+        );
         return result;
       }
     }
@@ -147,6 +152,11 @@ class ImageService {
 
     files.sort((a, b) =>
         _extractPictureNum(a.path).compareTo(_extractPictureNum(b.path)));
+
+    debugLogger(
+      "IMAGE_SERVICE",
+      "Load Images : ${files.length}",
+    );
 
     return files
         .map(

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:glint_frontend/domain/business_logic/models/profile/profile_properties_enum.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/repo/profile/profile_repo.dart';
@@ -30,7 +31,9 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
     }
   }
 
-  Future<void> updateProfile(PeopleCardModel updatedModel) async {}
+  Future<void> updateProfile(PeopleCardModel updatedModel) async {
+    await profileRepo.updateProfileData(updatedModel);
+  }
 
   Future<void> uploadMedia() async {}
 
@@ -44,19 +47,75 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
 
   void updateInterests(List<String> newInterests) {}
 
-  void updateBio(String newBio) {}
+  void updateBio(String newBio) {
+    final updatedModelWithBio =
+        state.previewProfileModel?.copyWith(bio: newBio);
+    if (updatedModelWithBio != null) {
+      updateProfile(updatedModelWithBio);
+    }
+  }
 
-  void updateOccupation(String newOccupation) {}
+  void updateOccupation(String newOccupation) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("occupation", (_) => newOccupation);
+    final updatedAbout = state.previewProfileModel?.copyWith(
+      about: currentAboutMap,
+      occupation: newOccupation,
+    );
+    if (updatedAbout != null) {
+      updateProfile(updatedAbout);
+    }
+  }
 
-  void updateEducation(String newEducation) {}
+  void updateEducation(String newEducation) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("education", (_) => newEducation);
+    final updatedAbout =
+        state.previewProfileModel?.copyWith(about: currentAboutMap);
+    if (updatedAbout != null) {
+      updateProfile(updatedAbout);
+    }
+  }
 
-  void updateHeight(String newHeight) {}
+  void updateHeight(String newHeight) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("height", (_) => newHeight);
+    final updatedAbout =
+        state.previewProfileModel?.copyWith(about: currentAboutMap);
+    if (updatedAbout != null) {
+      updateProfile(updatedAbout);
+    }
+  }
 
-  void updateWorkoutHabits(String newWorkoutHabits) {}
+  void updateWorkoutHabits(String newWorkoutHabits) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("workout", (_) => newWorkoutHabits);
+    final updatedAbout =
+        state.previewProfileModel?.copyWith(about: currentAboutMap);
+    if (updatedAbout != null) {
+      updateProfile(updatedAbout);
+    }
+  }
 
-  void updateSmokingHabits(String newSmokingHabits) {}
+  void updateSmokingHabits(String newSmokingHabits) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("smoking", (_) => newSmokingHabits);
+    final updatedAbout =
+        state.previewProfileModel?.copyWith(about: currentAboutMap);
+    if (updatedAbout != null) {
+      updateProfile(updatedAbout);
+    }
+  }
 
-  void updateDrinkingHabits(String newDrinkingHabits) {}
+  void updateDrinkingHabits(String newDrinkingHabits) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("drinking", (_) => newDrinkingHabits);
+    final updatedAbout =
+        state.previewProfileModel?.copyWith(about: currentAboutMap);
+    if (updatedAbout != null) {
+      updateProfile(updatedAbout);
+    }
+  }
 
   void emitNewState(ProfileEditState newState) {
     emit(newState);

@@ -72,48 +72,52 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
       passedQueryParameters: null,
     );
 
-    switch (response) {
-      case Success():
-        final successResponse = LoginResponse.fromJson(response.data);
-        await profileDao.insertProfile(successResponse.mapToEntity());
-        final accessToken = successResponse.profile?.authToken;
-        final refreshToken = successResponse.profile?.refreshToken;
-        final streamToken = successResponse.profile?.streamAuthToken;
-        final userId = successResponse.profile?.userId;
-        final userName = successResponse.profile?.username;
-        final userImageUrl =
-            successResponse.profile?.pictureUrlList?.first.presignedUrl;
-        if (successResponse.profile != null) {
-          saveMembershipDetails(
-            ProfileMembershipEntity(
-              userId: successResponse.profile!.userId.toString(),
-              superLikes: successResponse.profile!.superLikesLeft ?? 0,
-              aiMessages: successResponse.profile!.aiMessagesRemaining ?? 0,
-              rewinds: successResponse.profile!.rewindsRemaining ?? 0,
-              superDm: successResponse.profile!.directDmRemaining ?? 0,
-            ),
+    try {
+      switch (response) {
+        case Success():
+          final successResponse = LoginResponse.fromJson(response.data);
+          await profileDao.insertProfile(successResponse.mapToEntity());
+          final accessToken = successResponse.profile?.authToken;
+          final refreshToken = successResponse.profile?.refreshToken;
+          final streamToken = successResponse.profile?.streamAuthToken;
+          final userId = successResponse.profile?.userId;
+          final userName = successResponse.profile?.username;
+          final userImageUrl = successResponse.profile?.pictureUrlList?.firstOrNull?.presignedUrl;
+          if (successResponse.profile != null) {
+            saveMembershipDetails(
+              ProfileMembershipEntity(
+                userId: successResponse.profile!.userId.toString(),
+                superLikes: successResponse.profile!.superLikesLeft ?? 0,
+                aiMessages: successResponse.profile!.aiMessagesRemaining ?? 0,
+                rewinds: successResponse.profile!.rewindsRemaining ?? 0,
+                superDm: successResponse.profile!.directDmRemaining ?? 0,
+              ),
+            );
+          }
+          await sharedPreferenceHelper.saveUserData(accessToken, refreshToken,
+              streamToken, userId.toString(), userName, userImageUrl);
+
+          await sharedPreferenceHelper
+              .saveUserType(successResponse.profile?.userRole ?? "user");
+
+          await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.adminUserOrganizationKey,
+            successResponse.profile?.occupation ?? "Event Manager",
           );
-        }
-        await sharedPreferenceHelper.saveUserData(accessToken, refreshToken,
-            streamToken, userId.toString(), userName, userImageUrl);
 
-        await sharedPreferenceHelper
-            .saveUserType(successResponse.profile?.userRole ?? "user");
+          await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.adminUserEmailKey,
+            loginRequestBody.email ?? "",
+          );
 
-        await sharedPreferenceHelper.saveString(
-          SharedPreferenceKeys.adminUserOrganizationKey,
-          successResponse.profile?.occupation ?? "Event Manager",
-        );
-
-        await sharedPreferenceHelper.saveString(
-          SharedPreferenceKeys.adminUserEmailKey,
-          loginRequestBody.email ?? "",
-        );
-
-        return Success(successResponse);
-      case Failure():
-        debugLogger("LOGIN_FAILED", "Reason : ${response.error}");
-        return Failure(Exception());
+          return Success(successResponse);
+        case Failure():
+          debugLogger("LOGIN_FAILED", "Reason : ${response.error}");
+          return Failure(Exception(response.error));
+      }
+    } catch (e) {
+      debugLogger("LOGIN_FAILED", "Reason : $e");
+      return Failure(Exception("LOGIN_FAILED Reason : $e"));
     }
   }
 

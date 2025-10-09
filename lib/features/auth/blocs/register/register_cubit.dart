@@ -67,7 +67,10 @@ class RegisterCubit extends Cubit<RegisterState> {
   //Todo: handle the Role as per the type of registration
   //Todo: Update the FCM token
   Future<void> registerUser() async {
-    emitNewState(state.copyWith(isLoading: true));
+    emitNewState(
+      state.copyWith(
+          isLoading: true, currentSuccessStatus: "Registering New User"),
+    );
     final userRequestModel = await authenticationRepo.getOnBoardedUser();
     if (state.isEmailValid && state.isPassWordValid) {
       final updatedRequestWithCredentials = userRequestModel?.copyWith(
@@ -82,6 +85,10 @@ class RegisterCubit extends Cubit<RegisterState> {
         switch (isRegisteredResponse) {
           //todo: Emit Success state
           case Success<void>():
+            emitNewState(
+              state.copyWith(
+                  currentSuccessStatus: "Registered, Login you now to system"),
+            );
             await authenticationRepo.clearTheDbAfterRegistration();
             await _loginUser(
               state.email,
@@ -100,7 +107,6 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
   }
 
-  //Todo: Showcase in the UI the various state happening here.
   Future<void> _loginUser(
     String validEmail,
     String validPassword,
@@ -146,6 +152,11 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   Future<void> _uploadMediaFiles() async {
+    emitNewState(
+      state.copyWith(
+        currentSuccessStatus: "Uploading your images..",
+      ),
+    );
     final savedImages = await imageService.loadSavedImages();
     final mediaFiles = savedImages.map((file) => file.file).toList();
     final imagesUploadResponse =
@@ -161,7 +172,9 @@ class RegisterCubit extends Cubit<RegisterState> {
         );
       case Failure<void>():
         print("Files not uploaded");
-        emitNewState(state.copyWith(isLoading: false));
+        emitNewState(state.copyWith(
+          isLoading: false,
+        ));
     }
   }
 
