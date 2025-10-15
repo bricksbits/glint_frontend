@@ -19,52 +19,61 @@ class GetVerifiedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        //name and subtitle
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //name
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                RichText(
-                  text: TextSpan(
-                    text: '$name,',
-                    style: AppTheme.headingTwo.copyWith(
-                      fontStyle: FontStyle.normal,
-                    ),
-                    children: [
+        // Left Section: Name, age, badge, and subtitle
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Name Row
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Flexible(
+                    child: Text.rich(
                       TextSpan(
-                        text: ' $age',
+                        text: '$name, ',
                         style: AppTheme.headingTwo.copyWith(
-                          fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                         ),
+                        children: [
+                          TextSpan(
+                            text: '$age',
+                            style: AppTheme.headingTwo.copyWith(
+                              fontWeight: FontWeight.w400,
+                              fontStyle: FontStyle.normal,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
 
-                const Gap(12.0),
+                  const Gap(8.0),
 
-                // Verified badge
-                SvgPicture.asset(
-                  'lib/assets/icons/unverified_badge.svg',
-                ),
-              ],
-            ),
-            const Gap(8.0),
-            // subtitle
-            const Text(
-              'Photo verified profiles\ntends to get more matches',
-              style: AppTheme.simpleText,
-            ),
-          ],
+                  // Badge
+                  SvgPicture.asset(
+                    'lib/assets/icons/unverified_badge.svg',
+                    height: 20,
+                  ),
+                ],
+              ),
+
+              const Gap(8.0),
+
+              // Subtitle
+              const Text(
+                'Photo verified profiles\ntend to get more matches',
+                style: AppTheme.simpleText,
+              ),
+            ],
+          ),
         ),
 
-        const Spacer(),
+        const Gap(12.0),
 
+        // Right Section: Button
         SizedBox(
           height: 68.0,
           child: GlintElevatedButton(
@@ -73,7 +82,7 @@ class GetVerifiedWidget extends StatelessWidget {
             backgroundColor: AppColours.black,
             customBorderRadius: 70.0,
           ),
-        )
+        ),
       ],
     );
   }

@@ -5,6 +5,6 @@ class ProfileEditState with _$ProfileEditState {
   const factory ProfileEditState.initial({
     @Default(null) PeopleCardModel? previewProfileModel,
     @Default("") String error,
-    @Default(false) bool isLoading,
+    @Default(true) bool isLoading,
   }) = _Initial;
 }

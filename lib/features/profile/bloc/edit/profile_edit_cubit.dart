@@ -23,10 +23,16 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
     final currentProfile = await profileRepo.fetchUserProfile();
     switch (currentProfile) {
       case Success<PeopleCardModel>():
-        emitNewState(state.copyWith(previewProfileModel: currentProfile.data));
+        emitNewState(
+          state.copyWith(
+              previewProfileModel: currentProfile.data, isLoading: false),
+        );
       case Failure<PeopleCardModel>():
         emitNewState(
-          state.copyWith(error: "No profile data found, please login again."),
+          state.copyWith(
+            error: "No profile data found, please login again.",
+            isLoading: false,
+          ),
         );
     }
   }

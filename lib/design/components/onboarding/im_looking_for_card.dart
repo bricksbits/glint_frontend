@@ -57,11 +57,11 @@ class _ImLookingForCardState extends State<ImLookingForCard> {
               children: [
                 GlintCustomLabelChip(
                   label: 'Long-Term',
-                  isSelected: _lookingFor == 'Long-Term' ||
+                  isSelected: _lookingFor == 'Long Term' ||
                       (widget.lookingFor != null &&
-                          widget.lookingFor == 'Long-Term'),
+                          widget.lookingFor == 'Long Term'),
                   onTap: () {
-                    setState(() => _lookingFor = 'Long-Term');
+                    setState(() => _lookingFor = 'Long Term');
                     widget.lookingForCallback("Long Term");
                   },
                 ),

@@ -85,27 +85,6 @@ class _YourPronounsCardState extends State<YourPronounsCard> {
   }
 
   @override
-  void initState() {
-    //Todo: Define a better scalable logic here
-    if (widget.genderPassed != null) {
-      if (widget.genderPassed == "female") {
-        _selectedPronoun = "She/Her";
-      }
-
-      if (widget.genderPassed == "male") {
-        _selectedPronoun = "He/Him";
-      }
-
-      if (widget.genderPassed != "female" && widget.genderPassed != "male") {
-        _selectedPronoun = "They/Them";
-      }
-    } else {
-      _selectedPronoun = "Prefer not to say";
-    }
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final customPronoun = _customPronounsController.text.trim();
     return Container(
@@ -139,28 +118,36 @@ class _YourPronounsCardState extends State<YourPronounsCard> {
                 children: [
                   GlintCustomLabelChip(
                     label: 'He/Him',
-                    isSelected: _selectedPronoun == 'He/Him',
+                    isSelected: _selectedPronoun == 'He/Him' ||
+                        (widget.genderPassed != null &&
+                            widget.genderPassed == "male"),
                     onTap: () {
                       widget.pronounsSelected("He/Him");
                     },
                   ),
                   GlintCustomLabelChip(
                     label: 'She/Her',
-                    isSelected: _selectedPronoun == 'She/Her',
+                    isSelected: _selectedPronoun == 'She/Her' ||
+                        (widget.genderPassed != null &&
+                            widget.genderPassed == "female"),
                     onTap: () {
                       widget.pronounsSelected("She/Her");
                     },
                   ),
                   GlintCustomLabelChip(
                     label: 'They/Them',
-                    isSelected: _selectedPronoun == 'They/Them',
+                    isSelected: _selectedPronoun == 'They/Them' ||
+                        (widget.genderPassed != null &&
+                                widget.genderPassed != "male" &&
+                            widget.genderPassed != "female"),
                     onTap: () {
                       widget.pronounsSelected("They/Them");
                     },
                   ),
                   GlintCustomLabelChip(
                     label: 'Prefer not to say',
-                    isSelected: _selectedPronoun == 'Prefer not to say',
+                    isSelected: _selectedPronoun == 'Prefer not to say' ||
+                        widget.genderPassed == null,
                     onTap: () {
                       widget.pronounsSelected("Prefer not to say");
                     },

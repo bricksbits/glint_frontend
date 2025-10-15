@@ -129,7 +129,6 @@ extension PeopleCardToEntity on PeopleCardModel {
       'workoutHabit': 5,
       'drinkingHabit': 5,
       'smokingHabit': 5,
-      // total = 70 (fields) + 30 (pictures) = 100
     };
 
     double totalWeight = fieldWeights.values.reduce((a, b) => a + b);
@@ -166,7 +165,6 @@ extension PeopleCardToEntity on PeopleCardModel {
 
     filledWeight += pictureScore;
 
-    final completion = (filledWeight / totalWeight) * 100.0;
-    return completion.clamp(0, 100);
+    return (filledWeight / totalWeight);
   }
 }
