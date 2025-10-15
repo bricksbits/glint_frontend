@@ -34,12 +34,12 @@ class ImageService {
       }
     } else {
       // Mobile: Pick images using image_picker
-      final images = await _picker.pickMultiImage();
-      if (images != null) {
-        final directory = await getApplicationDocumentsDirectory();
-        final existing = await _loadSavedImageNames(directory);
-        final availableSlots = _getAvailableSlots(existing);
+      final directory = await getApplicationDocumentsDirectory();
+      final existing = await _loadSavedImageNames(directory);
+      final availableSlots = _getAvailableSlots(existing);
 
+      final images = await _picker.pickMultiImage(limit: availableSlots.length);
+      if (images.isNotEmpty) {
         List<ImageManagerData> result = [];
 
         for (int i = 0; i < images.length && i < availableSlots.length; i++) {
@@ -101,7 +101,7 @@ class ImageService {
     int maxCount = 6,
   }) async {
     // Only for mobile
-    final images = await _picker.pickMultiImage();
+    final images = await _picker.pickMultiImage(limit: maxCount);
     if (images.isEmpty) return [];
 
     // Define custom directory: .../eventId/files/

@@ -3,7 +3,8 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class ImLookingForCard extends StatefulWidget {
-  const ImLookingForCard({super.key, required this.lookingForCallback, required this.lookingFor});
+  const ImLookingForCard(
+      {super.key, required this.lookingForCallback, required this.lookingFor});
 
   final String? lookingFor;
   final Function(String) lookingForCallback;
@@ -56,7 +57,9 @@ class _ImLookingForCardState extends State<ImLookingForCard> {
               children: [
                 GlintCustomLabelChip(
                   label: 'Long-Term',
-                  isSelected: _lookingFor == 'Long-Term',
+                  isSelected: _lookingFor == 'Long-Term' ||
+                      (widget.lookingFor != null &&
+                          widget.lookingFor == 'Long-Term'),
                   onTap: () {
                     setState(() => _lookingFor = 'Long-Term');
                     widget.lookingForCallback("Long Term");
@@ -64,7 +67,9 @@ class _ImLookingForCardState extends State<ImLookingForCard> {
                 ),
                 GlintCustomLabelChip(
                   label: 'Something Casual',
-                  isSelected: _lookingFor == 'Something Casual',
+                  isSelected: _lookingFor == 'Something Casual' ||
+                      (widget.lookingFor != null &&
+                          widget.lookingFor == 'Something Casual'),
                   onTap: () {
                     setState(() => _lookingFor = 'Something Casual');
                     widget.lookingForCallback("Something Casual");
@@ -72,7 +77,9 @@ class _ImLookingForCardState extends State<ImLookingForCard> {
                 ),
                 GlintCustomLabelChip(
                   label: 'New Friends',
-                  isSelected: _lookingFor == 'New Friends',
+                  isSelected: _lookingFor == 'New Friends' ||
+                      (widget.lookingFor != null &&
+                          widget.lookingFor == 'New Friends'),
                   onTap: () {
                     setState(() => _lookingFor = 'New Friends');
                     widget.lookingForCallback("New Friends");
@@ -80,7 +87,9 @@ class _ImLookingForCardState extends State<ImLookingForCard> {
                 ),
                 GlintCustomLabelChip(
                   label: 'Not Sure',
-                  isSelected: _lookingFor == 'Not Sure',
+                  isSelected: _lookingFor == 'Not Sure' ||
+                      (widget.lookingFor != null &&
+                          widget.lookingFor == 'Not Sure'),
                   onTap: () {
                     setState(() => _lookingFor = 'Not Sure');
                     widget.lookingForCallback("Not Sure");

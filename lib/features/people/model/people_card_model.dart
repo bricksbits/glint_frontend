@@ -113,4 +113,60 @@ extension PeopleCardToEntity on PeopleCardModel {
       location: location,
     );
   }
+
+  double get profileCompletion {
+    final Map<String, double> fieldWeights = {
+      'username': 5,
+      'age': 5,
+      'gender': 5,
+      'genderPreference': 5,
+      'interests': 5,
+      'lookingFor': 5,
+      'bio': 10,
+      'height': 5,
+      'occupation': 5,
+      'education': 5,
+      'workoutHabit': 5,
+      'drinkingHabit': 5,
+      'smokingHabit': 5,
+      // total = 70 (fields) + 30 (pictures) = 100
+    };
+
+    double totalWeight = fieldWeights.values.reduce((a, b) => a + b);
+
+    double filledWeight = 0;
+
+    if (username.isNotEmpty) filledWeight += fieldWeights['username']!;
+    if (age.isNotEmpty) filledWeight += fieldWeights['age']!;
+    if (gender.isNotEmpty) filledWeight += fieldWeights['gender']!;
+    if (genderPreference.isNotEmpty) filledWeight += fieldWeights['genderPreference']!;
+    if (interests.isNotEmpty) filledWeight += fieldWeights['interests']!;
+    if (lookingFor.isNotEmpty) filledWeight += fieldWeights['lookingFor']!;
+    if (bio.isNotEmpty) filledWeight += fieldWeights['bio']!;
+    if (about["height"] != null) filledWeight += fieldWeights['height']!;
+    if (occupation != null) filledWeight += fieldWeights['occupation']!;
+    if (about["education"] != null) filledWeight += fieldWeights['education']!;
+    if (about["workout"] != null) filledWeight += fieldWeights['workoutHabit']!;
+    if (about["drinking"] != null) filledWeight += fieldWeights['drinkingHabit']!;
+    if (about["smoking"] != null) filledWeight += fieldWeights['smokingHabit']!;
+
+    int picCount = pictureUrlList.length;
+    double pictureScore = 0;
+    totalWeight += 30;
+
+    if (picCount >= 1 && picCount < 3) {
+      pictureScore = 10;
+    } else if (picCount >= 3 && picCount < 6) {
+      pictureScore = 20;
+    } else if (picCount >= 6 && picCount < 9) {
+      pictureScore = 25;
+    } else if (picCount >= 9) {
+      pictureScore = 30;
+    }
+
+    filledWeight += pictureScore;
+
+    final completion = (filledWeight / totalWeight) * 100.0;
+    return completion.clamp(0, 100);
+  }
 }

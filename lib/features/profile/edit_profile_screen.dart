@@ -104,7 +104,7 @@ class EditProfileScreen extends StatelessWidget {
 
                     // pronouns card
                     YourPronounsCard(
-                      pronouns: state.previewProfileModel?.gender,
+                      genderPassed: state.previewProfileModel?.gender,
                       pronounsSelected: (pronouns) {
                         context
                             .read<ProfileEditCubit>()
@@ -123,12 +123,16 @@ class EditProfileScreen extends StatelessWidget {
 
                     // enter bio
                     EnterYourBio(
-                      onBioCompleted: (newBio) {},
+                      onBioCompleted: (newBio) {
+                        context.read<ProfileEditCubit>()
+                            .updateBio(newBio);
+                      },
                       bio: state.previewProfileModel?.bio ?? "",
                     ),
 
                     // Additional info
                     const Gap(24.0),
+
                     AdditionalInfoContainer(
                       occupation: state.previewProfileModel?.occupation,
                       education: state.previewProfileModel?.about["education"],

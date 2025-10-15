@@ -1,5 +1,6 @@
 import 'package:floor/floor.dart';
 import 'package:glint_frontend/data/local/db/database/string_type_converter.dart';
+import 'package:glint_frontend/data/remote/model/request/profile/update_profile_request_body.dart';
 import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 
@@ -107,23 +108,37 @@ extension ProfileToPeopleMapper on ProfileEntity {
 
   RegisterUserRequest mapToRequestUserModel() {
     return RegisterUserRequest(
-      userId,
-      username,
-      "",
-      "",
-      bio,
-      dateOfBirthFormatted,
-      height ?? "",
-      education ?? "",
-      occupation ?? "",
-      gender,
-      genderPreference,
-      workoutHabit ?? "",
-      drinkingHabit ?? "",
-      smokingHabit ?? "",
-      lookingFor,
-      interests,
-      age
+        userId,
+        username,
+        "",
+        "",
+        bio,
+        dateOfBirthFormatted,
+        height ?? "",
+        education ?? "",
+        occupation ?? "",
+        gender,
+        genderPreference,
+        workoutHabit ?? "",
+        drinkingHabit ?? "",
+        smokingHabit ?? "",
+        lookingFor,
+        interests,
+        age
+    );
+  }
+
+  UpdateProfileRequestBody mapToUpdateProfileRequestModel() {
+    return UpdateProfileRequestBody(
+      username: username,
+      phoneNumber: "9999999999",
+      bio: bio,
+      height: height != null ? double.parse(height!) : null,
+      education: education,
+      workoutHabit: workoutHabit,
+      smokingHabit: smokingHabit,
+      drinkingHabit: drinkingHabit,
+      occupation: occupation,
     );
   }
 }

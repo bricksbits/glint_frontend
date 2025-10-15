@@ -69,7 +69,9 @@ class RegisterCubit extends Cubit<RegisterState> {
   Future<void> registerUser() async {
     emitNewState(
       state.copyWith(
-          isLoading: true, currentSuccessStatus: "Registering New User"),
+        isLoading: true,
+        currentSuccessStatus: "Registering New User",
+      ),
     );
     final userRequestModel = await authenticationRepo.getOnBoardedUser();
     if (state.isEmailValid && state.isPassWordValid) {
@@ -87,7 +89,7 @@ class RegisterCubit extends Cubit<RegisterState> {
           case Success<void>():
             emitNewState(
               state.copyWith(
-                  currentSuccessStatus: "Registered, Login you now to system"),
+                  currentSuccessStatus: "Registered, Setting up your profile,"),
             );
             await authenticationRepo.clearTheDbAfterRegistration();
             await _loginUser(
@@ -96,7 +98,13 @@ class RegisterCubit extends Cubit<RegisterState> {
             );
           case Failure<void>():
             //todo: Emit Failure state and let them try again.
-            emitNewState(state.copyWith(isLoading: false));
+            emitNewState(
+              state.copyWith(
+                isLoading: false,
+                isRegisteredSuccessfully: false,
+                currentSuccessStatus: "Something Went Wrong",
+              ),
+            );
         }
       }
     } else {
@@ -163,6 +171,24 @@ class RegisterCubit extends Cubit<RegisterState> {
         await authenticationRepo.uploadMediaFile(mediaFiles);
     switch (imagesUploadResponse) {
       case Success<void>():
+        _updateProfile();
+        break;
+      case Failure<void>():
+        print("Files not uploaded");
+        emitNewState(state.copyWith(
+          isLoading: false,
+        ));
+    }
+  }
+
+  Future<void> _updateProfile() async {
+    emitNewState(
+      state.copyWith(
+        currentSuccessStatus: "Fetching profiles",
+      ),
+    );
+    signInUserUseCase.perform(
+      (response) {
         emitNewState(
           state.copyWith(
             isRegisteredSuccessfully: true,
@@ -170,12 +196,16 @@ class RegisterCubit extends Cubit<RegisterState> {
             navigateToRoute: GlintMainRoutes.home.name,
           ),
         );
-      case Failure<void>():
-        print("Files not uploaded");
-        emitNewState(state.copyWith(
-          isLoading: false,
-        ));
-    }
+      },
+      (error) {
+        print("Login : Error $error");
+        emit(state.copyWith(isLoading: false, isRegisteredSuccessfully: false));
+      },
+      () {
+        print("Login : On Done");
+      },
+      LoginRequestBody(email: state.email, password: state.password),
+    );
   }
 
   Future<void> registerAsAAdmin() async {

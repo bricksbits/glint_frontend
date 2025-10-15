@@ -19,7 +19,7 @@ extension LoginMapper on LoginResponse {
       gender: profile?.gender ?? "",
       genderPreference: profile?.genderPreference ?? "",
       interests: profile?.interests ?? [],
-      lookingFor: profile?.relationshipGoals?.first ?? "",
+      lookingFor: profile?.relationshipGoals?.firstOrNull ?? "",
       bio: profile?.bio ?? "",
       height: profile?.height.toString(),
       occupation: profile?.occupation,

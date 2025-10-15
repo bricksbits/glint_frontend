@@ -22,13 +22,17 @@ mixin _$ProfileHandlingState {
       throw _privateConstructorUsedError;
   String get error => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
+  bool get isProfileChanged => throw _privateConstructorUsedError;
+  bool get isNewImagesSelected => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
             PeopleCardModel? previewProfileModel,
             ProfileMembershipEntity? membershipEntity,
             String error,
-            bool isLoading)
+            bool isLoading,
+            bool isProfileChanged,
+            bool isNewImagesSelected)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -38,7 +42,9 @@ mixin _$ProfileHandlingState {
             PeopleCardModel? previewProfileModel,
             ProfileMembershipEntity? membershipEntity,
             String error,
-            bool isLoading)?
+            bool isLoading,
+            bool isProfileChanged,
+            bool isNewImagesSelected)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -48,7 +54,9 @@ mixin _$ProfileHandlingState {
             PeopleCardModel? previewProfileModel,
             ProfileMembershipEntity? membershipEntity,
             String error,
-            bool isLoading)?
+            bool isLoading,
+            bool isProfileChanged,
+            bool isNewImagesSelected)?
         initial,
     required TResult orElse(),
   }) =>
@@ -87,7 +95,9 @@ abstract class $ProfileHandlingStateCopyWith<$Res> {
       {PeopleCardModel? previewProfileModel,
       ProfileMembershipEntity? membershipEntity,
       String error,
-      bool isLoading});
+      bool isLoading,
+      bool isProfileChanged,
+      bool isNewImagesSelected});
 }
 
 /// @nodoc
@@ -110,6 +120,8 @@ class _$ProfileHandlingStateCopyWithImpl<$Res,
     Object? membershipEntity = freezed,
     Object? error = null,
     Object? isLoading = null,
+    Object? isProfileChanged = null,
+    Object? isNewImagesSelected = null,
   }) {
     return _then(_value.copyWith(
       previewProfileModel: freezed == previewProfileModel
@@ -128,6 +140,14 @@ class _$ProfileHandlingStateCopyWithImpl<$Res,
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isProfileChanged: null == isProfileChanged
+          ? _value.isProfileChanged
+          : isProfileChanged // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isNewImagesSelected: null == isNewImagesSelected
+          ? _value.isNewImagesSelected
+          : isNewImagesSelected // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -144,7 +164,9 @@ abstract class _$$InitialImplCopyWith<$Res>
       {PeopleCardModel? previewProfileModel,
       ProfileMembershipEntity? membershipEntity,
       String error,
-      bool isLoading});
+      bool isLoading,
+      bool isProfileChanged,
+      bool isNewImagesSelected});
 }
 
 /// @nodoc
@@ -164,6 +186,8 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? membershipEntity = freezed,
     Object? error = null,
     Object? isLoading = null,
+    Object? isProfileChanged = null,
+    Object? isNewImagesSelected = null,
   }) {
     return _then(_$InitialImpl(
       previewProfileModel: freezed == previewProfileModel
@@ -182,6 +206,14 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isProfileChanged: null == isProfileChanged
+          ? _value.isProfileChanged
+          : isProfileChanged // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isNewImagesSelected: null == isNewImagesSelected
+          ? _value.isNewImagesSelected
+          : isNewImagesSelected // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -193,7 +225,9 @@ class _$InitialImpl implements _Initial {
       {this.previewProfileModel = null,
       this.membershipEntity = null,
       this.error = "",
-      this.isLoading = false});
+      this.isLoading = false,
+      this.isProfileChanged = false,
+      this.isNewImagesSelected = false});
 
   @override
   @JsonKey()
@@ -207,10 +241,16 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final bool isLoading;
+  @override
+  @JsonKey()
+  final bool isProfileChanged;
+  @override
+  @JsonKey()
+  final bool isNewImagesSelected;
 
   @override
   String toString() {
-    return 'ProfileHandlingState.initial(previewProfileModel: $previewProfileModel, membershipEntity: $membershipEntity, error: $error, isLoading: $isLoading)';
+    return 'ProfileHandlingState.initial(previewProfileModel: $previewProfileModel, membershipEntity: $membershipEntity, error: $error, isLoading: $isLoading, isProfileChanged: $isProfileChanged, isNewImagesSelected: $isNewImagesSelected)';
   }
 
   @override
@@ -224,12 +264,22 @@ class _$InitialImpl implements _Initial {
                 other.membershipEntity == membershipEntity) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading));
+                other.isLoading == isLoading) &&
+            (identical(other.isProfileChanged, isProfileChanged) ||
+                other.isProfileChanged == isProfileChanged) &&
+            (identical(other.isNewImagesSelected, isNewImagesSelected) ||
+                other.isNewImagesSelected == isNewImagesSelected));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, previewProfileModel, membershipEntity, error, isLoading);
+      runtimeType,
+      previewProfileModel,
+      membershipEntity,
+      error,
+      isLoading,
+      isProfileChanged,
+      isNewImagesSelected);
 
   /// Create a copy of ProfileHandlingState
   /// with the given fields replaced by the non-null parameter values.
@@ -246,10 +296,13 @@ class _$InitialImpl implements _Initial {
             PeopleCardModel? previewProfileModel,
             ProfileMembershipEntity? membershipEntity,
             String error,
-            bool isLoading)
+            bool isLoading,
+            bool isProfileChanged,
+            bool isNewImagesSelected)
         initial,
   }) {
-    return initial(previewProfileModel, membershipEntity, error, isLoading);
+    return initial(previewProfileModel, membershipEntity, error, isLoading,
+        isProfileChanged, isNewImagesSelected);
   }
 
   @override
@@ -259,11 +312,13 @@ class _$InitialImpl implements _Initial {
             PeopleCardModel? previewProfileModel,
             ProfileMembershipEntity? membershipEntity,
             String error,
-            bool isLoading)?
+            bool isLoading,
+            bool isProfileChanged,
+            bool isNewImagesSelected)?
         initial,
   }) {
-    return initial?.call(
-        previewProfileModel, membershipEntity, error, isLoading);
+    return initial?.call(previewProfileModel, membershipEntity, error,
+        isLoading, isProfileChanged, isNewImagesSelected);
   }
 
   @override
@@ -273,12 +328,15 @@ class _$InitialImpl implements _Initial {
             PeopleCardModel? previewProfileModel,
             ProfileMembershipEntity? membershipEntity,
             String error,
-            bool isLoading)?
+            bool isLoading,
+            bool isProfileChanged,
+            bool isNewImagesSelected)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(previewProfileModel, membershipEntity, error, isLoading);
+      return initial(previewProfileModel, membershipEntity, error, isLoading,
+          isProfileChanged, isNewImagesSelected);
     }
     return orElse();
   }
@@ -317,7 +375,9 @@ abstract class _Initial implements ProfileHandlingState {
       {final PeopleCardModel? previewProfileModel,
       final ProfileMembershipEntity? membershipEntity,
       final String error,
-      final bool isLoading}) = _$InitialImpl;
+      final bool isLoading,
+      final bool isProfileChanged,
+      final bool isNewImagesSelected}) = _$InitialImpl;
 
   @override
   PeopleCardModel? get previewProfileModel;
@@ -327,6 +387,10 @@ abstract class _Initial implements ProfileHandlingState {
   String get error;
   @override
   bool get isLoading;
+  @override
+  bool get isProfileChanged;
+  @override
+  bool get isNewImagesSelected;
 
   /// Create a copy of ProfileHandlingState
   /// with the given fields replaced by the non-null parameter values.

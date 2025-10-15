@@ -28,3 +28,20 @@ class ProfileMembershipEntity {
     required this.superDm,
   });
 }
+
+extension ProfileMembershipEntityCopy on ProfileMembershipEntity {
+  ProfileMembershipEntity copyWith({
+    int? superLikes,
+    int? aiMessages,
+    int? rewinds,
+    int? superDm,
+  }) {
+    return ProfileMembershipEntity(
+      userId: userId, // never changed
+      superLikes: superLikes ?? this.superLikes,
+      aiMessages: aiMessages ?? this.aiMessages,
+      rewinds: rewinds ?? this.rewinds,
+      superDm: superDm ?? this.superDm,
+    );
+  }
+}
