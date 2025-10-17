@@ -23,8 +23,6 @@ class _DateOfBirthOnboardingScreenState
     extends State<DateOfBirthOnboardingScreen> {
   late DateTime _selectedDate;
 
-  String userName = 'Abhishek';
-
   @override
   void initState() {
     super.initState();
@@ -43,7 +41,8 @@ class _DateOfBirthOnboardingScreenState
 
   int calculateAge() {
     final now = DateTime.now();
-    return (now.difference(_selectedDate).inDays ~/ 365);
+    final newAgeCalculated = (now.difference(_selectedDate).inDays ~/ 365);
+    return newAgeCalculated;
   }
 
   void showAgeConfirmationSheet(BuildContext context) {
@@ -83,7 +82,7 @@ class _DateOfBirthOnboardingScreenState
                     ),
                     const Gap(32.0),
                     Text(
-                      'Hey $userName, your age is ${calculateAge()} years\nThis will be shown in your profile.',
+                      'Hey!, your age is ${calculateAge()} years\nThis will be shown in your profile.',
                       style: AppTheme.simpleText,
                     ),
                     const Gap(32.0),
@@ -96,21 +95,16 @@ class _DateOfBirthOnboardingScreenState
                         onPressed: () {
                           if (calculateAge() >= 18) {
                             context.read<OnBoardingCubit>().setAge(
-                                  calculateAge().toString(),
+                                  calculateAge(),
                                   DateFormat("yyyy-MM-dd HH:mm:ss")
                                       .format(_selectedDate),
                                 );
-
-                            context.pop();
-                          }
-                          final currentAge =
-                              state.currentState?.dateOfBirthWithDateFormat;
-                          if (currentAge != null && calculateAge() >= 18) {
-                            context
-                                .read<OnBoardingCubit>()
-                                .updateProfileLocally();
                             final target = GlintBoardingRoutes.gender.name;
+                            Navigator.of(context).pop();
                             context.go("/$target");
+                          } else {
+                            Navigator.of(context).pop();
+                            //Todo: Show a Snackbar that you are not allowed to enter the app.
                           }
                         },
                       ),

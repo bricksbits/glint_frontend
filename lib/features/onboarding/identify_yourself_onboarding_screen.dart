@@ -60,7 +60,7 @@ class _IdentifyYourselfOnboardingScreenState
                       onTap: () {
                         setState(() => selectedIdentity = 'Woman');
                         if (selectedIdentity != null) {
-                          context.read<OnBoardingCubit>().setGender("Male");
+                          context.read<OnBoardingCubit>().setGender("Female");
                         }
                       },
                     ),
@@ -72,7 +72,7 @@ class _IdentifyYourselfOnboardingScreenState
                       onTap: () {
                         setState(() => selectedIdentity = 'Man');
                         if (selectedIdentity != null) {
-                          context.read<OnBoardingCubit>().setGender("Female");
+                          context.read<OnBoardingCubit>().setGender("Male");
                         }
                       },
                     ),
