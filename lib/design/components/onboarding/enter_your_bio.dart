@@ -78,7 +78,7 @@ class _EnterYourBioState extends State<EnterYourBio> {
             keyboardType: TextInputType.multiline,
             maxLines: null,
             autocorrect: true,
-            maxLength: 20,
+            maxLength: 200,
             controller: _bioController,
             cursorColor: AppColours.primaryBlue,
             style: AppTheme.simpleBodyText.copyWith(

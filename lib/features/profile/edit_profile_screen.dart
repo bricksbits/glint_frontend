@@ -26,16 +26,21 @@ class EditProfileScreen extends StatelessWidget {
               backgroundColor: AppColours.white,
               actions: [
                 // save icon
-                Container(
-                  height: 44.0,
-                  width: 44.0,
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: AppColours.black,
-                  ),
-                  child: SvgPicture.asset(
-                    'lib/assets/icons/profile/save_icon.svg',
+                GestureDetector(
+                  onTap: () {
+                    context.read<ProfileEditCubit>().publishChanges();
+                  },
+                  child: Container(
+                    height: 44.0,
+                    width: 44.0,
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: AppColours.black,
+                    ),
+                    child: SvgPicture.asset(
+                      'lib/assets/icons/profile/save_icon.svg',
+                    ),
                   ),
                 ),
 

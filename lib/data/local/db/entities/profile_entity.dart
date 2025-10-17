@@ -139,6 +139,8 @@ extension ProfileToPeopleMapper on ProfileEntity {
       smokingHabit: smokingHabit,
       drinkingHabit: drinkingHabit,
       occupation: occupation,
+      genderPreference: genderPreference,
+      gender: gender
     );
   }
 }

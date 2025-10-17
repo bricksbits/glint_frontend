@@ -121,8 +121,9 @@ class ProfileRepoImpl extends ProfileRepo {
   }
 
   @override
-  Future<Result<void>> updateProfile(String userId) async {
-    final getUpdatedProfile = await profileDao.getProfileData(userId);
+  Future<Result<void>> updateProfile() async {
+    final getUserId = await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
+    final getUpdatedProfile = await profileDao.getProfileData(getUserId);
     if (getUpdatedProfile == null) {
       return Failure(Exception("Local user profile not available"));
     }
@@ -131,7 +132,7 @@ class ProfileRepoImpl extends ProfileRepo {
         httpClient: httpClient,
         requestType: HttpRequestEnum.PUT,
         endpoint: "user/profile",
-        requestBody: getUpdatedProfile.mapToUpdateProfileRequestModel());
+        requestBody: getUpdatedProfile.mapToUpdateProfileRequestModel().toJson());
 
     switch (updateProfileResponse) {
       case Success():

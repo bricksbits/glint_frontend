@@ -142,7 +142,7 @@ class ImageService {
   }
 
   Future<List<ImageManagerData>> loadSavedImages() async {
-    if (kIsWeb) return []; // No file storage on web
+    if (kIsWeb) return [];
     final dir = await getApplicationDocumentsDirectory();
     final files = dir
         .listSync()
@@ -207,5 +207,17 @@ class ImageService {
   int _extractStoryNum(String path) {
     final match = RegExp(r'story_(\d+)').firstMatch(path);
     return int.tryParse(match?.group(1) ?? '0') ?? 0;
+  }
+
+  Future<void> clearAllAppData() async {
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      if (await dir.exists()) {
+        await dir.delete(recursive: true);
+        debugLogger("Clear App Directory", "Cleaned");
+      }
+    } catch (e) {
+      debugLogger("Clear App Directory", "Cleaning failed");
+    }
   }
 }

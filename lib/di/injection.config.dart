@@ -138,13 +138,14 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           gh<_i368.MyDioClient>(),
         ));
-    gh.factory<_i995.ForgotPasswordRepo>(
-        () => _i509.ForgotPasswordRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i789.LogoutUserUsecase>(() => _i789.LogoutUserUsecase(
           asyncEncryptedSharedPreferenceHelper:
               gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           dao: gh<_i719.ProfileDao>(),
+          imageService: gh<_i43.ImageService>(),
         ));
+    gh.factory<_i995.ForgotPasswordRepo>(
+        () => _i509.ForgotPasswordRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i143.IsUserLoggedInUsecase>(() =>
         _i143.IsUserLoggedInUsecase(
             gh<_i274.AsyncEncryptedSharedPreferenceHelper>()));

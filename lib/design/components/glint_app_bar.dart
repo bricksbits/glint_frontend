@@ -32,13 +32,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         return [
           GestureDetector(
             onTap: () async {
-              //Todo: Remove this Action from here.
-              final loginUseCase = GetIt.instance.get<LogoutUserUsecase>();
-              loginUseCase.perform((success) {
-                if (success != null && success) {
-                  context.goNamed(GlintMainRoutes.auth.name);
-                }
-              }, (error) {}, () {});
+              context.pushNamed(GlintMainRoutes.settings.name);
             },
             child: SvgPicture.asset(
               'lib/assets/icons/settings_icon.svg',

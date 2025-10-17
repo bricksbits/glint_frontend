@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:get_it/get_it.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/application_logic/logout_usecase.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class ProfileSettingsScreen extends StatefulWidget {
@@ -99,7 +103,12 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                       buttonText: 'Yes, Logout',
                       buttonabackgroundColor: AppColours.black,
                       onAccept: () {
-                        // todo - handle logout
+                        final loginUseCase = GetIt.instance.get<LogoutUserUsecase>();
+                        loginUseCase.perform((success) {
+                          if (success != null && success) {
+                            context.goNamed(GlintMainRoutes.starter.name);
+                          }
+                        }, (error) {}, () {});
                       },
                     );
                   },

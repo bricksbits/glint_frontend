@@ -12,7 +12,7 @@ abstract class ProfileRepo {
 
   Future<Result<void>> verifyUser();
 
-  Future<Result<void>> updateProfile(String userId);
+  Future<Result<void>> updateProfile();
 
   Future<Result<ProfileMembershipEntity>> getUserMembershipDetails();
 

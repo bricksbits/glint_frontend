@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:injectable/injectable.dart';
 
@@ -10,9 +11,13 @@ class LogoutUserUsecase extends UseCase<bool, void> {
   final AsyncEncryptedSharedPreferenceHelper
       asyncEncryptedSharedPreferenceHelper;
   final ProfileDao dao;
+  final ImageService imageService;
 
-  LogoutUserUsecase(
-      {required this.asyncEncryptedSharedPreferenceHelper, required this.dao});
+  LogoutUserUsecase({
+    required this.asyncEncryptedSharedPreferenceHelper,
+    required this.dao,
+    required this.imageService,
+  });
 
   @override
   Future<Stream<bool>> buildUseCaseStream(void params) async {
@@ -20,6 +25,7 @@ class LogoutUserUsecase extends UseCase<bool, void> {
     try {
       await asyncEncryptedSharedPreferenceHelper.clearEncryptedPrefs();
       await dao.clearProfileTable();
+      await imageService.clearAllAppData();
       controller.add(true);
     } catch (e) {
       controller.addError(Exception(e.toString()));

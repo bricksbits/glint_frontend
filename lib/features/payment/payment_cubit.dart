@@ -46,7 +46,9 @@ class PaymentCubit extends Cubit<PaymentState> {
           }
           final razorPayKey = orderResponse.success?.razorpayKey;
           final razorPayOrderId = orderResponse.success?.razorpayOrderId;
-          if (razorPayOrderId != null && razorPayKey != null && amount != null) {
+          if (razorPayOrderId != null &&
+              razorPayKey != null &&
+              amount != null) {
             generateTheOrderId(razorPayKey, razorPayOrderId, "1200");
           }
         case Failure<bookEventResponse.BookEventResponse>():
@@ -115,13 +117,19 @@ class PaymentCubit extends Cubit<PaymentState> {
 
   Future<void> verifyThePayment(
     String razorpayPaymentId,
+    String razorpayOrderId,
+    String razorpaySignature,
   ) async {
     final myOrderId = state.orderId;
     print(
         "Verification Started with Order ID : $myOrderId and $razorpayPaymentId");
     if (myOrderId != null) {
-      final verifyResponse =
-          await paymentRepo.verifyPayment(myOrderId, razorpayPaymentId);
+      final verifyResponse = await paymentRepo.verifyPayment(
+        myOrderId,
+        razorpayPaymentId,
+        razorpayOrderId,
+        razorpaySignature,
+      );
       switch (verifyResponse) {
         case Success<void>():
           print("VerifyPayment : Payment got verified");

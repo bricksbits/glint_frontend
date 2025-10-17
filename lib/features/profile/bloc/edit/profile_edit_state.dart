@@ -6,5 +6,8 @@ class ProfileEditState with _$ProfileEditState {
     @Default(null) PeopleCardModel? previewProfileModel,
     @Default("") String error,
     @Default(true) bool isLoading,
+    @Default(false) bool isNewImagesUploaded,
+    @Default(false) bool isProfileDataChanged,
+    @Default([]) List<File?> newlyUploadedImages,
   }) = _Initial;
 }
