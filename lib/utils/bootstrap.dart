@@ -5,6 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/di/injection.dart';
+import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:logging/logging.dart';
 
 import '../features/auth/blocs/reset_password/reset_password_bloc.dart';
@@ -25,7 +26,11 @@ Future<void> bootstrap(
         ),
         BlocProvider<InternetStatusCheckerCubit>(
           create: (_) => InternetStatusCheckerCubit(connectivity),
-        )
+        ),
+        BlocProvider<PaymentCubit>(
+          lazy: true,
+          create: (_) => PaymentCubit(),
+        ),
       ],
       child: await builder(),
     ),

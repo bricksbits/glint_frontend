@@ -72,7 +72,41 @@ class _OneLastStepOnboardingScreenState
 
                   // Additional info
                   const Gap(24.0),
-                  const AdditionalInfoContainer(),
+
+                  AdditionalInfoContainer(
+                    occupation: state.currentState?.occupation,
+                    education: state.currentState?.education,
+                    height: state.currentState?.height,
+                    workoutHabits: state.currentState?.workoutHabit,
+                    drinkingHabits: state.currentState?.drinkingHabit,
+                    smokingHabits: state.currentState?.smokingHabit,
+                    occupationProvided: (occupation) {
+                      context.read<OnBoardingCubit>().setOccupation(occupation);
+                    },
+                    educationSelected: (education) {
+                      context.read<OnBoardingCubit>().setEducation(education);
+                    },
+                    heightProvided: (height) {
+                      context
+                          .read<OnBoardingCubit>()
+                          .setHeight(height.toString());
+                    },
+                    workoutHabitSelected: (workoutHabit) {
+                      context
+                          .read<OnBoardingCubit>()
+                          .setWorkingHabit(workoutHabit);
+                    },
+                    drinkingHabitSelected: (drinkingHabit) {
+                      context
+                          .read<OnBoardingCubit>()
+                          .setDrinkingHabit(drinkingHabit);
+                    },
+                    smokingHabitSelected: (smokingHabit) {
+                      context
+                          .read<OnBoardingCubit>()
+                          .setSmokingHabit(smokingHabit);
+                    },
+                  ),
 
                   // Spacer
                   const Spacer(),
@@ -91,7 +125,7 @@ class _OneLastStepOnboardingScreenState
                               .read<OnBoardingCubit>()
                               .updateProfileLocally();
                           final target = GlintMainRoutes.register.name;
-                          context.go("/$target",extra: false);
+                          context.go("/$target", extra: false);
                         } else {
                           //Todo: Show Error
                         }

@@ -67,7 +67,7 @@ class Profile {
     interests = json['interests'] != null ? json['interests'].cast<String>() : [];
     relationshipGoals = json['relationship_goals'] != null ? json['relationship_goals'].cast<String>() : [];
     bio = json['bio'];
-    height = json['height'];
+    height = _toDouble(json['height']);
     occupation = json['occupation'];
     education = json['education'];
     workoutHabit = json['workout_habit'];
@@ -211,6 +211,17 @@ Profile copyWith({  String? authToken,
     return map;
   }
 
+  static double? _toDouble(dynamic value) {
+    try {
+      if (value == null) return null;
+      if (value is double) return value;
+      if (value is int) return value.toDouble();
+      if (value is String) return double.tryParse(value);
+      return null;
+    } catch (e){
+      return null;
+    }
+  }
 }
 
 VideoUrlList videoUrlListFromJson(String str) => VideoUrlList.fromJson(json.decode(str));

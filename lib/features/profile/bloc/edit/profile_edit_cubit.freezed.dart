@@ -20,24 +20,42 @@ mixin _$ProfileEditState {
       throw _privateConstructorUsedError;
   String get error => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
+  bool get isNewImagesUploaded => throw _privateConstructorUsedError;
+  bool get isProfileDataChanged => throw _privateConstructorUsedError;
+  List<File?> get newlyUploadedImages => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            PeopleCardModel? previewProfileModel, String error, bool isLoading)
+            PeopleCardModel? previewProfileModel,
+            String error,
+            bool isLoading,
+            bool isNewImagesUploaded,
+            bool isProfileDataChanged,
+            List<File?> newlyUploadedImages)
         initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            PeopleCardModel? previewProfileModel, String error, bool isLoading)?
+            PeopleCardModel? previewProfileModel,
+            String error,
+            bool isLoading,
+            bool isNewImagesUploaded,
+            bool isProfileDataChanged,
+            List<File?> newlyUploadedImages)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            PeopleCardModel? previewProfileModel, String error, bool isLoading)?
+            PeopleCardModel? previewProfileModel,
+            String error,
+            bool isLoading,
+            bool isNewImagesUploaded,
+            bool isProfileDataChanged,
+            List<File?> newlyUploadedImages)?
         initial,
     required TResult orElse(),
   }) =>
@@ -73,7 +91,12 @@ abstract class $ProfileEditStateCopyWith<$Res> {
       _$ProfileEditStateCopyWithImpl<$Res, ProfileEditState>;
   @useResult
   $Res call(
-      {PeopleCardModel? previewProfileModel, String error, bool isLoading});
+      {PeopleCardModel? previewProfileModel,
+      String error,
+      bool isLoading,
+      bool isNewImagesUploaded,
+      bool isProfileDataChanged,
+      List<File?> newlyUploadedImages});
 }
 
 /// @nodoc
@@ -94,6 +117,9 @@ class _$ProfileEditStateCopyWithImpl<$Res, $Val extends ProfileEditState>
     Object? previewProfileModel = freezed,
     Object? error = null,
     Object? isLoading = null,
+    Object? isNewImagesUploaded = null,
+    Object? isProfileDataChanged = null,
+    Object? newlyUploadedImages = null,
   }) {
     return _then(_value.copyWith(
       previewProfileModel: freezed == previewProfileModel
@@ -108,6 +134,18 @@ class _$ProfileEditStateCopyWithImpl<$Res, $Val extends ProfileEditState>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isNewImagesUploaded: null == isNewImagesUploaded
+          ? _value.isNewImagesUploaded
+          : isNewImagesUploaded // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isProfileDataChanged: null == isProfileDataChanged
+          ? _value.isProfileDataChanged
+          : isProfileDataChanged // ignore: cast_nullable_to_non_nullable
+              as bool,
+      newlyUploadedImages: null == newlyUploadedImages
+          ? _value.newlyUploadedImages
+          : newlyUploadedImages // ignore: cast_nullable_to_non_nullable
+              as List<File?>,
     ) as $Val);
   }
 }
@@ -121,7 +159,12 @@ abstract class _$$InitialImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {PeopleCardModel? previewProfileModel, String error, bool isLoading});
+      {PeopleCardModel? previewProfileModel,
+      String error,
+      bool isLoading,
+      bool isNewImagesUploaded,
+      bool isProfileDataChanged,
+      List<File?> newlyUploadedImages});
 }
 
 /// @nodoc
@@ -140,6 +183,9 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? previewProfileModel = freezed,
     Object? error = null,
     Object? isLoading = null,
+    Object? isNewImagesUploaded = null,
+    Object? isProfileDataChanged = null,
+    Object? newlyUploadedImages = null,
   }) {
     return _then(_$InitialImpl(
       previewProfileModel: freezed == previewProfileModel
@@ -154,6 +200,18 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isNewImagesUploaded: null == isNewImagesUploaded
+          ? _value.isNewImagesUploaded
+          : isNewImagesUploaded // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isProfileDataChanged: null == isProfileDataChanged
+          ? _value.isProfileDataChanged
+          : isProfileDataChanged // ignore: cast_nullable_to_non_nullable
+              as bool,
+      newlyUploadedImages: null == newlyUploadedImages
+          ? _value._newlyUploadedImages
+          : newlyUploadedImages // ignore: cast_nullable_to_non_nullable
+              as List<File?>,
     ));
   }
 }
@@ -164,7 +222,11 @@ class _$InitialImpl implements _Initial {
   const _$InitialImpl(
       {this.previewProfileModel = null,
       this.error = "",
-      this.isLoading = false});
+      this.isLoading = true,
+      this.isNewImagesUploaded = false,
+      this.isProfileDataChanged = false,
+      final List<File?> newlyUploadedImages = const []})
+      : _newlyUploadedImages = newlyUploadedImages;
 
   @override
   @JsonKey()
@@ -175,10 +237,25 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final bool isLoading;
+  @override
+  @JsonKey()
+  final bool isNewImagesUploaded;
+  @override
+  @JsonKey()
+  final bool isProfileDataChanged;
+  final List<File?> _newlyUploadedImages;
+  @override
+  @JsonKey()
+  List<File?> get newlyUploadedImages {
+    if (_newlyUploadedImages is EqualUnmodifiableListView)
+      return _newlyUploadedImages;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_newlyUploadedImages);
+  }
 
   @override
   String toString() {
-    return 'ProfileEditState.initial(previewProfileModel: $previewProfileModel, error: $error, isLoading: $isLoading)';
+    return 'ProfileEditState.initial(previewProfileModel: $previewProfileModel, error: $error, isLoading: $isLoading, isNewImagesUploaded: $isNewImagesUploaded, isProfileDataChanged: $isProfileDataChanged, newlyUploadedImages: $newlyUploadedImages)';
   }
 
   @override
@@ -190,12 +267,24 @@ class _$InitialImpl implements _Initial {
                 other.previewProfileModel == previewProfileModel) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading));
+                other.isLoading == isLoading) &&
+            (identical(other.isNewImagesUploaded, isNewImagesUploaded) ||
+                other.isNewImagesUploaded == isNewImagesUploaded) &&
+            (identical(other.isProfileDataChanged, isProfileDataChanged) ||
+                other.isProfileDataChanged == isProfileDataChanged) &&
+            const DeepCollectionEquality()
+                .equals(other._newlyUploadedImages, _newlyUploadedImages));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, previewProfileModel, error, isLoading);
+  int get hashCode => Object.hash(
+      runtimeType,
+      previewProfileModel,
+      error,
+      isLoading,
+      isNewImagesUploaded,
+      isProfileDataChanged,
+      const DeepCollectionEquality().hash(_newlyUploadedImages));
 
   /// Create a copy of ProfileEditState
   /// with the given fields replaced by the non-null parameter values.
@@ -209,32 +298,50 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            PeopleCardModel? previewProfileModel, String error, bool isLoading)
+            PeopleCardModel? previewProfileModel,
+            String error,
+            bool isLoading,
+            bool isNewImagesUploaded,
+            bool isProfileDataChanged,
+            List<File?> newlyUploadedImages)
         initial,
   }) {
-    return initial(previewProfileModel, error, isLoading);
+    return initial(previewProfileModel, error, isLoading, isNewImagesUploaded,
+        isProfileDataChanged, newlyUploadedImages);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            PeopleCardModel? previewProfileModel, String error, bool isLoading)?
+            PeopleCardModel? previewProfileModel,
+            String error,
+            bool isLoading,
+            bool isNewImagesUploaded,
+            bool isProfileDataChanged,
+            List<File?> newlyUploadedImages)?
         initial,
   }) {
-    return initial?.call(previewProfileModel, error, isLoading);
+    return initial?.call(previewProfileModel, error, isLoading,
+        isNewImagesUploaded, isProfileDataChanged, newlyUploadedImages);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            PeopleCardModel? previewProfileModel, String error, bool isLoading)?
+            PeopleCardModel? previewProfileModel,
+            String error,
+            bool isLoading,
+            bool isNewImagesUploaded,
+            bool isProfileDataChanged,
+            List<File?> newlyUploadedImages)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(previewProfileModel, error, isLoading);
+      return initial(previewProfileModel, error, isLoading, isNewImagesUploaded,
+          isProfileDataChanged, newlyUploadedImages);
     }
     return orElse();
   }
@@ -272,7 +379,10 @@ abstract class _Initial implements ProfileEditState {
   const factory _Initial(
       {final PeopleCardModel? previewProfileModel,
       final String error,
-      final bool isLoading}) = _$InitialImpl;
+      final bool isLoading,
+      final bool isNewImagesUploaded,
+      final bool isProfileDataChanged,
+      final List<File?> newlyUploadedImages}) = _$InitialImpl;
 
   @override
   PeopleCardModel? get previewProfileModel;
@@ -280,6 +390,12 @@ abstract class _Initial implements ProfileEditState {
   String get error;
   @override
   bool get isLoading;
+  @override
+  bool get isNewImagesUploaded;
+  @override
+  bool get isProfileDataChanged;
+  @override
+  List<File?> get newlyUploadedImages;
 
   /// Create a copy of ProfileEditState
   /// with the given fields replaced by the non-null parameter values.

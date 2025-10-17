@@ -14,6 +14,7 @@ import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 part 'on_boarding_cubit.freezed.dart';
+
 part 'on_boarding_state.dart';
 
 class OnBoardingCubit extends Cubit<OnBoardingState> {
@@ -95,19 +96,23 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   String? get currentName => _getCurrentRegisterUserState()?.username;
 
-  String? get currentAge => _getCurrentRegisterUserState()?.dateOfBirthWithDateFormat;
+  String? get currentAge =>
+      _getCurrentRegisterUserState()?.dateOfBirthWithDateFormat;
 
   String? get currentDesignation => _getCurrentRegisterUserState()?.occupation;
 
   String? get currentBio => _getCurrentRegisterUserState()?.bio;
 
-  String? get currentLookingFor => _getCurrentRegisterUserState()?.relationShipGoals;
+  String? get currentLookingFor =>
+      _getCurrentRegisterUserState()?.relationShipGoals;
 
-  List<String>? get currentInterests => _getCurrentRegisterUserState()?.interests;
+  List<String>? get currentInterests =>
+      _getCurrentRegisterUserState()?.interests;
 
   String? get currentGender => _getCurrentRegisterUserState()?.gender;
 
-  String? get currentGenderPreferences => _getCurrentRegisterUserState()?.genderPreference;
+  String? get currentGenderPreferences =>
+      _getCurrentRegisterUserState()?.genderPreference;
 
   String? get currentHeight => _getCurrentRegisterUserState()?.height;
 
@@ -115,11 +120,14 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   String? get currentEducation => _getCurrentRegisterUserState()?.education;
 
-  String? get currentWorkingHabit => _getCurrentRegisterUserState()?.workoutHabit;
+  String? get currentWorkingHabit =>
+      _getCurrentRegisterUserState()?.workoutHabit;
 
-  String? get currentDrinkingHabit => _getCurrentRegisterUserState()?.drinkingHabit;
+  String? get currentDrinkingHabit =>
+      _getCurrentRegisterUserState()?.drinkingHabit;
 
-  String? get currentSmokingHabit => _getCurrentRegisterUserState()?.smokingHabit;
+  String? get currentSmokingHabit =>
+      _getCurrentRegisterUserState()?.smokingHabit;
 
   void setGender(String gender) {
     emit(
@@ -218,18 +226,26 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   void setAge(
-    String age,
+    int age,
     String selectedDate,
   ) {
-    emit(
-      state.copyWith(
-        currentState: _getCurrentRegisterUserState()?.copyWith(
-          calculatedAge: age,
-          dob: selectedDate
+    if (age >= 18) {
+      emit(
+        state.copyWith(
+          currentState: _getCurrentRegisterUserState()?.copyWith(
+            calculatedAge: age.toString(),
+            dob: selectedDate,
+          ),
         ),
-      ),
-    );
-    updateProfileLocally();
+      );
+      updateProfileLocally();
+    } else {
+      emit(
+        state.copyWith(
+          error: "You are to young for dating, :D",
+        ),
+      );
+    }
   }
 
   void setDesignation(String designation) {
@@ -316,7 +332,8 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   void _handleNullCurrentState(String methodName) {
     // You can choose to log this, throw an error, or emit a specific error state
     print("Warning: $methodName called when currentState is null.");
-    emit(state.copyWith(error: "Cannot update $methodName: PeopleUiModel is null."));
+    emit(state.copyWith(
+        error: "Cannot update $methodName: PeopleUiModel is null."));
   }
 
   Future<void> insertFakeUserInitially() async {
@@ -368,7 +385,8 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   Future<void> enableLocationAndCompleteOnboarding() async {
-    emit(state.copyWith(isLocationLoading: true, locationPermissionDenied: false));
+    emit(state.copyWith(
+        isLocationLoading: true, locationPermissionDenied: false));
 
     final permissionService = getIt<LocationPermissionService>();
     final sharedPrefHelper = getIt<AsyncEncryptedSharedPreferenceHelper>();

@@ -95,17 +95,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Column(
-                                  children: [
-                                    const Text('Amount to be paid',
-                                        style: TextStyle(color: Colors.grey)),
-                                    Text('₹ ${state.totalAmount}',
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      const Text(
+                                        'Amount to be paid',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        '₹ ${state.totalAmount}',
                                         style: const TextStyle(
                                             fontSize: 24,
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.indigo)),
-                                    const SizedBox(height: 10),
-                                  ],
+                                            color: Colors.indigo),
+                                      ),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
                                 ),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
@@ -128,7 +134,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   },
                                   child: const Padding(
                                     padding: EdgeInsets.symmetric(
-                                        vertical: 14, horizontal: 35),
+                                      vertical: 14,
+                                      horizontal: 14,
+                                    ),
                                     child: Text('Proceed',
                                         style: TextStyle(
                                             fontSize: 16, color: Colors.white)),
@@ -329,7 +337,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
         children: [
           _buildPriceRow(
               // 'Ticket cost per person', '₹ ${int.parse(totalAmount) / 2}'),
-              'Ticket cost per person', '₹ $totalAmount'),
+              'Ticket cost per person',
+              '₹ $totalAmount'),
           _buildPriceRow('Person(s)', 'x 2'),
           _buildPriceRow('Ticket Amount', '₹ $totalAmount'),
           _buildPriceRow('GST', '+ 18%'),
@@ -356,9 +365,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
     if (context.mounted) {
       if (successResponse.data != null) {
         if (successResponse.orderId != null &&
-            successResponse.paymentId != null) {
+            successResponse.paymentId != null &&
+            successResponse.signature != null) {
           context.read<PaymentCubit>().verifyThePayment(
                 successResponse.paymentId!,
+                successResponse.orderId!,
+                successResponse.signature!,
               );
         }
       }

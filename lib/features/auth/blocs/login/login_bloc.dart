@@ -56,6 +56,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           case Success<UsersType>():
             add(_EmitState(LoginState.success(response.data)));
           case Failure<UsersType>():
+            //Todo: Handle the Error Case, When the Image is not uploaded,
             add(const _EmitState(LoginState.error("Something went wrong")));
         }
       },

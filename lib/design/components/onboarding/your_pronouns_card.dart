@@ -4,9 +4,9 @@ import 'package:glint_frontend/design/exports.dart';
 
 class YourPronounsCard extends StatefulWidget {
   const YourPronounsCard(
-      {super.key, required this.pronounsSelected, this.pronouns});
+      {super.key, required this.pronounsSelected, this.genderPassed});
 
-  final String? pronouns;
+  final String? genderPassed;
   final Function(String) pronounsSelected;
 
   @override
@@ -15,6 +15,7 @@ class YourPronounsCard extends StatefulWidget {
 
 class _YourPronounsCardState extends State<YourPronounsCard> {
   bool _choseCustomPronoun = false;
+  String? _selectedPronoun;
 
   final _customPronounsController = TextEditingController();
 
@@ -117,28 +118,36 @@ class _YourPronounsCardState extends State<YourPronounsCard> {
                 children: [
                   GlintCustomLabelChip(
                     label: 'He/Him',
-                    isSelected: widget.pronouns == 'He/Him',
+                    isSelected: _selectedPronoun == 'He/Him' ||
+                        (widget.genderPassed != null &&
+                            widget.genderPassed == "male"),
                     onTap: () {
                       widget.pronounsSelected("He/Him");
                     },
                   ),
                   GlintCustomLabelChip(
                     label: 'She/Her',
-                    isSelected: widget.pronouns == 'She/Her',
+                    isSelected: _selectedPronoun == 'She/Her' ||
+                        (widget.genderPassed != null &&
+                            widget.genderPassed == "female"),
                     onTap: () {
                       widget.pronounsSelected("She/Her");
                     },
                   ),
                   GlintCustomLabelChip(
                     label: 'They/Them',
-                    isSelected: widget.pronouns == 'They/Them',
+                    isSelected: _selectedPronoun == 'They/Them' ||
+                        (widget.genderPassed != null &&
+                                widget.genderPassed != "male" &&
+                            widget.genderPassed != "female"),
                     onTap: () {
                       widget.pronounsSelected("They/Them");
                     },
                   ),
                   GlintCustomLabelChip(
                     label: 'Prefer not to say',
-                    isSelected: widget.pronouns == 'Prefer not to say',
+                    isSelected: _selectedPronoun == 'Prefer not to say' ||
+                        widget.genderPassed == null,
                     onTap: () {
                       widget.pronounsSelected("Prefer not to say");
                     },
@@ -174,7 +183,7 @@ class _YourPronounsCardState extends State<YourPronounsCard> {
                   if (_choseCustomPronoun)
                     GlintCustomLabelChip(
                       label: customPronoun,
-                      isSelected: widget.pronouns == customPronoun,
+                      isSelected: widget.genderPassed == customPronoun,
                       onTap: () => widget.pronounsSelected(customPronoun),
                     ),
                 ],

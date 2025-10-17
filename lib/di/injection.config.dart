@@ -116,13 +116,6 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i361.Dio>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
-    gh.lazySingleton<_i662.ProfileRepo>(() => _i548.ProfileRepoImpl(
-          httpClient: gh<_i368.MyDioClient>(),
-          sharedPreferenceHelper:
-              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-          profileDao: gh<_i719.ProfileDao>(),
-          membershipDao: gh<_i1011.MembershipDao>(),
-        ));
     gh.lazySingleton<_i873.AuthenticationRepo>(
         () => _i840.AuthenticationRepoImpl(
               gh<_i368.MyDioClient>(),
@@ -145,13 +138,14 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           gh<_i368.MyDioClient>(),
         ));
-    gh.factory<_i995.ForgotPasswordRepo>(
-        () => _i509.ForgotPasswordRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i789.LogoutUserUsecase>(() => _i789.LogoutUserUsecase(
           asyncEncryptedSharedPreferenceHelper:
               gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           dao: gh<_i719.ProfileDao>(),
+          imageService: gh<_i43.ImageService>(),
         ));
+    gh.factory<_i995.ForgotPasswordRepo>(
+        () => _i509.ForgotPasswordRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i143.IsUserLoggedInUsecase>(() =>
         _i143.IsUserLoggedInUsecase(
             gh<_i274.AsyncEncryptedSharedPreferenceHelper>()));
@@ -178,6 +172,14 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           gh<_i719.ProfileDao>(),
+        ));
+    gh.lazySingleton<_i662.ProfileRepo>(() => _i548.ProfileRepoImpl(
+          httpClient: gh<_i368.MyDioClient>(),
+          sharedPreferenceHelper:
+              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          profileDao: gh<_i719.ProfileDao>(),
+          membershipDao: gh<_i1011.MembershipDao>(),
+          imageService: gh<_i43.ImageService>(),
         ));
     gh.factory<_i849.ChatRepo>(
         () => _i651.ChatRepoImpl(gh<_i368.MyDioClient>()));

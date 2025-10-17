@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/auth/blocs/register/register_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 
 import '../onboarding/on_boarding_cubit.dart';
@@ -102,7 +103,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
       context.read<RegisterCubit>().enteredPassword(_passwordController.text);
     });
 
-    _nameController.addListener((){
+    _nameController.addListener(() {
       context.read<RegisterCubit>().enteredUserName(_nameController.text);
     });
     super.initState();
@@ -117,7 +118,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
             context.goNamed(state.navigateToRoute);
           }
         } else {
-          print("Listening to RegisterCubit, ${state.toString()}");
+          debugLogger("Listening to RegisterCubit", state.toString());
         }
       },
       child: BlocBuilder<RegisterCubit, RegisterState>(
@@ -128,8 +129,19 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                 ? const GlintEventAuthAppbar()
                 : AppBar(backgroundColor: AppColours.white),
             body: state.isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
+                ? Center(
+                    child: Column(
+                      children: [
+                        const CircularProgressIndicator(),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          state.currentSuccessStatus,
+                          style: AppTheme.headingThree,
+                        )
+                      ],
+                    ),
                   )
                 : AuthStackedIllustrationScreen(
                     isAdmin: widget.isAdmin,

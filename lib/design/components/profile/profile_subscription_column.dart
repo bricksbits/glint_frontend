@@ -81,7 +81,7 @@ class ProfileSubscriptionColumn extends StatelessWidget {
                   context.pushNamed(
                     GlintMainRoutes.payment.name,
                     extra: PaymentArgumentModel(
-                      membershipType: MembershipType.PLATINUM,
+                      membershipType: MembershipType.GOLD,
                       amountOfSelectedMembership: "359",
                       timePeriod: "30",
                       eventId: null,

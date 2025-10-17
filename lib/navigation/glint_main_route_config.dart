@@ -119,10 +119,6 @@ final glintMainRoutes = GoRouter(
             lazy: true,
             create: (_) => EventBaseCubit(),
           ),
-          BlocProvider<PaymentCubit>(
-            lazy: true,
-            create: (_) => PaymentCubit(),
-          ),
         ],
         child: const HomeScreen(),
       ),

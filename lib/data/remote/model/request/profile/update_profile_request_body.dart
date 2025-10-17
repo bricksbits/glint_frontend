@@ -4,29 +4,22 @@ String updateProfileRequestBodyToJson(UpdateProfileRequestBody data) => json.enc
 class UpdateProfileRequestBody {
   UpdateProfileRequestBody({
       this.username, 
-      this.password, 
-      this.email, 
-      this.phoneNumber, 
+      this.phoneNumber,
       this.bio, 
-      this.dateOfBirth, 
-      this.height, 
+      this.height,
       this.education, 
       this.occupation, 
       this.gender, 
       this.genderPreference, 
       this.workoutHabit, 
       this.drinkingHabit, 
-      this.smokingHabit, 
-      this.relationshipGoals, 
-      this.interests,});
+      this.smokingHabit,
+  });
 
   UpdateProfileRequestBody.fromJson(dynamic json) {
     username = json['username'];
-    password = json['password'];
-    email = json['email'];
     phoneNumber = json['phone_number'];
     bio = json['bio'];
-    dateOfBirth = json['date_of_birth'];
     height = json['height'];
     education = json['education'];
     occupation = json['occupation'];
@@ -35,15 +28,10 @@ class UpdateProfileRequestBody {
     workoutHabit = json['workout_habit'];
     drinkingHabit = json['drinking_habit'];
     smokingHabit = json['smoking_habit'];
-    relationshipGoals = json['relationship_goals'] != null ? RelationshipGoals.fromJson(json['relationship_goals']) : null;
-    interests = json['interests'] != null ? Interests.fromJson(json['interests']) : null;
   }
   String? username;
-  String? password;
-  String? email;
   String? phoneNumber;
   String? bio;
-  String? dateOfBirth;
   double? height;
   String? education;
   String? occupation;
@@ -52,8 +40,6 @@ class UpdateProfileRequestBody {
   String? workoutHabit;
   String? drinkingHabit;
   String? smokingHabit;
-  RelationshipGoals? relationshipGoals;
-  Interests? interests;
 UpdateProfileRequestBody copyWith({  String? username,
   String? password,
   String? email,
@@ -71,11 +57,8 @@ UpdateProfileRequestBody copyWith({  String? username,
   RelationshipGoals? relationshipGoals,
   Interests? interests,
 }) => UpdateProfileRequestBody(  username: username ?? this.username,
-  password: password ?? this.password,
-  email: email ?? this.email,
   phoneNumber: phoneNumber ?? this.phoneNumber,
   bio: bio ?? this.bio,
-  dateOfBirth: dateOfBirth ?? this.dateOfBirth,
   height: height ?? this.height,
   education: education ?? this.education,
   occupation: occupation ?? this.occupation,
@@ -84,17 +67,12 @@ UpdateProfileRequestBody copyWith({  String? username,
   workoutHabit: workoutHabit ?? this.workoutHabit,
   drinkingHabit: drinkingHabit ?? this.drinkingHabit,
   smokingHabit: smokingHabit ?? this.smokingHabit,
-  relationshipGoals: relationshipGoals ?? this.relationshipGoals,
-  interests: interests ?? this.interests,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['username'] = username;
-    map['password'] = password;
-    map['email'] = email;
     map['phone_number'] = phoneNumber;
     map['bio'] = bio;
-    map['date_of_birth'] = dateOfBirth;
     map['height'] = height;
     map['education'] = education;
     map['occupation'] = occupation;
@@ -103,12 +81,6 @@ UpdateProfileRequestBody copyWith({  String? username,
     map['workout_habit'] = workoutHabit;
     map['drinking_habit'] = drinkingHabit;
     map['smoking_habit'] = smokingHabit;
-    if (relationshipGoals != null) {
-      map['relationship_goals'] = relationshipGoals?.toJson();
-    }
-    if (interests != null) {
-      map['interests'] = interests?.toJson();
-    }
     return map;
   }
 

@@ -34,7 +34,11 @@ class ShowAndUploadPicturesContainersState
                         child: UploadPictureContainer(
                           isDP: index == 0,
                           // first container is for DP
-                          imageFile: null,
+                          imageFile: state.newlyUploadedImages.isNotEmpty
+                              ? state.newlyUploadedImages.length > index
+                                  ? state.newlyUploadedImages[index]
+                                  : null
+                              : null,
                           imageUrl: state.previewProfileModel != null
                               ? state.previewProfileModel!.pictureUrlList
                                           .length >
@@ -43,7 +47,6 @@ class ShowAndUploadPicturesContainersState
                                       .pictureUrlList[index]
                                   : null
                               : null,
-                          // pass the image if available
                           onImagePick: () {
                             context.read<ProfileEditCubit>().onPickImage();
                           },
@@ -69,7 +72,11 @@ class ShowAndUploadPicturesContainersState
                   child: Transform.translate(
                     offset: Offset(xOffset.toDouble(), 0),
                     child: UploadPictureContainer(
-                      imageFile: null,
+                      imageFile: state.newlyUploadedImages.isNotEmpty
+                          ? state.newlyUploadedImages.length > containerIndex
+                              ? state.newlyUploadedImages[index]
+                              : null
+                          : null,
                       imageUrl: state.previewProfileModel != null
                           ? state.previewProfileModel!.pictureUrlList.length >
                                   containerIndex
@@ -77,12 +84,9 @@ class ShowAndUploadPicturesContainersState
                               : null
                           : null,
                       // pass the image if available
-                      onImagePick:
-                          context.read<ProfileEditCubit>().onPickImage,
+                      onImagePick: context.read<ProfileEditCubit>().onPickImage,
                       onRemoveImage: () {
-                        context
-                            .read<ProfileEditCubit>()
-                            .removeImageAt(index);
+                        context.read<ProfileEditCubit>().removeImageAt(index);
                       },
                     ),
                   ),
@@ -103,7 +107,12 @@ class ShowAndUploadPicturesContainersState
                         offset:
                             Offset(index == 1 ? 0 : (index == 0 ? 4 : -4), 0),
                         child: UploadPictureContainer(
-                          imageFile: null,
+                          imageFile: state.newlyUploadedImages.isNotEmpty
+                              ? state.newlyUploadedImages.length >
+                                      containerIndex
+                                  ? state.newlyUploadedImages[index]
+                                  : null
+                              : null,
                           imageUrl: state.previewProfileModel != null
                               ? state.previewProfileModel!.pictureUrlList
                                           .length >

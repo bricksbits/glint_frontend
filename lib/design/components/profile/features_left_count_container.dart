@@ -4,7 +4,12 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class FeaturesLeftCountContainer extends StatelessWidget {
-  const FeaturesLeftCountContainer({super.key, required this.superLikeCounts, required this.rewindCounts, required this.superDmCounts});
+  const FeaturesLeftCountContainer(
+      {super.key,
+      required this.superLikeCounts,
+      required this.rewindCounts,
+      required this.superDmCounts});
+
   final int superLikeCounts;
   final int rewindCounts;
   final int superDmCounts;
@@ -19,7 +24,7 @@ class FeaturesLeftCountContainer extends StatelessWidget {
         Expanded(
           child: _buildPremiumFeaturesCountContainer(
             iconPath: 'lib/assets/icons/super_like.svg',
-            count: 3,
+            count: superLikeCounts,
             label: 'Superlikes',
             isSmallScreen: isSmallScreen,
           ),
@@ -31,7 +36,7 @@ class FeaturesLeftCountContainer extends StatelessWidget {
         Expanded(
           child: _buildPremiumFeaturesCountContainer(
             iconPath: 'lib/assets/icons/profile/rewind_icon.svg',
-            count: 8,
+            count: rewindCounts,
             label: 'Rewinds',
             isSmallScreen: isSmallScreen,
           ),
@@ -43,7 +48,7 @@ class FeaturesLeftCountContainer extends StatelessWidget {
         Expanded(
           child: _buildPremiumFeaturesCountContainer(
             iconPath: 'lib/assets/icons/direct_msg.svg',
-            count: 6,
+            count: superDmCounts,
             label: 'SuperDM',
             isSmallScreen: isSmallScreen,
           ),

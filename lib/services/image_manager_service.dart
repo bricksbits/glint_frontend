@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
@@ -33,12 +34,12 @@ class ImageService {
       }
     } else {
       // Mobile: Pick images using image_picker
-      final images = await _picker.pickMultiImage();
-      if (images != null) {
-        final directory = await getApplicationDocumentsDirectory();
-        final existing = await _loadSavedImageNames(directory);
-        final availableSlots = _getAvailableSlots(existing);
+      final directory = await getApplicationDocumentsDirectory();
+      final existing = await _loadSavedImageNames(directory);
+      final availableSlots = _getAvailableSlots(existing);
 
+      final images = await _picker.pickMultiImage(limit: availableSlots.length);
+      if (images.isNotEmpty) {
         List<ImageManagerData> result = [];
 
         for (int i = 0; i < images.length && i < availableSlots.length; i++) {
@@ -58,6 +59,10 @@ class ImageService {
             file: file,
           ));
         }
+        debugLogger(
+          "IMAGE_SERVICE",
+          "Images Picked successfully : ${result.first.file}",
+        );
         return result;
       }
     }
@@ -96,7 +101,7 @@ class ImageService {
     int maxCount = 6,
   }) async {
     // Only for mobile
-    final images = await _picker.pickMultiImage();
+    final images = await _picker.pickMultiImage(limit: maxCount);
     if (images.isEmpty) return [];
 
     // Define custom directory: .../eventId/files/
@@ -137,7 +142,7 @@ class ImageService {
   }
 
   Future<List<ImageManagerData>> loadSavedImages() async {
-    if (kIsWeb) return []; // No file storage on web
+    if (kIsWeb) return [];
     final dir = await getApplicationDocumentsDirectory();
     final files = dir
         .listSync()
@@ -147,6 +152,11 @@ class ImageService {
 
     files.sort((a, b) =>
         _extractPictureNum(a.path).compareTo(_extractPictureNum(b.path)));
+
+    debugLogger(
+      "IMAGE_SERVICE",
+      "Load Images : ${files.length}",
+    );
 
     return files
         .map(
@@ -197,5 +207,17 @@ class ImageService {
   int _extractStoryNum(String path) {
     final match = RegExp(r'story_(\d+)').firstMatch(path);
     return int.tryParse(match?.group(1) ?? '0') ?? 0;
+  }
+
+  Future<void> clearAllAppData() async {
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      if (await dir.exists()) {
+        await dir.delete(recursive: true);
+        debugLogger("Clear App Directory", "Cleaned");
+      }
+    } catch (e) {
+      debugLogger("Clear App Directory", "Cleaning failed");
+    }
   }
 }

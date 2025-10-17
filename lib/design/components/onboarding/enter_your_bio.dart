@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
@@ -14,19 +16,34 @@ class EnterYourBio extends StatefulWidget {
 }
 
 class _EnterYourBioState extends State<EnterYourBio> {
-  final _bioController = TextEditingController();
+  late final TextEditingController _bioController;
+  Timer? _debounce;
 
   @override
   void initState() {
-    _bioController.addListener(() {
+    _bioController = TextEditingController(text: widget.bio);
+    _bioController.addListener(_onBioChanged);
+    super.initState();
+  }
+
+  void _onBioChanged() {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
       widget.onBioCompleted(_bioController.text);
     });
-    _bioController.text = widget.bio;
-    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant EnterYourBio oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.bio != widget.bio) {
+      _bioController.text = widget.bio;
+    }
   }
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _bioController.dispose();
     super.dispose();
   }

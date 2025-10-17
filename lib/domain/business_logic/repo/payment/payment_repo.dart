@@ -19,9 +19,12 @@ abstract class PaymentRepo {
   Future<Result<void>> verifyPayment(
     int orderId,
     String paymentId,
+    String razorpayOrderId,
+    String razorpaySignature,
   );
 
   Future<Result<void>> cancelOrder(String orderId);
 
-  Future<Result<(List<EventPaymentHistory>, List<MembershipPaymentHistory>)>> fetchPaymentHistory();
+  Future<Result<(List<EventPaymentHistory>, List<MembershipPaymentHistory>)>>
+      fetchPaymentHistory();
 }

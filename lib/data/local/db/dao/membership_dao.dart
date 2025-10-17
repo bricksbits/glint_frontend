@@ -8,4 +8,8 @@ abstract class MembershipDao {
 
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertMembership(ProfileMembershipEntity membership);
+
+  @Update(onConflict: OnConflictStrategy.replace)
+  Future<void> updateTheMembershipDetails(ProfileMembershipEntity updatedEntity);
 }
+

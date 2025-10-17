@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/features/profile/bloc/profile_handling_cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -19,10 +20,14 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     ProfileInfoColumn(
-                      profileProgress: 0.7,
-                      userName: state.previewProfileModel?.username ??
-                          "Username",
+                      profileProgress:
+                          state.previewProfileModel?.profileCompletion ?? 0.6,
+                      userName:
+                          state.previewProfileModel?.username ?? "Username",
                       userAge: state.previewProfileModel?.age ?? "18",
+                      userProfileImageUrl: state.previewProfileModel
+                              ?.pictureUrlList.firstOrNull ??
+                          "https://www.glintapp.io",
                     ),
                     ProfileSubscriptionColumn(
                       superLikeCounts: state.membershipEntity?.superLikes ?? 0,

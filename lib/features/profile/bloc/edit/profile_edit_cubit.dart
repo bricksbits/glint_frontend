@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
@@ -22,17 +24,86 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
     final currentProfile = await profileRepo.fetchUserProfile();
     switch (currentProfile) {
       case Success<PeopleCardModel>():
-        emitNewState(state.copyWith(previewProfileModel: currentProfile.data));
+        emitNewState(
+          state.copyWith(
+              previewProfileModel: currentProfile.data, isLoading: false),
+        );
       case Failure<PeopleCardModel>():
         emitNewState(
-          state.copyWith(error: "No profile data found, please login again."),
+          state.copyWith(
+            error: "No profile data found, please login again.",
+            isLoading: false,
+          ),
         );
     }
   }
 
-  Future<void> updateProfile(PeopleCardModel updatedModel) async {}
+  Future<void> publishChanges() async {
+    if (state.isNewImagesUploaded && state.newlyUploadedImages.isNotEmpty) {
+      uploadMedia();
+    }
 
-  Future<void> uploadMedia() async {}
+    if (state.isProfileDataChanged && !state.isNewImagesUploaded) {
+      updateProfile();
+    }
+
+    if (state.isNewImagesUploaded &&
+        state.newlyUploadedImages.isNotEmpty &&
+        state.isProfileDataChanged) {
+      Future.wait([uploadMedia(), updateProfile()]).then((_) {
+        emitNewState(state.copyWith(
+          isLoading: false,
+          isNewImagesUploaded: false,
+          newlyUploadedImages: [],
+          isProfileDataChanged: false,
+        ));
+      }).onError((error, st) {
+        emitNewState(state.copyWith(
+            isLoading: false,
+            error: "Not able to perform the required actions,"));
+      });
+    }
+  }
+
+  Future<void> updateProfile() async {
+    emitNewState(state.copyWith(isLoading: true));
+    final profileUpdateResponse = await profileRepo.updateProfile();
+    switch (profileUpdateResponse) {
+      case Success<void>():
+        emitNewState(state.copyWith(
+          isLoading: false,
+          isProfileDataChanged: false,
+        ));
+        break;
+      case Failure<void>():
+        emitNewState(state.copyWith(
+            isLoading: false, error: "Not able to update profile,"));
+        break;
+    }
+  }
+
+  Future<void> updateProfileLocally(PeopleCardModel updatedModel) async {
+    emitNewState(state.copyWith(
+      isProfileDataChanged: true,
+    ));
+    await profileRepo.updateProfileData(updatedModel);
+  }
+
+  Future<void> uploadMedia() async {
+    emitNewState(state.copyWith(isLoading: true));
+    final imagesResponse = await profileRepo.updateMedia();
+    switch (imagesResponse) {
+      case Success<void>():
+        emitNewState(state.copyWith(
+          isLoading: false,
+        ));
+        break;
+      case Failure<void>():
+        emitNewState(state.copyWith(
+            isLoading: false, error: "Not able to upload Media,"));
+        break;
+    }
+  }
 
   Future<void> deleteMedia(List<String> deletedFilesNumber) async {}
 
@@ -44,19 +115,106 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
 
   void updateInterests(List<String> newInterests) {}
 
-  void updateBio(String newBio) {}
+  void updateBio(String newBio) {
+    final updatedModelWithBio = state.previewProfileModel?.copyWith(
+      bio: newBio,
+    );
+    if (updatedModelWithBio != null) {
+      updateProfileLocally(updatedModelWithBio);
+    }
+  }
 
-  void updateOccupation(String newOccupation) {}
+  void updateOccupation(String newOccupation) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("occupation", (_) => newOccupation);
+    final updatedProfile = state.previewProfileModel?.copyWith(
+      about: currentAboutMap,
+      occupation: newOccupation,
+    );
+    if (updatedProfile != null) {
+      updateProfileLocally(updatedProfile);
+      emitNewState(
+        state.copyWith(
+          previewProfileModel: updatedProfile,
+        ),
+      );
+    }
+  }
 
-  void updateEducation(String newEducation) {}
+  void updateEducation(String newEducation) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("education", (_) => newEducation);
+    final updatedProfile =
+        state.previewProfileModel?.copyWith(about: currentAboutMap);
+    if (updatedProfile != null) {
+      updateProfileLocally(updatedProfile);
+      emitNewState(
+        state.copyWith(
+          previewProfileModel: updatedProfile,
+        ),
+      );
+    }
+  }
 
-  void updateHeight(String newHeight) {}
+  void updateHeight(String newHeight) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("height", (_) => newHeight);
+    final updatedProfile =
+        state.previewProfileModel?.copyWith(about: currentAboutMap);
+    if (updatedProfile != null) {
+      updateProfileLocally(updatedProfile);
+      emitNewState(
+        state.copyWith(
+          previewProfileModel: updatedProfile,
+        ),
+      );
+    }
+  }
 
-  void updateWorkoutHabits(String newWorkoutHabits) {}
+  void updateWorkoutHabits(String newWorkoutHabits) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("workout", (_) => newWorkoutHabits);
+    final updateProfile =
+        state.previewProfileModel?.copyWith(about: currentAboutMap);
+    if (updateProfile != null) {
+      updateProfileLocally(updateProfile);
+      emitNewState(
+        state.copyWith(
+          previewProfileModel: updateProfile,
+        ),
+      );
+    }
+  }
 
-  void updateSmokingHabits(String newSmokingHabits) {}
+  void updateSmokingHabits(String newSmokingHabits) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("smoking", (_) => newSmokingHabits);
+    final updatedProfile =
+        state.previewProfileModel?.copyWith(about: currentAboutMap);
+    if (updatedProfile != null) {
+      updateProfileLocally(updatedProfile);
+      emitNewState(
+        state.copyWith(
+          previewProfileModel: updatedProfile,
+        ),
+      );
+    }
+  }
 
-  void updateDrinkingHabits(String newDrinkingHabits) {}
+  void updateDrinkingHabits(String newDrinkingHabits) {
+    final currentAboutMap = state.previewProfileModel?.about;
+    currentAboutMap?.update("drinking", (_) => newDrinkingHabits);
+    final updatedProfile =
+        state.previewProfileModel?.copyWith(about: currentAboutMap);
+    if (updatedProfile != null) {
+      updateProfileLocally(updatedProfile);
+      emitNewState(
+        state.copyWith(
+          previewProfileModel: updatedProfile,
+        ),
+      );
+    }
+  }
 
   void emitNewState(ProfileEditState newState) {
     emit(newState);
@@ -64,12 +222,12 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
 
   Future<void> onPickImage() async {
     final pickedImages = await imageService.pickImages();
-    // emitNewState(
-    //   state.copyWith(
-    //     uploadedFilePaths: pickedImages.map((image) => image.file).toList(),
-    //   ),
-    // );
-    // updateProfileLocally();
+    emitNewState(
+      state.copyWith(
+        newlyUploadedImages: pickedImages.map((image) => image.file).toList(),
+        isNewImagesUploaded: true,
+      ),
+    );
   }
 
   void removeImageAt(int index) {

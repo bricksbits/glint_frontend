@@ -317,6 +317,17 @@ class _$MembershipDao extends MembershipDao {
                   'aiMessages': item.aiMessages,
                   'rewinds': item.rewinds,
                   'superDm': item.superDm
+                }),
+        _profileMembershipEntityUpdateAdapter = UpdateAdapter(
+            database,
+            'memberships',
+            ['userId'],
+            (ProfileMembershipEntity item) => <String, Object?>{
+                  'userId': item.userId,
+                  'superLikes': item.superLikes,
+                  'aiMessages': item.aiMessages,
+                  'rewinds': item.rewinds,
+                  'superDm': item.superDm
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -327,6 +338,9 @@ class _$MembershipDao extends MembershipDao {
 
   final InsertionAdapter<ProfileMembershipEntity>
       _profileMembershipEntityInsertionAdapter;
+
+  final UpdateAdapter<ProfileMembershipEntity>
+      _profileMembershipEntityUpdateAdapter;
 
   @override
   Future<ProfileMembershipEntity?> getMembership(String userId) async {
@@ -344,6 +358,13 @@ class _$MembershipDao extends MembershipDao {
   Future<void> insertMembership(ProfileMembershipEntity membership) async {
     await _profileMembershipEntityInsertionAdapter.insert(
         membership, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> updateTheMembershipDetails(
+      ProfileMembershipEntity updatedEntity) async {
+    await _profileMembershipEntityUpdateAdapter.update(
+        updatedEntity, OnConflictStrategy.replace);
   }
 }
 

@@ -5,8 +5,9 @@ class ProfileHandlingState with _$ProfileHandlingState {
   const factory ProfileHandlingState.initial({
     @Default(null) PeopleCardModel? previewProfileModel,
     @Default(null) ProfileMembershipEntity? membershipEntity,
-
     @Default("") String error,
     @Default(false) bool isLoading,
+    @Default(false) bool isProfileChanged,
+    @Default(false) bool isNewImagesSelected,
   }) = _Initial;
 }

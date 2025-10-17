@@ -59,7 +59,7 @@ class PaymentRepoImpl extends PaymentRepo {
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.PUT,
-      endpoint: "user/background",
+      endpoint: "user/membership",
       requestBody: requestBody.toJson(),
       passedQueryParameters: null,
     );
@@ -83,13 +83,18 @@ class PaymentRepoImpl extends PaymentRepo {
   Future<Result<void>> verifyPayment(
     int orderId,
     String paymentId,
+    String razorpayOrderId,
+    String razorpaySignature,
   ) async {
     final requestBody = VerifyPaymentRequestBody(
-        orderId: orderId, razorpayPaymentId: paymentId);
+        orderId: orderId,
+        razorpayPaymentId: paymentId,
+        razorpayOrderId: razorpayOrderId,
+        razorpaySignature: razorpaySignature);
 
     final response = await apiCallHandler(
       httpClient: httpClient,
-      requestType: HttpRequestEnum.POST,
+      requestType: HttpRequestEnum.PUT,
       endpoint: "user/verify-payment",
       requestBody: requestBody.toJson(),
       passedQueryParameters: null,

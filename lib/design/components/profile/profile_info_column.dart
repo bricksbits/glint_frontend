@@ -11,12 +11,14 @@ class ProfileInfoColumn extends StatelessWidget {
   final double profileProgress;
   final String userName;
   final String userAge;
+  final String userProfileImageUrl;
 
   const ProfileInfoColumn({
     super.key,
     required this.profileProgress,
     required this.userName,
     required this.userAge,
+    required this.userProfileImageUrl,
   });
 
   @override
@@ -39,10 +41,14 @@ class ProfileInfoColumn extends StatelessWidget {
               child: CircleAvatar(
                 radius: 75.0,
                 child: CachedNetworkImage(
-                  imageUrl:
-                      'https://cdn2.iconfinder.com/data/icons/web-hosting-19/50/70-512.png',
-                  fit: BoxFit.cover,
-                ),
+                    imageUrl: userProfileImageUrl,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, error, stack) {
+                      return Image.asset(
+                        fit: BoxFit.cover,
+                        'lib/assets/images/temp_place_holder.png',
+                      );
+                    }),
               ),
             ),
           ],

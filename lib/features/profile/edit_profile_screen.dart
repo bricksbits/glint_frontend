@@ -26,16 +26,21 @@ class EditProfileScreen extends StatelessWidget {
               backgroundColor: AppColours.white,
               actions: [
                 // save icon
-                Container(
-                  height: 44.0,
-                  width: 44.0,
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: AppColours.black,
-                  ),
-                  child: SvgPicture.asset(
-                    'lib/assets/icons/profile/save_icon.svg',
+                GestureDetector(
+                  onTap: () {
+                    context.read<ProfileEditCubit>().publishChanges();
+                  },
+                  child: Container(
+                    height: 44.0,
+                    width: 44.0,
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: AppColours.black,
+                    ),
+                    child: SvgPicture.asset(
+                      'lib/assets/icons/profile/save_icon.svg',
+                    ),
                   ),
                 ),
 
@@ -64,67 +69,130 @@ class EditProfileScreen extends StatelessWidget {
                 const Gap(20.0), // for design replication purpose
               ],
             ),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0).copyWith(
-                bottom: 20.0,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Gap(12.0),
-                    // images container
-                    const ShowAndUploadPicturesContainers(),
-
-                    //get verified
-                    const Gap(32.0),
-                    GetVerifiedWidget(
-                      name: state.previewProfileModel?.username ?? "Username",
-                      age: int.parse(state.previewProfileModel?.age ?? "18"),
-                      onTap: () {
-                        //Todo: Remove this navigation
-                        context
-                            .pushNamed(GlintProfileRoutes.ticketHistory.name);
-                      },
+            body: state.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20.0).copyWith(
+                      bottom: 20.0,
                     ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Gap(12.0),
+                          // images container
+                          const ShowAndUploadPicturesContainers(),
 
-                    const Gap(32.0),
+                          //get verified
+                          const Gap(32.0),
+                          GetVerifiedWidget(
+                            name: state.previewProfileModel?.username ??
+                                "Username",
+                            age: int.parse(
+                                state.previewProfileModel?.age ?? "18"),
+                            onTap: () {
+                              //Todo: Remove this navigation
+                              context.pushNamed(
+                                  GlintProfileRoutes.ticketHistory.name);
+                            },
+                          ),
 
-                    //im looking for card
-                    ImLookingForCard(
-                      lookingFor: state.previewProfileModel?.lookingFor ?? "",
-                      lookingForCallback: (lookingFor) {},
+                          const Gap(32.0),
+
+                          //im looking for card
+                          ImLookingForCard(
+                            lookingFor:
+                                state.previewProfileModel?.lookingFor ?? "",
+                            lookingForCallback: (lookingFor) {
+                              context
+                                  .read<ProfileEditCubit>()
+                                  .updateRelationshipGoal(lookingFor);
+                            },
+                          ),
+
+                          const Gap(16.0),
+
+                          // pronouns card
+                          YourPronounsCard(
+                            genderPassed: state.previewProfileModel?.gender,
+                            pronounsSelected: (pronouns) {
+                              context
+                                  .read<ProfileEditCubit>()
+                                  .updatePronouns(pronouns);
+                            },
+                          ),
+
+                          const Gap(20.0),
+
+                          // Interests and Vibe
+                          _buildInterestsAndVibeSections(
+                            state.previewProfileModel?.interests ?? [],
+                          ),
+
+                          const Gap(20.0),
+
+                          // enter bio
+                          EnterYourBio(
+                            onBioCompleted: (newBio) {
+                              context
+                                  .read<ProfileEditCubit>()
+                                  .updateBio(newBio);
+                            },
+                            bio: state.previewProfileModel?.bio ?? "",
+                          ),
+
+                          // Additional info
+                          const Gap(24.0),
+
+                          AdditionalInfoContainer(
+                            occupation: state.previewProfileModel?.occupation,
+                            education:
+                                state.previewProfileModel?.about["education"],
+                            height: state.previewProfileModel?.about["height"],
+                            workoutHabits:
+                                state.previewProfileModel?.about["workout"],
+                            drinkingHabits:
+                                state.previewProfileModel?.about["drinking"],
+                            smokingHabits:
+                                state.previewProfileModel?.about["smoking"],
+                            occupationProvided: (occupation) {
+                              context
+                                  .read<ProfileEditCubit>()
+                                  .updateOccupation(occupation);
+                            },
+                            educationSelected: (education) {
+                              context
+                                  .read<ProfileEditCubit>()
+                                  .updateOccupation(education);
+                            },
+                            heightProvided: (height) {
+                              context.read<ProfileEditCubit>().updateHeight(
+                                    height.toString(),
+                                  );
+                            },
+                            workoutHabitSelected: (workout) {
+                              context
+                                  .read<ProfileEditCubit>()
+                                  .updateWorkoutHabits(workout);
+                            },
+                            drinkingHabitSelected: (drinking) {
+                              context
+                                  .read<ProfileEditCubit>()
+                                  .updateWorkoutHabits(drinking);
+                            },
+                            smokingHabitSelected: (smoking) {
+                              context
+                                  .read<ProfileEditCubit>()
+                                  .updateWorkoutHabits(smoking);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-
-                    const Gap(16.0),
-
-                    // pronouns card
-                    YourPronounsCard(
-                      pronouns: state.previewProfileModel?.gender,
-                      pronounsSelected: (pronouns) {},
-                    ),
-
-                    const Gap(20.0),
-
-                    // Interests and Vibe
-                    _buildInterestsAndVibeSections(
-                        state.previewProfileModel?.interests ?? []),
-
-                    const Gap(20.0),
-
-                    // enter bio
-                    EnterYourBio(
-                      onBioCompleted: (newBio) {},
-                      bio: state.previewProfileModel?.bio ?? "",
-                    ),
-
-                    // Additional info
-                    const Gap(24.0),
-                    const AdditionalInfoContainer(),
-                  ],
-                ),
-              ),
-            ),
+                  ),
           );
         },
       ),
