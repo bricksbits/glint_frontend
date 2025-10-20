@@ -23,10 +23,6 @@ class _UploadStoryScreenState extends State<UploadStoryScreen> {
   @override
   void initState() {
     super.initState();
-
-    // context.read<UploadStoryBloc>().capturePassArgument(
-    //       widget.isUploadStory,
-    //     );
   }
 
   @override
@@ -34,10 +30,8 @@ class _UploadStoryScreenState extends State<UploadStoryScreen> {
     return BlocProvider(
       create: (context) => UploadStoryBloc(),
       child: BlocListener<UploadStoryBloc, UploadStoryState>(
-        listenWhen: (prev, current) =>
-            prev.isUploadingStoryEvent != current.isUploadingStoryEvent,
         listener: (context, state) {
-          if (state.isUploadingStoryEvent) {
+          if (state.newUserStoryUploadSuccess) {
             context.pop();
           }
         },
@@ -60,7 +54,8 @@ class _UploadStoryScreenState extends State<UploadStoryScreen> {
                               )
                         : Image.network(
                             state.uploadedStories?.storiesUrl.first ?? "",
-                            fit: BoxFit.cover),
+                            fit: BoxFit.cover,
+                          ),
                   ),
 
                   /// Top user info + delete
