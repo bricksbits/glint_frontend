@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/filter/filter_preferences_cubit.dart';
+import 'package:go_router/go_router.dart';
 
 class FilterPreferenceScreen extends StatefulWidget {
   const FilterPreferenceScreen({super.key});
@@ -21,64 +24,84 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColours.white,
-      body: CustomScrollView(
-        slivers: [
-          // app bar
-          const SliverGlintCustomAppBar(
-            title: 'Filter Your Preferences',
-            subtitle: 'Never miss a moment that matters.',
-          ),
+    return BlocProvider(
+      create: (context) => FilterPreferencesCubit(),
+      child: BlocBuilder<FilterPreferencesCubit, FilterPreferencesState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColours.white,
+            body: CustomScrollView(
+              slivers: [
+                // app bar
+                const SliverGlintCustomAppBar(
+                  title: 'Filter Your Preferences',
+                  subtitle: 'Never miss a moment that matters.',
+                ),
 
-          const SliverGap(20.0),
+                const SliverGap(20.0),
 
-          // who you want to see banner
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: _buildWhoYouWantToSeeBanner(),
+                // who you want to see banner
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: _buildWhoYouWantToSeeBanner(),
+                  ),
+                ),
+
+                const SliverGap(20.0),
+
+                // age and distance range selector
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: GlintAgeDistanceCard(
+                      hasBorders: true,
+                      collectMaxDistance: (maxDistance) {
+                        context
+                            .read<FilterPreferencesCubit>()
+                            .updateDistancePreferences(maxDistance);
+                      },
+                      collectMinAndMaxAgeCallback: (min, max) {
+                        context
+                            .read<FilterPreferencesCubit>()
+                            .updateAgePreferences(min, max);
+                      },
+                    ),
+                  ),
+                ),
+
+                const SliverGap(20.0),
+
+                // filter interests
+                SliverToBoxAdapter(
+                  child: _buildFilterInterests(),
+                ),
+
+                const SliverGap(44.0),
+
+                // filter distance
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                    ),
+                    child: GlintElevatedButton(
+                      isPrimary: true,
+                      onPressed: () {
+                        context.pop();
+                        context.read<FilterPreferencesCubit>().applyChanges();
+                      },
+                      label: 'Apply Changes',
+                    ),
+                  ),
+                ),
+
+                // bottom gap
+                const SliverGap(20.0),
+              ],
             ),
-          ),
-
-          const SliverGap(20.0),
-
-          // age and distance range selector
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: GlintAgeDistanceCard(
-                hasBorders: true,
-              ),
-            ),
-          ),
-
-          const SliverGap(20.0),
-
-          // filter interests
-          SliverToBoxAdapter(
-            child: _buildFilterInterests(),
-          ),
-
-          const SliverGap(44.0),
-
-          // filter distance
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20.0,
-              ),
-              child: GlintElevatedButton(
-                isPrimary: true,
-                onPressed: () {},
-                label: 'Apply Changes',
-              ),
-            ),
-          ),
-
-          // bottom gap
-          const SliverGap(20.0),
-        ],
+          );
+        },
       ),
     );
   }
@@ -196,7 +219,9 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
             ),
           ),
           const Gap(16.0),
-          const GlintInterestsSelection(selectedInterests: [],),
+          const GlintInterestsSelection(
+            selectedInterests: [],
+          ),
         ],
       ),
     );

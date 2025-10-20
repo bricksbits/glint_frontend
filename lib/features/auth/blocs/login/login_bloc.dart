@@ -48,19 +48,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     String validEmail,
     String validPassword,
   ) async {
+    add(const LoginEvent.emitNewState(LoginState.loading(true)));
     signInUserUseCase.perform(
       (response) {
         switch (response) {
           case null:
+            add(const LoginEvent.emitNewState(LoginState.loading(false)));
             add(const _EmitState(LoginState.error("Something went wrong")));
           case Success<UsersType>():
+            add(const LoginEvent.emitNewState(LoginState.loading(false)));
             add(_EmitState(LoginState.success(response.data)));
           case Failure<UsersType>():
             //Todo: Handle the Error Case, When the Image is not uploaded,
+            add(const LoginEvent.emitNewState(LoginState.loading(false)));
             add(const _EmitState(LoginState.error("Something went wrong")));
         }
       },
       (error) {
+        add(const LoginEvent.emitNewState(LoginState.loading(false)));
         add(_EmitState(LoginState.error("Something went wrong,$error")));
       },
       () {

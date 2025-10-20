@@ -680,7 +680,7 @@ mixin _$LoginState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(bool isLoading) loading,
     required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
@@ -690,7 +690,7 @@ mixin _$LoginState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(bool isLoading)? loading,
     TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
@@ -700,7 +700,7 @@ mixin _$LoginState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(bool isLoading)? loading,
     TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
@@ -804,7 +804,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(bool isLoading) loading,
     required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
@@ -817,7 +817,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(bool isLoading)? loading,
     TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
@@ -830,7 +830,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(bool isLoading)? loading,
     TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
@@ -896,6 +896,8 @@ abstract class _$$LoadingImplCopyWith<$Res> {
   factory _$$LoadingImplCopyWith(
           _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
       __$$LoadingImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({bool isLoading});
 }
 
 /// @nodoc
@@ -908,58 +910,84 @@ class __$$LoadingImplCopyWithImpl<$Res>
 
   /// Create a copy of LoginState
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? isLoading = null,
+  }) {
+    return _then(_$LoadingImpl(
+      null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$LoadingImpl implements _Loading {
-  const _$LoadingImpl();
+  const _$LoadingImpl(this.isLoading);
+
+  @override
+  final bool isLoading;
 
   @override
   String toString() {
-    return 'LoginState.loading()';
+    return 'LoginState.loading(isLoading: $isLoading)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoadingImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$LoadingImpl &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, isLoading);
+
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoadingImplCopyWith<_$LoadingImpl> get copyWith =>
+      __$$LoadingImplCopyWithImpl<_$LoadingImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(bool isLoading) loading,
     required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
     required TResult Function(String password) passwordChanged,
   }) {
-    return loading();
+    return loading(isLoading);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(bool isLoading)? loading,
     TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
     TResult? Function(String password)? passwordChanged,
   }) {
-    return loading?.call();
+    return loading?.call(isLoading);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(bool isLoading)? loading,
     TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
@@ -967,7 +995,7 @@ class _$LoadingImpl implements _Loading {
     required TResult orElse(),
   }) {
     if (loading != null) {
-      return loading();
+      return loading(isLoading);
     }
     return orElse();
   }
@@ -1017,7 +1045,15 @@ class _$LoadingImpl implements _Loading {
 }
 
 abstract class _Loading implements LoginState {
-  const factory _Loading() = _$LoadingImpl;
+  const factory _Loading(final bool isLoading) = _$LoadingImpl;
+
+  bool get isLoading;
+
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoadingImplCopyWith<_$LoadingImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -1089,7 +1125,7 @@ class _$SuccessImpl implements _Success {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(bool isLoading) loading,
     required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
@@ -1102,7 +1138,7 @@ class _$SuccessImpl implements _Success {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(bool isLoading)? loading,
     TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
@@ -1115,7 +1151,7 @@ class _$SuccessImpl implements _Success {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(bool isLoading)? loading,
     TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
@@ -1253,7 +1289,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(bool isLoading) loading,
     required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
@@ -1266,7 +1302,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(bool isLoading)? loading,
     TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
@@ -1279,7 +1315,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(bool isLoading)? loading,
     TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
@@ -1417,7 +1453,7 @@ class _$EmailChangedImpl implements _EmailChanged {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(bool isLoading) loading,
     required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
@@ -1430,7 +1466,7 @@ class _$EmailChangedImpl implements _EmailChanged {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(bool isLoading)? loading,
     TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
@@ -1443,7 +1479,7 @@ class _$EmailChangedImpl implements _EmailChanged {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(bool isLoading)? loading,
     TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,
@@ -1583,7 +1619,7 @@ class _$PasswordChangedImpl implements _PasswordChanged {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(bool isLoading) loading,
     required TResult Function(UsersType type) success,
     required TResult Function(String message) error,
     required TResult Function(String email) emailChanged,
@@ -1596,7 +1632,7 @@ class _$PasswordChangedImpl implements _PasswordChanged {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(bool isLoading)? loading,
     TResult? Function(UsersType type)? success,
     TResult? Function(String message)? error,
     TResult? Function(String email)? emailChanged,
@@ -1609,7 +1645,7 @@ class _$PasswordChangedImpl implements _PasswordChanged {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(bool isLoading)? loading,
     TResult Function(UsersType type)? success,
     TResult Function(String message)? error,
     TResult Function(String email)? emailChanged,

@@ -45,7 +45,7 @@ class GlintFilterPrefsCard extends StatelessWidget {
             style: AppTheme.simpleText,
           ),
           const Gap(60.0),
-          const GlintAgeDistanceCard(), // the filter card UI
+          // const GlintAgeDistanceCard(), // the filter card UI
           const Gap(32.0),
           SizedBox(
             width: double.infinity,
