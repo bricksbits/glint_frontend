@@ -4,30 +4,27 @@ import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/components/people/profile_action_button.dart';
 import 'package:glint_frontend/design/components/people/profile_name_and_detail_column.dart';
 import 'package:glint_frontend/design/components/people/share_profile_icon_button.dart';
+import 'package:glint_frontend/features/people/model/scrollable_list_item_type.dart';
 
 import 'last_profile_status_chips.dart';
 
 //Todo: Remove the Error Placeholder with the design placeHolder
 class TopProfileCard extends StatelessWidget {
-  final String imageUrl;
-  final String recentActive;
   final VoidCallback shareProfile;
-  final String designation;
   final VoidCallback sendMessage;
   final VoidCallback sendSuperLike;
   final double screenHeight;
   final double screenWidth;
+  final PeopleTopCardModel topCardModel;
 
   const TopProfileCard({
     super.key,
-    required this.imageUrl,
-    required this.recentActive,
     required this.shareProfile,
-    required this.designation,
     required this.sendMessage,
     required this.sendSuperLike,
     required this.screenHeight,
     required this.screenWidth,
+    required this.topCardModel,
   });
 
   @override
@@ -47,7 +44,7 @@ class TopProfileCard extends StatelessWidget {
           child: Image.network(
             height: availableHeight,
             width: screenWidth,
-            imageUrl,
+            topCardModel.imageUrl,
             fit: BoxFit.cover,
             errorBuilder: (context, error, stack) {
               return Image.asset(
@@ -82,7 +79,7 @@ class TopProfileCard extends StatelessWidget {
         Positioned(
           top: 16.0,
           left: 16.0,
-          child: LastProfileStatusChips(text: recentActive),
+          child: LastProfileStatusChips(text: topCardModel.profileTag),
         ),
         Positioned(
           top: 16.0,
@@ -98,12 +95,12 @@ class TopProfileCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ProfileNameAndDetailColumn(
-                name: 'Profile name',
-                distance: '9',
-                views: "62",
-                age: "21",
+                name: topCardModel.name,
+                distance: topCardModel.locationAway,
+                views: topCardModel.views,
+                age: topCardModel.age,
                 isPremiumUser: false,
-                designation: designation,
+                designation: topCardModel.designation,
               ),
               Row(
                 children: [

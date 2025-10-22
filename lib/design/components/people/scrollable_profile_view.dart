@@ -38,12 +38,12 @@ class ScrollableProfileView extends StatelessWidget {
               child: TopProfileCard(
                 screenWidth: screenWidth,
                 screenHeight: screenHeight,
-                imageUrl: peopleUiModel.convert().topCardModel.imageUrl,
-                recentActive: "New",
+                topCardModel: peopleUiModel.convert().topCardModel,
                 shareProfile: () {},
-                designation: peopleUiModel.occupation,
                 sendMessage: () {},
-                sendSuperLike: () {},
+                sendSuperLike: () {
+                  onSuperLiked(peopleUiModel.userId);
+                },
               ),
             ),
           ),
@@ -70,8 +70,15 @@ class ScrollableProfileView extends StatelessWidget {
             ),
           ),
 
-          const SliverToBoxAdapter(
-            child: ScrollableProfileFooter(),
+          SliverToBoxAdapter(
+            child: ScrollableProfileFooter(
+              onDiLikedProfile: () {
+                onDisLiked(peopleUiModel.userId);
+              },
+              onLikedProfile: () {
+                onLiked(peopleUiModel.userId);
+              },
+            ),
           ),
         ],
       ),

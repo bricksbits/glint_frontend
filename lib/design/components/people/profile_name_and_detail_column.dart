@@ -28,7 +28,7 @@ class ProfileNameAndDetailColumn extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ProfileDesignationGradientLabel(text: designation),
+        ProfileDesignationGradientLabel(designation: designation),
 
         const Gap(16.0),
 

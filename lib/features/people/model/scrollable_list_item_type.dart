@@ -34,6 +34,7 @@ class PeopleTopCardModel {
   final String views;
   final String designation;
   final String imageUrl;
+  final String profileTag;
 
   PeopleTopCardModel(
     this.id,
@@ -43,5 +44,6 @@ class PeopleTopCardModel {
     this.locationAway,
     this.views,
     this.designation,
+    this.profileTag,
   );
 }

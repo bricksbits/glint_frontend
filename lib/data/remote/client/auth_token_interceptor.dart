@@ -3,6 +3,7 @@ import 'package:glint_frontend/data/local/persist/async_encrypted_shared_prefere
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/model/response/auth/refresh_auth_token_response.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 ///  Checks if the Access Token is Valid or not.
 ///  IF Not valid, we make another API call to update the Auth Token.
@@ -31,16 +32,13 @@ class AuthInterceptor extends Interceptor {
   /// Remove Constants.
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
-    final authState = rootNavigatorKey.currentState;
     if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
       final refreshToken = await sharedPreferenceHelper
           .getString(SharedPreferenceKeys.refreshTokenKey);
 
       if (refreshToken.isEmpty) {
-        if (authState != null) {
-          authState.pushNamed(GlintMainRoutes.splash.name);
-          return;
-        }
+        GoRouter.of(rootNavigatorKey.currentContext!)
+            .goNamed(GlintMainRoutes.splash.name);
         return;
       }
 
@@ -70,15 +68,14 @@ class AuthInterceptor extends Interceptor {
           return handler.resolve(clone);
         } else {
           await sharedPreferenceHelper.clearEncryptedPrefs();
-          authState?.pushNamed(GlintMainRoutes.splash.name);
+          GoRouter.of(rootNavigatorKey.currentContext!)
+              .goNamed(GlintMainRoutes.splash.name);
         }
       } catch (e) {
         // Token refresh failed, logout user
         await sharedPreferenceHelper.clearEncryptedPrefs();
-        if (authState != null) {
-          authState.pushNamed(GlintMainRoutes.splash.name);
-          return;
-        }
+        GoRouter.of(rootNavigatorKey.currentContext!)
+            .goNamed(GlintMainRoutes.splash.name);
         return handler.next(err);
       }
     }

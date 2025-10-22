@@ -184,8 +184,11 @@ final glintMainRoutes = GoRouter(
           path: '/${GlintChatRoutes.oneTimePhotoView.name}',
           name: GlintChatRoutes.oneTimePhotoView.name,
           builder: (context, state) {
-            final imagePassed = state.extra as String?;
-            return OneTimeViewScreen(imageUrl: imagePassed);
+            final arguments = state.extra as OneTimeViewNavArguments?;
+            return OneTimeViewScreen(
+              imageUrl: arguments?.imageUrl,
+              messageWithMedia: arguments?.message,
+            );
           },
         ),
       ],
