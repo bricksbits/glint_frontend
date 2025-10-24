@@ -255,7 +255,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         const Gap(8.0),
                                         // Todo: Fix the format of the date
                                         Text(
-                                          lastMessageDate.formatToStandard(),
+                                          lastMessageDate.toChatTimestamp(),
                                           style:
                                               AppTheme.smallBodyText.copyWith(
                                             color: AppColours.darkGray,

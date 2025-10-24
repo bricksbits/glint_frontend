@@ -34,6 +34,24 @@ extension DateTimeFormatter on DateTime {
   String toFormattedTime() {
     return DateFormat('h:mm a').format(this);
   }
+
+  String toChatTimestamp() {
+    final now = DateTime.now();
+    final difference = now.difference(this).inDays;
+
+    if (difference == 0) {
+      return "${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}";
+    } else if (difference == 1) {
+      return "Yesterday";
+    } else {
+      const months = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ];
+      final monthName = months[month - 1];
+      return "$day $monthName";
+    }
+  }
 }
 
 DateTime dateFromStandardResponse(String date) {

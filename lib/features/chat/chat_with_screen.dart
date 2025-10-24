@@ -230,7 +230,7 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 6),
                               child: Text(
-                                getFormattedDate(DateTime.now()),
+                                getFormattedDate(dateTime),
                                 style: const TextStyle(
                                     fontSize: 12, color: Colors.black87),
                               ),
