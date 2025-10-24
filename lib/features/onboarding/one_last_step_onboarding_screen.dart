@@ -123,11 +123,9 @@ class _OneLastStepOnboardingScreenState
                         foregroundColor: Colors.white,
                         backgroundColor: AppColours.primaryBlue,
                         onPressed: () {
-                          final bioValue = state.currentState?.bio;
-                          if (bioValue != null && bioValue.isNotEmpty) {
-                            context
-                                .read<OnBoardingCubit>()
-                                .updateProfileLocally();
+                          if (context
+                              .read<OnBoardingCubit>()
+                              .validatePersonalInformation()) {
                             final target = GlintMainRoutes.register.name;
                             context.go("/$target", extra: false);
                           } else {

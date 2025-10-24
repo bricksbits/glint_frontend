@@ -80,21 +80,11 @@ class _InterestsAndVibeOnboardingScreenState
                                 foregroundColor: Colors.white,
                                 backgroundColor: AppColours.primaryBlue,
                                 onPressed: () {
-                                  final interestListLength =
-                                      state.currentState?.interests;
-                                  if (interestListLength != null) {
-                                    if (interestListLength.length >= 5) {
-                                      context
-                                          .read<OnBoardingCubit>()
-                                          .updateProfileLocally();
-                                      final target =
-                                          GlintBoardingRoutes.bio.name;
-                                      context.go("/$target");
-                                    } else {
-                                      //Todo: Show Snackbar to select more items
-                                    }
-                                  } else {
-                                    //Todo : Disable the Next Button.
+                                  if (context
+                                      .read<OnBoardingCubit>()
+                                      .validateInterestCounts()) {
+                                    final target = GlintBoardingRoutes.bio.name;
+                                    context.go("/$target");
                                   }
                                 },
                               ),

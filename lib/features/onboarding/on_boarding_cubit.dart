@@ -426,6 +426,83 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     }
   }
 
+  bool validateIfImageProvidedOrNot() {
+    if (state.uploadedFilePaths.isEmpty) {
+      emitNewState(state.copyWith(error: "Please Select atleast one image."));
+      return false;
+    }
+    return true;
+  }
+
+  bool validateInterestCounts() {
+    if (state.currentState?.interests != null &&
+        state.currentState!.interests!.isNotEmpty) {
+      if (state.currentState!.interests!.length < 5) {
+        emitNewState(state.copyWith(
+            error:
+                "Please select more ${5 - state.currentState!.interests!.length} interest for better matching."));
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      emitNewState(state.copyWith(
+          error: "Please select around 5 interests for better matching."));
+      return false;
+    }
+  }
+
+  bool validatePersonalInformation() {
+    if (state.currentState?.height == null) {
+      emitNewState(state.copyWith(error: "Height Missing,"));
+      return false;
+    }
+
+    if (state.currentState?.education == null) {
+      emitNewState(state.copyWith(error: "Education Missing,"));
+      return false;
+    }
+
+    if (state.currentState?.occupation == null &&
+        state.currentState!.occupation!.isNotEmpty) {
+      emitNewState(state.copyWith(error: "Occupation leads to better matches"));
+      return false;
+    }
+
+    if (state.currentState?.smokingHabit == null) {
+      emitNewState(state.copyWith(error: "Smoking Habit Missing,"));
+      return false;
+    }
+
+    if (state.currentState?.drinkingHabit == null) {
+      emitNewState(state.copyWith(error: "Drinking Habit Missing,"));
+      return false;
+    }
+
+    if (state.currentState?.workoutHabit == null) {
+      emitNewState(state.copyWith(error: "Workout Habit Missing,"));
+      return false;
+    }
+
+    if (state.currentState?.bio == null &&
+        state.currentState!.bio!.isNotEmpty) {
+      emitNewState(state.copyWith(
+          error: "Bio tells more about you, can lead to better match,"));
+      return false;
+    }
+
+    return true;
+  }
+
+  bool validateIfRelationGoalsProvidedOrNot() {
+    if (state.currentState?.relationShipGoals == null) {
+      emitNewState(state.copyWith(error: "Tell us what you are looking for?"));
+      return false;
+    }
+
+    return true;
+  }
+
   void emitNewState(OnBoardingState newState) {
     emit(newState);
   }
