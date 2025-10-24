@@ -40,7 +40,7 @@ class _CommonBottomSheetComponentState<T extends Enum>
         top: 24.0,
         left: 24.0,
         right: 24.0,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+        bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -49,59 +49,61 @@ class _CommonBottomSheetComponentState<T extends Enum>
           topRight: Radius.circular(25.0),
         ),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          // Header: Icon and Title
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(widget.icon,
-                  size: 30,
-                  color:
-                      Theme.of(context).colorScheme.primary.withOpacity(0.7)),
-              const SizedBox(width: 10),
-              Text(
-                widget.title,
-                style:
-                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          const Divider(height: 30),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            // Header: Icon and Title
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(widget.icon,
+                    size: 30,
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.7)),
+                const SizedBox(width: 10),
+                Text(
+                  widget.title,
+                  style:
+                      const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const Divider(height: 30),
 
-          SizedBox(
-            width: double.infinity,
-            child: GlintTextInputField(
-              controller: _bottomSheetTextController,
-              hintText: 'Ex: He/Him',
-              suffix: GestureDetector(
-                onTap: () {
-                  widget.onValueAdded(_bottomSheetTextController.text.trim());
-                  Navigator.of(context).pop();
-                },
-                child: const Icon(
-                  Icons.arrow_forward,
-                  color: AppColours.primaryBlue,
-                  size: 20.0,
+            SizedBox(
+              width: double.infinity,
+              child: GlintTextInputField(
+                controller: _bottomSheetTextController,
+                hintText: 'Ex: He/Him',
+                suffix: GestureDetector(
+                  onTap: () {
+                    widget.onValueAdded(_bottomSheetTextController.text.trim());
+                    Navigator.of(context).pop();
+                  },
+                  child: const Icon(
+                    Icons.arrow_forward,
+                    color: AppColours.primaryBlue,
+                    size: 20.0,
+                  ),
                 ),
               ),
             ),
-          ),
 
-          const SizedBox(height: 30),
+            const SizedBox(height: 30),
 
-          // Skip Button (bottom-aligned)
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the bottom sheet
-              },
-              child: const Text('Skip >>', style: TextStyle(fontSize: 16)),
+            // Skip Button (bottom-aligned)
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the bottom sheet
+                },
+                child: const Text('Skip >>', style: TextStyle(fontSize: 16)),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

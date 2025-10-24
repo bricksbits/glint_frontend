@@ -75,6 +75,7 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
             label: 'Occupation',
             onTap: () {
               context.showBottomSheet(
+                enableDrag: true,
                 isDismissible: true,
                 (context) {
                   return CommonBottomSheetComponent(
