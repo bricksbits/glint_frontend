@@ -32,7 +32,7 @@ enum GlintChatRoutes {
   chatWith,
   stories,
   videoCall,
-  tickets,
+  ticket,
   getTicket,
   uploadStory,
   oneTimePhotoView,
@@ -41,13 +41,13 @@ enum GlintChatRoutes {
 enum GlintEventRoutes {
   eventDetails,
   peopleInterested,
-  explore,
+  tickets,
 }
 
 enum GlintProfileRoutes {
   profilePreview,
   editProfile,
-  ticketHistory,
+  paymentHistory,
 }
 
 enum GlintBoardingRoutes {

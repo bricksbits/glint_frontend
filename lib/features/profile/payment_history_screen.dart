@@ -4,8 +4,8 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/profile/bloc/history/payment_history_cubit.dart';
 
-class ProfileHistoryTicketsScreen extends StatelessWidget {
-  const ProfileHistoryTicketsScreen({super.key});
+class PaymentHistoryScreen extends StatelessWidget {
+  const PaymentHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -428,7 +428,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   bool validateIfImageProvidedOrNot() {
     if (state.uploadedFilePaths.isEmpty) {
-      emitNewState(state.copyWith(error: "Please Select atleast one image."));
+      emitNewState(state.copyWith(error: "Minimum one image required."));
       return false;
     }
     return true;
@@ -453,41 +453,46 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   bool validatePersonalInformation() {
-    if (state.currentState?.height == null) {
-      emitNewState(state.copyWith(error: "Height Missing,"));
+    if (state.currentState?.bio == null ||
+        state.currentState!.bio?.isEmpty == true) {
+      emitNewState(state.copyWith(
+          error: "Bio tells more about you, can lead to better match,"));
       return false;
     }
 
-    if (state.currentState?.education == null) {
-      emitNewState(state.copyWith(error: "Education Missing,"));
-      return false;
-    }
-
-    if (state.currentState?.occupation == null &&
-        state.currentState!.occupation!.isNotEmpty) {
+    if (state.currentState?.occupation == null ||
+        state.currentState!.occupation?.isEmpty == true) {
       emitNewState(state.copyWith(error: "Occupation leads to better matches"));
       return false;
     }
 
-    if (state.currentState?.smokingHabit == null) {
+    if (state.currentState?.education == null ||
+        state.currentState!.education?.isEmpty == true) {
+      emitNewState(state.copyWith(error: "Education Missing,"));
+      return false;
+    }
+
+    if (state.currentState?.height == null ||
+        state.currentState!.height?.isEmpty == true) {
+      emitNewState(state.copyWith(error: "Height Missing,"));
+      return false;
+    }
+
+    if (state.currentState?.smokingHabit == null ||
+        state.currentState!.smokingHabit?.isEmpty == true) {
       emitNewState(state.copyWith(error: "Smoking Habit Missing,"));
       return false;
     }
 
-    if (state.currentState?.drinkingHabit == null) {
+    if (state.currentState?.drinkingHabit == null ||
+        state.currentState!.drinkingHabit?.isEmpty == true) {
       emitNewState(state.copyWith(error: "Drinking Habit Missing,"));
       return false;
     }
 
-    if (state.currentState?.workoutHabit == null) {
+    if (state.currentState?.workoutHabit == null ||
+        state.currentState!.workoutHabit?.isEmpty == true) {
       emitNewState(state.copyWith(error: "Workout Habit Missing,"));
-      return false;
-    }
-
-    if (state.currentState?.bio == null &&
-        state.currentState!.bio!.isNotEmpty) {
-      emitNewState(state.copyWith(
-          error: "Bio tells more about you, can lead to better match,"));
       return false;
     }
 

@@ -208,7 +208,6 @@ class _LoginScreenState extends State<LoginScreen> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         const targetScreen = GlintAuthRoutes.resetPassword;
-
         context.pushNamed(targetScreen.name);
       },
       child: Align(

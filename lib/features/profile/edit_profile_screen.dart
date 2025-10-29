@@ -96,7 +96,7 @@ class EditProfileScreen extends StatelessWidget {
                             onTap: () {
                               //Todo: Remove this navigation
                               context.pushNamed(
-                                  GlintProfileRoutes.ticketHistory.name);
+                                  GlintProfileRoutes.paymentHistory.name);
                             },
                           ),
 

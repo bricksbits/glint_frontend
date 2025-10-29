@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -85,6 +86,18 @@ class _InterestsAndVibeOnboardingScreenState
                                       .validateInterestCounts()) {
                                     final target = GlintBoardingRoutes.bio.name;
                                     context.go("/$target");
+                                  } else {
+                                    final currentInterests = context
+                                        .read<OnBoardingCubit>()
+                                        .currentInterests;
+                                    if (currentInterests != null &&
+                                        currentInterests.isNotEmpty) {
+                                      final remainingInterests =
+                                          5 - currentInterests.length;
+                                      showCustomSnackbar(context,
+                                          message:
+                                              "Please select $remainingInterests more");
+                                    }
                                   }
                                 },
                               ),

@@ -23,6 +23,7 @@ import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_screen.dart';
+import 'package:glint_frontend/features/event/exports.dart';
 import 'package:glint_frontend/features/event/people/people_interested_for_event_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 import 'package:glint_frontend/features/likes/likes_screen.dart';
@@ -176,8 +177,8 @@ final glintMainRoutes = GoRouter(
           builder: (context, state) => const ChatWithVideoCallScreen(),
         ),
         GoRoute(
-          path: '/${GlintChatRoutes.tickets.name}',
-          name: GlintChatRoutes.tickets.name,
+          path: '/${GlintChatRoutes.ticket.name}',
+          name: GlintChatRoutes.ticket.name,
           builder: (context, state) => const ConfirmTicketScreen(),
         ),
         GoRoute(
@@ -238,6 +239,17 @@ final glintMainRoutes = GoRouter(
             );
           },
         ),
+        GoRoute(
+          path: '/${GlintEventRoutes.tickets.name}',
+          name: GlintEventRoutes.tickets.name,
+          builder: (context, state) {
+            return BlocProvider(
+              lazy: true,
+              create: (context) => EventBaseCubit(),
+              child: const EventTicketHistoryScreen(),
+            );
+          },
+        ),
       ],
     ),
     GoRoute(
@@ -256,9 +268,9 @@ final glintMainRoutes = GoRouter(
           builder: (context, state) => const EditProfileScreen(),
         ),
         GoRoute(
-          path: '/${GlintProfileRoutes.ticketHistory.name}',
-          name: GlintProfileRoutes.ticketHistory.name,
-          builder: (context, state) => const ProfileHistoryTicketsScreen(),
+          path: '/${GlintProfileRoutes.paymentHistory.name}',
+          name: GlintProfileRoutes.paymentHistory.name,
+          builder: (context, state) => const PaymentHistoryScreen(),
         ),
       ],
     ),
