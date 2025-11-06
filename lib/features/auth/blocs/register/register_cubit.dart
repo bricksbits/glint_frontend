@@ -317,7 +317,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       error = 'Confirm Password cannot be empty.';
     } else if (state.confirmPassword.length < minLength) {
       error = 'Confirm Password must be at least $minLength characters.';
-    } else if (state.confirmPassword == state.password) {
+    } else if (state.confirmPassword != state.password) {
       error = 'Password and Confirm Password does not match';
     }
 

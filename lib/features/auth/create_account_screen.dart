@@ -120,7 +120,10 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
   Widget build(BuildContext context) {
     return BlocListener<RegisterCubit, RegisterState>(
       listenWhen: (previous, current) {
-        if (previous.error != current.error) {
+        if (previous.error != current.error ||
+            previous.navigateToRoute != current.navigateToRoute ||
+            previous.isRegisteredSuccessfully !=
+                current.isRegisteredSuccessfully) {
           return true;
         }
         return false;
