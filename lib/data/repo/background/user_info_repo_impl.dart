@@ -1,3 +1,5 @@
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/fcm_token_request.dart';
@@ -10,16 +12,21 @@ import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
-@Singleton(as: UserInfoRepo)
+@LazySingleton(as: UserInfoRepo)
 class UserInfoRepoImpl extends UserInfoRepo {
   final MyDioClient httpClient;
+  final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
 
-  UserInfoRepoImpl(this.httpClient);
+  UserInfoRepoImpl(
+    this.httpClient,
+    this.sharedPreferenceHelper,
+  );
 
   @override
   Future<Result<void>> updateFcmToken(String fcmTokenGenerated) async {
     var requestBody = FcmTokenRequest(fcmToken: fcmTokenGenerated).toJson();
-
+    await sharedPreferenceHelper.saveString(
+        SharedPreferenceKeys.deviceFcmTokenKey, fcmTokenGenerated);
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.PUT,
@@ -51,7 +58,10 @@ class UserInfoRepoImpl extends UserInfoRepo {
   @override
   Future<Result<void>> updateUserLocation() async {
     var updateLocationRequestBody = UpdateUserLcoationRequestBody(
-        userId: 0, latitide: 12.45, longitude: 43.32);
+      userId: 0,
+      latitide: 12.45,
+      longitude: 43.32,
+    );
 
     final response = await apiCallHandler(
       httpClient: httpClient,

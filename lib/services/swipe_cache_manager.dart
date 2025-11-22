@@ -120,6 +120,7 @@ class SwipeBufferManager {
       requestBody: requestModel.toJson(),
     );
 
+    //Todo: Call Recent Matches and Update Chat Channels here once a Match occured.
     switch (response) {
       case Success():
         final postActions = UserActionResponse.fromJson(response.data);

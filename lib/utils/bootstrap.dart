@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
+import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 import 'package:logging/logging.dart';
 
 import '../features/auth/blocs/reset_password/reset_password_bloc.dart';
@@ -18,6 +20,17 @@ Future<void> bootstrap(
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
   final connectivity = Connectivity();
+  final firebaseInstance = FirebaseMessaging.instance;
+  final notificationSettings =
+      await firebaseInstance.requestPermission(provisional: true);
+
+  firebaseInstance.onTokenRefresh.listen((newToken) {
+    final userInfoRepo = getIt.get<UserInfoManagerCubit>();
+    userInfoRepo.updateTheFcmTokenToServer(newToken);
+  }).onError((error) {
+    //Todo: Log the Error to the Analytic here.
+  });
+
   runApp(
     MultiBlocProvider(
       providers: [

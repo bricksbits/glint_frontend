@@ -24,4 +24,7 @@ class SharedPreferenceKeys {
   static const String userSearchMinAgeKey = "userSearchMinAge";
   static const String userSearchMaxAgeKey = "userSearchMaxAge";
   static const String userSearchMaxDistanceKey = "userSearchMaxDistance";
+
+  // FCM
+  static const String deviceFcmTokenKey = "fcmToken";
 }

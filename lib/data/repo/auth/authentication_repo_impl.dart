@@ -45,7 +45,10 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
     RegisterUserRequest registerUserModel,
     String userRole,
   ) async {
-    final requestBody = registerUserModel.mapToData(userRole);
+    final getFcmToken = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.deviceFcmTokenKey);
+    final requestBody = registerUserModel.mapToData(
+        userRole, userRole == "user" ? getFcmToken : null);
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
@@ -82,7 +85,8 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
           final streamToken = successResponse.profile?.streamAuthToken;
           final userId = successResponse.profile?.userId;
           final userName = successResponse.profile?.username;
-          final userImageUrl = successResponse.profile?.pictureUrlList?.firstOrNull?.presignedUrl;
+          final userImageUrl = successResponse
+              .profile?.pictureUrlList?.firstOrNull?.presignedUrl;
           if (successResponse.profile != null) {
             saveMembershipDetails(
               ProfileMembershipEntity(

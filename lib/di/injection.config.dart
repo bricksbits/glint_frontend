@@ -73,6 +73,7 @@ import '../domain/business_logic/repo/profile/profile_repo.dart' as _i662;
 import '../domain/business_logic/repo/story/story_repo.dart' as _i762;
 import '../services/image_manager_service.dart' as _i43;
 import '../services/swipe_cache_manager.dart' as _i517;
+import '../utils/user_info/user_info_manager_cubit.dart' as _i141;
 import 'local_module.dart' as _i519;
 import 'network_module.dart' as _i567;
 
@@ -100,6 +101,8 @@ extension GetItInjectableX on _i174.GetIt {
       () => localModule.glintDatabase(),
       preResolve: true,
     );
+    gh.lazySingleton<_i141.UserInfoManagerCubit>(
+        () => _i141.UserInfoManagerCubit());
     gh.singleton<_i719.ProfileDao>(
         () => localModule.getProfileDao(gh<_i160.GlintDatabase>()));
     gh.singleton<_i1011.MembershipDao>(
@@ -154,8 +157,6 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           gh<_i719.ProfileDao>(),
         ));
-    gh.singleton<_i661.UserInfoRepo>(
-        () => _i321.UserInfoRepoImpl(gh<_i368.MyDioClient>()));
     gh.factory<_i972.SignInUserUseCase>(
         () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
     gh.lazySingleton<_i427.LikesDataRepo>(() => _i503.LikesDataRepoImpl(
@@ -183,6 +184,10 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i849.ChatRepo>(
         () => _i651.ChatRepoImpl(gh<_i368.MyDioClient>()));
+    gh.lazySingleton<_i661.UserInfoRepo>(() => _i321.UserInfoRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+        ));
     gh.lazySingleton<_i579.RejectPublishedEventUsecase>(() =>
         _i579.RejectPublishedEventUsecase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i839.ApprovePublishedEventUsecase>(() =>

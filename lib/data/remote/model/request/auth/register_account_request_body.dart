@@ -51,7 +51,7 @@ class RegisterAccountRequestBody {
         ? json['relationship_goals'].cast<String>()
         : [];
     interests =
-    json['interests'] != null ? json['interests'].cast<String>() : [];
+        json['interests'] != null ? json['interests'].cast<String>() : [];
     role = json['role'];
     approvedByAdmin = json['approved_by_admin'];
     fcmToken = json['fcm_token'];
@@ -145,14 +145,15 @@ class RegisterAccountRequestBody {
   }
 }
 
-//Todo: Remove this Random with passed value
 var _random = Random().nextInt(999999);
 
 //Todo: Implement the Bottom Sheet and Fix those predefined placeholder values
 // height, Occupation, Designation, workout, smoking, drinking,
 extension RegisterUserRequestMapper on RegisterUserRequest {
-  RegisterAccountRequestBody mapToData(String userType) {
-    // var parsedHeight = height != null ? double.parse(height ?? "0.00") : 0.00;
+  RegisterAccountRequestBody mapToData(
+    String userType,
+    String? fcmToken,
+  ) {
     return RegisterAccountRequestBody(
       username: username,
       password: password,
@@ -174,7 +175,7 @@ extension RegisterUserRequestMapper on RegisterUserRequest {
       interests: interests,
       role: userType,
       approvedByAdmin: true,
-      fcmToken: "fcm_test_${_random}_${_random}",
+      fcmToken: fcmToken ?? "fcm_token_random_${_random}_$_random",
     );
   }
 }
