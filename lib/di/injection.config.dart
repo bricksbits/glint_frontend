@@ -167,6 +167,11 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
+    gh.lazySingleton<_i661.UserInfoRepo>(() => _i321.UserInfoRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          gh<_i1011.MembershipDao>(),
+        ));
     gh.factory<_i235.PaymentRepo>(
         () => _i854.PaymentRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i678.PeopleRepo>(() => _i955.PeopleRepoImpl(
@@ -184,10 +189,6 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i849.ChatRepo>(
         () => _i651.ChatRepoImpl(gh<_i368.MyDioClient>()));
-    gh.lazySingleton<_i661.UserInfoRepo>(() => _i321.UserInfoRepoImpl(
-          gh<_i368.MyDioClient>(),
-          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-        ));
     gh.lazySingleton<_i579.RejectPublishedEventUsecase>(() =>
         _i579.RejectPublishedEventUsecase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i839.ApprovePublishedEventUsecase>(() =>

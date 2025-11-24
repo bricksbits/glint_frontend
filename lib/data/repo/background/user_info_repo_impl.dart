@@ -1,3 +1,5 @@
+import 'package:glint_frontend/data/local/db/dao/membership_dao.dart';
+import 'package:glint_frontend/data/local/db/entities/profile_membership_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
@@ -16,10 +18,12 @@ import 'package:injectable/injectable.dart';
 class UserInfoRepoImpl extends UserInfoRepo {
   final MyDioClient httpClient;
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
+  final MembershipDao membershipDao;
 
   UserInfoRepoImpl(
     this.httpClient,
     this.sharedPreferenceHelper,
+    this.membershipDao,
   );
 
   @override
@@ -84,17 +88,21 @@ class UserInfoRepoImpl extends UserInfoRepo {
 
   /// Get the User Premium info and update the DB
   @override
-  Future<Result<void>> getCurrentPremiumInfo() async {
+  Future<Result<void>> fetchCurrentPremiumInfo() async {
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       endpoint: "/user/premium-info",
     );
 
+    final userId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
     switch (response) {
       case Success():
-        var membershipData = GetMembershipResponseBody.fromJson(response.data);
-        //Todo: Update this data to DB
+        final membershipDataFromRemote =
+            GetMembershipResponseBody.fromJson(response.data);
+        final membershipEntity = membershipDataFromRemote.mapToEntity(userId);
+        membershipDao.updateTheMembershipDetails(membershipEntity);
         return Success("");
       case Failure():
         debugLogger("Membership", "Failed to get the perks");
@@ -104,29 +112,38 @@ class UserInfoRepoImpl extends UserInfoRepo {
 
   /// Whenever the User uses the perks update the db and put it to server
   @override
-  Future<Result<void>> updateCurrentPremiumInfo() async {
-    // Todo: Get this data from DB and update the server.
-    var requestBody = UpdatePremiumRequestBody(
-      aiMessagesRemaining: 5,
-      directDmRemaining: 2,
-      rewindsRemaining: 2,
-      superLikesRemaining: 1,
-    );
-
+  Future<Result<void>> updateCurrentPremiumInfo(
+      ProfileMembershipEntity entity) async {
+    var requestBody = entity.mapToRequestBody();
     final response = await apiCallHandler(
-        httpClient: httpClient,
-        requestType: HttpRequestEnum.PUT,
-        endpoint: "/user/premium-info",
-        requestBody: requestBody.toJson());
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.PUT,
+      endpoint: "/user/premium-info",
+      requestBody: requestBody.toJson(),
+    );
 
     switch (response) {
       case Success():
         debugLogger("Membership", "New values updated");
-        // Todo: New Value provided now update the db as well.
+        await membershipDao.updateTheMembershipDetails(entity);
         return Success("");
       case Failure():
         debugLogger("Membership", "Failed to update the perks");
         return Failure(Exception("Error : ${response.error}"));
+    }
+  }
+
+  @override
+  Future<Result<ProfileMembershipEntity>> getCurrentUserPremiumInfo() async {
+    //Todo: What if user is not premium user, disable unwanted calls,
+    fetchCurrentPremiumInfo();
+    final userId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
+    final membershipEntity = await membershipDao.getMembership(userId);
+    if (membershipEntity != null) {
+      return Success(membershipEntity);
+    } else {
+      return Failure(Exception("No Membership data found"));
     }
   }
 }

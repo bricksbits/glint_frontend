@@ -17,19 +17,28 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$UserInfoManagerState {
   String? get fcmToken => throw _privateConstructorUsedError;
+  ProfileMembershipEntity? get membershipEntity =>
+      throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? fcmToken) initial,
+    required TResult Function(String? fcmToken,
+            ProfileMembershipEntity? membershipEntity, String? error)
+        initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String? fcmToken)? initial,
+    TResult? Function(String? fcmToken,
+            ProfileMembershipEntity? membershipEntity, String? error)?
+        initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? fcmToken)? initial,
+    TResult Function(String? fcmToken,
+            ProfileMembershipEntity? membershipEntity, String? error)?
+        initial,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -63,7 +72,10 @@ abstract class $UserInfoManagerStateCopyWith<$Res> {
           $Res Function(UserInfoManagerState) then) =
       _$UserInfoManagerStateCopyWithImpl<$Res, UserInfoManagerState>;
   @useResult
-  $Res call({String? fcmToken});
+  $Res call(
+      {String? fcmToken,
+      ProfileMembershipEntity? membershipEntity,
+      String? error});
 }
 
 /// @nodoc
@@ -83,11 +95,21 @@ class _$UserInfoManagerStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? fcmToken = freezed,
+    Object? membershipEntity = freezed,
+    Object? error = freezed,
   }) {
     return _then(_value.copyWith(
       fcmToken: freezed == fcmToken
           ? _value.fcmToken
           : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
+      membershipEntity: freezed == membershipEntity
+          ? _value.membershipEntity
+          : membershipEntity // ignore: cast_nullable_to_non_nullable
+              as ProfileMembershipEntity?,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -101,7 +123,10 @@ abstract class _$$InitialImplCopyWith<$Res>
       __$$InitialImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? fcmToken});
+  $Res call(
+      {String? fcmToken,
+      ProfileMembershipEntity? membershipEntity,
+      String? error});
 }
 
 /// @nodoc
@@ -118,11 +143,21 @@ class __$$InitialImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? fcmToken = freezed,
+    Object? membershipEntity = freezed,
+    Object? error = freezed,
   }) {
     return _then(_$InitialImpl(
       fcmToken: freezed == fcmToken
           ? _value.fcmToken
           : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
+      membershipEntity: freezed == membershipEntity
+          ? _value.membershipEntity
+          : membershipEntity // ignore: cast_nullable_to_non_nullable
+              as ProfileMembershipEntity?,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -131,15 +166,22 @@ class __$$InitialImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$InitialImpl implements _Initial {
-  const _$InitialImpl({this.fcmToken = null});
+  const _$InitialImpl(
+      {this.fcmToken = null, this.membershipEntity = null, this.error = null});
 
   @override
   @JsonKey()
   final String? fcmToken;
+  @override
+  @JsonKey()
+  final ProfileMembershipEntity? membershipEntity;
+  @override
+  @JsonKey()
+  final String? error;
 
   @override
   String toString() {
-    return 'UserInfoManagerState.initial(fcmToken: $fcmToken)';
+    return 'UserInfoManagerState.initial(fcmToken: $fcmToken, membershipEntity: $membershipEntity, error: $error)';
   }
 
   @override
@@ -148,11 +190,15 @@ class _$InitialImpl implements _Initial {
         (other.runtimeType == runtimeType &&
             other is _$InitialImpl &&
             (identical(other.fcmToken, fcmToken) ||
-                other.fcmToken == fcmToken));
+                other.fcmToken == fcmToken) &&
+            (identical(other.membershipEntity, membershipEntity) ||
+                other.membershipEntity == membershipEntity) &&
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, fcmToken);
+  int get hashCode =>
+      Object.hash(runtimeType, fcmToken, membershipEntity, error);
 
   /// Create a copy of UserInfoManagerState
   /// with the given fields replaced by the non-null parameter values.
@@ -165,27 +211,33 @@ class _$InitialImpl implements _Initial {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? fcmToken) initial,
+    required TResult Function(String? fcmToken,
+            ProfileMembershipEntity? membershipEntity, String? error)
+        initial,
   }) {
-    return initial(fcmToken);
+    return initial(fcmToken, membershipEntity, error);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String? fcmToken)? initial,
+    TResult? Function(String? fcmToken,
+            ProfileMembershipEntity? membershipEntity, String? error)?
+        initial,
   }) {
-    return initial?.call(fcmToken);
+    return initial?.call(fcmToken, membershipEntity, error);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? fcmToken)? initial,
+    TResult Function(String? fcmToken,
+            ProfileMembershipEntity? membershipEntity, String? error)?
+        initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(fcmToken);
+      return initial(fcmToken, membershipEntity, error);
     }
     return orElse();
   }
@@ -220,10 +272,17 @@ class _$InitialImpl implements _Initial {
 }
 
 abstract class _Initial implements UserInfoManagerState {
-  const factory _Initial({final String? fcmToken}) = _$InitialImpl;
+  const factory _Initial(
+      {final String? fcmToken,
+      final ProfileMembershipEntity? membershipEntity,
+      final String? error}) = _$InitialImpl;
 
   @override
   String? get fcmToken;
+  @override
+  ProfileMembershipEntity? get membershipEntity;
+  @override
+  String? get error;
 
   /// Create a copy of UserInfoManagerState
   /// with the given fields replaced by the non-null parameter values.
