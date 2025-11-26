@@ -83,94 +83,111 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColours.white,
-      appBar: isAdmin
-          ? const GlintEventAuthAppbar()
-          : AppBar(
-              backgroundColor: AppColours.white,
-            ),
-      body: AuthStackedIllustrationScreen(
-        isAdmin: isAdmin,
-        body: Column(
-          children: [
-            if (!isAdmin) ...[
-              Center(
-                child: SvgPicture.asset(
-                  'lib/assets/images/auth/glint_create_password.svg',
-                ),
+    return BlocListener<ResetPasswordBloc, ResetPasswordState>(
+      listenWhen: (prev, current) => prev != current,
+      listener: (context, state) {
+        state.when(
+          initial: () {},
+          loading: () {},
+          otpSent: () {},
+          passwordResetSuccess: () {
+            context.goNamed(GlintAuthRoutes.passwordSuccess.name);
+          },
+          error: (error) {
+            // Todo: Show the Snackbar here
+          },
+        );
+      },
+      child: BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColours.white,
+            appBar: isAdmin
+                ? const GlintEventAuthAppbar()
+                : AppBar(
+                    backgroundColor: AppColours.white,
+                  ),
+            body: AuthStackedIllustrationScreen(
+              isAdmin: isAdmin,
+              body: Column(
+                children: [
+                  if (!isAdmin) ...[
+                    Center(
+                      child: SvgPicture.asset(
+                        'lib/assets/images/auth/glint_create_password.svg',
+                      ),
+                    ),
+                    const Gap(40.0),
+                  ],
+
+                  if (isAdmin) ...[
+                    const Spacer(),
+                    Text(
+                      'Re-Create Password',
+                      style: AppTheme.headingThree.copyWith(
+                        fontStyle: FontStyle.normal,
+                      ),
+                    ),
+                    const Gap(32.0),
+                  ],
+
+                  // text fields
+                  AuthIconTextField(
+                    controller: _passwordController,
+                    type: IconTextFieldType.password,
+                    focusNode: _passwordFocusNode,
+                    hintText: 'Create Password',
+                    isTextFieldFocused: _passwordFocusNode.hasFocus,
+                    onChanged: (_) => _validateForm(),
+                    onTap: () {
+                      setState(() {
+                        _passwordFocusNode.requestFocus();
+                      });
+                    },
+                  ),
+
+                  const Gap(20.0),
+
+                  AuthIconTextField(
+                    controller: _confirmPasswordController,
+                    type: IconTextFieldType.password,
+                    focusNode: _confirmPasswordFocusNode,
+                    hintText: 'Retype Password',
+                    isTextFieldFocused: _confirmPasswordFocusNode.hasFocus,
+                    onChanged: (_) => _validateForm(),
+                    onTap: () {
+                      setState(() {
+                        _confirmPasswordFocusNode.requestFocus();
+                      });
+                    },
+                  ),
+
+                  const Gap(50.0),
+
+                  // create account button - Updated with validation
+                  SizedBox(
+                    width: double.infinity,
+                    child: GlintElevatedButton(
+                      label: isAdmin ? 'Confirm' : 'Login',
+                      customBorderRadius: 10.0,
+                      customTextStyle: AppTheme.simpleBodyText.copyWith(
+                        color: AppColours.white,
+                      ),
+                      // Button is disabled if validation fails
+                      onPressed: _isButtonEnabled
+                          ? () {
+                              _handleResetPassword();
+                            }
+                          : null, // null disables the button
+                    ),
+                  ),
+
+                  if (isAdmin) const Spacer(flex: 4),
+                ],
               ),
-              const Gap(40.0),
-            ],
-
-            if (isAdmin) ...[
-              const Spacer(),
-              Text(
-                'Re-Create Password',
-                style: AppTheme.headingThree.copyWith(
-                  fontStyle: FontStyle.normal,
-                ),
-              ),
-              const Gap(32.0),
-            ],
-
-            // text fields
-            AuthIconTextField(
-              controller: _passwordController,
-              type: IconTextFieldType.password,
-              focusNode: _passwordFocusNode,
-              hintText: 'Create Password',
-              isTextFieldFocused: _passwordFocusNode.hasFocus,
-              onChanged: (_) => _validateForm(),
-              onTap: () {
-                setState(() {
-                  _passwordFocusNode.requestFocus();
-                });
-              },
             ),
-
-            const Gap(20.0),
-
-            AuthIconTextField(
-              controller: _confirmPasswordController,
-              type: IconTextFieldType.password,
-              focusNode: _confirmPasswordFocusNode,
-              hintText: 'Retype Password',
-              isTextFieldFocused: _confirmPasswordFocusNode.hasFocus,
-              onChanged: (_) => _validateForm(),
-              onTap: () {
-                setState(() {
-                  _confirmPasswordFocusNode.requestFocus();
-                });
-              },
-            ),
-
-            const Gap(50.0),
-
-            // create account button - Updated with validation
-            SizedBox(
-              width: double.infinity,
-              child: GlintElevatedButton(
-                label: isAdmin ? 'Confirm' : 'Login',
-                customBorderRadius: 10.0,
-                customTextStyle: AppTheme.simpleBodyText.copyWith(
-                  color: AppColours.white,
-                ),
-                // Button is disabled if validation fails
-                onPressed: _isButtonEnabled
-                    ? () {
-                        _handleResetPassword();
-                        //Todo: Handle the Navigation here.
-                        // context.go("/${GlintAdminDasboardRoutes.adminAuth.name}/${GlintAuthRoutes.passwordSuccess.name}");
-                        // debugPrint('login (create password) button pressed');
-                      }
-                    : null, // null disables the button
-              ),
-            ),
-
-            if (isAdmin) const Spacer(flex: 4),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

@@ -85,8 +85,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                // Handle Login tap
-                // context.read<RegisterCubit>().registerUser();
+                context.pushNamed(GlintMainRoutes.auth.name);
               },
           ),
         ],

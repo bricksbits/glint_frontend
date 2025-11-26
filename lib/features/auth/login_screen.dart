@@ -253,8 +253,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                const targetScreen = GlintMainRoutes.register;
-                context.goNamed(targetScreen.name, extra: false);
+                final targetScreen = widget.isAdmin ? GlintMainRoutes.register : GlintMainRoutes.onBoarding;
+                context.pushNamed(targetScreen.name, extra: widget.isAdmin);
               },
           ),
         ],

@@ -116,7 +116,7 @@ class _AuthButtons extends StatelessWidget {
               customBorderRadius: 30.0,
               customTextStyle: AppTheme.simpleBodyText,
               onPressed: () {
-                context.go("/${GlintBoardingRoutes.boarding.name}");
+                context.push("/${GlintBoardingRoutes.boarding.name}");
               },
             ),
           ),
@@ -129,7 +129,7 @@ class _AuthButtons extends StatelessWidget {
               customBorderRadius: 30.0,
               customTextStyle: AppTheme.simpleBodyText,
               onPressed: () {
-                context.go(
+                context.push(
                   "/${GlintMainRoutes.register.name}",
                   extra: true,
                 );
@@ -146,7 +146,7 @@ class _AuthButtons extends StatelessWidget {
               color: AppColours.white,
             ),
             onPressed: () {
-              context.go("/${GlintMainRoutes.auth.name}");
+              context.push("/${GlintMainRoutes.auth.name}");
             },
           ),
           const Gap(24.0),

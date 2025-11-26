@@ -8,6 +8,7 @@ import 'package:glint_frontend/features/admin/bloc/track_specific_event/track_ad
 import 'package:glint_frontend/features/admin/screen/admin_dashboard_screen.dart';
 import 'package:glint_frontend/features/admin/screen/admin_track_event_screen.dart';
 import 'package:glint_frontend/features/admin/screen/super_admin_dashboard_screen.dart';
+import 'package:glint_frontend/features/auth/blocs/reset_password/reset_password_bloc.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
 import 'package:glint_frontend/features/auth/starter_screen.dart';
@@ -100,7 +101,17 @@ final glintMainRoutes = GoRouter(
       builder: (context, state) => const LoginScreen(
         isAdmin: false,
       ),
+    ),
+    ShellRoute(
+      navigatorKey: resetAuthenticationKey,
       routes: glintAuthenticationRoutesBase,
+      builder: (context, state, child) {
+        return BlocProvider(
+          lazy: true,
+          create: (_) => ResetPasswordBloc(),
+          child: child, // <-- Here it goes
+        );
+      },
     ),
     GoRoute(
       path: '/${GlintMainRoutes.home.name}',
