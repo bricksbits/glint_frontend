@@ -37,9 +37,6 @@ class TrackAdminEventCubit extends Cubit<TrackAdminEventState> {
     emit(newState);
   }
 
-  //Todo: Will be used for the Admin Event Tracking
-  Future<void> fetchEventStatsForAdmin() async {}
-
   Future<void> fetchInterestedUsers(int eventId) async {
     getInterestedUsersUseCase.perform((interestedUsers) {
       if (interestedUsers != null && interestedUsers.isNotEmpty) {

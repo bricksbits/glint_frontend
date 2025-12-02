@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/onboarding/show_and_upload_pictures_containers.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/people/state/people_screen_state.dart';
@@ -94,9 +95,11 @@ class EditProfileScreen extends StatelessWidget {
                             age: int.parse(
                                 state.previewProfileModel?.age ?? "18"),
                             onTap: () {
-                              //Todo: Remove this navigation
-                              context.pushNamed(
-                                  GlintProfileRoutes.paymentHistory.name);
+                              showCustomSnackbar(
+                                context,
+                                message:
+                                    "Our Verification Model, needs more training, check for new updates from our end.",
+                              );
                             },
                           ),
 

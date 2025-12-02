@@ -16,7 +16,6 @@ part 'upload_story_state.dart';
 
 part 'upload_story_bloc.freezed.dart';
 
-//Todo: Do the Failure Media testing
 class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
   final StoryRepo storyRepo = getIt.get<StoryRepo>();
   final ImageService imageService = getIt.get<ImageService>();
@@ -31,7 +30,6 @@ class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
         final response =
             await storyRepo.uploadStory(state.currentUploadedFile!);
         switch (response) {
-          //Todo: Add a Snackbar to showcase the success,
           case Success<bool>():
             add(
               _UpdateAndEmitNewState(

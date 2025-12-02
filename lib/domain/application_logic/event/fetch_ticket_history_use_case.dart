@@ -18,7 +18,6 @@ class FetchTicketHistoryUseCase extends UseCase<List<EventTicketHistoryDomainMod
           await eventBookingRepo.getEventTicketHistory();
       switch (userTicketsHistoryResponse) {
         case Success():
-          // TODO: Return the Required Type via the Repo
           controller.add([]);
           logger.finest('fetching event details successful.');
         case Failure():

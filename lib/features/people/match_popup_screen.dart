@@ -3,6 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
+//Todo: Develop a mechanism to showcase this screen,
+// Problem is the batching of the profiles swipes
+// Had to discuss with the Backend Team.
 class MatchPopupScreen extends StatelessWidget {
   const MatchPopupScreen({super.key});
 

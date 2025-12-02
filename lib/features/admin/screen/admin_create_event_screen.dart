@@ -631,7 +631,6 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
           icon: Icons.location_on_outlined,
           child: TextField(
             maxLength: 70,
-            // todo - check if needs change
             style: AppTheme.simpleText,
             decoration: const InputDecoration(
               border: InputBorder.none,

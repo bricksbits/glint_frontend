@@ -16,7 +16,6 @@ class FetchEventsUseCase extends UseCase<List<EventListDomainModel>, void> {
     try {
       final eventsResponse = await eventRepo.getAllEvents();
       switch (eventsResponse) {
-      // TODO: Return the Required Type via the Repo
         case Success():
           // controller.add(eventsResponse.data
           controller.add([]);

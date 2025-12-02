@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
 import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
@@ -15,7 +16,10 @@ import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/profile_screen.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:glint_frontend/services/image_manager_service.dart';
+import 'package:glint_frontend/services/swipe_cache_manager.dart';
 import 'package:glint_frontend/utils/internet/internet_status_checker_cubit.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -28,7 +32,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   int _selectedIndex = 2;
   static final List<Widget> _bottomNavScreens = [
     const ProfileScreen(),
@@ -87,6 +91,39 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    const logPrefix = "HomeScreenAppLifecycle";
+    switch (state) {
+      case AppLifecycleState.detached:
+        debugLogger(logPrefix, "App is detached");
+        break;
+      case AppLifecycleState.resumed:
+        debugLogger(logPrefix, "App is resumed");
+        break;
+      case AppLifecycleState.inactive:
+        debugLogger(logPrefix, "App is in inActive");
+        break;
+      case AppLifecycleState.hidden:
+        debugLogger(logPrefix, "App is hidden");
+        break;
+      case AppLifecycleState.paused:
+        final swipeManager = getIt.get<SwipeBufferManager>();
+        swipeManager.flushOnAppPause().then((_) {
+          debugLogger(logPrefix, "Cache Swipes processed successfully,");
+        });
+        debugLogger(logPrefix, "App is paused");
+        break;
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<InternetStatusCheckerCubit, InternetStatusCheckerState>(
       builder: (context, state) {
@@ -134,5 +171,11 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 }

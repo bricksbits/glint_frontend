@@ -18,7 +18,6 @@ import '../utils/result_sealed.dart';
 /// - Debounced flushing every 10 seconds
 /// - Early flush if 10 swipes are reached
 /// - Safe retry logic if app is paused
-//Todo: Call the Flush Buffer on app Pause and when dispose
 @singleton
 class SwipeBufferManager {
   final SwipeActionDao swipeActionDao;
@@ -61,7 +60,6 @@ class SwipeBufferManager {
   }
 
   /// Should be called on app pause (e.g., in dispose or app lifecycle event)
-  /// Todo: Should be called from parent Layout of Home Screen
   Future<void> flushOnAppPause() async {
     _debounceTimer?.cancel();
     await _flushBuffer();
@@ -98,7 +96,6 @@ class SwipeBufferManager {
     }
   }
 
-  /// Todo: Send the Batches of the files here
   /// Todo: Add Analytics when number of matches missed,
   Future<bool> _sendBatchToServer(List<SwipeActionEntity> batch) async {
     debugLogger(logPrefix, "${batch.length} Items Processing to Server");

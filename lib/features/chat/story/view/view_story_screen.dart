@@ -68,13 +68,19 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                               Positioned.fill(
                                 child: Container(color: Colors.black),
                               ),
-                              // TODO(GO): Put the Error Builder here
                               Positioned.fill(
                                 child: StoryImage(
                                   key: ValueKey(currentVisibleStory),
                                   imageProvider: NetworkImage(
                                     currentVisibleStory ?? "",
                                   ),
+                                  errorBuilder: (BuildContext context,
+                                      Object error, StackTrace? stackTrace) {
+                                    return Image.asset(
+                                      fit: BoxFit.cover,
+                                      'lib/assets/images/temp_place_holder.png',
+                                    );
+                                  },
                                   fit: BoxFit.cover,
                                 ),
                               ),

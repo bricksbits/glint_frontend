@@ -4,6 +4,7 @@ import 'package:glint_frontend/data/local/db/entities/profile_membership_entity.
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/repo/profile/profile_repo.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 part 'profile_handling_state.dart';
@@ -24,10 +25,9 @@ class ProfileHandlingCubit extends Cubit<ProfileHandlingState> {
       case Success<ProfileMembershipEntity>():
         emitNewState(state.copyWith(membershipEntity: membershipData.data));
       case Failure<ProfileMembershipEntity>():
-        //Todo: log this error as Snackbar
         var error = membershipData.error;
         emitNewState(
-          state.copyWith(error: "No membership data found"),
+          state.copyWith(error: "No membership data found, $error"),
         );
     }
   }

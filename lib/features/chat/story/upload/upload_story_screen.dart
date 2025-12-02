@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/features/chat/story/upload/upload_story_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path/path.dart';
@@ -30,9 +31,16 @@ class _UploadStoryScreenState extends State<UploadStoryScreen> {
     return BlocProvider(
       create: (context) => UploadStoryBloc(),
       child: BlocListener<UploadStoryBloc, UploadStoryState>(
+        listenWhen: (prev, current) => prev != current,
         listener: (context, state) {
           if (state.newUserStoryUploadSuccess) {
             context.pop();
+            showCustomSnackbar(context, message: "Story uploaded successfully");
+          }
+
+          if (state.error != null) {
+            showCustomSnackbar(context,
+                message: state.error ?? "Something went wrong", isError: true);
           }
         },
         child: BlocBuilder<UploadStoryBloc, UploadStoryState>(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -94,7 +95,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
             context.goNamed(GlintAuthRoutes.passwordSuccess.name);
           },
           error: (error) {
-            // Todo: Show the Snackbar here
+            showCustomSnackbar(context, message: error, isError: true);
           },
         );
       },
@@ -107,84 +108,91 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                 : AppBar(
                     backgroundColor: AppColours.white,
                   ),
-            body: AuthStackedIllustrationScreen(
-              isAdmin: isAdmin,
-              body: Column(
-                children: [
-                  if (!isAdmin) ...[
-                    Center(
-                      child: SvgPicture.asset(
-                        'lib/assets/images/auth/glint_create_password.svg',
-                      ),
-                    ),
-                    const Gap(40.0),
-                  ],
-
-                  if (isAdmin) ...[
-                    const Spacer(),
-                    Text(
-                      'Re-Create Password',
-                      style: AppTheme.headingThree.copyWith(
-                        fontStyle: FontStyle.normal,
-                      ),
-                    ),
-                    const Gap(32.0),
-                  ],
-
-                  // text fields
-                  AuthIconTextField(
-                    controller: _passwordController,
-                    type: IconTextFieldType.password,
-                    focusNode: _passwordFocusNode,
-                    hintText: 'Create Password',
-                    isTextFieldFocused: _passwordFocusNode.hasFocus,
-                    onChanged: (_) => _validateForm(),
-                    onTap: () {
-                      setState(() {
-                        _passwordFocusNode.requestFocus();
-                      });
-                    },
-                  ),
-
-                  const Gap(20.0),
-
-                  AuthIconTextField(
-                    controller: _confirmPasswordController,
-                    type: IconTextFieldType.password,
-                    focusNode: _confirmPasswordFocusNode,
-                    hintText: 'Retype Password',
-                    isTextFieldFocused: _confirmPasswordFocusNode.hasFocus,
-                    onChanged: (_) => _validateForm(),
-                    onTap: () {
-                      setState(() {
-                        _confirmPasswordFocusNode.requestFocus();
-                      });
-                    },
-                  ),
-
-                  const Gap(50.0),
-
-                  // create account button - Updated with validation
-                  SizedBox(
-                    width: double.infinity,
-                    child: GlintElevatedButton(
-                      label: isAdmin ? 'Confirm' : 'Login',
-                      customBorderRadius: 10.0,
-                      customTextStyle: AppTheme.simpleBodyText.copyWith(
-                        color: AppColours.white,
-                      ),
-                      // Button is disabled if validation fails
-                      onPressed: _isButtonEnabled
-                          ? () {
-                              _handleResetPassword();
-                            }
-                          : null, // null disables the button
-                    ),
-                  ),
-
-                  if (isAdmin) const Spacer(flex: 4),
-                ],
+            body: state.maybeWhen(
+              loading: () => const Center(
+                child: CircularProgressIndicator(),
               ),
+              orElse: () {
+                return AuthStackedIllustrationScreen(
+                  isAdmin: isAdmin,
+                  body: Column(
+                    children: [
+                      if (!isAdmin) ...[
+                        Center(
+                          child: SvgPicture.asset(
+                            'lib/assets/images/auth/glint_create_password.svg',
+                          ),
+                        ),
+                        const Gap(40.0),
+                      ],
+
+                      if (isAdmin) ...[
+                        const Spacer(),
+                        Text(
+                          'Re-Create Password',
+                          style: AppTheme.headingThree.copyWith(
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                        const Gap(32.0),
+                      ],
+
+                      // text fields
+                      AuthIconTextField(
+                        controller: _passwordController,
+                        type: IconTextFieldType.password,
+                        focusNode: _passwordFocusNode,
+                        hintText: 'Create Password',
+                        isTextFieldFocused: _passwordFocusNode.hasFocus,
+                        onChanged: (_) => _validateForm(),
+                        onTap: () {
+                          setState(() {
+                            _passwordFocusNode.requestFocus();
+                          });
+                        },
+                      ),
+
+                      const Gap(20.0),
+
+                      AuthIconTextField(
+                        controller: _confirmPasswordController,
+                        type: IconTextFieldType.password,
+                        focusNode: _confirmPasswordFocusNode,
+                        hintText: 'Retype Password',
+                        isTextFieldFocused: _confirmPasswordFocusNode.hasFocus,
+                        onChanged: (_) => _validateForm(),
+                        onTap: () {
+                          setState(() {
+                            _confirmPasswordFocusNode.requestFocus();
+                          });
+                        },
+                      ),
+
+                      const Gap(50.0),
+
+                      // create account button - Updated with validation
+                      SizedBox(
+                        width: double.infinity,
+                        child: GlintElevatedButton(
+                          label: isAdmin ? 'Confirm' : 'Login',
+                          customBorderRadius: 10.0,
+                          customTextStyle: AppTheme.simpleBodyText.copyWith(
+                            color: AppColours.white,
+                          ),
+                          // Button is disabled if validation fails
+                          onPressed: _isButtonEnabled
+                              ? () {
+                                  _handleResetPassword();
+                                }
+                              : null, // null disables the button
+                        ),
+                      ),
+
+                      if (isAdmin) const Spacer(flex: 4),
+                    ],
+                  ),
+                );
+              },
             ),
           );
         },

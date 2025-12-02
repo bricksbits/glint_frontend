@@ -116,15 +116,6 @@ class LikesScreen extends StatelessWidget {
               ),
             ),
             const Gap(24.0),
-            // GlintElevatedButton(
-            //   label: 'See profiles',
-            //   foregroundColor: Colors.white,
-            //   backgroundColor: AppColours.primaryBlue,
-            //   onPressed: () {
-            //     debugPrint('clicked see profiles');
-            //     //todo - add see profiles functionality
-            //   },
-            // )
           ],
         ),
       ),
