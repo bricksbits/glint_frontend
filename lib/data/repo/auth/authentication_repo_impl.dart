@@ -37,9 +37,6 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
     this.membershipDao,
   );
 
-  //Todo: Save the new Data to the Local \
-  // Tokens
-  // Profile Response to Db
   @override
   Future<Result<void>> createAccount(
     RegisterUserRequest registerUserModel,
@@ -115,6 +112,11 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
           await sharedPreferenceHelper.saveString(
             SharedPreferenceKeys.adminUserEmailKey,
             loginRequestBody.email ?? "",
+          );
+
+          await sharedPreferenceHelper.saveBoolean(
+            SharedPreferenceKeys.premiumUserKey,
+            successResponse.profile?.isPremiumUser ?? false,
           );
 
           return Success(successResponse);

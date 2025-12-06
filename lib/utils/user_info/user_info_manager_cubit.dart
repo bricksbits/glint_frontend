@@ -20,20 +20,13 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   final sharedPrefHelper = getIt<AsyncEncryptedSharedPreferenceHelper>();
 
   UserInfoManagerCubit() : super(const UserInfoManagerState.initial()) {
-    checkFCMTokenAndUpdateToServer();
+    pushFcmTokenToServer();
     getCurrentMembershipData();
+    updateUserLastKnowLocation();
   }
 
   Future<void> updateTheFcmLocally(String fcmToken) async {
     await userInfoRepo.updateFcmTokenLocally(fcmToken);
-  }
-
-  Future<void> checkFCMTokenAndUpdateToServer() async {
-    final isTokenAvailable = await sharedPrefHelper
-        .getString(SharedPreferenceKeys.deviceFcmTokenKey);
-    if (isTokenAvailable.isNotEmpty) {
-      pushFcmTokenToServer();
-    }
   }
 
   Future<void> pushFcmTokenToServer() async {
@@ -132,6 +125,10 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
       await sharedPrefHelper.saveDouble(SharedPreferenceKeys.userLongitudeKey,
           getCurrentLocation?.longitude ?? 77.41);
     }
+  }
+
+  Future<void> updateUserLastKnowLocation() async {
+    await userInfoRepo.updateUserLocation();
   }
 
   void emitNewStatee(UserInfoManagerState newState) {

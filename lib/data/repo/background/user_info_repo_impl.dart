@@ -27,10 +27,12 @@ class UserInfoRepoImpl extends UserInfoRepo {
 
   @override
   Future<Result<void>> updateFcmTokenToServer() async {
+    final userId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
     final fcmToken = await sharedPreferenceHelper.getString(
       SharedPreferenceKeys.deviceFcmTokenKey,
     );
-    if (fcmToken.isNotEmpty) {
+    if (fcmToken.isNotEmpty && userId.isNotEmpty) {
       var requestBody = FcmTokenRequest(fcmToken: fcmToken).toJson();
       final response = await apiCallHandler(
         httpClient: httpClient,
@@ -74,29 +76,32 @@ class UserInfoRepoImpl extends UserInfoRepo {
     final userLong = await sharedPreferenceHelper
         .getDouble(SharedPreferenceKeys.userLongitudeKey);
 
-    var updateLocationRequestBody = UpdateUserLcoationRequestBody(
-      userId: int.parse(userId),
-      latitide: userLat,
-      longitude: userLong,
-    );
+    if (userId.isNotEmpty && userLong != 0 && userLat != 0) {
+      var updateLocationRequestBody = UpdateUserLcoationRequestBody(
+        userId: int.parse(userId),
+        latitide: userLat,
+        longitude: userLong,
+      );
 
-    final response = await apiCallHandler(
-      httpClient: httpClient,
-      requestType: HttpRequestEnum.GET,
-      endpoint: "/user/location",
-      requestBody: updateLocationRequestBody.toJson(),
-      passedQueryParameters: null,
-    );
+      final response = await apiCallHandler(
+        httpClient: httpClient,
+        requestType: HttpRequestEnum.PUT,
+        endpoint: "/user/location",
+        requestBody: updateLocationRequestBody.toJson(),
+        passedQueryParameters: null,
+      );
 
-    switch (response) {
-      case Success():
-        debugLogger("LOCATION",
-            "User location updated, with value ${updateLocationRequestBody.latitide} & ${updateLocationRequestBody.longitude}");
-        return Success("");
-      case Failure():
-        debugLogger("LOCATION", "Failed to update the user location");
-        return Failure(Exception("Error: ${response.error}"));
+      switch (response) {
+        case Success():
+          debugLogger("LOCATION",
+              "User location updated, with value ${updateLocationRequestBody.latitide} & ${updateLocationRequestBody.longitude}");
+          return Success("");
+        case Failure():
+          debugLogger("LOCATION", "Failed to update the user location");
+          return Failure(Exception("Error: ${response.error}"));
+      }
     }
+    return Failure(Exception("No Users ID allocated yet"));
   }
 
   /// Get the User Premium info and update the DB
@@ -148,16 +153,21 @@ class UserInfoRepoImpl extends UserInfoRepo {
 
   @override
   Future<Result<ProfileMembershipEntity>> getCurrentUserPremiumInfo() async {
-    //Todo: What if user is not premium user, disable unwanted calls,
-    fetchCurrentPremiumInfo();
-    final userId =
-        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
-    final membershipEntity = await membershipDao.getMembership(userId);
-    if (membershipEntity != null) {
-      return Success(membershipEntity);
-    } else {
-      return Failure(Exception("No Membership data found"));
+    final isPremiumUser = await sharedPreferenceHelper
+        .getBoolean(SharedPreferenceKeys.premiumUserKey);
+    if (isPremiumUser) {
+      fetchCurrentPremiumInfo();
+      final userId = await sharedPreferenceHelper
+          .getString(SharedPreferenceKeys.userIdKey);
+      final membershipEntity = await membershipDao.getMembership(userId);
+      if (membershipEntity != null) {
+        return Success(membershipEntity);
+      } else {
+        return Failure(Exception("No Membership data found"));
+      }
     }
+
+    return Failure(Exception("Current user is not a premium user."));
   }
 
   @override
