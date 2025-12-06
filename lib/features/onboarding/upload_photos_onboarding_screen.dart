@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/glint_custom_app_bar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -19,11 +20,10 @@ class UploadPhotosOnboardingScreen extends StatefulWidget {
 
 class _UploadPhotosOnboardingScreenState
     extends State<UploadPhotosOnboardingScreen> {
-
   @override
   void initState() {
-    context.read<OnBoardingCubit>()
-        .setUpLastBoardingState(OnBoardingCompletedTill.CHOICE_OF_GENDER_SELECTED);
+    context.read<OnBoardingCubit>().setUpLastBoardingState(
+        OnBoardingCompletedTill.CHOICE_OF_GENDER_SELECTED);
     super.initState();
   }
 
@@ -102,8 +102,15 @@ class _UploadPhotosOnboardingScreenState
                   foregroundColor: Colors.white,
                   backgroundColor: AppColours.primaryBlue,
                   onPressed: () {
-                    final target = GlintBoardingRoutes.pronouns.name;
-                    context.go("/$target");
+                    if (context
+                        .read<OnBoardingCubit>()
+                        .validateIfImageProvidedOrNot()) {
+                      final target = GlintBoardingRoutes.pronouns.name;
+                      context.go("/$target");
+                    } else {
+                      showCustomSnackbar(context,
+                          message: "Minimum one image required.");
+                    }
                   },
                 ),
               ),

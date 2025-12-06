@@ -13,15 +13,15 @@ class PeopleScreenState {
 extension ToPeopleScreenState on PeopleCardModel {
   PeopleScreenState convert() {
     final topCardModel = PeopleTopCardModel(
-      userId,
-      pictureUrlList.isNotEmpty ? pictureUrlList.first : '',
-      // Added imageUrl from the first image
-      username,
-      age,
-      distanceAway,
-      profileViews ?? "",
-      occupation ?? "",
-    );
+        userId,
+        pictureUrlList.isNotEmpty ? pictureUrlList.first : '',
+        // Added imageUrl from the first image
+        username,
+        age,
+        distanceAway,
+        profileViews ?? "",
+        occupation ?? "",
+        profileTag);
 
     List<PeopleListModelData> listModel = [];
 
@@ -30,8 +30,8 @@ extension ToPeopleScreenState on PeopleCardModel {
     int imageIndex = 1;
     const int totalComponents = 5;
 
-    while (
-    componentIndex < totalComponents || imageIndex < pictureUrlList.length) {
+    while (componentIndex < totalComponents ||
+        imageIndex < pictureUrlList.length) {
       // Add component (if available)
       if (componentIndex < totalComponents) {
         switch (componentIndex) {
@@ -106,6 +106,7 @@ PeopleScreenState convertPeopleUiModelToPeopleScreenState(
     uiModel.distanceAway,
     uiModel.profileViews ?? "",
     uiModel.occupation,
+    uiModel.profileTag,
   );
 
   List<PeopleListModelData> listModel = [];
@@ -115,8 +116,8 @@ PeopleScreenState convertPeopleUiModelToPeopleScreenState(
   int imageIndex = 0;
   const int totalComponents = 5;
 
-  while (
-      componentIndex < totalComponents || imageIndex < uiModel.pictureUrlList.length) {
+  while (componentIndex < totalComponents ||
+      imageIndex < uiModel.pictureUrlList.length) {
     // Add component (if available)
     if (componentIndex < totalComponents) {
       switch (componentIndex) {
@@ -179,12 +180,15 @@ PeopleScreenState convertPeopleUiModelToPeopleScreenState(
   return PeopleScreenState(listModel, topCardModel);
 }
 
-List<Map<String, dynamic>> mapAboutSectionToIconTextList(Map<String, String> aboutSection) {
+List<Map<String, dynamic>> mapAboutSectionToIconTextList(
+  Map<String, String> aboutSection,
+) {
   final iconMapping = {
     'height': Icons.straighten,
-    'workoutHabits': Icons.fitness_center,
-    'drinkingHabits': Icons.local_bar,
-    'smokingHabits': Icons.smoking_rooms,
+    'workout': Icons.fitness_center,
+    'drinking': Icons.local_bar,
+    'smoking': Icons.smoking_rooms,
+    'education': Icons.book,
   };
 
   List<Map<String, dynamic>> result = [];
@@ -206,12 +210,12 @@ List<Map<String, String>> mapInterestsToLabelIconList({
 }) {
   return userInterests
       .map((interest) =>
-  interest[0].toUpperCase() + interest.substring(1).toLowerCase())
-      .where((capitalizedInterest) => interestEmojisMap.containsKey(capitalizedInterest))
+          interest[0].toUpperCase() + interest.substring(1).toLowerCase())
+      .where((capitalizedInterest) =>
+          interestEmojisMap.containsKey(capitalizedInterest))
       .map((capitalizedInterest) => {
-    'label': capitalizedInterest,
-    'icon': interestEmojisMap[capitalizedInterest]!,
-  })
+            'label': capitalizedInterest,
+            'icon': interestEmojisMap[capitalizedInterest]!,
+          })
       .toList();
 }
-

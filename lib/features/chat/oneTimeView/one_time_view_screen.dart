@@ -2,15 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
+import 'package:glint_frontend/design/common/app_theme.dart';
+import 'package:glint_frontend/design/components/exports.dart';
 
 class OneTimeViewScreen extends StatelessWidget {
   final String? imageUrl;
+  final String? messageWithMedia;
 
-  const OneTimeViewScreen({super.key, required this.imageUrl});
+  const OneTimeViewScreen({
+    super.key,
+    required this.imageUrl,
+    required this.messageWithMedia,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final query = MediaQuery.of(context).size;
+    final screenHeight = MediaQuery.of(context).size.height * 0.75;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColours.white,
@@ -25,32 +33,54 @@ class OneTimeViewScreen extends StatelessWidget {
                 'lib/assets/icons/glint_logo.svg',
               ),
               const Gap(10),
-              const Text("One Time PhotoView")
+              const Text(
+                "Preview",
+                style: AppTheme.simpleBodyText,
+              )
             ],
           ),
         ),
       ),
-      body: imageUrl != null
-          ? Image.network(
-              imageUrl!,
-              fit: BoxFit.fill,
-              width: query.width,
-              height: query.height,
-              // loadingBuilder: (context, child, loadingProgress) {
-              //   return loadingProgress.cumulativeBytesLoaded <= 100 ? const Center(
-              //     child: CircularProgressIndicator(),
-              //   );
-              // },
-              errorBuilder: (context, error, stackTraces) {
-                return const Center(
-                  child: Text("Check your internet once, please,"),
-                );
-              },
-            )
-          : const Center(
-              child:
-                  Text("Invalid Images, tell the sender\nto send it you again"),
-            ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Column(
+          children: [
+            imageUrl != null
+                ? ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    child: Image.network(
+                      imageUrl!,
+                      fit: BoxFit.cover,
+                      width: screenWidth,
+                      height: screenHeight,
+                      // loadingBuilder: (context, child, loadingProgress) {
+                      //   return loadingProgress!.cumulativeBytesLoaded <= 100 ? const Center(
+                      //     child: CircularProgressIndicator(),
+                      //   );
+                      // },
+                      errorBuilder: (context, error, stackTraces) {
+                        return const Center(
+                          child: Text("Check your internet once, please,"),
+                        );
+                      },
+                    ),
+                  )
+                : const Center(
+                    child: Text(
+                        "Invalid Images, tell the sender\nto send it you again"),
+                  ),
+            messageWithMedia != null
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      messageWithMedia!,
+                      style: AppTheme.simpleBodyText,
+                    ),
+                  )
+                : const SizedBox.shrink()
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:floor/floor.dart';
 import 'package:glint_frontend/data/local/db/entities/profile_entity.dart';
+import 'package:glint_frontend/data/remote/model/request/background/update_premium_request_body.dart';
 
 @Entity(
   tableName: 'memberships',
@@ -42,6 +43,15 @@ extension ProfileMembershipEntityCopy on ProfileMembershipEntity {
       aiMessages: aiMessages ?? this.aiMessages,
       rewinds: rewinds ?? this.rewinds,
       superDm: superDm ?? this.superDm,
+    );
+  }
+
+  UpdatePremiumRequestBody mapToRequestBody() {
+    return UpdatePremiumRequestBody(
+      aiMessagesRemaining: aiMessages,
+      directDmRemaining: superDm,
+      rewindsRemaining: rewinds,
+      superLikesRemaining: superLikes
     );
   }
 }

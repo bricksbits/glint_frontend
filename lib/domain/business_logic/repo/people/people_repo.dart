@@ -13,4 +13,10 @@ abstract class PeopleRepo {
   Future<Result<bool>> userSwipeGesture(SwipeGestureType gestureType);
 
   Future<String> getUserId();
+
+  Future<void> setupMinAndMaxDistanceForProfile(int min, int max);
+
+  Future<void> setupDistanceForProfileSearch(int distanceInMeter);
+
+  Future<(int minAge, int maxAge, int maxDistance)> getSavedSearchConfig();
 }

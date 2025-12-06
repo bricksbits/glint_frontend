@@ -78,11 +78,36 @@ class PeopleRepoImpl extends PeopleRepo {
   /// Fetch More profiles and save it to DB
   @override
   Future<Result<void>> fetchProfiles(int currentOffset) async {
+    Map<String, dynamic> fetchProfilesQueryParameters = {
+      "offset": currentOffset
+    };
+
+    final maxAge = await sharedPreferenceHelper
+        .getInt(SharedPreferenceKeys.userSearchMaxAgeKey);
+    final minAge = await sharedPreferenceHelper
+        .getInt(SharedPreferenceKeys.userSearchMinAgeKey);
+    final maxDistance = await sharedPreferenceHelper
+        .getInt(SharedPreferenceKeys.userSearchMaxDistanceKey);
+
+    if (maxAge > 0) {
+      fetchProfilesQueryParameters.putIfAbsent("max-age", () => maxAge);
+    }
+
+    if (minAge > 0) {
+      fetchProfilesQueryParameters.putIfAbsent("min-age", () => minAge);
+    }
+
+    if (maxDistance > 0) {
+      fetchProfilesQueryParameters.putIfAbsent(
+          "distance", () => maxDistance * 1000);
+    }
+
     final response = await apiCallHandler(
-        httpClient: httpClient,
-        requestType: HttpRequestEnum.GET,
-        endpoint: "user/profile",
-        passedQueryParameters: {"offset": currentOffset});
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      endpoint: "user/profile",
+      passedQueryParameters: fetchProfilesQueryParameters,
+    );
 
     switch (response) {
       case Success():
@@ -106,5 +131,30 @@ class PeopleRepoImpl extends PeopleRepo {
     var userId =
         await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
     return userId;
+  }
+
+  @override
+  Future<void> setupDistanceForProfileSearch(int distanceInMeter) async {
+    await sharedPreferenceHelper.saveInt(
+        SharedPreferenceKeys.userSearchMaxDistanceKey, distanceInMeter);
+  }
+
+  @override
+  Future<void> setupMinAndMaxDistanceForProfile(int min, int max) async {
+    await sharedPreferenceHelper.saveInt(
+        SharedPreferenceKeys.userSearchMinAgeKey, min);
+    await sharedPreferenceHelper.saveInt(
+        SharedPreferenceKeys.userSearchMaxAgeKey, max);
+  }
+
+  @override
+  Future<(int, int, int)> getSavedSearchConfig() async {
+    final minAge = await sharedPreferenceHelper
+        .getInt(SharedPreferenceKeys.userSearchMinAgeKey);
+    final maxAge = await sharedPreferenceHelper
+        .getInt(SharedPreferenceKeys.userSearchMaxAgeKey);
+    final maxDistance = await sharedPreferenceHelper
+        .getInt(SharedPreferenceKeys.userSearchMaxDistanceKey);
+    return (minAge, maxAge, maxDistance);
   }
 }

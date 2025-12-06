@@ -32,7 +32,7 @@ enum GlintChatRoutes {
   chatWith,
   stories,
   videoCall,
-  tickets,
+  ticket,
   getTicket,
   uploadStory,
   oneTimePhotoView,
@@ -41,13 +41,13 @@ enum GlintChatRoutes {
 enum GlintEventRoutes {
   eventDetails,
   peopleInterested,
-  explore,
+  tickets,
 }
 
 enum GlintProfileRoutes {
   profilePreview,
   editProfile,
-  ticketHistory,
+  paymentHistory,
 }
 
 enum GlintBoardingRoutes {
@@ -79,6 +79,7 @@ enum GlintAdminDasboardRoutes {
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> onBoardingKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> resetAuthenticationKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> trackAdminEventKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> adminDashboardKey = GlobalKey<NavigatorState>();

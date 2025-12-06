@@ -22,17 +22,22 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   RegisterCubit() : super(const RegisterState.initial());
 
-  //Todo: Do the Verification here
   void enteredEmail(String email) {
-    emit(state.copyWith(email: email, isEmailValid: true));
+    emitNewState(state.copyWith(email: email));
   }
 
-  //Todo: Do the Verification here
   void enteredPassword(String password) {
-    emit(
+    emitNewState(
       state.copyWith(
         password: password,
-        isPassWordValid: true,
+      ),
+    );
+  }
+
+  void enteredConfirmPassword(String confirmPassword) {
+    emitNewState(
+      state.copyWith(
+        confirmPassword: confirmPassword,
       ),
     );
   }
@@ -64,54 +69,59 @@ class RegisterCubit extends Cubit<RegisterState> {
   // Get Email and Password from User
   // Hit the Register User API
   // Delete everything from persistence
-  //Todo: handle the Role as per the type of registration
   //Todo: Update the FCM token
   Future<void> registerUser() async {
-    emitNewState(
-      state.copyWith(
-        isLoading: true,
-        currentSuccessStatus: "Registering New User",
-      ),
-    );
-    final userRequestModel = await authenticationRepo.getOnBoardedUser();
-    if (state.isEmailValid && state.isPassWordValid) {
-      final updatedRequestWithCredentials = userRequestModel?.copyWith(
-        email: state.email,
-        password: state.password,
+    if (state.isEmailValid &&
+        state.isPassWordValid &&
+        state.isConfirmPassword) {
+      emitNewState(
+        state.copyWith(
+          isLoading: true,
+          currentSuccessStatus: "Registering New User",
+        ),
       );
-      if (updatedRequestWithCredentials != null) {
-        final isRegisteredResponse = await authenticationRepo.createAccount(
-          updatedRequestWithCredentials,
-          "user",
+      final userRequestModel = await authenticationRepo.getOnBoardedUser();
+      if (state.isEmailValid && state.isPassWordValid) {
+        final updatedRequestWithCredentials = userRequestModel?.copyWith(
+          email: state.email,
+          password: state.password,
         );
-        switch (isRegisteredResponse) {
-          //todo: Emit Success state
-          case Success<void>():
-            emitNewState(
-              state.copyWith(
-                  currentSuccessStatus: "Registered, Setting up your profile,"),
-            );
-            await authenticationRepo.clearTheDbAfterRegistration();
-            await _loginUser(
-              state.email,
-              state.password,
-            );
-          case Failure<void>():
-            //todo: Emit Failure state and let them try again.
-            emitNewState(
-              state.copyWith(
-                isLoading: false,
-                isRegisteredSuccessfully: false,
-                currentSuccessStatus: "Something Went Wrong",
-              ),
-            );
+        if (updatedRequestWithCredentials != null) {
+          final isRegisteredResponse = await authenticationRepo.createAccount(
+            updatedRequestWithCredentials,
+            "user",
+          );
+          switch (isRegisteredResponse) {
+            case Success<void>():
+              emitNewState(
+                state.copyWith(
+                    currentSuccessStatus:
+                        "Registered, Setting up your profile,"),
+              );
+              await authenticationRepo.clearTheDbAfterRegistration();
+              await _loginUser(
+                state.email,
+                state.password,
+              );
+            case Failure<void>():
+              //todo: Emit Failure state and let them try again.
+              emitNewState(
+                state.copyWith(
+                  isLoading: false,
+                  isRegisteredSuccessfully: false,
+                  currentSuccessStatus: "Something Went Wrong",
+                ),
+              );
+          }
         }
+      } else {
+        emit(state.copyWith(
+            isPassWordValid: false,
+            isEmailValid: false,
+            error: "Email and password is not valid,"));
       }
     } else {
-      emit(state.copyWith(
-        isPassWordValid: false,
-        isEmailValid: false,
-      ));
+      _validateEmail();
     }
   }
 
@@ -239,6 +249,93 @@ class RegisterCubit extends Cubit<RegisterState> {
       case Failure<void>():
         debugLogger(
             "RegisterCubit", "Something went wrong, can't register the admin");
+    }
+  }
+
+  void _validateEmail() {
+    String? error;
+    if (state.email.isEmpty) {
+      error = 'Email cannot be empty.';
+    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+        .hasMatch(state.email)) {
+      error = 'Please enter a valid email address.';
+    }
+
+    if (error != null) {
+      emitNewState(
+        state.copyWith(
+          isEmailValid: false,
+          error: error,
+        ),
+      );
+    } else {
+      error = null;
+      emitNewState(
+        state.copyWith(
+          isEmailValid: true,
+          error: "",
+        ),
+      );
+      _validatePassword();
+    }
+  }
+
+  void _validatePassword() {
+    String? error;
+    const int minLength = 9;
+
+    if (state.password.isEmpty) {
+      error = 'Password cannot be empty.';
+    } else if (state.password.length < minLength) {
+      error = 'Password must be at least 10 characters.';
+    }
+
+    // Emit a new state ONLY if the error status has changed
+    if (error != null) {
+      emitNewState(
+        state.copyWith(
+          isPassWordValid: false,
+          error: error,
+        ),
+      );
+    } else {
+      emitNewState(
+        state.copyWith(
+          isPassWordValid: true,
+          error: "",
+        ),
+      );
+      _validateConfirmPassword();
+    }
+  }
+
+  void _validateConfirmPassword() {
+    String? error;
+    const int minLength = 8;
+
+    if (state.confirmPassword.isEmpty) {
+      error = 'Confirm Password cannot be empty.';
+    } else if (state.confirmPassword.length < minLength) {
+      error = 'Confirm Password must be at least $minLength characters.';
+    } else if (state.confirmPassword != state.password) {
+      error = 'Password and Confirm Password does not match';
+    }
+
+    // Emit a new state ONLY if the error status has changed
+    if (error != null) {
+      emitNewState(
+        state.copyWith(
+          isConfirmPassword: false,
+          error: error,
+        ),
+      );
+    } else {
+      emitNewState(
+        state.copyWith(
+          isConfirmPassword: true,
+          error: "",
+        ),
+      );
     }
   }
 

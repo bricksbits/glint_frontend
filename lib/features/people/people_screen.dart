@@ -103,10 +103,28 @@ class PeopleScreen extends StatelessWidget {
                               "On show Id : ${state.cardList[index].userId}");
                           return ScrollableProfileView(
                             peopleUiModel: state.cardList[index],
-                            onLiked: (userId) {},
-                            onDisLiked: (userId) {},
+                            onLiked: (userId) {
+                              debugLogger(
+                                  "Manual SWIPE", "UserId : $userId to Right");
+                              cardSwiperController
+                                  .swipe(CardSwiperDirection.right);
+                            },
+                            onDisLiked: (userId) {
+                              debugLogger(
+                                  "Manual SWIPE", "UserId : $userId to LEft");
+                              cardSwiperController
+                                  .swipe(CardSwiperDirection.left);
+                            },
                             onDm: (userId) {},
-                            onSuperLiked: (userId) {},
+                            onSuperLiked: (userId) {
+                              context.read<PeopleCardsBloc>().add(
+                                    PeopleCardsEvent.onSuperLiked(
+                                      userId,
+                                    ),
+                                  );
+                              cardSwiperController
+                                  .swipe(CardSwiperDirection.right);
+                            },
                           );
                         },
                       )

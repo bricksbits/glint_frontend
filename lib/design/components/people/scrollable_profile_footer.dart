@@ -3,7 +3,14 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class ScrollableProfileFooter extends StatelessWidget {
-  const ScrollableProfileFooter({super.key});
+  const ScrollableProfileFooter({
+    super.key,
+    required this.onLikedProfile,
+    required this.onDiLikedProfile,
+  });
+
+  final VoidCallback onLikedProfile;
+  final VoidCallback onDiLikedProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +25,11 @@ class ScrollableProfileFooter extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    debugPrint('Dislike button tapped');
+                    onDiLikedProfile();
                   },
                   child: Container(
-                    width: 44.0,
-                    height: 44.0,
+                    width: 88.0,
+                    height: 88.0,
                     decoration: const BoxDecoration(
                       color: AppColours.red,
                       shape: BoxShape.circle,
@@ -30,7 +37,7 @@ class ScrollableProfileFooter extends StatelessWidget {
                     child: const Icon(
                       Icons.close, // Replace with your custom icon
                       color: Colors.white,
-                      size: 22.0,
+                      size: 44.0,
                     ),
                   ),
                 ),
@@ -49,11 +56,11 @@ class ScrollableProfileFooter extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    debugPrint('Like button tapped');
+                    onLikedProfile();
                   },
                   child: Container(
-                    width: 44.0,
-                    height: 44.0,
+                    width: 88.0,
+                    height: 88.0,
                     decoration: const BoxDecoration(
                       color: AppColours.primaryBlue,
                       shape: BoxShape.circle,
@@ -61,7 +68,7 @@ class ScrollableProfileFooter extends StatelessWidget {
                     child: const Icon(
                       Icons.favorite, // Replace with your custom icon
                       color: Colors.white,
-                      size: 22.0,
+                      size: 44.0,
                     ),
                   ),
                 ),

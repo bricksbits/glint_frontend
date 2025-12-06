@@ -4,6 +4,7 @@ import 'package:glint_frontend/design/components/chat/empty_chat_state_view.dart
 import 'package:glint_frontend/design/components/chat/get_ticket_gradient_view.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -178,9 +179,16 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                                           context.pushNamed(
                                             GlintChatRoutes
                                                 .oneTimePhotoView.name,
-                                            extra: imageUrls.first,
+                                            extra: OneTimeViewNavArguments(
+                                              imageUrls.first,
+                                              message.text,
+                                            ),
                                           );
-                                          hasBeenViewed = true;
+                                          markMessageAttachmentViewed(
+                                            client:
+                                                StreamChat.of(context).client,
+                                            messageWithAttachment: message,
+                                          );
                                         })
                                       : _buildMessageBubble(message, isMine),
                                 ] else ...[
@@ -190,9 +198,16 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                                           context.pushNamed(
                                             GlintChatRoutes
                                                 .oneTimePhotoView.name,
-                                            extra: imageUrls.first,
+                                            extra: OneTimeViewNavArguments(
+                                              imageUrls.first,
+                                              message.text,
+                                            ),
                                           );
-                                          hasBeenViewed = true;
+                                          markMessageAttachmentViewed(
+                                            client:
+                                                StreamChat.of(context).client,
+                                            messageWithAttachment: message,
+                                          );
                                         })
                                       : _buildMessageBubble(message, isMine),
                                   const SizedBox(width: 8),
@@ -215,7 +230,7 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 6),
                               child: Text(
-                                getFormattedDate(DateTime.now()),
+                                getFormattedDate(dateTime),
                                 style: const TextStyle(
                                     fontSize: 12, color: Colors.black87),
                               ),
@@ -448,6 +463,44 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
     );
     await channel.watch();
     return channel;
+  }
+
+  /// Marks the attachment of a message as viewed by updating its extraData.
+  Future<void> markMessageAttachmentViewed({
+    required StreamChatClient client,
+    required Message? messageWithAttachment,
+  }) async {
+    try {
+      if (messageWithAttachment == null) {
+        debugLogger("Stream Message", "Message is null");
+        return;
+      }
+
+      if (messageWithAttachment.attachments.isEmpty) {
+        debugLogger(
+            "Stream Message", "⚠️ Message has no attachments to update.");
+        return;
+      }
+
+      final attachment = messageWithAttachment.attachments.first;
+
+      final updatedExtraData = Map<String, Object?>.from(attachment.extraData);
+      updatedExtraData['viewed'] = true;
+
+      final updatedAttachment =
+          attachment.copyWith(extraData: updatedExtraData);
+
+      final updatedMessage =
+          messageWithAttachment.copyWith(attachments: [updatedAttachment]);
+
+      await client.updateMessage(updatedMessage);
+
+      debugLogger("Stream Message",
+          "${messageWithAttachment.id} updated with viewed property");
+    } catch (e, st) {
+      debugLogger("Stream Message",
+          "${messageWithAttachment?.id} update failed with, Error : $e");
+    }
   }
 
   Widget _buildTime(Message message) {

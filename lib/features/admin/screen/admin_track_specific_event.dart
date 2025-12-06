@@ -216,9 +216,7 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
                   height: 56.0,
                   child: GlintElevatedButton(
                     label: 'End this Event',
-                    onPressed: () {
-                      // todo - add end event functionality
-                    },
+                    onPressed: () {},
                     customTextStyle: AppTheme.simpleBodyText.copyWith(
                       color: AppColours.white,
                     ),

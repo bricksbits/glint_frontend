@@ -15,6 +15,7 @@ class UploadStoryState with _$UploadStoryState {
     // General
     @Default(false) bool isLoading,
     @Default(null) String? error,
-    @Default(false) bool isUploadingStoryEvent,
+    @Default(false) bool newUserStoryUploadSuccess,
+    @Default(false) bool newUserStoryUploadFail,
   }) = _UploadStoryState;
 }

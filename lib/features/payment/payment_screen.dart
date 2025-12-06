@@ -21,7 +21,6 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  //Todo(GO): Inject Razorpay Instance
   //Todo(GO): Support for the Different UPI apps on IOS and Android.
   final Razorpay _razorpay = Razorpay();
 

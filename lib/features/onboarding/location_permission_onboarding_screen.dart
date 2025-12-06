@@ -4,13 +4,29 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
-class LocationPermissionOnboardingScreen extends StatelessWidget {
+class LocationPermissionOnboardingScreen extends StatefulWidget {
   const LocationPermissionOnboardingScreen({super.key});
 
   @override
+  State<LocationPermissionOnboardingScreen> createState() =>
+      _LocationPermissionOnboardingScreenState();
+}
+
+class _LocationPermissionOnboardingScreenState
+    extends State<LocationPermissionOnboardingScreen> {
+  @override
+  void initState() {
+    context
+        .read<OnBoardingCubit>()
+        .setUpLastBoardingState(OnBoardingCompletedTill.BIO_DONE);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final AsyncEncryptedSharedPreferenceHelper asyncHelper;
     return BlocBuilder<OnBoardingCubit, OnBoardingState>(
       builder: (context, state) {
         return Scaffold(
@@ -33,12 +49,8 @@ class LocationPermissionOnboardingScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         const Spacer(),
-                        // Add more widgets here
-
                         _locationPermissionContainer(context),
-
                         const Gap(20.0),
-
                         Text(
                           'We value your privacy and only use your location to enhance your experience.',
                           style: AppTheme.simpleText.copyWith(
@@ -47,7 +59,6 @@ class LocationPermissionOnboardingScreen extends StatelessWidget {
                           ),
                           textAlign: TextAlign.center,
                         ),
-
                         const Spacer(),
                       ],
                     ),
@@ -94,13 +105,22 @@ class LocationPermissionOnboardingScreen extends StatelessWidget {
             listener: (context, state) {
               if (state.locationPermissionDenied == true) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Location permission is required")),
+                  const SnackBar(
+                      content: Text("Location permission is required")),
                 );
               }
 
-              if (state.onBoardingStatus == OnBoardingCompletedTill.COMPLETED) {
+              if (state.onBoardingStatus == OnBoardingCompletedTill.COMPLETED &&
+                  state.isLocationLoading == false &&
+                  state.locationPermissionDenied == false) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Navigating to next screen.")),
+                  const SnackBar(
+                      content: Text("Get Ready for even better experience")),
+                );
+                final target = GlintMainRoutes.register.name;
+                context.go(
+                  "/$target",
+                  extra: false,
                 );
               }
             },
@@ -113,7 +133,9 @@ class LocationPermissionOnboardingScreen extends StatelessWidget {
                   onPressed: isLoading
                       ? null
                       : () async {
-                          context.read<OnBoardingCubit>().enableLocationAndCompleteOnboarding();
+                          context
+                              .read<OnBoardingCubit>()
+                              .enableLocationAndCompleteOnboarding();
                         },
                 ),
               );

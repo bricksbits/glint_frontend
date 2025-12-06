@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/application_logic/logout_usecase.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -103,7 +104,8 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                       buttonText: 'Yes, Logout',
                       buttonabackgroundColor: AppColours.black,
                       onAccept: () {
-                        final loginUseCase = GetIt.instance.get<LogoutUserUsecase>();
+                        final loginUseCase =
+                            GetIt.instance.get<LogoutUserUsecase>();
                         loginUseCase.perform((success) {
                           if (success != null && success) {
                             context.goNamed(GlintMainRoutes.starter.name);
@@ -138,7 +140,9 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                           'Are you sure you want to delete your Glint Profile permanently?',
                       buttonText: 'Yes, Delete',
                       onAccept: () {
-                        // todo - handle logout
+                        showCustomSnackbar(context,
+                            message:
+                                "We are working on deleting User, until then please log out");
                       },
                     );
                   },

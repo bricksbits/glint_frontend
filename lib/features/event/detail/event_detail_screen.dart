@@ -178,60 +178,6 @@ class EventDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // if (isSuperAdmin) ...[
-                        //   const Gap(12.0),
-                        //   const Divider(
-                        //     color: AppColours.mediumGray,
-                        //     thickness: 0.5,
-                        //   ),
-                        //   const Gap(8.0),
-                        //   Padding(
-                        //     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        //     child: Row(
-                        //       children: [
-                        //         Expanded(
-                        //           child: SizedBox(
-                        //             height: 44.0,
-                        //             child: GlintElevatedButton(
-                        //               label: 'Accept',
-                        //               customBorderRadius: 10.0,
-                        //               customTextStyle: AppTheme.simpleText.copyWith(
-                        //                 fontWeight: FontWeight.w700,
-                        //                 color: AppColours.white,
-                        //               ),
-                        //               onPressed: () {
-                        //                 // todo - implement super admin accept functionality
-                        //               },
-                        //             ),
-                        //           ),
-                        //         ),
-                        //         const Gap(12.0),
-                        //         Expanded(
-                        //           child: SizedBox(
-                        //             height: 44.0,
-                        //             child: GlintElevatedButton(
-                        //               label: 'Reject',
-                        //               customBorderRadius: 10.0,
-                        //               backgroundColor: AppColours.white,
-                        //               customBorderSide: const BorderSide(
-                        //                 color: AppColours.rejectedColor,
-                        //                 width: 1.0,
-                        //               ),
-                        //               customTextStyle: AppTheme.simpleText.copyWith(
-                        //                 fontWeight: FontWeight.w700,
-                        //                 color: AppColours.rejectedColor,
-                        //               ),
-                        //               onPressed: () {
-                        //                 // todo - implement super admin reject functionality
-                        //               },
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ],
-                        // end of the page gap for design replication purpose
                         const Gap(20.0),
                       ],
                     ),

@@ -23,5 +23,6 @@ enum OnBoardingCompletedTill {
   IMAGES_SELECTED,
   PRONOUNS_DONE,
   INTERESTS_DONE,
+  BIO_DONE,
   COMPLETED,
 }

@@ -95,7 +95,6 @@ class ImageService {
     return null;
   }
 
-  //Todo: Test and Verify the behaviour
   Future<List<ImageManagerData>> pickImagesForEvent({
     required String eventId,
     int maxCount = 6,

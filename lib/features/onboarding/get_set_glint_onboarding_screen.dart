@@ -92,11 +92,9 @@ class _GetSetGlintOnboardingScreenState
                       foregroundColor: Colors.white,
                       backgroundColor: AppColours.primaryBlue,
                       onPressed: () {
-                        var lookingFor = state.currentState?.relationShipGoals;
-                        if (lookingFor != null) {
-                          context
-                              .read<OnBoardingCubit>()
-                              .updateProfileLocally();
+                        if (context
+                            .read<OnBoardingCubit>()
+                            .validateIfRelationGoalsProvidedOrNot()) {
                           final target = GlintBoardingRoutes.interests.name;
                           context.go("/$target");
                         }

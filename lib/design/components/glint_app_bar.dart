@@ -32,6 +32,15 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         return [
           GestureDetector(
             onTap: () async {
+              context.pushNamed(GlintProfileRoutes.paymentHistory.name);
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/rupee_icon.svg',
+            ),
+          ),
+          const Gap(20.0),
+          GestureDetector(
+            onTap: () async {
               context.pushNamed(GlintMainRoutes.settings.name);
             },
             child: SvgPicture.asset(
@@ -42,6 +51,15 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         ];
       case GlintAppBarActions.event:
         return [
+          GestureDetector(
+            onTap: () async {
+              context.pushNamed(GlintEventRoutes.tickets.name);
+            },
+            child: SvgPicture.asset(
+              'lib/assets/icons/glint-ticket.svg',
+            ),
+          ),
+          const Gap(20.0),
           GestureDetector(
             onTap: () {
               context.pushNamed(GlintMainRoutes.filter.name);

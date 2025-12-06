@@ -819,7 +819,8 @@ mixin _$UploadStoryState {
       throw _privateConstructorUsedError; // General
   bool get isLoading => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
-  bool get isUploadingStoryEvent => throw _privateConstructorUsedError;
+  bool get newUserStoryUploadSuccess => throw _privateConstructorUsedError;
+  bool get newUserStoryUploadFail => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -830,7 +831,8 @@ mixin _$UploadStoryState {
             File? currentUploadedFile,
             bool isLoading,
             String? error,
-            bool isUploadingStoryEvent)
+            bool newUserStoryUploadSuccess,
+            bool newUserStoryUploadFail)
         uploadStoryState,
   }) =>
       throw _privateConstructorUsedError;
@@ -844,7 +846,8 @@ mixin _$UploadStoryState {
             File? currentUploadedFile,
             bool isLoading,
             String? error,
-            bool isUploadingStoryEvent)?
+            bool newUserStoryUploadSuccess,
+            bool newUserStoryUploadFail)?
         uploadStoryState,
   }) =>
       throw _privateConstructorUsedError;
@@ -858,7 +861,8 @@ mixin _$UploadStoryState {
             File? currentUploadedFile,
             bool isLoading,
             String? error,
-            bool isUploadingStoryEvent)?
+            bool newUserStoryUploadSuccess,
+            bool newUserStoryUploadFail)?
         uploadStoryState,
     required TResult orElse(),
   }) =>
@@ -901,7 +905,8 @@ abstract class $UploadStoryStateCopyWith<$Res> {
       File? currentUploadedFile,
       bool isLoading,
       String? error,
-      bool isUploadingStoryEvent});
+      bool newUserStoryUploadSuccess,
+      bool newUserStoryUploadFail});
 }
 
 /// @nodoc
@@ -926,7 +931,8 @@ class _$UploadStoryStateCopyWithImpl<$Res, $Val extends UploadStoryState>
     Object? currentUploadedFile = freezed,
     Object? isLoading = null,
     Object? error = freezed,
-    Object? isUploadingStoryEvent = null,
+    Object? newUserStoryUploadSuccess = null,
+    Object? newUserStoryUploadFail = null,
   }) {
     return _then(_value.copyWith(
       uploadedStories: freezed == uploadedStories
@@ -957,9 +963,13 @@ class _$UploadStoryStateCopyWithImpl<$Res, $Val extends UploadStoryState>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
-      isUploadingStoryEvent: null == isUploadingStoryEvent
-          ? _value.isUploadingStoryEvent
-          : isUploadingStoryEvent // ignore: cast_nullable_to_non_nullable
+      newUserStoryUploadSuccess: null == newUserStoryUploadSuccess
+          ? _value.newUserStoryUploadSuccess
+          : newUserStoryUploadSuccess // ignore: cast_nullable_to_non_nullable
+              as bool,
+      newUserStoryUploadFail: null == newUserStoryUploadFail
+          ? _value.newUserStoryUploadFail
+          : newUserStoryUploadFail // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -981,7 +991,8 @@ abstract class _$$UploadStoryStateImplCopyWith<$Res>
       File? currentUploadedFile,
       bool isLoading,
       String? error,
-      bool isUploadingStoryEvent});
+      bool newUserStoryUploadSuccess,
+      bool newUserStoryUploadFail});
 }
 
 /// @nodoc
@@ -1004,7 +1015,8 @@ class __$$UploadStoryStateImplCopyWithImpl<$Res>
     Object? currentUploadedFile = freezed,
     Object? isLoading = null,
     Object? error = freezed,
-    Object? isUploadingStoryEvent = null,
+    Object? newUserStoryUploadSuccess = null,
+    Object? newUserStoryUploadFail = null,
   }) {
     return _then(_$UploadStoryStateImpl(
       uploadedStories: freezed == uploadedStories
@@ -1035,9 +1047,13 @@ class __$$UploadStoryStateImplCopyWithImpl<$Res>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
-      isUploadingStoryEvent: null == isUploadingStoryEvent
-          ? _value.isUploadingStoryEvent
-          : isUploadingStoryEvent // ignore: cast_nullable_to_non_nullable
+      newUserStoryUploadSuccess: null == newUserStoryUploadSuccess
+          ? _value.newUserStoryUploadSuccess
+          : newUserStoryUploadSuccess // ignore: cast_nullable_to_non_nullable
+              as bool,
+      newUserStoryUploadFail: null == newUserStoryUploadFail
+          ? _value.newUserStoryUploadFail
+          : newUserStoryUploadFail // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -1054,7 +1070,8 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
       this.currentUploadedFile = null,
       this.isLoading = false,
       this.error = null,
-      this.isUploadingStoryEvent = false});
+      this.newUserStoryUploadSuccess = false,
+      this.newUserStoryUploadFail = false});
 
 // When Viewing the Stories
   @override
@@ -1082,11 +1099,14 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
   final String? error;
   @override
   @JsonKey()
-  final bool isUploadingStoryEvent;
+  final bool newUserStoryUploadSuccess;
+  @override
+  @JsonKey()
+  final bool newUserStoryUploadFail;
 
   @override
   String toString() {
-    return 'UploadStoryState.uploadStoryState(uploadedStories: $uploadedStories, userName: $userName, userCircularAvatarUrl: $userCircularAvatarUrl, isVerified: $isVerified, currentUploadedFile: $currentUploadedFile, isLoading: $isLoading, error: $error, isUploadingStoryEvent: $isUploadingStoryEvent)';
+    return 'UploadStoryState.uploadStoryState(uploadedStories: $uploadedStories, userName: $userName, userCircularAvatarUrl: $userCircularAvatarUrl, isVerified: $isVerified, currentUploadedFile: $currentUploadedFile, isLoading: $isLoading, error: $error, newUserStoryUploadSuccess: $newUserStoryUploadSuccess, newUserStoryUploadFail: $newUserStoryUploadFail)';
   }
 
   @override
@@ -1107,8 +1127,11 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.error, error) || other.error == error) &&
-            (identical(other.isUploadingStoryEvent, isUploadingStoryEvent) ||
-                other.isUploadingStoryEvent == isUploadingStoryEvent));
+            (identical(other.newUserStoryUploadSuccess,
+                    newUserStoryUploadSuccess) ||
+                other.newUserStoryUploadSuccess == newUserStoryUploadSuccess) &&
+            (identical(other.newUserStoryUploadFail, newUserStoryUploadFail) ||
+                other.newUserStoryUploadFail == newUserStoryUploadFail));
   }
 
   @override
@@ -1121,7 +1144,8 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
       currentUploadedFile,
       isLoading,
       error,
-      isUploadingStoryEvent);
+      newUserStoryUploadSuccess,
+      newUserStoryUploadFail);
 
   /// Create a copy of UploadStoryState
   /// with the given fields replaced by the non-null parameter values.
@@ -1143,7 +1167,8 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
             File? currentUploadedFile,
             bool isLoading,
             String? error,
-            bool isUploadingStoryEvent)
+            bool newUserStoryUploadSuccess,
+            bool newUserStoryUploadFail)
         uploadStoryState,
   }) {
     return uploadStoryState(
@@ -1154,7 +1179,8 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
         currentUploadedFile,
         isLoading,
         error,
-        isUploadingStoryEvent);
+        newUserStoryUploadSuccess,
+        newUserStoryUploadFail);
   }
 
   @override
@@ -1168,7 +1194,8 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
             File? currentUploadedFile,
             bool isLoading,
             String? error,
-            bool isUploadingStoryEvent)?
+            bool newUserStoryUploadSuccess,
+            bool newUserStoryUploadFail)?
         uploadStoryState,
   }) {
     return uploadStoryState?.call(
@@ -1179,7 +1206,8 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
         currentUploadedFile,
         isLoading,
         error,
-        isUploadingStoryEvent);
+        newUserStoryUploadSuccess,
+        newUserStoryUploadFail);
   }
 
   @override
@@ -1193,7 +1221,8 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
             File? currentUploadedFile,
             bool isLoading,
             String? error,
-            bool isUploadingStoryEvent)?
+            bool newUserStoryUploadSuccess,
+            bool newUserStoryUploadFail)?
         uploadStoryState,
     required TResult orElse(),
   }) {
@@ -1206,7 +1235,8 @@ class _$UploadStoryStateImpl implements _UploadStoryState {
           currentUploadedFile,
           isLoading,
           error,
-          isUploadingStoryEvent);
+          newUserStoryUploadSuccess,
+          newUserStoryUploadFail);
     }
     return orElse();
   }
@@ -1249,7 +1279,8 @@ abstract class _UploadStoryState implements UploadStoryState {
       final File? currentUploadedFile,
       final bool isLoading,
       final String? error,
-      final bool isUploadingStoryEvent}) = _$UploadStoryStateImpl;
+      final bool newUserStoryUploadSuccess,
+      final bool newUserStoryUploadFail}) = _$UploadStoryStateImpl;
 
 // When Viewing the Stories
   @override
@@ -1267,7 +1298,9 @@ abstract class _UploadStoryState implements UploadStoryState {
   @override
   String? get error;
   @override
-  bool get isUploadingStoryEvent;
+  bool get newUserStoryUploadSuccess;
+  @override
+  bool get newUserStoryUploadFail;
 
   /// Create a copy of UploadStoryState
   /// with the given fields replaced by the non-null parameter values.

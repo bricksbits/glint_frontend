@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/chat/common_ticket_banner.dart';
 import 'package:glint_frontend/design/components/chat/ticket_details_component.dart';
 import 'package:glint_frontend/design/components/exports.dart';
@@ -112,7 +113,8 @@ class GetEventTicketScreen extends StatelessWidget {
                           matchId: getTicketArgumentModel.matchId,
                           userOne: getTicketArgumentModel.currentUser,
                           userTwo: getTicketArgumentModel.matchedUser,
-                          eventTicketPrice: getTicketArgumentModel.eventFinalPrice,
+                          eventTicketPrice:
+                              getTicketArgumentModel.eventFinalPrice,
                         ),
                       );
                     },
@@ -136,7 +138,9 @@ class GetEventTicketScreen extends StatelessWidget {
                       ],
                     ),
                     onPressed: () {
-                      //Todo: Show a Snackbar that, is not available will be add up in the future,
+                      showCustomSnackbar(context,
+                          message:
+                              "We are working on Split Payment feature, please checks for updates");
                     },
                   ),
                 ),

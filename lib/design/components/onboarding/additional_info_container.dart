@@ -48,6 +48,7 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
     context.showBottomSheet(
       isDismissible: true,
       (context) {
+        widget.heightProvided(66);
         return HeightInputComponent(
           heightSelected: (height) {
             widget.heightProvided(height);
@@ -75,6 +76,7 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
             label: 'Occupation',
             onTap: () {
               context.showBottomSheet(
+                enableDrag: true,
                 isDismissible: true,
                 (context) {
                   return CommonBottomSheetComponent(
@@ -137,7 +139,8 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
                   return CommonBottomSheetChipComponent(
                     title: 'Workout',
                     icon: Icons.fitness_center,
-                    selectedValue: getEnumFromString(widget.workoutHabits, WorkoutOptions.values, WorkoutOptions.sometimes),
+                    selectedValue: getEnumFromString(widget.workoutHabits,
+                        WorkoutOptions.values, WorkoutOptions.sometimes),
                     listValues: WorkoutOptions.values,
                     onSelection: (selectedItem) {
                       widget.workoutHabitSelected(selectedItem.name);
@@ -159,7 +162,8 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
                   return CommonBottomSheetChipComponent(
                     title: 'Drinking',
                     icon: Icons.local_bar,
-                    selectedValue: getEnumFromString(widget.drinkingHabits, DrinkingHabit.values, DrinkingHabit.never),
+                    selectedValue: getEnumFromString(widget.drinkingHabits,
+                        DrinkingHabit.values, DrinkingHabit.never),
                     listValues: DrinkingHabit.values,
                     onSelection: (selectedItem) {
                       widget.drinkingHabitSelected(selectedItem.name);
@@ -181,7 +185,8 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
                   return CommonBottomSheetChipComponent(
                     title: 'Smoking',
                     icon: Icons.smoking_rooms,
-                    selectedValue: getEnumFromString(widget.smokingHabits, SmokingHabit.values, SmokingHabit.nonSmoker),
+                    selectedValue: getEnumFromString(widget.smokingHabits,
+                        SmokingHabit.values, SmokingHabit.nonSmoker),
                     listValues: SmokingHabit.values,
                     onSelection: (selectedItem) {
                       widget.smokingHabitSelected(selectedItem.name);

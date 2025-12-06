@@ -9,9 +9,13 @@ class GlintAgeDistanceCard extends StatefulWidget {
   const GlintAgeDistanceCard({
     super.key,
     this.hasBorders = false,
+    required this.collectMinAndMaxAgeCallback,
+    required this.collectMaxDistance,
   });
 
   final bool hasBorders;
+  final Function(int, int) collectMinAndMaxAgeCallback;
+  final Function(int) collectMaxDistance;
 
   @override
   State<GlintAgeDistanceCard> createState() => _GlintAgeDistanceCardState();
@@ -80,6 +84,10 @@ class _GlintAgeDistanceCardState extends State<GlintAgeDistanceCard> {
                       fromAge = lowerValue;
                       toAge = upperValue;
                     });
+                    widget.collectMinAndMaxAgeCallback(
+                      fromAge.toInt(),
+                      toAge.toInt(),
+                    );
                   },
                   trackBar: FlutterSliderTrackBar(
                     activeTrackBar: BoxDecoration(
@@ -152,6 +160,7 @@ class _GlintAgeDistanceCardState extends State<GlintAgeDistanceCard> {
                     setState(() {
                       distance = lowerValue;
                     });
+                    widget.collectMaxDistance(distance.toInt());
                   },
                   trackBar: FlutterSliderTrackBar(
                     activeTrackBar: BoxDecoration(

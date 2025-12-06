@@ -16,7 +16,6 @@ part 'upload_story_state.dart';
 
 part 'upload_story_bloc.freezed.dart';
 
-//Todo: Do the Failure Media testing
 class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
   final StoryRepo storyRepo = getIt.get<StoryRepo>();
   final ImageService imageService = getIt.get<ImageService>();
@@ -24,13 +23,21 @@ class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
       getIt.get<AsyncEncryptedSharedPreferenceHelper>();
 
   UploadStoryBloc() : super(const UploadStoryState.uploadStoryState()) {
+    _fetchTheUserProfileData();
+
     on<_UploadStory>((event, emit) async {
       if (state.currentUploadedFile != null) {
         final response =
             await storyRepo.uploadStory(state.currentUploadedFile!);
         switch (response) {
           case Success<bool>():
-            print("Story uploaded successfully");
+            add(
+              _UpdateAndEmitNewState(
+                state.copyWith(
+                  newUserStoryUploadSuccess: true,
+                ),
+              ),
+            );
           case Failure<bool>():
             add(_UpdateAndEmitNewState(state.copyWith(
                 error: "Can't process the media, please try again.")));
@@ -69,24 +76,16 @@ class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
     });
 
     on<_SelectStoryFromGallery>((event, emit) async {
-      final userName = await sharedPreferenceHelper
-          .getString(SharedPreferenceKeys.userNameKey);
-      final userImageUrl = await sharedPreferenceHelper
-          .getString(SharedPreferenceKeys.userPrimaryPicUrlKey);
-
       final selectedFile = await imageService.pickStory();
       if (selectedFile != null) {
         add(
           _UpdateAndEmitNewState(
             state.copyWith(
               currentUploadedFile: selectedFile.file,
-              userName: userName,
-              userCircularAvatarUrl: userImageUrl,
               isVerified: false,
             ),
           ),
         );
-        add(const UploadStoryEvent.uploadStory());
       } else {
         add(_UpdateAndEmitNewState(
             state.copyWith(error: "Not able tp pick images, try again")));
@@ -99,8 +98,23 @@ class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
     });
   }
 
+  Future<void> _fetchTheUserProfileData() async {
+    final userName = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.userNameKey);
+    final userImageUrl = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.userPrimaryPicUrlKey);
+    add(
+      _UpdateAndEmitNewState(
+        state.copyWith(
+          userName: userName,
+          userCircularAvatarUrl: userImageUrl,
+          isVerified: false,
+        ),
+      ),
+    );
+  }
+
   void capturePassArgument(bool isUploadingStory) {
-    add(_UpdateAndEmitNewState(
-        state.copyWith(isUploadingStoryEvent: isUploadingStory)));
+    // Save the Arguments, for further logic to come,
   }
 }

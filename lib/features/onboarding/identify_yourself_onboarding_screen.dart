@@ -7,7 +7,6 @@ import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
-//Todo: Remove this Screen its not needed.
 class IdentifyYourselfOnboardingScreen extends StatefulWidget {
   const IdentifyYourselfOnboardingScreen({super.key});
 
@@ -77,17 +76,17 @@ class _IdentifyYourselfOnboardingScreenState
                       },
                     ),
                     const Gap(16.0),
-                    GlintCustomIconChip(
-                      label: 'Prefer not to say',
-                      assetPath: 'lib/assets/icons/everyone.svg',
-                      isSelected: selectedIdentity == 'Everyone',
-                      onTap: () {
-                        setState(() => selectedIdentity = 'Everyone');
-                        if (selectedIdentity != null) {
-                          context.read<OnBoardingCubit>().setGender("Everyone");
-                        }
-                      },
-                    ),
+                    // GlintCustomIconChip(
+                    //   label: 'Prefer not to say',
+                    //   assetPath: 'lib/assets/icons/everyone.svg',
+                    //   isSelected: selectedIdentity == 'Everyone',
+                    //   onTap: () {
+                    //     setState(() => selectedIdentity = 'Everyone');
+                    //     if (selectedIdentity != null) {
+                    //       context.read<OnBoardingCubit>().setGender("Everyone");
+                    //     }
+                    //   },
+                    // ),
                   ],
                 ),
                 const Spacer(flex: 3),

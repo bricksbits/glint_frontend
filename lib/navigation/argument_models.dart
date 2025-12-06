@@ -46,3 +46,10 @@ class ChatWithNavArguments {
     this.eventStartTime,
   });
 }
+
+class OneTimeViewNavArguments {
+  final String? imageUrl;
+  final String? message;
+
+  OneTimeViewNavArguments(this.imageUrl, this.message);
+}

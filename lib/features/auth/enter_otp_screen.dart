@@ -32,7 +32,6 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _codeController.dispose();
     super.dispose();
   }
@@ -118,14 +117,13 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
                     ? null
                     : () {
                         final otp = _codeController.text;
-                        // Todo: Handle the Navigation here
-                        // context.go(
-                        //   "/${GlintAdminDasboardRoutes.adminAuth.name}/${GlintAuthRoutes.recreatePassword.name}",
-                        //   extra: {
-                        //     'email': widget.email!,
-                        //     'otp': otp,
-                        //   },
-                        // );
+                        context.pushNamed(
+                          GlintAuthRoutes.recreatePassword.name,
+                          extra: {
+                            'email': widget.email!,
+                            'otp': otp,
+                          },
+                        );
                         debugPrint('confirm otp button pressed');
                       },
               ),

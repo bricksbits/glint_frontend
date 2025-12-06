@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/auth/blocs/register/register_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -84,8 +85,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                // Handle Login tap
-                // context.read<RegisterCubit>().registerUser();
+                context.pushNamed(GlintMainRoutes.auth.name);
               },
           ),
         ],
@@ -103,6 +103,12 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
       context.read<RegisterCubit>().enteredPassword(_passwordController.text);
     });
 
+    _confirmPasswordController.addListener(() {
+      context
+          .read<RegisterCubit>()
+          .enteredConfirmPassword(_confirmPasswordController.text);
+    });
+
     _nameController.addListener(() {
       context.read<RegisterCubit>().enteredUserName(_nameController.text);
     });
@@ -112,13 +118,31 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegisterCubit, RegisterState>(
+      listenWhen: (previous, current) {
+        if (previous.error != current.error ||
+            previous.navigateToRoute != current.navigateToRoute ||
+            previous.isRegisteredSuccessfully !=
+                current.isRegisteredSuccessfully) {
+          return true;
+        }
+        return false;
+      },
       listener: (context, state) {
         if (state.isRegisteredSuccessfully) {
           if (context.mounted) {
             context.goNamed(state.navigateToRoute);
           }
-        } else {
-          debugLogger("Listening to RegisterCubit", state.toString());
+        }
+        if (!state.isEmailValid && state.error.isNotEmpty) {
+          showCustomSnackbar(context, message: state.error, isError: true);
+        }
+
+        if (!state.isPassWordValid && state.error.isNotEmpty) {
+          showCustomSnackbar(context, message: state.error, isError: true);
+        }
+
+        if (!state.isConfirmPassword && state.error.isNotEmpty) {
+          showCustomSnackbar(context, message: state.error, isError: true);
         }
       },
       child: BlocBuilder<RegisterCubit, RegisterState>(

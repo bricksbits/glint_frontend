@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class ProfileDesignationGradientLabel extends StatelessWidget {
-  final String text;
+  final String designation;
 
   const ProfileDesignationGradientLabel({
     super.key,
-    required this.text,
+    required this.designation,
   });
 
   @override
@@ -28,7 +28,7 @@ class ProfileDesignationGradientLabel extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              'Graphic Designer',
+              designation,
               style: AppTheme.simpleText.copyWith(
                 color: AppColours.white,
               ),

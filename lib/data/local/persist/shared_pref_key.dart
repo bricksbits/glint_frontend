@@ -19,4 +19,12 @@ class SharedPreferenceKeys {
   static const String adminUserOrganizationKey = "adminOrganization";
   static const String adminUserEmailKey = "adminEmail";
   static const String adminUserContactKey = "adminContact";
+
+  // Search
+  static const String userSearchMinAgeKey = "userSearchMinAge";
+  static const String userSearchMaxAgeKey = "userSearchMaxAge";
+  static const String userSearchMaxDistanceKey = "userSearchMaxDistance";
+
+  // FCM
+  static const String deviceFcmTokenKey = "fcmToken";
 }

@@ -8,6 +8,7 @@ import 'package:glint_frontend/features/admin/bloc/track_specific_event/track_ad
 import 'package:glint_frontend/features/admin/screen/admin_dashboard_screen.dart';
 import 'package:glint_frontend/features/admin/screen/admin_track_event_screen.dart';
 import 'package:glint_frontend/features/admin/screen/super_admin_dashboard_screen.dart';
+import 'package:glint_frontend/features/auth/blocs/reset_password/reset_password_bloc.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
 import 'package:glint_frontend/features/auth/starter_screen.dart';
@@ -23,6 +24,7 @@ import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_screen.dart';
+import 'package:glint_frontend/features/event/exports.dart';
 import 'package:glint_frontend/features/event/people/people_interested_for_event_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 import 'package:glint_frontend/features/likes/likes_screen.dart';
@@ -99,7 +101,17 @@ final glintMainRoutes = GoRouter(
       builder: (context, state) => const LoginScreen(
         isAdmin: false,
       ),
+    ),
+    ShellRoute(
+      navigatorKey: resetAuthenticationKey,
       routes: glintAuthenticationRoutesBase,
+      builder: (context, state, child) {
+        return BlocProvider(
+          lazy: true,
+          create: (_) => ResetPasswordBloc(),
+          child: child, // <-- Here it goes
+        );
+      },
     ),
     GoRoute(
       path: '/${GlintMainRoutes.home.name}',
@@ -176,16 +188,19 @@ final glintMainRoutes = GoRouter(
           builder: (context, state) => const ChatWithVideoCallScreen(),
         ),
         GoRoute(
-          path: '/${GlintChatRoutes.tickets.name}',
-          name: GlintChatRoutes.tickets.name,
+          path: '/${GlintChatRoutes.ticket.name}',
+          name: GlintChatRoutes.ticket.name,
           builder: (context, state) => const ConfirmTicketScreen(),
         ),
         GoRoute(
           path: '/${GlintChatRoutes.oneTimePhotoView.name}',
           name: GlintChatRoutes.oneTimePhotoView.name,
           builder: (context, state) {
-            final imagePassed = state.extra as String?;
-            return OneTimeViewScreen(imageUrl: imagePassed);
+            final arguments = state.extra as OneTimeViewNavArguments?;
+            return OneTimeViewScreen(
+              imageUrl: arguments?.imageUrl,
+              messageWithMedia: arguments?.message,
+            );
           },
         ),
       ],
@@ -235,6 +250,17 @@ final glintMainRoutes = GoRouter(
             );
           },
         ),
+        GoRoute(
+          path: '/${GlintEventRoutes.tickets.name}',
+          name: GlintEventRoutes.tickets.name,
+          builder: (context, state) {
+            return BlocProvider(
+              lazy: true,
+              create: (context) => EventBaseCubit(),
+              child: const EventTicketHistoryScreen(),
+            );
+          },
+        ),
       ],
     ),
     GoRoute(
@@ -253,9 +279,9 @@ final glintMainRoutes = GoRouter(
           builder: (context, state) => const EditProfileScreen(),
         ),
         GoRoute(
-          path: '/${GlintProfileRoutes.ticketHistory.name}',
-          name: GlintProfileRoutes.ticketHistory.name,
-          builder: (context, state) => const ProfileHistoryTicketsScreen(),
+          path: '/${GlintProfileRoutes.paymentHistory.name}',
+          name: GlintProfileRoutes.paymentHistory.name,
+          builder: (context, state) => const PaymentHistoryScreen(),
         ),
       ],
     ),

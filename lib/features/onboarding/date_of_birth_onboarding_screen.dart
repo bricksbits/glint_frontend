@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -104,7 +105,9 @@ class _DateOfBirthOnboardingScreenState
                             context.go("/$target");
                           } else {
                             Navigator.of(context).pop();
-                            //Todo: Show a Snackbar that you are not allowed to enter the app.
+                            showCustomSnackbar(context,
+                                message:
+                                    "Seriously?, you are not allowed here kid");
                           }
                         },
                       ),

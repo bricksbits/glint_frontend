@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glint_frontend/features/auth/blocs/reset_password/reset_password_bloc.dart';
 import 'package:glint_frontend/features/auth/create_password_screen.dart';
 import 'package:glint_frontend/features/auth/enter_otp_screen.dart';
 import 'package:glint_frontend/features/auth/password_change_confirmation_screen.dart';
@@ -9,31 +12,61 @@ final glintAuthenticationRoutesBase = [
   GoRoute(
     path: '/${GlintAuthRoutes.resetPassword.name}',
     name: GlintAuthRoutes.resetPassword.name,
-    builder: (context, state) => const ResetPasswordScreen(),
+    pageBuilder: (context, state) {
+      var resetPasswordBloc = context.read<ResetPasswordBloc>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: resetPasswordBloc,
+          child: const ResetPasswordScreen(),
+        ),
+      );
+    },
   ),
   GoRoute(
-      path: '/${GlintAuthRoutes.otp.name}/:email',
-      name: GlintAuthRoutes.otp.name,
-      builder: (context, state) {
-        final email = state.pathParameters['email'];
-        return EnterOtpScreen(email: email);
-      }),
+    path: '/${GlintAuthRoutes.otp.name}/:email',
+    name: GlintAuthRoutes.otp.name,
+    pageBuilder: (context, state) {
+      var resetPasswordBloc = context.read<ResetPasswordBloc>();
+      final email = state.pathParameters['email'];
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: resetPasswordBloc,
+          child: EnterOtpScreen(email: email),
+        ),
+      );
+    },
+  ),
   GoRoute(
     path: '/${GlintAuthRoutes.recreatePassword.name}',
     name: GlintAuthRoutes.recreatePassword.name,
-    builder: (context, state) {
+    pageBuilder: (context, state) {
+      var resetPasswordBloc = context.read<ResetPasswordBloc>();
       final extra = state.extra as Map<String, dynamic>;
       final email = extra['email'] ?? '';
       final otp = extra['otp'] ?? '';
-      return CreatePasswordScreen(
-        email: email,
-        otp: otp,
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: resetPasswordBloc,
+          child: CreatePasswordScreen(
+            email: email,
+            otp: otp,
+          ),
+        ),
       );
     },
   ),
   GoRoute(
     path: '/${GlintAuthRoutes.passwordSuccess.name}',
     name: GlintAuthRoutes.passwordSuccess.name,
+    pageBuilder: (context, state) {
+      var resetPasswordBloc = context.read<ResetPasswordBloc>();
+      return MaterialPage(
+        child: BlocProvider.value(
+          value: resetPasswordBloc,
+          child: const PasswordChangeConfirmationScreen(),
+        ),
+      );
+    },
     builder: (context, state) => const PasswordChangeConfirmationScreen(),
   ),
 ];

@@ -80,19 +80,19 @@ class _OnboardingScreenState extends State<WhoCatchesYourEyeOnboardingScreen> {
                       },
                     ),
                     const Gap(16.0),
-                    GlintCustomIconChip(
-                      label: 'Everyone',
-                      assetPath: 'lib/assets/icons/everyone.svg',
-                      isSelected: selectedGender == 'Everyone',
-                      onTap: () {
-                        setState(() => selectedGender = 'Everyone');
-                        if (selectedGender != null) {
-                          context
-                              .read<OnBoardingCubit>()
-                              .setGenderPreferences("Everyone");
-                        }
-                      },
-                    ),
+                    // GlintCustomIconChip(
+                    //   label: 'Everyone',
+                    //   assetPath: 'lib/assets/icons/everyone.svg',
+                    //   isSelected: selectedGender == 'Everyone',
+                    //   onTap: () {
+                    //     setState(() => selectedGender = 'Everyone');
+                    //     if (selectedGender != null) {
+                    //       context
+                    //           .read<OnBoardingCubit>()
+                    //           .setGenderPreferences("Everyone");
+                    //     }
+                    //   },
+                    // ),
                   ],
                 ),
                 const Spacer(flex: 3),

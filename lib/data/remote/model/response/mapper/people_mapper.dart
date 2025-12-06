@@ -1,4 +1,5 @@
 import 'package:glint_frontend/data/local/db/entities/profile_entity.dart';
+import 'package:glint_frontend/data/remote/model/response/admin/get_published_event_response.dart';
 import 'package:glint_frontend/data/remote/model/response/people/get_people_response.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,7 @@ extension GetPeopleResponseMapper on GetPeopleResponse {
           (element) => ProfileEntity(
             userId: element.userId.toString(),
             username: element.username ?? "",
-            age: element.dateOfBirth ?? "",
+            age: calculateAge(element.dateOfBirth ?? "").toString(),
             gender: element.gender ?? "",
             genderPreference: element.genderPreference ?? "",
             interests: element.interests ?? [],
@@ -26,13 +27,12 @@ extension GetPeopleResponseMapper on GetPeopleResponse {
             profileLikes: element.profileLikes.toString(),
             pictureUrlList: element.pictureUrlList
                     ?.where((picture) => picture.presignedUrl != null)
-                    .map((filterPicture) =>
-                        "${filterPicture.presignedUrl}")
+                    .map((filterPicture) => "${filterPicture.presignedUrl}")
                     .toList() ??
                 [],
-            profileTag: "NO PROFILE TAG",
-            lastLocation: "NO LOCATION",
-            location: "NO LOCATION",
+            profileTag: "New",
+            lastLocation: "Hidden",
+            location: "Hidden",
             dateOfBirthFormatted: element.dateOfBirth,
           ),
         )

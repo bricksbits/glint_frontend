@@ -10,12 +10,12 @@ class RegisterState with _$RegisterState {
     @Default("") String contactNumber,
     @Default(false) bool isLoading,
     @Default("") String confirmPassword,
-    @Default(true) bool isEmailValid,
-    @Default(true) bool isPassWordValid,
-    @Default(true) bool isConfirmPassword,
+    @Default(false) bool isEmailValid,
+    @Default(false) bool isPassWordValid,
+    @Default(false) bool isConfirmPassword,
     @Default(false) bool isRegisteredSuccessfully,
     @Default("") String navigateToRoute,
-
+    @Default("") String error,
     @Default('') String currentSuccessStatus,
   }) = _Initial;
 }

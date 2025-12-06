@@ -1,3 +1,4 @@
+import 'package:glint_frontend/data/local/db/entities/profile_membership_entity.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class UserInfoRepo {
@@ -5,11 +6,13 @@ abstract class UserInfoRepo {
 
   Future<Result<void>> updateUserLastActiveTime();
 
-  Future<Result<void>> updateFcmToken(String fcmTokenGenerated);
+  Future<Result<void>> updateFcmTokenToServer();
 
-  // To showcase in the Profile Screen and let user use their perks
-  Future<Result<void>> getCurrentPremiumInfo();
+  Future<void> updateFcmTokenLocally(String fcmTokenGenerated);
 
-  // Once any perks used update the premium information
-  Future<Result<void>> updateCurrentPremiumInfo();
+  Future<Result<void>> fetchCurrentPremiumInfo();
+
+  Future<Result<void>> updateCurrentPremiumInfo(ProfileMembershipEntity entity);
+
+  Future<Result<ProfileMembershipEntity>> getCurrentUserPremiumInfo();
 }

@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
             BlocListener<LoginBloc, LoginState>(listener: (myContext, state) {
           state.when(
               initial: () {},
-              loading: () {},
+              loading: (isLoading) {},
               success: (type) {
                 if (myContext.mounted) {
                   switch (type) {
@@ -51,8 +51,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           .go("/${GlintAdminDasboardRoutes.adminHome.name}");
                       break;
                     case UsersType.SUPER_ADMIN:
-                      myContext
-                          .go("/${GlintAdminDasboardRoutes.superAdminHome.name}");
+                      myContext.go(
+                          "/${GlintAdminDasboardRoutes.superAdminHome.name}");
                       break;
                   }
                 }
@@ -140,9 +140,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 );
               },
-              loading: () {
+              loading: (isLoading) {
                 return const Center(
-                  child: Text("Loading"),
+                  child: CircularProgressIndicator(),
                 );
               },
               success: (type) {
@@ -208,7 +208,6 @@ class _LoginScreenState extends State<LoginScreen> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         const targetScreen = GlintAuthRoutes.resetPassword;
-
         context.pushNamed(targetScreen.name);
       },
       child: Align(
@@ -254,8 +253,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                const targetScreen = GlintMainRoutes.register;
-                context.goNamed(targetScreen.name,extra: false);
+                final targetScreen = widget.isAdmin ? GlintMainRoutes.register : GlintMainRoutes.onBoarding;
+                context.pushNamed(targetScreen.name, extra: widget.isAdmin);
               },
           ),
         ],

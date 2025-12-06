@@ -37,15 +37,18 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
     this.membershipDao,
   );
 
-  //Todo: Save the new Data to the Local \
-  // Tokens
-  // Profile Response to Db
   @override
   Future<Result<void>> createAccount(
     RegisterUserRequest registerUserModel,
     String userRole,
   ) async {
-    final requestBody = registerUserModel.mapToData(userRole);
+    final fcmTokenLocal = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.deviceFcmTokenKey);
+
+    final requestBody = registerUserModel.mapToData(
+      userRole,
+      fcmTokenLocal.isNotEmpty ? fcmTokenLocal : null,
+    );
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,
@@ -82,7 +85,8 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
           final streamToken = successResponse.profile?.streamAuthToken;
           final userId = successResponse.profile?.userId;
           final userName = successResponse.profile?.username;
-          final userImageUrl = successResponse.profile?.pictureUrlList?.firstOrNull?.presignedUrl;
+          final userImageUrl = successResponse
+              .profile?.pictureUrlList?.firstOrNull?.presignedUrl;
           if (successResponse.profile != null) {
             saveMembershipDetails(
               ProfileMembershipEntity(
@@ -108,6 +112,11 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
           await sharedPreferenceHelper.saveString(
             SharedPreferenceKeys.adminUserEmailKey,
             loginRequestBody.email ?? "",
+          );
+
+          await sharedPreferenceHelper.saveBoolean(
+            SharedPreferenceKeys.premiumUserKey,
+            successResponse.profile?.isPremiumUser ?? false,
           );
 
           return Success(successResponse);
