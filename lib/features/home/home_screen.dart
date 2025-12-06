@@ -20,6 +20,7 @@ import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/services/swipe_cache_manager.dart';
 import 'package:glint_frontend/utils/internet/internet_status_checker_cubit.dart';
 import 'package:glint_frontend/utils/logger.dart';
+import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -104,7 +105,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         debugLogger(logPrefix, "App is detached");
         break;
       case AppLifecycleState.resumed:
-        debugLogger(logPrefix, "App is resumed");
+        final userInfoCubit = getIt.get<UserInfoManagerCubit>();
+        userInfoCubit.updateUserLocation();
         break;
       case AppLifecycleState.inactive:
         debugLogger(logPrefix, "App is in inActive");

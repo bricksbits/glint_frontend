@@ -20,6 +20,8 @@ part 'on_boarding_state.dart';
 class OnBoardingCubit extends Cubit<OnBoardingState> {
   final OnBoardingRepo boardingRepo = getIt.get<OnBoardingRepo>();
   final ImageService imageService = getIt.get<ImageService>();
+  final permissionService = getIt<LocationPermissionService>();
+  final sharedPrefHelper = getIt<AsyncEncryptedSharedPreferenceHelper>();
 
   OnBoardingCubit() : super(const OnBoardingState.initial()) {
     getLatestUpdatedState().then((currentBoardingState) {
@@ -78,8 +80,12 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
           currentDestination: GlintBoardingRoutes.bio.name,
         ));
         break;
+      case OnBoardingCompletedTill.BIO_DONE:
+        emitNewState(state.copyWith(
+          currentDestination: GlintBoardingRoutes.location.name,
+        ));
+        break;
       case OnBoardingCompletedTill.COMPLETED:
-        //Todo: Update this Logic as per Bio screen only
         emitNewState(state.copyWith(
           currentDestination: GlintMainRoutes.register.name,
         ));
@@ -385,11 +391,12 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   Future<void> enableLocationAndCompleteOnboarding() async {
-    emit(state.copyWith(
-        isLocationLoading: true, locationPermissionDenied: false));
-
-    final permissionService = getIt<LocationPermissionService>();
-    final sharedPrefHelper = getIt<AsyncEncryptedSharedPreferenceHelper>();
+    emit(
+      state.copyWith(
+        isLocationLoading: true,
+        locationPermissionDenied: false,
+      ),
+    );
 
     final isGranted = await permissionService.requestPermission();
 
@@ -404,13 +411,13 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     final position = await permissionService.getCurrentLocation();
 
     if (position != null) {
-      await sharedPrefHelper.saveString(
+      await sharedPrefHelper.saveDouble(
         SharedPreferenceKeys.userLatitudeKey,
-        position.latitude.toString(),
+        position.latitude,
       );
-      await sharedPrefHelper.saveString(
+      await sharedPrefHelper.saveDouble(
         SharedPreferenceKeys.userLongitudeKey,
-        position.longitude.toString(),
+        position.longitude,
       );
 
       await setUpLastBoardingState(OnBoardingCompletedTill.COMPLETED);

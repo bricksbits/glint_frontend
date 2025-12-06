@@ -72,6 +72,7 @@ import '../domain/business_logic/repo/people/people_repo.dart' as _i678;
 import '../domain/business_logic/repo/profile/profile_repo.dart' as _i662;
 import '../domain/business_logic/repo/story/story_repo.dart' as _i762;
 import '../services/image_manager_service.dart' as _i43;
+import '../services/location_permission_service.dart' as _i700;
 import '../services/swipe_cache_manager.dart' as _i517;
 import '../utils/user_info/user_info_manager_cubit.dart' as _i141;
 import 'local_module.dart' as _i519;
@@ -103,6 +104,8 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i141.UserInfoManagerCubit>(
         () => _i141.UserInfoManagerCubit());
+    gh.lazySingleton<_i700.LocationPermissionService>(
+        () => _i700.LocationPermissionService());
     gh.singleton<_i719.ProfileDao>(
         () => localModule.getProfileDao(gh<_i160.GlintDatabase>()));
     gh.singleton<_i1011.MembershipDao>(

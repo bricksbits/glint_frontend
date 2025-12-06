@@ -141,8 +141,8 @@ class _OneLastStepOnboardingScreenState
                             if (context
                                 .read<OnBoardingCubit>()
                                 .validatePersonalInformation()) {
-                              final target = GlintMainRoutes.register.name;
-                              context.go("/$target", extra: false);
+                              final target = GlintBoardingRoutes.location.name;
+                              context.push("/$target");
                             }
                           },
                         ),

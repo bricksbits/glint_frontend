@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/data/local/db/entities/profile_membership_entity.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/repo/background/info/user_info_repo.dart';
+import 'package:glint_frontend/services/location_permission_service.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
@@ -13,13 +16,28 @@ part 'user_info_manager_cubit.freezed.dart';
 @LazySingleton()
 class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   final userInfoRepo = getIt.get<UserInfoRepo>();
+  final permissionService = getIt<LocationPermissionService>();
+  final sharedPrefHelper = getIt<AsyncEncryptedSharedPreferenceHelper>();
 
   UserInfoManagerCubit() : super(const UserInfoManagerState.initial()) {
+    checkFCMTokenAndUpdateToServer();
     getCurrentMembershipData();
   }
 
-  Future<void> updateTheFcmTokenToServer(String fcmToken) async {
-    await userInfoRepo.updateFcmToken(fcmToken);
+  Future<void> updateTheFcmLocally(String fcmToken) async {
+    await userInfoRepo.updateFcmTokenLocally(fcmToken);
+  }
+
+  Future<void> checkFCMTokenAndUpdateToServer() async {
+    final isTokenAvailable = await sharedPrefHelper
+        .getString(SharedPreferenceKeys.deviceFcmTokenKey);
+    if (isTokenAvailable.isNotEmpty) {
+      pushFcmTokenToServer();
+    }
+  }
+
+  Future<void> pushFcmTokenToServer() async {
+    await userInfoRepo.updateFcmTokenToServer();
   }
 
   Future<void> getCurrentMembershipData() async {
@@ -101,6 +119,18 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
         final updateDbForSuperDm =
             await userInfoRepo.updateCurrentPremiumInfo(updatedState);
       }
+    }
+  }
+
+  Future<void> updateUserLocation() async {
+    final isPermissionStillAvailable =
+        await permissionService.requestPermission();
+    if (isPermissionStillAvailable) {
+      final getCurrentLocation = await permissionService.getCurrentLocation();
+      await sharedPrefHelper.saveDouble(SharedPreferenceKeys.userLatitudeKey,
+          getCurrentLocation?.latitude ?? 24.7);
+      await sharedPrefHelper.saveDouble(SharedPreferenceKeys.userLongitudeKey,
+          getCurrentLocation?.longitude ?? 77.41);
     }
   }
 

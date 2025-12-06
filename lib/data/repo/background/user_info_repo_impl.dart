@@ -5,7 +5,6 @@ import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/fcm_token_request.dart';
-import 'package:glint_frontend/data/remote/model/request/background/update_premium_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/background/update_user_lcoation_request_body.dart';
 import 'package:glint_frontend/data/remote/model/response/membership/get_membership_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
@@ -27,27 +26,34 @@ class UserInfoRepoImpl extends UserInfoRepo {
   );
 
   @override
-  Future<Result<void>> updateFcmToken(String fcmTokenGenerated) async {
-    var requestBody = FcmTokenRequest(fcmToken: fcmTokenGenerated).toJson();
-    await sharedPreferenceHelper.saveString(
-        SharedPreferenceKeys.deviceFcmTokenKey, fcmTokenGenerated);
-    final response = await apiCallHandler(
-      httpClient: httpClient,
-      requestType: HttpRequestEnum.PUT,
-      endpoint: "/user/fcm-token",
-      requestBody: requestBody,
-      passedQueryParameters: null,
+  Future<Result<void>> updateFcmTokenToServer() async {
+    final fcmToken = await sharedPreferenceHelper.getString(
+      SharedPreferenceKeys.deviceFcmTokenKey,
     );
+    if (fcmToken.isNotEmpty) {
+      var requestBody = FcmTokenRequest(fcmToken: fcmToken).toJson();
+      final response = await apiCallHandler(
+        httpClient: httpClient,
+        requestType: HttpRequestEnum.PUT,
+        endpoint: "/user/fcm-token",
+        requestBody: requestBody,
+        passedQueryParameters: null,
+      );
 
-    switch (response) {
-      case Success():
-        debugLogger("FCM_TOKEN", "Token updated");
-        return Success("");
-      case Failure():
-        debugLogger("FCM_TOKEN", "Token failed to updated");
-        return Failure(
-          Exception("Error : ${response.error} Failed to update FCM"),
-        );
+      switch (response) {
+        case Success():
+          debugLogger("FCM_TOKEN", "Token updated");
+          return Success("");
+        case Failure():
+          debugLogger("FCM_TOKEN", "Token failed to updated");
+          return Failure(
+            Exception("Error : ${response.error} Failed to update FCM"),
+          );
+      }
+    } else {
+      return Failure(
+        Exception("Error : Can't update FCM Token, as there is no token"),
+      );
     }
   }
 
@@ -61,10 +67,17 @@ class UserInfoRepoImpl extends UserInfoRepo {
   /// Should be called whenever users enters the app
   @override
   Future<Result<void>> updateUserLocation() async {
+    final userId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
+    final userLat = await sharedPreferenceHelper
+        .getDouble(SharedPreferenceKeys.userLatitudeKey);
+    final userLong = await sharedPreferenceHelper
+        .getDouble(SharedPreferenceKeys.userLongitudeKey);
+
     var updateLocationRequestBody = UpdateUserLcoationRequestBody(
-      userId: 0,
-      latitide: 12.45,
-      longitude: 43.32,
+      userId: int.parse(userId),
+      latitide: userLat,
+      longitude: userLong,
     );
 
     final response = await apiCallHandler(
@@ -145,5 +158,13 @@ class UserInfoRepoImpl extends UserInfoRepo {
     } else {
       return Failure(Exception("No Membership data found"));
     }
+  }
+
+  @override
+  Future<void> updateFcmTokenLocally(String fcmTokenGenerated) async {
+    await sharedPreferenceHelper.saveString(
+      SharedPreferenceKeys.deviceFcmTokenKey,
+      fcmTokenGenerated,
+    );
   }
 }

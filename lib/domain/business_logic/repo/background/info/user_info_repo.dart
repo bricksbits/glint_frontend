@@ -6,7 +6,9 @@ abstract class UserInfoRepo {
 
   Future<Result<void>> updateUserLastActiveTime();
 
-  Future<Result<void>> updateFcmToken(String fcmTokenGenerated);
+  Future<Result<void>> updateFcmTokenToServer();
+
+  Future<void> updateFcmTokenLocally(String fcmTokenGenerated);
 
   Future<Result<void>> fetchCurrentPremiumInfo();
 

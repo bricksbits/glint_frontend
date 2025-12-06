@@ -45,10 +45,13 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
     RegisterUserRequest registerUserModel,
     String userRole,
   ) async {
-    final getFcmToken = await sharedPreferenceHelper
+    final fcmTokenLocal = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.deviceFcmTokenKey);
+
     final requestBody = registerUserModel.mapToData(
-        userRole, userRole == "user" ? getFcmToken : null);
+      userRole,
+      fcmTokenLocal.isNotEmpty ? fcmTokenLocal : null,
+    );
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.POST,

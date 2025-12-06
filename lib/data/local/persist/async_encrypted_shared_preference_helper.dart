@@ -54,6 +54,21 @@ class AsyncEncryptedSharedPreferenceHelper {
     return value;
   }
 
+  Future<void> saveDouble(
+      String key,
+      double value,
+      ) async {
+    await sharedPreferencesAsync.setDouble(key, value);
+  }
+
+  Future<double> getDouble(
+      String key,
+      ) async {
+    final value =
+        await sharedPreferencesAsync.getDouble(key, defaultValue: 0) ?? 0;
+    return value;
+  }
+
   Future<void> clearEncryptedPrefs() async {
     final keys = await sharedPreferencesAsync.getKeys();
     for (var key in keys) {
