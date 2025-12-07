@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
-import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'dart:async';
+
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/get_recent_matches_response.dart';

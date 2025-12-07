@@ -7,7 +7,12 @@ import 'package:glint_frontend/features/chat/story/model/recent_matches_model.da
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart'
-    show StreamChatClient, User, ConnectionStatus, StreamChannelListController;
+    show
+        StreamChatClient,
+        User,
+        ConnectionStatus,
+        StreamChannelListController,
+        StreamChatError;
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart'
     show Filter, SortOption;
 
@@ -24,8 +29,8 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   final StreamChatClient chatClient = getIt.get<StreamChatClient>();
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
-    _getRecentMatches();
     _connectToStreamClient();
+    _getRecentMatches();
     _checkChatClientStatus();
   }
 
@@ -49,19 +54,28 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     final userName = await getUserName();
     final userImage = await getUserImage();
     if (chatClient.wsConnectionStatus == ConnectionStatus.disconnected) {
-      await chatClient
-          .connectUser(
-        User(id: userId, name: userName, image: userImage),
-        userToken,
-      )
-          .then((_) {
-        setupTheChannelListController(chatClient, userId);
-      }).onError((e, st) {
+      try {
+        await chatClient
+            .connectUser(
+          User(id: userId, name: userName, image: userImage),
+          userToken,
+        )
+            .then((_) {
+          setupTheChannelListController(chatClient, userId);
+        }).onError((e, st) {
+          updateState(state.copyWith(
+              isLoading: false,
+              isChatReady: false,
+              error: "Chat Server went busy, please try again later"));
+        });
+      } on StreamChatError catch (streamError) {
+        debugLogger("CHAT", "Stream Error : ${streamError.message}");
         updateState(state.copyWith(
           isLoading: false,
           isChatReady: false,
+          error: "Chat Server went busy, please try again later",
         ));
-      });
+      }
     } else {
       setupTheChannelListController(chatClient, userId);
     }
