@@ -31,10 +31,11 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   final StreamChatClient chatClient = getIt.get<StreamChatClient>();
   StreamSubscription<Result<List<RecentMatchesModel>>>?
       _recentMatchesSubscription;
+  late final StreamChannelListController? _channelListController;
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
-    _connectToStreamClient();
     _getRecentMatches();
+    _connectToStreamClient();
     _checkChatClientStatus();
   }
 
@@ -56,17 +57,6 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
       },
     );
     chatRepo.fetchRecentMatches();
-
-    // final response = await chatRepo.fetchRecentMatches();
-    // switch (response) {
-    //   case Success<List<RecentMatchesModel>>():
-    //     final matches = response.data;
-    //     updateState(state.copyWith(recentMatches: matches));
-    //   case Failure<List<RecentMatchesModel>>():
-    //     updateState(
-    //       state.copyWith(error: "Not able to fetch recent Matches, right now."),
-    //     );
-    // }
   }
 
   Future<void> _connectToStreamClient() async {
@@ -77,19 +67,11 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     final userImage = await getUserImage();
     if (chatClient.wsConnectionStatus == ConnectionStatus.disconnected) {
       try {
-        await chatClient
-            .connectUser(
+        await chatClient.connectUser(
           User(id: userId, name: userName, image: userImage),
           userToken,
-        )
-            .then((_) {
-          setupTheChannelListController(chatClient, userId);
-        }).onError((e, st) {
-          updateState(state.copyWith(
-              isLoading: false,
-              isChatReady: false,
-              error: "Chat Server went busy, please try again later"));
-        });
+        );
+        setupTheChannelListController(chatClient, userId);
       } on StreamChatError catch (streamError) {
         debugLogger("CHAT", "Stream Error : ${streamError.message}");
         updateState(state.copyWith(
@@ -131,19 +113,19 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     StreamChatClient client,
     String currentUserId,
   ) {
-    final channelListController = StreamChannelListController(
+    _channelListController = StreamChannelListController(
       client: chatClient,
       filter: Filter.in_(
         'members',
         [currentUserId],
       ),
-      // channelStateSort: const [SortOption('last_message_at', direction: -1)],
+      channelStateSort: const [SortOption('last_message_at', direction: -1)],
       limit: 42,
     );
-    channelListController.doInitialLoad();
+    _channelListController?.doInitialLoad();
     updateState(
       state.copyWith(
-        channelListController: channelListController,
+        channelListController: _channelListController,
         isChatReady: true,
         isLoading: false,
       ),
@@ -156,7 +138,8 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
 
   @override
   Future<void> close() {
-    state.channelListController?.dispose();
+    _channelListController?.dispose();
+    _recentMatchesSubscription?.cancel();
     chatRepo.disposeRecentChatStream();
     return super.close();
   }

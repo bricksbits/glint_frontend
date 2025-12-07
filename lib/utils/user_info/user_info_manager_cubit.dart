@@ -30,7 +30,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   }
 
   Future<void> pushFcmTokenToServer() async {
-    await userInfoRepo.updateFcmTokenToServer();
+    userInfoRepo.updateFcmTokenToServer();
   }
 
   Future<void> getCurrentMembershipData() async {
@@ -128,7 +128,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   }
 
   Future<void> updateUserLastKnowLocation() async {
-    await userInfoRepo.updateUserLocation();
+    userInfoRepo.updateUserLocation();
   }
 
   void emitNewStatee(UserInfoManagerState newState) {
