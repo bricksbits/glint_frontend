@@ -6,6 +6,7 @@ import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/application_logic/auth/is_user_logged_in_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 part 'splash_screen_event.dart';
@@ -103,7 +104,10 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
     final userToken = await getUserToken(userId);
     final userName = await getUserName();
     final userImage = await getUserImage();
-    if (userToken.isEmpty || userId.isEmpty || userImage.isEmpty || userName.isEmpty) {
+    if (userToken.isEmpty ||
+        userId.isEmpty ||
+        userImage.isEmpty ||
+        userName.isEmpty) {
       add(
         SplashScreenEvent.emitNewStates(
           SplashScreenState.navigateTo(
@@ -113,10 +117,15 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
       );
       return;
     }
-    await chatClient.connectUser(
-      User(id: userId, name: userName, image: userImage),
-      userToken,
-    );
+    try {
+      await chatClient.connectUser(
+        User(id: userId, name: userName, image: userImage),
+        userToken,
+      );
+    } on StreamChatError catch (streamError) {
+      debugLogger(
+          "SPLASH", "Stream chat doesn't initialized, ${streamError.message}");
+    }
   }
 
   Future<String> getUserImage() async {

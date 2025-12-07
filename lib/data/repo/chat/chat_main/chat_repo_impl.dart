@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
-import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'dart:async';
+
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/get_recent_matches_response.dart';
@@ -14,6 +14,8 @@ import 'package:injectable/injectable.dart';
 @Injectable(as: ChatRepo)
 class ChatRepoImpl extends ChatRepo {
   final MyDioClient httpClient;
+  final _recentMatchesController =
+      StreamController<Result<List<RecentMatchesModel>>>.broadcast();
 
   ChatRepoImpl(
     this.httpClient,
@@ -26,7 +28,7 @@ class ChatRepoImpl extends ChatRepo {
   }
 
   @override
-  Future<Result<List<RecentMatchesModel>>> fetchRecentMatches() async {
+  Future<void> fetchRecentMatches() async {
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
@@ -38,11 +40,13 @@ class ChatRepoImpl extends ChatRepo {
         final recentMatchesResponse =
             GetRecentMatchesResponse.fromJson(response.data);
         final matches = recentMatchesResponse.mapToUiModel();
-        return Success(matches);
+        _recentMatchesController.add(Success(matches));
+        break;
       case Failure():
-        return Failure(
+        _recentMatchesController.add(Failure(
           Exception("No Recent matches found"),
-        );
+        ));
+        break;
     }
   }
 
@@ -62,5 +66,15 @@ class ChatRepoImpl extends ChatRepo {
       case Failure():
         return Failure(Exception("No stories found"));
     }
+  }
+
+  @override
+  void disposeRecentChatStream() {
+    _recentMatchesController.close();
+  }
+
+  @override
+  Stream<Result<List<RecentMatchesModel>>> recentMatchesStreamGetter() {
+    return _recentMatchesController.stream;
   }
 }

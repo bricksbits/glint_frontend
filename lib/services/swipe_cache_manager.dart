@@ -7,6 +7,7 @@ import 'package:glint_frontend/data/remote/model/request/people/user_action_requ
 import 'package:glint_frontend/data/remote/model/response/people/user_action_response.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/swipe_action_type.dart';
+import 'package:glint_frontend/domain/business_logic/repo/chat/chat_repo.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:injectable/injectable.dart';
 
@@ -23,6 +24,7 @@ class SwipeBufferManager {
   final SwipeActionDao swipeActionDao;
   final ProfileDao profileDao;
   final MyDioClient httpClient;
+  final ChatRepo chatRepo;
 
   Timer? _debounceTimer;
   bool _isProcessing = false;
@@ -34,6 +36,7 @@ class SwipeBufferManager {
     this.httpClient, {
     required this.profileDao,
     required this.swipeActionDao,
+    required this.chatRepo,
   });
 
   /// Call this method whenever user swipes a profile.
@@ -117,11 +120,11 @@ class SwipeBufferManager {
       requestBody: requestModel.toJson(),
     );
 
-    //Todo: Call Recent Matches and Update Chat Channels here once a Match occured.
     switch (response) {
       case Success():
         final postActions = UserActionResponse.fromJson(response.data);
         if (postActions.message?.actionResponseList != null) {
+          fetchDataIfMatchFound(postActions.message?.actionResponseList ?? []);
           var actionSuccessfulOn = postActions.message?.actionResponseList
               ?.map((action) => action.userId);
           if (actionSuccessfulOn?.length != batch.length) {
@@ -140,5 +143,17 @@ class SwipeBufferManager {
   /// Clean up any timers or tasks
   void dispose() {
     _debounceTimer?.cancel();
+  }
+
+  Future<void> fetchDataIfMatchFound(
+      List<ActionResponseList> matchActionsList) async {
+    for (var matchResponse in matchActionsList) {
+      if (matchResponse.matchOccurred != null) {
+        if (matchResponse.matchOccurred == true) {
+          // Fetch Recent Matches screen + Update the Chat Screen
+          chatRepo.fetchRecentMatches();
+        }
+      }
+    }
   }
 }

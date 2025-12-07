@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
@@ -7,7 +9,12 @@ import 'package:glint_frontend/features/chat/story/model/recent_matches_model.da
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart'
-    show StreamChatClient, User, ConnectionStatus, StreamChannelListController;
+    show
+        StreamChatClient,
+        User,
+        ConnectionStatus,
+        StreamChannelListController,
+        StreamChatError;
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart'
     show Filter, SortOption;
 
@@ -22,24 +29,38 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper =
       getIt.get();
   final StreamChatClient chatClient = getIt.get<StreamChatClient>();
+  StreamSubscription<Result<List<RecentMatchesModel>>>?
+      _recentMatchesSubscription;
+  late final StreamChannelListController? _channelListController;
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
     _getRecentMatches();
+    _observeRecentMatches();
     _connectToStreamClient();
     _checkChatClientStatus();
   }
 
+  Future<void> _observeRecentMatches() async {
+    _recentMatchesSubscription = chatRepo.recentMatchesStreamGetter().listen(
+      (recentMatchesResponse) {
+        switch (recentMatchesResponse) {
+          case Success<List<RecentMatchesModel>>():
+            final matches = recentMatchesResponse.data;
+            updateState(state.copyWith(recentMatches: matches));
+            break;
+          case Failure<List<RecentMatchesModel>>():
+            updateState(
+              state.copyWith(
+                  error: "Not able to fetch recent Matches, right now."),
+            );
+            break;
+        }
+      },
+    );
+  }
+
   Future<void> _getRecentMatches() async {
-    final response = await chatRepo.fetchRecentMatches();
-    switch (response) {
-      case Success<List<RecentMatchesModel>>():
-        final matches = response.data;
-        updateState(state.copyWith(recentMatches: matches));
-      case Failure<List<RecentMatchesModel>>():
-        updateState(
-          state.copyWith(error: "Not able to fetch recent Matches, right now."),
-        );
-    }
+    await chatRepo.fetchRecentMatches();
   }
 
   Future<void> _connectToStreamClient() async {
@@ -49,19 +70,20 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     final userName = await getUserName();
     final userImage = await getUserImage();
     if (chatClient.wsConnectionStatus == ConnectionStatus.disconnected) {
-      await chatClient
-          .connectUser(
-        User(id: userId, name: userName, image: userImage),
-        userToken,
-      )
-          .then((_) {
+      try {
+        await chatClient.connectUser(
+          User(id: userId, name: userName, image: userImage),
+          userToken,
+        );
         setupTheChannelListController(chatClient, userId);
-      }).onError((e, st) {
+      } on StreamChatError catch (streamError) {
+        debugLogger("CHAT", "Stream Error : ${streamError.message}");
         updateState(state.copyWith(
           isLoading: false,
           isChatReady: false,
+          error: "Chat Server went busy, please try again later",
         ));
-      });
+      }
     } else {
       setupTheChannelListController(chatClient, userId);
     }
@@ -95,19 +117,19 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     StreamChatClient client,
     String currentUserId,
   ) {
-    final channelListController = StreamChannelListController(
+    _channelListController = StreamChannelListController(
       client: chatClient,
       filter: Filter.in_(
         'members',
         [currentUserId],
       ),
-      // channelStateSort: const [SortOption('last_message_at', direction: -1)],
+      channelStateSort: const [SortOption('last_message_at', direction: -1)],
       limit: 42,
     );
-    channelListController.doInitialLoad();
+    _channelListController?.doInitialLoad();
     updateState(
       state.copyWith(
-        channelListController: channelListController,
+        channelListController: _channelListController,
         isChatReady: true,
         isLoading: false,
       ),
@@ -120,7 +142,9 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
 
   @override
   Future<void> close() {
-    state.channelListController?.dispose();
+    _channelListController?.dispose();
+    _recentMatchesSubscription?.cancel();
+    chatRepo.disposeRecentChatStream();
     return super.close();
   }
 

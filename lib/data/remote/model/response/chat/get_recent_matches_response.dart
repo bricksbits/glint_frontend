@@ -72,6 +72,14 @@ class Profiles {
     this.matchedAtEventStartTime,
   });
 
+  static double? _toDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value);
+    return null;
+  }
+
   Profiles.fromJson(dynamic json) {
     matchId = json['match_id'];
     userId = json['user_id'];
@@ -85,7 +93,7 @@ class Profiles {
         ? json['relationship_goals'].cast<String>()
         : [];
     bio = json['bio'];
-    height = json['height'];
+    height =  _toDouble(json['height']);
     occupation = json['occupation'];
     education = json['education'];
     workoutHabit = json['workout_habit'];

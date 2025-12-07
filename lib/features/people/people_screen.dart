@@ -140,9 +140,9 @@ class PeopleScreen extends StatelessWidget {
   }
 
   int numberOfCardsToBeDisplayed(int currentCardsAvailable) {
-    if (currentCardsAvailable > 3) {
+    if (currentCardsAvailable >= 2) {
       return 2;
-    } else if (currentCardsAvailable > 1) {
+    } else if (currentCardsAvailable == 1) {
       return 1;
     } else {
       return 0;

@@ -129,26 +129,22 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i719.ProfileDao>(),
               gh<_i1011.MembershipDao>(),
             ));
-    gh.factory<_i757.EventRepo>(() => _i390.EventRepoImpl(
-          gh<_i368.MyDioClient>(),
-          gh<_i863.EventLikeDao>(),
-          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-        ));
-    gh.singleton<_i517.SwipeBufferManager>(() => _i517.SwipeBufferManager(
-          gh<_i368.MyDioClient>(),
-          profileDao: gh<_i719.ProfileDao>(),
-          swipeActionDao: gh<_i1004.SwipeActionDao>(),
-        ));
-    gh.lazySingleton<_i330.OnBoardingRepo>(() => _i359.OnBoardRepoImpl(
-          gh<_i719.ProfileDao>(),
-          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-          gh<_i368.MyDioClient>(),
-        ));
     gh.lazySingleton<_i789.LogoutUserUsecase>(() => _i789.LogoutUserUsecase(
           asyncEncryptedSharedPreferenceHelper:
               gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           dao: gh<_i719.ProfileDao>(),
           imageService: gh<_i43.ImageService>(),
+          chatClient: gh<_i981.StreamChatClient>(),
+        ));
+    gh.factory<_i757.EventRepo>(() => _i390.EventRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i863.EventLikeDao>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+        ));
+    gh.lazySingleton<_i330.OnBoardingRepo>(() => _i359.OnBoardRepoImpl(
+          gh<_i719.ProfileDao>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          gh<_i368.MyDioClient>(),
         ));
     gh.factory<_i995.ForgotPasswordRepo>(
         () => _i509.ForgotPasswordRepoImpl(gh<_i368.MyDioClient>()));
@@ -200,6 +196,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i786.SendOtpUseCase(gh<_i995.ForgotPasswordRepo>()));
     gh.factory<_i804.ResetPasswordWithOtpUseCase>(() =>
         _i804.ResetPasswordWithOtpUseCase(gh<_i995.ForgotPasswordRepo>()));
+    gh.singleton<_i517.SwipeBufferManager>(() => _i517.SwipeBufferManager(
+          gh<_i368.MyDioClient>(),
+          profileDao: gh<_i719.ProfileDao>(),
+          swipeActionDao: gh<_i1004.SwipeActionDao>(),
+          chatRepo: gh<_i849.ChatRepo>(),
+        ));
     gh.lazySingleton<_i130.PublishEventUseCase>(
         () => _i130.PublishEventUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i38.GetAllPublishEventsUsecase>(
