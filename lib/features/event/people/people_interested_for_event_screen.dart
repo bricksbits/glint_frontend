@@ -19,6 +19,7 @@ class PeopleInterestedForEventScreen extends StatefulWidget {
       _PeopleInterestedForEventScreenState();
 }
 
+//Todo: [Release 2] Build the Strong mechanism for Event profile, that doesn't collide with Main Profiles list
 class _PeopleInterestedForEventScreenState
     extends State<PeopleInterestedForEventScreen> {
   final CardSwiperController cardSwiperController = CardSwiperController();
@@ -78,7 +79,7 @@ class _PeopleInterestedForEventScreenState
                             }
                           },
                           controller: cardSwiperController,
-                          numberOfCardsDisplayed: 1,
+                          numberOfCardsDisplayed: state.cardList.length,
                           onUndo: (previousIndex, currentIndex,
                               cardSwipeDirection) {
                             if (cardSwipeDirection ==

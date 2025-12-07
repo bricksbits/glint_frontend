@@ -35,11 +35,12 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
     _getRecentMatches();
+    _observeRecentMatches();
     _connectToStreamClient();
     _checkChatClientStatus();
   }
 
-  Future<void> _getRecentMatches() async {
+  Future<void> _observeRecentMatches() async {
     _recentMatchesSubscription = chatRepo.recentMatchesStreamGetter().listen(
       (recentMatchesResponse) {
         switch (recentMatchesResponse) {
@@ -56,7 +57,10 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
         }
       },
     );
-    chatRepo.fetchRecentMatches();
+  }
+
+  Future<void> _getRecentMatches() async {
+    await chatRepo.fetchRecentMatches();
   }
 
   Future<void> _connectToStreamClient() async {

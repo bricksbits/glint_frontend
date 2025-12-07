@@ -129,111 +129,245 @@ class _ChatScreenState extends State<ChatScreen> {
                                       final oppositeUserImage =
                                           oppositeUser.user?.image;
 
-                                      final lastMessage =
-                                          channels[index].state?.messages.last;
-                                      final isLastMessageAMedia =
-                                          lastMessage?.attachments.isNotEmpty ??
-                                              false;
-                                      final lastMessageDate =
-                                          lastMessage?.createdAt ??
-                                              DateTime.now();
-                                      final unreadCount =
-                                          channels[index].state?.unreadCount ??
-                                              0;
-                                      final myUserId = StreamChat.of(context)
-                                              .currentUser
-                                              ?.id ??
-                                          0;
+                                      final messages =
+                                          channels[index].state?.messages;
+                                      if (messages != null &&
+                                          messages.isNotEmpty) {
+                                        final lastMessage = channels[index]
+                                            .state
+                                            ?.messages
+                                            .last;
+                                        final isLastMessageAMedia = lastMessage
+                                                ?.attachments.isNotEmpty ??
+                                            false;
+                                        final lastMessageDate =
+                                            lastMessage?.createdAt ??
+                                                DateTime.now();
+                                        final unreadCount = channels[index]
+                                                .state
+                                                ?.unreadCount ??
+                                            0;
+                                        final myUserId = StreamChat.of(context)
+                                                .currentUser
+                                                ?.id ??
+                                            0;
 
-                                      // // Determine if the last message was sent by the opposite user and is unread
-                                      final isUnreadFromOtherUser =
-                                          lastMessage != null &&
-                                              lastMessage.user?.id !=
-                                                  myUserId &&
-                                              unreadCount > 0;
+                                        // // Determine if the last message was sent by the opposite user and is unread
+                                        final isUnreadFromOtherUser =
+                                            lastMessage != null &&
+                                                lastMessage.user?.id !=
+                                                    myUserId &&
+                                                unreadCount > 0;
 
-                                      return ListTile(
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                          vertical: 6.0,
-                                          horizontal: 20.0,
-                                        ),
-                                        leading: Stack(
-                                          clipBehavior: Clip.none,
-                                          alignment: Alignment.center,
-                                          children: [
-                                            oppositeUserImage != null
-                                                ? SizedBox(
-                                                    height: 52.0,
-                                                    width: 48.0,
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                              .all(
-                                                        Radius.circular(8.0),
+                                        return ListTile(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                            vertical: 6.0,
+                                            horizontal: 20.0,
+                                          ),
+                                          leading: Stack(
+                                            clipBehavior: Clip.none,
+                                            alignment: Alignment.center,
+                                            children: [
+                                              oppositeUserImage != null
+                                                  ? SizedBox(
+                                                      height: 52.0,
+                                                      width: 48.0,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                .all(
+                                                          Radius.circular(8.0),
+                                                        ),
+                                                        child: FadeInImage
+                                                            .assetNetwork(
+                                                          placeholder:
+                                                              'lib/assets/images/temp_place_holder.png',
+                                                          // Local placeholder
+                                                          image:
+                                                              oppositeUserImage,
+                                                          fit: BoxFit.cover,
+                                                          width:
+                                                              double.infinity,
+                                                          height: 220,
+                                                          imageErrorBuilder:
+                                                              (context, error,
+                                                                  stackTrace) {
+                                                            return Image.asset(
+                                                              'lib/assets/images/temp_place_holder.png',
+                                                              fit: BoxFit.cover,
+                                                            );
+                                                          },
+                                                        ),
                                                       ),
-                                                      child: FadeInImage
-                                                          .assetNetwork(
-                                                        placeholder:
-                                                            'lib/assets/images/temp_place_holder.png',
-                                                        // Local placeholder
-                                                        image:
-                                                            oppositeUserImage,
-                                                        fit: BoxFit.cover,
-                                                        width: double.infinity,
-                                                        height: 220,
-                                                        imageErrorBuilder:
-                                                            (context, error,
-                                                                stackTrace) {
-                                                          return Image.asset(
-                                                            'lib/assets/images/temp_place_holder.png',
-                                                            fit: BoxFit.cover,
-                                                          );
-                                                        },
+                                                    )
+                                                  : Container(
+                                                      height: 52.0,
+                                                      width: 48.0,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                          Radius.circular(8.0),
+                                                        ),
+                                                        image: DecorationImage(
+                                                          image: AssetImage(
+                                                              'lib/assets/images/temp_place_holder.png'),
+                                                        ),
                                                       ),
                                                     ),
-                                                  )
-                                                : Container(
-                                                    height: 52.0,
-                                                    width: 48.0,
-                                                    decoration:
-                                                        const BoxDecoration(
+                                            ],
+                                          ),
+                                          title: Text(
+                                            oppositeUserName,
+                                            style: AppTheme.simpleBodyText
+                                                .copyWith(
+                                              color: AppColours.black,
+                                            ),
+                                          ),
+                                          subtitle: Text(
+                                            isLastMessageAMedia
+                                                ? "Checkout this Image"
+                                                : lastMessage?.text ??
+                                                    "You got a new msg",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: AppTheme.simpleText.copyWith(
+                                              color: AppColours.darkGray,
+                                            ),
+                                          ),
+                                          trailing: Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 5.0),
+                                            child: Column(
+                                              children: [
+                                                if (isUnreadFromOtherUser)
+                                                  // your turn if message received
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 6,
+                                                      vertical: 2.0,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.black,
                                                       borderRadius:
-                                                          BorderRadius.all(
-                                                        Radius.circular(8.0),
-                                                      ),
-                                                      image: DecorationImage(
-                                                        image: AssetImage(
-                                                            'lib/assets/images/temp_place_holder.png'),
+                                                          BorderRadius.circular(
+                                                              4.0),
+                                                    ),
+                                                    child: Text(
+                                                      'Your Turn',
+                                                      style: AppTheme.simpleText
+                                                          .copyWith(
+                                                        fontSize: 10.0,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: AppColours.white,
                                                       ),
                                                     ),
                                                   ),
-                                          ],
-                                        ),
-                                        title: Text(
-                                          oppositeUserName,
-                                          style:
-                                              AppTheme.simpleBodyText.copyWith(
-                                            color: AppColours.black,
+                                                const Gap(8.0),
+                                                Text(
+                                                  lastMessageDate
+                                                      .toChatTimestamp(),
+                                                  style: AppTheme.smallBodyText
+                                                      .copyWith(
+                                                    color: AppColours.darkGray,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        subtitle: Text(
-                                          isLastMessageAMedia
-                                              ? "Checkout this Image"
-                                              : lastMessage?.text ??
-                                                  "You got a new msg",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: AppTheme.simpleText.copyWith(
-                                            color: AppColours.darkGray,
+                                          onTap: () {
+                                            context.pushNamed(
+                                              GlintChatRoutes.chatWith.name,
+                                              extra: ChatWithNavArguments(
+                                                channelId:
+                                                    channels[index].id ?? "0",
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      } else {
+                                        return ListTile(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                            vertical: 6.0,
+                                            horizontal: 20.0,
                                           ),
-                                        ),
-                                        trailing: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Column(
+                                          leading: Stack(
+                                            clipBehavior: Clip.none,
+                                            alignment: Alignment.center,
                                             children: [
-                                              if (isUnreadFromOtherUser)
+                                              oppositeUserImage != null
+                                                  ? SizedBox(
+                                                      height: 52.0,
+                                                      width: 48.0,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                .all(
+                                                          Radius.circular(8.0),
+                                                        ),
+                                                        child: FadeInImage
+                                                            .assetNetwork(
+                                                          placeholder:
+                                                              'lib/assets/images/temp_place_holder.png',
+                                                          // Local placeholder
+                                                          image:
+                                                              oppositeUserImage,
+                                                          fit: BoxFit.cover,
+                                                          width:
+                                                              double.infinity,
+                                                          height: 220,
+                                                          imageErrorBuilder:
+                                                              (context, error,
+                                                                  stackTrace) {
+                                                            return Image.asset(
+                                                              'lib/assets/images/temp_place_holder.png',
+                                                              fit: BoxFit.cover,
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Container(
+                                                      height: 52.0,
+                                                      width: 48.0,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                          Radius.circular(8.0),
+                                                        ),
+                                                        image: DecorationImage(
+                                                          image: AssetImage(
+                                                              'lib/assets/images/temp_place_holder.png'),
+                                                        ),
+                                                      ),
+                                                    ),
+                                            ],
+                                          ),
+                                          title: Text(
+                                            oppositeUserName,
+                                            style: AppTheme.simpleBodyText
+                                                .copyWith(
+                                              color: AppColours.black,
+                                            ),
+                                          ),
+                                          subtitle: Text(
+                                            "Make your first move,",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: AppTheme.simpleText.copyWith(
+                                              color: AppColours.darkGray,
+                                            ),
+                                          ),
+                                          trailing: Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 5.0),
+                                            child: Column(
+                                              children: [
                                                 // your turn if message received
                                                 Container(
                                                   padding: const EdgeInsets
@@ -258,28 +392,21 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                              const Gap(8.0),
-                                              Text(
-                                                lastMessageDate
-                                                    .toChatTimestamp(),
-                                                style: AppTheme.smallBodyText
-                                                    .copyWith(
-                                                  color: AppColours.darkGray,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          context.pushNamed(
-                                            GlintChatRoutes.chatWith.name,
-                                            extra: ChatWithNavArguments(
-                                              channelId:
-                                                  channels[index].id ?? "0",
+                                                const Gap(8.0),
+                                              ],
                                             ),
-                                          );
-                                        },
-                                      );
+                                          ),
+                                          onTap: () {
+                                            context.pushNamed(
+                                              GlintChatRoutes.chatWith.name,
+                                              extra: ChatWithNavArguments(
+                                                channelId:
+                                                    channels[index].id ?? "0",
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      }
                                     },
                                   ),
                                 )
