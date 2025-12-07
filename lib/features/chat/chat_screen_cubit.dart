@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
@@ -27,6 +29,8 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper =
       getIt.get();
   final StreamChatClient chatClient = getIt.get<StreamChatClient>();
+  StreamSubscription<Result<List<RecentMatchesModel>>>?
+      _recentMatchesSubscription;
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
     _connectToStreamClient();
@@ -35,16 +39,34 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   }
 
   Future<void> _getRecentMatches() async {
-    final response = await chatRepo.fetchRecentMatches();
-    switch (response) {
-      case Success<List<RecentMatchesModel>>():
-        final matches = response.data;
-        updateState(state.copyWith(recentMatches: matches));
-      case Failure<List<RecentMatchesModel>>():
-        updateState(
-          state.copyWith(error: "Not able to fetch recent Matches, right now."),
-        );
-    }
+    _recentMatchesSubscription = chatRepo.recentMatchesStreamGetter().listen(
+      (recentMatchesResponse) {
+        switch (recentMatchesResponse) {
+          case Success<List<RecentMatchesModel>>():
+            final matches = recentMatchesResponse.data;
+            updateState(state.copyWith(recentMatches: matches));
+            break;
+          case Failure<List<RecentMatchesModel>>():
+            updateState(
+              state.copyWith(
+                  error: "Not able to fetch recent Matches, right now."),
+            );
+            break;
+        }
+      },
+    );
+    chatRepo.fetchRecentMatches();
+
+    // final response = await chatRepo.fetchRecentMatches();
+    // switch (response) {
+    //   case Success<List<RecentMatchesModel>>():
+    //     final matches = response.data;
+    //     updateState(state.copyWith(recentMatches: matches));
+    //   case Failure<List<RecentMatchesModel>>():
+    //     updateState(
+    //       state.copyWith(error: "Not able to fetch recent Matches, right now."),
+    //     );
+    // }
   }
 
   Future<void> _connectToStreamClient() async {
@@ -135,6 +157,7 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   @override
   Future<void> close() {
     state.channelListController?.dispose();
+    chatRepo.disposeRecentChatStream();
     return super.close();
   }
 
