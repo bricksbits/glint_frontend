@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
@@ -127,15 +128,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InternetStatusCheckerCubit, InternetStatusCheckerState>(
-      builder: (context, state) {
+    return BlocConsumer<InternetStatusCheckerCubit, InternetStatusCheckerState>(
+      listener: (context, state) {
         if (state is InternetStatusDisConnected) {
-          return const Banner(
-            message: "No Internet Connection",
-            location: BannerLocation.topStart,
-            color: Colors.red,
-          );
+          showCustomSnackbar(context,
+              message: "No internet available", isError: true);
         }
+      },
+      builder: (context, state) {
         return Scaffold(
           // extendBody: true,
           backgroundColor: AppColours.white,

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:glint_frontend/utils/internet/handling_url_launches_util.dart';
 import 'package:go_router/go_router.dart';
 
 class StarterScreen extends StatelessWidget {
@@ -182,7 +183,10 @@ class _AuthTerms extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    // TODO - Handle Terms & Conditions tap
+                    HandlingUrlLaunchesUtil.openUrl(
+                      context,
+                      "https://glintapp.io/terms-and-conditions",
+                    );
                   },
               ),
             ],
@@ -205,7 +209,10 @@ class _AuthTerms extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    // TODO - Handle Privacy Policy tap
+                    HandlingUrlLaunchesUtil.openUrl(
+                      context,
+                      "http://glintapp.io/privacy-policy",
+                    );
                   },
               ),
             ],

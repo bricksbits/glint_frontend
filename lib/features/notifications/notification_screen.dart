@@ -30,91 +30,91 @@ class NotificationScreen extends StatelessWidget {
           ),
 
           // empty state (if no notifications)
-          // SliverFillRemaining(
-          //   hasScrollBody: false,
-          //   child: _buildNotificationEmptyState(),
-          // ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: _buildNotificationEmptyState(),
+          ),
 
           //notifications
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                _buildLabelWiseNotifications(
-                  label: 'Today',
-                  notifications: [
-                    GlintNotificationTile(
-                      title: 'New Matches Await!',
-                      subtitle: 'Check out users in your town.',
-                      iconState: NotificationTileIconState.match,
-                      date: DateTime.now(),
-                    ),
-                    GlintNotificationTile(
-                      title: 'Your Profile Stands Out!',
-                      subtitle: 'You’ve received 20+ views today.',
-                      iconState: NotificationTileIconState.stat,
-                      date: DateTime.now(),
-                    ),
-                    GlintNotificationTile(
-                      title: 'Got a match with Swati',
-                      subtitle: 'Message to know more about her',
-                      imageUrl:
-                          'https://avatars.githubusercontent.com/u/70279771?v=4',
-                      date: DateTime.now(),
-                    ),
-                  ],
-                ),
-                const Gap(20.0),
-                _buildLabelWiseNotifications(
-                  label: 'Yesterday',
-                  notifications: [
-                    GlintNotificationTile(
-                      title: 'Event Near You!',
-                      subtitle: 'Meet like-minded people IRL.',
-                      iconState: NotificationTileIconState.event,
-                      date: DateTime.now(),
-                    ),
-                    GlintNotificationTile(
-                      title: 'New Matches Await!',
-                      subtitle: 'Check out users in your town.',
-                      iconState: NotificationTileIconState.match,
-                      date: DateTime.now(),
-                    ),
-                    GlintNotificationTile(
-                      title: 'Your Profile Stands Out!',
-                      subtitle: 'You’ve received 20+ views today.',
-                      iconState: NotificationTileIconState.stat,
-                      date: DateTime.now(),
-                    ),
-                  ],
-                ),
-                const Gap(20.0),
-                _buildLabelWiseNotifications(
-                  label: 'This Week',
-                  notifications: [
-                    GlintNotificationTile(
-                      title: 'Got a match with Swati',
-                      subtitle: 'Message to know more about her',
-                      imageUrl:
-                          'https://avatars.githubusercontent.com/u/70279771?v=4',
-                      date: DateTime.now(),
-                    ),
-                    GlintNotificationTile(
-                      title: 'New Matches Await!',
-                      subtitle: 'Check out users in your town.',
-                      iconState: NotificationTileIconState.match,
-                      date: DateTime.now(),
-                    ),
-                    GlintNotificationTile(
-                      title: 'Your Profile Stands Out!',
-                      subtitle: 'You’ve received 20+ views today.',
-                      iconState: NotificationTileIconState.stat,
-                      date: DateTime.now(),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          // SliverList(
+          //   delegate: SliverChildListDelegate(
+          //     [
+          //       _buildLabelWiseNotifications(
+          //         label: 'Today',
+          //         notifications: [
+          //           GlintNotificationTile(
+          //             title: 'New Matches Await!',
+          //             subtitle: 'Check out users in your town.',
+          //             iconState: NotificationTileIconState.match,
+          //             date: DateTime.now(),
+          //           ),
+          //           GlintNotificationTile(
+          //             title: 'Your Profile Stands Out!',
+          //             subtitle: 'You’ve received 20+ views today.',
+          //             iconState: NotificationTileIconState.stat,
+          //             date: DateTime.now(),
+          //           ),
+          //           GlintNotificationTile(
+          //             title: 'Got a match with Swati',
+          //             subtitle: 'Message to know more about her',
+          //             imageUrl:
+          //                 'https://avatars.githubusercontent.com/u/70279771?v=4',
+          //             date: DateTime.now(),
+          //           ),
+          //         ],
+          //       ),
+          //       const Gap(20.0),
+          //       _buildLabelWiseNotifications(
+          //         label: 'Yesterday',
+          //         notifications: [
+          //           GlintNotificationTile(
+          //             title: 'Event Near You!',
+          //             subtitle: 'Meet like-minded people IRL.',
+          //             iconState: NotificationTileIconState.event,
+          //             date: DateTime.now(),
+          //           ),
+          //           GlintNotificationTile(
+          //             title: 'New Matches Await!',
+          //             subtitle: 'Check out users in your town.',
+          //             iconState: NotificationTileIconState.match,
+          //             date: DateTime.now(),
+          //           ),
+          //           GlintNotificationTile(
+          //             title: 'Your Profile Stands Out!',
+          //             subtitle: 'You’ve received 20+ views today.',
+          //             iconState: NotificationTileIconState.stat,
+          //             date: DateTime.now(),
+          //           ),
+          //         ],
+          //       ),
+          //       const Gap(20.0),
+          //       _buildLabelWiseNotifications(
+          //         label: 'This Week',
+          //         notifications: [
+          //           GlintNotificationTile(
+          //             title: 'Got a match with Swati',
+          //             subtitle: 'Message to know more about her',
+          //             imageUrl:
+          //                 'https://avatars.githubusercontent.com/u/70279771?v=4',
+          //             date: DateTime.now(),
+          //           ),
+          //           GlintNotificationTile(
+          //             title: 'New Matches Await!',
+          //             subtitle: 'Check out users in your town.',
+          //             iconState: NotificationTileIconState.match,
+          //             date: DateTime.now(),
+          //           ),
+          //           GlintNotificationTile(
+          //             title: 'Your Profile Stands Out!',
+          //             subtitle: 'You’ve received 20+ views today.',
+          //             iconState: NotificationTileIconState.stat,
+          //             date: DateTime.now(),
+          //           ),
+          //         ],
+          //       ),
+          //     ],
+          //   ),
+          // ),
           const SliverGap(16.0),
           // bottom padding basically
         ],

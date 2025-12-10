@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
+import 'package:glint_frontend/design/common/app_theme.dart';
 
 /// A utility function to show a custom-styled SnackBar.
 ///
@@ -22,10 +23,10 @@ void showCustomSnackbar(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: backgroundColor.withOpacity(0.5),
+            color: backgroundColor,
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, 3),
@@ -42,10 +43,7 @@ void showCustomSnackbar(
           Expanded(
             child: Text(
               message,
-              style: const TextStyle(
-                color: AppColours.black,
-                fontWeight: FontWeight.w500,
-              ),
+              style: AppTheme.simpleText,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
