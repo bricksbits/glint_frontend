@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
+import 'package:glint_frontend/features/event/empty_event_container.dart';
 
 import '../base_view/events_list_screen.dart';
 import '../base_view/category_list_screen.dart';
@@ -70,14 +71,15 @@ class _EventBaseScreenState extends State<EventBaseScreen> {
               ),
             ),
 
-            // body
-            body: const TabBarView(
-              children: [
-                // main event screen
-                EventsListScreen(),
-                CategoryListScreen(),
-              ],
-            ),
+            body: const EmptyEventContainer(),
+            //Todo: Uncomment those When Event Feature gets tested
+            // body: const TabBarView(
+            //   children: [
+            //     // main event screen
+            //     EventsListScreen(),
+            //     CategoryListScreen(),
+            //   ],
+            // ),
           ),
         );
       },
