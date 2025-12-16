@@ -2,7 +2,7 @@ name: glint_frontend
 description: "FE works for the Glint Products"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.0.2+2
+version: 0.0.3
 
 environment:
   sdk: ^3.5.4
