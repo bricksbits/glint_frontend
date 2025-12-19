@@ -1,0 +1,3 @@
+API_BASE_URL=https://api.glintapp.io/
+STREAM_API_KEY=PROD_ABC123XYZ
+ENVIRONMENT_NAME=Production

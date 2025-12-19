@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +10,9 @@ import 'package:go_router/go_router.dart';
 import '../../exports.dart';
 
 class ProfileSubscriptionColumn extends StatelessWidget {
-  const ProfileSubscriptionColumn({super.key, required this.superLikeCounts, required this.rewindCounts, required this.superDmCounts});
+  const ProfileSubscriptionColumn(
+      {super.key, required this.superLikeCounts, required this.rewindCounts, required this.superDmCounts});
+
   final int superLikeCounts;
   final int rewindCounts;
   final int superDmCounts;
@@ -38,23 +41,27 @@ class ProfileSubscriptionColumn extends StatelessWidget {
               _buildSubscriptionCard(
                 context: context,
                 onTap: () {
-                  context.pushNamed(
-                    GlintMainRoutes.payment.name,
-                    extra: PaymentArgumentModel(
-                      membershipType: MembershipType.PLATINUM,
-                      amountOfSelectedMembership: "359",
-                      timePeriod: "30",
-                      eventId: null,
-                      matchId: null,
-                      userOne: null,
-                      userTwo: null,
-                      eventTicketPrice: null,
-                    ),
+                  showCustomSnackbar(
+                    context,
+                    message: "Subscriptions not available, please update the app for newer version.",
                   );
+                  // context.pushNamed(
+                  //   GlintMainRoutes.payment.name,
+                  //   extra: PaymentArgumentModel(
+                  //     membershipType: MembershipType.PLATINUM,
+                  //     amountOfSelectedMembership: "359",
+                  //     timePeriod: "30",
+                  //     eventId: null,
+                  //     matchId: null,
+                  //     userOne: null,
+                  //     userTwo: null,
+                  //     eventTicketPrice: null,
+                  //   ),
+                  // );
                 },
                 title: "Platinum plan",
                 logoPath:
-                    'lib/assets/icons/profile/platinum_card_glint_logo.svg',
+                'lib/assets/icons/profile/platinum_card_glint_logo.svg',
                 leftFeatures: [
                   '8 Superlikes',
                   '7 SuperDM',
@@ -78,19 +85,23 @@ class ProfileSubscriptionColumn extends StatelessWidget {
               _buildSubscriptionCard(
                 context: context,
                 onTap: () {
-                  context.pushNamed(
-                    GlintMainRoutes.payment.name,
-                    extra: PaymentArgumentModel(
-                      membershipType: MembershipType.GOLD,
-                      amountOfSelectedMembership: "359",
-                      timePeriod: "30",
-                      eventId: null,
-                      matchId: null,
-                      userOne: null,
-                      userTwo: null,
-                      eventTicketPrice: null,
-                    ),
+                  showCustomSnackbar(
+                    context,
+                    message: "Subscriptions not available, please update the app for newer version.",
                   );
+                  // context.pushNamed(
+                  //   GlintMainRoutes.payment.name,
+                  //   extra: PaymentArgumentModel(
+                  //     membershipType: MembershipType.GOLD,
+                  //     amountOfSelectedMembership: "359",
+                  //     timePeriod: "30",
+                  //     eventId: null,
+                  //     matchId: null,
+                  //     userOne: null,
+                  //     userTwo: null,
+                  //     eventTicketPrice: null,
+                  //   ),
+                  // );
                 },
                 title: "Gold plan",
                 logoPath: 'lib/assets/icons/profile/gold_card_glint_logo.svg',
@@ -139,7 +150,9 @@ class ProfileSubscriptionColumn extends StatelessWidget {
     required bool isGoldPlan,
     required VoidCallback? onTap,
   }) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
     final isSmallScreen = screenSize.width < 400;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 18.0),
@@ -185,9 +198,10 @@ class ProfileSubscriptionColumn extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: leftFeatures
                         .map(
-                          (feature) => _buildTickLabel(
+                          (feature) =>
+                          _buildTickLabel(
                               feature, isGoldPlan, isSmallScreen),
-                        )
+                    )
                         .toList(),
                   ),
                 ),
@@ -197,12 +211,13 @@ class ProfileSubscriptionColumn extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: rightFeatures
                         .map(
-                          (feature) => _buildTickLabel(
+                          (feature) =>
+                          _buildTickLabel(
                             feature,
                             isGoldPlan,
                             isSmallScreen,
                           ),
-                        )
+                    )
                         .toList(),
                   ),
                 ),

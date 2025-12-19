@@ -1,5 +1,5 @@
 class GlintApiConstants{
   static const int apiTimeOut = 5000;
   static const int apiReceiveTimeOut = 5000;
-  static const String glintBaseUrl = "https://api.glintapp.io/";
+  static const String glintBaseUrl = "https://api-staging.glintapp.io/";
 }

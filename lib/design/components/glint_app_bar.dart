@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -30,7 +31,11 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         return [
           GestureDetector(
             onTap: () async {
-              context.pushNamed(GlintProfileRoutes.paymentHistory.name);
+              showCustomSnackbar(
+                context,
+                message: "No Events, no tickets data",
+              );
+              // context.pushNamed(GlintProfileRoutes.paymentHistory.name);
             },
             child: SvgPicture.asset(
               'lib/assets/icons/rupee_icon.svg',
