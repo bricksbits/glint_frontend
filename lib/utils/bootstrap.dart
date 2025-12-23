@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/repo/background/info/user_info_repo.dart';
@@ -19,8 +22,9 @@ import 'internet/internet_status_checker_cubit.dart';
 Future<void> bootstrap(
   FutureOr<Widget> Function() builder,
 ) async {
-  flutterLogError();
   WidgetsFlutterBinding.ensureInitialized();
+  flutterLogError();
+  setupFirebaseCrashlytics();
   await configureDependencies();
   final connectivity = Connectivity();
   await Firebase.initializeApp();
@@ -48,6 +52,21 @@ Future<void> bootstrap(
       child: await builder(),
     ),
   );
+}
+
+void setupFirebaseCrashlytics() async {
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+  if (kDebugMode) {
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+    print("Crashlytics collection is disabled in Debug Mode.");
+  } else {
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    print("Crashlytics collection is enabled in Production Mode.");
+  }
 }
 
 //Todo : Add Analytics here
