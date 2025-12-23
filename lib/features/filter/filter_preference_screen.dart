@@ -38,15 +38,15 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
                   subtitle: 'Never miss a moment that matters.',
                 ),
 
-                const SliverGap(20.0),
-
-                // who you want to see banner
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: _buildWhoYouWantToSeeBanner(),
-                  ),
-                ),
+                // const SliverGap(20.0),
+                //
+                // // who you want to see banner
+                // SliverToBoxAdapter(
+                //   child: Padding(
+                //     padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                //     child: _buildWhoYouWantToSeeBanner(),
+                //   ),
+                // ),
 
                 const SliverGap(20.0),
 
@@ -213,10 +213,11 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Filter Interests',
-            style: AppTheme.simpleBodyText.copyWith(
-              fontWeight: FontWeight.w700,
+            'We are working on more advance filter, keep checking for updates',
+            style: AppTheme.lightText.copyWith(
+              fontWeight: FontWeight.w200,
             ),
+            textAlign: TextAlign.center,
           ),
           const Gap(16.0),
           const GlintInterestsSelection(

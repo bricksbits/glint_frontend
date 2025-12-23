@@ -48,7 +48,7 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
     context.showBottomSheet(
       isDismissible: true,
       (context) {
-        widget.heightProvided(66);
+        // widget.heightProvided(66);
         return HeightInputComponent(
           heightSelected: (height) {
             widget.heightProvided(height);

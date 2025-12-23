@@ -115,7 +115,7 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
                                           currentVisibleUser?.username ??
-                                              "User",
+                                              "",
                                           style: const TextStyle(
                                             fontSize: 18,
                                             color: Colors.white,

@@ -127,10 +127,10 @@ final glintMainRoutes = GoRouter(
             lazy: true,
             create: (_) => ChatScreenCubit(),
           ),
-          // BlocProvider<EventBaseCubit>(
-          //   lazy: true,
-          //   create: (_) => EventBaseCubit(),
-          // ),
+          BlocProvider<EventBaseCubit>(
+            lazy: true,
+            create: (_) => EventBaseCubit(),
+          ),
         ],
         child: const HomeScreen(),
       ),

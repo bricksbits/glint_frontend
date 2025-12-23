@@ -14,7 +14,7 @@ class EventBaseCubit extends Cubit<EventBaseState> {
   final EventRepo eventRepo = getIt.get<EventRepo>();
 
   EventBaseCubit() : super(const EventBaseState.initial()) {
-    _fetchRecentEvents();
+    // _fetchRecentEvents();
   }
 
   Future<void> _fetchRecentEvents() async {

@@ -27,8 +27,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:8.2.2' // Use your project's version
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // ADD THIS LINE
-        classpath 'com.google.gms:google-services:4.4.2'
+        classpath 'com.google.gms:google-services:4.4.4'
+        classpath 'com.google.firebase.crashlytics:com.google.firebase.crashlytics.gradle.plugin:3.0.6'
     }
 }
