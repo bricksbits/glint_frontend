@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:992882318986:android:50c75391334899d425d773",
+        "android_client_info": {
+          "package_name": "com.bricksbits.glint"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW8-tD-Wy_jdxs7QpVFZWjENNB0VY_d1g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:992882318986:android:b5842cb31a20acb625d773",
         "android_client_info": {
           "package_name": "com.bricksbits.glint_frontend"

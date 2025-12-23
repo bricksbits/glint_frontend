@@ -93,15 +93,15 @@ class _CommonBottomSheetComponentState<T extends Enum>
             const SizedBox(height: 30),
 
             // Skip Button (bottom-aligned)
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close the bottom sheet
-                },
-                child: const Text('Done', style: TextStyle(fontSize: 16)),
-              ),
-            ),
+            // Align(
+            //   alignment: Alignment.centerRight,
+            //   child: TextButton(
+            //     onPressed: () {
+            //       Navigator.pop(context); // Close the bottom sheet
+            //     },
+            //     child: const Text('Done', style: TextStyle(fontSize: 16)),
+            //   ),
+            // ),
           ],
         ),
       ),

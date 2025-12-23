@@ -122,7 +122,7 @@ class _CommonBottomSheetChipComponentState<T extends Enum>
               onPressed: () {
                 Navigator.pop(context); // Close the bottom sheet
               },
-              child: const Text('Skip >>', style: TextStyle(fontSize: 16)),
+              child: const Text('Done', style: TextStyle(fontSize: 16)),
             ),
           ),
         ],
