@@ -2,10 +2,28 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:glint_frontend/analytics/glint_analytics_events.dart';
 
 class GlintAnalyticService {
-  static final _firebaseAnalyticsInstance = FirebaseAnalytics.instance;
+  static get _firebaseAnalyticsInstance => FirebaseAnalytics.instance;
 
   static void setAnalyticsEnable() {
     _firebaseAnalyticsInstance.setAnalyticsCollectionEnabled(true);
+  }
+
+  static void logError(
+    String? recordName,
+    String? recordTime,
+    String? recordMessage,
+    String? exceptionMessage,
+    StackTrace? stackTrace,
+  ) {
+    _firebaseAnalyticsInstance.logEvent(
+      name: "flutter_error",
+      parameters: {
+        "recordTime": recordTime ?? "--",
+        "recordName": recordName ?? "--",
+        "recordMessage": recordMessage ?? "--",
+        "exception": exceptionMessage ?? "--",
+      },
+    );
   }
 
   /// FEATURE : AUTHENTICATION

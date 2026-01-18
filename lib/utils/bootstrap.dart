@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,8 +8,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/di/injection.dart';
-import 'package:glint_frontend/domain/business_logic/repo/background/info/user_info_repo.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
@@ -23,17 +22,23 @@ Future<void> bootstrap(
   FutureOr<Widget> Function() builder,
 ) async {
   WidgetsFlutterBinding.ensureInitialized();
-  flutterLogError();
-  setupFirebaseCrashlytics();
+  await Firebase.initializeApp();
+  await setupFirebaseCrashlytics();
+  GlintAnalyticService.setAnalyticsEnable();
   await configureDependencies();
   final connectivity = Connectivity();
-  await Firebase.initializeApp();
   final firebaseInstance = FirebaseMessaging.instance;
   final notificationSettings =
       await firebaseInstance.requestPermission(provisional: true);
   final userInfoRepo = getIt.get<UserInfoManagerCubit>();
 
-  setupFireBase(firebaseInstance, notificationSettings, userInfoRepo);
+  setupFirebaseNotification(
+    firebaseInstance,
+    notificationSettings,
+    userInfoRepo,
+  );
+
+  flutterLogError();
 
   runApp(
     MultiBlocProvider(
@@ -54,7 +59,7 @@ Future<void> bootstrap(
   );
 }
 
-void setupFirebaseCrashlytics() async {
+Future<void> setupFirebaseCrashlytics() async {
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
@@ -81,7 +86,7 @@ void flutterLogError() {
   });
 }
 
-void setupFireBase(
+void setupFirebaseNotification(
   FirebaseMessaging firebaseInstance,
   NotificationSettings notificationSettings,
   UserInfoManagerCubit userInfoCubit,
