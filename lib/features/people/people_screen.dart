@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:glint_frontend/analytics/glint_analytics_events.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_view.dart';
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
@@ -9,7 +11,7 @@ import 'package:glint_frontend/utils/logger.dart';
 class PeopleScreen extends StatelessWidget {
   PeopleScreen({super.key});
 
-  final CardSwiperController cardSwiperController = CardSwiperController();
+  final CardSwiperController _cardSwiperController = CardSwiperController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +52,10 @@ class PeopleScreen extends StatelessWidget {
                             case CardSwiperDirection.none:
                               return false;
                             case CardSwiperDirection.left:
+                              GlintAnalyticService.onCardActionEvent(
+                                GlintSwipeGestureAnalyticsEvents.LEFT,
+                                false,
+                              );
                               context.read<PeopleCardsBloc>().add(
                                     PeopleCardsEvent.onLeftSwiped(
                                       prevSwipedCard.userId,
@@ -57,6 +63,10 @@ class PeopleScreen extends StatelessWidget {
                                   );
                               break;
                             case CardSwiperDirection.right:
+                              GlintAnalyticService.onCardActionEvent(
+                                GlintSwipeGestureAnalyticsEvents.RIGHT,
+                                false,
+                              );
                               context.read<PeopleCardsBloc>().add(
                                     PeopleCardsEvent.onRightSwiped(
                                         prevSwipedCard.userId),
@@ -83,7 +93,7 @@ class PeopleScreen extends StatelessWidget {
 
                           return true;
                         },
-                        controller: cardSwiperController,
+                        controller: _cardSwiperController,
                         numberOfCardsDisplayed:
                             numberOfCardsToBeDisplayed(state.cardList.length),
                         onUndo:
@@ -106,23 +116,32 @@ class PeopleScreen extends StatelessWidget {
                             onLiked: (userId) {
                               debugLogger(
                                   "Manual SWIPE", "UserId : $userId to Right");
-                              cardSwiperController
+                              _cardSwiperController
                                   .swipe(CardSwiperDirection.right);
                             },
                             onDisLiked: (userId) {
                               debugLogger(
                                   "Manual SWIPE", "UserId : $userId to LEft");
-                              cardSwiperController
+                              _cardSwiperController
                                   .swipe(CardSwiperDirection.left);
                             },
-                            onDm: (userId) {},
+                            onDm: (userId) {
+                              GlintAnalyticService.onCardActionEvent(
+                                GlintSwipeGestureAnalyticsEvents.DM,
+                                false,
+                              );
+                            },
                             onSuperLiked: (userId) {
+                              GlintAnalyticService.onCardActionEvent(
+                                GlintSwipeGestureAnalyticsEvents.SUPER,
+                                false,
+                              );
                               context.read<PeopleCardsBloc>().add(
                                     PeopleCardsEvent.onSuperLiked(
                                       userId,
                                     ),
                                   );
-                              cardSwiperController
+                              _cardSwiperController
                                   .swipe(CardSwiperDirection.right);
                             },
                           );

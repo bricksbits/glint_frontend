@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/filter/filter_preferences_cubit.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +16,8 @@ class FilterPreferenceScreen extends StatefulWidget {
 
 class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
   String _selected = 'women';
+  int _distance = 0;
+  int _maxAge = 18;
 
   final List<Map<String, String>> _options = [
     {'id': 'women', 'label': 'Women'},
@@ -57,11 +60,13 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
                     child: GlintAgeDistanceCard(
                       hasBorders: true,
                       collectMaxDistance: (maxDistance) {
+                        _distance = maxDistance;
                         context
                             .read<FilterPreferencesCubit>()
                             .updateDistancePreferences(maxDistance);
                       },
                       collectMinAndMaxAgeCallback: (min, max) {
+                        _maxAge = max;
                         context
                             .read<FilterPreferencesCubit>()
                             .updateAgePreferences(min, max);
@@ -89,6 +94,11 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
                       isPrimary: true,
                       onPressed: () {
                         context.pop();
+                        GlintAnalyticService.onSearchApplyEvent(
+                          _distance.toString(),
+                          _maxAge.toString(),
+                          false,
+                        );
                         context.read<FilterPreferencesCubit>().applyChanges();
                       },
                       label: 'Apply Changes',

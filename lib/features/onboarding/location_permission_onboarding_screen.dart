@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
@@ -104,6 +105,7 @@ class _LocationPermissionOnboardingScreenState
           BlocConsumer<OnBoardingCubit, OnBoardingState>(
             listener: (context, state) {
               if (state.locationPermissionDenied == true) {
+                GlintAnalyticService.onBoardLocationPermissionEvent(false);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                       content: Text("Location permission is required")),
@@ -117,6 +119,7 @@ class _LocationPermissionOnboardingScreenState
                   const SnackBar(
                       content: Text("Get Ready for even better experience")),
                 );
+                GlintAnalyticService.onBoardLocationPermissionEvent(true);
                 final target = GlintMainRoutes.register.name;
                 context.go(
                   "/$target",

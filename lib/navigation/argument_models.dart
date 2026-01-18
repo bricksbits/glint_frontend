@@ -38,12 +38,14 @@ class ChatWithNavArguments {
   final String? eventId;
   final String? eventName;
   final String? eventStartTime;
+  final String? matchId;
 
   ChatWithNavArguments({
     required this.channelId,
     this.eventId,
     this.eventName,
     this.eventStartTime,
+    this.matchId,
   });
 }
 

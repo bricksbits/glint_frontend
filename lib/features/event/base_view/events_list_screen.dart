@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
@@ -37,6 +38,12 @@ class _EventsListScreenState extends State<EventsListScreen> {
   ];
 
   @override
+  void initState() {
+    GlintAnalyticService.onEventTabsEvent("EventScreen");
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<EventBaseCubit, EventBaseState>(
       builder: (context, state) {
@@ -65,6 +72,8 @@ class _EventsListScreenState extends State<EventsListScreen> {
                     return HotEvent(
                       eventModel: event,
                       getEventInfo: (eventId) {
+                        GlintAnalyticService.onEventCardItemInfoClickedEvent(
+                            eventId);
                         context.push(
                           "/${GlintMainRoutes.event.name}/${GlintEventRoutes.eventDetails.name}",
                           extra: int.parse(eventId),
@@ -78,6 +87,10 @@ class _EventsListScreenState extends State<EventsListScreen> {
                         context
                             .read<EventBaseCubit>()
                             .markInterestedUserIfNotAlready(eventId);
+
+                        GlintAnalyticService.onEventCardItemClickedEvent(
+                          eventId,
+                        );
 
                         context.push(
                           "/${GlintMainRoutes.event.name}/${GlintEventRoutes.peopleInterested.name}",
@@ -151,7 +164,7 @@ class _EventsListScreenState extends State<EventsListScreen> {
               setState(() {
                 _selectedChip = chipEnum;
               });
-              print(_selectedChip);
+              GlintAnalyticService.onEventFilterTabsEvent(_selectedChip.name);
             },
             child: Chip(
               shape: const StadiumBorder(

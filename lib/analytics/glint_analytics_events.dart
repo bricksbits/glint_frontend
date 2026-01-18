@@ -47,6 +47,7 @@ class GlintAnalyticsEvents {
   static String ON_EVENT_IMAGES_SCROLLED = "event_images_scrolled";
   static String ON_EVENT_TO_INSTA = "event_to_instagram";
   static String ON_EVENT_TO_WEBSITE = "event_to_website";
+  static String ON_EVENT_TICKET_HISTORY = "event_tickets_history_clicked";
   static String ON_EVENT_NAV = "event_nav";
 
   // Chat

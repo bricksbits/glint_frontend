@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -35,6 +36,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
                 context,
                 message: "No Events, no tickets data",
               );
+              GlintAnalyticService.onTicketHistoryEvent();
               // context.pushNamed(GlintProfileRoutes.paymentHistory.name);
             },
             child: SvgPicture.asset(
@@ -44,6 +46,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Gap(20.0),
           GestureDetector(
             onTap: () async {
+              GlintAnalyticService.onProfileSettingsEvent();
               context.pushNamed(GlintMainRoutes.settings.name);
             },
             child: SvgPicture.asset(
@@ -56,6 +59,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         return [
           GestureDetector(
             onTap: () async {
+              GlintAnalyticService.onEventsTicketHistoryClickedEvent();
               context.pushNamed(GlintEventRoutes.tickets.name);
             },
             child: SvgPicture.asset(
@@ -65,6 +69,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Gap(20.0),
           GestureDetector(
             onTap: () {
+              GlintAnalyticService.onSearchScreenEvent(false);
               context.pushNamed(GlintMainRoutes.filter.name);
             },
             child: SvgPicture.asset(
@@ -78,6 +83,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           GestureDetector(
             onTap: () {
               // Replace with rollback functionality
+              GlintAnalyticService.onRewindEvent(false);
             },
             child: SvgPicture.asset(
               'lib/assets/icons/glint_rollback.svg',
@@ -86,6 +92,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Gap(18.0),
           GestureDetector(
             onTap: () {
+              GlintAnalyticService.onLikeScreenEvent(false);
               context.pushNamed(GlintMainRoutes.likes.name);
             },
             child: SvgPicture.asset(
@@ -95,6 +102,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Gap(18.0),
           GestureDetector(
             onTap: () {
+              GlintAnalyticService.onNotificationScreenEvent(false);
               context.pushNamed(GlintMainRoutes.notifications.name);
             },
             child: SvgPicture.asset(
@@ -104,6 +112,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Gap(18.0),
           GestureDetector(
             onTap: () {
+              GlintAnalyticService.onSearchScreenEvent(false);
               context.pushNamed(GlintMainRoutes.filter.name);
             },
             child: SvgPicture.asset(
@@ -116,6 +125,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         return [
           GestureDetector(
             onTap: () {
+              GlintAnalyticService.onRewindEvent(false);
               // Replace with rollback functionality
             },
             child: SvgPicture.asset(
@@ -125,6 +135,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Gap(18.0),
           GestureDetector(
             onTap: () {
+              GlintAnalyticService.onSearchScreenEvent(false);
               context.pushNamed(GlintMainRoutes.filter.name);
             },
             child: SvgPicture.asset(

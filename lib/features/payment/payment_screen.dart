@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
@@ -49,6 +50,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         state.when(initiate: (orderId, amount, name, desc, razorPayModel,
             paymentModel, loading, isMembership, error) {
           if (razorPayModel != null) {
+            GlintAnalyticService.onPaymentProceedEvent();
             print("Success Order Placed, opening razorpay");
             _razorpay.open(razorPayModel.toJson());
           }

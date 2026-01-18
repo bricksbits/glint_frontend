@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/auth/blocs/reset_password/reset_password_bloc.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -65,6 +66,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
             if (!context.mounted) return;
 
+            GlintAnalyticService.emailIdProvidedForForgotPasswordEvent();
             context.pushNamed(
               GlintAuthRoutes.otp.name,
               pathParameters: {'email': email},
