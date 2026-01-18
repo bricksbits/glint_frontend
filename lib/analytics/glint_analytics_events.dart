@@ -10,6 +10,7 @@ class GlintAnalyticsEvents {
 
 
   // OnBoarding
+  static String ON_BOARDING_STARTED = "boarding_started";
   static String ON_BOARDING_IMAGES_PROVIDED = "boarding_images";
   static String ON_BOARDING_BIO = "boarding_bio";
   static String ON_BOARDING_RESET = "boarding_reset";

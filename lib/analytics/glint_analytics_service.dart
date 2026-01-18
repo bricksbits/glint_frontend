@@ -49,6 +49,13 @@ class GlintAnalyticService {
   }
 
   /// Feature : ONBOARDING
+
+  static void onBoardStartedEvent() {
+    _firebaseAnalyticsInstance.logEvent(
+      name: GlintAnalyticsEvents.ON_BOARDING_STARTED,
+    );
+  }
+
   static void onBoardImageProvidedEvent() {
     _firebaseAnalyticsInstance.logEvent(
       name: GlintAnalyticsEvents.ON_BOARDING_IMAGES_PROVIDED,
