@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/utils/internet/handling_url_launches_util.dart';
@@ -117,26 +118,27 @@ class _AuthButtons extends StatelessWidget {
               customBorderRadius: 30.0,
               customTextStyle: AppTheme.simpleBodyText,
               onPressed: () {
+                GlintAnalyticService.onBoardStartedEvent();
                 context.push("/${GlintBoardingRoutes.boarding.name}");
               },
             ),
           ),
-          const Gap(12.0),
-          SizedBox(
-            width: double.infinity,
-            child: GlintElevatedButton(
-              label: 'Create Admin Account',
-              backgroundColor: AppColours.white,
-              customBorderRadius: 30.0,
-              customTextStyle: AppTheme.simpleBodyText,
-              onPressed: () {
-                context.push(
-                  "/${GlintMainRoutes.register.name}",
-                  extra: true,
-                );
-              },
-            ),
-          ),
+          // const Gap(12.0),
+          // SizedBox(
+          //   width: double.infinity,
+          //   child: GlintElevatedButton(
+          //     label: 'Create Admin Account',
+          //     backgroundColor: AppColours.white,
+          //     customBorderRadius: 30.0,
+          //     customTextStyle: AppTheme.simpleBodyText,
+          //     onPressed: () {
+          //       context.push(
+          //         "/${GlintMainRoutes.register.name}",
+          //         extra: true,
+          //       );
+          //     },
+          //   ),
+          // ),
           const Gap(12.0),
           // Login elevated button
           GlintCustomBorderedElevatedButton(

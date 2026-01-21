@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
 import 'package:glint_frontend/design/components/exports.dart';
 import 'package:glint_frontend/utils/internet/handling_url_launches_util.dart';
@@ -39,10 +40,9 @@ class EmptyEventContainer extends StatelessWidget {
           ),
           GlintElevatedButton(
             label: "Follow Updates on our Inst",
-            customTextStyle: AppTheme.simpleText.copyWith(
-              color: Colors.white
-            ),
+            customTextStyle: AppTheme.simpleText.copyWith(color: Colors.white),
             onPressed: () {
+              GlintAnalyticService.onNoEventsInstaLinksClickedEvent();
               HandlingUrlLaunchesUtil.openInstagramProfile(context, "glintapp");
             },
           ),
@@ -51,10 +51,9 @@ class EmptyEventContainer extends StatelessWidget {
           ),
           GlintElevatedButton(
             label: "Write to us or for Business",
-            customTextStyle: AppTheme.simpleText.copyWith(
-                color: Colors.white
-            ),
+            customTextStyle: AppTheme.simpleText.copyWith(color: Colors.white),
             onPressed: () {
+              GlintAnalyticService.onNoEventsWebsiteLinksClickedEvent();
               HandlingUrlLaunchesUtil.openUrl(
                   context, "http://glintapp.io/#subscription");
             },

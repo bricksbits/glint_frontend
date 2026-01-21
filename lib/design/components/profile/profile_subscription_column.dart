@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -41,6 +42,7 @@ class ProfileSubscriptionColumn extends StatelessWidget {
               _buildSubscriptionCard(
                 context: context,
                 onTap: () {
+                  GlintAnalyticService.onSubscriptionProfileEvent("Platinum");
                   showCustomSnackbar(
                     context,
                     message: "Subscriptions not available, please update the app for newer version.",
@@ -85,6 +87,7 @@ class ProfileSubscriptionColumn extends StatelessWidget {
               _buildSubscriptionCard(
                 context: context,
                 onTap: () {
+                  GlintAnalyticService.onSubscriptionProfileEvent("Platinum");
                   showCustomSnackbar(
                     context,
                     message: "Subscriptions not available, please update the app for newer version.",

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/di/injection.dart';
@@ -39,6 +40,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   /// And will decide which screen to display
   void getCurrentBoardingStatus(OnBoardingCompletedTill currentStatus) {
     debugLogger("Boarding State", currentStatus.name);
+    GlintAnalyticService.onBoardNavigatedDirectlyEvent(currentStatus.name);
     switch (currentStatus) {
       case OnBoardingCompletedTill.NOT_STARTED:
         emitNewState(state.copyWith(

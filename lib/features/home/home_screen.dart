@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:glint_frontend/analytics/glint_analytics_events.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/di/injection.dart';
@@ -52,7 +54,35 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   ];
 
   void _onNavItemTap(int index) {
-    setState(() => _selectedIndex = index);
+    setState(() {
+      _selectedIndex = index;
+      switch (index) {
+        case 0:
+          {
+            GlintAnalyticService.onNavItemClickedEvent(
+                GlintNavItemAnalyticsEvents.PROFILE);
+            break;
+          }
+        case 1:
+          {
+            GlintAnalyticService.onNavItemClickedEvent(
+                GlintNavItemAnalyticsEvents.EVENT);
+            break;
+          }
+        case 2:
+          {
+            GlintAnalyticService.onNavItemClickedEvent(
+                GlintNavItemAnalyticsEvents.HOME);
+            break;
+          }
+        case 3:
+          {
+            GlintAnalyticService.onNavItemClickedEvent(
+                GlintNavItemAnalyticsEvents.CHAT);
+            break;
+          }
+      }
+    });
   }
 
   Widget _buildNavItem(int index) {

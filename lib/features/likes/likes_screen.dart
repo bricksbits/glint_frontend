@@ -194,6 +194,7 @@ class LikesScreen extends StatelessWidget {
                 imageUrl: likedProfile.pictureUrlList.first,
                 name: likedProfile.username,
                 age: int.parse(likedProfile.age),
+                userId: likedProfile.userId,
               );
             },
           ),

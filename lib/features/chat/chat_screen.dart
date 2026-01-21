@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
 import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
@@ -52,6 +53,7 @@ class _ChatScreenState extends State<ChatScreen> {
               const Gap(18.0),
               GestureDetector(
                 onTap: () {
+                  GlintAnalyticService.onUploadStoriesEvent();
                   context.pushNamed(GlintChatRoutes.uploadStory.name);
                 },
                 child: SvgPicture.asset(
@@ -73,8 +75,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     )
                   : RefreshIndicator(
-                      onRefresh: () async =>
-                          state.channelListController?.refresh(),
+                      onRefresh: () async {
+                        GlintAnalyticService.onRefreshHitEvent();
+                        return state.channelListController?.refresh();
+                      },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,10 +88,12 @@ class _ChatScreenState extends State<ChatScreen> {
                             context.pushNamed(
                               GlintChatRoutes.chatWith.name,
                               extra: ChatWithNavArguments(
-                                  channelId: match.chatChannelId,
-                                  eventId: match.eventId,
-                                  eventName: match.eventName,
-                                  eventStartTime: match.eventStartTime),
+                                channelId: match.chatChannelId,
+                                eventId: match.eventId,
+                                eventName: match.eventName,
+                                eventStartTime: match.eventStartTime,
+                                matchId: match.matchId
+                              ),
                             );
                           },
                               noRecentMatches:

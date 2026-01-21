@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -117,6 +118,7 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
                     ? null
                     : () {
                         final otp = _codeController.text;
+                        GlintAnalyticService.otpProvidedForForgotPasswordEvent();
                         context.pushNamed(
                           GlintAuthRoutes.recreatePassword.name,
                           extra: {

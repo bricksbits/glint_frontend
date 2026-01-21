@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/application_logic/logout_usecase.dart';
@@ -96,6 +97,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                     ),
                   ),
                   onPressed: () {
+                    GlintAnalyticService.onSettingLogoutEvent();
                     showAccountLifecycleDialog(
                       context,
                       icon: Icons.power_settings_new_outlined,
@@ -132,6 +134,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                     ),
                   ),
                   onPressed: () {
+                    GlintAnalyticService.onSettingLogoutEvent();
                     showAccountLifecycleDialog(
                       context,
                       icon: Icons.delete_outline_rounded,
@@ -237,6 +240,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                   ),
                   onPressed: () {
                     // TODO - Action for changing location.
+                    GlintAnalyticService.onSettingLocationNameProvidedEvent();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -277,7 +281,10 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
               style: AppTheme.simpleBodyText,
             ),
             trailing: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                //Todo; Open Website with Contact as Route
+                GlintAnalyticService.onSettingContactUsEvent();
+              },
               icon: const Icon(
                 Icons.arrow_forward_rounded,
               ),
@@ -304,7 +311,8 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
               color: AppColours.black,
             ),
             onTap: () {
-              // TODO - Open FAQs page
+              //Todo; Open Website with FAQ as Route
+              GlintAnalyticService.onSettingFaqEvent();
             },
           ),
         ],
@@ -352,6 +360,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                   activeColor: AppColours.primaryBlue,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   onChanged: (value) {
+                    GlintAnalyticService.onNotificationSettingsUpdateEvent();
                     setState(() {
                       _isNotificationsEnabled = value;
                       debugPrint('Notifications master toggle: $value');

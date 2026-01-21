@@ -72,7 +72,9 @@ class _EventBaseScreenState extends State<EventBaseScreen> {
             ),
 
             body: const EmptyEventContainer(),
-            //Todo: Uncomment those When Event Feature gets tested
+            //Todo: Uncomment those When Event Feature gets tested and
+            // Add the Empty Event List screen state
+
             // body: const TabBarView(
             //   children: [
             //     // main event screen

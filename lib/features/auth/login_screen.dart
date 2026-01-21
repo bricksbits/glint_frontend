@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/features/auth/blocs/login/login_bloc.dart';
@@ -45,14 +46,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   switch (type) {
                     case UsersType.USER:
                       myContext.go("/${GlintMainRoutes.home.name}");
+                      GlintAnalyticService.loggingEvent("USER");
                       break;
                     case UsersType.ADMIN:
                       myContext
                           .go("/${GlintAdminDasboardRoutes.adminHome.name}");
+                      GlintAnalyticService.loggingEvent("ADMIN");
                       break;
                     case UsersType.SUPER_ADMIN:
                       myContext.go(
                           "/${GlintAdminDasboardRoutes.superAdminHome.name}");
+                      GlintAnalyticService.loggingEvent("SUPER-ADMIN");
                       break;
                   }
                 }
@@ -209,6 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
       onTap: () {
         const targetScreen = GlintAuthRoutes.resetPassword;
         context.pushNamed(targetScreen.name);
+        GlintAnalyticService.forgotPasswordEvent();
       },
       child: Align(
         alignment: widget.isAdmin ? Alignment.center : Alignment.centerRight,
@@ -253,7 +258,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                final targetScreen = widget.isAdmin ? GlintMainRoutes.register : GlintMainRoutes.onBoarding;
+                final targetScreen = widget.isAdmin
+                    ? GlintMainRoutes.register
+                    : GlintMainRoutes.onBoarding;
                 context.pushNamed(targetScreen.name, extra: widget.isAdmin);
               },
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/components/chat/chat_circular_icon_button.dart';
 import 'package:glint_frontend/design/components/chat/empty_chat_state_view.dart';
 import 'package:glint_frontend/design/components/chat/get_ticket_gradient_view.dart';
@@ -61,10 +62,17 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                   leading: Padding(
                     padding: const EdgeInsets.only(
                         left: 8.0, top: 4, bottom: 4, right: 4),
-                    child: CircleAvatar(
-                      radius: 18,
-                      backgroundImage: NetworkImage(
-                        oppositeUserImage,
+                    child: GestureDetector(
+                      onTap: () {
+                        GlintAnalyticService.onUserThumbnailClickedEvent(
+                          widget.chatWithNavArguments.matchId ?? "--",
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 18,
+                        backgroundImage: NetworkImage(
+                          oppositeUserImage,
+                        ),
                       ),
                     ),
                   ),
@@ -85,13 +93,18 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                     IconButton(
                       icon: const Icon(Icons.video_call),
                       onPressed: () {
-                        // Handle call action
+                        GlintAnalyticService.onVideoCallClickedEvent(
+                          widget.chatWithNavArguments.channelId,
+                        );
                       },
                     ),
                     IconButton(
                       icon: const Icon(Icons.more_vert),
                       onPressed: () {
-                        // Handle more options
+                        GlintAnalyticService.onSettingIconMenuClickedEvent(
+                            widget.chatWithNavArguments.channelId,
+                            "--",
+                            widget.chatWithNavArguments.matchId ?? "--");
                       },
                     ),
                   ],
@@ -351,6 +364,7 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                             radius: 16,
                             padding: const EdgeInsets.all(8),
                             onPressed: () async {
+                              GlintAnalyticService.onMediaSelectedEvent();
                               final attachmentHandler =
                                   StreamAttachmentHandler.instance;
                               final result = await attachmentHandler.pickImage(

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -124,6 +125,7 @@ class ProfileInfoColumn extends StatelessWidget {
         context.pushNamed(
           GlintProfileRoutes.editProfile.name,
         );
+        GlintAnalyticService.onEditProfileEvent();
       },
       child: Container(
         padding: const EdgeInsets.symmetric(

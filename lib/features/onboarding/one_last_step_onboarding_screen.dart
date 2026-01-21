@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -141,6 +142,7 @@ class _OneLastStepOnboardingScreenState
                             if (context
                                 .read<OnBoardingCubit>()
                                 .validatePersonalInformation()) {
+                              GlintAnalyticService.onBoardCompletedBioEvent();
                               final target = GlintBoardingRoutes.location.name;
                               context.push("/$target");
                             }

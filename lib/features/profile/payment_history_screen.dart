@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/profile/bloc/history/payment_history_cubit.dart';
 
@@ -40,6 +41,8 @@ class PaymentHistoryScreen extends StatelessWidget {
                                   // live event chip
                                   ChoiceChip(
                                     onSelected: (bool? value) {
+                                      GlintAnalyticService
+                                          .onPaymentHistoryTabEvent("all");
                                       context
                                           .read<PaymentHistoryCubit>()
                                           .selectAll();
@@ -64,6 +67,8 @@ class PaymentHistoryScreen extends StatelessWidget {
                                   const Gap(12.0),
                                   ChoiceChip(
                                     onSelected: (bool? value) {
+                                      GlintAnalyticService
+                                          .onPaymentHistoryTabEvent("events");
                                       context
                                           .read<PaymentHistoryCubit>()
                                           .selectEvent();
@@ -93,6 +98,9 @@ class PaymentHistoryScreen extends StatelessWidget {
                                   const Gap(12.0),
                                   ChoiceChip(
                                     onSelected: (bool? value) {
+                                      GlintAnalyticService
+                                          .onPaymentHistoryTabEvent(
+                                              "membership");
                                       context
                                           .read<PaymentHistoryCubit>()
                                           .selectMembership();
