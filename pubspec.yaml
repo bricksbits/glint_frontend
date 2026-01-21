@@ -76,7 +76,7 @@ flutter:
   generate: true
   assets:
     - .env.staging
-    - .env.prod.dart
+    - .env.prod
     - lib/assets/images/
     - lib/assets/images/chat/
     - lib/assets/icons/

@@ -30,3 +30,8 @@ Alternatively, run them from terminal with `./scripts/<script>.sh`.
 1. Make all scripts executable:
    ```zsh
    chmod +x scripts/*.sh
+
+
+## Android Builds commands 
+For Prod: ./scripts/android_bundle.sh prod
+For Staging: ./scripts/android_bundle.sh staging
