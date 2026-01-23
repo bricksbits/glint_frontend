@@ -32,6 +32,7 @@ class LikesScreen extends StatelessWidget {
                   child: _buildLikeScreenBanner(state.profileViewCount),
                 )),
 
+                //Todo: Remove the first method here.
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {

@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:glint_frontend/data/local/db/dao/event_like_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/user_event_like_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/data/remote/model/response/admin/get_interested_users_response.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_all_events_response.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_event_details_response.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_user_interested_for_event_response.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_detail_domain.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
@@ -43,8 +47,16 @@ class EventRepoImpl extends EventRepo {
 
     switch (response) {
       case Success():
-        var people = GetUserInterestedForEventResponse.fromJson(response.data);
-        return Success(people.mapToPeopleCard());
+        var people = UniversalSuccessResponseBody<
+            GetUserInterestedForEventResponse>.fromJson(
+          response.data,
+          (json) => GetUserInterestedForEventResponse.fromJson(json),
+        );
+        if (people.success && people.data != null) {
+          return Success(people.data!.mapToPeopleCard());
+        } else {
+          return Failure(Exception(people.message));
+        }
       case Failure():
         return Failure(Exception(response.error));
     }
@@ -62,8 +74,20 @@ class EventRepoImpl extends EventRepo {
 
     switch (response) {
       case Success():
-        final events = GetAllEventsResponse.fromJson(response.data);
-        return Success(events.mapToDomain());
+        final events =
+            UniversalSuccessResponseBody<GetAllEventsResponse>.fromJson(
+          response.data,
+          (json) => GetAllEventsResponse.fromJson(json),
+        );
+        if (events.success && events.data != null) {
+          return Success(
+            events.data!.mapToDomain(),
+          );
+        } else {
+          return Failure(
+            Exception(events.message),
+          );
+        }
       case Failure():
         return Failure(Exception(response.error));
     }
@@ -83,8 +107,16 @@ class EventRepoImpl extends EventRepo {
 
     switch (response) {
       case Success():
-        final details = GetEventDetailsResponse.fromJson(response.data);
-        return Success(details.mapToDomain());
+        final details =
+            UniversalSuccessResponseBody<GetEventDetailsResponse>.fromJson(
+          response.data,
+          (json) => GetEventDetailsResponse.fromJson(json),
+        );
+        if (details.success && details.data != null) {
+          return Success(details.data!.mapToDomain());
+        } else {
+          return Failure(Exception(details.message));
+        }
       case Failure():
         return Failure(Exception(response.error));
     }
@@ -118,7 +150,7 @@ class EventRepoImpl extends EventRepo {
               eventId: eventId.toString(),
             ),
           );
-          return Success(response.data);
+          return Success("Liked Event");
         case Failure():
           debugLogger(
             "[MarkUserInterested]",

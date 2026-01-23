@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/local/db/dao/membership_dao.dart';
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
@@ -8,6 +10,7 @@ import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/story_upload_response.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/profile/profile_repo.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
@@ -91,15 +94,24 @@ class ProfileRepoImpl extends ProfileRepo {
 
     switch (response) {
       case Success():
-        final storiesResponse = StoryUploadResponse.fromJson(response.data);
-        if (storiesResponse.filesUploaded?.isNotEmpty == true) {
-          return const Success(true);
+        final storiesResponse =
+            UniversalSuccessResponseBody<StoryUploadResponse>.fromJson(
+          response.data,
+          (json) => StoryUploadResponse.fromJson(json),
+        );
+        if (storiesResponse.data != null && storiesResponse.success) {
+          if (storiesResponse.data!.filesUploaded?.isNotEmpty == true) {
+            return const Success(true);
+          } else {
+            return Failure(
+              Exception(
+                  "Files ${storiesResponse.data!.filesNotUploaded} failed to upload"),
+            );
+          }
         } else {
-          return Failure(
-            Exception(
-                "Files ${storiesResponse.filesNotUploaded} failed to upload"),
-          );
+          return Failure(Exception(storiesResponse.message));
         }
+
       case Failure():
         return Failure(
           Exception("Not able to upload files currently, please try again."),
@@ -122,7 +134,8 @@ class ProfileRepoImpl extends ProfileRepo {
 
   @override
   Future<Result<void>> updateProfile() async {
-    final getUserId = await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
+    final getUserId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
     final getUpdatedProfile = await profileDao.getProfileData(getUserId);
     if (getUpdatedProfile == null) {
       return Failure(Exception("Local user profile not available"));
@@ -132,7 +145,8 @@ class ProfileRepoImpl extends ProfileRepo {
         httpClient: httpClient,
         requestType: HttpRequestEnum.PUT,
         endpoint: "user/profile",
-        requestBody: getUpdatedProfile.mapToUpdateProfileRequestModel().toJson());
+        requestBody:
+            getUpdatedProfile.mapToUpdateProfileRequestModel().toJson());
 
     switch (updateProfileResponse) {
       case Success():

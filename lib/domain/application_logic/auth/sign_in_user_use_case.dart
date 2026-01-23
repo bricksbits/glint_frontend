@@ -24,7 +24,7 @@ class SignInUserUseCase extends UseCase<Result<UsersType>, LoginRequestBody> {
       authenticationRepo.login(params!).then((loginResponse) {
         switch (loginResponse) {
           case Success<LoginResponse>(data: _):
-            var typeFound = loginResponse.data.profile?.userRole ?? "user";
+            var typeFound = loginResponse.data.data?.userRole ?? "user";
             late final UsersType userType;
             switch (typeFound) {
               case 'user':

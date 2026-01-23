@@ -34,6 +34,7 @@ class EventBookingRepoImpl extends EventBookingRepo {
     }
   }
 
+  //Todo: Add the required parsing here, And use the Usecase
   @override
   Future<Result<List<EventTicketHistoryDomainModel>>>
       getEventTicketHistory() async {

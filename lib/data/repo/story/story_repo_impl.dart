@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -5,6 +6,7 @@ import 'package:glint_frontend/data/local/persist/async_encrypted_shared_prefere
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/story_upload_response.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/story/story_repo.dart';
 import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
@@ -35,14 +37,24 @@ class StoryRepoImpl extends StoryRepo {
 
     switch (response) {
       case Success():
-        final storiesResponse = StoryUploadResponse.fromJson(response.data);
-        if (storiesResponse.filesUploaded?.isNotEmpty == true) {
-          return const Success(true);
+        final storiesResponse =
+            UniversalSuccessResponseBody<StoryUploadResponse>.fromJson(
+          response.data,
+          (json) => StoryUploadResponse.fromJson(json),
+        );
+        if (storiesResponse.success && storiesResponse.data != null) {
+          if (storiesResponse.data!.filesUploaded?.isNotEmpty == true) {
+            return const Success(true);
+          } else {
+            return Failure(
+              Exception(
+                  "Story ${newlyUploadedStoryFile.path} failed to upload"),
+            );
+          }
         } else {
-          return Failure(
-            Exception("Story ${newlyUploadedStoryFile.path} failed to upload"),
-          );
+          return Failure(Exception(storiesResponse.message));
         }
+
       case Failure():
         return Failure(
           Exception("Not able to upload stories currently, please try again."),
@@ -69,13 +81,21 @@ class StoryRepoImpl extends StoryRepo {
 
     switch (response) {
       case Success():
-        final storiesResponse = StoryUploadResponse.fromJson(response.data);
-        if (storiesResponse.filesUploaded?.isNotEmpty == true) {
-          return const Success(true);
+        final storiesResponse =
+            UniversalSuccessResponseBody<StoryUploadResponse>.fromJson(
+          response.data,
+          (json) => StoryUploadResponse.fromJson(json),
+        );
+        if (storiesResponse.data != null && storiesResponse.success) {
+          if (storiesResponse.data!.filesUploaded?.isNotEmpty == true) {
+            return const Success(true);
+          } else {
+            return Failure(
+              Exception("Story ${selectedStory.path} failed to delete"),
+            );
+          }
         } else {
-          return Failure(
-            Exception("Story ${selectedStory.path} failed to delete"),
-          );
+          return Failure(Exception(storiesResponse.message));
         }
       case Failure():
         return Failure(
@@ -84,6 +104,7 @@ class StoryRepoImpl extends StoryRepo {
     }
   }
 
+  @Deprecated("Users stories are being covered with others stories,")
   @override
   Future<Result<ViewStoryModel>> getMyStories() async {
     await Future.delayed(const Duration(milliseconds: 800));

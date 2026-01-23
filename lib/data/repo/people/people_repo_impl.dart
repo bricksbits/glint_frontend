@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/profile_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
@@ -7,6 +9,7 @@ import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/ads/advertiisment_response.dart';
 import 'package:glint_frontend/data/remote/model/response/mapper/people_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/people/get_people_response.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/ads/ads_list_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/swipe_gestures_type.dart';
@@ -39,14 +42,22 @@ class PeopleRepoImpl extends PeopleRepo {
 
     switch (response) {
       case Success():
-        final adsResponse = AdvertiismentResponse.fromJson(response.data);
-        if (adsResponse.ads != null) {
-          final adsList = adsResponse.ads
-              ?.map((element) => AdsListDomainModel(element))
-              .toList();
-          return Success(adsList ?? []);
+        final adsResponse =
+            UniversalSuccessResponseBody<AdvertiismentResponse>.fromJson(
+          response.data,
+          (json) => AdvertiismentResponse.fromJson(json),
+        );
+        if (adsResponse.success && adsResponse.data != null) {
+          if (adsResponse.data!.ads != null) {
+            final adsList = adsResponse.data!.ads
+                ?.map((element) => AdsListDomainModel(element))
+                .toList();
+            return Success(adsList ?? []);
+          }
+          return const Success([]);
+        } else {
+          return Failure(Exception(adsResponse.message));
         }
-        return const Success([]);
       case Failure():
         return Failure(Exception("Ads List failed : ${response.error}"));
     }
@@ -111,15 +122,24 @@ class PeopleRepoImpl extends PeopleRepo {
 
     switch (response) {
       case Success():
-        final peopleResponse = GetPeopleResponse.fromJson(response.data);
-        if (peopleResponse.profiles != null) {
-          final peopleList = peopleResponse.mapToProfileEntity();
-          if (peopleList != null && peopleList.isNotEmpty) {
-            profileDao.insertFetchedProfiles(peopleList);
-            return const Success([]);
+        final peopleResponse =
+            UniversalSuccessResponseBody<GetPeopleResponse>.fromJson(
+          response.data,
+          (json) => GetPeopleResponse.fromJson(json),
+        );
+        if (peopleResponse.success && peopleResponse.data != null) {
+          if (peopleResponse.data!.profiles != null) {
+            final peopleList = peopleResponse.data!.mapToProfileEntity();
+            if (peopleList != null && peopleList.isNotEmpty) {
+              profileDao.insertFetchedProfiles(peopleList);
+              return const Success([]);
+            }
           }
+          return const Success([]);
+        } else {
+          return Failure(Exception(peopleResponse.message));
         }
-        return const Success([]);
+
       case Failure():
         return Failure(
             Exception("No more profiles available : ${response.error}"));

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:glint_frontend/data/remote/model/response/error/universal_error_response_body.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_error_response_body.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 /// A Network Response Handler Class
