@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/payment/book_event_request_body.dart';
@@ -7,6 +9,7 @@ import 'package:glint_frontend/data/remote/model/response/payment/book_event_res
     as bookEventResponse;
 import 'package:glint_frontend/data/remote/model/response/payment/buy_membership_response.dart';
 import 'package:glint_frontend/data/remote/model/response/payment/payment_history_response.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/payment/payment_repo.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
@@ -39,11 +42,18 @@ class PaymentRepoImpl extends PaymentRepo {
 
     switch (response) {
       case Success():
-        final successResponse =
-            bookEventResponse.BookEventResponse.fromJson(response.data);
-        return Success(successResponse);
+        final successResponse = UniversalSuccessResponseBody<
+            bookEventResponse.BookEventResponse>.fromJson(
+          response.data,
+          (json) => bookEventResponse.BookEventResponse.fromJson(response.data),
+        );
+        if (successResponse.success && successResponse.data != null) {
+          return Success(successResponse.data!);
+        } else {
+          return Failure(Exception(successResponse.message));
+        }
       case Failure():
-        return Failure(Exception("Can't Book the ticket, please try again"));
+        return Failure(response.error);
     }
   }
 
@@ -66,8 +76,16 @@ class PaymentRepoImpl extends PaymentRepo {
 
     switch (response) {
       case Success():
-        final successResponse = BuyMembershipResponse.fromJson(response.data);
-        return Success(successResponse);
+        final successResponse =
+            UniversalSuccessResponseBody<BuyMembershipResponse>.fromJson(
+          response.data,
+          (json) => BuyMembershipResponse.fromJson(json),
+        );
+        if (successResponse.success && successResponse.data != null) {
+          return Success(successResponse.data!);
+        } else {
+          return Failure(Exception(successResponse.message));
+        }
       case Failure():
         return Failure(Exception("Can't get the Membership, please try again"));
     }
@@ -79,6 +97,8 @@ class PaymentRepoImpl extends PaymentRepo {
     throw UnimplementedError();
   }
 
+  @Deprecated(
+      "Instead of this Razorpay Webhooks are used, automatic verification")
   @override
   Future<Result<void>> verifyPayment(
     int orderId,
@@ -126,17 +146,25 @@ class PaymentRepoImpl extends PaymentRepo {
     switch (historyResponse) {
       case Success():
         var historyModel =
-            PaymentHistoryResponse.fromJson(historyResponse.data);
-        if (historyModel.paymentHistory != null) {
-          final eventHistory =
-              historyModel.paymentHistory?.eventPaymentHistory ?? [];
-          final membershipHistory =
-              historyModel.paymentHistory?.membershipPaymentHistory ?? [];
-          return Success((eventHistory, membershipHistory));
+            UniversalSuccessResponseBody<PaymentHistoryResponse>.fromJson(
+          historyResponse.data,
+          (json) => PaymentHistoryResponse.fromJson(json),
+        );
+        if (historyModel.success && historyModel.data != null) {
+          if (historyModel.data!.paymentHistory != null) {
+            final eventHistory =
+                historyModel.data!.paymentHistory?.eventPaymentHistory ?? [];
+            final membershipHistory =
+                historyModel.data!.paymentHistory?.membershipPaymentHistory ??
+                    [];
+            return Success((eventHistory, membershipHistory));
+          } else {
+            return Failure(
+              Exception("Can't fetch history at the moment,"),
+            );
+          }
         } else {
-          return Failure(
-            Exception("Can't fetch history at the moment,"),
-          );
+          return Failure(Exception(historyModel.message));
         }
       case Failure():
         return Failure(

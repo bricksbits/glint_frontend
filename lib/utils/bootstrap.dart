@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
+import 'package:glint_frontend/utils/app_config.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 import 'package:logging/logging.dart';
@@ -22,6 +23,7 @@ Future<void> bootstrap(
   FutureOr<Widget> Function() builder,
 ) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AppConfig.initialize();
   await Firebase.initializeApp();
   await setupFirebaseCrashlytics();
   GlintAnalyticService.setAnalyticsEnable();

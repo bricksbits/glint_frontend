@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:glint_frontend/data/remote/model/response/auth/login_response.dart';
+import 'package:glint_frontend/data/remote/model/response/event/get_user_interested_for_event_response.dart';
 import 'package:glint_frontend/domain/business_logic/repo/event/events_repo.dart';
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
-class FetchEventInterestedProfilesUseCase extends UseCase<List<Profile>, int> {
+class FetchEventInterestedProfilesUseCase extends UseCase<List<Profiles>, int> {
   final EventRepo eventRepo;
 
   FetchEventInterestedProfilesUseCase(this.eventRepo);
@@ -15,8 +16,8 @@ class FetchEventInterestedProfilesUseCase extends UseCase<List<Profile>, int> {
   /// Currently you are trying to Return `List<Profile>` but your repo
   /// Method is returning Void
   @override
-  Future<Stream<List<Profile>?>> buildUseCaseStream(int? params) async {
-    final StreamController<List<Profile>> controller = StreamController();
+  Future<Stream<List<Profiles>?>> buildUseCaseStream(int? params) async {
+    final StreamController<List<Profiles>> controller = StreamController();
     try {
       final eventInterestedProfilesResponse =
           await eventRepo.fetchInterestedProfiles(params);

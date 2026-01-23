@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 ///  Checks if the Access Token is Valid or not.
 ///  IF Not valid, we make another API call to update the Auth Token.
 ///  By using the Refresh Token
-class AuthInterceptor extends Interceptor {
+class AuthInterceptor extends QueuedInterceptorsWrapper {
   final Dio authClient;
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
 
@@ -31,15 +31,20 @@ class AuthInterceptor extends Interceptor {
   /// Handle the Navigation effectively
   /// Remove Constants.
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    const retriedKey = "retried";
+    if (err.response?.statusCode == 401) {
+      // Preventing looping for 401 queued error
+      if (err.requestOptions.extra[retriedKey] == true) {
+        return handler.next(err);
+      }
+
       final refreshToken = await sharedPreferenceHelper
           .getString(SharedPreferenceKeys.refreshTokenKey);
 
       if (refreshToken.isEmpty) {
-        GoRouter.of(rootNavigatorKey.currentContext!)
-            .goNamed(GlintMainRoutes.splash.name);
-        return;
+        _handleLogOutAndClearCache();
+        return handler.next(err);
       }
 
       try {
@@ -50,10 +55,8 @@ class AuthInterceptor extends Interceptor {
         if (response.statusCode == 200) {
           final successResponse =
               RefreshAuthTokenResponse.fromJson(response.data);
-          final newRequest = err.requestOptions;
           if (successResponse.accessToken != null &&
               successResponse.refreshToken != null) {
-            newRequest.headers['Auth'] = successResponse.accessToken;
             await sharedPreferenceHelper.saveString(
               SharedPreferenceKeys.accessTokenKey,
               successResponse.accessToken!,
@@ -63,22 +66,25 @@ class AuthInterceptor extends Interceptor {
               successResponse.refreshToken!,
             );
           }
-
-          final clone = await authClient.fetch(newRequest);
+          final newOptions = err.requestOptions;
+          newOptions.headers['Auth'] = successResponse.accessToken;
+          newOptions.extra[retriedKey] = true;
+          final clone = await authClient.fetch(newOptions);
           return handler.resolve(clone);
         } else {
-          await sharedPreferenceHelper.clearEncryptedPrefs();
-          GoRouter.of(rootNavigatorKey.currentContext!)
-              .goNamed(GlintMainRoutes.splash.name);
+          _handleLogOutAndClearCache();
         }
       } catch (e) {
-        // Token refresh failed, logout user
-        await sharedPreferenceHelper.clearEncryptedPrefs();
-        GoRouter.of(rootNavigatorKey.currentContext!)
-            .goNamed(GlintMainRoutes.splash.name);
+        _handleLogOutAndClearCache();
         return handler.next(err);
       }
     }
     return handler.next(err);
+  }
+
+  void _handleLogOutAndClearCache() async {
+    await sharedPreferenceHelper.clearEncryptedPrefs();
+    GoRouter.of(rootNavigatorKey.currentContext!)
+        .goNamed(GlintMainRoutes.splash.name);
   }
 }

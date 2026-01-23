@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -12,6 +13,7 @@ import 'package:glint_frontend/data/remote/model/response/admin/admin_mappers.da
 import 'package:glint_frontend/data/remote/model/response/admin/get_interested_users_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_published_event_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_ticket_booked_response.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/application_logic/auth/is_user_logged_in_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_approve_reject_domain_model.dart';
@@ -79,7 +81,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       case Success():
         return const Success(true);
       case Failure():
-        return Failure(Exception("Something Went wrong"));
+        return Failure(createEventResponse.error);
     }
   }
 
@@ -98,7 +100,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       case Success():
         return const Success(true);
       case Failure():
-        return Failure(Exception("Something Went wrong"));
+        return Failure(createEventRequestResponse.error);
     }
   }
 
@@ -135,10 +137,17 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     switch (ticketBookedUsers) {
       case Success():
         final response =
-            GetTicketBookedResponse.fromJson(ticketBookedUsers.data);
-        return Success(response.mapToDomain());
+            UniversalSuccessResponseBody<GetTicketBookedResponse>.fromJson(
+          ticketBookedUsers.data,
+          (json) => GetTicketBookedResponse.fromJson(json),
+        );
+        if (response.success && response.data != null) {
+          return Success(response.data!.mapToDomain());
+        } else {
+          return Failure(Exception(response.message));
+        }
       case Failure():
-        return Failure(Exception("Something Went wrong"));
+        return Failure(ticketBookedUsers.error);
     }
   }
 
@@ -164,19 +173,26 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
         break;
     }
 
-    final interestedProfiles = await apiCallHandler(
+    final interestedProfilesResponse = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       endpoint: fetchInterestedUserEndpoint,
     );
 
-    switch (interestedProfiles) {
+    switch (interestedProfilesResponse) {
       case Success():
         final response =
-            GetInterestedUsersResponse.fromJson(interestedProfiles.data);
-        return Success(response.mapToDomain());
+            UniversalSuccessResponseBody<GetInterestedUsersResponse>.fromJson(
+          interestedProfilesResponse.data,
+          (json) => GetInterestedUsersResponse.fromJson(json),
+        );
+        if (response.data != null && response.success) {
+          return Success(response.data!.mapToDomain());
+        } else {
+          return Failure(Exception(response.message));
+        }
       case Failure():
-        return Failure(Exception("Something Went wrong"));
+        return Failure(interestedProfilesResponse.error);
     }
   }
 
@@ -191,15 +207,22 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     switch (allEventsResponse) {
       case Success():
         final response =
-            GetPublishedEventResponse.fromJson(allEventsResponse.data);
-        final mappedResponse = response.mapToDomain();
-        if (mappedResponse.isNotEmpty) {
-          return Success(mappedResponse);
+            UniversalSuccessResponseBody<GetPublishedEventResponse>.fromJson(
+          allEventsResponse.data,
+          (json) => GetPublishedEventResponse.fromJson(json),
+        );
+        if (response.data != null && response.success) {
+          final mappedResponse = response.data!.mapToDomain();
+          if (mappedResponse.isNotEmpty) {
+            return Success(mappedResponse);
+          } else {
+            return Failure(Exception("Response is Empty"));
+          }
         } else {
-          return Failure(Exception("Response is Empty"));
+          return Failure(Exception(response.message));
         }
       case Failure():
-        return Failure(Exception("Something Went wrong"));
+        return Failure(allEventsResponse.error);
     }
   }
 
@@ -240,15 +263,25 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     switch (allEventsResponse) {
       case Success():
         final response =
-            GetPublishedEventResponse.fromJson(allEventsResponse.data);
-        final mappedResponse = response.mapToDomain();
-        if (mappedResponse.isNotEmpty) {
-          return Success(mappedResponse);
+            UniversalSuccessResponseBody<GetPublishedEventResponse>.fromJson(
+          allEventsResponse.data,
+          (json) => GetPublishedEventResponse.fromJson(json),
+        );
+        if (response.success && response.data != null) {
+          final mappedResponse = response.data!.mapToDomain();
+          if (mappedResponse.isNotEmpty) {
+            return Success(mappedResponse);
+          } else {
+            return Failure(Exception("Response is Empty"));
+          }
         } else {
-          return Failure(Exception("Response is Empty"));
+          return Failure(Exception(response.message));
         }
+
       case Failure():
-        return Failure(Exception("Something Went wrong"));
+        return Failure(
+          allEventsResponse.error,
+        );
     }
   }
 
@@ -296,7 +329,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   }
 
   @override
-  Future<PeopleCardModel?> getCurrentUserDetails() async{
+  Future<PeopleCardModel?> getCurrentUserDetails() async {
     var currentUserId =
         await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
     var currentUser = await profileDao.getProfileData(currentUserId);

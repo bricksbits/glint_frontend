@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/mapper/people_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/people/get_people_response.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/likes/likes_data_repo.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
@@ -29,14 +32,23 @@ class LikesDataRepoImpl extends LikesDataRepo {
 
     switch (response) {
       case Success():
-        final peopleResponse = GetPeopleResponse.fromJson(response.data);
-        if (peopleResponse.profiles != null) {
-          final peopleList = peopleResponse.mapToUiModel();
-          if (peopleList.isNotEmpty) {
-            return Success(peopleList);
+        final peopleResponse =
+            UniversalSuccessResponseBody<GetPeopleResponse>.fromJson(
+          response.data,
+          (json) => GetPeopleResponse.fromJson(json),
+        );
+        if (peopleResponse.success && peopleResponse.data != null) {
+          if (peopleResponse.data?.profiles != null) {
+            final peopleList = peopleResponse.data!.mapToUiModel();
+            if (peopleList.isNotEmpty) {
+              return Success(peopleList);
+            }
           }
+          return const Success([]);
+        } else {
+          return Failure(Exception(peopleResponse.message));
         }
-        return const Success([]);
+
       case Failure():
         return Failure(
           Exception("No more profiles available : ${response.error}"),
@@ -54,14 +66,22 @@ class LikesDataRepoImpl extends LikesDataRepo {
 
     switch (response) {
       case Success():
-        final peopleResponse = GetPeopleResponse.fromJson(response.data);
-        if (peopleResponse.profiles != null) {
-          final peopleList = peopleResponse.mapToUiModel();
-          if (peopleList.isNotEmpty) {
-            return Success(peopleList);
+        final peopleResponse =
+            UniversalSuccessResponseBody<GetPeopleResponse>.fromJson(
+          response.data,
+          (json) => GetPeopleResponse.fromJson(json),
+        );
+        if (peopleResponse.success && peopleResponse.data != null) {
+          if (peopleResponse.data?.profiles != null) {
+            final peopleList = peopleResponse.data!.mapToUiModel();
+            if (peopleList.isNotEmpty) {
+              return Success(peopleList);
+            }
           }
+          return const Success([]);
+        } else {
+          return Failure(Exception(peopleResponse.message));
         }
-        return const Success([]);
       case Failure():
         return Failure(
           Exception("No more profiles available : ${response.error}"),
@@ -79,14 +99,22 @@ class LikesDataRepoImpl extends LikesDataRepo {
 
     switch (response) {
       case Success():
-        final peopleResponse = GetPeopleResponse.fromJson(response.data);
-        if (peopleResponse.profiles != null) {
-          final peopleList = peopleResponse.mapToUiModel();
-          if (peopleList.isNotEmpty) {
-            return Success(peopleList);
+        final peopleResponse =
+            UniversalSuccessResponseBody<GetPeopleResponse>.fromJson(
+          response.data,
+          (json) => GetPeopleResponse.fromJson(json),
+        );
+        if (peopleResponse.success && peopleResponse.data != null) {
+          if (peopleResponse.data?.profiles != null) {
+            final peopleList = peopleResponse.data!.mapToUiModel();
+            if (peopleList.isNotEmpty) {
+              return Success(peopleList);
+            }
           }
+          return const Success([]);
+        } else {
+          return Failure(Exception(peopleResponse.message));
         }
-        return const Success([]);
       case Failure():
         return Failure(
           Exception("No more profiles available : ${response.error}"),

@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/get_recent_matches_response.dart';
 import 'package:glint_frontend/data/remote/model/response/story/story_response.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/chat/chat_repo.dart';
 import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
@@ -38,10 +40,15 @@ class ChatRepoImpl extends ChatRepo {
     switch (response) {
       case Success():
         final recentMatchesResponse =
-            GetRecentMatchesResponse.fromJson(response.data);
-        final matches = recentMatchesResponse.mapToUiModel();
-        _recentMatchesController.add(Success(matches));
-        break;
+            UniversalSuccessResponseBody<GetRecentMatchesResponse>.fromJson(
+                response.data,
+                (json) => GetRecentMatchesResponse.fromJson(json));
+        if (recentMatchesResponse.success &&
+            recentMatchesResponse.data != null) {
+          final matches = recentMatchesResponse.data!.mapToUiModel();
+          _recentMatchesController.add(Success(matches));
+          break;
+        }
       case Failure():
         _recentMatchesController.add(Failure(
           Exception("No Recent matches found"),
@@ -60,9 +67,17 @@ class ChatRepoImpl extends ChatRepo {
 
     switch (response) {
       case Success():
-        final storiesResponse = StoryResponse.fromJson(response.data);
-        final stories = storiesResponse.mapToUiModel();
-        return Success(stories);
+        final storiesResponse =
+            UniversalSuccessResponseBody<StoryResponse>.fromJson(
+          response.data,
+          (json) => StoryResponse.fromJson(json),
+        );
+        if (storiesResponse.success && storiesResponse.data != null) {
+          final stories = storiesResponse.data!.mapToUiModel();
+          return Success(stories);
+        } else {
+          return Failure(Exception(storiesResponse.message));
+        }
       case Failure():
         return Failure(Exception("No stories found"));
     }

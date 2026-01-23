@@ -7,6 +7,7 @@ import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/application_logic/logout_usecase.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:glint_frontend/utils/app_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -20,6 +21,7 @@ class ProfileSettingsScreen extends StatefulWidget {
 class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   final _locationController = TextEditingController();
   String _appVersion = '';
+  String _envName = '';
 
   @override
   void initState() {
@@ -33,7 +35,9 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   Future<void> _getAppVersion() async {
     final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      _appVersion = 'v${packageInfo.version} (${packageInfo.buildNumber})';
+      _envName = AppConfig.envType;
+      _appVersion =
+          'v${packageInfo.version} (${packageInfo.buildNumber}) $_envName';
     });
   }
 
@@ -161,6 +165,11 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                     const Gap(4.0),
                     Text(
                       _appVersion,
+                      style: AppTheme.simpleText,
+                    ),
+                    const Gap(12.0),
+                    const Text(
+                      "Made with ❤️ in Bhilai",
                       style: AppTheme.simpleText,
                     ),
                   ],

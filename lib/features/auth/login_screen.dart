@@ -153,8 +153,76 @@ class _LoginScreenState extends State<LoginScreen> {
                 return const SizedBox.shrink();
               },
               error: (errorMessage) {
-                return Center(
-                  child: Text("Error : $errorMessage"),
+                return AuthStackedIllustrationScreen(
+                  isAdmin: widget.isAdmin,
+                  body: Column(
+                    children: [
+                      if (!widget.isAdmin)
+                        Center(
+                          child: SvgPicture.asset(
+                              'lib/assets/images/auth/glint_login.svg'),
+                        ),
+                      const Gap(40.0),
+                      if (widget.isAdmin)
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 40.0),
+                            child: Column(
+                              children: [
+                                const Spacer(),
+                                Text(
+                                  'Login',
+                                  style: AppTheme.headingThree
+                                      .copyWith(fontStyle: FontStyle.normal),
+                                ),
+                                const Gap(32.0),
+                                _buildAuthFields(),
+                                const Gap(60.0),
+                                _buildActionButton('Log In', () {
+                                  context.read<LoginBloc>()
+                                    ..add(LoginEvent.emailInput(
+                                        _emailController.text))
+                                    ..add(
+                                      LoginEvent.passwordInput(
+                                          _passwordController.text),
+                                    )
+                                    ..add(
+                                      const LoginEvent.login(),
+                                    );
+                                }),
+                                const Gap(16.0),
+                                _buildForgotPassword(),
+                                const Spacer(flex: 4),
+                                _buildRegisterText(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      if (!widget.isAdmin) ...[
+                        _buildAuthFields(),
+                        const Gap(12.0),
+                        _buildForgotPassword(),
+                        const Gap(60.0),
+                        _buildActionButton(
+                          'Login',
+                              () {
+                            context.read<LoginBloc>()
+                              ..add(
+                                  LoginEvent.emailInput(_emailController.text))
+                              ..add(
+                                LoginEvent.passwordInput(
+                                    _passwordController.text),
+                              )
+                              ..add(
+                                const LoginEvent.login(),
+                              );
+                          },
+                        ),
+                        const Gap(16.0),
+                        _buildRegisterText(),
+                      ],
+                    ],
+                  ),
                 );
               },
               emailChanged: (email) {
