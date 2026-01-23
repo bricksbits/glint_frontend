@@ -7,6 +7,7 @@ import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/fcm_token_request.dart';
 import 'package:glint_frontend/data/remote/model/request/background/update_user_lcoation_request_body.dart';
 import 'package:glint_frontend/data/remote/model/response/membership/get_membership_response_body.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/background/info/user_info_repo.dart';
 import 'package:glint_frontend/utils/logger.dart';
@@ -48,9 +49,7 @@ class UserInfoRepoImpl extends UserInfoRepo {
           return Success("");
         case Failure():
           debugLogger("FCM_TOKEN", "Token failed to updated");
-          return Failure(
-            Exception("Error : ${response.error} Failed to update FCM"),
-          );
+          return Failure(response.error);
       }
     } else {
       return Failure(
@@ -118,10 +117,19 @@ class UserInfoRepoImpl extends UserInfoRepo {
     switch (response) {
       case Success():
         final membershipDataFromRemote =
-            GetMembershipResponseBody.fromJson(response.data);
-        final membershipEntity = membershipDataFromRemote.mapToEntity(userId);
-        membershipDao.updateTheMembershipDetails(membershipEntity);
-        return Success("");
+            UniversalSuccessResponseBody<GetMembershipResponseBody>.fromJson(
+          response.data,
+          (membershipResponse) =>
+              GetMembershipResponseBody.fromJson(membershipResponse),
+        );
+        if (membershipDataFromRemote.data != null &&
+            membershipDataFromRemote.success) {
+          final membershipEntity =
+              membershipDataFromRemote.data!.mapToEntity(userId);
+          membershipDao.updateTheMembershipDetails(membershipEntity);
+          return Success("");
+        }
+        return Failure(Exception(membershipDataFromRemote.message));
       case Failure():
         debugLogger("Membership", "Failed to get the perks");
         return Failure(Exception("Error: ${response.error}"));

@@ -1,31 +1,46 @@
 import 'dart:convert';
+
+import 'package:glint_frontend/data/remote/model/response/converters/data_model_converters_helper.dart';
+import 'package:glint_frontend/data/remote/model/response/people/get_people_response.dart';
 LoginResponse loginResponseFromJson(String str) => LoginResponse.fromJson(json.decode(str));
 String loginResponseToJson(LoginResponse data) => json.encode(data.toJson());
 class LoginResponse {
   LoginResponse({
-      this.profile,});
+      this.success, 
+      this.message, 
+      this.data,});
 
   LoginResponse.fromJson(dynamic json) {
-    profile = json['profile'] != null ? Profile.fromJson(json['profile']) : null;
+    success = json['success'];
+    message = json['message'];
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
-  Profile? profile;
-LoginResponse copyWith({  Profile? profile,
-}) => LoginResponse(  profile: profile ?? this.profile,
+  bool? success;
+  String? message;
+  Data? data;
+LoginResponse copyWith({  bool? success,
+  String? message,
+  Data? data,
+}) => LoginResponse(  success: success ?? this.success,
+  message: message ?? this.message,
+  data: data ?? this.data,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    if (profile != null) {
-      map['profile'] = profile?.toJson();
+    map['success'] = success;
+    map['message'] = message;
+    if (data != null) {
+      map['data'] = data?.toJson();
     }
     return map;
   }
 
 }
 
-Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
-String profileToJson(Profile data) => json.encode(data.toJson());
-class Profile {
-  Profile({
+Data dataFromJson(String str) => Data.fromJson(json.decode(str));
+String dataToJson(Data data) => json.encode(data.toJson());
+class Data {
+  Data({
       this.authToken, 
       this.refreshToken, 
       this.streamAuthToken, 
@@ -54,7 +69,7 @@ class Profile {
       this.superLikesLeft, 
       this.directDmRemaining,});
 
-  Profile.fromJson(dynamic json) {
+  Data.fromJson(dynamic json) {
     authToken = json['auth_token'];
     refreshToken = json['refresh_token'];
     streamAuthToken = json['stream_auth_token'];
@@ -67,7 +82,7 @@ class Profile {
     interests = json['interests'] != null ? json['interests'].cast<String>() : [];
     relationshipGoals = json['relationship_goals'] != null ? json['relationship_goals'].cast<String>() : [];
     bio = json['bio'];
-    height = _toDouble(json['height']);
+    height = toDouble(json['height']);
     occupation = json['occupation'];
     education = json['education'];
     workoutHabit = json['workout_habit'];
@@ -84,7 +99,7 @@ class Profile {
     if (json['video_url_list'] != null) {
       videoUrlList = [];
       json['video_url_list'].forEach((v) {
-        videoUrlList?.add(VideoUrlList.fromJson(v));
+        videoUrlList?.add(VideoUrlList.fromJson(json));
       });
     }
     isPremiumUser = json['is_premium_user'];
@@ -114,13 +129,13 @@ class Profile {
   int? profileViews;
   int? profileLikes;
   List<PictureUrlList>? pictureUrlList;
-  List<VideoUrlList>? videoUrlList;
+  List<dynamic>? videoUrlList;
   bool? isPremiumUser;
   int? aiMessagesRemaining;
   int? rewindsRemaining;
   int? superLikesLeft;
   int? directDmRemaining;
-Profile copyWith({  String? authToken,
+Data copyWith({  String? authToken,
   String? refreshToken,
   String? streamAuthToken,
   String? userRole,
@@ -141,13 +156,13 @@ Profile copyWith({  String? authToken,
   int? profileViews,
   int? profileLikes,
   List<PictureUrlList>? pictureUrlList,
-  List<VideoUrlList>? videoUrlList,
+  List<dynamic>? videoUrlList,
   bool? isPremiumUser,
   int? aiMessagesRemaining,
   int? rewindsRemaining,
   int? superLikesLeft,
   int? directDmRemaining,
-}) => Profile(  authToken: authToken ?? this.authToken,
+}) => Data(  authToken: authToken ?? this.authToken,
   refreshToken: refreshToken ?? this.refreshToken,
   streamAuthToken: streamAuthToken ?? this.streamAuthToken,
   userRole: userRole ?? this.userRole,
@@ -208,44 +223,6 @@ Profile copyWith({  String? authToken,
     map['rewinds_remaining'] = rewindsRemaining;
     map['super_likes_left'] = superLikesLeft;
     map['direct_dm_remaining'] = directDmRemaining;
-    return map;
-  }
-
-  static double? _toDouble(dynamic value) {
-    try {
-      if (value == null) return null;
-      if (value is double) return value;
-      if (value is int) return value.toDouble();
-      if (value is String) return double.tryParse(value);
-      return null;
-    } catch (e){
-      return null;
-    }
-  }
-}
-
-VideoUrlList videoUrlListFromJson(String str) => VideoUrlList.fromJson(json.decode(str));
-String videoUrlListToJson(VideoUrlList data) => json.encode(data.toJson());
-class VideoUrlList {
-  VideoUrlList({
-      this.presignedUrl, 
-      this.fileExtension,});
-
-  VideoUrlList.fromJson(dynamic json) {
-    presignedUrl = json['presigned_url'];
-    fileExtension = json['file_extension'];
-  }
-  String? presignedUrl;
-  String? fileExtension;
-VideoUrlList copyWith({  String? presignedUrl,
-  String? fileExtension,
-}) => VideoUrlList(  presignedUrl: presignedUrl ?? this.presignedUrl,
-  fileExtension: fileExtension ?? this.fileExtension,
-);
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['presigned_url'] = presignedUrl;
-    map['file_extension'] = fileExtension;
     return map;
   }
 

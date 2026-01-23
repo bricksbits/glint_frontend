@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -14,9 +15,9 @@ import 'package:glint_frontend/data/remote/model/request/auth/register_account_r
 import 'package:glint_frontend/data/remote/model/response/auth/login_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/auth/login_response.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/story_upload_response.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
-import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
 import 'package:glint_frontend/domain/business_logic/repo/boarding/on_boarding_repo.dart';
 import 'package:glint_frontend/utils/logger.dart';
@@ -79,47 +80,50 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
       switch (response) {
         case Success():
           final successResponse = LoginResponse.fromJson(response.data);
-          await profileDao.insertProfile(successResponse.mapToEntity());
-          final accessToken = successResponse.profile?.authToken;
-          final refreshToken = successResponse.profile?.refreshToken;
-          final streamToken = successResponse.profile?.streamAuthToken;
-          final userId = successResponse.profile?.userId;
-          final userName = successResponse.profile?.username;
-          final userImageUrl = successResponse
-              .profile?.pictureUrlList?.firstOrNull?.presignedUrl;
-          if (successResponse.profile != null) {
-            saveMembershipDetails(
-              ProfileMembershipEntity(
-                userId: successResponse.profile!.userId.toString(),
-                superLikes: successResponse.profile!.superLikesLeft ?? 0,
-                aiMessages: successResponse.profile!.aiMessagesRemaining ?? 0,
-                rewinds: successResponse.profile!.rewindsRemaining ?? 0,
-                superDm: successResponse.profile!.directDmRemaining ?? 0,
-              ),
+          if (successResponse.data != null && successResponse.success == true) {
+            await profileDao.insertProfile(successResponse.mapToEntity());
+            final accessToken = successResponse.data?.authToken;
+            final refreshToken = successResponse.data?.refreshToken;
+            final streamToken = successResponse.data?.streamAuthToken;
+            final userId = successResponse.data?.userId;
+            final userName = successResponse.data?.username;
+            final userImageUrl =
+                successResponse.data?.pictureUrlList?.firstOrNull?.presignedUrl;
+            if (successResponse.data != null) {
+              saveMembershipDetails(
+                ProfileMembershipEntity(
+                  userId: successResponse.data?.userId.toString() ?? "user_id",
+                  superLikes: successResponse.data?.superLikesLeft ?? 0,
+                  aiMessages: successResponse.data?.aiMessagesRemaining ?? 0,
+                  rewinds: successResponse.data?.rewindsRemaining ?? 0,
+                  superDm: successResponse.data?.directDmRemaining ?? 0,
+                ),
+              );
+            }
+            await sharedPreferenceHelper.saveUserData(accessToken, refreshToken,
+                streamToken, userId.toString(), userName, userImageUrl);
+
+            await sharedPreferenceHelper
+                .saveUserType(successResponse.data?.userRole ?? "user");
+
+            await sharedPreferenceHelper.saveString(
+              SharedPreferenceKeys.adminUserOrganizationKey,
+              successResponse.data?.occupation ?? "Event Manager",
             );
+
+            await sharedPreferenceHelper.saveString(
+              SharedPreferenceKeys.adminUserEmailKey,
+              loginRequestBody.email ?? "",
+            );
+
+            await sharedPreferenceHelper.saveBoolean(
+              SharedPreferenceKeys.premiumUserKey,
+              successResponse.data?.isPremiumUser ?? false,
+            );
+            return Success(successResponse);
+          } else {
+            return Failure(Exception(successResponse.message));
           }
-          await sharedPreferenceHelper.saveUserData(accessToken, refreshToken,
-              streamToken, userId.toString(), userName, userImageUrl);
-
-          await sharedPreferenceHelper
-              .saveUserType(successResponse.profile?.userRole ?? "user");
-
-          await sharedPreferenceHelper.saveString(
-            SharedPreferenceKeys.adminUserOrganizationKey,
-            successResponse.profile?.occupation ?? "Event Manager",
-          );
-
-          await sharedPreferenceHelper.saveString(
-            SharedPreferenceKeys.adminUserEmailKey,
-            loginRequestBody.email ?? "",
-          );
-
-          await sharedPreferenceHelper.saveBoolean(
-            SharedPreferenceKeys.premiumUserKey,
-            successResponse.profile?.isPremiumUser ?? false,
-          );
-
-          return Success(successResponse);
         case Failure():
           debugLogger("LOGIN_FAILED", "Reason : ${response.error}");
           return Failure(Exception(response.error));
@@ -182,18 +186,22 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
 
     switch (response) {
       case Success():
-        final storiesResponse = StoryUploadResponse.fromJson(response.data);
-        if (storiesResponse.filesUploaded?.isNotEmpty == true) {
+        final storiesResponse =
+            UniversalSuccessResponseBody<StoryUploadResponse>.fromJson(
+          response.data,
+          (mediaResponse) => StoryUploadResponse.fromJson(mediaResponse),
+        );
+        if (storiesResponse.data?.filesUploaded?.isNotEmpty == true) {
           return const Success(true);
         } else {
           return Failure(
             Exception(
-                "Files ${storiesResponse.filesNotUploaded} failed to upload"),
+                "Files ${storiesResponse.data?.filesNotUploaded} failed to upload"),
           );
         }
       case Failure():
         return Failure(
-          Exception("Not able to upload files currently, please try again."),
+          response.error,
         );
     }
   }

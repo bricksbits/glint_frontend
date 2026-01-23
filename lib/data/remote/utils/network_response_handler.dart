@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_error_response_body.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 /// A Network Response Handler Class
@@ -16,18 +17,26 @@ Future<Result<dynamic>> networkResponseHandler(
       // Returning the Raw data.
       return Success(response?.data);
     } else if (responseStatusCode >= 400 && responseStatusCode <= 499) {
-      return Failure(
-          Exception("Unauthorized Error, Status Code $responseStatusCode"));
+      return _parseError(response?.data);
     } else {
-      return Failure(Exception("Something went wrong"));
+      return _parseError(response?.data);
     }
   } on TimeoutException catch (timeOutException) {
-    return Failure(Exception("OnTimeout Exception $timeOutException"));
+    return Failure(Exception("OnTimeout Exception: $timeOutException"));
   } on RedirectException catch (redirectException) {
-    return Failure(Exception("Redirection Exception $redirectException"));
+    return Failure(Exception("Redirection Exception: $redirectException"));
   } on IOException catch (ioException) {
-    return Failure(Exception("Exception caught $ioException"));
+    return Failure(Exception("IO Exception: $ioException"));
   } on Exception catch (someException) {
-    return Failure(Exception("Exception caught $someException"));
+    return Failure(Exception("Exception: $someException"));
+  }
+}
+
+Result<T> _parseError<T>(Response response) {
+  try {
+    final errorData = UniversalErrorResponseBody.fromJson(response.data);
+    return Failure(Exception(errorData.error?.message));
+  } catch (exception) {
+    return Failure(Exception("Something went wrong $exception"));
   }
 }

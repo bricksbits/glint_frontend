@@ -5,7 +5,7 @@ import 'login_response.dart';
 
 extension LoginMapper on LoginResponse {
   ProfileEntity mapToEntity() {
-    var profile = this.profile;
+    var profile = data;
     var pics = profile?.pictureUrlList
             ?.map((e) => e.presignedUrl)
             .whereType<String>()

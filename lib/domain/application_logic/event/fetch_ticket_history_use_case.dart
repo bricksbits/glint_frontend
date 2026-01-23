@@ -5,6 +5,7 @@ import 'package:glint_frontend/domain/business_logic/repo/event/event_booking_re
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
+// Todo: Use the class, once Event Section is Up
 class FetchTicketHistoryUseCase extends UseCase<List<EventTicketHistoryDomainModel>, void> {
   final EventBookingRepo eventBookingRepo;
 

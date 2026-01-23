@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/db/dao/swipe_action_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/swipe_action_entity.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/people/user_action_request_model.dart';
 import 'package:glint_frontend/data/remote/model/response/people/user_action_response.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/swipe_action_type.dart';
 import 'package:glint_frontend/domain/business_logic/repo/chat/chat_repo.dart';
@@ -122,18 +124,30 @@ class SwipeBufferManager {
 
     switch (response) {
       case Success():
-        final postActions = UserActionResponse.fromJson(response.data);
-        if (postActions.message?.actionResponseList != null) {
-          fetchDataIfMatchFound(postActions.message?.actionResponseList ?? []);
-          var actionSuccessfulOn = postActions.message?.actionResponseList
-              ?.map((action) => action.userId);
-          if (actionSuccessfulOn?.length != batch.length) {
-            debugLogger(logPrefix, "SWIPE Actions : Few Id's swipe missed");
+        final postActions =
+            UniversalSuccessResponseBody<UserActionResponse>.fromJson(
+          response.data,
+          (json) => UserActionResponse.fromJson(json),
+        );
+        if (postActions.success && postActions.data != null) {
+          if (postActions.data?.message!.actionResponseList != null) {
+            fetchDataIfMatchFound(
+                postActions.data?.message?.actionResponseList ?? []);
+            var actionSuccessfulOn = postActions
+                .data?.message?.actionResponseList
+                ?.map((action) => action.userId);
+            if (actionSuccessfulOn?.length != batch.length) {
+              debugLogger(logPrefix, "SWIPE Actions : Few Id's swipe missed");
+            }
+            debugLogger(logPrefix, "${batch.length} Process Completed");
+            return true;
+          } else {
+            return false;
           }
-          debugLogger(logPrefix, "${batch.length} Process Completed");
-          return true;
+        } else {
+          debugLogger(logPrefix, postActions.message);
+          return false;
         }
-        return false;
       case Failure():
         debugLogger(logPrefix, "${batch.length} Process Failed");
         return false;
