@@ -5,7 +5,6 @@ import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/mapper/people_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/people/get_people_response.dart';
-import 'package:glint_frontend/data/remote/model/response/universal/universal_error_response_body.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/likes/likes_data_repo.dart';
