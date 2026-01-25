@@ -1,4 +1,4 @@
-import 'package:glint_frontend/data/remote/model/response/story/story_response.dart';
+import 'package:glint_frontend/data/remote/model/response/story/story_response_body.dart';
 
 class ViewStoryModel {
   final List<String> storiesUrl;
@@ -18,21 +18,25 @@ class ViewStoryModel {
   });
 }
 
-extension ViewStoryModelMapper on StoryResponse {
+extension ViewStoryModelMapper on StoryResponseBody {
   List<ViewStoryModel> mapToUiModel() {
-    return story.entries.map((item) {
-      return ViewStoryModel(
-        storiesUrl: item.value.storyUrlList
-            .map(
-              (storyData) => storyData.presignedUrl,
-            )
-            .toList(),
-        username: "User, ${item.key}",
-        userImageUrl: "",
-        storyViewCount: "2",
-        streakCount: "32",
-        streamChannelId: item.value.streamChatChannelId,
-      );
-    }).toList();
+    return data?.stories?.map((item) {
+          int storiesViews = item.storyViews ?? 0;
+          int storiesLikes = item.storyLikes ?? 0;
+          return ViewStoryModel(
+            storiesUrl: item.storyUrlList
+                    ?.map(
+                      (storyData) => storyData.presignedUrl ?? "",
+                    )
+                    .toList() ??
+                [],
+            username: item.username ?? "",
+            userImageUrl: "",
+            storyViewCount: storiesViews.toString(),
+            streakCount: storiesLikes.toString(),
+            streamChannelId: item.streamChatChannelId,
+          );
+        }).toList() ??
+        [];
   }
 }

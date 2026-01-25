@@ -156,8 +156,6 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           gh<_i719.ProfileDao>(),
         ));
-    gh.factory<_i972.SignInUserUseCase>(
-        () => _i972.SignInUserUseCase(gh<_i873.AuthenticationRepo>()));
     gh.lazySingleton<_i427.LikesDataRepo>(() => _i503.LikesDataRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
@@ -192,6 +190,10 @@ extension GetItInjectableX on _i174.GetIt {
         _i579.RejectPublishedEventUsecase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i839.ApprovePublishedEventUsecase>(() =>
         _i839.ApprovePublishedEventUsecase(gh<_i1000.AdminDashboardRepo>()));
+    gh.factory<_i972.SignInUserUseCase>(() => _i972.SignInUserUseCase(
+          gh<_i873.AuthenticationRepo>(),
+          gh<_i662.ProfileRepo>(),
+        ));
     gh.factory<_i786.SendOtpUseCase>(
         () => _i786.SendOtpUseCase(gh<_i995.ForgotPasswordRepo>()));
     gh.factory<_i804.ResetPasswordWithOtpUseCase>(() =>

@@ -23,6 +23,7 @@ mixin _$ProfileEditState {
   bool get isNewImagesUploaded => throw _privateConstructorUsedError;
   bool get isProfileDataChanged => throw _privateConstructorUsedError;
   List<File?> get newlyUploadedImages => throw _privateConstructorUsedError;
+  bool get refetchProfileData => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -31,7 +32,8 @@ mixin _$ProfileEditState {
             bool isLoading,
             bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages)
+            List<File?> newlyUploadedImages,
+            bool refetchProfileData)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -43,7 +45,8 @@ mixin _$ProfileEditState {
             bool isLoading,
             bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages)?
+            List<File?> newlyUploadedImages,
+            bool refetchProfileData)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -55,7 +58,8 @@ mixin _$ProfileEditState {
             bool isLoading,
             bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages)?
+            List<File?> newlyUploadedImages,
+            bool refetchProfileData)?
         initial,
     required TResult orElse(),
   }) =>
@@ -96,7 +100,8 @@ abstract class $ProfileEditStateCopyWith<$Res> {
       bool isLoading,
       bool isNewImagesUploaded,
       bool isProfileDataChanged,
-      List<File?> newlyUploadedImages});
+      List<File?> newlyUploadedImages,
+      bool refetchProfileData});
 }
 
 /// @nodoc
@@ -120,6 +125,7 @@ class _$ProfileEditStateCopyWithImpl<$Res, $Val extends ProfileEditState>
     Object? isNewImagesUploaded = null,
     Object? isProfileDataChanged = null,
     Object? newlyUploadedImages = null,
+    Object? refetchProfileData = null,
   }) {
     return _then(_value.copyWith(
       previewProfileModel: freezed == previewProfileModel
@@ -146,6 +152,10 @@ class _$ProfileEditStateCopyWithImpl<$Res, $Val extends ProfileEditState>
           ? _value.newlyUploadedImages
           : newlyUploadedImages // ignore: cast_nullable_to_non_nullable
               as List<File?>,
+      refetchProfileData: null == refetchProfileData
+          ? _value.refetchProfileData
+          : refetchProfileData // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -164,7 +174,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       bool isLoading,
       bool isNewImagesUploaded,
       bool isProfileDataChanged,
-      List<File?> newlyUploadedImages});
+      List<File?> newlyUploadedImages,
+      bool refetchProfileData});
 }
 
 /// @nodoc
@@ -186,6 +197,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? isNewImagesUploaded = null,
     Object? isProfileDataChanged = null,
     Object? newlyUploadedImages = null,
+    Object? refetchProfileData = null,
   }) {
     return _then(_$InitialImpl(
       previewProfileModel: freezed == previewProfileModel
@@ -212,6 +224,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value._newlyUploadedImages
           : newlyUploadedImages // ignore: cast_nullable_to_non_nullable
               as List<File?>,
+      refetchProfileData: null == refetchProfileData
+          ? _value.refetchProfileData
+          : refetchProfileData // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -225,7 +241,8 @@ class _$InitialImpl implements _Initial {
       this.isLoading = true,
       this.isNewImagesUploaded = false,
       this.isProfileDataChanged = false,
-      final List<File?> newlyUploadedImages = const []})
+      final List<File?> newlyUploadedImages = const [],
+      this.refetchProfileData = true})
       : _newlyUploadedImages = newlyUploadedImages;
 
   @override
@@ -254,8 +271,12 @@ class _$InitialImpl implements _Initial {
   }
 
   @override
+  @JsonKey()
+  final bool refetchProfileData;
+
+  @override
   String toString() {
-    return 'ProfileEditState.initial(previewProfileModel: $previewProfileModel, error: $error, isLoading: $isLoading, isNewImagesUploaded: $isNewImagesUploaded, isProfileDataChanged: $isProfileDataChanged, newlyUploadedImages: $newlyUploadedImages)';
+    return 'ProfileEditState.initial(previewProfileModel: $previewProfileModel, error: $error, isLoading: $isLoading, isNewImagesUploaded: $isNewImagesUploaded, isProfileDataChanged: $isProfileDataChanged, newlyUploadedImages: $newlyUploadedImages, refetchProfileData: $refetchProfileData)';
   }
 
   @override
@@ -273,7 +294,9 @@ class _$InitialImpl implements _Initial {
             (identical(other.isProfileDataChanged, isProfileDataChanged) ||
                 other.isProfileDataChanged == isProfileDataChanged) &&
             const DeepCollectionEquality()
-                .equals(other._newlyUploadedImages, _newlyUploadedImages));
+                .equals(other._newlyUploadedImages, _newlyUploadedImages) &&
+            (identical(other.refetchProfileData, refetchProfileData) ||
+                other.refetchProfileData == refetchProfileData));
   }
 
   @override
@@ -284,7 +307,8 @@ class _$InitialImpl implements _Initial {
       isLoading,
       isNewImagesUploaded,
       isProfileDataChanged,
-      const DeepCollectionEquality().hash(_newlyUploadedImages));
+      const DeepCollectionEquality().hash(_newlyUploadedImages),
+      refetchProfileData);
 
   /// Create a copy of ProfileEditState
   /// with the given fields replaced by the non-null parameter values.
@@ -303,11 +327,12 @@ class _$InitialImpl implements _Initial {
             bool isLoading,
             bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages)
+            List<File?> newlyUploadedImages,
+            bool refetchProfileData)
         initial,
   }) {
     return initial(previewProfileModel, error, isLoading, isNewImagesUploaded,
-        isProfileDataChanged, newlyUploadedImages);
+        isProfileDataChanged, newlyUploadedImages, refetchProfileData);
   }
 
   @override
@@ -319,11 +344,18 @@ class _$InitialImpl implements _Initial {
             bool isLoading,
             bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages)?
+            List<File?> newlyUploadedImages,
+            bool refetchProfileData)?
         initial,
   }) {
-    return initial?.call(previewProfileModel, error, isLoading,
-        isNewImagesUploaded, isProfileDataChanged, newlyUploadedImages);
+    return initial?.call(
+        previewProfileModel,
+        error,
+        isLoading,
+        isNewImagesUploaded,
+        isProfileDataChanged,
+        newlyUploadedImages,
+        refetchProfileData);
   }
 
   @override
@@ -335,13 +367,14 @@ class _$InitialImpl implements _Initial {
             bool isLoading,
             bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages)?
+            List<File?> newlyUploadedImages,
+            bool refetchProfileData)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
       return initial(previewProfileModel, error, isLoading, isNewImagesUploaded,
-          isProfileDataChanged, newlyUploadedImages);
+          isProfileDataChanged, newlyUploadedImages, refetchProfileData);
     }
     return orElse();
   }
@@ -382,7 +415,8 @@ abstract class _Initial implements ProfileEditState {
       final bool isLoading,
       final bool isNewImagesUploaded,
       final bool isProfileDataChanged,
-      final List<File?> newlyUploadedImages}) = _$InitialImpl;
+      final List<File?> newlyUploadedImages,
+      final bool refetchProfileData}) = _$InitialImpl;
 
   @override
   PeopleCardModel? get previewProfileModel;
@@ -396,6 +430,8 @@ abstract class _Initial implements ProfileEditState {
   bool get isProfileDataChanged;
   @override
   List<File?> get newlyUploadedImages;
+  @override
+  bool get refetchProfileData;
 
   /// Create a copy of ProfileEditState
   /// with the given fields replaced by the non-null parameter values.

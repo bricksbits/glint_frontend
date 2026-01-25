@@ -10,6 +10,8 @@ import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/story_upload_response.dart';
+import 'package:glint_frontend/data/remote/model/response/profile/its_me_body_mapper.dart';
+import 'package:glint_frontend/data/remote/model/response/profile/its_me_response_body.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/profile/profile_repo.dart';
@@ -52,6 +54,7 @@ class ProfileRepoImpl extends ProfileRepo {
     throw UnimplementedError();
   }
 
+  //Todo: Make this method Reactive
   @override
   Future<Result<ProfileMembershipEntity>> getUserMembershipDetails() async {
     var getCurrentUserid =
@@ -155,5 +158,71 @@ class ProfileRepoImpl extends ProfileRepo {
         return Failure(Exception(
             "Failed to update profile, : ${updateProfileResponse.error}"));
     }
+  }
+
+  @override
+  Future<Result<void>> getAndCacheUserProfile() async {
+    final getProfileAsResponse = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      endpoint: "user/profile/me",
+    );
+
+    switch (getProfileAsResponse) {
+      case Success():
+        final itsMeBody = ItsMeResponseBody.fromJson(getProfileAsResponse.data);
+        if (itsMeBody.success == true && itsMeBody.data != null) {
+          cacheUserProfile(itsMeBody);
+          return Success("");
+        } else {
+          return Failure(Exception(itsMeBody.message));
+        }
+      case Failure():
+        return Failure(getProfileAsResponse.error);
+    }
+  }
+
+  Future<void> cacheUserProfile(ItsMeResponseBody successResponse) async {
+    await profileDao.insertProfile(successResponse.mapToEntity());
+    final userId = successResponse.data?.userId;
+    final userName = successResponse.data?.username;
+    final userImageUrl =
+        successResponse.data?.pictureUrlList?.firstOrNull?.presignedUrl;
+    if (successResponse.data != null) {
+      saveMembershipDetails(
+        ProfileMembershipEntity(
+          userId: successResponse.data?.userId.toString() ?? "user_id",
+          superLikes: successResponse.data?.superLikesLeft ?? 0,
+          aiMessages: successResponse.data?.aiMessagesRemaining ?? 0,
+          rewinds: successResponse.data?.rewindsRemaining ?? 0,
+          superDm: successResponse.data?.directDmRemaining ?? 0,
+        ),
+      );
+    }
+    await sharedPreferenceHelper.saveUserData(
+      null,
+      null,
+      null,
+      userId.toString(),
+      userName,
+      userImageUrl,
+    );
+
+    await sharedPreferenceHelper
+        .saveUserType(successResponse.data?.userRole ?? "user");
+
+    await sharedPreferenceHelper.saveString(
+      SharedPreferenceKeys.adminUserOrganizationKey,
+      successResponse.data?.occupation ?? "Event Manager",
+    );
+
+    await sharedPreferenceHelper.saveBoolean(
+      SharedPreferenceKeys.premiumUserKey,
+      successResponse.data?.isPremiumUser ?? false,
+    );
+  }
+
+  Future<void> saveMembershipDetails(ProfileMembershipEntity entity) async {
+    await membershipDao.insertMembership(entity);
   }
 }

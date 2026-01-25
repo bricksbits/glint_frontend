@@ -81,45 +81,27 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
         case Success():
           final successResponse = LoginResponse.fromJson(response.data);
           if (successResponse.data != null && successResponse.success == true) {
-            await profileDao.insertProfile(successResponse.mapToEntity());
             final accessToken = successResponse.data?.authToken;
             final refreshToken = successResponse.data?.refreshToken;
             final streamToken = successResponse.data?.streamAuthToken;
             final userId = successResponse.data?.userId;
-            final userName = successResponse.data?.username;
-            final userImageUrl =
-                successResponse.data?.pictureUrlList?.firstOrNull?.presignedUrl;
-            if (successResponse.data != null) {
-              saveMembershipDetails(
-                ProfileMembershipEntity(
-                  userId: successResponse.data?.userId.toString() ?? "user_id",
-                  superLikes: successResponse.data?.superLikesLeft ?? 0,
-                  aiMessages: successResponse.data?.aiMessagesRemaining ?? 0,
-                  rewinds: successResponse.data?.rewindsRemaining ?? 0,
-                  superDm: successResponse.data?.directDmRemaining ?? 0,
-                ),
-              );
-            }
-            await sharedPreferenceHelper.saveUserData(accessToken, refreshToken,
-                streamToken, userId.toString(), userName, userImageUrl);
+            await sharedPreferenceHelper.saveUserData(
+              accessToken,
+              refreshToken,
+              streamToken,
+              userId.toString(),
+              null,
+              null,
+            );
 
             await sharedPreferenceHelper
                 .saveUserType(successResponse.data?.userRole ?? "user");
-
-            await sharedPreferenceHelper.saveString(
-              SharedPreferenceKeys.adminUserOrganizationKey,
-              successResponse.data?.occupation ?? "Event Manager",
-            );
 
             await sharedPreferenceHelper.saveString(
               SharedPreferenceKeys.adminUserEmailKey,
               loginRequestBody.email ?? "",
             );
 
-            await sharedPreferenceHelper.saveBoolean(
-              SharedPreferenceKeys.premiumUserKey,
-              successResponse.data?.isPremiumUser ?? false,
-            );
             return Success(successResponse);
           } else {
             return Failure(Exception(successResponse.message));

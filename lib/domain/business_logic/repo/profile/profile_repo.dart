@@ -6,7 +6,8 @@ abstract class ProfileRepo {
   Future<Result<PeopleCardModel>> fetchUserProfile();
 
   Future<Result<void>> updateProfileData(
-      PeopleCardModel updatedPeopleCardModel);
+    PeopleCardModel updatedPeopleCardModel,
+  );
 
   Future<Result<void>> updateMedia();
 
@@ -17,4 +18,6 @@ abstract class ProfileRepo {
   Future<Result<ProfileMembershipEntity>> getUserMembershipDetails();
 
   Future<Result<void>> getAllPaymentHistory();
+
+  Future<Result<void>> getAndCacheUserProfile();
 }

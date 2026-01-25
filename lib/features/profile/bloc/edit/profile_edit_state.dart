@@ -9,5 +9,6 @@ class ProfileEditState with _$ProfileEditState {
     @Default(false) bool isNewImagesUploaded,
     @Default(false) bool isProfileDataChanged,
     @Default([]) List<File?> newlyUploadedImages,
+    @Default(true) bool refetchProfileData,
   }) = _Initial;
 }

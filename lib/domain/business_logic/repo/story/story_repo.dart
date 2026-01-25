@@ -9,4 +9,8 @@ abstract class StoryRepo {
   Future<Result<bool>> uploadStory(File newlyUploadedStoryFile);
 
   Future<Result<void>> deleteStory(File selectedStory);
+
+  Future<Result<void>> likeStory(int storyOwnerId, String storyId);
+
+  Future<Result<void>> disLikeStory(int storyOwnerId, String storyId);
 }

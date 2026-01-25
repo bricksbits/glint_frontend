@@ -5,6 +5,7 @@ import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/application_logic/auth/sign_in_user_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
+import 'package:glint_frontend/domain/business_logic/repo/profile/profile_repo.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/utils/logger.dart';
@@ -18,6 +19,7 @@ part 'register_cubit.freezed.dart';
 class RegisterCubit extends Cubit<RegisterState> {
   final ImageService imageService = getIt.get<ImageService>();
   final AuthenticationRepo authenticationRepo = getIt.get<AuthenticationRepo>();
+  final ProfileRepo profileRepo = getIt.get<ProfileRepo>();
   final SignInUserUseCase signInUserUseCase = getIt.get<SignInUserUseCase>();
 
   RegisterCubit() : super(const RegisterState.initial());
@@ -197,8 +199,9 @@ class RegisterCubit extends Cubit<RegisterState> {
         currentSuccessStatus: "Fetching profiles",
       ),
     );
-    signInUserUseCase.perform(
-      (response) {
+    final updateProfileResult = await profileRepo.getAndCacheUserProfile();
+    switch (updateProfileResult) {
+      case Success<void>():
         emitNewState(
           state.copyWith(
             isRegisteredSuccessfully: true,
@@ -206,16 +209,11 @@ class RegisterCubit extends Cubit<RegisterState> {
             navigateToRoute: GlintMainRoutes.home.name,
           ),
         );
-      },
-      (error) {
-        print("Login : Error $error");
+        break;
+      case Failure<void>():
         emit(state.copyWith(isLoading: false, isRegisteredSuccessfully: false));
-      },
-      () {
-        print("Login : On Done");
-      },
-      LoginRequestBody(email: state.email, password: state.password),
-    );
+        break;
+    }
   }
 
   Future<void> registerAsAAdmin() async {
