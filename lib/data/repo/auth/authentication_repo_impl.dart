@@ -12,7 +12,6 @@ import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/login_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/register_account_request_body.dart';
-import 'package:glint_frontend/data/remote/model/response/auth/login_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/auth/login_response.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/story_upload_response.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
@@ -60,9 +59,12 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
 
     switch (response) {
       case Success():
-        return Success(response.data);
+        return Success("");
       case Failure():
-        return Failure(Exception(response.error));
+        return Failure(
+          Exception(response.error),
+          message: response.message,
+        );
     }
   }
 
@@ -104,15 +106,17 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
 
             return Success(successResponse);
           } else {
-            return Failure(Exception(successResponse.message));
+            return Failure(Exception(successResponse.message),
+                message: successResponse.message);
           }
         case Failure():
           debugLogger("LOGIN_FAILED", "Reason : ${response.error}");
-          return Failure(Exception(response.error));
+          return Failure(Exception(response.error), message: response.message);
       }
     } catch (e) {
       debugLogger("LOGIN_FAILED", "Reason : $e");
-      return Failure(Exception("LOGIN_FAILED Reason : $e"));
+      return Failure(Exception("LOGIN_FAILED Reason : $e"),
+          message: "Something went wrong,");
     }
   }
 
@@ -179,11 +183,13 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
           return Failure(
             Exception(
                 "Files ${storiesResponse.data?.filesNotUploaded} failed to upload"),
+            message: storiesResponse.message,
           );
         }
       case Failure():
         return Failure(
           response.error,
+          message: response.message,
         );
     }
   }

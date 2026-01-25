@@ -36,8 +36,16 @@ class MyDioClient {
         queryParameters: queryParameters,
       );
       return networkResponseHandler(response);
+    } on DioException catch (e) {
+      // This handles cases where the server responded with an error (4xx, 5xx)
+      if (e.response != null) {
+        return networkResponseHandler(e.response);
+      }
+      // This handles cases like No Internet, Timeout, etc.
+      return Failure(Exception(e.message),
+          message: "Poor connection, request failed");
     } on Exception catch (exception) {
-      return Failure(exception);
+      return Failure(exception, message: "Something went wrong.");
     }
   }
 
@@ -48,8 +56,13 @@ class MyDioClient {
     try {
       final postResponse = await dioHttpClient.post(endpoint, data: body);
       return networkResponseHandler(postResponse);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return networkResponseHandler(e.response);
+      }
+      return Failure(Exception(e.message), message: "Poor connection, request failed");
     } on Exception catch (exception) {
-      return Failure(exception);
+      return Failure(exception, message: "Something went wrong.");
     }
   }
 
@@ -60,8 +73,16 @@ class MyDioClient {
     try {
       final postResponse = await dioHttpClient.put(endpoint, data: body);
       return networkResponseHandler(postResponse);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return networkResponseHandler(e.response);
+      }
+      return Failure(
+        Exception(e.message),
+        message: "Poor connection, request failed",
+      );
     } on Exception catch (exception) {
-      return Failure(exception);
+      return Failure(exception, message: "Something went wrong.");
     }
   }
 
@@ -81,8 +102,16 @@ class MyDioClient {
       final uploadFileResponse =
           await dioHttpClient.post(endpoint, data: formData);
       return networkResponseHandler(uploadFileResponse);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return networkResponseHandler(e.response);
+      }
+      return Failure(
+        Exception(e.message),
+        message: "Poor connection, request failed",
+      );
     } on Exception catch (exception) {
-      return Failure(exception);
+      return Failure(exception, message: "Something went wrong.");
     }
   }
 
@@ -106,8 +135,16 @@ class MyDioClient {
       final deletedFilesResponse =
           await dioHttpClient.delete(endpoint, data: formData);
       return networkResponseHandler(deletedFilesResponse);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return networkResponseHandler(e.response);
+      }
+      return Failure(
+        Exception(e.message),
+        message: "Poor connection, request failed",
+      );
     } on Exception catch (exception) {
-      return Failure(exception);
+      return Failure(exception, message: "Something went wrong.");
     }
   }
 }

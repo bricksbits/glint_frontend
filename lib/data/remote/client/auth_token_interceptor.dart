@@ -33,6 +33,13 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     const retriedKey = "retried";
+    final isAuthTokenAvailable = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.accessTokenKey);
+
+    if (isAuthTokenAvailable.isEmpty) {
+      return handler.next(err);
+    }
+
     if (err.response?.statusCode == 401) {
       // Preventing looping for 401 queued error
       if (err.requestOptions.extra[retriedKey] == true) {

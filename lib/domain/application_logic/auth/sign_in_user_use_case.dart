@@ -44,16 +44,21 @@ class SignInUserUseCase extends UseCase<Result<UsersType>, LoginRequestBody> {
             }
             controller.add(Success(userType));
             controller.close();
-          case Failure<LoginResponse>(error: var error):
-            controller.addError(Failure(error));
+          case Failure<LoginResponse>(
+              error: var error,
+              message: var message,
+            ):
+            controller.addError(Failure(error, message: message));
             controller.close();
         }
       }).catchError((caughtError) {
-        controller.addError(Failure(Exception(caughtError.toString())));
+        controller.addError(Failure(Exception(caughtError.toString()),
+            message: "Something Went wrong."));
         controller.close();
       });
     } catch (e) {
-      controller.addError(Failure(Exception(e.toString())));
+      controller.addError(
+          Failure(Exception(e.toString()), message: "Something went wrong."));
       controller.close();
     }
     return controller.stream;

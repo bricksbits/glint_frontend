@@ -55,18 +55,26 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           case null:
             add(const LoginEvent.emitNewState(LoginState.loading(false)));
             add(const _EmitState(LoginState.error("Something went wrong")));
+            break;
           case Success<UsersType>():
             add(const LoginEvent.emitNewState(LoginState.loading(false)));
             add(_EmitState(LoginState.success(response.data)));
+            break;
           case Failure<UsersType>():
             //Todo: Handle the Error Case, When the Image is not uploaded,
             add(const LoginEvent.emitNewState(LoginState.loading(false)));
-            add(const _EmitState(LoginState.error("Something went wrong")));
+            add(_EmitState(LoginState.error("${response.message}")));
+            break;
         }
       },
       (error) {
         add(const LoginEvent.emitNewState(LoginState.loading(false)));
-        add(_EmitState(LoginState.error("Something went wrong,$error")));
+        if (error is Failure) {
+          add(_EmitState(LoginState.error("${error.message}")));
+        } else {
+          add(const _EmitState(
+              LoginState.error("Please check credentials again, wrong info.")));
+        }
       },
       () {
         print("Login Bloc : On Done");

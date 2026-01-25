@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               error: (error) {
                 ScaffoldMessenger.of(myContext).showSnackBar(
-                  SnackBar(content: Text('Login Error: $error')),
+                  SnackBar(content: Text(error)),
                 );
               },
               emailChanged: (emailChanged) {},
