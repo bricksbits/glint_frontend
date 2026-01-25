@@ -31,7 +31,7 @@ extension ViewStoryModelMapper on StoryResponseBody {
                     .toList() ??
                 [],
             username: item.username ?? "",
-            userImageUrl: "",
+            userImageUrl: item.profilePicture ?? "",
             storyViewCount: storiesViews.toString(),
             streakCount: storiesLikes.toString(),
             streamChannelId: item.streamChatChannelId,
