@@ -104,7 +104,10 @@ class _AdditionalInfoContainerState extends State<AdditionalInfoContainer> {
                     title: 'Education',
                     icon: Icons.school_outlined,
                     selectedValue: getEnumFromString(
-                        widget.education, Education.values, Education.graduate),
+                      widget.education,
+                      Education.values,
+                      Education.graduate,
+                    ),
                     listValues: Education.values,
                     onSelection: (selectedItem) {
                       widget.educationSelected(selectedItem.name);

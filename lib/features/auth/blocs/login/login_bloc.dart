@@ -31,7 +31,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<_Login>(
       (event, emit) async {
         if (email != null && password != null) {
-          loginUser(email!, password!);
+          if (_validateEmail(email!)) {
+            if (_validatePassword(password!)) {
+              loginUser(email!, password!);
+            }
+          }
+        } else {
+          add(
+            const _EmitState(
+              LoginState.error('Please provide your Credentials.'),
+            ),
+          );
         }
       },
     );
@@ -81,5 +91,46 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       },
       LoginRequestBody(email: validEmail, password: validPassword),
     );
+  }
+
+  bool _validateEmail(String email) {
+    if (email.isEmpty) {
+      add(
+        const _EmitState(
+          LoginState.error("Email cannot be empty."),
+        ),
+      );
+      return false;
+    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      add(
+        const _EmitState(
+          LoginState.error('Please enter a valid email address.'),
+        ),
+      );
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  bool _validatePassword(String password) {
+    const int minLength = 9;
+    if (password.isEmpty) {
+      add(
+        const _EmitState(
+          LoginState.error('Password cannot be empty.'),
+        ),
+      );
+      return false;
+    } else if (password.length < minLength) {
+      add(
+        const _EmitState(
+          LoginState.error('Password must be at least 10 characters.'),
+        ),
+      );
+      return false;
+    } else {
+      return true;
+    }
   }
 }

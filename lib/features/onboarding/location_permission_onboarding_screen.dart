@@ -102,6 +102,21 @@ class _LocationPermissionOnboardingScreenState
             textAlign: TextAlign.center,
           ),
           const Gap(40.0),
+          GestureDetector(
+            onTap: () {
+              final target = GlintMainRoutes.register.name;
+              context.go(
+                "/$target",
+                extra: false,
+              );
+            },
+            child: const Text(
+              'Proceed anyway >>',
+              style: AppTheme.smallBodyText,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const Gap(40.0),
           BlocConsumer<OnBoardingCubit, OnBoardingState>(
             listener: (context, state) {
               if (state.locationPermissionDenied == true) {

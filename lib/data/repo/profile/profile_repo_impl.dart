@@ -175,10 +175,10 @@ class ProfileRepoImpl extends ProfileRepo {
           cacheUserProfile(itsMeBody);
           return Success("");
         } else {
-          return Failure(Exception(itsMeBody.message));
+          return Failure(Exception(itsMeBody.message),message: itsMeBody.message);
         }
       case Failure():
-        return Failure(getProfileAsResponse.error);
+        return Failure(getProfileAsResponse.error,message: getProfileAsResponse.message);
     }
   }
 

@@ -105,22 +105,27 @@ class RegisterCubit extends Cubit<RegisterState> {
                 state.email,
                 state.password,
               );
+              break;
             case Failure<void>():
-              //todo: Emit Failure state and let them try again.
+              final reason = isRegisteredResponse.message ??
+                  "Register Action failed, please try again.";
               emitNewState(
                 state.copyWith(
                   isLoading: false,
                   isRegisteredSuccessfully: false,
-                  currentSuccessStatus: "Something Went Wrong",
+                  currentSuccessStatus: "Register Action Failed,",
+                  error: reason,
                 ),
               );
           }
         }
       } else {
-        emit(state.copyWith(
-            isPassWordValid: false,
-            isEmailValid: false,
-            error: "Email and password is not valid,"));
+        emit(
+          state.copyWith(
+              isPassWordValid: false,
+              isEmailValid: false,
+              error: "Email or password is not valid,"),
+        );
       }
     } else {
       _validateEmail();
@@ -137,7 +142,23 @@ class RegisterCubit extends Cubit<RegisterState> {
       },
       (error) {
         print("Login : Error ${error.toString()}");
-        emit(state.copyWith(isLoading: false, isRegisteredSuccessfully: false));
+        if (error is Failure) {
+          final reason = error.message ?? "Login Failed";
+          emit(
+            state.copyWith(
+              isLoading: false,
+              isRegisteredSuccessfully: false,
+              error: reason,
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+                isLoading: false,
+                isRegisteredSuccessfully: false,
+                error: "Authentication failed."),
+          );
+        }
       },
       () {
         print("Login : On Done");
@@ -186,10 +207,14 @@ class RegisterCubit extends Cubit<RegisterState> {
         _updateProfile();
         break;
       case Failure<void>():
-        print("Files not uploaded");
-        emitNewState(state.copyWith(
-          isLoading: false,
-        ));
+        final reason = imagesUploadResponse.message ?? "Files Upload failed";
+        emitNewState(
+          state.copyWith(
+            isLoading: false,
+            error: reason,
+          ),
+        );
+        break;
     }
   }
 
@@ -211,7 +236,15 @@ class RegisterCubit extends Cubit<RegisterState> {
         );
         break;
       case Failure<void>():
-        emit(state.copyWith(isLoading: false, isRegisteredSuccessfully: false));
+        final reason =
+            updateProfileResult.message ?? "Can't fetch your details";
+        emit(
+          state.copyWith(
+            isLoading: false,
+            isRegisteredSuccessfully: false,
+            error: reason,
+          ),
+        );
         break;
     }
   }
