@@ -15,7 +15,7 @@ class MyDioClient {
 
   MyDioClient(this.dioHttpClient, this.sharedPreferenceHelper) {
     dioHttpClient.interceptors.addAll([
-      AuthInterceptor(sharedPreferenceHelper, dioHttpClient),
+      AuthInterceptor(sharedPreferenceHelper),
       LogInterceptor(
         request: true,
         requestHeader: true,

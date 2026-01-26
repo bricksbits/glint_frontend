@@ -11,6 +11,7 @@ import 'package:glint_frontend/features/admin/screen/super_admin_dashboard_scree
 import 'package:glint_frontend/features/auth/blocs/reset_password/reset_password_bloc.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
+import 'package:glint_frontend/features/auth/password_change_confirmation_screen.dart';
 import 'package:glint_frontend/features/auth/starter_screen.dart';
 import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';

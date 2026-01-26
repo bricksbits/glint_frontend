@@ -54,7 +54,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final bloc = context.read<ResetPasswordBloc>();
     bloc.add(ResetPasswordEvent.sendOtp(email));
 
-    // Listen to bloc stream
     _blocSubscription = bloc.stream.listen(
       (state) {
         state.maybeWhen(
@@ -83,6 +82,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(message)),
             );
+
+            context.goNamed(GlintMainRoutes.auth.name);
           },
           orElse: () {
             debugPrint('Other state received');

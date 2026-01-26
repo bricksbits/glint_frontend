@@ -22,6 +22,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       await _sendOtp(event.email, emit);
     });
 
+    //Todo : Add the validation for the New and Confirm Password,
     on<_ResetPassword>((event, emit) async {
       emit(const ResetPasswordState.loading());
       await _resetPassword(event.email, event.otp, event.newPassword);

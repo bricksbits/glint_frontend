@@ -101,9 +101,11 @@ class _GlintEventAuthAppbarState extends State<GlintEventAuthAppbar> {
       centerTitle: false,
       scrolledUnderElevation: 0.0,
       backgroundColor: AppColours.white,
-      title: SvgPicture.asset(
-        'lib/assets/images/admin/glint_event_management_logo.svg',
-      ),
+      title: widget.hasAdminActions
+          ? SvgPicture.asset(
+              'lib/assets/images/admin/glint_event_management_logo.svg',
+            )
+          : const SizedBox.shrink(),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
         child: Container(
