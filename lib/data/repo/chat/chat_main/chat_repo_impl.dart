@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/get_recent_matches_response.dart';
-import 'package:glint_frontend/data/remote/model/response/story/story_response.dart';
+import 'package:glint_frontend/data/remote/model/response/story/story_response_body.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/chat/chat_repo.dart';
@@ -67,13 +66,9 @@ class ChatRepoImpl extends ChatRepo {
 
     switch (response) {
       case Success():
-        final storiesResponse =
-            UniversalSuccessResponseBody<StoryResponse>.fromJson(
-          response.data,
-          (json) => StoryResponse.fromJson(json),
-        );
-        if (storiesResponse.success && storiesResponse.data != null) {
-          final stories = storiesResponse.data!.mapToUiModel();
+        final storiesResponse = StoryResponseBody.fromJson(response.data);
+        if (storiesResponse.success == true && storiesResponse.data != null) {
+          final stories = storiesResponse.mapToUiModel();
           return Success(stories);
         } else {
           return Failure(Exception(storiesResponse.message));

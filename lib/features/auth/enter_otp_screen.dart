@@ -90,7 +90,7 @@ class _EnterOtpScreenState extends State<EnterOtpScreen> {
                 submittedPinTheme: submittedPinTheme,
                 onChanged: (pin) => {
                   setState(() {
-                    if (pin.length != 6) {
+                    if (pin.length == 4) {
                       buttonDisabled = true;
                     }
                   })

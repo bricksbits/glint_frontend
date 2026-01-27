@@ -59,10 +59,9 @@ class PaymentRepoImpl extends PaymentRepo {
 
   @override
   Future<Result<BuyMembershipResponse>> buyMembership(
-      MembershipType membershipType, String price, String timePeriod) async {
+    MembershipType membershipType,
+  ) async {
     final requestBody = BuyMembershipRequest(
-      price: int.parse(price),
-      numberOfDays: int.parse(timePeriod),
       membershipType: membershipType.name.toLowerCase(),
     );
 
@@ -84,10 +83,16 @@ class PaymentRepoImpl extends PaymentRepo {
         if (successResponse.success && successResponse.data != null) {
           return Success(successResponse.data!);
         } else {
-          return Failure(Exception(successResponse.message));
+          return Failure(
+            Exception(successResponse.message),
+            message: successResponse.message,
+          );
         }
       case Failure():
-        return Failure(Exception("Can't get the Membership, please try again"));
+        return Failure(
+          Exception("Can't get the Membership, please try again"),
+          message: response.message,
+        );
     }
   }
 

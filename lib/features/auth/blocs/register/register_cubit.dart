@@ -5,6 +5,7 @@ import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/application_logic/auth/sign_in_user_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
+import 'package:glint_frontend/domain/business_logic/repo/profile/profile_repo.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/utils/logger.dart';
@@ -18,6 +19,7 @@ part 'register_cubit.freezed.dart';
 class RegisterCubit extends Cubit<RegisterState> {
   final ImageService imageService = getIt.get<ImageService>();
   final AuthenticationRepo authenticationRepo = getIt.get<AuthenticationRepo>();
+  final ProfileRepo profileRepo = getIt.get<ProfileRepo>();
   final SignInUserUseCase signInUserUseCase = getIt.get<SignInUserUseCase>();
 
   RegisterCubit() : super(const RegisterState.initial());
@@ -71,6 +73,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   // Delete everything from persistence
   //Todo: Update the FCM token
   Future<void> registerUser() async {
+    _validateEmail();
     if (state.isEmailValid &&
         state.isPassWordValid &&
         state.isConfirmPassword) {
@@ -103,22 +106,27 @@ class RegisterCubit extends Cubit<RegisterState> {
                 state.email,
                 state.password,
               );
+              break;
             case Failure<void>():
-              //todo: Emit Failure state and let them try again.
+              final reason = isRegisteredResponse.message ??
+                  "Register Action failed, please try again.";
               emitNewState(
                 state.copyWith(
                   isLoading: false,
                   isRegisteredSuccessfully: false,
-                  currentSuccessStatus: "Something Went Wrong",
+                  currentSuccessStatus: "Register Action Failed,",
+                  error: reason,
                 ),
               );
           }
         }
       } else {
-        emit(state.copyWith(
-            isPassWordValid: false,
-            isEmailValid: false,
-            error: "Email and password is not valid,"));
+        emit(
+          state.copyWith(
+              isPassWordValid: false,
+              isEmailValid: false,
+              error: "Email or password is not valid,"),
+        );
       }
     } else {
       _validateEmail();
@@ -135,7 +143,23 @@ class RegisterCubit extends Cubit<RegisterState> {
       },
       (error) {
         print("Login : Error ${error.toString()}");
-        emit(state.copyWith(isLoading: false, isRegisteredSuccessfully: false));
+        if (error is Failure) {
+          final reason = error.message ?? "Login Failed";
+          emit(
+            state.copyWith(
+              isLoading: false,
+              isRegisteredSuccessfully: false,
+              error: reason,
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+                isLoading: false,
+                isRegisteredSuccessfully: false,
+                error: "Authentication failed."),
+          );
+        }
       },
       () {
         print("Login : On Done");
@@ -184,10 +208,14 @@ class RegisterCubit extends Cubit<RegisterState> {
         _updateProfile();
         break;
       case Failure<void>():
-        print("Files not uploaded");
-        emitNewState(state.copyWith(
-          isLoading: false,
-        ));
+        final reason = imagesUploadResponse.message ?? "Files Upload failed";
+        emitNewState(
+          state.copyWith(
+            isLoading: false,
+            error: reason,
+          ),
+        );
+        break;
     }
   }
 
@@ -197,8 +225,9 @@ class RegisterCubit extends Cubit<RegisterState> {
         currentSuccessStatus: "Fetching profiles",
       ),
     );
-    signInUserUseCase.perform(
-      (response) {
+    final updateProfileResult = await profileRepo.getAndCacheUserProfile();
+    switch (updateProfileResult) {
+      case Success<void>():
         emitNewState(
           state.copyWith(
             isRegisteredSuccessfully: true,
@@ -206,16 +235,19 @@ class RegisterCubit extends Cubit<RegisterState> {
             navigateToRoute: GlintMainRoutes.home.name,
           ),
         );
-      },
-      (error) {
-        print("Login : Error $error");
-        emit(state.copyWith(isLoading: false, isRegisteredSuccessfully: false));
-      },
-      () {
-        print("Login : On Done");
-      },
-      LoginRequestBody(email: state.email, password: state.password),
-    );
+        break;
+      case Failure<void>():
+        final reason =
+            updateProfileResult.message ?? "Can't fetch your details";
+        emit(
+          state.copyWith(
+            isLoading: false,
+            isRegisteredSuccessfully: false,
+            error: reason,
+          ),
+        );
+        break;
+    }
   }
 
   Future<void> registerAsAAdmin() async {
@@ -282,7 +314,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   void _validatePassword() {
     String? error;
-    const int minLength = 9;
+    const int minLength = 10;
 
     if (state.password.isEmpty) {
       error = 'Password cannot be empty.';
@@ -311,7 +343,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   void _validateConfirmPassword() {
     String? error;
-    const int minLength = 8;
+    const int minLength = 10;
 
     if (state.confirmPassword.isEmpty) {
       error = 'Confirm Password cannot be empty.';

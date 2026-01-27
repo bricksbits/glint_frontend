@@ -29,7 +29,10 @@ class _CommonBottomSheetChipComponentState<T extends Enum>
   @override
   void initState() {
     super.initState();
-    _selected = widget.selectedValue;
+    setState(() {
+      _selected = widget.selectedValue;
+    });
+    widget.onSelection(_selected);
   }
 
   @override

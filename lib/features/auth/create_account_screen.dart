@@ -41,6 +41,8 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _nameController.dispose();
+    _contactController.dispose();
     _organizationController.dispose();
     _confirmPasswordController.dispose();
     _emailFocusNode.dispose();
@@ -129,12 +131,17 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
         return false;
       },
       listener: (context, state) {
+        if (state.error.isNotEmpty) {
+          showCustomSnackbar(context, message: state.error, isError: true);
+        }
+
         if (state.isRegisteredSuccessfully) {
           if (context.mounted) {
             GlintAnalyticService.registerSuccessfullyEvent();
             context.goNamed(state.navigateToRoute);
           }
         }
+
         if (!state.isEmailValid && state.error.isNotEmpty) {
           showCustomSnackbar(context, message: state.error, isError: true);
         }
@@ -274,6 +281,7 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                           GlintAuthActionButton(
                             label: 'Sign up',
                             onPressed: () {
+                              FocusScope.of(context).unfocus();
                               context.read<RegisterCubit>().registerUser();
                             },
                           ),

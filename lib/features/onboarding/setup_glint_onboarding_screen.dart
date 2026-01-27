@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/glint_custom_app_bar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/business_logic/repo/boarding/on_boarding_repo.dart';
@@ -61,10 +62,14 @@ class SetupGlintOnboardingScreen extends StatelessWidget {
                     foregroundColor: Colors.white,
                     backgroundColor: AppColours.primaryBlue,
                     onPressed: () {
-                      final targetDestination = state.currentDestination ?? GlintBoardingRoutes.name.name;
+                      final targetDestination = state.currentDestination ??
+                          GlintBoardingRoutes.name.name;
                       final isNewUserCreated = state.currentState;
-                      if (isNewUserCreated?.tempUserId == NEW_ON_BOARD_USER_ID) {
+                      if (isNewUserCreated?.tempUserId ==
+                          NEW_ON_BOARD_USER_ID) {
                         context.go("/$targetDestination");
+                        showCustomSnackbar(context,
+                            message: "Your progress is saved with us");
                       }
                     },
                   ),

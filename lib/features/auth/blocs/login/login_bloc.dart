@@ -31,7 +31,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<_Login>(
       (event, emit) async {
         if (email != null && password != null) {
-          loginUser(email!, password!);
+          if (_validateEmail(email!)) {
+            if (_validatePassword(password!)) {
+              loginUser(email!, password!);
+            }
+          }
+        } else {
+          add(
+            const _EmitState(
+              LoginState.error('Please provide your Credentials.'),
+            ),
+          );
         }
       },
     );
@@ -55,23 +65,72 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           case null:
             add(const LoginEvent.emitNewState(LoginState.loading(false)));
             add(const _EmitState(LoginState.error("Something went wrong")));
+            break;
           case Success<UsersType>():
             add(const LoginEvent.emitNewState(LoginState.loading(false)));
             add(_EmitState(LoginState.success(response.data)));
+            break;
           case Failure<UsersType>():
             //Todo: Handle the Error Case, When the Image is not uploaded,
             add(const LoginEvent.emitNewState(LoginState.loading(false)));
-            add(const _EmitState(LoginState.error("Something went wrong")));
+            add(_EmitState(LoginState.error("${response.message}")));
+            break;
         }
       },
       (error) {
         add(const LoginEvent.emitNewState(LoginState.loading(false)));
-        add(_EmitState(LoginState.error("Something went wrong,$error")));
+        if (error is Failure) {
+          add(_EmitState(LoginState.error("${error.message}")));
+        } else {
+          add(const _EmitState(
+              LoginState.error("Please check credentials again, wrong info.")));
+        }
       },
       () {
         print("Login Bloc : On Done");
       },
       LoginRequestBody(email: validEmail, password: validPassword),
     );
+  }
+
+  bool _validateEmail(String email) {
+    if (email.isEmpty) {
+      add(
+        const _EmitState(
+          LoginState.error("Email cannot be empty."),
+        ),
+      );
+      return false;
+    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      add(
+        const _EmitState(
+          LoginState.error('Please enter a valid email address.'),
+        ),
+      );
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  bool _validatePassword(String password) {
+    const int minLength = 9;
+    if (password.isEmpty) {
+      add(
+        const _EmitState(
+          LoginState.error('Password cannot be empty.'),
+        ),
+      );
+      return false;
+    } else if (password.length < minLength) {
+      add(
+        const _EmitState(
+          LoginState.error('Password must be at least 10 characters.'),
+        ),
+      );
+      return false;
+    } else {
+      return true;
+    }
   }
 }

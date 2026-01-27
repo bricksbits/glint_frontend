@@ -12,7 +12,6 @@ import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/login_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/register_account_request_body.dart';
-import 'package:glint_frontend/data/remote/model/response/auth/login_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/auth/login_response.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/story_upload_response.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
@@ -60,9 +59,12 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
 
     switch (response) {
       case Success():
-        return Success(response.data);
+        return Success("");
       case Failure():
-        return Failure(Exception(response.error));
+        return Failure(
+          Exception(response.error),
+          message: response.message,
+        );
     }
   }
 
@@ -81,56 +83,40 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
         case Success():
           final successResponse = LoginResponse.fromJson(response.data);
           if (successResponse.data != null && successResponse.success == true) {
-            await profileDao.insertProfile(successResponse.mapToEntity());
             final accessToken = successResponse.data?.authToken;
             final refreshToken = successResponse.data?.refreshToken;
             final streamToken = successResponse.data?.streamAuthToken;
             final userId = successResponse.data?.userId;
-            final userName = successResponse.data?.username;
-            final userImageUrl =
-                successResponse.data?.pictureUrlList?.firstOrNull?.presignedUrl;
-            if (successResponse.data != null) {
-              saveMembershipDetails(
-                ProfileMembershipEntity(
-                  userId: successResponse.data?.userId.toString() ?? "user_id",
-                  superLikes: successResponse.data?.superLikesLeft ?? 0,
-                  aiMessages: successResponse.data?.aiMessagesRemaining ?? 0,
-                  rewinds: successResponse.data?.rewindsRemaining ?? 0,
-                  superDm: successResponse.data?.directDmRemaining ?? 0,
-                ),
-              );
-            }
-            await sharedPreferenceHelper.saveUserData(accessToken, refreshToken,
-                streamToken, userId.toString(), userName, userImageUrl);
+            await sharedPreferenceHelper.saveUserData(
+              accessToken,
+              refreshToken,
+              streamToken,
+              userId.toString(),
+              null,
+              null,
+            );
 
             await sharedPreferenceHelper
                 .saveUserType(successResponse.data?.userRole ?? "user");
-
-            await sharedPreferenceHelper.saveString(
-              SharedPreferenceKeys.adminUserOrganizationKey,
-              successResponse.data?.occupation ?? "Event Manager",
-            );
 
             await sharedPreferenceHelper.saveString(
               SharedPreferenceKeys.adminUserEmailKey,
               loginRequestBody.email ?? "",
             );
 
-            await sharedPreferenceHelper.saveBoolean(
-              SharedPreferenceKeys.premiumUserKey,
-              successResponse.data?.isPremiumUser ?? false,
-            );
             return Success(successResponse);
           } else {
-            return Failure(Exception(successResponse.message));
+            return Failure(Exception(successResponse.message),
+                message: successResponse.message);
           }
         case Failure():
           debugLogger("LOGIN_FAILED", "Reason : ${response.error}");
-          return Failure(Exception(response.error));
+          return Failure(Exception(response.error), message: response.message);
       }
     } catch (e) {
       debugLogger("LOGIN_FAILED", "Reason : $e");
-      return Failure(Exception("LOGIN_FAILED Reason : $e"));
+      return Failure(Exception("LOGIN_FAILED Reason : $e"),
+          message: "Something went wrong,");
     }
   }
 
@@ -197,11 +183,13 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
           return Failure(
             Exception(
                 "Files ${storiesResponse.data?.filesNotUploaded} failed to upload"),
+            message: storiesResponse.message,
           );
         }
       case Failure():
         return Failure(
           response.error,
+          message: response.message,
         );
     }
   }

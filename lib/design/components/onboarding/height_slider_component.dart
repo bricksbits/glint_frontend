@@ -23,11 +23,21 @@ class _HeightInputComponentState extends State<HeightInputComponent> {
     final int inches = totalInches.round();
     final int feet = inches ~/ 12;
     final int remainingInches = inches % 12;
-    return "$feet' $remainingInches";
+    return "$feet'.$remainingInches";
   }
 
   double _getFinalValue() {
     return _totalInches.roundToDouble();
+  }
+
+  double _formatHeightAsDouble(double totalInches) {
+    final int totalInchesInt = totalInches.round();
+    final int feet = totalInchesInt ~/ 12;
+    final int remainingInches = totalInchesInt % 12;
+
+    // This creates the 5.6 format
+    // We divide by 10 to move the inches to the first decimal place
+    return feet + (remainingInches / 10);
   }
 
   @override
@@ -84,7 +94,7 @@ class _HeightInputComponentState extends State<HeightInputComponent> {
             max: maxHeightInches,
             divisions: divisions,
             onChanged: (double newValue) {
-              widget.heightSelected(newValue);
+              widget.heightSelected(_formatHeightAsDouble(newValue));
               setState(() {
                 _totalInches = newValue;
               });

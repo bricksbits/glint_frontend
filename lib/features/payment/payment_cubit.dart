@@ -22,10 +22,11 @@ class PaymentCubit extends Cubit<PaymentState> {
   void collectPaymentRequest(PaymentArgumentModel? paymentRequest) {
     emit(
       state.copyWith(
-          paymentModel: paymentRequest,
-          loading: false,
-          isMembershipRequest: paymentRequest?.membershipType != null &&
-              paymentRequest?.eventId == null),
+        paymentModel: paymentRequest,
+        loading: false,
+        isMembershipRequest: paymentRequest?.membershipType != null &&
+            paymentRequest?.eventId == null,
+      ),
     );
   }
 
@@ -69,8 +70,6 @@ class PaymentCubit extends Cubit<PaymentState> {
         membershipType != null) {
       final getMembershipResponse = await paymentRepo.buyMembership(
         membershipType,
-        membershipAmount,
-        membershipTime,
       );
 
       switch (getMembershipResponse) {
@@ -91,7 +90,9 @@ class PaymentCubit extends Cubit<PaymentState> {
           }
         case Failure<BuyMembershipResponse>():
           emit(state.copyWith(
-              error: "Can't verify the background request, try again please,"));
+            error: getMembershipResponse.message,
+          ));
+          break;
       }
     } else {
       emit(state.copyWith(
@@ -107,12 +108,13 @@ class PaymentCubit extends Cubit<PaymentState> {
     print("Order Generated with Id: $razorpayOrderId and Key: $razorpayKey");
     final orderObject = RazorpayOrderModel(
       razorpayKey: razorpayKey,
-      amount: int.parse(amount),
       razorpayOrderId: razorpayOrderId,
       name: state.name,
       description: state.description,
     );
-    emit(state.copyWith(razorpayModel: orderObject));
+    emit(
+      state.copyWith(razorpayModel: orderObject),
+    );
   }
 
   Future<void> verifyThePayment(

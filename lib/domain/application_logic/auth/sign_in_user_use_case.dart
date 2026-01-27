@@ -6,6 +6,7 @@ import 'package:glint_frontend/data/remote/model/request/auth/login_request_body
 import 'package:glint_frontend/data/remote/model/response/auth/login_response.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
+import 'package:glint_frontend/domain/business_logic/repo/profile/profile_repo.dart';
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
@@ -13,8 +14,9 @@ import 'package:injectable/injectable.dart';
 @injectable
 class SignInUserUseCase extends UseCase<Result<UsersType>, LoginRequestBody> {
   final AuthenticationRepo authenticationRepo;
+  final ProfileRepo profileRepo;
 
-  SignInUserUseCase(this.authenticationRepo);
+  SignInUserUseCase(this.authenticationRepo, this.profileRepo);
 
   @override
   Future<Stream<Result<UsersType>?>> buildUseCaseStream(
@@ -24,6 +26,7 @@ class SignInUserUseCase extends UseCase<Result<UsersType>, LoginRequestBody> {
       authenticationRepo.login(params!).then((loginResponse) {
         switch (loginResponse) {
           case Success<LoginResponse>(data: _):
+            profileRepo.getAndCacheUserProfile();
             var typeFound = loginResponse.data.data?.userRole ?? "user";
             late final UsersType userType;
             switch (typeFound) {
@@ -41,16 +44,21 @@ class SignInUserUseCase extends UseCase<Result<UsersType>, LoginRequestBody> {
             }
             controller.add(Success(userType));
             controller.close();
-          case Failure<LoginResponse>(error: var error):
-            controller.addError(Failure(error));
+          case Failure<LoginResponse>(
+              error: var error,
+              message: var message,
+            ):
+            controller.addError(Failure(error, message: message));
             controller.close();
         }
       }).catchError((caughtError) {
-        controller.addError(Failure(Exception(caughtError.toString())));
+        controller.addError(Failure(Exception(caughtError.toString()),
+            message: "Something Went wrong."));
         controller.close();
       });
     } catch (e) {
-      controller.addError(Failure(Exception(e.toString())));
+      controller.addError(
+          Failure(Exception(e.toString()), message: "Something went wrong."));
       controller.close();
     }
     return controller.stream;

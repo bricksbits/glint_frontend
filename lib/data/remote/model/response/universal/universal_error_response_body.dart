@@ -33,52 +33,24 @@ String errorToJson(Error data) => json.encode(data.toJson());
 class Error {
   Error({
       this.code, 
-      this.message, 
-      this.details,});
+      this.message,
+  });
 
   Error.fromJson(dynamic json) {
     code = json['code'];
     message = json['message'];
-    details = json['details'] != null ? Details.fromJson(json['details']) : null;
   }
   String? code;
   String? message;
-  Details? details;
 Error copyWith({  String? code,
   String? message,
-  Details? details,
 }) => Error(  code: code ?? this.code,
   message: message ?? this.message,
-  details: details ?? this.details,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['code'] = code;
     map['message'] = message;
-    if (details != null) {
-      map['details'] = details?.toJson();
-    }
-    return map;
-  }
-
-}
-
-Details detailsFromJson(String str) => Details.fromJson(json.decode(str));
-String detailsToJson(Details data) => json.encode(data.toJson());
-class Details {
-  Details({
-      this.username,});
-
-  Details.fromJson(dynamic json) {
-    username = json['username'];
-  }
-  String? username;
-Details copyWith({  String? username,
-}) => Details(  username: username ?? this.username,
-);
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['username'] = username;
     return map;
   }
 

@@ -1,24 +1,27 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/data/remote/model/request/story/story_like_dislike_request_body.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/story_upload_response.dart';
+import 'package:glint_frontend/data/remote/model/response/story/story_like_dislike_response_body.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/story/story_repo.dart';
 import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: StoryRepo)
+@LazySingleton(as: StoryRepo)
 class StoryRepoImpl extends StoryRepo {
   final MyDioClient httpClient;
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
 
   StoryRepoImpl(this.httpClient, this.sharedPreferenceHelper);
+
+  final logPrefix = "StoryRepo";
 
   @override
   Future<Result<bool>> uploadStory(File newlyUploadedStoryFile) async {
@@ -122,5 +125,60 @@ class StoryRepoImpl extends StoryRepo {
         streakCount: "",
       ),
     );
+  }
+
+  @override
+  Future<Result<void>> disLikeStory(int storyOwnerId, String storyId) async {
+    final requestJsonBody = StoryLikeDislikeRequestBody(
+            storyOwnerUserId: storyOwnerId, storyUuid: storyId)
+        .toJson();
+
+    final response = await apiCallHandler(
+        httpClient: httpClient,
+        requestType: HttpRequestEnum.POST,
+        endpoint: "user/content/story/like",
+        requestBody: requestJsonBody);
+
+    switch (response) {
+      case Success():
+        final successResponse =
+            StoryLikeDislikeResponseBody.fromJson(response.data);
+        if (successResponse.success == true) {
+          debugLogger(logPrefix, successResponse.message.toString());
+          return Success("");
+        } else {
+          return Failure(Exception(successResponse.message));
+        }
+      case Failure():
+        return Failure(response.error);
+    }
+  }
+
+  @override
+  Future<Result<void>> likeStory(int storyOwnerId, String storyId) async {
+    final requestJsonBody = StoryLikeDislikeRequestBody(
+            storyOwnerUserId: storyOwnerId, storyUuid: storyId)
+        .toJson();
+
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.DELETE,
+      endpoint: "user/content/story/like",
+      requestBody: requestJsonBody,
+    );
+
+    switch (response) {
+      case Success():
+        final successResponse =
+            StoryLikeDislikeResponseBody.fromJson(response.data);
+        if (successResponse.success == true) {
+          debugLogger(logPrefix, successResponse.message.toString());
+          return Success("");
+        } else {
+          return Failure(Exception(successResponse.message));
+        }
+      case Failure():
+        return Failure(response.error);
+    }
   }
 }

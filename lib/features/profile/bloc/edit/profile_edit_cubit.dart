@@ -6,6 +6,7 @@ import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/repo/profile/profile_repo.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 part 'profile_edit_state.dart';
@@ -20,6 +21,8 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
     fetchCurrentProfile();
   }
 
+  final String logPrefix = "ProfileCubit";
+
   Future<void> fetchCurrentProfile() async {
     final currentProfile = await profileRepo.fetchUserProfile();
     switch (currentProfile) {
@@ -28,13 +31,38 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
           state.copyWith(
               previewProfileModel: currentProfile.data, isLoading: false),
         );
+        break;
       case Failure<PeopleCardModel>():
+        // A Weak mechanism to close the recursion calls,
+        if (state.refetchProfileData) {
+          debugLogger(logPrefix, "NoProfile Data found, re-fetching data");
+          getUserProfile();
+          emitNewState(state.copyWith(refetchProfileData: false));
+        }
         emitNewState(
           state.copyWith(
-            error: "No profile data found, please login again.",
+            error: "No profile data found, Fetching data again.",
             isLoading: false,
           ),
         );
+        break;
+    }
+  }
+
+  Future<void> getUserProfile() async {
+    final itsMeResponse = await profileRepo.getAndCacheUserProfile();
+    switch (itsMeResponse) {
+      case Success<void>():
+        fetchCurrentProfile();
+        break;
+      case Failure<void>():
+        emitNewState(
+          state.copyWith(
+            error: "Server Went down, can't fetch profile currently",
+            isLoading: false,
+          ),
+        );
+        break;
     }
   }
 
