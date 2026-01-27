@@ -5,8 +5,11 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -34,9 +37,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   void initState() {
     super.initState();
-    context
-        .read<PaymentCubit>()
-        .collectPaymentRequest(widget.paymentArgumentModel);
+    context.read<PaymentCubit>().collectPaymentRequest(
+          widget.paymentArgumentModel,
+        );
 
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentFailure);
@@ -47,8 +50,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget build(BuildContext context) {
     return BlocListener<PaymentCubit, PaymentState>(
       listener: (context, state) {
-        state.when(initiate: (orderId, amount, name, desc, razorPayModel,
-            paymentModel, loading, isMembership, error) {
+        state.when(initiate: (
+          orderId,
+          amount,
+          name,
+          desc,
+          razorPayModel,
+          paymentModel,
+          loading,
+          isMembership,
+          error,
+        ) {
           if (razorPayModel != null) {
             GlintAnalyticService.onPaymentProceedEvent();
             print("Success Order Placed, opening razorpay");
@@ -368,11 +380,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
         if (successResponse.orderId != null &&
             successResponse.paymentId != null &&
             successResponse.signature != null) {
-          context.read<PaymentCubit>().verifyThePayment(
-                successResponse.paymentId!,
-                successResponse.orderId!,
-                successResponse.signature!,
-              );
+          // context.read<PaymentCubit>().verifyThePayment(
+          //       successResponse.paymentId!,
+          //       successResponse.orderId!,
+          //       successResponse.signature!,
+          //     );
+          showCustomSnackbar(context, message: "Payment Successful");
+          context.pop();
+          context.pushNamed(GlintMainRoutes.home.name);
         }
       }
     } else {

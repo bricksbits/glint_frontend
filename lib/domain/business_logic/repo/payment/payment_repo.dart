@@ -12,8 +12,6 @@ abstract class PaymentRepo {
 
   Future<Result<BuyMembershipResponse>> buyMembership(
     MembershipType membershipType,
-    String price,
-    String timePeriod,
   );
 
   Future<Result<void>> verifyPayment(

@@ -73,6 +73,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   // Delete everything from persistence
   //Todo: Update the FCM token
   Future<void> registerUser() async {
+    _validateEmail();
     if (state.isEmailValid &&
         state.isPassWordValid &&
         state.isConfirmPassword) {
@@ -313,7 +314,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   void _validatePassword() {
     String? error;
-    const int minLength = 9;
+    const int minLength = 10;
 
     if (state.password.isEmpty) {
       error = 'Password cannot be empty.';
@@ -342,7 +343,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   void _validateConfirmPassword() {
     String? error;
-    const int minLength = 8;
+    const int minLength = 10;
 
     if (state.confirmPassword.isEmpty) {
       error = 'Confirm Password cannot be empty.';

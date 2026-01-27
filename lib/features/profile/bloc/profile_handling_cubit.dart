@@ -33,14 +33,45 @@ class ProfileHandlingCubit extends Cubit<ProfileHandlingState> {
   }
 
   Future<void> fetchCurrentProfile() async {
+    emitNewState(state.copyWith(isLoading: true));
     final currentProfile = await profileRepo.fetchUserProfile();
     switch (currentProfile) {
       case Success<PeopleCardModel>():
-        emitNewState(state.copyWith(previewProfileModel: currentProfile.data));
-      case Failure<PeopleCardModel>():
         emitNewState(
-          state.copyWith(error: "No profile data found, please login again."),
+          state.copyWith(
+            isLoading: false,
+            previewProfileModel: currentProfile.data,
+          ),
         );
+        break;
+      case Failure<PeopleCardModel>():
+        getUserProfile();
+        emitNewState(
+          state.copyWith(
+            isLoading: false,
+            error: "No profile data found, please login again.",
+          ),
+        );
+        break;
+    }
+  }
+
+  Future<void> getUserProfile() async {
+    emitNewState(state.copyWith(isLoading: true));
+    final itsMeResponse = await profileRepo.getAndCacheUserProfile();
+    switch (itsMeResponse) {
+      case Success<void>():
+        fetchCurrentProfile();
+        break;
+      case Failure<void>():
+        emitNewState(state.copyWith(isLoading: false));
+        emitNewState(
+          state.copyWith(
+            error: "Server Went down, can't fetch profile currently",
+            isLoading: false,
+          ),
+        );
+        break;
     }
   }
 
