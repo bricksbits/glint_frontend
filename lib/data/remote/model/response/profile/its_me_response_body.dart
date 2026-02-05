@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:glint_frontend/data/remote/model/response/converters/data_model_converters_helper.dart';
 import 'package:glint_frontend/data/remote/model/response/people/get_people_response.dart';
 
 ItsMeResponseBody itsMeResponseBodyFromJson(String str) => ItsMeResponseBody.fromJson(json.decode(str));
@@ -77,7 +78,7 @@ class Data {
     interests = json['interests'] != null ? json['interests'].cast<String>() : [];
     relationshipGoals = json['relationship_goals'] != null ? json['relationship_goals'].cast<String>() : [];
     bio = json['bio'];
-    height = json['height'];
+    height = toDouble(json['height']);
     occupation = json['occupation'];
     education = json['education'];
     workoutHabit = json['workout_habit'];

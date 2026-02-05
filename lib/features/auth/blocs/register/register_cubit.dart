@@ -242,8 +242,9 @@ class RegisterCubit extends Cubit<RegisterState> {
         emit(
           state.copyWith(
             isLoading: false,
-            isRegisteredSuccessfully: false,
+            isRegisteredSuccessfully: true,
             error: reason,
+            navigateToRoute: GlintMainRoutes.home.name,
           ),
         );
         break;

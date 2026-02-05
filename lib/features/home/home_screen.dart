@@ -161,6 +161,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               }
             },
           ),
+          BlocListener<UserInfoManagerCubit, UserInfoManagerState>(
+            listenWhen: (pre,curr) => curr.error != null,
+              listener: (context, state) {
+                if (state.error != null) {
+                  showCustomSnackbar(
+                    context,
+                    message: state.error ?? "No Perks Left",
+                    isError: true,
+                  );
+                }
+              }),
         ],
         child: IndexedStack(
           index: _selectedIndex,

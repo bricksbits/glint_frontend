@@ -26,16 +26,10 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
     pushFcmTokenToServer();
   }
 
-  // Todo: Call from the Home Screen
   Future<void> init() async {
-    getCurrentUserProfile().then((_) {
-      fetchPremiumStatus();
+    fetchPremiumStatus().then((_) {
       getCurrentMembershipData();
     });
-  }
-
-  Future<void> getCurrentUserProfile() async {
-    await userInfoRepo.getAndCacheUserInfo();
   }
 
   Future<void> updateTheFcmLocally(String fcmToken) async {
@@ -58,7 +52,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
           break;
         case Failure<ProfileMembershipEntity?>():
           emit(state.copyWith(
-              membershipEntity: null, error: "Error: ${result.error}"));
+              membershipEntity: null,));
           break;
       }
     });
@@ -69,7 +63,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
       superLikedUsed();
       return true;
     } else {
-      emitNewStatee(state.copyWith(error: "No premium perks found"));
+      emitNewStatee(state.copyWith(error: "No Super Likes available"));
       return false;
     }
   }
@@ -79,7 +73,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
       rewindUsed();
       return true;
     } else {
-      emitNewStatee(state.copyWith(error: "No premium perks found"));
+      emitNewStatee(state.copyWith(error: "No Rewinds available"));
       return false;
     }
   }
@@ -88,12 +82,12 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
     if (state.isPremiumUser) {
       final currentDmCount = state.membershipEntity?.superDm ?? 0;
       if (currentDmCount <= 0) {
-        emit(state.copyWith(error: "No more rewinds left"));
+        emit(state.copyWith(error: "No more DM's left"));
         return false;
       }
       return true;
     } else {
-      emitNewStatee(state.copyWith(error: "No premium perks found"));
+      emitNewStatee(state.copyWith(error: "No Messages available."));
       return false;
     }
   }
@@ -147,8 +141,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
           rewinds: currentRewindCount - 1,
         );
         emit(state.copyWith(membershipEntity: updatedState));
-        final updateDbForRewinds =
-            await userInfoRepo.setLocalUserPremiumInfo(updatedState);
+        await userInfoRepo.setLocalUserPremiumInfo(updatedState);
       }
     }
   }
@@ -156,7 +149,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   Future<void> aiMessageUsed() async {
     final currentAiMessageCount = state.membershipEntity?.aiMessages ?? 0;
     if (currentAiMessageCount <= 0) {
-      emit(state.copyWith(error: "No more rewinds left"));
+      emit(state.copyWith(error: "No more AI messages left"));
     } else {
       final currentStateOfMembership = state.membershipEntity;
       if (currentStateOfMembership != null) {
