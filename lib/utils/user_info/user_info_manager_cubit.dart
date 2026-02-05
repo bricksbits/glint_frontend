@@ -23,11 +23,15 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   final chatWithRepo = getIt.get<ChatWithRepo>();
 
   UserInfoManagerCubit() : super(const UserInfoManagerState.initial()) {
-    getCurrentUserProfile();
-    fetchPremiumStatus();
-    getCurrentMembershipData();
     pushFcmTokenToServer();
-    updateUserLastKnowLocation();
+  }
+
+  // Todo: Call from the Home Screen
+  Future<void> init() async {
+    getCurrentUserProfile().then((_) {
+      fetchPremiumStatus();
+      getCurrentMembershipData();
+    });
   }
 
   Future<void> getCurrentUserProfile() async {
@@ -38,6 +42,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
     await userInfoRepo.updateFcmTokenLocally(fcmToken);
   }
 
+  // Todo: Call from Splash Screen
   Future<void> pushFcmTokenToServer() async {
     userInfoRepo.updateFcmTokenToServer();
   }
@@ -45,10 +50,13 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   Future<void> getCurrentMembershipData() async {
     await userInfoRepo.getLocalUserPremiumInfo().then((result) {
       switch (result) {
-        case Success<ProfileMembershipEntity>():
-          emit(state.copyWith(membershipEntity: result.data));
+        case Success<ProfileMembershipEntity?>():
+          final membershipData = result.data;
+          if (membershipData != null) {
+            emit(state.copyWith(membershipEntity: membershipData));
+          }
           break;
-        case Failure<ProfileMembershipEntity>():
+        case Failure<ProfileMembershipEntity?>():
           emit(state.copyWith(
               membershipEntity: null, error: "Error: ${result.error}"));
           break;
@@ -173,7 +181,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
     }
   }
 
-  Future<void> updateUserLocation() async {
+  Future<void> updateUserLocationLocally() async {
     final isPermissionStillAvailable =
         await permissionService.requestPermission();
     if (isPermissionStillAvailable) {
@@ -182,6 +190,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
           getCurrentLocation?.latitude ?? 24.7);
       await sharedPrefHelper.saveDouble(SharedPreferenceKeys.userLongitudeKey,
           getCurrentLocation?.longitude ?? 77.41);
+      updateUserLastKnowLocation();
     }
   }
 

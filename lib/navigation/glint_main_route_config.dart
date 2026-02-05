@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/pass_event_details_argument_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 import 'package:glint_frontend/features/admin/bloc/admin_dasboard/admin_dashboard_bloc.dart';
@@ -11,7 +12,6 @@ import 'package:glint_frontend/features/admin/screen/super_admin_dashboard_scree
 import 'package:glint_frontend/features/auth/blocs/reset_password/reset_password_bloc.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
-import 'package:glint_frontend/features/auth/password_change_confirmation_screen.dart';
 import 'package:glint_frontend/features/auth/starter_screen.dart';
 import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
@@ -23,8 +23,6 @@ import 'package:glint_frontend/features/chat/oneTimeView/one_time_view_screen.da
 import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
 import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
-import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
-import 'package:glint_frontend/features/event/base/event_base_screen.dart';
 import 'package:glint_frontend/features/event/exports.dart';
 import 'package:glint_frontend/features/event/people/people_interested_for_event_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
@@ -44,7 +42,6 @@ import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/navigation/glint_authentication_routes.dart';
 import 'package:glint_frontend/navigation/glint_user_on_boarding_routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 import '../features/admin/screen/admin_create_event_screen.dart';
 import '../features/admin/screen/admin_edit_profile_screen.dart';
@@ -55,6 +52,7 @@ import '../features/admin/screen/track_event_tickets_bought_screen.dart';
 import '../features/auth/blocs/register/register_cubit.dart';
 import '../features/chat/chat_screen.dart';
 import '../features/home/home_screen.dart';
+import '../utils/user_info/user_info_manager_cubit.dart';
 
 final glintMainRoutes = GoRouter(
   initialLocation: '/',

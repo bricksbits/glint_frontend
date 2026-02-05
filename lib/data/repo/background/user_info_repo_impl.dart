@@ -143,7 +143,7 @@ class UserInfoRepoImpl extends UserInfoRepo {
   }
 
   @override
-  Future<Result<ProfileMembershipEntity>> getLocalUserPremiumInfo() async {
+  Future<Result<ProfileMembershipEntity?>> getLocalUserPremiumInfo() async {
     final isPremiumUser = await sharedPreferenceHelper
         .getBoolean(SharedPreferenceKeys.premiumUserKey);
     if (isPremiumUser) {
@@ -157,7 +157,7 @@ class UserInfoRepoImpl extends UserInfoRepo {
       }
     }
 
-    return Failure(Exception("Current user is not a premium user."));
+    return const Success(null);
   }
 
   @override
@@ -180,8 +180,8 @@ class UserInfoRepoImpl extends UserInfoRepo {
       case Success():
         final itsMeBody = ItsMeResponseBody.fromJson(getProfileAsResponse.data);
         if (itsMeBody.success == true && itsMeBody.data != null) {
-          cacheUserProfile(itsMeBody);
-          return Success("");
+          await cacheUserProfile(itsMeBody);
+          return const Success("");
         } else {
           return Failure(Exception(itsMeBody.message),
               message: itsMeBody.message);

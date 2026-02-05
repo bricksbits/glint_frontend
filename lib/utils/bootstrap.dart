@@ -58,7 +58,7 @@ Future<void> bootstrap(
         ),
         BlocProvider<UserInfoManagerCubit>(
           lazy: true,
-          create: (_) => UserInfoManagerCubit(),
+          create: (_) => getIt.get<UserInfoManagerCubit>(),
         ),
       ],
       child: await builder(),

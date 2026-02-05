@@ -54,17 +54,14 @@ class ProfileRepoImpl extends ProfileRepo {
     throw UnimplementedError();
   }
 
-  //Todo: Make this method Reactive
   @override
-  Future<Result<ProfileMembershipEntity>> getUserMembershipDetails() async {
+  Stream<ProfileMembershipEntity?> getUserMembershipDetails() async* {
     var getCurrentUserid =
         await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
-    final membershipEntity =
-        await membershipDao.getMembership(getCurrentUserid);
-    if (membershipEntity != null) {
-      return Success(membershipEntity);
+    if (getCurrentUserid.isNotEmpty) {
+      yield* membershipDao.getMembershipStream(getCurrentUserid);
     } else {
-      return Failure(Exception("Error: No membership data Found"));
+      yield null;
     }
   }
 

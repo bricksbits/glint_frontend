@@ -15,7 +15,6 @@ import 'package:glint_frontend/utils/internet/internet_status_checker_cubit.dart
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -112,6 +111,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    context.read<UserInfoManagerCubit>().init();
     super.initState();
   }
 
@@ -127,8 +127,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         swipeManager.flushOnAppPause().then((_) {
           debugLogger(logPrefix, "Cache Swipes processed successfully,");
         });
-        final userInfoCubit = getIt.get<UserInfoManagerCubit>();
-        userInfoCubit.updateUserLocation();
+        context.read<UserInfoManagerCubit>().updateUserLocationLocally();
         break;
       case AppLifecycleState.inactive:
         debugLogger(logPrefix, "App is in inActive");
@@ -145,50 +144,49 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<InternetStatusCheckerCubit, InternetStatusCheckerState>(
-      listener: (context, state) {
-        if (state is InternetStatusDisConnected) {
-          showCustomSnackbar(context,
-              message: "No internet available", isError: true);
-        }
-      },
-      builder: (context, state) {
-        return Scaffold(
-          // extendBody: true,
-          backgroundColor: AppColours.white,
-          // do not show app bar on chat screen
-          appBar: _selectedIndex == 3
-              ? null
-              : GlintAppBar(
-                  appBarAction: appBarAction(_selectedIndex),
-                ),
-          body: IndexedStack(
-            index: _selectedIndex,
-            children: _bottomNavScreens,
-          ),
-          bottomNavigationBar: Container(
-            height: 70.0,
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 20.0)
-                .copyWith(bottom: 20.0),
-            decoration: BoxDecoration(
-              color: AppColours.white,
-              borderRadius: BorderRadius.circular(50.0),
-              border: Border.all(
-                color: AppColours.gray.withAlpha(92),
-                width: 1.25,
-              ),
+    return Scaffold(
+      backgroundColor: AppColours.white,
+      appBar: _selectedIndex == 3
+          ? null
+          : GlintAppBar(
+              appBarAction: appBarAction(_selectedIndex),
             ),
-            padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: List.generate(_navIcons.length, _buildNavItem),
-            ),
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<InternetStatusCheckerCubit, InternetStatusCheckerState>(
+            listener: (context, state) {
+              if (state is InternetStatusDisConnected) {
+                showCustomSnackbar(context,
+                    message: "No Internet available", isError: true);
+              }
+            },
           ),
-        );
-      },
+        ],
+        child: IndexedStack(
+          index: _selectedIndex,
+          children: _bottomNavScreens,
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 70.0,
+        width: double.infinity,
+        margin:
+            const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: 20.0),
+        decoration: BoxDecoration(
+          color: AppColours.white,
+          borderRadius: BorderRadius.circular(50.0),
+          border: Border.all(
+            color: AppColours.gray.withAlpha(92),
+            width: 1.25,
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: List.generate(_navIcons.length, _buildNavItem),
+        ),
+      ),
     );
   }
 

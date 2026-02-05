@@ -307,7 +307,7 @@ class _$MembershipDao extends MembershipDao {
   _$MembershipDao(
     this.database,
     this.changeListener,
-  )   : _queryAdapter = QueryAdapter(database),
+  )   : _queryAdapter = QueryAdapter(database, changeListener),
         _profileMembershipEntityInsertionAdapter = InsertionAdapter(
             database,
             'memberships',
@@ -317,7 +317,8 @@ class _$MembershipDao extends MembershipDao {
                   'aiMessages': item.aiMessages,
                   'rewinds': item.rewinds,
                   'superDm': item.superDm
-                }),
+                },
+            changeListener),
         _profileMembershipEntityUpdateAdapter = UpdateAdapter(
             database,
             'memberships',
@@ -328,7 +329,8 @@ class _$MembershipDao extends MembershipDao {
                   'aiMessages': item.aiMessages,
                   'rewinds': item.rewinds,
                   'superDm': item.superDm
-                });
+                },
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -352,6 +354,21 @@ class _$MembershipDao extends MembershipDao {
             rewinds: row['rewinds'] as int,
             superDm: row['superDm'] as int),
         arguments: [userId]);
+  }
+
+  @override
+  Stream<ProfileMembershipEntity?> getMembershipStream(String userId) {
+    return _queryAdapter.queryStream(
+        'SELECT * FROM memberships WHERE userId = ?1',
+        mapper: (Map<String, Object?> row) => ProfileMembershipEntity(
+            userId: row['userId'] as String,
+            superLikes: row['superLikes'] as int,
+            aiMessages: row['aiMessages'] as int,
+            rewinds: row['rewinds'] as int,
+            superDm: row['superDm'] as int),
+        arguments: [userId],
+        queryableName: 'memberships',
+        isView: false);
   }
 
   @override

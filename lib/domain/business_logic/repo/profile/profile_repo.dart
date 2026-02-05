@@ -15,7 +15,7 @@ abstract class ProfileRepo {
 
   Future<Result<void>> updateProfile();
 
-  Future<Result<ProfileMembershipEntity>> getUserMembershipDetails();
+  Stream<ProfileMembershipEntity?> getUserMembershipDetails();
 
   Future<Result<void>> getAllPaymentHistory();
 

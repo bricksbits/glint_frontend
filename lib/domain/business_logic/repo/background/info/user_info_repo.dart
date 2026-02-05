@@ -1,5 +1,6 @@
 import 'package:glint_frontend/data/local/db/entities/profile_membership_entity.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
+import 'package:injectable/injectable.dart';
 
 abstract class UserInfoRepo {
   Future<Result<void>> updateUserLocation();
@@ -10,7 +11,7 @@ abstract class UserInfoRepo {
 
   Future<Result<void>> setLocalUserPremiumInfo(ProfileMembershipEntity entity);
 
-  Future<Result<ProfileMembershipEntity>> getLocalUserPremiumInfo();
+  Future<Result<ProfileMembershipEntity?>> getLocalUserPremiumInfo();
 
   Future<Result<void>> getAndCacheUserInfo();
 
