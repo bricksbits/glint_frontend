@@ -4,9 +4,12 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:glint_frontend/analytics/glint_analytics_events.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_view.dart';
+import 'package:glint_frontend/design/components/profile/super_dm_dialog.dart';
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/logger.dart';
+import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class PeopleScreen extends StatelessWidget {
   PeopleScreen({super.key});
@@ -15,6 +18,7 @@ class PeopleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final streamClient = StreamChat.of(context).client;
     return BlocBuilder<PeopleCardsBloc, PeopleCardsState>(
       builder: (context, state) {
         debugLogger("PeopleScreen: CardList", "${state.cardList.length}");
@@ -126,12 +130,41 @@ class PeopleScreen extends StatelessWidget {
                                   .swipe(CardSwiperDirection.left);
                             },
                             onDm: (userId) {
-                              GlintAnalyticService.onCardActionEvent(
-                                GlintSwipeGestureAnalyticsEvents.DM,
-                                false,
-                              );
+                              final isSuperDmAvailable = context
+                                  .read<UserInfoManagerCubit>()
+                                  .superDmClicked();
+                              final user = state.cardList[index];
+                              if (isSuperDmAvailable) {
+                                GlintAnalyticService.onCardActionEvent(
+                                  GlintSwipeGestureAnalyticsEvents.DM,
+                                  true,
+                                );
+                                SuperDmDialog.show(
+                                  context: context,
+                                  name: user.username,
+                                  bio: user.bio,
+                                  onSend: (message) {
+                                    context
+                                        .read<UserInfoManagerCubit>()
+                                        .sendSuperDm(
+                                          userId,
+                                          message,
+                                          streamClient,
+                                        );
+                                  },
+                                );
+                              } else {
+                                GlintAnalyticService.onCardActionEvent(
+                                  GlintSwipeGestureAnalyticsEvents.DM,
+                                  false,
+                                );
+                              }
                             },
                             onSuperLiked: (userId) {
+                              final isSuperLikesAvailable = context
+                                  .read<UserInfoManagerCubit>()
+                                  .superLikeClicked();
+
                               GlintAnalyticService.onCardActionEvent(
                                 GlintSwipeGestureAnalyticsEvents.SUPER,
                                 false,

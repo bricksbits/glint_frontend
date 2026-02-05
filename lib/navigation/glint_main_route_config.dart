@@ -119,14 +119,12 @@ final glintMainRoutes = GoRouter(
       name: GlintMainRoutes.home.name,
       builder: (context, state) => MultiBlocProvider(
         providers: [
+          BlocProvider<ChatScreenCubit>(
+            create: (_) => ChatScreenCubit(),
+          ),
           BlocProvider<PeopleCardsBloc>(
-            lazy: true,
             create: (_) =>
                 PeopleCardsBloc()..add(const PeopleCardsEvent.started()),
-          ),
-          BlocProvider<ChatScreenCubit>(
-            lazy: true,
-            create: (_) => ChatScreenCubit(),
           ),
           BlocProvider<EventBaseCubit>(
             lazy: true,

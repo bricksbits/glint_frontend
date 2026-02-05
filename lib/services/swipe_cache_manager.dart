@@ -31,7 +31,7 @@ class SwipeBufferManager {
   Timer? _debounceTimer;
   bool _isProcessing = false;
   Duration debounceDuration = const Duration(seconds: 5);
-  int batchSize = 5;
+  int batchSize = 15;
   String logPrefix = "BUFFER_MANAGER_SWIPES";
 
   SwipeBufferManager(
@@ -71,6 +71,9 @@ class SwipeBufferManager {
   }
 
   /// Flushes swipe actions from DB in batches
+  /// Flushes after 5 seconds of first swipe
+  /// Flushes if the swipes actions are more than 5 in 5 second duration
+  /// Flushes when the App is on the Resume/Pause
   Future<void> _flushBuffer() async {
     if (_isProcessing) return;
 
@@ -91,6 +94,8 @@ class SwipeBufferManager {
           allSwipes = allSwipes.skip(batchSize).toList();
         } else {
           // Retry next time: keep data in DB
+          debugLogger(
+              logPrefix, "Batching request failed, more data left at the DB");
           break;
         }
       }
@@ -124,17 +129,11 @@ class SwipeBufferManager {
 
     switch (response) {
       case Success():
-        final postActions =
-            UniversalSuccessResponseBody<UserActionResponse>.fromJson(
-          response.data,
-          (json) => UserActionResponse.fromJson(json),
-        );
-        if (postActions.success && postActions.data != null) {
-          if (postActions.data?.message!.actionResponseList != null) {
-            fetchDataIfMatchFound(
-                postActions.data?.message?.actionResponseList ?? []);
-            var actionSuccessfulOn = postActions
-                .data?.message?.actionResponseList
+        final postActions = UserActionResponse.fromJson(response.data);
+        if (postActions.success == true && postActions.data != null) {
+          if (postActions.data?.actionResponseList != null) {
+            fetchDataIfMatchFound(postActions.data?.actionResponseList ?? []);
+            var actionSuccessfulOn = postActions.data?.actionResponseList
                 ?.map((action) => action.userId);
             if (actionSuccessfulOn?.length != batch.length) {
               debugLogger(logPrefix, "SWIPE Actions : Few Id's swipe missed");
@@ -145,7 +144,7 @@ class SwipeBufferManager {
             return false;
           }
         } else {
-          debugLogger(logPrefix, postActions.message);
+          debugLogger(logPrefix, postActions.message.toString());
           return false;
         }
       case Failure():

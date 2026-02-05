@@ -160,14 +160,15 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
-    gh.factory<_i762.StoryRepo>(() => _i946.StoryRepoImpl(
-          gh<_i368.MyDioClient>(),
-          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-        ));
     gh.lazySingleton<_i661.UserInfoRepo>(() => _i321.UserInfoRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           gh<_i1011.MembershipDao>(),
+          gh<_i719.ProfileDao>(),
+        ));
+    gh.lazySingleton<_i762.StoryRepo>(() => _i946.StoryRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
     gh.factory<_i235.PaymentRepo>(
         () => _i854.PaymentRepoImpl(gh<_i368.MyDioClient>()));

@@ -34,9 +34,9 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   late final StreamChannelListController? _channelListController;
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
+    _connectToStreamClient();
     _getRecentMatches();
     _observeRecentMatches();
-    _connectToStreamClient();
     _checkChatClientStatus();
   }
 

@@ -1,4 +1,5 @@
 import 'package:glint_frontend/data/local/db/dao/membership_dao.dart';
+import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/profile_membership_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
@@ -6,24 +7,31 @@ import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/auth/fcm_token_request.dart';
 import 'package:glint_frontend/data/remote/model/request/background/update_user_lcoation_request_body.dart';
+import 'package:glint_frontend/data/remote/model/request/chat/super_dm_on_request_body.dart';
+import 'package:glint_frontend/data/remote/model/response/chat/super_dm_response_body.dart';
+import 'package:glint_frontend/data/remote/model/response/mapper/memebership_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/membership/get_membership_response_body.dart';
-import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
+import 'package:glint_frontend/data/remote/model/response/profile/its_me_body_mapper.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/background/info/user_info_repo.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../remote/model/response/profile/its_me_response_body.dart';
+
 @LazySingleton(as: UserInfoRepo)
 class UserInfoRepoImpl extends UserInfoRepo {
   final MyDioClient httpClient;
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
   final MembershipDao membershipDao;
+  final ProfileDao profileDao;
 
   UserInfoRepoImpl(
     this.httpClient,
     this.sharedPreferenceHelper,
     this.membershipDao,
+    this.profileDao,
   );
 
   @override
@@ -56,12 +64,6 @@ class UserInfoRepoImpl extends UserInfoRepo {
         Exception("Error : Can't update FCM Token, as there is no token"),
       );
     }
-  }
-
-  @override
-  Future<Result<void>> updateUserLastActiveTime() {
-    // TODO: implement updateUserLastActiveTime
-    throw UnimplementedError();
   }
 
   /// Get the Current Location and User Id from Shared Pref and make the API request
@@ -103,7 +105,6 @@ class UserInfoRepoImpl extends UserInfoRepo {
     return Failure(Exception("No Users ID allocated yet"));
   }
 
-  /// Get the User Premium info and update the DB
   @override
   Future<Result<void>> fetchCurrentPremiumInfo() async {
     final response = await apiCallHandler(
@@ -117,15 +118,11 @@ class UserInfoRepoImpl extends UserInfoRepo {
     switch (response) {
       case Success():
         final membershipDataFromRemote =
-            UniversalSuccessResponseBody<GetMembershipResponseBody>.fromJson(
-          response.data,
-          (membershipResponse) =>
-              GetMembershipResponseBody.fromJson(membershipResponse),
-        );
+            GetMembershipResponseBody.fromJson(response.data);
         if (membershipDataFromRemote.data != null &&
-            membershipDataFromRemote.success) {
+            membershipDataFromRemote.success == true) {
           final membershipEntity =
-              membershipDataFromRemote.data!.mapToEntity(userId);
+              membershipDataFromRemote.mapToEntity(userId);
           membershipDao.updateTheMembershipDetails(membershipEntity);
           return Success("");
         }
@@ -138,33 +135,18 @@ class UserInfoRepoImpl extends UserInfoRepo {
 
   /// Whenever the User uses the perks update the db and put it to server
   @override
-  Future<Result<void>> updateCurrentPremiumInfo(
-      ProfileMembershipEntity entity) async {
-    var requestBody = entity.mapToRequestBody();
-    final response = await apiCallHandler(
-      httpClient: httpClient,
-      requestType: HttpRequestEnum.PUT,
-      endpoint: "/user/premium-info",
-      requestBody: requestBody.toJson(),
-    );
-
-    switch (response) {
-      case Success():
-        debugLogger("Membership", "New values updated");
-        await membershipDao.updateTheMembershipDetails(entity);
-        return Success("");
-      case Failure():
-        debugLogger("Membership", "Failed to update the perks");
-        return Failure(Exception("Error : ${response.error}"));
-    }
+  Future<Result<void>> setLocalUserPremiumInfo(
+    ProfileMembershipEntity entity,
+  ) async {
+    await membershipDao.updateTheMembershipDetails(entity);
+    return Success("");
   }
 
   @override
-  Future<Result<ProfileMembershipEntity>> getCurrentUserPremiumInfo() async {
+  Future<Result<ProfileMembershipEntity>> getLocalUserPremiumInfo() async {
     final isPremiumUser = await sharedPreferenceHelper
         .getBoolean(SharedPreferenceKeys.premiumUserKey);
     if (isPremiumUser) {
-      fetchCurrentPremiumInfo();
       final userId = await sharedPreferenceHelper
           .getString(SharedPreferenceKeys.userIdKey);
       final membershipEntity = await membershipDao.getMembership(userId);
@@ -184,5 +166,105 @@ class UserInfoRepoImpl extends UserInfoRepo {
       SharedPreferenceKeys.deviceFcmTokenKey,
       fcmTokenGenerated,
     );
+  }
+
+  @override
+  Future<Result<void>> getAndCacheUserInfo() async {
+    final getProfileAsResponse = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      endpoint: "user/profile/me",
+    );
+
+    switch (getProfileAsResponse) {
+      case Success():
+        final itsMeBody = ItsMeResponseBody.fromJson(getProfileAsResponse.data);
+        if (itsMeBody.success == true && itsMeBody.data != null) {
+          cacheUserProfile(itsMeBody);
+          return Success("");
+        } else {
+          return Failure(Exception(itsMeBody.message),
+              message: itsMeBody.message);
+        }
+      case Failure():
+        return Failure(getProfileAsResponse.error,
+            message: getProfileAsResponse.message);
+    }
+  }
+
+  Future<void> cacheUserProfile(ItsMeResponseBody successResponse) async {
+    await profileDao.insertProfile(successResponse.mapToEntity());
+    final userId = successResponse.data?.userId;
+    final userName = successResponse.data?.username;
+    final userImageUrl =
+        successResponse.data?.pictureUrlList?.firstOrNull?.presignedUrl;
+    if (successResponse.data != null) {
+      saveMembershipDetails(
+        ProfileMembershipEntity(
+          userId: successResponse.data?.userId.toString() ?? "user_id",
+          superLikes: successResponse.data?.superLikesLeft ?? 0,
+          aiMessages: successResponse.data?.aiMessagesRemaining ?? 0,
+          rewinds: successResponse.data?.rewindsRemaining ?? 0,
+          superDm: successResponse.data?.directDmRemaining ?? 0,
+        ),
+      );
+    }
+    await sharedPreferenceHelper.saveUserData(
+      null,
+      null,
+      null,
+      userId.toString(),
+      userName,
+      userImageUrl,
+    );
+
+    await sharedPreferenceHelper
+        .saveUserType(successResponse.data?.userRole ?? "user");
+
+    await sharedPreferenceHelper.saveString(
+      SharedPreferenceKeys.adminUserOrganizationKey,
+      successResponse.data?.occupation ?? "Event Manager",
+    );
+
+    await sharedPreferenceHelper.saveBoolean(
+      SharedPreferenceKeys.premiumUserKey,
+      successResponse.data?.isPremiumUser ?? false,
+    );
+  }
+
+  Future<void> saveMembershipDetails(ProfileMembershipEntity entity) async {
+    await membershipDao.insertMembership(entity);
+  }
+
+  @override
+  Future<bool> isPremiumUser() async {
+    final isPremium = await sharedPreferenceHelper
+        .getBoolean(SharedPreferenceKeys.premiumUserKey);
+    return isPremium;
+  }
+
+  @override
+  Future<String?> fetchDirectDmChannelIdWithUserId(String onUserId) async {
+    final superDmRequest =
+        SuperDmOnRequestBody(onUserId: int.parse(onUserId)).toJson();
+    final getProfileAsResponse = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.POST,
+      endpoint: "user/chat/direct-message",
+      requestBody: superDmRequest,
+    );
+
+    switch (getProfileAsResponse) {
+      case Success():
+        final superDmResponse =
+            SuperDmResponseBody.fromJson(getProfileAsResponse.data);
+        if (superDmResponse.success == true) {
+          return superDmResponse.data?.streamChatChannelId;
+        }
+        break;
+      case Failure():
+        return null;
+    }
+    return null;
   }
 }

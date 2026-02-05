@@ -46,6 +46,7 @@ Future<void> bootstrap(
     MultiBlocProvider(
       providers: [
         BlocProvider<ResetPasswordBloc>(
+          lazy: true,
           create: (_) => ResetPasswordBloc(),
         ),
         BlocProvider<InternetStatusCheckerCubit>(
@@ -54,6 +55,10 @@ Future<void> bootstrap(
         BlocProvider<PaymentCubit>(
           lazy: true,
           create: (_) => PaymentCubit(),
+        ),
+        BlocProvider<UserInfoManagerCubit>(
+          lazy: true,
+          create: (_) => UserInfoManagerCubit(),
         ),
       ],
       child: await builder(),

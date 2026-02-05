@@ -4,6 +4,7 @@ import 'package:glint_frontend/data/remote/model/response/payment/book_event_res
     as bookEventResponse;
 import 'package:glint_frontend/data/remote/model/response/payment/buy_membership_response.dart';
 import 'package:glint_frontend/di/injection.dart';
+import 'package:glint_frontend/domain/business_logic/repo/background/info/user_info_repo.dart';
 import 'package:glint_frontend/domain/business_logic/repo/payment/payment_repo.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/model/razorpay_order_model.dart';
@@ -16,6 +17,7 @@ part 'payment_cubit.freezed.dart';
 
 class PaymentCubit extends Cubit<PaymentState> {
   final PaymentRepo paymentRepo = getIt.get<PaymentRepo>();
+  final UserInfoRepo userInfoRepo = getIt.get<UserInfoRepo>();
 
   PaymentCubit() : super(const PaymentState.initiate());
 
@@ -117,6 +119,11 @@ class PaymentCubit extends Cubit<PaymentState> {
     );
   }
 
+  Future<void> updateTheMembershipDetails() async {
+    userInfoRepo.fetchCurrentPremiumInfo();
+  }
+
+  @Deprecated("Using Webhook, this method is not needed")
   Future<void> verifyThePayment(
     String razorpayPaymentId,
     String razorpayOrderId,

@@ -9,6 +9,7 @@ import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -49,24 +50,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<PaymentCubit, PaymentState>(
+      listenWhen: (prev, curr) {
+        return curr.razorpayModel != null || (prev.error != curr.error);
+      },
       listener: (context, state) {
-        state.when(initiate: (
-          orderId,
-          amount,
-          name,
-          desc,
-          razorPayModel,
-          paymentModel,
-          loading,
-          isMembership,
-          error,
-        ) {
-          if (razorPayModel != null) {
-            GlintAnalyticService.onPaymentProceedEvent();
-            print("Success Order Placed, opening razorpay");
-            _razorpay.open(razorPayModel.toJson());
-          }
-        });
+        if (state.razorpayModel != null) {
+          GlintAnalyticService.onPaymentProceedEvent();
+          print("Success Order Placed, opening razorpay");
+          _razorpay.open(state.razorpayModel!.toJson());
+        }
+
+        if (state.error != null) {
+          showCustomSnackbar(
+            context,
+            message: state.error ?? "Can't proceed the payment",
+          );
+        }
       },
       child: BlocBuilder<PaymentCubit, PaymentState>(
         builder: (context, state) {
@@ -150,9 +149,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       vertical: 14,
                                       horizontal: 14,
                                     ),
-                                    child: Text('Proceed',
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.white)),
+                                    child: Text(
+                                      'Proceed',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.white),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -380,11 +381,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         if (successResponse.orderId != null &&
             successResponse.paymentId != null &&
             successResponse.signature != null) {
-          // context.read<PaymentCubit>().verifyThePayment(
-          //       successResponse.paymentId!,
-          //       successResponse.orderId!,
-          //       successResponse.signature!,
-          //     );
+          context.read<PaymentCubit>().updateTheMembershipDetails();
           showCustomSnackbar(context, message: "Payment Successful");
           context.pop();
           context.pushNamed(GlintMainRoutes.home.name);
@@ -396,8 +393,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _handlePaymentFailure(PaymentFailureResponse failureResponse) {
-    print(
-        "PaymentFailed : Response : ${failureResponse.error}, ${failureResponse.message}");
+    showCustomSnackbar(context,
+        message: "Payment Failed: ${failureResponse.message}");
+    debugLogger(
+      "PaymentScreen",
+      "PaymentFailed : Response : ${failureResponse.error}, ${failureResponse.message}",
+    );
   }
 
   void _handlePaymentWalletAdded(ExternalWalletResponse walletAddedResponse) {}

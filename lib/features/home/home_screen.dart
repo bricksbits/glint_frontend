@@ -6,28 +6,15 @@ import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/di/injection.dart';
-import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
-import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
-import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
-import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/base/event_base_screen.dart';
-import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
-import 'package:glint_frontend/features/payment/payment_cubit.dart';
-import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/profile_screen.dart';
-import 'package:glint_frontend/features/service/service_screen.dart';
-import 'package:glint_frontend/navigation/glint_all_routes.dart';
-import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/services/swipe_cache_manager.dart';
 import 'package:glint_frontend/utils/internet/internet_status_checker_cubit.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
-import 'package:go_router/go_router.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
-import '../payment/payment_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -136,6 +123,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         debugLogger(logPrefix, "App is detached");
         break;
       case AppLifecycleState.resumed:
+        final swipeManager = getIt.get<SwipeBufferManager>();
+        swipeManager.flushOnAppPause().then((_) {
+          debugLogger(logPrefix, "Cache Swipes processed successfully,");
+        });
         final userInfoCubit = getIt.get<UserInfoManagerCubit>();
         userInfoCubit.updateUserLocation();
         break;
@@ -146,10 +137,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         debugLogger(logPrefix, "App is hidden");
         break;
       case AppLifecycleState.paused:
-        final swipeManager = getIt.get<SwipeBufferManager>();
-        swipeManager.flushOnAppPause().then((_) {
-          debugLogger(logPrefix, "Cache Swipes processed successfully,");
-        });
         debugLogger(logPrefix, "App is paused");
         break;
     }
