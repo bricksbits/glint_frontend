@@ -121,8 +121,7 @@ class UserInfoRepoImpl extends UserInfoRepo {
             GetMembershipResponseBody.fromJson(response.data);
         if (membershipDataFromRemote.data != null &&
             membershipDataFromRemote.success == true) {
-          final membershipEntity =
-              membershipDataFromRemote.mapToEntity(userId);
+          final membershipEntity = membershipDataFromRemote.mapToEntity(userId);
           membershipDao.updateTheMembershipDetails(membershipEntity);
           return Success("");
         }
@@ -143,21 +142,14 @@ class UserInfoRepoImpl extends UserInfoRepo {
   }
 
   @override
-  Future<Result<ProfileMembershipEntity?>> getLocalUserPremiumInfo() async {
-    final isPremiumUser = await sharedPreferenceHelper
-        .getBoolean(SharedPreferenceKeys.premiumUserKey);
-    if (isPremiumUser) {
-      final userId = await sharedPreferenceHelper
-          .getString(SharedPreferenceKeys.userIdKey);
-      final membershipEntity = await membershipDao.getMembership(userId);
-      if (membershipEntity != null) {
-        return Success(membershipEntity);
-      } else {
-        return Failure(Exception("No Membership data found"));
-      }
+  Stream<ProfileMembershipEntity?> getLocalUserPremiumInfo() async* {
+    final userId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
+    if (userId.isNotEmpty) {
+      yield* membershipDao.getMembershipStream(userId);
+    } else {
+      yield null;
     }
-
-    return const Success(null);
   }
 
   @override
@@ -206,6 +198,7 @@ class UserInfoRepoImpl extends UserInfoRepo {
           aiMessages: successResponse.data?.aiMessagesRemaining ?? 0,
           rewinds: successResponse.data?.rewindsRemaining ?? 0,
           superDm: successResponse.data?.directDmRemaining ?? 0,
+          isPremium: successResponse.data?.isPremiumUser ?? false,
         ),
       );
     }

@@ -11,7 +11,7 @@ abstract class UserInfoRepo {
 
   Future<Result<void>> setLocalUserPremiumInfo(ProfileMembershipEntity entity);
 
-  Future<Result<ProfileMembershipEntity?>> getLocalUserPremiumInfo();
+  Stream<ProfileMembershipEntity?> getLocalUserPremiumInfo();
 
   Future<Result<void>> getAndCacheUserInfo();
 

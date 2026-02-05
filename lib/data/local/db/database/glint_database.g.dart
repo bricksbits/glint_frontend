@@ -106,7 +106,7 @@ class _$GlintDatabase extends GlintDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `swipe_actions` (`collabId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `currentUserId` TEXT NOT NULL, `swipedOnUserId` TEXT NOT NULL, `isUnsent` INTEGER NOT NULL, `action` TEXT NOT NULL, `timestamp` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `memberships` (`userId` TEXT NOT NULL, `superLikes` INTEGER NOT NULL, `aiMessages` INTEGER NOT NULL, `rewinds` INTEGER NOT NULL, `superDm` INTEGER NOT NULL, FOREIGN KEY (`userId`) REFERENCES `profiles` (`userId`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`userId`))');
+            'CREATE TABLE IF NOT EXISTS `memberships` (`userId` TEXT NOT NULL, `superLikes` INTEGER NOT NULL, `aiMessages` INTEGER NOT NULL, `rewinds` INTEGER NOT NULL, `superDm` INTEGER NOT NULL, `isPremium` INTEGER NOT NULL, FOREIGN KEY (`userId`) REFERENCES `profiles` (`userId`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`userId`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `user_event_likes` (`userId` TEXT NOT NULL, `eventId` TEXT NOT NULL, FOREIGN KEY (`userId`) REFERENCES `profiles` (`userId`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`userId`, `eventId`))');
 
@@ -316,7 +316,8 @@ class _$MembershipDao extends MembershipDao {
                   'superLikes': item.superLikes,
                   'aiMessages': item.aiMessages,
                   'rewinds': item.rewinds,
-                  'superDm': item.superDm
+                  'superDm': item.superDm,
+                  'isPremium': item.isPremium ? 1 : 0
                 },
             changeListener),
         _profileMembershipEntityUpdateAdapter = UpdateAdapter(
@@ -328,7 +329,8 @@ class _$MembershipDao extends MembershipDao {
                   'superLikes': item.superLikes,
                   'aiMessages': item.aiMessages,
                   'rewinds': item.rewinds,
-                  'superDm': item.superDm
+                  'superDm': item.superDm,
+                  'isPremium': item.isPremium ? 1 : 0
                 },
             changeListener);
 
@@ -352,7 +354,8 @@ class _$MembershipDao extends MembershipDao {
             superLikes: row['superLikes'] as int,
             aiMessages: row['aiMessages'] as int,
             rewinds: row['rewinds'] as int,
-            superDm: row['superDm'] as int),
+            superDm: row['superDm'] as int,
+            isPremium: (row['isPremium'] as int) != 0),
         arguments: [userId]);
   }
 
@@ -365,7 +368,8 @@ class _$MembershipDao extends MembershipDao {
             superLikes: row['superLikes'] as int,
             aiMessages: row['aiMessages'] as int,
             rewinds: row['rewinds'] as int,
-            superDm: row['superDm'] as int),
+            superDm: row['superDm'] as int,
+            isPremium: (row['isPremium'] as int) != 0),
         arguments: [userId],
         queryableName: 'memberships',
         isView: false);

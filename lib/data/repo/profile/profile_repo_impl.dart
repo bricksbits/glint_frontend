@@ -193,6 +193,7 @@ class ProfileRepoImpl extends ProfileRepo {
           aiMessages: successResponse.data?.aiMessagesRemaining ?? 0,
           rewinds: successResponse.data?.rewindsRemaining ?? 0,
           superDm: successResponse.data?.directDmRemaining ?? 0,
+          isPremium: successResponse.data?.isPremiumUser ?? false,
         ),
       );
     }

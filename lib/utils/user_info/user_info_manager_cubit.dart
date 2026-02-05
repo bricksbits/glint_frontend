@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/data/local/db/entities/profile_membership_entity.dart';
@@ -7,7 +9,7 @@ import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/repo/background/info/user_info_repo.dart';
 import 'package:glint_frontend/domain/business_logic/repo/chat/chat_with_repo.dart';
 import 'package:glint_frontend/services/location_permission_service.dart';
-import 'package:glint_frontend/utils/result_sealed.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:injectable/injectable.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' as streamChat;
 
@@ -21,15 +23,10 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   final permissionService = getIt.get<LocationPermissionService>();
   final sharedPrefHelper = getIt.get<AsyncEncryptedSharedPreferenceHelper>();
   final chatWithRepo = getIt.get<ChatWithRepo>();
+  StreamSubscription<ProfileMembershipEntity?>? profileMembershipPerks;
 
   UserInfoManagerCubit() : super(const UserInfoManagerState.initial()) {
     pushFcmTokenToServer();
-  }
-
-  Future<void> init() async {
-    fetchPremiumStatus().then((_) {
-      getCurrentMembershipData();
-    });
   }
 
   Future<void> updateTheFcmLocally(String fcmToken) async {
@@ -41,21 +38,25 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
     userInfoRepo.updateFcmTokenToServer();
   }
 
-  Future<void> getCurrentMembershipData() async {
-    await userInfoRepo.getLocalUserPremiumInfo().then((result) {
-      switch (result) {
-        case Success<ProfileMembershipEntity?>():
-          final membershipData = result.data;
-          if (membershipData != null) {
-            emit(state.copyWith(membershipEntity: membershipData));
-          }
-          break;
-        case Failure<ProfileMembershipEntity?>():
-          emit(state.copyWith(
-              membershipEntity: null,));
-          break;
-      }
-    });
+  void getCurrentMembershipData() {
+    profileMembershipPerks =
+        userInfoRepo.getLocalUserPremiumInfo().distinct().listen(
+      (membership) {
+        if (membership != null) {
+          emitNewState(
+            state.copyWith(
+              membershipEntity: membership,
+              isPremiumUser: membership.isPremium,
+            ),
+          );
+        } else {
+          debugLogger("[UserInfoCubit]", "No Membership data found");
+        }
+      },
+      onError: (error) {
+        emitNewState(state.copyWith(error: "DB issue, "));
+      },
+    );
   }
 
   bool superLikeClicked() {
@@ -63,7 +64,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
       superLikedUsed();
       return true;
     } else {
-      emitNewStatee(state.copyWith(error: "No Super Likes available"));
+      emitNewState(state.copyWith(error: "No Super Likes available"));
       return false;
     }
   }
@@ -73,7 +74,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
       rewindUsed();
       return true;
     } else {
-      emitNewStatee(state.copyWith(error: "No Rewinds available"));
+      emitNewState(state.copyWith(error: "No Rewinds available"));
       return false;
     }
   }
@@ -87,13 +88,13 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
       }
       return true;
     } else {
-      emitNewStatee(state.copyWith(error: "No Messages available."));
+      emitNewState(state.copyWith(error: "No Messages available."));
       return false;
     }
   }
 
   Future<String?> getSuperDmChannelId(String onUserId) async {
-    emitNewStatee(state.copyWith(isLoading: true));
+    emitNewState(state.copyWith(isLoading: true));
     final channelId =
         await userInfoRepo.fetchDirectDmChannelIdWithUserId(onUserId);
     return channelId;
@@ -106,7 +107,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   ) async {
     final channelId = await getSuperDmChannelId(onUserId);
     if (channelId != null) {
-      emitNewStatee(state.copyWith(isLoading: false));
+      emitNewState(state.copyWith(isLoading: false));
       final newChannel = client.channel('messaging', id: channelId);
       chatWithRepo.sendTextMessage(client, newChannel, message);
       updateSuperDmCountAfterSuccessfulDm();
@@ -193,10 +194,16 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
 
   Future<void> fetchPremiumStatus() async {
     final isPremiumUser = await userInfoRepo.isPremiumUser();
-    emitNewStatee(state.copyWith(isPremiumUser: isPremiumUser));
+    emitNewState(state.copyWith(isPremiumUser: isPremiumUser));
   }
 
-  void emitNewStatee(UserInfoManagerState newState) {
+  void emitNewState(UserInfoManagerState newState) {
     emit(newState);
+  }
+
+  @override
+  Future<void> close() {
+    profileMembershipPerks?.cancel();
+    return super.close();
   }
 }

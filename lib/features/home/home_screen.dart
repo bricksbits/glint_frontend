@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    context.read<UserInfoManagerCubit>().init();
+    context.read<UserInfoManagerCubit>().getCurrentMembershipData();
     super.initState();
   }
 

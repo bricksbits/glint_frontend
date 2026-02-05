@@ -9,6 +9,7 @@ extension MembershipMapper on GetMembershipResponseBody {
       aiMessages: data?.aiMessagesRemaining ?? 0,
       rewinds: data?.rewindsRemaining ?? 0,
       superDm: data?.directDmRemaining ?? 0,
+      isPremium: data?.isPremiumUser ?? false,
     );
   }
 }

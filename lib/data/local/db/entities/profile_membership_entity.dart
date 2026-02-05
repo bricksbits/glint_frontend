@@ -20,6 +20,7 @@ class ProfileMembershipEntity {
   final int aiMessages;
   final int rewinds;
   final int superDm;
+  final bool isPremium;
 
   ProfileMembershipEntity({
     required this.userId,
@@ -27,6 +28,7 @@ class ProfileMembershipEntity {
     required this.aiMessages,
     required this.rewinds,
     required this.superDm,
+    required this.isPremium,
   });
 }
 
@@ -36,22 +38,23 @@ extension ProfileMembershipEntityCopy on ProfileMembershipEntity {
     int? aiMessages,
     int? rewinds,
     int? superDm,
+    bool? isPremium,
   }) {
     return ProfileMembershipEntity(
-      userId: userId, // never changed
+      userId: userId,
       superLikes: superLikes ?? this.superLikes,
       aiMessages: aiMessages ?? this.aiMessages,
       rewinds: rewinds ?? this.rewinds,
       superDm: superDm ?? this.superDm,
+      isPremium: isPremium ?? this.isPremium,
     );
   }
 
   UpdatePremiumRequestBody mapToRequestBody() {
     return UpdatePremiumRequestBody(
-      aiMessagesRemaining: aiMessages,
-      directDmRemaining: superDm,
-      rewindsRemaining: rewinds,
-      superLikesRemaining: superLikes
-    );
+        aiMessagesRemaining: aiMessages,
+        directDmRemaining: superDm,
+        rewindsRemaining: rewinds,
+        superLikesRemaining: superLikes);
   }
 }
