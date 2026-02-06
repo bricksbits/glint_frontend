@@ -117,7 +117,6 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
     }
   }
 
-  // Return a Callback To handle the SuperLike mechanism to the App Layer
   Future<void> superLikedUsed() async {
     final currentSuperLikedCount = state.membershipEntity?.superLikes ?? 0;
     if (currentSuperLikedCount <= 0) {

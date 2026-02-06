@@ -35,12 +35,8 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         return [
           GestureDetector(
             onTap: () async {
-              showCustomSnackbar(
-                context,
-                message: "No Events, no tickets data",
-              );
               GlintAnalyticService.onTicketHistoryEvent();
-              // context.pushNamed(GlintProfileRoutes.paymentHistory.name);
+              context.pushNamed(GlintProfileRoutes.paymentHistory.name);
             },
             child: SvgPicture.asset(
               'lib/assets/icons/rupee_icon.svg',
@@ -62,7 +58,11 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         return [
           GestureDetector(
             onTap: () async {
-              context.pushNamed(GlintEventRoutes.tickets.name);
+              showCustomSnackbar(
+                context,
+                message: "No ticket history available",
+              );
+              // context.pushNamed(GlintEventRoutes.tickets.name);
               GlintAnalyticService.onEventsTicketHistoryClickedEvent();
             },
             child: SvgPicture.asset(
