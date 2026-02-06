@@ -215,6 +215,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
       _cardSwiperController.swipe(
         CardSwiperDirection.top,
       );
+      context.read<UserInfoManagerCubit>().superLikedUsed();
       return true;
     } else {
       GlintAnalyticService.onCardActionEvent(

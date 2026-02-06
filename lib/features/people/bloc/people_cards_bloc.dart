@@ -161,12 +161,12 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
 
       if (currentHistoryList.isEmpty) {
         add(PeopleCardsEvent.emitNewState(
-            state.copyWith(error: "You haven't Swiped left anyone yet")));
+            state.copyWith(error: "You haven't Swiped anyone yet")));
         return;
       }
 
       final userToRestore = currentHistoryList.removeLast();
-      final updatedSwipeIds = swipeIdSet.remove(userToRestore.userId);
+      swipeIdSet.remove(userToRestore.userId);
       currentDisplayCards.insert(0, userToRestore);
       add(
         PeopleCardsEvent.emitNewState(
@@ -183,17 +183,21 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
 
     on<_OnActionHappened>((event, emit) {
       final lastActionUser = state.displayCards
-          .where((profile) => profile.userId == event.passedId)
-          .toList()
-          .first;
+          .firstWhere((profile) => profile.userId == event.passedId);
 
       final alreadySwipedUserIdSet = state.alreadySwipedIds;
 
       final historyUntilNow = state.swipedHistoryCards;
 
+      // Filter out the
+      final updatedDisplayCardsList = state.displayCards
+          .where((profile) => profile.userId != event.passedId)
+          .toList();
+
       add(
         PeopleCardsEvent.emitNewState(
           state.copyWith(
+            displayCards: updatedDisplayCardsList,
             swipedHistoryCards: [...historyUntilNow, lastActionUser],
             alreadySwipedIds: {
               ...alreadySwipedUserIdSet,

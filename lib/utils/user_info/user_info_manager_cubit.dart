@@ -61,7 +61,11 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
 
   bool superLikeClicked() {
     if (state.isPremiumUser) {
-      superLikedUsed();
+      final currentSuperLikesCount = state.membershipEntity?.superLikes ?? 0;
+      if (currentSuperLikesCount <= 0) {
+        emit(state.copyWith(error: "No more likes left"));
+        return false;
+      }
       return true;
     } else {
       emitNewState(state.copyWith(error: "No Super Likes available"));
