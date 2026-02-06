@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/pass_event_details_argument_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 import 'package:glint_frontend/features/admin/bloc/admin_dasboard/admin_dashboard_bloc.dart';
@@ -51,6 +50,7 @@ import '../features/admin/screen/track_event_interested_people_screen.dart';
 import '../features/admin/screen/track_event_tickets_bought_screen.dart';
 import '../features/auth/blocs/register/register_cubit.dart';
 import '../features/chat/chat_screen.dart';
+import '../features/chat/story/model/view_story_model.dart';
 import '../features/home/home_screen.dart';
 import '../utils/user_info/user_info_manager_cubit.dart';
 
@@ -156,9 +156,11 @@ final glintMainRoutes = GoRouter(
           path: '/${GlintChatRoutes.stories.name}',
           name: GlintChatRoutes.stories.name,
           builder: (context, state) {
-            final passedIndex = state.extra as int?;
+            final navArguments =
+                state.extra as ({int index, List<ViewStoryModel> stories})?;
             return ViewStoryScreen(
-              passedIndex: passedIndex ?? 0,
+              passedIndex: navArguments?.index ?? 0,
+              passedStories: navArguments?.stories ?? [],
             );
           },
         ),
@@ -210,7 +212,7 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintMainRoutes.people.name}',
       name: GlintMainRoutes.people.name,
-      builder: (context, state) => PeopleScreen(),
+      builder: (context, state) => const PeopleScreen(),
     ),
     GoRoute(
       path: '/${GlintMainRoutes.event.name}',

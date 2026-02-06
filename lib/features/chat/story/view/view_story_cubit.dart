@@ -15,6 +15,7 @@ part 'view_story_state.dart';
 
 part 'view_story_cubit.freezed.dart';
 
+//Todo: Delete this Cubit,
 class ViewStoryCubit extends Cubit<ViewStoryState> {
   final ChatRepo chatRepo = getIt.get<ChatRepo>();
   final ChatWithRepo chatWithRepo = getIt.get<ChatWithRepo>();

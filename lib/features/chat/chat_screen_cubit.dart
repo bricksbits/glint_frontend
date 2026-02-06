@@ -16,9 +16,11 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart'
         StreamChannelListController,
         StreamChatError;
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart'
-    show Filter, SortOption;
+    show Filter, SortOption, Channel;
 
 import '../../data/local/persist/shared_pref_key.dart';
+import '../../domain/business_logic/repo/chat/chat_with_repo.dart';
+import 'story/model/view_story_model.dart';
 
 part 'chat_screen_state.dart';
 
@@ -26,6 +28,8 @@ part 'chat_screen_cubit.freezed.dart';
 
 class ChatScreenCubit extends Cubit<ChatScreenState> {
   final ChatRepo chatRepo = getIt.get<ChatRepo>();
+  final ChatWithRepo chatWithRepo = getIt.get<ChatWithRepo>();
+
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper =
       getIt.get();
   final StreamChatClient chatClient = getIt.get<StreamChatClient>();
@@ -38,6 +42,7 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     _getRecentMatches();
     _observeRecentMatches();
     _checkChatClientStatus();
+    _getStories();
   }
 
   Future<void> _observeRecentMatches() async {
@@ -138,6 +143,36 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
 
   void updateState(ChatScreenState newState) {
     emit(newState);
+  }
+
+  Future<void> _getStories() async {
+    updateState(state.copyWith(isLoading: true));
+    final response = await chatRepo.fetchStories();
+    switch (response) {
+      case Success<List<ViewStoryModel>>():
+        final stories = response.data;
+        updateState(
+          state.copyWith(
+            isLoading: false,
+            stories: stories,
+          ),
+        );
+      case Failure<List<ViewStoryModel>>():
+        updateState(
+          state.copyWith(
+            error: "Not able to fetch more stories, right now.",
+            isLoading: false,
+          ),
+        );
+    }
+  }
+
+  Future<void> replyToStory(
+    StreamChatClient client,
+    Channel channel,
+    String message,
+  ) async {
+    await chatWithRepo.sendTextMessage(client, channel, message);
   }
 
   @override
