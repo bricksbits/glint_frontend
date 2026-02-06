@@ -205,7 +205,13 @@ class RegisterCubit extends Cubit<RegisterState> {
         await authenticationRepo.uploadMediaFile(mediaFiles);
     switch (imagesUploadResponse) {
       case Success<void>():
-        _updateProfile();
+        emitNewState(
+          state.copyWith(
+            isRegisteredSuccessfully: true,
+            isLoading: false,
+            navigateToRoute: GlintMainRoutes.home.name,
+          ),
+        );
         break;
       case Failure<void>():
         final reason = imagesUploadResponse.message ?? "Files Upload failed";
@@ -213,38 +219,6 @@ class RegisterCubit extends Cubit<RegisterState> {
           state.copyWith(
             isLoading: false,
             error: reason,
-          ),
-        );
-        break;
-    }
-  }
-
-  Future<void> _updateProfile() async {
-    emitNewState(
-      state.copyWith(
-        currentSuccessStatus: "Fetching profiles",
-      ),
-    );
-    final updateProfileResult = await profileRepo.getAndCacheUserProfile();
-    switch (updateProfileResult) {
-      case Success<void>():
-        emitNewState(
-          state.copyWith(
-            isRegisteredSuccessfully: true,
-            isLoading: false,
-            navigateToRoute: GlintMainRoutes.home.name,
-          ),
-        );
-        break;
-      case Failure<void>():
-        final reason =
-            updateProfileResult.message ?? "Can't fetch your details";
-        emit(
-          state.copyWith(
-            isLoading: false,
-            isRegisteredSuccessfully: true,
-            error: reason,
-            navigateToRoute: GlintMainRoutes.home.name,
           ),
         );
         break;

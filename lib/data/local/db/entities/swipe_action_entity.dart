@@ -6,7 +6,7 @@ import 'package:glint_frontend/domain/business_logic/models/common/swipe_action_
 @Entity(tableName: 'swipe_actions')
 class SwipeActionEntity {
   @PrimaryKey(autoGenerate: true)
-  final int collabId;
+  final int? collabId;
   final String currentUserId;
   final String swipedOnUserId;
   final bool isUnsent;
@@ -17,11 +17,12 @@ class SwipeActionEntity {
   @TypeConverters([DateTimeConverter])
   final DateTime timestamp;
 
-  SwipeActionEntity(
-      {required this.collabId,
-      required this.currentUserId,
-      required this.swipedOnUserId,
-      this.isUnsent = false,
-      required this.action,
-      required this.timestamp});
+  SwipeActionEntity({
+    this.collabId,
+    required this.currentUserId,
+    required this.swipedOnUserId,
+    this.isUnsent = false,
+    required this.action,
+    required this.timestamp,
+  });
 }

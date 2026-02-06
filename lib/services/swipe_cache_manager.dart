@@ -89,7 +89,10 @@ class SwipeBufferManager {
         final success = await _sendBatchToServer(batch);
 
         if (success) {
-          final ids = batch.map((e) => e.collabId).toList();
+          final ids = batch
+              .where((e) => e.collabId != null)
+              .map((e) => e.collabId!)
+              .toList();
           await swipeActionDao.deleteSwipesById(ids);
           allSwipes = allSwipes.skip(batchSize).toList();
         } else {
@@ -100,7 +103,7 @@ class SwipeBufferManager {
         }
       }
     } catch (e) {
-      print('[SwipeBufferManager] Error during flush: $e');
+      debugLogger('[SwipeBufferManager]', "Error during flush: $e");
     } finally {
       _isProcessing = false;
     }

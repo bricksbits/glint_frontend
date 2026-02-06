@@ -71,7 +71,6 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
 
   bool rewindClicked() {
     if (state.isPremiumUser) {
-      rewindUsed();
       return true;
     } else {
       emitNewState(state.copyWith(error: "No Rewinds available"));
@@ -199,6 +198,10 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
 
   void emitNewState(UserInfoManagerState newState) {
     emit(newState);
+  }
+
+  void clearError() {
+    emitNewState(state.copyWith(error: null));
   }
 
   @override

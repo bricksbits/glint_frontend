@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 enum GlintAppBarActions {
@@ -46,8 +49,8 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Gap(20.0),
           GestureDetector(
             onTap: () async {
-              GlintAnalyticService.onProfileSettingsEvent();
               context.pushNamed(GlintMainRoutes.settings.name);
+              GlintAnalyticService.onProfileSettingsEvent();
             },
             child: SvgPicture.asset(
               'lib/assets/icons/settings_icon.svg',
@@ -59,8 +62,8 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         return [
           GestureDetector(
             onTap: () async {
-              GlintAnalyticService.onEventsTicketHistoryClickedEvent();
               context.pushNamed(GlintEventRoutes.tickets.name);
+              GlintAnalyticService.onEventsTicketHistoryClickedEvent();
             },
             child: SvgPicture.asset(
               'lib/assets/icons/glint-ticket.svg',
@@ -69,8 +72,8 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Gap(20.0),
           GestureDetector(
             onTap: () {
-              GlintAnalyticService.onSearchScreenEvent(false);
               context.pushNamed(GlintMainRoutes.filter.name);
+              GlintAnalyticService.onSearchScreenEvent(false);
             },
             child: SvgPicture.asset(
               'lib/assets/icons/glint_filter.svg',
@@ -82,7 +85,21 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         return [
           GestureDetector(
             onTap: () {
-              // Replace with rollback functionality
+              final isRewindAvailable =
+                  context.read<UserInfoManagerCubit>().rewindClicked();
+              if (isRewindAvailable) {
+                final isHistoryProfileActionAvailable = context
+                    .read<PeopleCardsBloc>()
+                    .state
+                    .swipedHistoryCards
+                    .isNotEmpty;
+                if (isHistoryProfileActionAvailable) {
+                  context.read<PeopleCardsBloc>().undo();
+                  context.read<UserInfoManagerCubit>().rewindUsed();
+                } else {
+                  context.read<PeopleCardsBloc>().undo();
+                }
+              }
               GlintAnalyticService.onRewindEvent(false);
             },
             child: SvgPicture.asset(
