@@ -65,24 +65,24 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ],
           ),
-          body: state.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : state.isChatReady == false ||
-                      state.channelListController == null
-                  ? const Center(
-                      child: Text(
-                        "Chat Servers are not available",
-                        style: AppTheme.headingThree,
-                      ),
-                    )
-                  : RefreshIndicator(
-                      onRefresh: () async {
-                        GlintAnalyticService.onRefreshHitEvent();
-                        return state.channelListController?.refresh();
-                      },
-                      child: Column(
+          body: RefreshIndicator(
+            onRefresh: () async {
+              GlintAnalyticService.onRefreshHitEvent();
+              return state.channelListController?.refresh();
+            },
+            child: state.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : state.isChatReady == false ||
+                        state.channelListController == null
+                    ? const Center(
+                        child: Text(
+                          "Chat Servers are not available",
+                          style: AppTheme.headingThree,
+                        ),
+                      )
+                    : Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -104,11 +104,12 @@ class _ChatScreenState extends State<ChatScreen> {
                             context.pushNamed(
                               GlintChatRoutes.chatWith.name,
                               extra: ChatWithNavArguments(
-                                  channelId: match.chatChannelId,
-                                  eventId: match.eventId,
-                                  eventName: match.eventName,
-                                  eventStartTime: match.eventStartTime,
-                                  matchId: match.matchId),
+                                channelId: match.chatChannelId,
+                                eventId: match.eventId,
+                                eventName: match.eventName,
+                                eventStartTime: match.eventStartTime,
+                                matchId: match.matchId,
+                              ),
                             );
                           },
                               noRecentMatches:
@@ -439,7 +440,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ),
                         ],
                       ),
-                    ),
+          ),
         );
       },
     );

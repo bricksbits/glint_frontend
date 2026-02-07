@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/chat/story_comment_like.dart';
 import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
@@ -66,9 +67,6 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                       return Stack(
                         children: [
                           Positioned.fill(
-                            child: Container(color: Colors.black),
-                          ),
-                          Positioned.fill(
                             child: StoryImage(
                               key: ValueKey(currentVisibleStory),
                               imageProvider: NetworkImage(
@@ -88,19 +86,19 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                             padding: const EdgeInsets.only(top: 44, left: 8),
                             child: Row(
                               children: [
-                                // Container(
-                                //   height: 32,
-                                //   width: 32,
-                                //   decoration: BoxDecoration(
-                                //     image: DecorationImage(
-                                //       image: NetworkImage(
-                                //           currentVisibleUser?.userImageUrl ??
-                                //               ""),
-                                //       fit: BoxFit.cover,
-                                //     ),
-                                //     shape: BoxShape.circle,
-                                //   ),
-                                // ),
+                                Container(
+                                  height: 48,
+                                  width: 48,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                          currentVisibleUser?.userImageUrl ??
+                                              ""),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
                                 const SizedBox(
                                   width: 8,
                                 ),
@@ -108,53 +106,43 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                                   decoration: BoxDecoration(
                                     color: AppColours.black,
                                     borderRadius:
-                                        BorderRadiusGeometry.circular(10.0),
+                                        BorderRadiusGeometry.circular(8.0),
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
                                       currentVisibleUser?.username ?? "",
-                                      style: const TextStyle(
-                                        fontSize: 18,
+                                      style: AppTheme.simpleBodyText.copyWith(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "AlbertSans",
                                       ),
                                     ),
                                   ),
                                 ),
+                                const Spacer(),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColours.white,
+                                    borderRadius:
+                                        BorderRadiusGeometry.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.remove_red_eye,
+                                        ),
+                                        const Gap(4),
+                                        Text(
+                                          currentVisibleUser?.storyViewCount ??
+                                              "0",
+                                          style: AppTheme.smallBodyText,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
                                 const Gap(4),
-                                // Container(
-                                //   decoration: BoxDecoration(
-                                //       color: AppColours.primaryBlue,
-                                //       borderRadius:
-                                //           BorderRadiusGeometry.circular(
-                                //               10.0)),
-                                //   child: Row(
-                                //     mainAxisSize: MainAxisSize.min,
-                                //     children: [
-                                //       IconButton(
-                                //         padding: EdgeInsets.zero,
-                                //         color: Colors.white,
-                                //         icon: const Icon(Icons.bolt),
-                                //         onPressed: () {
-                                //           Navigator.pop(context);
-                                //         },
-                                //       ),
-                                //       Text(
-                                //         currentVisibleUser?.streakCount ??
-                                //             "",
-                                //         style: const TextStyle(
-                                //           fontSize: 14,
-                                //           color: Colors.white,
-                                //           fontWeight: FontWeight.bold,
-                                //           fontFamily: "AlbertSans",
-                                //         ),
-                                //       ),
-                                //       const Gap(16),
-                                //     ],
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
@@ -169,23 +157,11 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                             (BuildContext context, BoxConstraints constraints) {
                           return Stack(
                             children: [
-                              Positioned(
-                                left: 8,
-                                top: 44,
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  color: Colors.black,
-                                  icon: const Icon(Icons.close),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
                               currentActiveUser?.isOwnStory == false
                                   ? Positioned(
-                                      bottom: 24,
-                                      left: 24,
-                                      right: 24,
+                                      bottom: 16,
+                                      left: 2,
+                                      right: 2,
                                       child: StoryCommentTextInput(
                                         focusNode: _commentFocusNode,
                                         storyCommentController:
@@ -205,6 +181,9 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                                                   storyCommentTextController
                                                       .text,
                                                 );
+
+                                            showCustomSnackbar(context,
+                                                message: "Message Sent");
                                           }
                                           storyCommentTextController.clear();
                                           _commentFocusNode.unfocus();
