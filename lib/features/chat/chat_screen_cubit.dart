@@ -14,7 +14,8 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart'
         User,
         ConnectionStatus,
         StreamChannelListController,
-        StreamChatError;
+        StreamChatError,
+        StreamChat;
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart'
     show Filter, SortOption, Channel;
 
@@ -123,14 +124,17 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     String currentUserId,
   ) {
     _channelListController = StreamChannelListController(
-      client: chatClient,
-      filter: Filter.in_(
-        'members',
-        [currentUserId],
-      ),
-      channelStateSort: const [SortOption('last_message_at', direction: -1)],
-      limit: 42,
-    );
+        client: chatClient,
+        filter: Filter.and([
+          Filter.equal('type', 'messaging'),
+          Filter.in_(
+            'members',
+            [currentUserId],
+          ),
+        ]),
+        channelStateSort: const [SortOption('last_message_at', direction: -1)],
+        limit: 20,
+        presence: true);
     _channelListController?.doInitialLoad();
     updateState(
       state.copyWith(

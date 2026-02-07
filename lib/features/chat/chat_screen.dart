@@ -500,6 +500,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       const Gap(12.0),
                       Expanded(
                         child: ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           itemCount: recentMatches.length,
                           itemBuilder: (context, index) {
@@ -620,6 +621,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: SizedBox(
               height: 128.0,
               child: ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 itemCount: viewStoryModel.length,
