@@ -86,12 +86,16 @@ class _ChatScreenState extends State<ChatScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          state.stories != null && state.stories?.isNotEmpty == true
+                          state.stories != null &&
+                                  state.stories?.isNotEmpty == true
                               ? _buildStoriesSection(state.stories!,
                                   (selectedIndex) {
                                   context.pushNamed(
                                     GlintChatRoutes.stories.name,
-                                    extra: (index: selectedIndex, stories: state.stories),
+                                    extra: (
+                                      index: selectedIndex,
+                                      stories: state.stories
+                                    ),
                                   );
                                 })
                               : const SizedBox.shrink(),
@@ -592,111 +596,112 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+            ),
+            child: Text(
               "Stories",
               style: AppTheme.headingThree.copyWith(
                 fontStyle: FontStyle.normal,
                 fontSize: 18.0,
               ),
             ),
-            const Gap(2.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12.0)
-                  .copyWith(bottom: 0),
-              child: SizedBox(
-                height: 128.0,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: viewStoryModel.length,
-                  padding: const EdgeInsets.all(4),
-                  itemBuilder: (context, index) {
-                    var story = viewStoryModel[index];
-                    return GestureDetector(
-                      onTap: () {
-                        storySelectedIndex(index);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        margin: index == 0
-                            ? const EdgeInsets.only(left: 16.0)
-                            : null,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Stack(
-                              clipBehavior: Clip.none,
-                              alignment: Alignment.center,
-                              children: [
-                                GradientCircularProgressIndicator(
-                                  progress: 100,
-                                  stroke: 3.6,
-                                  gradient: AppColours.circularProgressGradient,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: CircleAvatar(
-                                      radius: 36,
-                                      backgroundImage:
-                                          NetworkImage(story.userImageUrl),
+          ),
+          const Gap(2.0),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 12.0).copyWith(bottom: 0),
+            child: SizedBox(
+              height: 128.0,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: viewStoryModel.length,
+                padding: const EdgeInsets.all(4),
+                itemBuilder: (context, index) {
+                  var story = viewStoryModel[index];
+                  return GestureDetector(
+                    onTap: () {
+                      storySelectedIndex(index);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      margin:
+                          index == 0 ? const EdgeInsets.only(left: 16.0) : null,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Stack(
+                            clipBehavior: Clip.none,
+                            alignment: Alignment.center,
+                            children: [
+                              GradientCircularProgressIndicator(
+                                progress: 100,
+                                stroke: 3.6,
+                                gradient: AppColours.circularProgressGradient,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: CircleAvatar(
+                                    radius: 36,
+                                    backgroundImage:
+                                        NetworkImage(story.userImageUrl),
+                                  ),
+                                ),
+                              ),
+                              if (int.parse(story.streakCount) > 0)
+                                Positioned(
+                                  bottom: -8.0,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6.0, vertical: 3.6),
+                                    decoration: BoxDecoration(
+                                      color: AppColours.primaryBlue,
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.local_fire_department,
+                                          size: 14,
+                                          color: AppColours.white,
+                                        ),
+                                        const Gap(2.0),
+                                        Text(
+                                          story.streakCount,
+                                          style:
+                                              AppTheme.smallBodyText.copyWith(
+                                            color: AppColours.white,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                                if (int.parse(story.streakCount) > 0)
-                                  Positioned(
-                                    bottom: -8.0,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 6.0, vertical: 3.6),
-                                      decoration: BoxDecoration(
-                                        color: AppColours.primaryBlue,
-                                        borderRadius: BorderRadius.circular(24),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Icon(
-                                            Icons.local_fire_department,
-                                            size: 14,
-                                            color: AppColours.white,
-                                          ),
-                                          const Gap(2.0),
-                                          Text(
-                                            story.streakCount,
-                                            style:
-                                                AppTheme.smallBodyText.copyWith(
-                                              color: AppColours.white,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                              ],
+                            ],
+                          ),
+                          const Gap(12.0),
+                          Text(
+                            story.username,
+                            style: AppTheme.simpleText.copyWith(
+                              color: AppColours.black,
                             ),
-                            const Gap(12.0),
-                            Text(
-                              story.username,
-                              style: AppTheme.simpleText.copyWith(
-                                color: AppColours.black,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

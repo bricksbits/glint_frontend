@@ -1,6 +1,9 @@
 import 'package:glint_frontend/data/remote/model/response/story/story_response_body.dart';
 
 class ViewStoryModel {
+  final String userId;
+  final String storyId;
+  final bool isOwnStory;
   final List<String> storiesUrl;
   final String username;
   final String userImageUrl;
@@ -9,6 +12,9 @@ class ViewStoryModel {
   final String? streamChannelId;
 
   ViewStoryModel({
+    required this.userId,
+    required this.storyId,
+    required this.isOwnStory,
     required this.storiesUrl,
     required this.username,
     required this.userImageUrl,
@@ -24,6 +30,9 @@ extension ViewStoryModelMapper on StoryResponseBody {
           int storiesViews = item.storyViews ?? 0;
           int storiesLikes = item.storyLikes ?? 0;
           return ViewStoryModel(
+            userId: item.userId.toString(),
+            storyId: item.storyUuid ?? "",
+            isOwnStory: item.isOwnStory ?? false,
             storiesUrl: item.storyUrlList
                     ?.map(
                       (storyData) => storyData.presignedUrl ?? "",

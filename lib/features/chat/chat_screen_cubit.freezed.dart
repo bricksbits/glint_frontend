@@ -242,7 +242,7 @@ class _$InitialImpl implements _Initial {
       this.error = "",
       final List<RecentMatchesModel>? recentMatches = null,
       this.channelListController = null,
-      final List<ViewStoryModel>? stories = const [],
+      final List<ViewStoryModel>? stories = null,
       this.selectedIndex = null})
       : _recentMatches = recentMatches,
         _stories = stories;

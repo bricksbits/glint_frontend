@@ -4,12 +4,14 @@ class StoryCommentTextInput extends StatefulWidget {
   final FocusNode focusNode;
   final TextEditingController storyCommentController;
   final VoidCallback onCommentSend;
+  final VoidCallback onStoryLiked;
 
   const StoryCommentTextInput({
     super.key,
     required this.focusNode,
     required this.storyCommentController,
     required this.onCommentSend,
+    required this.onStoryLiked,
   });
 
   @override
@@ -54,6 +56,7 @@ class _StoryCommentTextInputState extends State<StoryCommentTextInput> {
         IconButton(
           // Like button
           onPressed: () {
+            widget.onStoryLiked();
             setState(() {
               _isLiked = !_isLiked;
             });

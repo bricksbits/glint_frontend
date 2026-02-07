@@ -50,176 +50,201 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
   Widget build(BuildContext context) {
     final streamClient = StreamChat.of(context).client;
     final stories = widget.passedStories;
-    return Scaffold(
-      body: stories?.isNotEmpty == true
-          ? StoryPageView(
-              initialPage: widget.passedIndex ?? 0,
-              showShadow: true,
-              itemBuilder: (context, pageIndex, storyIndex) {
-                final currentVisibleUser = stories?[pageIndex];
-                final currentVisibleStory =
-                    currentVisibleUser?.storiesUrl[storyIndex];
-                return Stack(
-                  children: [
-                    Positioned.fill(
-                      child: Container(color: Colors.black),
-                    ),
-                    Positioned.fill(
-                      child: StoryImage(
-                        key: ValueKey(currentVisibleStory),
-                        imageProvider: NetworkImage(
-                          currentVisibleStory ?? "",
-                        ),
-                        errorBuilder: (BuildContext context, Object error,
-                            StackTrace? stackTrace) {
-                          return Image.asset(
-                            fit: BoxFit.cover,
-                            'lib/assets/images/temp_place_holder.png',
-                          );
-                        },
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 44, left: 8),
-                      child: Row(
+    return BlocProvider(
+      create: (context) => ViewStoryCubit(),
+      child: BlocBuilder<ViewStoryCubit, ViewStoryState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: stories?.isNotEmpty == true
+                ? StoryPageView(
+                    initialPage: widget.passedIndex ?? 0,
+                    showShadow: true,
+                    itemBuilder: (context, pageIndex, storyIndex) {
+                      final currentVisibleUser = stories?[pageIndex];
+                      final currentVisibleStory =
+                          currentVisibleUser?.storiesUrl[storyIndex];
+                      return Stack(
                         children: [
-                          // Container(
-                          //   height: 32,
-                          //   width: 32,
-                          //   decoration: BoxDecoration(
-                          //     image: DecorationImage(
-                          //       image: NetworkImage(
-                          //           currentVisibleUser?.userImageUrl ??
-                          //               ""),
-                          //       fit: BoxFit.cover,
-                          //     ),
-                          //     shape: BoxShape.circle,
-                          //   ),
-                          // ),
-                          const SizedBox(
-                            width: 8,
+                          Positioned.fill(
+                            child: Container(color: Colors.black),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColours.black,
-                              borderRadius: BorderRadiusGeometry.circular(10.0),
+                          Positioned.fill(
+                            child: StoryImage(
+                              key: ValueKey(currentVisibleStory),
+                              imageProvider: NetworkImage(
+                                currentVisibleStory ?? "",
+                              ),
+                              errorBuilder: (BuildContext context, Object error,
+                                  StackTrace? stackTrace) {
+                                return Image.asset(
+                                  fit: BoxFit.cover,
+                                  'lib/assets/images/temp_place_holder.png',
+                                );
+                              },
+                              fit: BoxFit.cover,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                currentVisibleUser?.username ?? "",
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "AlbertSans",
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 44, left: 8),
+                            child: Row(
+                              children: [
+                                // Container(
+                                //   height: 32,
+                                //   width: 32,
+                                //   decoration: BoxDecoration(
+                                //     image: DecorationImage(
+                                //       image: NetworkImage(
+                                //           currentVisibleUser?.userImageUrl ??
+                                //               ""),
+                                //       fit: BoxFit.cover,
+                                //     ),
+                                //     shape: BoxShape.circle,
+                                //   ),
+                                // ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColours.black,
+                                    borderRadius:
+                                        BorderRadiusGeometry.circular(10.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      currentVisibleUser?.username ?? "",
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "AlbertSans",
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const Gap(4),
+                                // Container(
+                                //   decoration: BoxDecoration(
+                                //       color: AppColours.primaryBlue,
+                                //       borderRadius:
+                                //           BorderRadiusGeometry.circular(
+                                //               10.0)),
+                                //   child: Row(
+                                //     mainAxisSize: MainAxisSize.min,
+                                //     children: [
+                                //       IconButton(
+                                //         padding: EdgeInsets.zero,
+                                //         color: Colors.white,
+                                //         icon: const Icon(Icons.bolt),
+                                //         onPressed: () {
+                                //           Navigator.pop(context);
+                                //         },
+                                //       ),
+                                //       Text(
+                                //         currentVisibleUser?.streakCount ??
+                                //             "",
+                                //         style: const TextStyle(
+                                //           fontSize: 14,
+                                //           color: Colors.white,
+                                //           fontWeight: FontWeight.bold,
+                                //           fontFamily: "AlbertSans",
+                                //         ),
+                                //       ),
+                                //       const Gap(16),
+                                //     ],
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    gestureItemBuilder: (context, pageIndex, storyIndex) {
+                      final currentActiveUser = stories?[pageIndex];
+                      currentChannel = currentActiveUser?.streamChannelId;
+                      return LayoutBuilder(
+                        builder:
+                            (BuildContext context, BoxConstraints constraints) {
+                          return Stack(
+                            children: [
+                              Positioned(
+                                left: 8,
+                                top: 44,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  color: Colors.black,
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ),
-                            ),
-                          ),
-                          const Gap(4),
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //       color: AppColours.primaryBlue,
-                          //       borderRadius:
-                          //           BorderRadiusGeometry.circular(
-                          //               10.0)),
-                          //   child: Row(
-                          //     mainAxisSize: MainAxisSize.min,
-                          //     children: [
-                          //       IconButton(
-                          //         padding: EdgeInsets.zero,
-                          //         color: Colors.white,
-                          //         icon: const Icon(Icons.bolt),
-                          //         onPressed: () {
-                          //           Navigator.pop(context);
-                          //         },
-                          //       ),
-                          //       Text(
-                          //         currentVisibleUser?.streakCount ??
-                          //             "",
-                          //         style: const TextStyle(
-                          //           fontSize: 14,
-                          //           color: Colors.white,
-                          //           fontWeight: FontWeight.bold,
-                          //           fontFamily: "AlbertSans",
-                          //         ),
-                          //       ),
-                          //       const Gap(16),
-                          //     ],
-                          //   ),
-                          // ),
-                        ],
-                      ),
+                              currentActiveUser?.isOwnStory == false
+                                  ? Positioned(
+                                      bottom: 24,
+                                      left: 24,
+                                      right: 24,
+                                      child: StoryCommentTextInput(
+                                        focusNode: _commentFocusNode,
+                                        storyCommentController:
+                                            storyCommentTextController,
+                                        onCommentSend: () {
+                                          if (currentChannel != null) {
+                                            final channel =
+                                                streamClient.channel(
+                                              'messaging',
+                                              id: currentChannel,
+                                            );
+                                            context
+                                                .read<ViewStoryCubit>()
+                                                .replyToStory(
+                                                  streamClient,
+                                                  channel,
+                                                  storyCommentTextController
+                                                      .text,
+                                                );
+                                          }
+                                          storyCommentTextController.clear();
+                                          _commentFocusNode.unfocus();
+                                        },
+                                        onStoryLiked: () {
+                                          context
+                                              .read<ViewStoryCubit>()
+                                              .likeOtherStory(
+                                                  currentActiveUser?.userId ??
+                                                      "",
+                                                  currentActiveUser?.storyId ??
+                                                      "");
+                                        },
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    indicatorAnimationController: indicatorAnimationController,
+                    initialStoryIndex: (_) => 0,
+                    pageLength: stories?.length ?? 0,
+                    storyLength: (int pageIndex) {
+                      return stories?[pageIndex].storiesUrl.length ?? 0;
+                    },
+                    onPageLimitReached: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                : const Center(
+                    child: Text(
+                      "Oops! No Stories available,",
+                      style: AppTheme.simpleBodyText,
                     ),
-                  ],
-                );
-              },
-              gestureItemBuilder: (context, pageIndex, storyIndex) {
-                final currentActiveUser = stories?[pageIndex];
-                currentChannel = currentActiveUser?.streamChannelId;
-                return LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                    return Stack(
-                      children: [
-                        Positioned(
-                          left: 8,
-                          top: 44,
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            color: Colors.black,
-                            icon: const Icon(Icons.close),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 24,
-                          left: 24,
-                          right: 24,
-                          child: StoryCommentTextInput(
-                            focusNode: _commentFocusNode,
-                            storyCommentController: storyCommentTextController,
-                            onCommentSend: () {
-                              if (currentChannel != null) {
-                                final channel = streamClient.channel(
-                                  'messaging',
-                                  id: currentChannel,
-                                );
-                                context.read<ChatScreenCubit>().replyToStory(
-                                      streamClient,
-                                      channel,
-                                      storyCommentTextController.text,
-                                    );
-                              }
-                              storyCommentTextController.clear();
-                              _commentFocusNode.unfocus();
-                            },
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              indicatorAnimationController: indicatorAnimationController,
-              initialStoryIndex: (_) => 0,
-              pageLength: stories?.length ?? 0,
-              storyLength: (int pageIndex) {
-                return stories?[pageIndex].storiesUrl.length ?? 0;
-              },
-              onPageLimitReached: () {
-                Navigator.pop(context);
-              },
-            )
-          : const Center(
-              child: Text(
-                "Oops! No Stories available,",
-                style: AppTheme.simpleBodyText,
-              ),
-            ),
+                  ),
+          );
+        },
+      ),
     );
   }
 
