@@ -15,7 +15,8 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart'
         ConnectionStatus,
         StreamChannelListController,
         StreamChatError,
-        StreamChat;
+        EventType;
+
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart'
     show Filter, SortOption, Channel;
 
@@ -37,6 +38,8 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   StreamSubscription<Result<List<RecentMatchesModel>>>?
       _recentMatchesSubscription;
   late final StreamChannelListController? _channelListController;
+
+  late final StreamSubscription? _channelsEventsSubscription;
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
     _connectToStreamClient();
@@ -124,7 +127,7 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     String currentUserId,
   ) {
     _channelListController = StreamChannelListController(
-        client: chatClient,
+        client: client,
         filter: Filter.and([
           Filter.equal('type', 'messaging'),
           Filter.in_(
@@ -135,14 +138,28 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
         channelStateSort: const [SortOption('last_message_at', direction: -1)],
         limit: 20,
         presence: true);
-    _channelListController?.doInitialLoad();
-    updateState(
-      state.copyWith(
-        channelListController: _channelListController,
-        isChatReady: true,
-        isLoading: false,
-      ),
-    );
+
+    _channelListController?.doInitialLoad().then((_) {
+      updateState(
+        state.copyWith(
+          channelListController: _channelListController,
+          isChatReady: true,
+          isLoading: false,
+        ),
+      );
+    });
+
+    _channelsEventsSubscription = client.on().listen((event) {
+      if (event.type == EventType.messageNew ||
+          event.type == EventType.notificationMessageNew ||
+          event.type == EventType.channelUpdated ||
+          event.type == EventType.notificationAddedToChannel) {
+        debugLogger("CHAT", "Event received: ${event.type}");
+
+        // Refresh the channel list
+        _channelListController?.refresh();
+      }
+    });
   }
 
   void updateState(ChatScreenState newState) {
@@ -184,6 +201,7 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     _channelListController?.dispose();
     _recentMatchesSubscription?.cancel();
     chatRepo.disposeRecentChatStream();
+    _channelsEventsSubscription?.cancel();
     return super.close();
   }
 

@@ -139,17 +139,19 @@ class _ChatScreenState extends State<ChatScreen> {
                                               .currentUser!
                                               .id;
                                       final oppositeUser = channels[index]
-                                          .state!
-                                          .members
-                                          .firstWhere(
+                                          .state
+                                          ?.members
+                                          .where(
                                             (member) =>
                                                 member.user!.id !=
                                                 currentUserId,
-                                          );
+                                          )
+                                          .firstOrNull;
+
                                       final oppositeUserName =
-                                          oppositeUser.user!.name;
+                                          oppositeUser?.user!.name;
                                       final oppositeUserImage =
-                                          oppositeUser.user?.image;
+                                          oppositeUser?.user?.image;
 
                                       final messages =
                                           channels[index].state?.messages;
@@ -241,7 +243,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             ],
                                           ),
                                           title: Text(
-                                            oppositeUserName,
+                                            oppositeUserName ?? "Match user",
                                             style: AppTheme.simpleBodyText
                                                 .copyWith(
                                               color: AppColours.black,
@@ -371,7 +373,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             ],
                                           ),
                                           title: Text(
-                                            oppositeUserName,
+                                            oppositeUserName ?? "Match User",
                                             style: AppTheme.simpleBodyText
                                                 .copyWith(
                                               color: AppColours.black,

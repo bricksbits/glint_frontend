@@ -101,9 +101,29 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
   Future<void> _connectToStreamClient() async {
     final StreamChatClient chatClient = getIt.get<StreamChatClient>();
     final userId = await getUserId();
-    final userToken = await getUserToken(userId);
+    final userToken = await getUserToken();
     final userName = await getUserName();
     final userImage = await getUserImage();
+    try {
+      await chatClient.connectUser(
+        User(
+          id: userId,
+          name: userName,
+          image: userImage,
+        ),
+        userToken,
+      );
+
+      final currentConnectedUser = chatClient.state.currentUser;
+      debugLogger(
+          "[]SplashBloc", "Current Connect User : $currentConnectedUser");
+    } on StreamChatError catch (streamError) {
+      debugLogger(
+          "SPLASH", "Stream chat doesn't initialized, ${streamError.message}");
+    } catch (e) {
+      debugLogger("SPLASH", "Stream chat doesn't initialized, ${e.toString()}");
+    }
+
     if (userToken.isEmpty ||
         userId.isEmpty ||
         userImage.isEmpty ||
@@ -116,15 +136,6 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
         ),
       );
       return;
-    }
-    try {
-      await chatClient.connectUser(
-        User(id: userId, name: userName, image: userImage),
-        userToken,
-      );
-    } on StreamChatError catch (streamError) {
-      debugLogger(
-          "SPLASH", "Stream chat doesn't initialized, ${streamError.message}");
     }
   }
 
@@ -146,7 +157,7 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
     return userName;
   }
 
-  Future<String> getUserToken(String userId) async {
+  Future<String> getUserToken() async {
     final userToken = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.streamTokenKey);
     return userToken;
