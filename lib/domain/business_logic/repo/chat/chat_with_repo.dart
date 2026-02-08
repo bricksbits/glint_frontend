@@ -18,4 +18,9 @@ abstract class ChatWithRepo {
   Future<Result<void>> reactToMessage();
 
   Future<Result<void>> bookTicket();
+
+  Future<void> likeStory(
+    String storyOwnerUserId,
+    String storyUuid,
+  );
 }

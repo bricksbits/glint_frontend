@@ -51,7 +51,7 @@ class ProfileSubscriptionColumn extends StatelessWidget {
                     GlintMainRoutes.payment.name,
                     extra: PaymentArgumentModel(
                       membershipType: MembershipType.PLATINUM,
-                      amountOfSelectedMembership: "359",
+                      amountOfSelectedMembership: "349",
                       timePeriod: "30",
                       eventId: null,
                       matchId: null,
@@ -92,7 +92,7 @@ class ProfileSubscriptionColumn extends StatelessWidget {
                     GlintMainRoutes.payment.name,
                     extra: PaymentArgumentModel(
                       membershipType: MembershipType.GOLD,
-                      amountOfSelectedMembership: "359",
+                      amountOfSelectedMembership: "249",
                       timePeriod: "30",
                       eventId: null,
                       matchId: null,

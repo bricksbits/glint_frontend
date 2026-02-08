@@ -6,7 +6,6 @@ import 'package:glint_frontend/features/chat/story/upload/upload_story_bloc.dart
 import 'package:go_router/go_router.dart';
 import 'package:path/path.dart';
 
-//Todo: Implement the Mechanism to watch user own stories,
 // Once Uploaded, Move to the Chat Screen.
 class UploadStoryScreen extends StatefulWidget {
   final bool isUploadStory;

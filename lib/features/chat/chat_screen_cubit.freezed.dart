@@ -22,7 +22,9 @@ mixin _$ChatScreenState {
   List<RecentMatchesModel>? get recentMatches =>
       throw _privateConstructorUsedError;
   StreamChannelListController? get channelListController =>
-      throw _privateConstructorUsedError;
+      throw _privateConstructorUsedError; // For Stories
+  List<ViewStoryModel>? get stories => throw _privateConstructorUsedError;
+  int? get selectedIndex => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -30,7 +32,9 @@ mixin _$ChatScreenState {
             bool isChatReady,
             String error,
             List<RecentMatchesModel>? recentMatches,
-            StreamChannelListController? channelListController)
+            StreamChannelListController? channelListController,
+            List<ViewStoryModel>? stories,
+            int? selectedIndex)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -41,7 +45,9 @@ mixin _$ChatScreenState {
             bool isChatReady,
             String error,
             List<RecentMatchesModel>? recentMatches,
-            StreamChannelListController? channelListController)?
+            StreamChannelListController? channelListController,
+            List<ViewStoryModel>? stories,
+            int? selectedIndex)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -52,7 +58,9 @@ mixin _$ChatScreenState {
             bool isChatReady,
             String error,
             List<RecentMatchesModel>? recentMatches,
-            StreamChannelListController? channelListController)?
+            StreamChannelListController? channelListController,
+            List<ViewStoryModel>? stories,
+            int? selectedIndex)?
         initial,
     required TResult orElse(),
   }) =>
@@ -92,7 +100,9 @@ abstract class $ChatScreenStateCopyWith<$Res> {
       bool isChatReady,
       String error,
       List<RecentMatchesModel>? recentMatches,
-      StreamChannelListController? channelListController});
+      StreamChannelListController? channelListController,
+      List<ViewStoryModel>? stories,
+      int? selectedIndex});
 }
 
 /// @nodoc
@@ -115,6 +125,8 @@ class _$ChatScreenStateCopyWithImpl<$Res, $Val extends ChatScreenState>
     Object? error = null,
     Object? recentMatches = freezed,
     Object? channelListController = freezed,
+    Object? stories = freezed,
+    Object? selectedIndex = freezed,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -137,6 +149,14 @@ class _$ChatScreenStateCopyWithImpl<$Res, $Val extends ChatScreenState>
           ? _value.channelListController
           : channelListController // ignore: cast_nullable_to_non_nullable
               as StreamChannelListController?,
+      stories: freezed == stories
+          ? _value.stories
+          : stories // ignore: cast_nullable_to_non_nullable
+              as List<ViewStoryModel>?,
+      selectedIndex: freezed == selectedIndex
+          ? _value.selectedIndex
+          : selectedIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -154,7 +174,9 @@ abstract class _$$InitialImplCopyWith<$Res>
       bool isChatReady,
       String error,
       List<RecentMatchesModel>? recentMatches,
-      StreamChannelListController? channelListController});
+      StreamChannelListController? channelListController,
+      List<ViewStoryModel>? stories,
+      int? selectedIndex});
 }
 
 /// @nodoc
@@ -175,6 +197,8 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? error = null,
     Object? recentMatches = freezed,
     Object? channelListController = freezed,
+    Object? stories = freezed,
+    Object? selectedIndex = freezed,
   }) {
     return _then(_$InitialImpl(
       isLoading: null == isLoading
@@ -197,6 +221,14 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.channelListController
           : channelListController // ignore: cast_nullable_to_non_nullable
               as StreamChannelListController?,
+      stories: freezed == stories
+          ? _value._stories
+          : stories // ignore: cast_nullable_to_non_nullable
+              as List<ViewStoryModel>?,
+      selectedIndex: freezed == selectedIndex
+          ? _value.selectedIndex
+          : selectedIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -209,8 +241,11 @@ class _$InitialImpl implements _Initial {
       this.isChatReady = false,
       this.error = "",
       final List<RecentMatchesModel>? recentMatches = null,
-      this.channelListController = null})
-      : _recentMatches = recentMatches;
+      this.channelListController = null,
+      final List<ViewStoryModel>? stories = null,
+      this.selectedIndex = null})
+      : _recentMatches = recentMatches,
+        _stories = stories;
 
   @override
   @JsonKey()
@@ -237,10 +272,26 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final StreamChannelListController? channelListController;
+// For Stories
+  final List<ViewStoryModel>? _stories;
+// For Stories
+  @override
+  @JsonKey()
+  List<ViewStoryModel>? get stories {
+    final value = _stories;
+    if (value == null) return null;
+    if (_stories is EqualUnmodifiableListView) return _stories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  @JsonKey()
+  final int? selectedIndex;
 
   @override
   String toString() {
-    return 'ChatScreenState.initial(isLoading: $isLoading, isChatReady: $isChatReady, error: $error, recentMatches: $recentMatches, channelListController: $channelListController)';
+    return 'ChatScreenState.initial(isLoading: $isLoading, isChatReady: $isChatReady, error: $error, recentMatches: $recentMatches, channelListController: $channelListController, stories: $stories, selectedIndex: $selectedIndex)';
   }
 
   @override
@@ -256,7 +307,10 @@ class _$InitialImpl implements _Initial {
             const DeepCollectionEquality()
                 .equals(other._recentMatches, _recentMatches) &&
             (identical(other.channelListController, channelListController) ||
-                other.channelListController == channelListController));
+                other.channelListController == channelListController) &&
+            const DeepCollectionEquality().equals(other._stories, _stories) &&
+            (identical(other.selectedIndex, selectedIndex) ||
+                other.selectedIndex == selectedIndex));
   }
 
   @override
@@ -266,7 +320,9 @@ class _$InitialImpl implements _Initial {
       isChatReady,
       error,
       const DeepCollectionEquality().hash(_recentMatches),
-      channelListController);
+      channelListController,
+      const DeepCollectionEquality().hash(_stories),
+      selectedIndex);
 
   /// Create a copy of ChatScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -284,11 +340,13 @@ class _$InitialImpl implements _Initial {
             bool isChatReady,
             String error,
             List<RecentMatchesModel>? recentMatches,
-            StreamChannelListController? channelListController)
+            StreamChannelListController? channelListController,
+            List<ViewStoryModel>? stories,
+            int? selectedIndex)
         initial,
   }) {
-    return initial(
-        isLoading, isChatReady, error, recentMatches, channelListController);
+    return initial(isLoading, isChatReady, error, recentMatches,
+        channelListController, stories, selectedIndex);
   }
 
   @override
@@ -299,11 +357,13 @@ class _$InitialImpl implements _Initial {
             bool isChatReady,
             String error,
             List<RecentMatchesModel>? recentMatches,
-            StreamChannelListController? channelListController)?
+            StreamChannelListController? channelListController,
+            List<ViewStoryModel>? stories,
+            int? selectedIndex)?
         initial,
   }) {
-    return initial?.call(
-        isLoading, isChatReady, error, recentMatches, channelListController);
+    return initial?.call(isLoading, isChatReady, error, recentMatches,
+        channelListController, stories, selectedIndex);
   }
 
   @override
@@ -314,13 +374,15 @@ class _$InitialImpl implements _Initial {
             bool isChatReady,
             String error,
             List<RecentMatchesModel>? recentMatches,
-            StreamChannelListController? channelListController)?
+            StreamChannelListController? channelListController,
+            List<ViewStoryModel>? stories,
+            int? selectedIndex)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(
-          isLoading, isChatReady, error, recentMatches, channelListController);
+      return initial(isLoading, isChatReady, error, recentMatches,
+          channelListController, stories, selectedIndex);
     }
     return orElse();
   }
@@ -356,12 +418,13 @@ class _$InitialImpl implements _Initial {
 
 abstract class _Initial implements ChatScreenState {
   const factory _Initial(
-          {final bool isLoading,
-          final bool isChatReady,
-          final String error,
-          final List<RecentMatchesModel>? recentMatches,
-          final StreamChannelListController? channelListController}) =
-      _$InitialImpl;
+      {final bool isLoading,
+      final bool isChatReady,
+      final String error,
+      final List<RecentMatchesModel>? recentMatches,
+      final StreamChannelListController? channelListController,
+      final List<ViewStoryModel>? stories,
+      final int? selectedIndex}) = _$InitialImpl;
 
   @override
   bool get isLoading;
@@ -372,7 +435,11 @@ abstract class _Initial implements ChatScreenState {
   @override
   List<RecentMatchesModel>? get recentMatches;
   @override
-  StreamChannelListController? get channelListController;
+  StreamChannelListController? get channelListController; // For Stories
+  @override
+  List<ViewStoryModel>? get stories;
+  @override
+  int? get selectedIndex;
 
   /// Create a copy of ChatScreenState
   /// with the given fields replaced by the non-null parameter values.
