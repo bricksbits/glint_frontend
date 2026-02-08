@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
-import 'package:glint_frontend/design/components/glint_elevated_button.dart';
+import 'package:glint_frontend/design/components/exports.dart';
 
 class SuperDmDialog extends StatefulWidget {
   final String initialName;
@@ -83,8 +83,18 @@ class _SuperDmDialogState extends State<SuperDmDialog> {
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const Icon(
+                Icons.messenger,
+                color: AppColours.darkGray,
+                size: 24.0,
+              ),
+
+              const SizedBox(
+                height: 16,
+              ),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
@@ -106,45 +116,29 @@ class _SuperDmDialogState extends State<SuperDmDialog> {
                 ),
                 child: Text(
                   widget.initialBio,
-                  style: AppTheme.simpleText,
+                  style: AppTheme.simpleText.copyWith(
+
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
 
               // Comment Input (The Dynamic Part)
-              TextField(
-                controller: _commentController,
-                maxLines: 3,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.only(right: 4.0, bottom: 0),
-                  hintText: 'Add your message here.',
-                  hintStyle: TextStyle(
-                    color: AppColours.darkGray,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColours.primaryBlue),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColours.primaryBlue),
-                  ),
-                ),
-              ),
+              GlintTextInputField(controller: _commentController,
+              hintText: "Send a Direct message",),
+
               const SizedBox(height: 12),
 
               // Send Button
-              SizedBox(
-                width: 300,
-                height: 56.0,
-                child: GlintElevatedButton(
-                  label: 'Send',
-                  onPressed: () {
-                    _validateAndSubmit();
-                  },
-                  customTextStyle: AppTheme.simpleBodyText.copyWith(
-                    fontWeight: FontWeight.w400,
-                  ),
-                  backgroundColor: AppColours.purpleShade.withAlpha(2),
+              GlintElevatedButton(
+                label: 'Send',
+                onPressed: () {
+                  _validateAndSubmit();
+                },
+                customTextStyle: AppTheme.simpleBodyText.copyWith(
+                  fontWeight: FontWeight.w400,
                 ),
+                backgroundColor: AppColours.purpleShade.withAlpha(2),
               ),
             ],
           ),

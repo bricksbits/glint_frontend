@@ -20,4 +20,6 @@ abstract class UserInfoRepo {
   Future<String?> fetchDirectDmChannelIdWithUserId(String onUserId);
 
   Future<Result<void>> fetchCurrentPremiumInfo();
+
+  Future<void> updateRewindAndAiCountToServer();
 }

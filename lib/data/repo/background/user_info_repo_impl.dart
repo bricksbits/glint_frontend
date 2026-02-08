@@ -261,4 +261,23 @@ class UserInfoRepoImpl extends UserInfoRepo {
     }
     return null;
   }
+
+  @override
+  Future<void> updateRewindAndAiCountToServer() async {
+    const String logPrefix = "[updateRewindAndAiCountToServer]";
+    final rewindAiCountsResponse = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.POST,
+      endpoint: "user/perks/rewind",
+    );
+
+    switch (rewindAiCountsResponse) {
+      case Success():
+        debugLogger(logPrefix, "Rewind perks decrement successful.");
+        break;
+      case Failure():
+        debugLogger(logPrefix, "Can't decrement the Rewind perks");
+        break;
+    }
+  }
 }

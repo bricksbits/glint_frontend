@@ -26,7 +26,6 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  //Todo(GO): Support for the Different UPI apps on IOS and Android.
   final Razorpay _razorpay = Razorpay();
 
   @override
@@ -75,7 +74,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
               centerTitle: false,
               backgroundColor: Colors.white,
               elevation: 0,
-              leading: const Icon(Icons.arrow_back, color: Colors.black),
+              leading: IconButton(
+                color: Colors.black,
+                onPressed: () {
+                  context.pop();
+                },
+                icon: const Icon(Icons.arrow_back),
+              ),
               title: const Text(
                 'Payment',
                 textAlign: TextAlign.start,
@@ -117,9 +122,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       Text(
                                         '₹ ${state.totalAmount}',
                                         style: const TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.indigo),
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.indigo,
+                                        ),
                                       ),
                                       const SizedBox(height: 10),
                                     ],
@@ -159,6 +165,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               ],
                             ),
                           ),
+                        ),
+                        const SizedBox(height: 40),
+                        const Text(
+                          '** NOTE **',
+                          style: AppTheme.headingFour,
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          '- AI Messages not available in current update.',
+                          style: AppTheme.smallBodyText,
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          '- There can be certain amount change as per the offers and dates.',
+                          style: AppTheme.smallBodyText,
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          '- Please be patient while doing payment, and\n follow the instruction to get best experience.',
+                          style: AppTheme.smallBodyText,
                         ),
                       ],
                     ),

@@ -145,6 +145,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
         );
         emit(state.copyWith(membershipEntity: updatedState));
         await userInfoRepo.setLocalUserPremiumInfo(updatedState);
+        await userInfoRepo.updateRewindAndAiCountToServer();
       }
     }
   }
@@ -190,6 +191,15 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
     }
   }
 
+  Future<void> _clearTheSearchSettings() async {
+    await sharedPrefHelper.saveString(
+        SharedPreferenceKeys.userSearchMaxDistanceKey, "");
+    await sharedPrefHelper.saveString(
+        SharedPreferenceKeys.userSearchMinAgeKey, "");
+    await sharedPrefHelper.saveString(
+        SharedPreferenceKeys.userSearchMaxAgeKey, "");
+  }
+
   Future<void> updateUserLastKnowLocation() async {
     userInfoRepo.updateUserLocation();
   }
@@ -210,6 +220,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   @override
   Future<void> close() {
     profileMembershipPerks?.cancel();
+    _clearTheSearchSettings();
     return super.close();
   }
 }

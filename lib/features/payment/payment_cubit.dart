@@ -22,12 +22,17 @@ class PaymentCubit extends Cubit<PaymentState> {
   PaymentCubit() : super(const PaymentState.initiate());
 
   void collectPaymentRequest(PaymentArgumentModel? paymentRequest) {
+    final isMembershipRequest = paymentRequest?.membershipType != null &&
+        paymentRequest?.eventId == null;
     emit(
       state.copyWith(
         paymentModel: paymentRequest,
         loading: false,
-        isMembershipRequest: paymentRequest?.membershipType != null &&
-            paymentRequest?.eventId == null,
+        isMembershipRequest: isMembershipRequest,
+        totalAmount: isMembershipRequest
+            ? paymentRequest?.amountOfSelectedMembership ??
+                "Provided in next Screen"
+            : paymentRequest?.eventTicketPrice ?? "Provided in next screen",
       ),
     );
   }
@@ -45,6 +50,7 @@ class PaymentCubit extends Cubit<PaymentState> {
           if (orderIdReceived != null) {
             emitNewState(state.copyWith(
               orderId: orderIdReceived,
+              totalAmount: amount,
             ));
           }
           final razorPayKey = orderResponse.success?.razorpayKey;
@@ -81,7 +87,12 @@ class PaymentCubit extends Cubit<PaymentState> {
           final razorPayKey = orderResponse.razorpayKey;
           final razorPayOrderId = orderResponse.razorpayOrderId;
           if (orderIdReceived != null) {
-            emitNewState(state.copyWith(orderId: orderIdReceived));
+            emitNewState(
+              state.copyWith(
+                orderId: orderIdReceived,
+                totalAmount: membershipAmount,
+              ),
+            );
           }
           if (razorPayOrderId != null && razorPayKey != null) {
             generateTheOrderId(

@@ -35,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     'lib/assets/icons/user_icon.svg',
     'lib/assets/icons/event_icon.svg',
     'lib/assets/icons/logo_icon.svg',
-    // 'lib/assets/icons/handshake_icon.svg',
     'lib/assets/icons/chat_icon.svg',
   ];
 
