@@ -10,6 +10,7 @@ class SharedPreferenceKeys {
   static const String verifiedUserKey = "verifiedUser";
   static const String lastSavedTimeKey = "lastSavedTime";
   static const String lastOnBoardingState = "lastOnBoardingState";
+  static const String userProfileViewsKey = "userProfileView";
 
   // location
   static const String userLatitudeKey = 'userLatitude';

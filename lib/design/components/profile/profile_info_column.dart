@@ -42,14 +42,15 @@ class ProfileInfoColumn extends StatelessWidget {
               child: CircleAvatar(
                 radius: 75.0,
                 child: CachedNetworkImage(
-                    imageUrl: userProfileImageUrl,
-                    fit: BoxFit.cover,
-                    errorWidget: (context, error, stack) {
-                      return Image.asset(
-                        fit: BoxFit.cover,
-                        'lib/assets/images/temp_place_holder.png',
-                      );
-                    }),
+                  imageUrl: userProfileImageUrl,
+                  fit: BoxFit.cover,
+                  errorWidget: (context, error, stack) {
+                    return Image.asset(
+                      fit: BoxFit.cover,
+                      'lib/assets/images/temp_place_holder.png',
+                    );
+                  },
+                ),
               ),
             ),
           ],

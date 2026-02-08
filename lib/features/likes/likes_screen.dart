@@ -29,40 +29,36 @@ class LikesScreen extends StatelessWidget {
                     horizontal: 20.0,
                     vertical: 24.0,
                   ),
-                  child: _buildLikeScreenBanner(state.profileViewCount),
+                  child: _buildLikeScreenBanner(
+                    state.profileViewCount,
+                  ),
                 )),
 
-                //Todo: Remove the first method here.
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      final topProfile = state.topProfiles.elementAt(index);
-                      return GlintTopProfileContainer(
-                        imageUrl: topProfile.pictureUrlList.first,
-                        name: topProfile.username,
-                        viewCount: topProfile.profileViews != null
-                            ? int.parse(topProfile.profileViews!)
-                            : 0,
-                      );
-                    },
-                    childCount: state.topProfiles.length,
-                  ),
-                ),
+                state.topProfiles.isNotEmpty
+                    ? _topProfileListWithHeader(
+                        state.topProfiles,
+                      )
+                    : const SizedBox.shrink(),
 
                 const SliverGap(28.0),
 
                 SliverToBoxAdapter(
-                  child: _buildProfileLikedYou(
-                    state.superLikedAndLikedProfiles,
-                  ),
+                  child: state.superLikedAndLikedProfiles.isNotEmpty
+                      ? _buildProfileLikedYou(
+                          state.superLikedAndLikedProfiles,
+                        )
+                      : const SizedBox.shrink(),
                 ),
 
                 // empty state
                 SliverFillRemaining(
                   hasScrollBody: false,
                   child: _buildLikeScreenEmptyState(
-                      state.superLikeProfiles.isNotEmpty ||
-                          state.likeProfiles.isNotEmpty),
+                    state.superLikeProfiles.isEmpty &&
+                        state.likeProfiles.isEmpty &&
+                        state.superLikedAndLikedProfiles.isEmpty &&
+                        state.topProfiles.isEmpty,
+                  ),
                 ),
 
                 //bottom padding basically
@@ -71,6 +67,51 @@ class LikesScreen extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _topProfileListWithHeader(
+    List<PeopleCardModel> topProfiles,
+  ) {
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Heading
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Top profiles',
+              style: AppTheme.simpleBodyText.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const Gap(16.0), // Space between heading and list
+
+          // Horizontal scrollable list
+          SizedBox(
+            height: 165.0,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              itemCount: topProfiles.length,
+              itemBuilder: (BuildContext context, int index) {
+                final topProfile = topProfiles.elementAt(index);
+                return topProfiles.isNotEmpty
+                    ? GlintTopProfileContainer(
+                        imageUrl: topProfile.pictureUrlList.firstOrNull ?? "",
+                        name: topProfile.username,
+                        viewCount: topProfile.profileViews != null
+                            ? int.parse(topProfile.profileViews!)
+                            : 0,
+                      )
+                    : const SizedBox.shrink();
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -120,36 +161,6 @@ class LikesScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildTopProfiles(
-      {required List<GlintTopProfileContainer> topProfiles}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-          ),
-          child: Text(
-            'Top Profiles',
-            style: AppTheme.simpleBodyText.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        const Gap(20.0),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              const Gap(20.0), // for design replication purpose
-              ...topProfiles,
-            ],
-          ),
-        )
-      ],
     );
   }
 
