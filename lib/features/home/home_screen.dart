@@ -126,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         swipeManager.flushOnAppPause().then((_) {
           debugLogger(logPrefix, "Cache Swipes processed successfully,");
         });
+        context.read<UserInfoManagerCubit>().setupFirebaseNotification();
         context.read<UserInfoManagerCubit>().updateUserLocationLocally();
         break;
       case AppLifecycleState.inactive:

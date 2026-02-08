@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/data/local/db/entities/profile_membership_entity.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
@@ -33,7 +34,6 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
     await userInfoRepo.updateFcmTokenLocally(fcmToken);
   }
 
-  // Todo: Call from Splash Screen
   Future<void> pushFcmTokenToServer() async {
     userInfoRepo.updateFcmTokenToServer();
   }
@@ -207,6 +207,39 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   Future<void> fetchPremiumStatus() async {
     final isPremiumUser = await userInfoRepo.isPremiumUser();
     emitNewState(state.copyWith(isPremiumUser: isPremiumUser));
+  }
+
+  void setupFirebaseNotification() async {
+    final firebaseInstance = FirebaseMessaging.instance;
+    final notificationSettings = await firebaseInstance.requestPermission(
+      provisional: true,
+    );
+    if (notificationSettings.authorizationStatus ==
+            AuthorizationStatus.authorized ||
+        notificationSettings.authorizationStatus ==
+            AuthorizationStatus.provisional) {
+      final fcmToken = await firebaseInstance.getToken();
+      if (fcmToken != null) {
+        debugLogger(
+            "FIREBASE TOKEN FETCH", "Token fetched at startup: $fcmToken");
+        updateTheFcmLocally(fcmToken);
+      } else {
+        debugLogger("FIREBASE TOKEN FETCH",
+            "Failed to fetch token at startup, it was null.");
+      }
+
+      firebaseInstance.onTokenRefresh.listen((newToken) {
+        debugLogger("FIREBASE TOKEN REFRESH", "New Token generated: $newToken");
+        updateTheFcmLocally(newToken);
+      }).onError((error) {
+        debugLogger(
+            "FIREBASE TOKEN REFRESH", "Failed to generate the token, ${error}");
+        //Todo: Log the Error to the Analytic here.
+      });
+    } else {
+      debugLogger("FIREBASE PERMISSIONS",
+          "User did not grant notification permissions.");
+    }
   }
 
   void emitNewState(UserInfoManagerState newState) {

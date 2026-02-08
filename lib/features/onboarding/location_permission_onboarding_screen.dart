@@ -4,8 +4,10 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 class LocationPermissionOnboardingScreen extends StatefulWidget {
@@ -70,6 +72,19 @@ class _LocationPermissionOnboardingScreenState
           ),
         );
       },
+    );
+  }
+
+  Widget _notificationPermissionContainer() {
+    return SizedBox(
+      width: double.infinity,
+      child: GlintElevatedButton(
+        label: "Enable Notifications",
+        onPressed: () {
+          final userInfoManagerCubit = getIt.get<UserInfoManagerCubit>();
+          userInfoManagerCubit.setupFirebaseNotification();
+        },
+      ),
     );
   }
 
@@ -144,18 +159,24 @@ class _LocationPermissionOnboardingScreenState
             },
             builder: (context, state) {
               final isLoading = state.isLocationLoading ?? false;
-              return SizedBox(
-                width: double.infinity,
-                child: GlintElevatedButton(
-                  label: isLoading ? 'Enabling...' : 'Enable Location',
-                  onPressed: isLoading
-                      ? null
-                      : () async {
-                          context
-                              .read<OnBoardingCubit>()
-                              .enableLocationAndCompleteOnboarding();
-                        },
-                ),
+              return Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: GlintElevatedButton(
+                      label: isLoading ? 'Enabling...' : 'Enable Location',
+                      onPressed: isLoading
+                          ? null
+                          : () async {
+                              context
+                                  .read<OnBoardingCubit>()
+                                  .enableLocationAndCompleteOnboarding();
+                            },
+                    ),
+                  ),
+                  const Gap(16),
+                  _notificationPermissionContainer(),
+                ],
               );
             },
           )
