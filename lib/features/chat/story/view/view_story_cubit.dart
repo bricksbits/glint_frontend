@@ -16,31 +16,9 @@ part 'view_story_state.dart';
 part 'view_story_cubit.freezed.dart';
 
 class ViewStoryCubit extends Cubit<ViewStoryState> {
-  final ChatRepo chatRepo = getIt.get<ChatRepo>();
   final ChatWithRepo chatWithRepo = getIt.get<ChatWithRepo>();
 
-  ViewStoryCubit() : super(const ViewStoryState.initial()) {
-    _getStories();
-  }
-
-  Future<void> _getStories() async {
-    updateState(state.copyWith(isLoading: true));
-    final response = await chatRepo.fetchStories();
-    switch (response) {
-      case Success<List<ViewStoryModel>>():
-        final stories = response.data;
-        updateState(
-          state.copyWith(
-            isLoading: false,
-            stories: stories,
-          ),
-        );
-      case Failure<List<ViewStoryModel>>():
-        updateState(
-          state.copyWith(error: "Not able to fetch more stories, right now."),
-        );
-    }
-  }
+  ViewStoryCubit() : super(const ViewStoryState.initial());
 
   Future<void> replyToStory(
     StreamChatClient client,
@@ -48,6 +26,16 @@ class ViewStoryCubit extends Cubit<ViewStoryState> {
     String message,
   ) async {
     await chatWithRepo.sendTextMessage(client, channel, message);
+  }
+
+  Future<void> likeOtherStory(
+    String onStoryUserId,
+    String storyUuid,
+  ) async {
+    chatWithRepo.likeStory(
+      onStoryUserId,
+      storyUuid,
+    );
   }
 
   void updateState(ViewStoryState newState) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/chat/chat_circular_icon_button.dart';
 import 'package:glint_frontend/design/components/chat/empty_chat_state_view.dart';
 import 'package:glint_frontend/design/components/chat/get_ticket_gradient_view.dart';
@@ -168,6 +169,22 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                                 imageReceived.extraData['viewed'] == true;
                           }
 
+                          final canViewPhoto = hasAttachments &&
+                              !isMine && // Only receiver can view
+                              isOneTimeView &&
+                              !hasBeenViewed;
+
+                          // Determine display state for the bubble
+                          final photoState = hasAttachments
+                              ? (isMine
+                                  ? (hasBeenViewed
+                                      ? 'viewed'
+                                      : 'sent') // Sender sees status
+                                  : (hasBeenViewed
+                                      ? 'viewed'
+                                      : 'available')) // Receiver sees availability
+                              : null;
+
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 6, horizontal: 8),
@@ -188,40 +205,41 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                                   const SizedBox(width: 8),
                                   hasAttachments
                                       ? _chatImageMessageBubble(
-                                          isOneTimeView && !hasBeenViewed, () {
-                                          context.pushNamed(
-                                            GlintChatRoutes
-                                                .oneTimePhotoView.name,
-                                            extra: OneTimeViewNavArguments(
-                                              imageUrls.first,
-                                              message.text,
-                                            ),
-                                          );
-                                          markMessageAttachmentViewed(
-                                            client:
-                                                StreamChat.of(context).client,
-                                            messageWithAttachment: message,
-                                          );
-                                        })
+                                          showAsViewed: hasBeenViewed,
+                                          onTap: () {
+                                            showCustomSnackbar(
+                                              context,
+                                              message:
+                                                  "Once sent, can't be viewed",
+                                            );
+                                          },
+                                          isSender: true,
+                                        )
                                       : _buildMessageBubble(message, isMine),
                                 ] else ...[
                                   hasAttachments
                                       ? _chatImageMessageBubble(
-                                          isOneTimeView && !hasBeenViewed, () {
-                                          context.pushNamed(
-                                            GlintChatRoutes
-                                                .oneTimePhotoView.name,
-                                            extra: OneTimeViewNavArguments(
-                                              imageUrls.first,
-                                              message.text,
-                                            ),
-                                          );
-                                          markMessageAttachmentViewed(
-                                            client:
-                                                StreamChat.of(context).client,
-                                            messageWithAttachment: message,
-                                          );
-                                        })
+                                          showAsViewed: hasBeenViewed,
+                                          onTap: () {
+                                            // Only allow viewing once
+                                            context.pushNamed(
+                                              GlintChatRoutes
+                                                  .oneTimePhotoView.name,
+                                              extra: OneTimeViewNavArguments(
+                                                imageUrls.first,
+                                                message.text,
+                                              ),
+                                            );
+
+                                            // Mark as viewed using your chosen method
+                                            markMessageAttachmentViewed(
+                                              client:
+                                                  StreamChat.of(context).client,
+                                              messageWithAttachment: message,
+                                            );
+                                          },
+                                          isSender: false,
+                                        )
                                       : _buildMessageBubble(message, isMine),
                                   const SizedBox(width: 8),
                                   // Time on the right for sender
@@ -530,10 +548,16 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
   /// This is an complicated Widget Block which does those following jobs:
   /// Handle the Alignment of the Message,
   /// Handles the One Time view of the Media Files
-  Widget _chatImageMessageBubble(
-    bool allowImage,
-    VoidCallback hasBeenWatched,
-  ) {
+  Widget _chatImageMessageBubble({
+    required bool showAsViewed,
+    required VoidCallback onTap,
+    required bool isSender,
+  }) {
+    // For sender: just show if viewed or not (no "Photo Sent" text)
+    // For receiver: show if they can view it or it's been viewed
+    final displayText = showAsViewed ? 'Viewed' : 'Photo';
+    final canTap = !isSender && !showAsViewed;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: const BoxDecoration(
@@ -560,26 +584,23 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                 const Icon(Icons.image_outlined, color: Colors.white, size: 24),
           ),
           const SizedBox(width: 12),
-          allowImage
-              ? GestureDetector(
-                  onTap: hasBeenWatched,
-                  child: const Text(
-                    'Photo',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                )
-              : const Text(
-                  'Viewed',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+          GestureDetector(
+            onTap: canTap
+                ? onTap
+                : () {
+                    if (isSender) {
+                      onTap();
+                    }
+                  },
+            child: Text(
+              displayText,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
         ],
       ),
     );

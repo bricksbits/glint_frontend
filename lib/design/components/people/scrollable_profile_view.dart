@@ -40,7 +40,9 @@ class ScrollableProfileView extends StatelessWidget {
                 screenHeight: screenHeight,
                 topCardModel: peopleUiModel.convert().topCardModel,
                 shareProfile: () {},
-                sendMessage: () {},
+                sendMessage: () {
+                  onDm(peopleUiModel.userId);
+                },
                 sendSuperLike: () {
                   onSuperLiked(peopleUiModel.userId);
                 },

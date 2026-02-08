@@ -8,6 +8,5 @@ class ViewStoryState with _$ViewStoryState {
     // For Stories
     @Default([]) List<ViewStoryModel>? stories,
     @Default(null) int? selectedIndex,
-
 }) = _Initial;
 }

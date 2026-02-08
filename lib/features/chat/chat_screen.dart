@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
 import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
@@ -44,7 +45,9 @@ class _ChatScreenState extends State<ChatScreen> {
             actions: [
               GestureDetector(
                 onTap: () {
-                  context.pushNamed(GlintChatRoutes.stories.name);
+                  showCustomSnackbar(context,
+                      message: "Story Likes will be available soon");
+                  // context.pushNamed(GlintChatRoutes.stories.name);
                 },
                 child: SvgPicture.asset(
                   'lib/assets/icons/glint_heart.svg',
@@ -62,27 +65,40 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ],
           ),
-          body: state.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : state.isChatReady == false ||
-                      state.channelListController == null
-                  ? const Center(
-                      child: Text(
-                        "Chat Servers are not available",
-                        style: AppTheme.headingThree,
-                      ),
-                    )
-                  : RefreshIndicator(
-                      onRefresh: () async {
-                        GlintAnalyticService.onRefreshHitEvent();
-                        return state.channelListController?.refresh();
-                      },
-                      child: Column(
+          body: RefreshIndicator(
+            onRefresh: () async {
+              GlintAnalyticService.onRefreshHitEvent();
+              return state.channelListController?.refresh();
+            },
+            child: state.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : state.isChatReady == false ||
+                        state.channelListController == null
+                    ? const Center(
+                        child: Text(
+                          "Chat Servers are not available",
+                          style: AppTheme.headingThree,
+                        ),
+                      )
+                    : Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          state.stories != null &&
+                                  state.stories?.isNotEmpty == true
+                              ? _buildStoriesSection(state.stories!,
+                                  (selectedIndex) {
+                                  context.pushNamed(
+                                    GlintChatRoutes.stories.name,
+                                    extra: (
+                                      index: selectedIndex,
+                                      stories: state.stories
+                                    ),
+                                  );
+                                })
+                              : const SizedBox.shrink(),
                           _buildRecentMatchesSection(state.recentMatches ?? [],
                               (match) {
                             context.pushNamed(
@@ -92,7 +108,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 eventId: match.eventId,
                                 eventName: match.eventName,
                                 eventStartTime: match.eventStartTime,
-                                matchId: match.matchId
+                                matchId: match.matchId,
                               ),
                             );
                           },
@@ -123,17 +139,19 @@ class _ChatScreenState extends State<ChatScreen> {
                                               .currentUser!
                                               .id;
                                       final oppositeUser = channels[index]
-                                          .state!
-                                          .members
-                                          .firstWhere(
+                                          .state
+                                          ?.members
+                                          .where(
                                             (member) =>
                                                 member.user!.id !=
                                                 currentUserId,
-                                          );
+                                          )
+                                          .firstOrNull;
+
                                       final oppositeUserName =
-                                          oppositeUser.user!.name;
+                                          oppositeUser?.user!.name;
                                       final oppositeUserImage =
-                                          oppositeUser.user?.image;
+                                          oppositeUser?.user?.image;
 
                                       final messages =
                                           channels[index].state?.messages;
@@ -225,7 +243,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             ],
                                           ),
                                           title: Text(
-                                            oppositeUserName,
+                                            oppositeUserName ?? "Match user",
                                             style: AppTheme.simpleBodyText
                                                 .copyWith(
                                               color: AppColours.black,
@@ -355,7 +373,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             ],
                                           ),
                                           title: Text(
-                                            oppositeUserName,
+                                            oppositeUserName ?? "Match User",
                                             style: AppTheme.simpleBodyText
                                                 .copyWith(
                                               color: AppColours.black,
@@ -424,7 +442,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ),
                         ],
                       ),
-                    ),
+          ),
         );
       },
     );
@@ -484,6 +502,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       const Gap(12.0),
                       Expanded(
                         child: ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           itemCount: recentMatches.length,
                           itemBuilder: (context, index) {
@@ -581,108 +600,113 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0).copyWith(bottom: 0),
-        child: SizedBox(
-          height: 128.0,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            itemCount: viewStoryModel.length,
-            padding: const EdgeInsets.all(4),
-            itemBuilder: (context, index) {
-              var story = viewStoryModel[index];
-              return GestureDetector(
-                onTap: () {
-                  storySelectedIndex(index);
-                },
-                child: Container(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  margin: index == 0 ? const EdgeInsets.only(left: 16.0) : null,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Stack(
-                        clipBehavior: Clip.none,
-                        alignment: Alignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+            ),
+            child: Text(
+              "Stories",
+              style: AppTheme.headingThree.copyWith(
+                fontStyle: FontStyle.normal,
+                fontSize: 18.0,
+              ),
+            ),
+          ),
+          const Gap(2.0),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 12.0).copyWith(bottom: 0),
+            child: SizedBox(
+              height: 128.0,
+              child: ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: viewStoryModel.length,
+                padding: const EdgeInsets.all(4),
+                itemBuilder: (context, index) {
+                  var story = viewStoryModel[index];
+                  return GestureDetector(
+                    onTap: () {
+                      storySelectedIndex(index);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      margin:
+                          index == 0 ? const EdgeInsets.only(left: 16.0) : null,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          GradientCircularProgressIndicator(
-                            progress: 100,
-                            stroke: 3.6,
-                            gradient: AppColours.circularProgressGradient,
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: CircleAvatar(
-                                radius: 36,
-                                backgroundImage:
-                                    NetworkImage(story.userImageUrl),
+                          Stack(
+                            clipBehavior: Clip.none,
+                            alignment: Alignment.center,
+                            children: [
+                              GradientCircularProgressIndicator(
+                                progress: 100,
+                                stroke: 3.6,
+                                gradient: AppColours.circularProgressGradient,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: CircleAvatar(
+                                    radius: 36,
+                                    backgroundImage:
+                                        NetworkImage(story.userImageUrl),
+                                  ),
+                                ),
                               ),
+                              if (int.parse(story.streakCount) > 0)
+                                Positioned(
+                                  bottom: -8.0,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6.0, vertical: 3.6),
+                                    decoration: BoxDecoration(
+                                      color: AppColours.primaryBlue,
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.local_fire_department,
+                                          size: 14,
+                                          color: AppColours.white,
+                                        ),
+                                        const Gap(2.0),
+                                        Text(
+                                          story.streakCount,
+                                          style:
+                                              AppTheme.smallBodyText.copyWith(
+                                            color: AppColours.white,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const Gap(12.0),
+                          Text(
+                            story.username,
+                            style: AppTheme.simpleText.copyWith(
+                              color: AppColours.black,
                             ),
                           ),
-                          if (int.parse(story.streakCount) > 0)
-                            Positioned(
-                              bottom: -8.0,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6.0, vertical: 3.6),
-                                decoration: BoxDecoration(
-                                  color: AppColours.primaryBlue,
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(
-                                      Icons.local_fire_department,
-                                      size: 14,
-                                      color: AppColours.white,
-                                    ),
-                                    const Gap(2.0),
-                                    Text(
-                                      story.streakCount,
-                                      style: AppTheme.smallBodyText.copyWith(
-                                        color: AppColours.white,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
                         ],
                       ),
-                      const Gap(12.0),
-                      Text(
-                        story.username,
-                        style: AppTheme.simpleText.copyWith(
-                          color: AppColours.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _emptyStoriesRowSection() {
-    return GradientCircularProgressIndicator(
-      progress: 100,
-      stroke: 3.6,
-      gradient: AppColours.circularProgressGradient,
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: CircleAvatar(
-          radius: 36,
-          maxRadius: 36,
-          backgroundImage: const NetworkImage(
-            "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-          ),
-        ),
+        ],
       ),
     );
   }

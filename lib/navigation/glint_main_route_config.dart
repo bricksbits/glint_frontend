@@ -11,7 +11,6 @@ import 'package:glint_frontend/features/admin/screen/super_admin_dashboard_scree
 import 'package:glint_frontend/features/auth/blocs/reset_password/reset_password_bloc.dart';
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
-import 'package:glint_frontend/features/auth/password_change_confirmation_screen.dart';
 import 'package:glint_frontend/features/auth/starter_screen.dart';
 import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/chat_with_screen.dart';
@@ -23,8 +22,6 @@ import 'package:glint_frontend/features/chat/oneTimeView/one_time_view_screen.da
 import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
 import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
-import 'package:glint_frontend/features/event/detail/event_detail_screen.dart';
-import 'package:glint_frontend/features/event/base/event_base_screen.dart';
 import 'package:glint_frontend/features/event/exports.dart';
 import 'package:glint_frontend/features/event/people/people_interested_for_event_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
@@ -44,7 +41,6 @@ import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/navigation/glint_authentication_routes.dart';
 import 'package:glint_frontend/navigation/glint_user_on_boarding_routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 import '../features/admin/screen/admin_create_event_screen.dart';
 import '../features/admin/screen/admin_edit_profile_screen.dart';
@@ -54,7 +50,9 @@ import '../features/admin/screen/track_event_interested_people_screen.dart';
 import '../features/admin/screen/track_event_tickets_bought_screen.dart';
 import '../features/auth/blocs/register/register_cubit.dart';
 import '../features/chat/chat_screen.dart';
+import '../features/chat/story/model/view_story_model.dart';
 import '../features/home/home_screen.dart';
+import '../utils/user_info/user_info_manager_cubit.dart';
 
 final glintMainRoutes = GoRouter(
   initialLocation: '/',
@@ -119,14 +117,12 @@ final glintMainRoutes = GoRouter(
       name: GlintMainRoutes.home.name,
       builder: (context, state) => MultiBlocProvider(
         providers: [
+          BlocProvider<ChatScreenCubit>(
+            create: (_) => ChatScreenCubit(),
+          ),
           BlocProvider<PeopleCardsBloc>(
-            lazy: true,
             create: (_) =>
                 PeopleCardsBloc()..add(const PeopleCardsEvent.started()),
-          ),
-          BlocProvider<ChatScreenCubit>(
-            lazy: true,
-            create: (_) => ChatScreenCubit(),
           ),
           BlocProvider<EventBaseCubit>(
             lazy: true,
@@ -160,9 +156,11 @@ final glintMainRoutes = GoRouter(
           path: '/${GlintChatRoutes.stories.name}',
           name: GlintChatRoutes.stories.name,
           builder: (context, state) {
-            final passedIndex = state.extra as int?;
+            final navArguments =
+                state.extra as ({int index, List<ViewStoryModel> stories})?;
             return ViewStoryScreen(
-              passedIndex: passedIndex ?? 0,
+              passedIndex: navArguments?.index ?? 0,
+              passedStories: navArguments?.stories ?? [],
             );
           },
         ),
@@ -214,7 +212,7 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintMainRoutes.people.name}',
       name: GlintMainRoutes.people.name,
-      builder: (context, state) => PeopleScreen(),
+      builder: (context, state) => const PeopleScreen(),
     ),
     GoRoute(
       path: '/${GlintMainRoutes.event.name}',

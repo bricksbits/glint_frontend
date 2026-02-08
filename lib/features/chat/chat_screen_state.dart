@@ -10,6 +10,9 @@ class ChatScreenState with _$ChatScreenState {
     // For Recent Matches
     @Default(null) List<RecentMatchesModel>? recentMatches,
     @Default(null) StreamChannelListController? channelListController,
+
+    // For Stories
+    @Default(null) List<ViewStoryModel>? stories,
+    @Default(null) int? selectedIndex,
   }) = _Initial;
 }
-//Todo: Remove the Stories or put them in the last, which are already viewed

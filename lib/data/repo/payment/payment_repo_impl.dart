@@ -142,7 +142,7 @@ class PaymentRepoImpl extends PaymentRepo {
       fetchPaymentHistory() async {
     final historyResponse = await apiCallHandler(
       httpClient: httpClient,
-      requestType: HttpRequestEnum.POST,
+      requestType: HttpRequestEnum.GET,
       endpoint: "user/payment-history",
       requestBody: null,
       passedQueryParameters: null,
@@ -151,30 +151,22 @@ class PaymentRepoImpl extends PaymentRepo {
     switch (historyResponse) {
       case Success():
         var historyModel =
-            UniversalSuccessResponseBody<PaymentHistoryResponse>.fromJson(
+            UniversalSuccessResponseBody<PaymentHistory>.fromJson(
           historyResponse.data,
-          (json) => PaymentHistoryResponse.fromJson(json),
+          (json) => PaymentHistory.fromJson(json),
         );
         if (historyModel.success && historyModel.data != null) {
-          if (historyModel.data!.paymentHistory != null) {
-            final eventHistory =
-                historyModel.data!.paymentHistory?.eventPaymentHistory ?? [];
-            final membershipHistory =
-                historyModel.data!.paymentHistory?.membershipPaymentHistory ??
-                    [];
-            return Success((eventHistory, membershipHistory));
-          } else {
-            return Failure(
-              Exception("Can't fetch history at the moment,"),
-            );
-          }
+          final eventHistory = historyModel.data!.eventPaymentHistory ?? [];
+          final membershipHistory =
+              historyModel.data!.membershipPaymentHistory ?? [];
+          return Success((eventHistory, membershipHistory));
         } else {
           return Failure(Exception(historyModel.message));
         }
       case Failure():
         return Failure(
-          Exception("Something went wrong, not able to load history data."),
-        );
+            Exception("Something went wrong, not able to load history data."),
+            message: "Server busy, can't fetch Payment History");
     }
   }
 }

@@ -104,9 +104,9 @@ class _$GlintDatabase extends GlintDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `profiles` (`userId` TEXT NOT NULL, `username` TEXT NOT NULL, `age` TEXT NOT NULL, `gender` TEXT NOT NULL, `genderPreference` TEXT NOT NULL, `interests` TEXT NOT NULL, `lookingFor` TEXT NOT NULL, `bio` TEXT NOT NULL, `height` TEXT, `occupation` TEXT, `education` TEXT, `workoutHabit` TEXT, `drinkingHabit` TEXT, `smokingHabit` TEXT, `profileViews` TEXT NOT NULL, `profileLikes` TEXT NOT NULL, `pictureUrlList` TEXT NOT NULL, `profileTag` TEXT, `lastLocation` TEXT, `location` TEXT, `dateOfBirthFormatted` TEXT, PRIMARY KEY (`userId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `swipe_actions` (`collabId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `currentUserId` TEXT NOT NULL, `swipedOnUserId` TEXT NOT NULL, `isUnsent` INTEGER NOT NULL, `action` TEXT NOT NULL, `timestamp` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `swipe_actions` (`collabId` INTEGER PRIMARY KEY AUTOINCREMENT, `currentUserId` TEXT NOT NULL, `swipedOnUserId` TEXT NOT NULL, `isUnsent` INTEGER NOT NULL, `action` TEXT NOT NULL, `timestamp` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `memberships` (`userId` TEXT NOT NULL, `superLikes` INTEGER NOT NULL, `aiMessages` INTEGER NOT NULL, `rewinds` INTEGER NOT NULL, `superDm` INTEGER NOT NULL, FOREIGN KEY (`userId`) REFERENCES `profiles` (`userId`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`userId`))');
+            'CREATE TABLE IF NOT EXISTS `memberships` (`userId` TEXT NOT NULL, `superLikes` INTEGER NOT NULL, `aiMessages` INTEGER NOT NULL, `rewinds` INTEGER NOT NULL, `superDm` INTEGER NOT NULL, `isPremium` INTEGER NOT NULL, FOREIGN KEY (`userId`) REFERENCES `profiles` (`userId`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`userId`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `user_event_likes` (`userId` TEXT NOT NULL, `eventId` TEXT NOT NULL, FOREIGN KEY (`userId`) REFERENCES `profiles` (`userId`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`userId`, `eventId`))');
 
@@ -307,7 +307,7 @@ class _$MembershipDao extends MembershipDao {
   _$MembershipDao(
     this.database,
     this.changeListener,
-  )   : _queryAdapter = QueryAdapter(database),
+  )   : _queryAdapter = QueryAdapter(database, changeListener),
         _profileMembershipEntityInsertionAdapter = InsertionAdapter(
             database,
             'memberships',
@@ -316,8 +316,10 @@ class _$MembershipDao extends MembershipDao {
                   'superLikes': item.superLikes,
                   'aiMessages': item.aiMessages,
                   'rewinds': item.rewinds,
-                  'superDm': item.superDm
-                }),
+                  'superDm': item.superDm,
+                  'isPremium': item.isPremium ? 1 : 0
+                },
+            changeListener),
         _profileMembershipEntityUpdateAdapter = UpdateAdapter(
             database,
             'memberships',
@@ -327,8 +329,10 @@ class _$MembershipDao extends MembershipDao {
                   'superLikes': item.superLikes,
                   'aiMessages': item.aiMessages,
                   'rewinds': item.rewinds,
-                  'superDm': item.superDm
-                });
+                  'superDm': item.superDm,
+                  'isPremium': item.isPremium ? 1 : 0
+                },
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -350,8 +354,25 @@ class _$MembershipDao extends MembershipDao {
             superLikes: row['superLikes'] as int,
             aiMessages: row['aiMessages'] as int,
             rewinds: row['rewinds'] as int,
-            superDm: row['superDm'] as int),
+            superDm: row['superDm'] as int,
+            isPremium: (row['isPremium'] as int) != 0),
         arguments: [userId]);
+  }
+
+  @override
+  Stream<ProfileMembershipEntity?> getMembershipStream(String userId) {
+    return _queryAdapter.queryStream(
+        'SELECT * FROM memberships WHERE userId = ?1',
+        mapper: (Map<String, Object?> row) => ProfileMembershipEntity(
+            userId: row['userId'] as String,
+            superLikes: row['superLikes'] as int,
+            aiMessages: row['aiMessages'] as int,
+            rewinds: row['rewinds'] as int,
+            superDm: row['superDm'] as int,
+            isPremium: (row['isPremium'] as int) != 0),
+        arguments: [userId],
+        queryableName: 'memberships',
+        isView: false);
   }
 
   @override
@@ -437,7 +458,7 @@ class _$SwipeActionDao extends SwipeActionDao {
     return _queryAdapter.queryList(
         'SELECT * FROM swipe_actions ORDER BY timestamp ASC',
         mapper: (Map<String, Object?> row) => SwipeActionEntity(
-            collabId: row['collabId'] as int,
+            collabId: row['collabId'] as int?,
             currentUserId: row['currentUserId'] as String,
             swipedOnUserId: row['swipedOnUserId'] as String,
             isUnsent: (row['isUnsent'] as int) != 0,
@@ -450,7 +471,7 @@ class _$SwipeActionDao extends SwipeActionDao {
     return _queryAdapter.queryListStream(
         'SELECT * FROM swipe_actions ORDER BY timestamp ASC',
         mapper: (Map<String, Object?> row) => SwipeActionEntity(
-            collabId: row['collabId'] as int,
+            collabId: row['collabId'] as int?,
             currentUserId: row['currentUserId'] as String,
             swipedOnUserId: row['swipedOnUserId'] as String,
             isUnsent: (row['isUnsent'] as int) != 0,

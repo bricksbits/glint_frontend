@@ -3,32 +3,44 @@ UserActionResponse userActionResponseFromJson(String str) => UserActionResponse.
 String userActionResponseToJson(UserActionResponse data) => json.encode(data.toJson());
 class UserActionResponse {
   UserActionResponse({
-      this.message,});
+      this.success, 
+      this.message, 
+      this.data,});
 
   UserActionResponse.fromJson(dynamic json) {
-    message = json['message'] != null ? Message.fromJson(json['message']) : null;
+    success = json['success'];
+    message = json['message'];
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
-  Message? message;
-UserActionResponse copyWith({  Message? message,
-}) => UserActionResponse(  message: message ?? this.message,
+  bool? success;
+  String? message;
+  Data? data;
+UserActionResponse copyWith({  bool? success,
+  String? message,
+  Data? data,
+}) => UserActionResponse(  success: success ?? this.success,
+  message: message ?? this.message,
+  data: data ?? this.data,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    if (message != null) {
-      map['message'] = message?.toJson();
+    map['success'] = success;
+    map['message'] = message;
+    if (data != null) {
+      map['data'] = data?.toJson();
     }
     return map;
   }
 
 }
 
-Message messageFromJson(String str) => Message.fromJson(json.decode(str));
-String messageToJson(Message data) => json.encode(data.toJson());
-class Message {
-  Message({
+Data dataFromJson(String str) => Data.fromJson(json.decode(str));
+String dataToJson(Data data) => json.encode(data.toJson());
+class Data {
+  Data({
       this.actionResponseList,});
 
-  Message.fromJson(dynamic json) {
+  Data.fromJson(dynamic json) {
     if (json['action_response_list'] != null) {
       actionResponseList = [];
       json['action_response_list'].forEach((v) {
@@ -37,8 +49,8 @@ class Message {
     }
   }
   List<ActionResponseList>? actionResponseList;
-Message copyWith({  List<ActionResponseList>? actionResponseList,
-}) => Message(  actionResponseList: actionResponseList ?? this.actionResponseList,
+Data copyWith({  List<ActionResponseList>? actionResponseList,
+}) => Data(  actionResponseList: actionResponseList ?? this.actionResponseList,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

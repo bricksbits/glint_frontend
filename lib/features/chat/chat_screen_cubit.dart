@@ -14,11 +14,15 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart'
         User,
         ConnectionStatus,
         StreamChannelListController,
-        StreamChatError;
+        StreamChatError,
+        EventType;
+
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart'
-    show Filter, SortOption;
+    show Filter, SortOption, Channel;
 
 import '../../data/local/persist/shared_pref_key.dart';
+import '../../domain/business_logic/repo/chat/chat_with_repo.dart';
+import 'story/model/view_story_model.dart';
 
 part 'chat_screen_state.dart';
 
@@ -26,6 +30,8 @@ part 'chat_screen_cubit.freezed.dart';
 
 class ChatScreenCubit extends Cubit<ChatScreenState> {
   final ChatRepo chatRepo = getIt.get<ChatRepo>();
+  final ChatWithRepo chatWithRepo = getIt.get<ChatWithRepo>();
+
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper =
       getIt.get();
   final StreamChatClient chatClient = getIt.get<StreamChatClient>();
@@ -33,11 +39,14 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
       _recentMatchesSubscription;
   late final StreamChannelListController? _channelListController;
 
+  late final StreamSubscription? _channelsEventsSubscription;
+
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
+    _connectToStreamClient();
     _getRecentMatches();
     _observeRecentMatches();
-    _connectToStreamClient();
     _checkChatClientStatus();
+    _getStories();
   }
 
   Future<void> _observeRecentMatches() async {
@@ -118,26 +127,73 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     String currentUserId,
   ) {
     _channelListController = StreamChannelListController(
-      client: chatClient,
-      filter: Filter.in_(
-        'members',
-        [currentUserId],
-      ),
-      channelStateSort: const [SortOption('last_message_at', direction: -1)],
-      limit: 42,
-    );
-    _channelListController?.doInitialLoad();
-    updateState(
-      state.copyWith(
-        channelListController: _channelListController,
-        isChatReady: true,
-        isLoading: false,
-      ),
-    );
+        client: client,
+        filter: Filter.and([
+          Filter.equal('type', 'messaging'),
+          Filter.in_(
+            'members',
+            [currentUserId],
+          ),
+        ]),
+        channelStateSort: const [SortOption('last_message_at', direction: -1)],
+        limit: 20,
+        presence: true);
+
+    _channelListController?.doInitialLoad().then((_) {
+      updateState(
+        state.copyWith(
+          channelListController: _channelListController,
+          isChatReady: true,
+          isLoading: false,
+        ),
+      );
+    });
+
+    _channelsEventsSubscription = client.on().listen((event) {
+      if (event.type == EventType.messageNew ||
+          event.type == EventType.notificationMessageNew ||
+          event.type == EventType.channelUpdated ||
+          event.type == EventType.notificationAddedToChannel) {
+        debugLogger("CHAT", "Event received: ${event.type}");
+
+        // Refresh the channel list
+        _channelListController?.refresh();
+      }
+    });
   }
 
   void updateState(ChatScreenState newState) {
     emit(newState);
+  }
+
+  Future<void> _getStories() async {
+    updateState(state.copyWith(isLoading: true));
+    final response = await chatRepo.fetchStories();
+    switch (response) {
+      case Success<List<ViewStoryModel>>():
+        final stories = response.data;
+        updateState(
+          state.copyWith(
+            isLoading: false,
+            stories: stories,
+          ),
+        );
+      case Failure<List<ViewStoryModel>>():
+        updateState(
+          state.copyWith(
+            error: "Not able to fetch more stories, right now.",
+            isLoading: false,
+          ),
+        );
+    }
+  }
+
+  Future<void> replyToStory(
+    StreamChatClient client,
+    Channel channel,
+    String message,
+  ) async {
+    await chatWithRepo.sendTextMessage(client, channel, message);
   }
 
   @override
@@ -145,6 +201,7 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     _channelListController?.dispose();
     _recentMatchesSubscription?.cancel();
     chatRepo.disposeRecentChatStream();
+    _channelsEventsSubscription?.cancel();
     return super.close();
   }
 

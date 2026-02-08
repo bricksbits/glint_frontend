@@ -13,7 +13,9 @@ part 'payment_history_cubit.freezed.dart';
 class PaymentHistoryCubit extends Cubit<PaymentHistoryState> {
   final paymentRepo = getIt.get<PaymentRepo>();
 
-  PaymentHistoryCubit() : super(const PaymentHistoryState.initial());
+  PaymentHistoryCubit() : super(const PaymentHistoryState.initial()) {
+    fetchHistory();
+  }
 
   Future<void> fetchHistory() async {
     emitNewState(state.copyWith(isLoading: true));
@@ -38,6 +40,7 @@ class PaymentHistoryCubit extends Cubit<PaymentHistoryState> {
             (List<EventPaymentHistory>, List<MembershipPaymentHistory>)>():
         emitNewState(state.copyWith(
             isLoading: false, error: "Error: ${historyResult.error}"));
+        break;
     }
   }
 

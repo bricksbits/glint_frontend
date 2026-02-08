@@ -4,6 +4,7 @@ import 'package:glint_frontend/data/remote/model/response/payment/book_event_res
     as bookEventResponse;
 import 'package:glint_frontend/data/remote/model/response/payment/buy_membership_response.dart';
 import 'package:glint_frontend/di/injection.dart';
+import 'package:glint_frontend/domain/business_logic/repo/background/info/user_info_repo.dart';
 import 'package:glint_frontend/domain/business_logic/repo/payment/payment_repo.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/model/razorpay_order_model.dart';
@@ -16,16 +17,22 @@ part 'payment_cubit.freezed.dart';
 
 class PaymentCubit extends Cubit<PaymentState> {
   final PaymentRepo paymentRepo = getIt.get<PaymentRepo>();
+  final UserInfoRepo userInfoRepo = getIt.get<UserInfoRepo>();
 
   PaymentCubit() : super(const PaymentState.initiate());
 
   void collectPaymentRequest(PaymentArgumentModel? paymentRequest) {
+    final isMembershipRequest = paymentRequest?.membershipType != null &&
+        paymentRequest?.eventId == null;
     emit(
       state.copyWith(
         paymentModel: paymentRequest,
         loading: false,
-        isMembershipRequest: paymentRequest?.membershipType != null &&
-            paymentRequest?.eventId == null,
+        isMembershipRequest: isMembershipRequest,
+        totalAmount: isMembershipRequest
+            ? paymentRequest?.amountOfSelectedMembership ??
+                "Provided in next Screen"
+            : paymentRequest?.eventTicketPrice ?? "Provided in next screen",
       ),
     );
   }
@@ -43,6 +50,7 @@ class PaymentCubit extends Cubit<PaymentState> {
           if (orderIdReceived != null) {
             emitNewState(state.copyWith(
               orderId: orderIdReceived,
+              totalAmount: amount,
             ));
           }
           final razorPayKey = orderResponse.success?.razorpayKey;
@@ -79,7 +87,12 @@ class PaymentCubit extends Cubit<PaymentState> {
           final razorPayKey = orderResponse.razorpayKey;
           final razorPayOrderId = orderResponse.razorpayOrderId;
           if (orderIdReceived != null) {
-            emitNewState(state.copyWith(orderId: orderIdReceived));
+            emitNewState(
+              state.copyWith(
+                orderId: orderIdReceived,
+                totalAmount: membershipAmount,
+              ),
+            );
           }
           if (razorPayOrderId != null && razorPayKey != null) {
             generateTheOrderId(
@@ -117,6 +130,11 @@ class PaymentCubit extends Cubit<PaymentState> {
     );
   }
 
+  Future<void> updateTheMembershipDetails() async {
+    userInfoRepo.fetchCurrentPremiumInfo();
+  }
+
+  @Deprecated("Using Webhook, this method is not needed")
   Future<void> verifyThePayment(
     String razorpayPaymentId,
     String razorpayOrderId,

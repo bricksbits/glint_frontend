@@ -6,28 +6,14 @@ import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/di/injection.dart';
-import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
 import 'package:glint_frontend/features/chat/chat_screen.dart';
-import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
-import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
-import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/base/event_base_screen.dart';
-import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
-import 'package:glint_frontend/features/payment/payment_cubit.dart';
-import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/profile_screen.dart';
-import 'package:glint_frontend/features/service/service_screen.dart';
-import 'package:glint_frontend/navigation/glint_all_routes.dart';
-import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/services/swipe_cache_manager.dart';
 import 'package:glint_frontend/utils/internet/internet_status_checker_cubit.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
-import 'package:go_router/go_router.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-
-import '../payment/payment_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     'lib/assets/icons/user_icon.svg',
     'lib/assets/icons/event_icon.svg',
     'lib/assets/icons/logo_icon.svg',
-    // 'lib/assets/icons/handshake_icon.svg',
     'lib/assets/icons/chat_icon.svg',
   ];
 
@@ -125,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    context.read<UserInfoManagerCubit>().getCurrentMembershipData();
     super.initState();
   }
 
@@ -136,8 +122,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         debugLogger(logPrefix, "App is detached");
         break;
       case AppLifecycleState.resumed:
-        final userInfoCubit = getIt.get<UserInfoManagerCubit>();
-        userInfoCubit.updateUserLocation();
+        final swipeManager = getIt.get<SwipeBufferManager>();
+        swipeManager.flushOnAppPause().then((_) {
+          debugLogger(logPrefix, "Cache Swipes processed successfully,");
+        });
+        context.read<UserInfoManagerCubit>().setupFirebaseNotification();
+        context.read<UserInfoManagerCubit>().updateUserLocationLocally();
         break;
       case AppLifecycleState.inactive:
         debugLogger(logPrefix, "App is in inActive");
@@ -146,10 +136,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         debugLogger(logPrefix, "App is hidden");
         break;
       case AppLifecycleState.paused:
-        final swipeManager = getIt.get<SwipeBufferManager>();
-        swipeManager.flushOnAppPause().then((_) {
-          debugLogger(logPrefix, "Cache Swipes processed successfully,");
-        });
         debugLogger(logPrefix, "App is paused");
         break;
     }
@@ -158,50 +144,62 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<InternetStatusCheckerCubit, InternetStatusCheckerState>(
-      listener: (context, state) {
-        if (state is InternetStatusDisConnected) {
-          showCustomSnackbar(context,
-              message: "No internet available", isError: true);
-        }
-      },
-      builder: (context, state) {
-        return Scaffold(
-          // extendBody: true,
-          backgroundColor: AppColours.white,
-          // do not show app bar on chat screen
-          appBar: _selectedIndex == 3
-              ? null
-              : GlintAppBar(
-                  appBarAction: appBarAction(_selectedIndex),
-                ),
-          body: IndexedStack(
-            index: _selectedIndex,
-            children: _bottomNavScreens,
-          ),
-          bottomNavigationBar: Container(
-            height: 70.0,
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 20.0)
-                .copyWith(bottom: 20.0),
-            decoration: BoxDecoration(
-              color: AppColours.white,
-              borderRadius: BorderRadius.circular(50.0),
-              border: Border.all(
-                color: AppColours.gray.withAlpha(92),
-                width: 1.25,
-              ),
+    return Scaffold(
+      backgroundColor: AppColours.white,
+      appBar: _selectedIndex == 3
+          ? null
+          : GlintAppBar(
+              appBarAction: appBarAction(_selectedIndex),
             ),
-            padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: List.generate(_navIcons.length, _buildNavItem),
-            ),
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<InternetStatusCheckerCubit, InternetStatusCheckerState>(
+            listener: (context, state) {
+              if (state is InternetStatusDisConnected) {
+                showCustomSnackbar(context,
+                    message: "No Internet available", isError: true);
+              }
+            },
           ),
-        );
-      },
+          BlocListener<UserInfoManagerCubit, UserInfoManagerState>(
+            listenWhen: (pre, curr) => curr.error != null,
+            listener: (context, state) {
+              if (state.error != null) {
+                showCustomSnackbar(
+                  context,
+                  message: state.error ?? "No Perks Left",
+                  isError: true,
+                );
+                context.read<UserInfoManagerCubit>().clearError();
+              }
+            },
+          ),
+        ],
+        child: IndexedStack(
+          index: _selectedIndex,
+          children: _bottomNavScreens,
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 70.0,
+        width: double.infinity,
+        margin:
+            const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: 20.0),
+        decoration: BoxDecoration(
+          color: AppColours.white,
+          borderRadius: BorderRadius.circular(50.0),
+          border: Border.all(
+            color: AppColours.gray.withAlpha(92),
+            width: 1.25,
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: List.generate(_navIcons.length, _buildNavItem),
+        ),
+      ),
     );
   }
 

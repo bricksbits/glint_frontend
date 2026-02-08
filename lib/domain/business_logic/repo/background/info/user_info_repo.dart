@@ -1,18 +1,25 @@
 import 'package:glint_frontend/data/local/db/entities/profile_membership_entity.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
+import 'package:injectable/injectable.dart';
 
 abstract class UserInfoRepo {
   Future<Result<void>> updateUserLocation();
-
-  Future<Result<void>> updateUserLastActiveTime();
 
   Future<Result<void>> updateFcmTokenToServer();
 
   Future<void> updateFcmTokenLocally(String fcmTokenGenerated);
 
+  Future<Result<void>> setLocalUserPremiumInfo(ProfileMembershipEntity entity);
+
+  Stream<ProfileMembershipEntity?> getLocalUserPremiumInfo();
+
+  Future<Result<void>> getAndCacheUserInfo();
+
+  Future<bool> isPremiumUser();
+
+  Future<String?> fetchDirectDmChannelIdWithUserId(String onUserId);
+
   Future<Result<void>> fetchCurrentPremiumInfo();
 
-  Future<Result<void>> updateCurrentPremiumInfo(ProfileMembershipEntity entity);
-
-  Future<Result<ProfileMembershipEntity>> getCurrentUserPremiumInfo();
+  Future<void> updateRewindAndAiCountToServer();
 }

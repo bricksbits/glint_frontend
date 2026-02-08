@@ -117,7 +117,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i274.AsyncEncryptedSharedPreferenceHelper>(() =>
         _i274.AsyncEncryptedSharedPreferenceHelper(
             gh<_i930.EncryptedSharedPreferencesAsync>()));
-    gh.lazySingleton<_i38.ChatWithRepo>(() => _i112.ChatWithRepoImpl());
     gh.singleton<_i368.MyDioClient>(() => _i368.MyDioClient(
           gh<_i361.Dio>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
@@ -148,6 +147,8 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i995.ForgotPasswordRepo>(
         () => _i509.ForgotPasswordRepoImpl(gh<_i368.MyDioClient>()));
+    gh.lazySingleton<_i38.ChatWithRepo>(
+        () => _i112.ChatWithRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i143.IsUserLoggedInUsecase>(() =>
         _i143.IsUserLoggedInUsecase(
             gh<_i274.AsyncEncryptedSharedPreferenceHelper>()));
@@ -160,14 +161,15 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
-    gh.factory<_i762.StoryRepo>(() => _i946.StoryRepoImpl(
-          gh<_i368.MyDioClient>(),
-          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-        ));
     gh.lazySingleton<_i661.UserInfoRepo>(() => _i321.UserInfoRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           gh<_i1011.MembershipDao>(),
+          gh<_i719.ProfileDao>(),
+        ));
+    gh.lazySingleton<_i762.StoryRepo>(() => _i946.StoryRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
     gh.factory<_i235.PaymentRepo>(
         () => _i854.PaymentRepoImpl(gh<_i368.MyDioClient>()));

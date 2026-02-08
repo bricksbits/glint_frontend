@@ -205,29 +205,6 @@ class RegisterCubit extends Cubit<RegisterState> {
         await authenticationRepo.uploadMediaFile(mediaFiles);
     switch (imagesUploadResponse) {
       case Success<void>():
-        _updateProfile();
-        break;
-      case Failure<void>():
-        final reason = imagesUploadResponse.message ?? "Files Upload failed";
-        emitNewState(
-          state.copyWith(
-            isLoading: false,
-            error: reason,
-          ),
-        );
-        break;
-    }
-  }
-
-  Future<void> _updateProfile() async {
-    emitNewState(
-      state.copyWith(
-        currentSuccessStatus: "Fetching profiles",
-      ),
-    );
-    final updateProfileResult = await profileRepo.getAndCacheUserProfile();
-    switch (updateProfileResult) {
-      case Success<void>():
         emitNewState(
           state.copyWith(
             isRegisteredSuccessfully: true,
@@ -237,12 +214,10 @@ class RegisterCubit extends Cubit<RegisterState> {
         );
         break;
       case Failure<void>():
-        final reason =
-            updateProfileResult.message ?? "Can't fetch your details";
-        emit(
+        final reason = imagesUploadResponse.message ?? "Files Upload failed";
+        emitNewState(
           state.copyWith(
             isLoading: false,
-            isRegisteredSuccessfully: false,
             error: reason,
           ),
         );

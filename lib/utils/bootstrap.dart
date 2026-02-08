@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,6 @@ import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:glint_frontend/utils/app_config.dart';
-import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 import 'package:logging/logging.dart';
 
@@ -29,23 +27,13 @@ Future<void> bootstrap(
   GlintAnalyticService.setAnalyticsEnable();
   await configureDependencies();
   final connectivity = Connectivity();
-  final firebaseInstance = FirebaseMessaging.instance;
-  final notificationSettings =
-      await firebaseInstance.requestPermission(provisional: true);
-  final userInfoRepo = getIt.get<UserInfoManagerCubit>();
-
-  setupFirebaseNotification(
-    firebaseInstance,
-    notificationSettings,
-    userInfoRepo,
-  );
-
   flutterLogError();
 
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider<ResetPasswordBloc>(
+          lazy: true,
           create: (_) => ResetPasswordBloc(),
         ),
         BlocProvider<InternetStatusCheckerCubit>(
@@ -54,6 +42,10 @@ Future<void> bootstrap(
         BlocProvider<PaymentCubit>(
           lazy: true,
           create: (_) => PaymentCubit(),
+        ),
+        BlocProvider<UserInfoManagerCubit>(
+          lazy: true,
+          create: (_) => getIt.get<UserInfoManagerCubit>(),
         ),
       ],
       child: await builder(),
@@ -69,16 +61,19 @@ Future<void> setupFirebaseCrashlytics() async {
   };
   if (kDebugMode) {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-    print("Crashlytics collection is disabled in Debug Mode.");
   } else {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-    print("Crashlytics collection is enabled in Production Mode.");
   }
 }
 
-//Todo : Add Analytics here
 void flutterLogError() {
   FlutterError.onError = (details) {
+    GlintAnalyticService.logError(
+        "FlutterLogError",
+        DateTime.timestamp().millisecondsSinceEpoch.toString(),
+        "Flutter System Error Log",
+        details.exceptionAsString(),
+        details.stack);
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
@@ -86,37 +81,4 @@ void flutterLogError() {
   Logger.root.onRecord.listen((record) {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
-}
-
-void setupFirebaseNotification(
-  FirebaseMessaging firebaseInstance,
-  NotificationSettings notificationSettings,
-  UserInfoManagerCubit userInfoCubit,
-) async {
-  if (notificationSettings.authorizationStatus ==
-          AuthorizationStatus.authorized ||
-      notificationSettings.authorizationStatus ==
-          AuthorizationStatus.provisional) {
-    final fcmToken = await firebaseInstance.getToken();
-    if (fcmToken != null) {
-      debugLogger(
-          "FIREBASE TOKEN FETCH", "Token fetched at startup: $fcmToken");
-      userInfoCubit.updateTheFcmLocally(fcmToken);
-    } else {
-      debugLogger("FIREBASE TOKEN FETCH",
-          "Failed to fetch token at startup, it was null.");
-    }
-
-    firebaseInstance.onTokenRefresh.listen((newToken) {
-      debugLogger("FIREBASE TOKEN REFRESH", "New Token generated: $newToken");
-      userInfoCubit.updateTheFcmLocally(newToken);
-    }).onError((error) {
-      debugLogger(
-          "FIREBASE TOKEN REFRESH", "Failed to generate the token, ${error}");
-      //Todo: Log the Error to the Analytic here.
-    });
-  } else {
-    debugLogger(
-        "FIREBASE PERMISSIONS", "User did not grant notification permissions.");
-  }
 }

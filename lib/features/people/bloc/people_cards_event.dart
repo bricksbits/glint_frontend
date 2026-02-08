@@ -16,4 +16,5 @@ class PeopleCardsEvent with _$PeopleCardsEvent {
   const factory PeopleCardsEvent.fetchInterestedUserForTheEvent(int? eventId) = _fetchInterestedUsersForEvent;
   const factory PeopleCardsEvent.onActionHappened(String passedId) = _OnActionHappened;
   const factory PeopleCardsEvent.emptyCardList() = _EmptyCardList;
+  const factory PeopleCardsEvent.undo() = _UndoCard;
 }

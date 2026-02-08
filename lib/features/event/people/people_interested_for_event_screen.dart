@@ -38,12 +38,12 @@ class _PeopleInterestedForEventScreenState
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : state.cardList.isEmpty
+              : state.displayCards.isEmpty
                   ? const Center(
                       child: Text(
                           "No Profile yet, please try again little later,"),
                     )
-                  : state.cardList.isNotEmpty
+                  : state.displayCards.isNotEmpty
                       ? CardSwiper(
                           allowedSwipeDirection:
                               const AllowedSwipeDirection.only(
@@ -55,7 +55,7 @@ class _PeopleInterestedForEventScreenState
                           onSwipe: (prev, current, swipeDirection) {
                             if (current != null) {
                               var fetchedUser =
-                                  state.cardList.elementAt(current);
+                                  state.displayCards.elementAt(current);
                               switch (swipeDirection) {
                                 case CardSwiperDirection.none:
                                   return false;
@@ -79,7 +79,7 @@ class _PeopleInterestedForEventScreenState
                             }
                           },
                           controller: cardSwiperController,
-                          numberOfCardsDisplayed: state.cardList.length,
+                          numberOfCardsDisplayed: state.displayCards.length,
                           onUndo: (previousIndex, currentIndex,
                               cardSwipeDirection) {
                             if (cardSwipeDirection ==
@@ -91,11 +91,11 @@ class _PeopleInterestedForEventScreenState
                             horizontal: 20.0,
                           ),
                           isLoop: false,
-                          cardsCount: state.cardList.length,
+                          cardsCount: state.displayCards.length,
                           cardBuilder: (context, index, percentThresholdX,
                                   percentThresholdY) =>
                               ScrollableProfileView(
-                            peopleUiModel: state.cardList[index],
+                            peopleUiModel: state.displayCards[index],
                             onLiked: (userId) {},
                             onDisLiked: (userId) {},
                             onDm: (userId) {},

@@ -6,6 +6,9 @@ abstract class MembershipDao {
   @Query('SELECT * FROM memberships WHERE userId = :userId')
   Future<ProfileMembershipEntity?> getMembership(String userId);
 
+  @Query('SELECT * FROM memberships WHERE userId = :userId')
+  Stream<ProfileMembershipEntity?> getMembershipStream(String userId);
+
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertMembership(ProfileMembershipEntity membership);
 
