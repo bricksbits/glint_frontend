@@ -29,7 +29,10 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
       case Success<PeopleCardModel>():
         emitNewState(
           state.copyWith(
-              previewProfileModel: currentProfile.data, isLoading: false),
+            previewProfileModel: currentProfile.data,
+            isLoading: false,
+            currentProfileImageSize: currentProfile.data.pictureUrlList.length,
+          ),
         );
         break;
       case Failure<PeopleCardModel>():
@@ -68,17 +71,22 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
 
   Future<void> publishChanges() async {
     if (state.isNewImagesUploaded && state.newlyUploadedImages.isNotEmpty) {
-      uploadMedia();
+      uploadMedia().then((_) {
+        getUserProfile();
+      });
     }
 
     if (state.isProfileDataChanged && !state.isNewImagesUploaded) {
-      updateProfile();
+      updateProfile().then((_) {
+        getUserProfile();
+      });
     }
 
     if (state.isNewImagesUploaded &&
         state.newlyUploadedImages.isNotEmpty &&
         state.isProfileDataChanged) {
       Future.wait([uploadMedia(), updateProfile()]).then((_) {
+        getUserProfile();
         emitNewState(state.copyWith(
           isLoading: false,
           isNewImagesUploaded: false,
@@ -125,6 +133,7 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
         emitNewState(state.copyWith(
           isLoading: false,
         ));
+        clearProfileDirectory();
         break;
       case Failure<void>():
         emitNewState(state.copyWith(
@@ -132,10 +141,6 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
         break;
     }
   }
-
-  Future<void> deleteMedia(List<String> deletedFilesNumber) async {}
-
-  Future<void> fetchAllPaymentHistory() async {}
 
   void updateRelationshipGoal(String newGoal) {}
 
@@ -249,10 +254,21 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
   }
 
   Future<void> onPickImage() async {
-    final pickedImages = await imageService.pickImages();
+    final maxCountForImages = state.currentProfileImageSize;
+    final pickedImages = await imageService.pickImages(
+      currentImageCount: maxCountForImages,
+    );
+    final emptyFilesPadding = List<File?>.filled(maxCountForImages, null);
+    final newFiles = pickedImages.map((img) => img.file).toList();
+
     emitNewState(
       state.copyWith(
-        newlyUploadedImages: pickedImages.map((image) => image.file).toList(),
+        newlyUploadedImages: maxCountForImages != 0
+            ? [
+                ...emptyFilesPadding,
+                ...newFiles,
+              ]
+            : newFiles,
         isNewImagesUploaded: true,
       ),
     );
@@ -267,5 +283,9 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
     //   ),
     // );
     // updateProfileLocally();
+  }
+
+  void clearProfileDirectory() async {
+    await imageService.clearProfileImagesDirectory();
   }
 }

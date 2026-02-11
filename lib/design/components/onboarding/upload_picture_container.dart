@@ -39,7 +39,7 @@ class UploadPictureContainer extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         GestureDetector(
-          onTap: onImagePick,
+          onTap: hasImage ? null : onImagePick,
           child: Container(
             height: kIsWeb
                 ? screenSize.width > 880

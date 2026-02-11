@@ -253,7 +253,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ..onTap = () {
                 final targetScreen = widget.isAdmin
                     ? GlintMainRoutes.register
-                    : GlintMainRoutes.onBoarding;
+                    : GlintMainRoutes.starter;
                 context.pushNamed(targetScreen.name, extra: widget.isAdmin);
               },
           ),

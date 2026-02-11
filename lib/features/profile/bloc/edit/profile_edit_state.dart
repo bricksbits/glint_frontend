@@ -10,5 +10,6 @@ class ProfileEditState with _$ProfileEditState {
     @Default(false) bool isProfileDataChanged,
     @Default([]) List<File?> newlyUploadedImages,
     @Default(true) bool refetchProfileData,
+    @Default(0) int currentProfileImageSize,
   }) = _Initial;
 }
