@@ -172,10 +172,12 @@ class ProfileRepoImpl extends ProfileRepo {
           cacheUserProfile(itsMeBody);
           return Success("");
         } else {
-          return Failure(Exception(itsMeBody.message),message: itsMeBody.message);
+          return Failure(Exception(itsMeBody.message),
+              message: itsMeBody.message);
         }
       case Failure():
-        return Failure(getProfileAsResponse.error,message: getProfileAsResponse.message);
+        return Failure(getProfileAsResponse.error,
+            message: getProfileAsResponse.message);
     }
   }
 
@@ -217,6 +219,11 @@ class ProfileRepoImpl extends ProfileRepo {
     await sharedPreferenceHelper.saveBoolean(
       SharedPreferenceKeys.premiumUserKey,
       successResponse.data?.isPremiumUser ?? false,
+    );
+
+    await sharedPreferenceHelper.saveInt(
+      SharedPreferenceKeys.userProfileViewsKey,
+      successResponse.data?.profileViews ?? 0,
     );
   }
 

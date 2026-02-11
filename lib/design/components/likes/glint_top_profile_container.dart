@@ -21,6 +21,12 @@ class GlintTopProfileContainer extends StatelessWidget {
       children: [
         CachedNetworkImage(
           imageUrl: imageUrl,
+          errorWidget: (context, error, stack) {
+            return Image.asset(
+              fit: BoxFit.cover,
+              'lib/assets/images/temp_place_holder.png',
+            );
+          },
           fit: BoxFit.cover,
           imageBuilder: (context, imageProvider) {
             return Container(

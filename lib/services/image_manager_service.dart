@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:file_picker/file_picker.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 import '../utils/image_manager/image_manager_data.dart';
 
@@ -14,75 +15,165 @@ import '../utils/image_manager/image_manager_data.dart';
 class ImageService {
   final ImagePicker _picker = ImagePicker();
 
-  Future<List<ImageManagerData>> pickImages({int maxCount = 9}) async {
-    if (kIsWeb) {
-      // Web: Pick files
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: true,
-        withData: true,
-      );
+  Future<List<ImageManagerData>> pickImages({int currentImageCount = 0}) async {
+    // Can't select more than 9 images,
+    if(currentImageCount >= 9){
+      return [];
+    }
 
-      if (result != null) {
-        return result.files
-            .take(maxCount)
-            .map((file) => ImageManagerData(
-                  name: file.name,
-                  bytes: file.bytes,
-                ))
-            .toList();
-      }
+    final directory = await _getProfileImagesDirectory();
+
+    final availableSlots = await _getAvailableProfileSlots(
+      currentImageCount: currentImageCount ?? 0,
+    );
+
+    // Pick images with the calculated limit
+    // PickMultipleImage only works withe more than 2 limit,
+    List<XFile> pickedImages = [];
+    if (currentImageCount == 8) {
+      final pickImage = await _picker.pickImage(source: ImageSource.gallery);
+      pickImage != null ? pickedImages.add(pickImage) : null;
     } else {
-      // Mobile: Pick images using image_picker
-      final directory = await getApplicationDocumentsDirectory();
-      final existing = await _loadSavedImageNames(directory);
-      final availableSlots = _getAvailableSlots(existing);
+      final images = await _picker.pickMultiImage(
+        limit: availableSlots.length,
+      );
+      pickedImages.addAll(images.toList());
+    }
 
-      final images = await _picker.pickMultiImage(limit: availableSlots.length);
-      if (images.isNotEmpty) {
-        List<ImageManagerData> result = [];
+    if (pickedImages.isNotEmpty) {
+      List<ImageManagerData> result = [];
 
-        for (int i = 0; i < images.length && i < availableSlots.length; i++) {
-          final pickedFile = images[i];
-          final compressedBytes = await FlutterImageCompress.compressWithFile(
-            pickedFile.path,
-            quality: 75,
-          );
+      for (int i = 0;
+          i < pickedImages.length && i < availableSlots.length;
+          i++) {
+        final pickedFile = pickedImages[i];
 
-          final filename = 'picture_${availableSlots[i]}.jpg';
-          final filePath = p.join(directory.path, filename);
-          final file = File(filePath);
-          await file.writeAsBytes(compressedBytes!);
+        final compressedBytes = await FlutterImageCompress.compressWithFile(
+          pickedFile.path,
+          quality: 75,
+        );
 
-          result.add(ImageManagerData(
+        final filename = 'picture_${availableSlots[i]}.jpg';
+        final filePath = p.join(directory.path, filename);
+        final file = File(filePath);
+        await file.writeAsBytes(compressedBytes!);
+
+        result.add(
+          ImageManagerData(
             name: filename,
             file: file,
-          ));
-        }
-        debugLogger(
-          "IMAGE_SERVICE",
-          "Images Picked successfully : ${result.first.file}",
+          ),
         );
-        return result;
       }
+      return result;
     }
+
     return [];
   }
 
-  Future<ImageManagerData?> pickStory({int maxCount = 1}) async {
+  Future<Directory> _getProfileImagesDirectory() async {
+    final appDir = await getApplicationDocumentsDirectory();
+    final profileDir = Directory(p.join(appDir.path, 'profileImages'));
+
+    if (!await profileDir.exists()) {
+      await profileDir.create(recursive: true);
+    }
+
+    return profileDir;
+  }
+
+// Get available slot numbers (e.g., [4, 5, 6, 7, 8, 9] if 1-3 are used)
+  Future<List<int>> _getAvailableProfileSlots(
+      {int currentImageCount = 0}) async {
+    final directory = await _getProfileImagesDirectory();
+    final existingLocal = await _loadSavedImageNames(directory);
+
+    // Reserve slots for images already uploaded
+    final reservedSlots = List.generate(currentImageCount, (i) => i + 1);
+
+    // Combine reserved slots with existing local files
+    final allUsedSlots = {...reservedSlots, ...existingLocal}.toList();
+
+    // Get available slots
+    return _getAvailableSlots(allUsedSlots);
+  }
+
+  Future<void> clearProfileImagesDirectory() async {
+    try {
+      final directory = await _getProfileImagesDirectory();
+
+      if (await directory.exists()) {
+        await directory.delete(recursive: true);
+        debugLogger("IMAGE_SERVICE", "Profile images directory deleted");
+      } else {
+        debugLogger("IMAGE_SERVICE", "Profile images directory doesn't exist");
+      }
+    } catch (e) {
+      debugLogger("IMAGE_SERVICE", "Error clearing profile images: $e");
+      rethrow;
+    }
+  }
+
+  Future<List<ImageManagerData>> getCurrentProfileImages() async {
+    try {
+      final directory = await _getProfileImagesDirectory();
+
+      if (!await directory.exists()) {
+        return [];
+      }
+
+      final files = directory
+          .listSync()
+          .whereType<File>()
+          .where((file) => file.path.contains(RegExp(r'picture_\d+\.jpg')))
+          .toList();
+
+      files.sort((a, b) {
+        final numA = _extractPictureNum(a.path);
+        final numB = _extractPictureNum(b.path);
+        return numA.compareTo(numB);
+      });
+
+      return files
+          .map((file) => ImageManagerData(
+                name: p.basename(file.path),
+                file: file,
+              ))
+          .toList();
+    } catch (e) {
+      debugLogger("IMAGE_SERVICE", "Error getting current profile images: $e");
+      return [];
+    }
+  }
+
+  Future<ImageManagerData?> pickStory(
+    String userId,
+  ) async {
     final storyFilePath = await _picker.pickImage(source: ImageSource.gallery);
     if (storyFilePath != null) {
-      final directory = await getApplicationDocumentsDirectory();
+      final directory = await _getStoryDirectory(userId);
+
+      // Mechanism to clear the old data
+      await _cleanupOldStories(directory);
+
       final existing = await _loadSavedStoriesNames(directory);
       final availableSlots = _getAvailableSlots(existing);
+
+      if (availableSlots.isEmpty) {
+        debugLogger(
+            'ImageManagerServiceStory', 'All story slots (1-9) are filled');
+        return null;
+      }
 
       final compressedBytes = await FlutterImageCompress.compressWithFile(
         storyFilePath.path,
         quality: 75,
       );
 
-      final filename = 'story_${availableSlots.first}.jpg';
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final filename = 'story_${availableSlots.first}_$timestamp.jpg';
       final filePath = p.join(directory.path, filename);
+
       final file = File(filePath);
       await file.writeAsBytes(compressedBytes!);
 
@@ -93,6 +184,54 @@ class ImageService {
     }
 
     return null;
+  }
+
+// Get or create user-specific story directory
+  Future<Directory> _getStoryDirectory(String userId) async {
+    final appDir = await getApplicationDocumentsDirectory();
+    final storyDir = Directory(p.join(appDir.path, 'story_$userId'));
+
+    if (!await storyDir.exists()) {
+      await storyDir.create(recursive: true);
+    }
+
+    return storyDir;
+  }
+
+// Extract story number from filename (FIXED REGEX)
+  int _extractStoryNum(String path) {
+    // Changed from picture_(\d+) to story_(\d+)
+    final match = RegExp(r'story_(\d+)_\d+\.jpg').firstMatch(path);
+    return int.tryParse(match?.group(1) ?? '0') ?? 0;
+  }
+
+// Clean up stories older than 24 hours
+  Future<void> _cleanupOldStories(Directory dir) async {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    const twentyFourHours = 24 * 60 * 60 * 1000; // milliseconds
+
+    final files = dir
+        .listSync()
+        .whereType<File>()
+        .where((file) => file.path.contains(RegExp(r'story_\d+_\d+\.jpg')));
+
+    for (final file in files) {
+      final timestamp = _extractTimestamp(file.path);
+      if (timestamp > 0 && (now - timestamp) > twentyFourHours) {
+        try {
+          await file.delete();
+          print('Deleted old story: ${p.basename(file.path)}');
+        } catch (e) {
+          print('Error deleting story: $e');
+        }
+      }
+    }
+  }
+
+// Extract timestamp from filename
+  int _extractTimestamp(String path) {
+    final match = RegExp(r'story_\d+_(\d+)\.jpg').firstMatch(path);
+    return int.tryParse(match?.group(1) ?? '0') ?? 0;
   }
 
   Future<List<ImageManagerData>> pickImagesForEvent({
@@ -142,7 +281,7 @@ class ImageService {
 
   Future<List<ImageManagerData>> loadSavedImages() async {
     if (kIsWeb) return [];
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = await _getProfileImagesDirectory();
     final files = dir
         .listSync()
         .whereType<File>()
@@ -176,16 +315,19 @@ class ImageService {
         .whereType<File>()
         .where((file) => file.path.contains(RegExp(r'picture_\d+\.jpg')))
         .map((f) => _extractPictureNum(f.path))
+        .where((number) => number > 0) // Filter out failed parses
         .toList();
     return files;
   }
 
+// Load existing story numbers from directory
   Future<List<int>> _loadSavedStoriesNames(Directory dir) async {
     final files = dir
         .listSync()
         .whereType<File>()
-        .where((file) => file.path.contains(RegExp(r'story_\d+\.jpg')))
-        .map((f) => _extractPictureNum(f.path))
+        .where((file) => file.path.contains(RegExp(r'story_\d+_\d+\.jpg')))
+        .map((f) => _extractStoryNum(f.path))
+        .where((number) => number > 0) // Filter out any failed parses
         .toList();
     return files;
   }
@@ -199,12 +341,7 @@ class ImageService {
   }
 
   int _extractPictureNum(String path) {
-    final match = RegExp(r'picture_(\d+)').firstMatch(path);
-    return int.tryParse(match?.group(1) ?? '0') ?? 0;
-  }
-
-  int _extractStoryNum(String path) {
-    final match = RegExp(r'story_(\d+)').firstMatch(path);
+    final match = RegExp(r'picture_(\d+)\.jpg').firstMatch(path);
     return int.tryParse(match?.group(1) ?? '0') ?? 0;
   }
 

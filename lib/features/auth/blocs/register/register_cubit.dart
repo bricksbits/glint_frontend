@@ -71,7 +71,6 @@ class RegisterCubit extends Cubit<RegisterState> {
   // Get Email and Password from User
   // Hit the Register User API
   // Delete everything from persistence
-  //Todo: Update the FCM token
   Future<void> registerUser() async {
     _validateEmail();
     if (state.isEmailValid &&
@@ -212,6 +211,7 @@ class RegisterCubit extends Cubit<RegisterState> {
             navigateToRoute: GlintMainRoutes.home.name,
           ),
         );
+        imageService.clearProfileImagesDirectory();
         break;
       case Failure<void>():
         final reason = imagesUploadResponse.message ?? "Files Upload failed";

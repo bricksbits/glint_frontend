@@ -39,11 +39,11 @@ class EmptyEventContainer extends StatelessWidget {
             height: 24,
           ),
           GlintElevatedButton(
-            label: "Follow Updates on our Inst",
+            label: "Follow Updates on our Insta",
             customTextStyle: AppTheme.simpleText.copyWith(color: Colors.white),
             onPressed: () {
               GlintAnalyticService.onNoEventsInstaLinksClickedEvent();
-              HandlingUrlLaunchesUtil.openInstagramProfile(context, "glintapp");
+              HandlingUrlLaunchesUtil.openInstagramProfile(context, "glint_india_");
             },
           ),
           const SizedBox(

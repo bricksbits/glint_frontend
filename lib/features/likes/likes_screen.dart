@@ -16,61 +16,103 @@ class LikesScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: AppColours.white,
-            body: CustomScrollView(
-              slivers: [
-                // app bar
-                const SliverGlintCustomAppBar(
-                  title: 'Liked you',
-                ),
+            body: state.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : CustomScrollView(
+                    slivers: [
+                      // app bar
+                      const SliverGlintCustomAppBar(
+                        title: 'Liked you',
+                      ),
 
-                SliverToBoxAdapter(
-                    child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 24.0,
+                      SliverToBoxAdapter(
+                          child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0,
+                          vertical: 24.0,
+                        ),
+                        child: _buildLikeScreenBanner(
+                          state.profileViewCount,
+                        ),
+                      )),
+
+                      state.topProfiles.isNotEmpty
+                          ? _topProfileListWithHeader(
+                              state.topProfiles,
+                            )
+                          : const SliverGap(0),
+
+                      const SliverGap(28.0),
+
+                      SliverToBoxAdapter(
+                        child: state.superLikedAndLikedProfiles.isNotEmpty
+                            ? _buildProfileLikedYou(
+                                state.superLikedAndLikedProfiles,
+                              )
+                            : const SliverGap(0),
+                      ),
+
+                      // empty state
+                      SliverToBoxAdapter(
+                        child: _buildLikeScreenEmptyState(
+                              state.superLikedAndLikedProfiles.isEmpty &&
+                              state.topProfiles.isEmpty,
+                        ),
+                      ),
+
+                      //bottom padding basically
+                      const SliverGap(16.0),
+                    ],
                   ),
-                  child: _buildLikeScreenBanner(state.profileViewCount),
-                )),
+          );
+        },
+      ),
+    );
+  }
 
-                //Todo: Remove the first method here.
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      final topProfile = state.topProfiles.elementAt(index);
-                      return GlintTopProfileContainer(
-                        imageUrl: topProfile.pictureUrlList.first,
+  Widget _topProfileListWithHeader(
+    List<PeopleCardModel> topProfiles,
+  ) {
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Heading
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Top profiles',
+              style: AppTheme.simpleBodyText.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const Gap(16.0), // Space between heading and list
+
+          // Horizontal scrollable list
+          SizedBox(
+            height: 165.0,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              itemCount: topProfiles.length,
+              itemBuilder: (BuildContext context, int index) {
+                final topProfile = topProfiles.elementAt(index);
+                return topProfiles.isNotEmpty
+                    ? GlintTopProfileContainer(
+                        imageUrl: topProfile.pictureUrlList.firstOrNull ?? "",
                         name: topProfile.username,
                         viewCount: topProfile.profileViews != null
                             ? int.parse(topProfile.profileViews!)
                             : 0,
-                      );
-                    },
-                    childCount: state.topProfiles.length,
-                  ),
-                ),
-
-                const SliverGap(28.0),
-
-                SliverToBoxAdapter(
-                  child: _buildProfileLikedYou(
-                    state.superLikedAndLikedProfiles,
-                  ),
-                ),
-
-                // empty state
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: _buildLikeScreenEmptyState(
-                      state.superLikeProfiles.isNotEmpty ||
-                          state.likeProfiles.isNotEmpty),
-                ),
-
-                //bottom padding basically
-                const SliverGap(16.0),
-              ],
+                      )
+                    : const SizedBox.shrink();
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
@@ -120,36 +162,6 @@ class LikesScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildTopProfiles(
-      {required List<GlintTopProfileContainer> topProfiles}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-          ),
-          child: Text(
-            'Top Profiles',
-            style: AppTheme.simpleBodyText.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        const Gap(20.0),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              const Gap(20.0), // for design replication purpose
-              ...topProfiles,
-            ],
-          ),
-        )
-      ],
     );
   }
 

@@ -28,6 +28,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
 
   UserInfoManagerCubit() : super(const UserInfoManagerState.initial()) {
     pushFcmTokenToServer();
+    updateUserLastKnowLocation();
   }
 
   Future<void> updateTheFcmLocally(String fcmToken) async {
@@ -187,7 +188,6 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
           getCurrentLocation?.latitude ?? 24.7);
       await sharedPrefHelper.saveDouble(SharedPreferenceKeys.userLongitudeKey,
           getCurrentLocation?.longitude ?? 77.41);
-      updateUserLastKnowLocation();
     }
   }
 
