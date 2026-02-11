@@ -16,55 +16,56 @@ class LikesScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: AppColours.white,
-            body: CustomScrollView(
-              slivers: [
-                // app bar
-                const SliverGlintCustomAppBar(
-                  title: 'Liked you',
-                ),
+            body: state.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : CustomScrollView(
+                    slivers: [
+                      // app bar
+                      const SliverGlintCustomAppBar(
+                        title: 'Liked you',
+                      ),
 
-                SliverToBoxAdapter(
-                    child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 24.0,
+                      SliverToBoxAdapter(
+                          child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0,
+                          vertical: 24.0,
+                        ),
+                        child: _buildLikeScreenBanner(
+                          state.profileViewCount,
+                        ),
+                      )),
+
+                      state.topProfiles.isNotEmpty
+                          ? _topProfileListWithHeader(
+                              state.topProfiles,
+                            )
+                          : const SliverGap(0),
+
+                      const SliverGap(28.0),
+
+                      SliverToBoxAdapter(
+                        child: state.superLikedAndLikedProfiles.isNotEmpty
+                            ? _buildProfileLikedYou(
+                                state.superLikedAndLikedProfiles,
+                              )
+                            : const SliverGap(0),
+                      ),
+
+                      // empty state
+                      SliverToBoxAdapter(
+                        child: _buildLikeScreenEmptyState(
+                              state.superLikedAndLikedProfiles.isEmpty &&
+                              state.topProfiles.isEmpty,
+                        ),
+                      ),
+
+                      //bottom padding basically
+                      const SliverGap(16.0),
+                    ],
                   ),
-                  child: _buildLikeScreenBanner(
-                    state.profileViewCount,
-                  ),
-                )),
-
-                state.topProfiles.isNotEmpty
-                    ? _topProfileListWithHeader(
-                        state.topProfiles,
-                      )
-                    : const SizedBox.shrink(),
-
-                const SliverGap(28.0),
-
-                SliverToBoxAdapter(
-                  child: state.superLikedAndLikedProfiles.isNotEmpty
-                      ? _buildProfileLikedYou(
-                          state.superLikedAndLikedProfiles,
-                        )
-                      : const SizedBox.shrink(),
-                ),
-
-                // empty state
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: _buildLikeScreenEmptyState(
-                    state.superLikeProfiles.isEmpty &&
-                        state.likeProfiles.isEmpty &&
-                        state.superLikedAndLikedProfiles.isEmpty &&
-                        state.topProfiles.isEmpty,
-                  ),
-                ),
-
-                //bottom padding basically
-                const SliverGap(16.0),
-              ],
-            ),
           );
         },
       ),

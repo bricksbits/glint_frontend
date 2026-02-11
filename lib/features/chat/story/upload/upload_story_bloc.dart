@@ -35,6 +35,7 @@ class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
               _UpdateAndEmitNewState(
                 state.copyWith(
                   newUserStoryUploadSuccess: true,
+                  currentUploadedFile: null,
                 ),
               ),
             );
@@ -76,7 +77,11 @@ class UploadStoryBloc extends Bloc<UploadStoryEvent, UploadStoryState> {
     });
 
     on<_SelectStoryFromGallery>((event, emit) async {
-      final selectedFile = await imageService.pickStory();
+      final userId = await sharedPreferenceHelper
+          .getString(SharedPreferenceKeys.userIdKey);
+      final selectedFile = await imageService.pickStory(
+        userId,
+      );
       if (selectedFile != null) {
         add(
           _UpdateAndEmitNewState(

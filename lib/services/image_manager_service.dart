@@ -69,20 +69,34 @@ class ImageService {
     return [];
   }
 
-  Future<ImageManagerData?> pickStory({int maxCount = 1}) async {
+  Future<ImageManagerData?> pickStory(
+    String userId,
+  ) async {
     final storyFilePath = await _picker.pickImage(source: ImageSource.gallery);
     if (storyFilePath != null) {
-      final directory = await getApplicationDocumentsDirectory();
+      final directory = await _getStoryDirectory(userId);
+
+      // Mechanism to clear the old data
+      await _cleanupOldStories(directory);
+
       final existing = await _loadSavedStoriesNames(directory);
       final availableSlots = _getAvailableSlots(existing);
+
+      if (availableSlots.isEmpty) {
+        debugLogger(
+            'ImageManagerServiceStory', 'All story slots (1-9) are filled');
+        return null;
+      }
 
       final compressedBytes = await FlutterImageCompress.compressWithFile(
         storyFilePath.path,
         quality: 75,
       );
 
-      final filename = 'story_${availableSlots.first}.jpg';
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final filename = 'story_${availableSlots.first}_$timestamp.jpg';
       final filePath = p.join(directory.path, filename);
+
       final file = File(filePath);
       await file.writeAsBytes(compressedBytes!);
 
@@ -93,6 +107,54 @@ class ImageService {
     }
 
     return null;
+  }
+
+  // Get or create user-specific story directory
+  Future<Directory> _getStoryDirectory(String userId) async {
+    final appDir = await getApplicationDocumentsDirectory();
+    final storyDir = Directory(p.join(appDir.path, 'story_$userId'));
+
+    if (!await storyDir.exists()) {
+      await storyDir.create(recursive: true);
+    }
+
+    return storyDir;
+  }
+
+  // Extract story number from filename (FIXED REGEX)
+  int _extractStoryNum(String path) {
+    // Changed from picture_(\d+) to story_(\d+)
+    final match = RegExp(r'story_(\d+)_\d+\.jpg').firstMatch(path);
+    return int.tryParse(match?.group(1) ?? '0') ?? 0;
+  }
+
+  // Clean up stories older than 24 hours
+  Future<void> _cleanupOldStories(Directory dir) async {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    const twentyFourHours = 24 * 60 * 60 * 1000; // milliseconds
+
+    final files = dir
+        .listSync()
+        .whereType<File>()
+        .where((file) => file.path.contains(RegExp(r'story_\d+_\d+\.jpg')));
+
+    for (final file in files) {
+      final timestamp = _extractTimestamp(file.path);
+      if (timestamp > 0 && (now - timestamp) > twentyFourHours) {
+        try {
+          await file.delete();
+          print('Deleted old story: ${p.basename(file.path)}');
+        } catch (e) {
+          print('Error deleting story: $e');
+        }
+      }
+    }
+  }
+
+  // Extract timestamp from filename
+  int _extractTimestamp(String path) {
+    final match = RegExp(r'story_\d+_(\d+)\.jpg').firstMatch(path);
+    return int.tryParse(match?.group(1) ?? '0') ?? 0;
   }
 
   Future<List<ImageManagerData>> pickImagesForEvent({
@@ -180,12 +242,14 @@ class ImageService {
     return files;
   }
 
+  // Load existing story numbers from directory
   Future<List<int>> _loadSavedStoriesNames(Directory dir) async {
     final files = dir
         .listSync()
         .whereType<File>()
-        .where((file) => file.path.contains(RegExp(r'story_\d+\.jpg')))
-        .map((f) => _extractPictureNum(f.path))
+        .where((file) => file.path.contains(RegExp(r'story_\d+_\d+\.jpg')))
+        .map((f) => _extractStoryNum(f.path))
+        .where((number) => number > 0) // Filter out any failed parses
         .toList();
     return files;
   }
@@ -200,11 +264,6 @@ class ImageService {
 
   int _extractPictureNum(String path) {
     final match = RegExp(r'picture_(\d+)').firstMatch(path);
-    return int.tryParse(match?.group(1) ?? '0') ?? 0;
-  }
-
-  int _extractStoryNum(String path) {
-    final match = RegExp(r'story_(\d+)').firstMatch(path);
     return int.tryParse(match?.group(1) ?? '0') ?? 0;
   }
 

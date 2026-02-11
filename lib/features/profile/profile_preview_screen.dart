@@ -40,6 +40,7 @@ class ProfilePreviewScreen extends StatelessWidget {
                           onDisLiked: (_) {},
                           onDm: (_) {},
                           onSuperLiked: (_) {},
+                          showCaseFooter: false,
                         ),
                       )
                     : const Center(

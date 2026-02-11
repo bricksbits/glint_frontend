@@ -12,6 +12,7 @@ class ScrollableProfileView extends StatelessWidget {
   final Function(String) onDisLiked;
   final Function(String) onDm;
   final Function(String) onSuperLiked;
+  final bool showCaseFooter;
 
   const ScrollableProfileView({
     super.key,
@@ -20,6 +21,7 @@ class ScrollableProfileView extends StatelessWidget {
     required this.onDisLiked,
     required this.onDm,
     required this.onSuperLiked,
+    this.showCaseFooter = true,
   });
 
   @override
@@ -73,14 +75,16 @@ class ScrollableProfileView extends StatelessWidget {
           ),
 
           SliverToBoxAdapter(
-            child: ScrollableProfileFooter(
-              onDiLikedProfile: () {
-                onDisLiked(peopleUiModel.userId);
-              },
-              onLikedProfile: () {
-                onLiked(peopleUiModel.userId);
-              },
-            ),
+            child: showCaseFooter
+                ? ScrollableProfileFooter(
+                    onDiLikedProfile: () {
+                      onDisLiked(peopleUiModel.userId);
+                    },
+                    onLikedProfile: () {
+                      onLiked(peopleUiModel.userId);
+                    },
+                  )
+                : const SizedBox.shrink(),
           ),
         ],
       ),
