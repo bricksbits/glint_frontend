@@ -33,6 +33,9 @@ mixin _$PeopleCardsEvent {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -52,6 +55,8 @@ mixin _$PeopleCardsEvent {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -71,6 +76,8 @@ mixin _$PeopleCardsEvent {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -93,6 +100,8 @@ mixin _$PeopleCardsEvent {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -114,6 +123,8 @@ mixin _$PeopleCardsEvent {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -134,6 +145,8 @@ mixin _$PeopleCardsEvent {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -216,6 +229,9 @@ class _$StartedImpl implements _Started {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return started();
   }
@@ -238,6 +254,8 @@ class _$StartedImpl implements _Started {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return started?.call();
   }
@@ -260,6 +278,8 @@ class _$StartedImpl implements _Started {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -288,6 +308,8 @@ class _$StartedImpl implements _Started {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return started(this);
   }
@@ -312,6 +334,8 @@ class _$StartedImpl implements _Started {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return started?.call(this);
   }
@@ -335,6 +359,8 @@ class _$StartedImpl implements _Started {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -432,6 +458,9 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return loading(isLoading);
   }
@@ -454,6 +483,8 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return loading?.call(isLoading);
   }
@@ -476,6 +507,8 @@ class _$LoadingImpl implements _Loading {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -504,6 +537,8 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return loading(this);
   }
@@ -528,6 +563,8 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return loading?.call(this);
   }
@@ -551,6 +588,8 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -628,6 +667,9 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return fetchNextCards();
   }
@@ -650,6 +692,8 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return fetchNextCards?.call();
   }
@@ -672,6 +716,8 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (fetchNextCards != null) {
@@ -700,6 +746,8 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return fetchNextCards(this);
   }
@@ -724,6 +772,8 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return fetchNextCards?.call(this);
   }
@@ -747,6 +797,8 @@ class _$FetchNextCardsImpl implements _FetchNextCards {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (fetchNextCards != null) {
@@ -819,6 +871,9 @@ class _$ClearAndUpdateListFromDbImpl implements _ClearAndUpdateListFromDb {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return clearAndUpdateListFromDb();
   }
@@ -841,6 +896,8 @@ class _$ClearAndUpdateListFromDbImpl implements _ClearAndUpdateListFromDb {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return clearAndUpdateListFromDb?.call();
   }
@@ -863,6 +920,8 @@ class _$ClearAndUpdateListFromDbImpl implements _ClearAndUpdateListFromDb {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (clearAndUpdateListFromDb != null) {
@@ -891,6 +950,8 @@ class _$ClearAndUpdateListFromDbImpl implements _ClearAndUpdateListFromDb {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return clearAndUpdateListFromDb(this);
   }
@@ -915,6 +976,8 @@ class _$ClearAndUpdateListFromDbImpl implements _ClearAndUpdateListFromDb {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return clearAndUpdateListFromDb?.call(this);
   }
@@ -938,6 +1001,8 @@ class _$ClearAndUpdateListFromDbImpl implements _ClearAndUpdateListFromDb {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (clearAndUpdateListFromDb != null) {
@@ -1035,6 +1100,9 @@ class _$SuperLikedImpl implements _SuperLiked {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return onSuperLiked(onUserId);
   }
@@ -1057,6 +1125,8 @@ class _$SuperLikedImpl implements _SuperLiked {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return onSuperLiked?.call(onUserId);
   }
@@ -1079,6 +1149,8 @@ class _$SuperLikedImpl implements _SuperLiked {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (onSuperLiked != null) {
@@ -1107,6 +1179,8 @@ class _$SuperLikedImpl implements _SuperLiked {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return onSuperLiked(this);
   }
@@ -1131,6 +1205,8 @@ class _$SuperLikedImpl implements _SuperLiked {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return onSuperLiked?.call(this);
   }
@@ -1154,6 +1230,8 @@ class _$SuperLikedImpl implements _SuperLiked {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (onSuperLiked != null) {
@@ -1259,6 +1337,9 @@ class _$RightSwipedImpl implements _RightSwiped {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return onRightSwiped(onUserId);
   }
@@ -1281,6 +1362,8 @@ class _$RightSwipedImpl implements _RightSwiped {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return onRightSwiped?.call(onUserId);
   }
@@ -1303,6 +1386,8 @@ class _$RightSwipedImpl implements _RightSwiped {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (onRightSwiped != null) {
@@ -1331,6 +1416,8 @@ class _$RightSwipedImpl implements _RightSwiped {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return onRightSwiped(this);
   }
@@ -1355,6 +1442,8 @@ class _$RightSwipedImpl implements _RightSwiped {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return onRightSwiped?.call(this);
   }
@@ -1378,6 +1467,8 @@ class _$RightSwipedImpl implements _RightSwiped {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (onRightSwiped != null) {
@@ -1483,6 +1574,9 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return onLeftSwiped(onUserId);
   }
@@ -1505,6 +1599,8 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return onLeftSwiped?.call(onUserId);
   }
@@ -1527,6 +1623,8 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (onLeftSwiped != null) {
@@ -1555,6 +1653,8 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return onLeftSwiped(this);
   }
@@ -1579,6 +1679,8 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return onLeftSwiped?.call(this);
   }
@@ -1602,6 +1704,8 @@ class _$LeftSwipedImpl implements _LeftSwiped {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (onLeftSwiped != null) {
@@ -1707,6 +1811,9 @@ class _$onMatchMadeImpl implements _onMatchMade {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return onMatchMade(onUserId);
   }
@@ -1729,6 +1836,8 @@ class _$onMatchMadeImpl implements _onMatchMade {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return onMatchMade?.call(onUserId);
   }
@@ -1751,6 +1860,8 @@ class _$onMatchMadeImpl implements _onMatchMade {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (onMatchMade != null) {
@@ -1779,6 +1890,8 @@ class _$onMatchMadeImpl implements _onMatchMade {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return onMatchMade(this);
   }
@@ -1803,6 +1916,8 @@ class _$onMatchMadeImpl implements _onMatchMade {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return onMatchMade?.call(this);
   }
@@ -1826,6 +1941,8 @@ class _$onMatchMadeImpl implements _onMatchMade {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (onMatchMade != null) {
@@ -1931,6 +2048,9 @@ class _$shareProfileImpl implements _shareProfile {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return shareProfile(onUserId);
   }
@@ -1953,6 +2073,8 @@ class _$shareProfileImpl implements _shareProfile {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return shareProfile?.call(onUserId);
   }
@@ -1975,6 +2097,8 @@ class _$shareProfileImpl implements _shareProfile {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (shareProfile != null) {
@@ -2003,6 +2127,8 @@ class _$shareProfileImpl implements _shareProfile {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return shareProfile(this);
   }
@@ -2027,6 +2153,8 @@ class _$shareProfileImpl implements _shareProfile {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return shareProfile?.call(this);
   }
@@ -2050,6 +2178,8 @@ class _$shareProfileImpl implements _shareProfile {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (shareProfile != null) {
@@ -2167,6 +2297,9 @@ class _$emitNewStateImpl implements _emitNewState {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return emitNewState(newState);
   }
@@ -2189,6 +2322,8 @@ class _$emitNewStateImpl implements _emitNewState {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return emitNewState?.call(newState);
   }
@@ -2211,6 +2346,8 @@ class _$emitNewStateImpl implements _emitNewState {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (emitNewState != null) {
@@ -2239,6 +2376,8 @@ class _$emitNewStateImpl implements _emitNewState {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return emitNewState(this);
   }
@@ -2263,6 +2402,8 @@ class _$emitNewStateImpl implements _emitNewState {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return emitNewState?.call(this);
   }
@@ -2286,6 +2427,8 @@ class _$emitNewStateImpl implements _emitNewState {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (emitNewState != null) {
@@ -2364,6 +2507,9 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return flushSwipeCards();
   }
@@ -2386,6 +2532,8 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return flushSwipeCards?.call();
   }
@@ -2408,6 +2556,8 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (flushSwipeCards != null) {
@@ -2436,6 +2586,8 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return flushSwipeCards(this);
   }
@@ -2460,6 +2612,8 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return flushSwipeCards?.call(this);
   }
@@ -2483,6 +2637,8 @@ class _$flushSwipeCardsImpl implements _flushSwipeCards {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (flushSwipeCards != null) {
@@ -2585,6 +2741,9 @@ class _$fetchInterestedUsersForEventImpl
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return fetchInterestedUserForTheEvent(eventId);
   }
@@ -2607,6 +2766,8 @@ class _$fetchInterestedUsersForEventImpl
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return fetchInterestedUserForTheEvent?.call(eventId);
   }
@@ -2629,6 +2790,8 @@ class _$fetchInterestedUsersForEventImpl
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (fetchInterestedUserForTheEvent != null) {
@@ -2657,6 +2820,8 @@ class _$fetchInterestedUsersForEventImpl
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return fetchInterestedUserForTheEvent(this);
   }
@@ -2681,6 +2846,8 @@ class _$fetchInterestedUsersForEventImpl
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return fetchInterestedUserForTheEvent?.call(this);
   }
@@ -2704,6 +2871,8 @@ class _$fetchInterestedUsersForEventImpl
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (fetchInterestedUserForTheEvent != null) {
@@ -2812,6 +2981,9 @@ class _$OnActionHappenedImpl implements _OnActionHappened {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return onActionHappened(passedId);
   }
@@ -2834,6 +3006,8 @@ class _$OnActionHappenedImpl implements _OnActionHappened {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return onActionHappened?.call(passedId);
   }
@@ -2856,6 +3030,8 @@ class _$OnActionHappenedImpl implements _OnActionHappened {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (onActionHappened != null) {
@@ -2884,6 +3060,8 @@ class _$OnActionHappenedImpl implements _OnActionHappened {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return onActionHappened(this);
   }
@@ -2908,6 +3086,8 @@ class _$OnActionHappenedImpl implements _OnActionHappened {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return onActionHappened?.call(this);
   }
@@ -2931,6 +3111,8 @@ class _$OnActionHappenedImpl implements _OnActionHappened {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (onActionHappened != null) {
@@ -3009,6 +3191,9 @@ class _$EmptyCardListImpl implements _EmptyCardList {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return emptyCardList();
   }
@@ -3031,6 +3216,8 @@ class _$EmptyCardListImpl implements _EmptyCardList {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return emptyCardList?.call();
   }
@@ -3053,6 +3240,8 @@ class _$EmptyCardListImpl implements _EmptyCardList {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (emptyCardList != null) {
@@ -3081,6 +3270,8 @@ class _$EmptyCardListImpl implements _EmptyCardList {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return emptyCardList(this);
   }
@@ -3105,6 +3296,8 @@ class _$EmptyCardListImpl implements _EmptyCardList {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return emptyCardList?.call(this);
   }
@@ -3128,6 +3321,8 @@ class _$EmptyCardListImpl implements _EmptyCardList {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (emptyCardList != null) {
@@ -3197,6 +3392,9 @@ class _$UndoCardImpl implements _UndoCard {
     required TResult Function(String passedId) onActionHappened,
     required TResult Function() emptyCardList,
     required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
   }) {
     return undo();
   }
@@ -3219,6 +3417,8 @@ class _$UndoCardImpl implements _UndoCard {
     TResult? Function(String passedId)? onActionHappened,
     TResult? Function()? emptyCardList,
     TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
   }) {
     return undo?.call();
   }
@@ -3241,6 +3441,8 @@ class _$UndoCardImpl implements _UndoCard {
     TResult Function(String passedId)? onActionHappened,
     TResult Function()? emptyCardList,
     TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (undo != null) {
@@ -3269,6 +3471,8 @@ class _$UndoCardImpl implements _UndoCard {
     required TResult Function(_OnActionHappened value) onActionHappened,
     required TResult Function(_EmptyCardList value) emptyCardList,
     required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
   }) {
     return undo(this);
   }
@@ -3293,6 +3497,8 @@ class _$UndoCardImpl implements _UndoCard {
     TResult? Function(_OnActionHappened value)? onActionHappened,
     TResult? Function(_EmptyCardList value)? emptyCardList,
     TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
   }) {
     return undo?.call(this);
   }
@@ -3316,6 +3522,8 @@ class _$UndoCardImpl implements _UndoCard {
     TResult Function(_OnActionHappened value)? onActionHappened,
     TResult Function(_EmptyCardList value)? emptyCardList,
     TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
     required TResult orElse(),
   }) {
     if (undo != null) {
@@ -3330,12 +3538,454 @@ abstract class _UndoCard implements PeopleCardsEvent {
 }
 
 /// @nodoc
+abstract class _$$AppendProfilesFromDbImplCopyWith<$Res> {
+  factory _$$AppendProfilesFromDbImplCopyWith(_$AppendProfilesFromDbImpl value,
+          $Res Function(_$AppendProfilesFromDbImpl) then) =
+      __$$AppendProfilesFromDbImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$AppendProfilesFromDbImplCopyWithImpl<$Res>
+    extends _$PeopleCardsEventCopyWithImpl<$Res, _$AppendProfilesFromDbImpl>
+    implements _$$AppendProfilesFromDbImplCopyWith<$Res> {
+  __$$AppendProfilesFromDbImplCopyWithImpl(_$AppendProfilesFromDbImpl _value,
+      $Res Function(_$AppendProfilesFromDbImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PeopleCardsEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$AppendProfilesFromDbImpl implements _AppendProfilesFromDb {
+  const _$AppendProfilesFromDbImpl();
+
+  @override
+  String toString() {
+    return 'PeopleCardsEvent.appendProfilesFromDb()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppendProfilesFromDbImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function(bool isLoading) loading,
+    required TResult Function() fetchNextCards,
+    required TResult Function() clearAndUpdateListFromDb,
+    required TResult Function(String onUserId) onSuperLiked,
+    required TResult Function(String onUserId) onRightSwiped,
+    required TResult Function(String onUserId) onLeftSwiped,
+    required TResult Function(String onUserId) onMatchMade,
+    required TResult Function(String onUserId) shareProfile,
+    required TResult Function(PeopleCardsState newState) emitNewState,
+    required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
+    required TResult Function(String passedId) onActionHappened,
+    required TResult Function() emptyCardList,
+    required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
+  }) {
+    return appendProfilesFromDb();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function(bool isLoading)? loading,
+    TResult? Function()? fetchNextCards,
+    TResult? Function()? clearAndUpdateListFromDb,
+    TResult? Function(String onUserId)? onSuperLiked,
+    TResult? Function(String onUserId)? onRightSwiped,
+    TResult? Function(String onUserId)? onLeftSwiped,
+    TResult? Function(String onUserId)? onMatchMade,
+    TResult? Function(String onUserId)? shareProfile,
+    TResult? Function(PeopleCardsState newState)? emitNewState,
+    TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
+    TResult? Function(String passedId)? onActionHappened,
+    TResult? Function()? emptyCardList,
+    TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
+  }) {
+    return appendProfilesFromDb?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function(bool isLoading)? loading,
+    TResult Function()? fetchNextCards,
+    TResult Function()? clearAndUpdateListFromDb,
+    TResult Function(String onUserId)? onSuperLiked,
+    TResult Function(String onUserId)? onRightSwiped,
+    TResult Function(String onUserId)? onLeftSwiped,
+    TResult Function(String onUserId)? onMatchMade,
+    TResult Function(String onUserId)? shareProfile,
+    TResult Function(PeopleCardsState newState)? emitNewState,
+    TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
+    TResult Function(String passedId)? onActionHappened,
+    TResult Function()? emptyCardList,
+    TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
+    required TResult orElse(),
+  }) {
+    if (appendProfilesFromDb != null) {
+      return appendProfilesFromDb();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) started,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_FetchNextCards value) fetchNextCards,
+    required TResult Function(_ClearAndUpdateListFromDb value)
+        clearAndUpdateListFromDb,
+    required TResult Function(_SuperLiked value) onSuperLiked,
+    required TResult Function(_RightSwiped value) onRightSwiped,
+    required TResult Function(_LeftSwiped value) onLeftSwiped,
+    required TResult Function(_onMatchMade value) onMatchMade,
+    required TResult Function(_shareProfile value) shareProfile,
+    required TResult Function(_emitNewState value) emitNewState,
+    required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
+    required TResult Function(_OnActionHappened value) onActionHappened,
+    required TResult Function(_EmptyCardList value) emptyCardList,
+    required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
+  }) {
+    return appendProfilesFromDb(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? started,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_FetchNextCards value)? fetchNextCards,
+    TResult? Function(_ClearAndUpdateListFromDb value)?
+        clearAndUpdateListFromDb,
+    TResult? Function(_SuperLiked value)? onSuperLiked,
+    TResult? Function(_RightSwiped value)? onRightSwiped,
+    TResult? Function(_LeftSwiped value)? onLeftSwiped,
+    TResult? Function(_onMatchMade value)? onMatchMade,
+    TResult? Function(_shareProfile value)? shareProfile,
+    TResult? Function(_emitNewState value)? emitNewState,
+    TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
+    TResult? Function(_OnActionHappened value)? onActionHappened,
+    TResult? Function(_EmptyCardList value)? emptyCardList,
+    TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
+  }) {
+    return appendProfilesFromDb?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? started,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_FetchNextCards value)? fetchNextCards,
+    TResult Function(_ClearAndUpdateListFromDb value)? clearAndUpdateListFromDb,
+    TResult Function(_SuperLiked value)? onSuperLiked,
+    TResult Function(_RightSwiped value)? onRightSwiped,
+    TResult Function(_LeftSwiped value)? onLeftSwiped,
+    TResult Function(_onMatchMade value)? onMatchMade,
+    TResult Function(_shareProfile value)? shareProfile,
+    TResult Function(_emitNewState value)? emitNewState,
+    TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
+    TResult Function(_OnActionHappened value)? onActionHappened,
+    TResult Function(_EmptyCardList value)? emptyCardList,
+    TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
+    required TResult orElse(),
+  }) {
+    if (appendProfilesFromDb != null) {
+      return appendProfilesFromDb(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _AppendProfilesFromDb implements PeopleCardsEvent {
+  const factory _AppendProfilesFromDb() = _$AppendProfilesFromDbImpl;
+}
+
+/// @nodoc
+abstract class _$$SetUpSwipeControllerImplCopyWith<$Res> {
+  factory _$$SetUpSwipeControllerImplCopyWith(_$SetUpSwipeControllerImpl value,
+          $Res Function(_$SetUpSwipeControllerImpl) then) =
+      __$$SetUpSwipeControllerImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({CardSwiperController controller});
+}
+
+/// @nodoc
+class __$$SetUpSwipeControllerImplCopyWithImpl<$Res>
+    extends _$PeopleCardsEventCopyWithImpl<$Res, _$SetUpSwipeControllerImpl>
+    implements _$$SetUpSwipeControllerImplCopyWith<$Res> {
+  __$$SetUpSwipeControllerImplCopyWithImpl(_$SetUpSwipeControllerImpl _value,
+      $Res Function(_$SetUpSwipeControllerImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PeopleCardsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? controller = null,
+  }) {
+    return _then(_$SetUpSwipeControllerImpl(
+      null == controller
+          ? _value.controller
+          : controller // ignore: cast_nullable_to_non_nullable
+              as CardSwiperController,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SetUpSwipeControllerImpl implements _SetUpSwipeController {
+  const _$SetUpSwipeControllerImpl(this.controller);
+
+  @override
+  final CardSwiperController controller;
+
+  @override
+  String toString() {
+    return 'PeopleCardsEvent.setupSwipeController(controller: $controller)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SetUpSwipeControllerImpl &&
+            (identical(other.controller, controller) ||
+                other.controller == controller));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, controller);
+
+  /// Create a copy of PeopleCardsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SetUpSwipeControllerImplCopyWith<_$SetUpSwipeControllerImpl>
+      get copyWith =>
+          __$$SetUpSwipeControllerImplCopyWithImpl<_$SetUpSwipeControllerImpl>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function(bool isLoading) loading,
+    required TResult Function() fetchNextCards,
+    required TResult Function() clearAndUpdateListFromDb,
+    required TResult Function(String onUserId) onSuperLiked,
+    required TResult Function(String onUserId) onRightSwiped,
+    required TResult Function(String onUserId) onLeftSwiped,
+    required TResult Function(String onUserId) onMatchMade,
+    required TResult Function(String onUserId) shareProfile,
+    required TResult Function(PeopleCardsState newState) emitNewState,
+    required TResult Function() flushSwipeCards,
+    required TResult Function(int? eventId) fetchInterestedUserForTheEvent,
+    required TResult Function(String passedId) onActionHappened,
+    required TResult Function() emptyCardList,
+    required TResult Function() undo,
+    required TResult Function() appendProfilesFromDb,
+    required TResult Function(CardSwiperController controller)
+        setupSwipeController,
+  }) {
+    return setupSwipeController(controller);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function(bool isLoading)? loading,
+    TResult? Function()? fetchNextCards,
+    TResult? Function()? clearAndUpdateListFromDb,
+    TResult? Function(String onUserId)? onSuperLiked,
+    TResult? Function(String onUserId)? onRightSwiped,
+    TResult? Function(String onUserId)? onLeftSwiped,
+    TResult? Function(String onUserId)? onMatchMade,
+    TResult? Function(String onUserId)? shareProfile,
+    TResult? Function(PeopleCardsState newState)? emitNewState,
+    TResult? Function()? flushSwipeCards,
+    TResult? Function(int? eventId)? fetchInterestedUserForTheEvent,
+    TResult? Function(String passedId)? onActionHappened,
+    TResult? Function()? emptyCardList,
+    TResult? Function()? undo,
+    TResult? Function()? appendProfilesFromDb,
+    TResult? Function(CardSwiperController controller)? setupSwipeController,
+  }) {
+    return setupSwipeController?.call(controller);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function(bool isLoading)? loading,
+    TResult Function()? fetchNextCards,
+    TResult Function()? clearAndUpdateListFromDb,
+    TResult Function(String onUserId)? onSuperLiked,
+    TResult Function(String onUserId)? onRightSwiped,
+    TResult Function(String onUserId)? onLeftSwiped,
+    TResult Function(String onUserId)? onMatchMade,
+    TResult Function(String onUserId)? shareProfile,
+    TResult Function(PeopleCardsState newState)? emitNewState,
+    TResult Function()? flushSwipeCards,
+    TResult Function(int? eventId)? fetchInterestedUserForTheEvent,
+    TResult Function(String passedId)? onActionHappened,
+    TResult Function()? emptyCardList,
+    TResult Function()? undo,
+    TResult Function()? appendProfilesFromDb,
+    TResult Function(CardSwiperController controller)? setupSwipeController,
+    required TResult orElse(),
+  }) {
+    if (setupSwipeController != null) {
+      return setupSwipeController(controller);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) started,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_FetchNextCards value) fetchNextCards,
+    required TResult Function(_ClearAndUpdateListFromDb value)
+        clearAndUpdateListFromDb,
+    required TResult Function(_SuperLiked value) onSuperLiked,
+    required TResult Function(_RightSwiped value) onRightSwiped,
+    required TResult Function(_LeftSwiped value) onLeftSwiped,
+    required TResult Function(_onMatchMade value) onMatchMade,
+    required TResult Function(_shareProfile value) shareProfile,
+    required TResult Function(_emitNewState value) emitNewState,
+    required TResult Function(_flushSwipeCards value) flushSwipeCards,
+    required TResult Function(_fetchInterestedUsersForEvent value)
+        fetchInterestedUserForTheEvent,
+    required TResult Function(_OnActionHappened value) onActionHappened,
+    required TResult Function(_EmptyCardList value) emptyCardList,
+    required TResult Function(_UndoCard value) undo,
+    required TResult Function(_AppendProfilesFromDb value) appendProfilesFromDb,
+    required TResult Function(_SetUpSwipeController value) setupSwipeController,
+  }) {
+    return setupSwipeController(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? started,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_FetchNextCards value)? fetchNextCards,
+    TResult? Function(_ClearAndUpdateListFromDb value)?
+        clearAndUpdateListFromDb,
+    TResult? Function(_SuperLiked value)? onSuperLiked,
+    TResult? Function(_RightSwiped value)? onRightSwiped,
+    TResult? Function(_LeftSwiped value)? onLeftSwiped,
+    TResult? Function(_onMatchMade value)? onMatchMade,
+    TResult? Function(_shareProfile value)? shareProfile,
+    TResult? Function(_emitNewState value)? emitNewState,
+    TResult? Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult? Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
+    TResult? Function(_OnActionHappened value)? onActionHappened,
+    TResult? Function(_EmptyCardList value)? emptyCardList,
+    TResult? Function(_UndoCard value)? undo,
+    TResult? Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult? Function(_SetUpSwipeController value)? setupSwipeController,
+  }) {
+    return setupSwipeController?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? started,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_FetchNextCards value)? fetchNextCards,
+    TResult Function(_ClearAndUpdateListFromDb value)? clearAndUpdateListFromDb,
+    TResult Function(_SuperLiked value)? onSuperLiked,
+    TResult Function(_RightSwiped value)? onRightSwiped,
+    TResult Function(_LeftSwiped value)? onLeftSwiped,
+    TResult Function(_onMatchMade value)? onMatchMade,
+    TResult Function(_shareProfile value)? shareProfile,
+    TResult Function(_emitNewState value)? emitNewState,
+    TResult Function(_flushSwipeCards value)? flushSwipeCards,
+    TResult Function(_fetchInterestedUsersForEvent value)?
+        fetchInterestedUserForTheEvent,
+    TResult Function(_OnActionHappened value)? onActionHappened,
+    TResult Function(_EmptyCardList value)? emptyCardList,
+    TResult Function(_UndoCard value)? undo,
+    TResult Function(_AppendProfilesFromDb value)? appendProfilesFromDb,
+    TResult Function(_SetUpSwipeController value)? setupSwipeController,
+    required TResult orElse(),
+  }) {
+    if (setupSwipeController != null) {
+      return setupSwipeController(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SetUpSwipeController implements PeopleCardsEvent {
+  const factory _SetUpSwipeController(final CardSwiperController controller) =
+      _$SetUpSwipeControllerImpl;
+
+  CardSwiperController get controller;
+
+  /// Create a copy of PeopleCardsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SetUpSwipeControllerImplCopyWith<_$SetUpSwipeControllerImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$PeopleCardsState {
   bool get isLoading => throw _privateConstructorUsedError;
   bool get isFetchingMoreProfile => throw _privateConstructorUsedError;
   List<PeopleCardModel> get displayCards => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
-  String get error => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
   int get currentOffset => throw _privateConstructorUsedError;
   List<PeopleCardModel> get swipedHistoryCards =>
       throw _privateConstructorUsedError;
@@ -3343,71 +3993,8 @@ mixin _$PeopleCardsState {
       throw _privateConstructorUsedError;
   Set<String> get alreadySwipedIds => throw _privateConstructorUsedError;
   int get lastActionWasUndo => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            bool isLoading,
-            bool isFetchingMoreProfile,
-            List<PeopleCardModel> displayCards,
-            String userId,
-            String error,
-            int currentOffset,
-            List<PeopleCardModel> swipedHistoryCards,
-            CardSwiperController? cardSwipeController,
-            Set<String> alreadySwipedIds,
-            int lastActionWasUndo)
-        ignite,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            bool isLoading,
-            bool isFetchingMoreProfile,
-            List<PeopleCardModel> displayCards,
-            String userId,
-            String error,
-            int currentOffset,
-            List<PeopleCardModel> swipedHistoryCards,
-            CardSwiperController? cardSwipeController,
-            Set<String> alreadySwipedIds,
-            int lastActionWasUndo)?
-        ignite,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            bool isLoading,
-            bool isFetchingMoreProfile,
-            List<PeopleCardModel> displayCards,
-            String userId,
-            String error,
-            int currentOffset,
-            List<PeopleCardModel> swipedHistoryCards,
-            CardSwiperController? cardSwipeController,
-            Set<String> alreadySwipedIds,
-            int lastActionWasUndo)?
-        ignite,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Ignite value) ignite,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Ignite value)? ignite,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Ignite value)? ignite,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  int get currentIndex => throw _privateConstructorUsedError;
+  bool get hasReachedEnd => throw _privateConstructorUsedError;
 
   /// Create a copy of PeopleCardsState
   /// with the given fields replaced by the non-null parameter values.
@@ -3427,12 +4014,14 @@ abstract class $PeopleCardsStateCopyWith<$Res> {
       bool isFetchingMoreProfile,
       List<PeopleCardModel> displayCards,
       String userId,
-      String error,
+      String? error,
       int currentOffset,
       List<PeopleCardModel> swipedHistoryCards,
       CardSwiperController? cardSwipeController,
       Set<String> alreadySwipedIds,
-      int lastActionWasUndo});
+      int lastActionWasUndo,
+      int currentIndex,
+      bool hasReachedEnd});
 }
 
 /// @nodoc
@@ -3454,12 +4043,14 @@ class _$PeopleCardsStateCopyWithImpl<$Res, $Val extends PeopleCardsState>
     Object? isFetchingMoreProfile = null,
     Object? displayCards = null,
     Object? userId = null,
-    Object? error = null,
+    Object? error = freezed,
     Object? currentOffset = null,
     Object? swipedHistoryCards = null,
     Object? cardSwipeController = freezed,
     Object? alreadySwipedIds = null,
     Object? lastActionWasUndo = null,
+    Object? currentIndex = null,
+    Object? hasReachedEnd = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -3478,10 +4069,10 @@ class _$PeopleCardsStateCopyWithImpl<$Res, $Val extends PeopleCardsState>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      error: null == error
+      error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       currentOffset: null == currentOffset
           ? _value.currentOffset
           : currentOffset // ignore: cast_nullable_to_non_nullable
@@ -3502,16 +4093,24 @@ class _$PeopleCardsStateCopyWithImpl<$Res, $Val extends PeopleCardsState>
           ? _value.lastActionWasUndo
           : lastActionWasUndo // ignore: cast_nullable_to_non_nullable
               as int,
+      currentIndex: null == currentIndex
+          ? _value.currentIndex
+          : currentIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+      hasReachedEnd: null == hasReachedEnd
+          ? _value.hasReachedEnd
+          : hasReachedEnd // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$IgniteImplCopyWith<$Res>
+abstract class _$$PeopleCardStateImplCopyWith<$Res>
     implements $PeopleCardsStateCopyWith<$Res> {
-  factory _$$IgniteImplCopyWith(
-          _$IgniteImpl value, $Res Function(_$IgniteImpl) then) =
-      __$$IgniteImplCopyWithImpl<$Res>;
+  factory _$$PeopleCardStateImplCopyWith(_$PeopleCardStateImpl value,
+          $Res Function(_$PeopleCardStateImpl) then) =
+      __$$PeopleCardStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -3519,20 +4118,22 @@ abstract class _$$IgniteImplCopyWith<$Res>
       bool isFetchingMoreProfile,
       List<PeopleCardModel> displayCards,
       String userId,
-      String error,
+      String? error,
       int currentOffset,
       List<PeopleCardModel> swipedHistoryCards,
       CardSwiperController? cardSwipeController,
       Set<String> alreadySwipedIds,
-      int lastActionWasUndo});
+      int lastActionWasUndo,
+      int currentIndex,
+      bool hasReachedEnd});
 }
 
 /// @nodoc
-class __$$IgniteImplCopyWithImpl<$Res>
-    extends _$PeopleCardsStateCopyWithImpl<$Res, _$IgniteImpl>
-    implements _$$IgniteImplCopyWith<$Res> {
-  __$$IgniteImplCopyWithImpl(
-      _$IgniteImpl _value, $Res Function(_$IgniteImpl) _then)
+class __$$PeopleCardStateImplCopyWithImpl<$Res>
+    extends _$PeopleCardsStateCopyWithImpl<$Res, _$PeopleCardStateImpl>
+    implements _$$PeopleCardStateImplCopyWith<$Res> {
+  __$$PeopleCardStateImplCopyWithImpl(
+      _$PeopleCardStateImpl _value, $Res Function(_$PeopleCardStateImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of PeopleCardsState
@@ -3544,14 +4145,16 @@ class __$$IgniteImplCopyWithImpl<$Res>
     Object? isFetchingMoreProfile = null,
     Object? displayCards = null,
     Object? userId = null,
-    Object? error = null,
+    Object? error = freezed,
     Object? currentOffset = null,
     Object? swipedHistoryCards = null,
     Object? cardSwipeController = freezed,
     Object? alreadySwipedIds = null,
     Object? lastActionWasUndo = null,
+    Object? currentIndex = null,
+    Object? hasReachedEnd = null,
   }) {
-    return _then(_$IgniteImpl(
+    return _then(_$PeopleCardStateImpl(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -3568,10 +4171,10 @@ class __$$IgniteImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      error: null == error
+      error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       currentOffset: null == currentOffset
           ? _value.currentOffset
           : currentOffset // ignore: cast_nullable_to_non_nullable
@@ -3592,27 +4195,38 @@ class __$$IgniteImplCopyWithImpl<$Res>
           ? _value.lastActionWasUndo
           : lastActionWasUndo // ignore: cast_nullable_to_non_nullable
               as int,
+      currentIndex: null == currentIndex
+          ? _value.currentIndex
+          : currentIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+      hasReachedEnd: null == hasReachedEnd
+          ? _value.hasReachedEnd
+          : hasReachedEnd // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
 
 /// @nodoc
 
-class _$IgniteImpl implements _Ignite {
-  const _$IgniteImpl(
+class _$PeopleCardStateImpl extends _PeopleCardState {
+  const _$PeopleCardStateImpl(
       {this.isLoading = true,
       this.isFetchingMoreProfile = false,
       final List<PeopleCardModel> displayCards = const [],
       this.userId = "",
-      this.error = "",
+      this.error = null,
       this.currentOffset = 0,
       final List<PeopleCardModel> swipedHistoryCards = const [],
       this.cardSwipeController = null,
       final Set<String> alreadySwipedIds = const {},
-      this.lastActionWasUndo = 0})
+      this.lastActionWasUndo = 0,
+      this.currentIndex = 0,
+      this.hasReachedEnd = false})
       : _displayCards = displayCards,
         _swipedHistoryCards = swipedHistoryCards,
-        _alreadySwipedIds = alreadySwipedIds;
+        _alreadySwipedIds = alreadySwipedIds,
+        super._();
 
   @override
   @JsonKey()
@@ -3634,7 +4248,7 @@ class _$IgniteImpl implements _Ignite {
   final String userId;
   @override
   @JsonKey()
-  final String error;
+  final String? error;
   @override
   @JsonKey()
   final int currentOffset;
@@ -3663,17 +4277,23 @@ class _$IgniteImpl implements _Ignite {
   @override
   @JsonKey()
   final int lastActionWasUndo;
+  @override
+  @JsonKey()
+  final int currentIndex;
+  @override
+  @JsonKey()
+  final bool hasReachedEnd;
 
   @override
   String toString() {
-    return 'PeopleCardsState.ignite(isLoading: $isLoading, isFetchingMoreProfile: $isFetchingMoreProfile, displayCards: $displayCards, userId: $userId, error: $error, currentOffset: $currentOffset, swipedHistoryCards: $swipedHistoryCards, cardSwipeController: $cardSwipeController, alreadySwipedIds: $alreadySwipedIds, lastActionWasUndo: $lastActionWasUndo)';
+    return 'PeopleCardsState(isLoading: $isLoading, isFetchingMoreProfile: $isFetchingMoreProfile, displayCards: $displayCards, userId: $userId, error: $error, currentOffset: $currentOffset, swipedHistoryCards: $swipedHistoryCards, cardSwipeController: $cardSwipeController, alreadySwipedIds: $alreadySwipedIds, lastActionWasUndo: $lastActionWasUndo, currentIndex: $currentIndex, hasReachedEnd: $hasReachedEnd)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$IgniteImpl &&
+            other is _$PeopleCardStateImpl &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.isFetchingMoreProfile, isFetchingMoreProfile) ||
@@ -3691,7 +4311,11 @@ class _$IgniteImpl implements _Ignite {
             const DeepCollectionEquality()
                 .equals(other._alreadySwipedIds, _alreadySwipedIds) &&
             (identical(other.lastActionWasUndo, lastActionWasUndo) ||
-                other.lastActionWasUndo == lastActionWasUndo));
+                other.lastActionWasUndo == lastActionWasUndo) &&
+            (identical(other.currentIndex, currentIndex) ||
+                other.currentIndex == currentIndex) &&
+            (identical(other.hasReachedEnd, hasReachedEnd) ||
+                other.hasReachedEnd == hasReachedEnd));
   }
 
   @override
@@ -3706,148 +4330,35 @@ class _$IgniteImpl implements _Ignite {
       const DeepCollectionEquality().hash(_swipedHistoryCards),
       cardSwipeController,
       const DeepCollectionEquality().hash(_alreadySwipedIds),
-      lastActionWasUndo);
+      lastActionWasUndo,
+      currentIndex,
+      hasReachedEnd);
 
   /// Create a copy of PeopleCardsState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$IgniteImplCopyWith<_$IgniteImpl> get copyWith =>
-      __$$IgniteImplCopyWithImpl<_$IgniteImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            bool isLoading,
-            bool isFetchingMoreProfile,
-            List<PeopleCardModel> displayCards,
-            String userId,
-            String error,
-            int currentOffset,
-            List<PeopleCardModel> swipedHistoryCards,
-            CardSwiperController? cardSwipeController,
-            Set<String> alreadySwipedIds,
-            int lastActionWasUndo)
-        ignite,
-  }) {
-    return ignite(
-        isLoading,
-        isFetchingMoreProfile,
-        displayCards,
-        userId,
-        error,
-        currentOffset,
-        swipedHistoryCards,
-        cardSwipeController,
-        alreadySwipedIds,
-        lastActionWasUndo);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            bool isLoading,
-            bool isFetchingMoreProfile,
-            List<PeopleCardModel> displayCards,
-            String userId,
-            String error,
-            int currentOffset,
-            List<PeopleCardModel> swipedHistoryCards,
-            CardSwiperController? cardSwipeController,
-            Set<String> alreadySwipedIds,
-            int lastActionWasUndo)?
-        ignite,
-  }) {
-    return ignite?.call(
-        isLoading,
-        isFetchingMoreProfile,
-        displayCards,
-        userId,
-        error,
-        currentOffset,
-        swipedHistoryCards,
-        cardSwipeController,
-        alreadySwipedIds,
-        lastActionWasUndo);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            bool isLoading,
-            bool isFetchingMoreProfile,
-            List<PeopleCardModel> displayCards,
-            String userId,
-            String error,
-            int currentOffset,
-            List<PeopleCardModel> swipedHistoryCards,
-            CardSwiperController? cardSwipeController,
-            Set<String> alreadySwipedIds,
-            int lastActionWasUndo)?
-        ignite,
-    required TResult orElse(),
-  }) {
-    if (ignite != null) {
-      return ignite(
-          isLoading,
-          isFetchingMoreProfile,
-          displayCards,
-          userId,
-          error,
-          currentOffset,
-          swipedHistoryCards,
-          cardSwipeController,
-          alreadySwipedIds,
-          lastActionWasUndo);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Ignite value) ignite,
-  }) {
-    return ignite(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Ignite value)? ignite,
-  }) {
-    return ignite?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Ignite value)? ignite,
-    required TResult orElse(),
-  }) {
-    if (ignite != null) {
-      return ignite(this);
-    }
-    return orElse();
-  }
+  _$$PeopleCardStateImplCopyWith<_$PeopleCardStateImpl> get copyWith =>
+      __$$PeopleCardStateImplCopyWithImpl<_$PeopleCardStateImpl>(
+          this, _$identity);
 }
 
-abstract class _Ignite implements PeopleCardsState {
-  const factory _Ignite(
+abstract class _PeopleCardState extends PeopleCardsState {
+  const factory _PeopleCardState(
       {final bool isLoading,
       final bool isFetchingMoreProfile,
       final List<PeopleCardModel> displayCards,
       final String userId,
-      final String error,
+      final String? error,
       final int currentOffset,
       final List<PeopleCardModel> swipedHistoryCards,
       final CardSwiperController? cardSwipeController,
       final Set<String> alreadySwipedIds,
-      final int lastActionWasUndo}) = _$IgniteImpl;
+      final int lastActionWasUndo,
+      final int currentIndex,
+      final bool hasReachedEnd}) = _$PeopleCardStateImpl;
+  const _PeopleCardState._() : super._();
 
   @override
   bool get isLoading;
@@ -3858,7 +4369,7 @@ abstract class _Ignite implements PeopleCardsState {
   @override
   String get userId;
   @override
-  String get error;
+  String? get error;
   @override
   int get currentOffset;
   @override
@@ -3869,11 +4380,15 @@ abstract class _Ignite implements PeopleCardsState {
   Set<String> get alreadySwipedIds;
   @override
   int get lastActionWasUndo;
+  @override
+  int get currentIndex;
+  @override
+  bool get hasReachedEnd;
 
   /// Create a copy of PeopleCardsState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$IgniteImplCopyWith<_$IgniteImpl> get copyWith =>
+  _$$PeopleCardStateImplCopyWith<_$PeopleCardStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

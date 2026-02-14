@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:glint_frontend/analytics/glint_analytics_events.dart';
+import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/data/local/db/entities/swipe_action_entity.dart';
 import 'package:glint_frontend/domain/business_logic/repo/event/events_repo.dart';
 import 'package:glint_frontend/services/swipe_cache_manager.dart';
@@ -11,6 +13,7 @@ import 'package:glint_frontend/domain/business_logic/models/common/swipe_action_
 import 'package:glint_frontend/domain/business_logic/repo/people/people_repo.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
+import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 
 part 'people_cards_event.dart';
 
@@ -21,287 +24,236 @@ part 'people_cards_bloc.freezed.dart';
 class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
   final PeopleRepo peopleRepo = getIt.get<PeopleRepo>();
   final EventRepo eventRepo = getIt.get<EventRepo>();
+  final UserInfoManagerCubit userInfoManagerCubit =
+      getIt.get<UserInfoManagerCubit>();
   final SwipeBufferManager swipeBufferManager = getIt.get<SwipeBufferManager>();
 
-  PeopleCardsBloc() : super(const PeopleCardsState.ignite()) {
-    on<_Started>((event, emit) async {
-      var userId = await peopleRepo.getUserId();
-      add(PeopleCardsEvent.emitNewState(
-        state.copyWith(
-          userId: userId,
-          isLoading: true,
-          isFetchingMoreProfile: true,
-        ),
-      ));
-      _validateTheCacheProfilesOrFetchMore();
+  PeopleCardsBloc() : super(const PeopleCardsState()) {
+    on<_SetUpSwipeController>((event, emit) {
+      emit(
+        state.copyWith(cardSwipeController: event.controller),
+      );
     });
 
-    on<_ClearAndUpdateListFromDb>((event, emit) async {
-      final newUiModelsResult = await peopleRepo.getProfilesFromDB();
-      switch (newUiModelsResult) {
-        case Success<List<PeopleCardModel>>():
-          // A mechanism to avoid repeating Cards,
-          final newUniqueProfiles = newUiModelsResult.data.where((profile) {
-            bool isAlreadyInList =
-                state.displayCards.any((e) => e.userId == profile.userId);
-            bool wasSwiped = state.alreadySwipedIds.contains(profile.userId);
-            return !isAlreadyInList && !wasSwiped;
-          }).toList();
+    on<_Started>((event, emit) async {
+      final userId = await peopleRepo.getUserId();
+      emit(state.copyWith(userId: userId, isLoading: true));
+      await _validateCacheOrFetch(emit);
+    });
 
-          if (newUniqueProfiles.isNotEmpty) {
-            add(PeopleCardsEvent.emitNewState(
-              state.copyWith(
-                displayCards: [
-                  ...state.displayCards,
-                  ...newUniqueProfiles,
-                ],
-                isLoading: false,
-                isFetchingMoreProfile: false,
-              ),
-            ));
-          }
+    on<_fetchInterestedUsersForEvent>((event, emit) async {
+      emit(state.copyWith(
+        isLoading: true,
+        // error: null,
+      ));
+      final userId = await peopleRepo.getUserId();
+      final result = await eventRepo.fetchInterestedProfiles(event.eventId);
+
+      switch (result) {
+        case Success<List<PeopleCardModel>>():
+          emit(state.copyWith(
+            // Full reset for event-specific stacks
+            displayCards: result.data,
+            currentIndex: 0,
+            swipedHistoryCards: [],
+            alreadySwipedIds: {},
+            userId: userId,
+            isLoading: false,
+            // error: null,
+          ));
         case Failure<List<PeopleCardModel>>():
-          add(PeopleCardsEvent.emitNewState(
-            state.copyWith(
-              error: "${newUiModelsResult.error}",
-              isLoading: false,
-              isFetchingMoreProfile: false,
-            ),
+          emit(state.copyWith(
+            error: "Can't load profiles. Try again.",
+            isLoading: false,
           ));
       }
     });
 
-    on<_Loading>((event, emit) async {
-      final currentLoadingState = state.isLoading;
-      emit(state.copyWith(isLoading: currentLoadingState));
+    // ────────────────────────────────────────────────────────────────────────
+    // SWIPE ACTIONS
+    // All three are identical in state logic — only the SwipeActionType differs.
+    // ────────────────────────────────────────────────────────────────────────
+
+    on<_RightSwiped>((event, emit) {
+      _handleSwipe(emit, userId: event.onUserId, action: SwipeActionType.RIGHT);
     });
 
-    on<_FetchNextCards>((event, emit) async {
-      final nextOffset = state.currentOffset + 5;
-      final moreProfileResult = await peopleRepo.fetchProfiles(nextOffset);
-      switch (moreProfileResult) {
-        case Success<void>():
-          add(
-            _emitNewState(
-              state.copyWith(
-                currentOffset: nextOffset,
-                isFetchingMoreProfile: true,
-                isLoading: false,
-              ),
-            ),
-          );
-          add(const _ClearAndUpdateListFromDb());
-          break;
-        case Failure<void>():
-          add(
-            _emitNewState(
-              state.copyWith(
-                currentOffset: state.currentOffset,
-                isFetchingMoreProfile: false,
-                isLoading: false,
-              ),
-            ),
-          );
-          break;
-      }
+    on<_LeftSwiped>((event, emit) {
+      _handleSwipe(emit, userId: event.onUserId, action: SwipeActionType.LEFT);
     });
 
-    on<_RightSwiped>((event, emit) async {
-      final passedId = event.onUserId;
-      final currentUserId = state.userId;
-
-      add(_OnActionHappened(passedId));
-
-      swipeBufferManager.bufferSwipe(
-        SwipeActionEntity(
-          currentUserId: currentUserId.toString(),
-          swipedOnUserId: passedId,
-          action: SwipeActionType.RIGHT,
-          timestamp: DateTime.now(),
-        ),
-      );
-    });
-
-    on<_LeftSwiped>((event, emit) async {
-      final passedId = event.onUserId;
-      final currentUserId = state.userId;
-
-      add(_OnActionHappened(passedId));
-
-      swipeBufferManager.bufferSwipe(
-        SwipeActionEntity(
-          currentUserId: currentUserId.toString(),
-          swipedOnUserId: passedId,
-          action: SwipeActionType.LEFT,
-          timestamp: DateTime.now(),
-        ),
-      );
-    });
-
-    on<_SuperLiked>((event, emit) async {
-      final passedId = event.onUserId;
-      final currentUserId = state.userId;
-
-      add(_OnActionHappened(passedId));
-
-      swipeBufferManager.bufferSwipe(
-        SwipeActionEntity(
-          currentUserId: currentUserId.toString(),
-          swipedOnUserId: passedId,
-          action: SwipeActionType.SUPER_LIKE,
-          timestamp: DateTime.now(),
-        ),
-      );
+    on<_SuperLiked>((event, emit) {
+      _handleSwipe(emit,
+          userId: event.onUserId, action: SwipeActionType.SUPER_LIKE);
     });
 
     on<_UndoCard>((event, emit) {
-      final currentHistoryList = [...state.swipedHistoryCards];
-      final currentDisplayCards = [...state.displayCards];
-      final swipeIdSet = {...state.alreadySwipedIds};
-
-      if (currentHistoryList.isEmpty) {
-        add(PeopleCardsEvent.emitNewState(
-            state.copyWith(error: "You haven't Swiped anyone yet")));
+      if (!state.canUndo) {
+        emit(state.copyWith(error: "Nothing left to undo."));
         return;
       }
-
-      final userToRestore = currentHistoryList.removeLast();
-      swipeIdSet.remove(userToRestore.userId);
-      currentDisplayCards.insert(0, userToRestore);
-      add(
-        PeopleCardsEvent.emitNewState(
-          state.copyWith(
-            displayCards: currentDisplayCards,
-            swipedHistoryCards: currentHistoryList,
-            alreadySwipedIds: swipeIdSet,
-            lastActionWasUndo: DateTime.now().millisecondsSinceEpoch,
-          ),
-        ),
-      );
-      return;
+      final history = [...state.swipedHistoryCards];
+      history.removeLast();
+      userInfoManagerCubit.rewindUsed();
+      emit(state.copyWith(
+        currentIndex: state.currentIndex - 1,
+        swipedHistoryCards: history,
+        error: null,
+      ));
     });
 
-    on<_OnActionHappened>((event, emit) {
-      final lastActionUser = state.displayCards
-          .firstWhere((profile) => profile.userId == event.passedId);
+    // ────────────────────────────────────────────────────────────────────────
+    // PAGINATION
+    // ────────────────────────────────────────────────────────────────────────
 
-      final alreadySwipedUserIdSet = state.alreadySwipedIds;
+    on<_FetchNextCards>((event, emit) async {
+      if (state.isFetchingMoreProfile || state.hasReachedEnd) return;
 
-      final historyUntilNow = state.swipedHistoryCards;
+      final nextOffset = state.currentOffset + 5;
+      emit(state.copyWith(isFetchingMoreProfile: true));
 
-      // Filter out the
-      final updatedDisplayCardsList = state.displayCards
-          .where((profile) => profile.userId != event.passedId)
-          .toList();
+      final result = await peopleRepo.fetchProfiles(nextOffset);
 
-      add(
-        PeopleCardsEvent.emitNewState(
-          state.copyWith(
-            displayCards: updatedDisplayCardsList,
-            swipedHistoryCards: [...historyUntilNow, lastActionUser],
-            alreadySwipedIds: {
-              ...alreadySwipedUserIdSet,
-              lastActionUser.userId
-            },
-          ),
-        ),
-      );
+      switch (result) {
+        case Success<void>():
+          emit(state.copyWith(currentOffset: nextOffset));
+          add(const PeopleCardsEvent.appendProfilesFromDb());
+
+        case Failure<void>():
+          emit(state.copyWith(isFetchingMoreProfile: false));
+      }
     });
 
-    on<_EmptyCardList>((event, emit) async {
-      add(
-        PeopleCardsEvent.emitNewState(
-          state.copyWith(
-            displayCards: [],
-          ),
-        ),
-      );
-    });
+    on<_AppendProfilesFromDb>((event, emit) async {
+      final result = await peopleRepo.getProfilesFromDB();
+      switch (result) {
+        case Success<List<PeopleCardModel>>():
+          final newUnique = result.data
+              .where((p) =>
+                  !state.alreadySwipedIds.contains(p.userId) &&
+                  !state.displayCards.any((e) => e.userId == p.userId))
+              .toList();
 
-    on<_emitNewState>((event, emit) {
-      final passedItem = event.newState;
-      emit(passedItem);
-    });
+          if (newUnique.isEmpty) {
+            emit(state.copyWith(
+              isFetchingMoreProfile: false,
+              hasReachedEnd: true,
+            ));
+            return;
+          }
 
-    on<_fetchInterestedUsersForEvent>(
-      (event, emit) async {
-        var userId = await peopleRepo.getUserId();
-        var profileResult =
-            await eventRepo.fetchInterestedProfiles(event.eventId);
-        switch (profileResult) {
-          case Success<List<PeopleCardModel>>():
-            add(
-              PeopleCardsEvent.emitNewState(
-                state.copyWith(
-                  displayCards: profileResult.data,
-                  error: "",
-                  isLoading: false,
-                  userId: userId,
-                ),
-              ),
-            );
-          case Failure<List<PeopleCardModel>>():
-            add(
-              PeopleCardsEvent.emitNewState(
-                state.copyWith(
-                  error: "can't load more profiles. Try again",
-                  isLoading: false,
-                ),
-              ),
-            );
-        }
-      },
-    );
+          emit(state.copyWith(
+            displayCards: [...state.displayCards, ...newUnique],
+            isLoading: false,
+            isFetchingMoreProfile: false,
+          ));
 
-    on<_onMatchMade>((event, emit) async {
-      final passedId = event.onUserId;
-
-      /// Check if the return response have the currentUserId
-      /// IF available showcase a new screen
-      /// Update the state to navigate to new screen
-    });
-
-    on<_shareProfile>((event, emit) async {
-      final passedId = event.onUserId;
-
-      /// Already have the Id, create a dynamic link
-      /// And fetch the users details.
+        case Failure<List<PeopleCardModel>>():
+          emit(state.copyWith(
+            error: result.error.toString(),
+            isLoading: false,
+            isFetchingMoreProfile: false,
+          ));
+      }
     });
   }
 
-  Future<void> _validateTheCacheProfilesOrFetchMore() async {
-    final newUiModelsResult = await peopleRepo.getProfilesFromDB();
-    switch (newUiModelsResult) {
-      case Success<List<PeopleCardModel>>():
-        final cacheItems = newUiModelsResult.data;
-        if (cacheItems.length < 3) {
-          await peopleRepo.fetchProfiles(state.currentOffset);
-          add(const PeopleCardsEvent.clearAndUpdateListFromDb());
-        } else {
-          add(const PeopleCardsEvent.clearAndUpdateListFromDb());
-        }
-        break;
-      case Failure<List<PeopleCardModel>>():
-        add(PeopleCardsEvent.emitNewState(
-          state.copyWith(
-            error: "${newUiModelsResult.error}",
-            isLoading: false,
-            isFetchingMoreProfile: false,
-          ),
-        ));
-        break;
+  void _handleSwipe(
+    Emitter<PeopleCardsState> emit, {
+    required String userId,
+    required SwipeActionType action,
+  }) {
+    if (state.currentIndex >= state.displayCards.length) return;
+
+    final swipedCard = state.displayCards[state.currentIndex];
+
+    assert(
+      swipedCard.userId == userId,
+      '[PeopleCardsBloc] Swipe mismatch: '
+      'expected ${swipedCard.userId}, got $userId. '
+      'This means the UI index and Bloc index are out of sync.',
+    );
+
+    final updatedHistory = [
+      ...state.swipedHistoryCards,
+      swipedCard,
+    ];
+    if (updatedHistory.length > kMaxUndoDepth) {
+      updatedHistory.removeAt(0); // Evict oldest
+    }
+
+    final newActiveIndex = state.currentIndex + 1;
+    emit(state.copyWith(
+      currentIndex: newActiveIndex,
+      swipedHistoryCards: updatedHistory,
+      alreadySwipedIds: {...state.alreadySwipedIds, swipedCard.userId},
+      // error: null,
+    ));
+
+    swipeBufferManager.bufferSwipe(SwipeActionEntity(
+      currentUserId: state.userId.toString(),
+      swipedOnUserId: userId,
+      action: action,
+      timestamp: DateTime.now(),
+    ));
+
+    // ── Pagination trigger ──────────────────────────────────────────────────
+    // After the emit above, remainingCards has already decremented.
+    // "2 or fewer remaining" is your chosen threshold.
+    final newCalculatedRemaining = state.displayCards.length - newActiveIndex;
+    if (newCalculatedRemaining <= 2 && !state.isFetchingMoreProfile) {
+      add(const PeopleCardsEvent.fetchNextCards());
     }
   }
 
-  void setCardController(CardSwiperController passedController) {
-    add(
-      PeopleCardsEvent.emitNewState(
-        state.copyWith(cardSwipeController: passedController),
-      ),
-    );
+  /// Called on startup. Uses local cache if warm enough, otherwise fetches.
+  Future<void> _validateCacheOrFetch(Emitter<PeopleCardsState> emit) async {
+    final result = await peopleRepo.getProfilesFromDB();
+
+    switch (result) {
+      case Success<List<PeopleCardModel>>():
+        if (result.data.length < 2) {
+          await peopleRepo.fetchProfiles(state.currentOffset);
+        }
+        add(const PeopleCardsEvent.appendProfilesFromDb());
+
+      case Failure<List<PeopleCardModel>>():
+        emit(state.copyWith(
+          error: result.error.toString(),
+          isLoading: false,
+          isFetchingMoreProfile: false,
+        ));
+    }
   }
 
-  void undo() {
+  bool superLikeUser(String userId) {
+    final isSuperLikesAvailable = userInfoManagerCubit.superLikeClicked();
+    GlintAnalyticService.onCardActionEvent(
+      GlintSwipeGestureAnalyticsEvents.SUPER,
+      isSuperLikesAvailable,
+    );
+
+    if (!isSuperLikesAvailable) {
+      return false;
+    }
+
+    userInfoManagerCubit.superLikedUsed();
+    add(PeopleCardsEvent.onSuperLiked(userId));
+    state.cardSwipeController?.swipe(
+      CardSwiperDirection.top,
+    );
+
+    return true;
+  }
+
+  void rewindUsingSwipeController() {
+    final isRewindAvailable =
+        userInfoManagerCubit.isRewindFunctionalityAvailable();
+    GlintAnalyticService.onRewindEvent(isRewindAvailable);
+
+    if (!isRewindAvailable) {
+      return;
+    }
     state.cardSwipeController?.undo();
   }
 }

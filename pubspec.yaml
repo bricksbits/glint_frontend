@@ -18,7 +18,7 @@ dependencies:
   flutter_svg: ^2.0.16
   cached_network_image: ^3.4.1
   flutter_xlider: ^3.5.0
-  flutter_card_swiper: ^7.0.2
+  flutter_card_swiper: ^7.2.0
   bottom_picker: ^2.9.0
   dotted_line: ^3.2.3
   image_picker: ^1.1.2

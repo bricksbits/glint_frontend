@@ -74,8 +74,13 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
     }
   }
 
-  bool rewindClicked() {
+  bool isRewindFunctionalityAvailable() {
     if (state.isPremiumUser) {
+      final currentRewindCount = state.membershipEntity?.rewinds ?? 0;
+      if (currentRewindCount <= 0) {
+        emit(state.copyWith(error: "No more rewinds left"));
+        return false;
+      }
       return true;
     } else {
       emitNewState(state.copyWith(error: "No Rewinds available"));
@@ -135,19 +140,14 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   }
 
   Future<void> rewindUsed() async {
-    final currentRewindCount = state.membershipEntity?.rewinds ?? 0;
-    if (currentRewindCount <= 0) {
-      emit(state.copyWith(error: "No more rewinds left"));
-    } else {
-      final currentStateOfMembership = state.membershipEntity;
-      if (currentStateOfMembership != null) {
-        final updatedState = currentStateOfMembership.copyWith(
-          rewinds: currentRewindCount - 1,
-        );
-        emit(state.copyWith(membershipEntity: updatedState));
-        await userInfoRepo.setLocalUserPremiumInfo(updatedState);
-        await userInfoRepo.updateRewindAndAiCountToServer();
-      }
+    final currentStateOfMembership = state.membershipEntity;
+    if (currentStateOfMembership != null) {
+      final updatedState = currentStateOfMembership.copyWith(
+        rewinds: currentStateOfMembership.rewinds - 1,
+      );
+      emit(state.copyWith(membershipEntity: updatedState));
+      await userInfoRepo.setLocalUserPremiumInfo(updatedState);
+      await userInfoRepo.updateRewindAndAiCountToServer();
     }
   }
 

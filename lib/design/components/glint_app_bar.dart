@@ -85,22 +85,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         return [
           GestureDetector(
             onTap: () {
-              final isRewindAvailable =
-                  context.read<UserInfoManagerCubit>().rewindClicked();
-              if (isRewindAvailable) {
-                final isHistoryProfileActionAvailable = context
-                    .read<PeopleCardsBloc>()
-                    .state
-                    .swipedHistoryCards
-                    .isNotEmpty;
-                if (isHistoryProfileActionAvailable) {
-                  context.read<PeopleCardsBloc>().undo();
-                  context.read<UserInfoManagerCubit>().rewindUsed();
-                } else {
-                  context.read<PeopleCardsBloc>().undo();
-                }
-              }
-              GlintAnalyticService.onRewindEvent(false);
+              context.read<PeopleCardsBloc>().rewindUsingSwipeController();
             },
             child: SvgPicture.asset(
               'lib/assets/icons/glint_rollback.svg',
