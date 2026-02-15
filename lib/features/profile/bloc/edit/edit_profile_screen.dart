@@ -114,9 +114,14 @@ class EditProfileScreen extends StatelessWidget {
                             lookingFor:
                                 state.previewProfileModel?.lookingFor ?? "",
                             lookingForCallback: (lookingFor) {
-                              context
-                                  .read<ProfileEditCubit>()
-                                  .updateRelationshipGoal(lookingFor);
+                              showCustomSnackbar(
+                                context,
+                                message: "Preference Can't be updated now",
+                                isError: true,
+                              );
+                              // context
+                              //     .read<ProfileEditCubit>()
+                              //     .updateRelationshipGoal(lookingFor);
                             },
                           ),
 
@@ -126,9 +131,14 @@ class EditProfileScreen extends StatelessWidget {
                           YourPronounsCard(
                             genderPassed: state.previewProfileModel?.gender,
                             pronounsSelected: (pronouns) {
-                              context
-                                  .read<ProfileEditCubit>()
-                                  .updatePronouns(pronouns);
+                              showCustomSnackbar(
+                                context,
+                                message: "Pronouns can't be updated now",
+                                isError: true,
+                              );
+                              // context
+                              //     .read<ProfileEditCubit>()
+                              //     .updatePronouns(pronouns);
                             },
                           ),
 
@@ -173,7 +183,7 @@ class EditProfileScreen extends StatelessWidget {
                             educationSelected: (education) {
                               context
                                   .read<ProfileEditCubit>()
-                                  .updateOccupation(education);
+                                  .updateEducation(education);
                             },
                             heightProvided: (height) {
                               context.read<ProfileEditCubit>().updateHeight(
@@ -188,12 +198,12 @@ class EditProfileScreen extends StatelessWidget {
                             drinkingHabitSelected: (drinking) {
                               context
                                   .read<ProfileEditCubit>()
-                                  .updateWorkoutHabits(drinking);
+                                  .updateDrinkingHabits(drinking);
                             },
                             smokingHabitSelected: (smoking) {
                               context
                                   .read<ProfileEditCubit>()
-                                  .updateWorkoutHabits(smoking);
+                                  .updateSmokingHabits(smoking);
                             },
                           ),
                         ],
