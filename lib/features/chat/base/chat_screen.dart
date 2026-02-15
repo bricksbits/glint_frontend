@@ -5,9 +5,9 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/chat/base/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
 import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
-import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/utils/date_and_time_extensions.dart';
@@ -86,6 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // ------------------------- Stories Section --------------------------- //
                           state.stories != null &&
                                   state.stories?.isNotEmpty == true
                               ? _buildStoriesSection(state.stories!,
@@ -99,6 +100,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                   );
                                 })
                               : const SizedBox.shrink(),
+
+                          // ------------------------- Recent Matches Section --------------------------- //
+
                           _buildRecentMatchesSection(state.recentMatches ?? [],
                               (match) {
                             context.pushNamed(
@@ -127,13 +131,20 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ),
                           ),
+
+                          // ------------------------- Recent Matches Section --------------------------- //
+
                           state.channelListController != null &&
                                   state.isChatReady
                               ? Expanded(
                                   child: StreamChannelListView(
                                     controller: state.channelListController!,
-                                    itemBuilder: (context, channels, index,
-                                        defaultTile) {
+                                    itemBuilder: (
+                                      context,
+                                      channels,
+                                      index,
+                                      defaultTile,
+                                    ) {
                                       final currentUserId =
                                           StreamChat.of(context)
                                               .currentUser!
@@ -171,16 +182,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 .state
                                                 ?.unreadCount ??
                                             0;
-                                        final myUserId = StreamChat.of(context)
-                                                .currentUser
-                                                ?.id ??
-                                            0;
 
                                         // // Determine if the last message was sent by the opposite user and is unread
                                         final isUnreadFromOtherUser =
                                             lastMessage != null &&
                                                 lastMessage.user?.id !=
-                                                    myUserId &&
+                                                    currentUserId &&
                                                 unreadCount > 0;
 
                                         return ListTile(
@@ -236,7 +243,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                         ),
                                                         image: DecorationImage(
                                                           image: AssetImage(
-                                                              'lib/assets/images/temp_place_holder.png'),
+                                                            'lib/assets/images/temp_place_holder.png',
+                                                          ),
                                                         ),
                                                       ),
                                                     ),

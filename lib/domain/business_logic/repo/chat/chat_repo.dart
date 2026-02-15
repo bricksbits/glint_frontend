@@ -12,4 +12,6 @@ abstract class ChatRepo {
   void disposeRecentChatStream();
 
   Stream<Result<List<RecentMatchesModel>>> recentMatchesStreamGetter();
+
+  Future<Result<void>> connectToServer();
 }

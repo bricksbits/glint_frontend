@@ -6,10 +6,10 @@ import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart'
 
 abstract class ChatWithRepo {
   Future<Result<void>> sendTextMessage(
-    StreamChatClient client,
-    Channel channel,
-    String message,
-  );
+    String channelId,
+    String message, {
+    bool isReplyingToStory = true,
+  });
 
   Future<Result<void>> sendOneTimeImageMessage();
 

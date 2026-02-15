@@ -6,7 +6,7 @@ import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/di/injection.dart';
-import 'package:glint_frontend/features/chat/chat_screen.dart';
+import 'package:glint_frontend/features/chat/base/chat_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_screen.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
 import 'package:glint_frontend/features/profile/profile_screen.dart';

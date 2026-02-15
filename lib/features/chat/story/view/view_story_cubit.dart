@@ -21,11 +21,14 @@ class ViewStoryCubit extends Cubit<ViewStoryState> {
   ViewStoryCubit() : super(const ViewStoryState.initial());
 
   Future<void> replyToStory(
-    StreamChatClient client,
-    Channel channel,
+    String channelId,
     String message,
   ) async {
-    await chatWithRepo.sendTextMessage(client, channel, message);
+    await chatWithRepo.sendTextMessage(
+      channelId,
+      message,
+      isReplyingToStory: true,
+    );
   }
 
   Future<void> likeOtherStory(

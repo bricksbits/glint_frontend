@@ -19,6 +19,7 @@ import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/auth/register_user_request.dart';
 import 'package:glint_frontend/domain/business_logic/repo/auth/authentication_repo.dart';
 import 'package:glint_frontend/domain/business_logic/repo/boarding/on_boarding_repo.dart';
+import 'package:glint_frontend/domain/business_logic/repo/chat/chat_repo.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
@@ -29,12 +30,14 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
   final ProfileDao profileDao;
   final MembershipDao membershipDao;
+  final ChatRepo chatRepo;
 
   AuthenticationRepoImpl(
     this.httpClient,
     this.sharedPreferenceHelper,
     this.profileDao,
     this.membershipDao,
+    this.chatRepo,
   );
 
   @override
@@ -87,13 +90,16 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
             final refreshToken = successResponse.data?.refreshToken;
             final streamToken = successResponse.data?.streamAuthToken;
             final userId = successResponse.data?.userId;
+            final userImageUrl =
+                successResponse.data?.pictureUrlList?.firstOrNull?.presignedUrl;
+
             await sharedPreferenceHelper.saveUserData(
               accessToken,
               refreshToken,
               streamToken,
               userId.toString(),
               null,
-              null,
+              userImageUrl,
             );
 
             await sharedPreferenceHelper
@@ -103,6 +109,8 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
               SharedPreferenceKeys.adminUserEmailKey,
               loginRequestBody.email ?? "",
             );
+
+            chatRepo.connectToServer();
 
             return Success(successResponse);
           } else {

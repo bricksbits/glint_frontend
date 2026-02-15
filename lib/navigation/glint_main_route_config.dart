@@ -12,11 +12,12 @@ import 'package:glint_frontend/features/auth/blocs/reset_password/reset_password
 import 'package:glint_frontend/features/auth/create_account_screen.dart';
 import 'package:glint_frontend/features/auth/login_screen.dart';
 import 'package:glint_frontend/features/auth/starter_screen.dart';
-import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
-import 'package:glint_frontend/features/chat/chat_with_screen.dart';
-import 'package:glint_frontend/features/chat/chat_with_video_call_screen.dart';
-import 'package:glint_frontend/features/chat/confirm_ticket_screen.dart';
-import 'package:glint_frontend/features/chat/get_ticket_screen.dart';
+import 'package:glint_frontend/features/chat/base/chat_screen_cubit.dart';
+import 'package:glint_frontend/features/chat/chat_with/chat_with_cubit.dart';
+import 'package:glint_frontend/features/chat/chat_with/chat_with_screen.dart';
+import 'package:glint_frontend/features/chat/misc/chat_with_video_call_screen.dart';
+import 'package:glint_frontend/features/chat/misc/confirm_ticket_screen.dart';
+import 'package:glint_frontend/features/chat/misc/get_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
 import 'package:glint_frontend/features/chat/oneTimeView/one_time_view_screen.dart';
 import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.dart';
@@ -49,7 +50,7 @@ import '../features/admin/screen/admin_track_specific_event.dart';
 import '../features/admin/screen/track_event_interested_people_screen.dart';
 import '../features/admin/screen/track_event_tickets_bought_screen.dart';
 import '../features/auth/blocs/register/register_cubit.dart';
-import '../features/chat/chat_screen.dart';
+import '../features/chat/base/chat_screen.dart';
 import '../features/chat/story/model/view_story_model.dart';
 import '../features/home/home_screen.dart';
 import '../utils/user_info/user_info_manager_cubit.dart';
@@ -147,8 +148,11 @@ final glintMainRoutes = GoRouter(
                 child: Text("Chat Servers went out"),
               );
             }
-            return ChatWithScreen(
-              chatWithNavArguments: passedArguments,
+            return BlocProvider(
+              create: (context) => ChatWithCubit(),
+              child: ChatWithScreen(
+                chatWithNavArguments: passedArguments,
+              ),
             );
           },
         ),

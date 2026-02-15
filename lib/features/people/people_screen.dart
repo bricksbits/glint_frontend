@@ -64,21 +64,11 @@ class _PeopleScreenState extends State<PeopleScreen> {
           }
 
           return CardSwiper(
-            // ── Stability ────────────────────────────────────────────────────────
-            // A constant key — never rebuild this widget from scratch.
-            // Undo is handled by controller.undo(), NOT by toggling a ValueKey.
             key: const ValueKey('people_card_swiper'),
-
-            // ── Data ─────────────────────────────────────────────────────────────
             cardsCount: state.displayCards.length,
             initialIndex: state.currentIndex,
-
-            // ── Undo visual config ────────────────────────────────────────────────
             showBackCardOnUndo: true,
-            // Fly-back animation
             numberOfCardsDisplayed: remainingCards >= 2 ? 2 : 1,
-
-            // ── Swipe config ─────────────────────────────────────────────────────
             allowedSwipeDirection: const AllowedSwipeDirection.only(
               left: true,
               right: true,
@@ -120,8 +110,6 @@ class _PeopleScreenState extends State<PeopleScreen> {
             },
 
             // ── Undo callback ─────────────────────────────────────────────────────
-            // The library calls this AFTER playing the fly-back animation.
-            // We just tell the Bloc to decrement its index to stay in sync.
             onUndo: (previousIndex, currentIndex, direction) {
               context
                   .read<PeopleCardsBloc>()
@@ -141,8 +129,6 @@ class _PeopleScreenState extends State<PeopleScreen> {
               return ScrollableProfileView(
                 key: ObjectKey(user.userId),
                 peopleUiModel: user,
-                // Button taps just trigger the controller — identical to a physical swipe.
-                // The controller fires onSwipe, which fires the Bloc event. One path only.
                 onLiked: (_) =>
                     _cardSwiperController.swipe(CardSwiperDirection.right),
                 onDisLiked: (_) =>

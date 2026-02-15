@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/repo/chat/chat_repo.dart';
 import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
+import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
+import 'package:glint_frontend/services/chat_service.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart'
@@ -20,33 +21,26 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart'
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart'
     show Filter, SortOption, Channel;
 
-import '../../data/local/persist/shared_pref_key.dart';
-import '../../domain/business_logic/repo/chat/chat_with_repo.dart';
-import 'story/model/view_story_model.dart';
-
 part 'chat_screen_state.dart';
 
 part 'chat_screen_cubit.freezed.dart';
 
 class ChatScreenCubit extends Cubit<ChatScreenState> {
   final ChatRepo chatRepo = getIt.get<ChatRepo>();
-  final ChatWithRepo chatWithRepo = getIt.get<ChatWithRepo>();
+  final ChatService chatService = getIt.get<ChatService>();
 
-  final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper =
-      getIt.get();
-  final StreamChatClient chatClient = getIt.get<StreamChatClient>();
+  // Stream Managers and Controllers
   StreamSubscription<Result<List<RecentMatchesModel>>>?
       _recentMatchesSubscription;
   late final StreamChannelListController? _channelListController;
-
   late final StreamSubscription? _channelsEventsSubscription;
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
-    _connectToStreamClient();
     _getRecentMatches();
     _observeRecentMatches();
     _checkChatClientStatus();
     _getStories();
+    _setupTheChannelListController(chatService.client);
   }
 
   Future<void> _observeRecentMatches() async {
@@ -74,70 +68,40 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
 
   Future<void> _connectToStreamClient() async {
     updateState(state.copyWith(isLoading: true));
-    final userId = await getUserId();
-    final userToken = await getUserToken(userId);
-    final userName = await getUserName();
-    final userImage = await getUserImage();
-    if (chatClient.wsConnectionStatus == ConnectionStatus.disconnected) {
-      try {
-        await chatClient.connectUser(
-          User(id: userId, name: userName, image: userImage),
-          userToken,
-        );
-        setupTheChannelListController(chatClient, userId);
-      } on StreamChatError catch (streamError) {
-        debugLogger("CHAT", "Stream Error : ${streamError.message}");
-        updateState(state.copyWith(
-          isLoading: false,
-          isChatReady: false,
-          error: "Chat Server went busy, please try again later",
-        ));
+    chatRepo.connectToServer().then((onValue) {
+      switch (onValue) {
+        case Success<void>():
+          _setupTheChannelListController(
+            chatService.client,
+          );
+          updateState(state.copyWith(isLoading: false));
+          break;
+        case Failure<void>():
+          updateState(state.copyWith(
+            isLoading: false,
+            error: onValue.message.toString(),
+          ));
+          break;
       }
-    } else {
-      setupTheChannelListController(chatClient, userId);
-    }
+    });
   }
 
-  Future<String> getUserImage() async {
-    final pic = await sharedPreferenceHelper
-        .getString(SharedPreferenceKeys.userPrimaryPicUrlKey);
-    return pic;
-  }
-
-  Future<String> getUserId() async {
-    final userId =
-        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
-    return userId;
-  }
-
-  Future<String> getUserName() async {
-    final userName = await sharedPreferenceHelper
-        .getString(SharedPreferenceKeys.userNameKey);
-    return userName;
-  }
-
-  Future<String> getUserToken(String userId) async {
-    final userToken = await sharedPreferenceHelper
-        .getString(SharedPreferenceKeys.streamTokenKey);
-    return userToken;
-  }
-
-  void setupTheChannelListController(
+  void _setupTheChannelListController(
     StreamChatClient client,
-    String currentUserId,
   ) {
     _channelListController = StreamChannelListController(
-        client: client,
-        filter: Filter.and([
-          Filter.equal('type', 'messaging'),
-          Filter.in_(
-            'members',
-            [currentUserId],
-          ),
-        ]),
-        channelStateSort: const [SortOption('last_message_at', direction: -1)],
-        limit: 20,
-        presence: true);
+      client: client,
+      filter: Filter.and([
+        Filter.equal('type', 'messaging'),
+        Filter.in_(
+          'members',
+          [chatService.client.state.currentUser?.id ?? "0"],
+        ),
+      ]),
+      channelStateSort: const [SortOption('last_message_at', direction: -1)],
+      limit: 20,
+      presence: true,
+    );
 
     _channelListController?.doInitialLoad().then((_) {
       updateState(
@@ -188,14 +152,6 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     }
   }
 
-  Future<void> replyToStory(
-    StreamChatClient client,
-    Channel channel,
-    String message,
-  ) async {
-    await chatWithRepo.sendTextMessage(client, channel, message);
-  }
-
   @override
   Future<void> close() {
     _channelListController?.dispose();
@@ -206,8 +162,20 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   }
 
   void _checkChatClientStatus() {
-    chatClient.wsConnectionStatusStream.listen((status) {
-      debugLogger("STREAM_CHAT_CONNECTION_STATUS", status.name);
-    });
+    chatService.client.wsConnectionStatusStream.listen(
+      (status) {
+        switch (status) {
+          case ConnectionStatus.connected:
+            debugLogger("STREAM_CHAT_CONNECTION_STATUS", status.name);
+            break;
+          case ConnectionStatus.connecting:
+            debugLogger("STREAM_CHAT_CONNECTION_STATUS", status.name);
+            break;
+          case ConnectionStatus.disconnected:
+            _connectToStreamClient();
+            break;
+        }
+      },
+    );
   }
 }

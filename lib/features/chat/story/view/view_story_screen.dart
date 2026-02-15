@@ -5,7 +5,6 @@ import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/chat/story_comment_like.dart';
-import 'package:glint_frontend/features/chat/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
 import 'package:glint_frontend/features/chat/story/view/view_story_cubit.dart';
 import 'package:story/story_image.dart';
@@ -49,7 +48,6 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final streamClient = StreamChat.of(context).client;
     final stories = widget.passedStories;
     return BlocProvider(
       create: (context) => ViewStoryCubit(),
@@ -168,20 +166,13 @@ class _ViewStoryScreenState extends State<ViewStoryScreen> {
                                             storyCommentTextController,
                                         onCommentSend: () {
                                           if (currentChannel != null) {
-                                            final channel =
-                                                streamClient.channel(
-                                              'messaging',
-                                              id: currentChannel,
-                                            );
                                             context
                                                 .read<ViewStoryCubit>()
                                                 .replyToStory(
-                                                  streamClient,
-                                                  channel,
+                                                  currentChannel!,
                                                   storyCommentTextController
                                                       .text,
                                                 );
-
                                             showCustomSnackbar(context,
                                                 message: "Message Sent");
                                           }

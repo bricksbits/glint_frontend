@@ -11,7 +11,7 @@ import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dar
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../payment/model/payment_argument_model.dart';
+import '../../payment/model/payment_argument_model.dart';
 
 class GetEventTicketScreen extends StatelessWidget {
   const GetEventTicketScreen({

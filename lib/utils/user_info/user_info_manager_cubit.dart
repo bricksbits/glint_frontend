@@ -117,8 +117,11 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
     final channelId = await getSuperDmChannelId(onUserId);
     if (channelId != null) {
       emitNewState(state.copyWith(isLoading: false));
-      final newChannel = client.channel('messaging', id: channelId);
-      chatWithRepo.sendTextMessage(client, newChannel, message);
+      chatWithRepo.sendTextMessage(
+        channelId,
+        message,
+        isReplyingToStory: false,
+      );
       updateSuperDmCountAfterSuccessfulDm();
     }
   }

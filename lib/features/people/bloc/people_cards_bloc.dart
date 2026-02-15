@@ -138,6 +138,7 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
             emit(state.copyWith(
               isFetchingMoreProfile: false,
               hasReachedEnd: true,
+              isLoading: false,
             ));
             return;
           }
