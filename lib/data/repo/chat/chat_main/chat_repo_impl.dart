@@ -17,14 +17,14 @@ import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' as StreamChat;
 
-@Injectable(as: ChatRepo)
+@LazySingleton(as: ChatRepo)
 class ChatRepoImpl extends ChatRepo {
   final MyDioClient httpClient;
   final ChatService chatService;
   final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper;
 
   final _recentMatchesController =
-      StreamController<Result<List<RecentMatchesModel>>>.broadcast();
+      StreamController<Result<List<RecentMatchesModel>>>.broadcast(sync: true);
 
   ChatRepoImpl(
     this.httpClient,
@@ -55,6 +55,8 @@ class ChatRepoImpl extends ChatRepo {
         if (recentMatchesResponse.success &&
             recentMatchesResponse.data != null) {
           final matches = recentMatchesResponse.data!.mapToUiModel();
+          debugLogger("ChatRepo", "Is Recent Match Subscription Listening, ${_recentMatchesController.hasListener}");
+          debugLogger("ChatRepo", "Is Recent Match Subscription Listening, ${_recentMatchesController.isClosed}");
           _recentMatchesController.add(Success(matches));
           break;
         }
@@ -110,15 +112,16 @@ class ChatRepoImpl extends ChatRepo {
         .getString(SharedPreferenceKeys.streamTokenKey);
 
     try {
-      if (!chatService.isConnected) {
+      if (isUserDetailsAvailable(userId, userName, userStreamToken)) {
         await chatService.connectUser(
           userId: userId,
           userName: userName,
           userToken: userStreamToken,
           profileImageUrl: userProfile,
         );
+        return const Result.success('');
       }
-      return const Result.success('');
+      return Failure(Exception(), message: "No User data found");
     } on StreamChat.StreamChatError catch (streamError) {
       const errorMsg = "Stream server initialization failed";
       debugLogger("[ChatRepo]", errorMsg);
@@ -128,5 +131,14 @@ class ChatRepoImpl extends ChatRepo {
           "[ChatRepo]", "Stream chat doesn't initialized, ${exc.toString()}");
       return Failure(exc, message: "Stream chat doesn't initialized");
     }
+  }
+
+  bool isUserDetailsAvailable(
+      String userId, String userName, String userToken) {
+    if (userId.isEmpty || userName.isEmpty || userToken.isEmpty) {
+      return false;
+    }
+
+    return true;
   }
 }

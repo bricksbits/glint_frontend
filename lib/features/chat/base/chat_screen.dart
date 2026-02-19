@@ -5,12 +5,12 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/chat/base/chat_channel_tile.dart';
 import 'package:glint_frontend/features/chat/base/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
 import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
-import 'package:glint_frontend/utils/date_and_time_extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gradient_circular_progress_indicator/gradient_circular_progress_indicator.dart';
 import 'package:intl/intl.dart';
@@ -68,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
           body: RefreshIndicator(
             onRefresh: () async {
               GlintAnalyticService.onRefreshHitEvent();
-              return state.channelListController?.refresh();
+              return context.read<ChatScreenCubit>().chatFacade();
             },
             child: state.isLoading
                 ? const Center(
@@ -132,313 +132,28 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                           ),
 
-                          // ------------------------- Recent Matches Section --------------------------- //
+                          // ------------------------- Chat Channels --------------------------- //
 
                           state.channelListController != null &&
                                   state.isChatReady
                               ? Expanded(
                                   child: StreamChannelListView(
                                     controller: state.channelListController!,
-                                    itemBuilder: (
-                                      context,
-                                      channels,
-                                      index,
-                                      defaultTile,
-                                    ) {
-                                      final currentUserId =
-                                          StreamChat.of(context)
-                                              .currentUser!
-                                              .id;
-                                      final oppositeUser = channels[index]
-                                          .state
-                                          ?.members
-                                          .where(
-                                            (member) =>
-                                                member.user!.id !=
-                                                currentUserId,
-                                          )
-                                          .firstOrNull;
-
-                                      final oppositeUserName =
-                                          oppositeUser?.user!.name;
-                                      final oppositeUserImage =
-                                          oppositeUser?.user?.image;
-
-                                      final messages =
-                                          channels[index].state?.messages;
-                                      if (messages != null &&
-                                          messages.isNotEmpty) {
-                                        final lastMessage = channels[index]
-                                            .state
-                                            ?.messages
-                                            .last;
-                                        final isLastMessageAMedia = lastMessage
-                                                ?.attachments.isNotEmpty ??
-                                            false;
-                                        final lastMessageDate =
-                                            lastMessage?.createdAt ??
-                                                DateTime.now();
-                                        final unreadCount = channels[index]
-                                                .state
-                                                ?.unreadCount ??
-                                            0;
-
-                                        // // Determine if the last message was sent by the opposite user and is unread
-                                        final isUnreadFromOtherUser =
-                                            lastMessage != null &&
-                                                lastMessage.user?.id !=
-                                                    currentUserId &&
-                                                unreadCount > 0;
-
-                                        return ListTile(
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                            vertical: 6.0,
-                                            horizontal: 20.0,
+                                    itemBuilder: (context, channels, index,
+                                        defaultTile) {
+                                      final currentUser =
+                                          StreamChat.of(context).currentUser;
+                                      return ChatChannelTile(
+                                        channel: channels[index],
+                                        currentUserId: currentUser?.id,
+                                        onTap: () => context.pushNamed(
+                                          GlintChatRoutes.chatWith.name,
+                                          extra: ChatWithNavArguments(
+                                            channelId:
+                                                channels[index].id ?? "0",
                                           ),
-                                          leading: Stack(
-                                            clipBehavior: Clip.none,
-                                            alignment: Alignment.center,
-                                            children: [
-                                              oppositeUserImage != null
-                                                  ? SizedBox(
-                                                      height: 52.0,
-                                                      width: 48.0,
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .all(
-                                                          Radius.circular(8.0),
-                                                        ),
-                                                        child: FadeInImage
-                                                            .assetNetwork(
-                                                          placeholder:
-                                                              'lib/assets/images/temp_place_holder.png',
-                                                          // Local placeholder
-                                                          image:
-                                                              oppositeUserImage,
-                                                          fit: BoxFit.cover,
-                                                          width:
-                                                              double.infinity,
-                                                          height: 220,
-                                                          imageErrorBuilder:
-                                                              (context, error,
-                                                                  stackTrace) {
-                                                            return Image.asset(
-                                                              'lib/assets/images/temp_place_holder.png',
-                                                              fit: BoxFit.cover,
-                                                            );
-                                                          },
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : Container(
-                                                      height: 52.0,
-                                                      width: 48.0,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                          Radius.circular(8.0),
-                                                        ),
-                                                        image: DecorationImage(
-                                                          image: AssetImage(
-                                                            'lib/assets/images/temp_place_holder.png',
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                            ],
-                                          ),
-                                          title: Text(
-                                            oppositeUserName ?? "Match user",
-                                            style: AppTheme.simpleBodyText
-                                                .copyWith(
-                                              color: AppColours.black,
-                                            ),
-                                          ),
-                                          subtitle: Text(
-                                            isLastMessageAMedia
-                                                ? "Checkout this Image"
-                                                : lastMessage?.text ??
-                                                    "You got a new msg",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: AppTheme.simpleText.copyWith(
-                                              color: AppColours.darkGray,
-                                            ),
-                                          ),
-                                          trailing: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 5.0),
-                                            child: Column(
-                                              children: [
-                                                if (isUnreadFromOtherUser)
-                                                  // your turn if message received
-                                                  Container(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                      horizontal: 6,
-                                                      vertical: 2.0,
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.black,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              4.0),
-                                                    ),
-                                                    child: Text(
-                                                      'Your Turn',
-                                                      style: AppTheme.simpleText
-                                                          .copyWith(
-                                                        fontSize: 10.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: AppColours.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                const Gap(8.0),
-                                                Text(
-                                                  lastMessageDate
-                                                      .toChatTimestamp(),
-                                                  style: AppTheme.smallBodyText
-                                                      .copyWith(
-                                                    color: AppColours.darkGray,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          onTap: () {
-                                            context.pushNamed(
-                                              GlintChatRoutes.chatWith.name,
-                                              extra: ChatWithNavArguments(
-                                                channelId:
-                                                    channels[index].id ?? "0",
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      } else {
-                                        return ListTile(
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                            vertical: 6.0,
-                                            horizontal: 20.0,
-                                          ),
-                                          leading: Stack(
-                                            clipBehavior: Clip.none,
-                                            alignment: Alignment.center,
-                                            children: [
-                                              oppositeUserImage != null
-                                                  ? SizedBox(
-                                                      height: 52.0,
-                                                      width: 48.0,
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .all(
-                                                          Radius.circular(8.0),
-                                                        ),
-                                                        child: FadeInImage
-                                                            .assetNetwork(
-                                                          placeholder:
-                                                              'lib/assets/images/temp_place_holder.png',
-                                                          // Local placeholder
-                                                          image:
-                                                              oppositeUserImage,
-                                                          fit: BoxFit.cover,
-                                                          width:
-                                                              double.infinity,
-                                                          height: 220,
-                                                          imageErrorBuilder:
-                                                              (context, error,
-                                                                  stackTrace) {
-                                                            return Image.asset(
-                                                              'lib/assets/images/temp_place_holder.png',
-                                                              fit: BoxFit.cover,
-                                                            );
-                                                          },
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : Container(
-                                                      height: 52.0,
-                                                      width: 48.0,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                          Radius.circular(8.0),
-                                                        ),
-                                                        image: DecorationImage(
-                                                          image: AssetImage(
-                                                              'lib/assets/images/temp_place_holder.png'),
-                                                        ),
-                                                      ),
-                                                    ),
-                                            ],
-                                          ),
-                                          title: Text(
-                                            oppositeUserName ?? "Match User",
-                                            style: AppTheme.simpleBodyText
-                                                .copyWith(
-                                              color: AppColours.black,
-                                            ),
-                                          ),
-                                          subtitle: Text(
-                                            "Make your first move,",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: AppTheme.simpleText.copyWith(
-                                              color: AppColours.darkGray,
-                                            ),
-                                          ),
-                                          trailing: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 5.0),
-                                            child: Column(
-                                              children: [
-                                                // your turn if message received
-                                                Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 6,
-                                                    vertical: 2.0,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.black,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4.0),
-                                                  ),
-                                                  child: Text(
-                                                    'Your Turn',
-                                                    style: AppTheme.simpleText
-                                                        .copyWith(
-                                                      fontSize: 10.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: AppColours.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                                const Gap(8.0),
-                                              ],
-                                            ),
-                                          ),
-                                          onTap: () {
-                                            context.pushNamed(
-                                              GlintChatRoutes.chatWith.name,
-                                              extra: ChatWithNavArguments(
-                                                channelId:
-                                                    channels[index].id ?? "0",
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      }
+                                        ),
+                                      );
                                     },
                                   ),
                                 )

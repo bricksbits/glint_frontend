@@ -9,7 +9,6 @@ import 'package:glint_frontend/design/components/chat/get_ticket_gradient_view.d
 import 'package:glint_frontend/features/chat/chat_with/chat_with_cubit.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
-import 'package:glint_frontend/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -257,12 +256,14 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                             ),
                           );
 
+                          /// Stream doesn't allow others message to get update by current user.
+                          /// Backend Dependency
                           // Mark as viewed using your chosen method
-                          context
-                              .read<ChatWithCubit>()
-                              .markTheOneTimeViewImageAsViewed(
-                                message,
-                              );
+                          // context
+                          //     .read<ChatWithCubit>()
+                          //     .markTheOneTimeViewImageAsViewed(
+                          //       message,
+                          //     );
                         },
                         oneTimeViewPhotoLabel: oneTimePhotoLabel,
                       )

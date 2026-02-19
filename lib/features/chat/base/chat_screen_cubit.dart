@@ -36,11 +36,22 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   late final StreamSubscription? _channelsEventsSubscription;
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
+    chatFacade();
+  }
+
+  void chatFacade() async {
     _getRecentMatches();
     _observeRecentMatches();
     _checkChatClientStatus();
     _getStories();
-    _setupTheChannelListController(chatService.client);
+    setupTheChannelListController();
+  }
+
+  bool _isChatConnected() {
+    final isChatConnected = chatService.isConnected;
+    debugLogger(
+        "ChatScreenCubit", "Is Chat Server connected, $isChatConnected");
+    return isChatConnected;
   }
 
   Future<void> _observeRecentMatches() async {
@@ -67,30 +78,30 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   }
 
   Future<void> _connectToStreamClient() async {
-    updateState(state.copyWith(isLoading: true));
-    chatRepo.connectToServer().then((onValue) {
-      switch (onValue) {
-        case Success<void>():
-          _setupTheChannelListController(
-            chatService.client,
-          );
-          updateState(state.copyWith(isLoading: false));
-          break;
-        case Failure<void>():
-          updateState(state.copyWith(
-            isLoading: false,
-            error: onValue.message.toString(),
-          ));
-          break;
-      }
-    });
+    if (!_isChatConnected()) {
+      chatRepo.connectToServer().then((onValue) {
+        switch (onValue) {
+          case Success<void>():
+            setupTheChannelListController();
+            updateState(state.copyWith(isLoading: false));
+            break;
+          case Failure<void>():
+            updateState(state.copyWith(
+              isLoading: false,
+              error: onValue.message.toString(),
+            ));
+            break;
+        }
+      });
+    }
   }
 
-  void _setupTheChannelListController(
-    StreamChatClient client,
-  ) {
+  void setupTheChannelListController() {
+    if (!_isChatConnected()) {
+      return;
+    }
     _channelListController = StreamChannelListController(
-      client: client,
+      client: chatService.client,
       filter: Filter.and([
         Filter.equal('type', 'messaging'),
         Filter.in_(
@@ -113,7 +124,7 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
       );
     });
 
-    _channelsEventsSubscription = client.on().listen((event) {
+    _channelsEventsSubscription = chatService.client.on().listen((event) {
       if (event.type == EventType.messageNew ||
           event.type == EventType.notificationMessageNew ||
           event.type == EventType.channelUpdated ||

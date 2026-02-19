@@ -90,6 +90,7 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
             final refreshToken = successResponse.data?.refreshToken;
             final streamToken = successResponse.data?.streamAuthToken;
             final userId = successResponse.data?.userId;
+            final userName = successResponse.data?.username;
             final userImageUrl =
                 successResponse.data?.pictureUrlList?.firstOrNull?.presignedUrl;
 
@@ -98,7 +99,7 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
               refreshToken,
               streamToken,
               userId.toString(),
-              null,
+              userName,
               userImageUrl,
             );
 
@@ -110,7 +111,7 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
               loginRequestBody.email ?? "",
             );
 
-            chatRepo.connectToServer();
+            await chatRepo.connectToServer();
 
             return Success(successResponse);
           } else {

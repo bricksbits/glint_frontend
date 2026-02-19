@@ -92,10 +92,6 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
       final newState = event.passedState;
       emit(newState);
     });
-
-    on<_ConnectToStreamClient>((event, emit) {
-      _connectToStreamClient();
-    });
   }
 
   void emitStates(SplashScreenState states) {}

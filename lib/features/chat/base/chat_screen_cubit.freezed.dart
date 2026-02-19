@@ -24,7 +24,8 @@ mixin _$ChatScreenState {
   StreamChannelListController? get channelListController =>
       throw _privateConstructorUsedError; // For Stories
   List<ViewStoryModel>? get stories => throw _privateConstructorUsedError;
-  int? get selectedIndex => throw _privateConstructorUsedError;
+  int? get selectedIndex => throw _privateConstructorUsedError; // For Chat
+  User? get currentUser => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -34,7 +35,8 @@ mixin _$ChatScreenState {
             List<RecentMatchesModel>? recentMatches,
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
-            int? selectedIndex)
+            int? selectedIndex,
+            User? currentUser)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -47,7 +49,8 @@ mixin _$ChatScreenState {
             List<RecentMatchesModel>? recentMatches,
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
-            int? selectedIndex)?
+            int? selectedIndex,
+            User? currentUser)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -60,7 +63,8 @@ mixin _$ChatScreenState {
             List<RecentMatchesModel>? recentMatches,
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
-            int? selectedIndex)?
+            int? selectedIndex,
+            User? currentUser)?
         initial,
     required TResult orElse(),
   }) =>
@@ -102,7 +106,8 @@ abstract class $ChatScreenStateCopyWith<$Res> {
       List<RecentMatchesModel>? recentMatches,
       StreamChannelListController? channelListController,
       List<ViewStoryModel>? stories,
-      int? selectedIndex});
+      int? selectedIndex,
+      User? currentUser});
 }
 
 /// @nodoc
@@ -127,6 +132,7 @@ class _$ChatScreenStateCopyWithImpl<$Res, $Val extends ChatScreenState>
     Object? channelListController = freezed,
     Object? stories = freezed,
     Object? selectedIndex = freezed,
+    Object? currentUser = freezed,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -157,6 +163,10 @@ class _$ChatScreenStateCopyWithImpl<$Res, $Val extends ChatScreenState>
           ? _value.selectedIndex
           : selectedIndex // ignore: cast_nullable_to_non_nullable
               as int?,
+      currentUser: freezed == currentUser
+          ? _value.currentUser
+          : currentUser // ignore: cast_nullable_to_non_nullable
+              as User?,
     ) as $Val);
   }
 }
@@ -176,7 +186,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       List<RecentMatchesModel>? recentMatches,
       StreamChannelListController? channelListController,
       List<ViewStoryModel>? stories,
-      int? selectedIndex});
+      int? selectedIndex,
+      User? currentUser});
 }
 
 /// @nodoc
@@ -199,6 +210,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? channelListController = freezed,
     Object? stories = freezed,
     Object? selectedIndex = freezed,
+    Object? currentUser = freezed,
   }) {
     return _then(_$InitialImpl(
       isLoading: null == isLoading
@@ -229,6 +241,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.selectedIndex
           : selectedIndex // ignore: cast_nullable_to_non_nullable
               as int?,
+      currentUser: freezed == currentUser
+          ? _value.currentUser
+          : currentUser // ignore: cast_nullable_to_non_nullable
+              as User?,
     ));
   }
 }
@@ -243,7 +259,8 @@ class _$InitialImpl implements _Initial {
       final List<RecentMatchesModel>? recentMatches = null,
       this.channelListController = null,
       final List<ViewStoryModel>? stories = null,
-      this.selectedIndex = null})
+      this.selectedIndex = null,
+      this.currentUser = null})
       : _recentMatches = recentMatches,
         _stories = stories;
 
@@ -288,10 +305,14 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final int? selectedIndex;
+// For Chat
+  @override
+  @JsonKey()
+  final User? currentUser;
 
   @override
   String toString() {
-    return 'ChatScreenState.initial(isLoading: $isLoading, isChatReady: $isChatReady, error: $error, recentMatches: $recentMatches, channelListController: $channelListController, stories: $stories, selectedIndex: $selectedIndex)';
+    return 'ChatScreenState.initial(isLoading: $isLoading, isChatReady: $isChatReady, error: $error, recentMatches: $recentMatches, channelListController: $channelListController, stories: $stories, selectedIndex: $selectedIndex, currentUser: $currentUser)';
   }
 
   @override
@@ -310,7 +331,9 @@ class _$InitialImpl implements _Initial {
                 other.channelListController == channelListController) &&
             const DeepCollectionEquality().equals(other._stories, _stories) &&
             (identical(other.selectedIndex, selectedIndex) ||
-                other.selectedIndex == selectedIndex));
+                other.selectedIndex == selectedIndex) &&
+            (identical(other.currentUser, currentUser) ||
+                other.currentUser == currentUser));
   }
 
   @override
@@ -322,7 +345,8 @@ class _$InitialImpl implements _Initial {
       const DeepCollectionEquality().hash(_recentMatches),
       channelListController,
       const DeepCollectionEquality().hash(_stories),
-      selectedIndex);
+      selectedIndex,
+      currentUser);
 
   /// Create a copy of ChatScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -342,11 +366,12 @@ class _$InitialImpl implements _Initial {
             List<RecentMatchesModel>? recentMatches,
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
-            int? selectedIndex)
+            int? selectedIndex,
+            User? currentUser)
         initial,
   }) {
     return initial(isLoading, isChatReady, error, recentMatches,
-        channelListController, stories, selectedIndex);
+        channelListController, stories, selectedIndex, currentUser);
   }
 
   @override
@@ -359,11 +384,12 @@ class _$InitialImpl implements _Initial {
             List<RecentMatchesModel>? recentMatches,
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
-            int? selectedIndex)?
+            int? selectedIndex,
+            User? currentUser)?
         initial,
   }) {
     return initial?.call(isLoading, isChatReady, error, recentMatches,
-        channelListController, stories, selectedIndex);
+        channelListController, stories, selectedIndex, currentUser);
   }
 
   @override
@@ -376,13 +402,14 @@ class _$InitialImpl implements _Initial {
             List<RecentMatchesModel>? recentMatches,
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
-            int? selectedIndex)?
+            int? selectedIndex,
+            User? currentUser)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
       return initial(isLoading, isChatReady, error, recentMatches,
-          channelListController, stories, selectedIndex);
+          channelListController, stories, selectedIndex, currentUser);
     }
     return orElse();
   }
@@ -424,7 +451,8 @@ abstract class _Initial implements ChatScreenState {
       final List<RecentMatchesModel>? recentMatches,
       final StreamChannelListController? channelListController,
       final List<ViewStoryModel>? stories,
-      final int? selectedIndex}) = _$InitialImpl;
+      final int? selectedIndex,
+      final User? currentUser}) = _$InitialImpl;
 
   @override
   bool get isLoading;
@@ -439,7 +467,9 @@ abstract class _Initial implements ChatScreenState {
   @override
   List<ViewStoryModel>? get stories;
   @override
-  int? get selectedIndex;
+  int? get selectedIndex; // For Chat
+  @override
+  User? get currentUser;
 
   /// Create a copy of ChatScreenState
   /// with the given fields replaced by the non-null parameter values.

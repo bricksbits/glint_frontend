@@ -82,7 +82,7 @@ class ChatService {
 
   Future<void> disconnectUser() async {
     await client.disconnectUser(
-      flushChatPersistence: true,
+      flushChatPersistence: false,
     );
     await persistenceClient.disconnect();
   }

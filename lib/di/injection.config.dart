@@ -97,7 +97,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => localModule.sharedPref(),
       preResolve: true,
     );
-    gh.factory<_i43.ImageService>(() => _i43.ImageService());
     gh.singleton<_i361.Dio>(() => networkModule.getHttpClientInstance());
     gh.singleton<_i981.StreamChatClient>(() => networkModule.chatClient());
     gh.singleton<_i205.StreamChatPersistenceClient>(
@@ -108,6 +107,7 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i141.UserInfoManagerCubit>(
         () => _i141.UserInfoManagerCubit());
+    gh.lazySingleton<_i43.ImageService>(() => _i43.ImageService());
     gh.lazySingleton<_i700.LocationPermissionService>(
         () => _i700.LocationPermissionService());
     gh.singleton<_i719.ProfileDao>(
@@ -163,26 +163,18 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
-    gh.factory<_i235.PaymentRepo>(
+    gh.lazySingleton<_i235.PaymentRepo>(
         () => _i854.PaymentRepoImpl(gh<_i368.MyDioClient>()));
     gh.lazySingleton<_i678.PeopleRepo>(() => _i955.PeopleRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           gh<_i719.ProfileDao>(),
         ));
-    gh.lazySingleton<_i662.ProfileRepo>(() => _i548.ProfileRepoImpl(
-          httpClient: gh<_i368.MyDioClient>(),
-          sharedPreferenceHelper:
-              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
-          profileDao: gh<_i719.ProfileDao>(),
-          membershipDao: gh<_i1011.MembershipDao>(),
-          imageService: gh<_i43.ImageService>(),
-        ));
     gh.lazySingleton<_i38.ChatWithRepo>(() => _i112.ChatWithRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i698.ChatService>(),
         ));
-    gh.factory<_i849.ChatRepo>(() => _i651.ChatRepoImpl(
+    gh.lazySingleton<_i849.ChatRepo>(() => _i651.ChatRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i698.ChatService>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
@@ -206,10 +198,6 @@ extension GetItInjectableX on _i174.GetIt {
           imageService: gh<_i43.ImageService>(),
           chatService: gh<_i698.ChatService>(),
         ));
-    gh.factory<_i972.SignInUserUseCase>(() => _i972.SignInUserUseCase(
-          gh<_i873.AuthenticationRepo>(),
-          gh<_i662.ProfileRepo>(),
-        ));
     gh.factory<_i786.SendOtpUseCase>(
         () => _i786.SendOtpUseCase(gh<_i995.ForgotPasswordRepo>()));
     gh.factory<_i804.ResetPasswordWithOtpUseCase>(() =>
@@ -232,6 +220,19 @@ extension GetItInjectableX on _i174.GetIt {
         _i907.GetAllTicketBoughtUsersUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i386.GetAllInterestedUsersUseCase>(() =>
         _i386.GetAllInterestedUsersUseCase(gh<_i1000.AdminDashboardRepo>()));
+    gh.lazySingleton<_i662.ProfileRepo>(() => _i548.ProfileRepoImpl(
+          httpClient: gh<_i368.MyDioClient>(),
+          sharedPreferenceHelper:
+              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+          profileDao: gh<_i719.ProfileDao>(),
+          membershipDao: gh<_i1011.MembershipDao>(),
+          imageService: gh<_i43.ImageService>(),
+          chatRepo: gh<_i849.ChatRepo>(),
+        ));
+    gh.lazySingleton<_i972.SignInUserUseCase>(() => _i972.SignInUserUseCase(
+          gh<_i873.AuthenticationRepo>(),
+          gh<_i662.ProfileRepo>(),
+        ));
     return this;
   }
 }

@@ -16,7 +16,7 @@ import 'package:glint_frontend/features/payment/model/payment_argument_model.dar
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: PaymentRepo)
+@LazySingleton(as: PaymentRepo)
 class PaymentRepoImpl extends PaymentRepo {
   final MyDioClient httpClient;
 

@@ -409,8 +409,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             successResponse.signature != null) {
           context.read<PaymentCubit>().updateTheMembershipDetails();
           showCustomSnackbar(context, message: "Payment Successful");
-          context.pop();
-          context.pushNamed(GlintMainRoutes.home.name);
+          context.goNamed(GlintMainRoutes.home.name);
         }
       }
     } else {
