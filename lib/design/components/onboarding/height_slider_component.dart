@@ -17,7 +17,7 @@ class _HeightInputComponentState extends State<HeightInputComponent> {
   static const double maxHeightInches = 96.0;
 
   // Default to 5'6"
-  double _totalInches = 0.0;
+  double _totalInches = 48.0;
 
   String _formatHeight(double totalInches) {
     final int inches = totalInches.round();
