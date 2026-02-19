@@ -422,6 +422,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.3"
+  drift:
+    dependency: transitive
+    description:
+      name: drift
+      sha256: "970cd188fddb111b26ea6a9b07a62bf5c2432d74147b8122c67044ae3b97e99e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.31.0"
   encrypt:
     dependency: transitive
     description:
@@ -711,10 +719,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_card_swiper
-      sha256: "1eacbfab31b572223042e03409726553aec431abe48af48c8d591d376d070d3d"
+      sha256: "895c6974729b51cf73a35f1b58ab57a0af3293131319e2cbccac3bc57ffcd69f"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.2"
+    version: "7.2.0"
   flutter_dotenv:
     dependency: "direct main"
     description:
@@ -1959,6 +1967,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.7.2"
+  sqlite3_flutter_libs:
+    dependency: transitive
+    description:
+      name: sqlite3_flutter_libs
+      sha256: "1e800ebe7f85a80a66adacaa6febe4d5f4d8b75f244e9838a27cb2ffc7aec08d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.41"
   sqlparser:
     dependency: transitive
     description:
@@ -2020,6 +2036,14 @@ packages:
     description:
       name: stream_chat_localizations
       sha256: "3bf991266facfd9ceff3d57ec499f61fd8a10e1f474188fb9acdb91de7682276"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.8.0"
+  stream_chat_persistence:
+    dependency: "direct main"
+    description:
+      name: stream_chat_persistence
+      sha256: "5024ec7560558580762836ae915ecf00ab5185d5baed81dd41fdc00a48cdd05e"
       url: "https://pub.dev"
     source: hosted
     version: "9.8.0"

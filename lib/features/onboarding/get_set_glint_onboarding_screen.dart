@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -97,6 +98,11 @@ class _GetSetGlintOnboardingScreenState
                             .validateIfRelationGoalsProvidedOrNot()) {
                           final target = GlintBoardingRoutes.interests.name;
                           context.go("/$target");
+                        } else {
+                          showCustomSnackbar(
+                            context,
+                            message: "Select an option first",
+                          );
                         }
                       },
                     ),

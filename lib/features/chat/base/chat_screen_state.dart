@@ -14,5 +14,8 @@ class ChatScreenState with _$ChatScreenState {
     // For Stories
     @Default(null) List<ViewStoryModel>? stories,
     @Default(null) int? selectedIndex,
+
+    // For Chat
+    @Default(null) User? currentUser,
   }) = _Initial;
 }

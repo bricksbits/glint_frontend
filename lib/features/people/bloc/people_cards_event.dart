@@ -17,4 +17,6 @@ class PeopleCardsEvent with _$PeopleCardsEvent {
   const factory PeopleCardsEvent.onActionHappened(String passedId) = _OnActionHappened;
   const factory PeopleCardsEvent.emptyCardList() = _EmptyCardList;
   const factory PeopleCardsEvent.undo() = _UndoCard;
+  const factory PeopleCardsEvent.appendProfilesFromDb() = _AppendProfilesFromDb;
+  const factory PeopleCardsEvent.setupSwipeController(CardSwiperController controller) = _SetUpSwipeController;
 }

@@ -14,6 +14,7 @@ import 'package:glint_frontend/data/remote/model/response/profile/its_me_body_ma
 import 'package:glint_frontend/data/remote/model/response/profile/its_me_response_body.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
+import 'package:glint_frontend/domain/business_logic/repo/chat/chat_repo.dart';
 import 'package:glint_frontend/domain/business_logic/repo/profile/profile_repo.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
@@ -27,6 +28,7 @@ class ProfileRepoImpl extends ProfileRepo {
   final ProfileDao profileDao;
   final MembershipDao membershipDao;
   final ImageService imageService;
+  final ChatRepo chatRepo;
 
   ProfileRepoImpl({
     required this.httpClient,
@@ -34,6 +36,7 @@ class ProfileRepoImpl extends ProfileRepo {
     required this.profileDao,
     required this.membershipDao,
     required this.imageService,
+    required this.chatRepo,
   });
 
   @override
@@ -169,7 +172,9 @@ class ProfileRepoImpl extends ProfileRepo {
       case Success():
         final itsMeBody = ItsMeResponseBody.fromJson(getProfileAsResponse.data);
         if (itsMeBody.success == true && itsMeBody.data != null) {
-          cacheUserProfile(itsMeBody);
+          await cacheUserProfile(itsMeBody);
+          // When profile updates, Connect with new data
+          await chatRepo.connectToServer();
           return Success("");
         } else {
           return Failure(Exception(itsMeBody.message),

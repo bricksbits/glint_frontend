@@ -2,7 +2,7 @@ name: glint_frontend
 description: "FE works for the Glint Products"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.0.3+3
+version: 0.1.1+5
 
 environment:
   sdk: ^3.5.4
@@ -18,7 +18,7 @@ dependencies:
   flutter_svg: ^2.0.16
   cached_network_image: ^3.4.1
   flutter_xlider: ^3.5.0
-  flutter_card_swiper: ^7.0.2
+  flutter_card_swiper: ^7.2.0
   bottom_picker: ^2.9.0
   dotted_line: ^3.2.3
   image_picker: ^1.1.2
@@ -26,6 +26,7 @@ dependencies:
   carousel_slider: ^5.0.0
   stream_chat_flutter: ^9.2.0+1
   stream_chat_flutter_core: ^9.2.0
+  stream_chat_persistence: ^9.2.0+1
   story: ^1.1.0
   pinput: ^5.0.1
   dio: ^5.8.0+1

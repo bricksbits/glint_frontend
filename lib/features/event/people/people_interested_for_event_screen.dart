@@ -77,6 +77,8 @@ class _PeopleInterestedForEventScreenState
                             } else {
                               return false;
                             }
+
+                            return true;
                           },
                           controller: cardSwiperController,
                           numberOfCardsDisplayed: state.displayCards.length,

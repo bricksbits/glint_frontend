@@ -11,7 +11,7 @@ import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@lazySingleton
 class SignInUserUseCase extends UseCase<Result<UsersType>, LoginRequestBody> {
   final AuthenticationRepo authenticationRepo;
   final ProfileRepo profileRepo;

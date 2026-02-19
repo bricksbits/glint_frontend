@@ -11,10 +11,11 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 import '../utils/image_manager/image_manager_data.dart';
 
-@injectable
+@lazySingleton
 class ImageService {
   final ImagePicker _picker = ImagePicker();
 
+  /// -------------------- PICK IMAGE FOR PROFILE ------------------------ ///
   Future<List<ImageManagerData>> pickImages({int currentImageCount = 0}) async {
     // Can't select more than 9 images,
     if(currentImageCount >= 9){
@@ -114,38 +115,7 @@ class ImageService {
     }
   }
 
-  Future<List<ImageManagerData>> getCurrentProfileImages() async {
-    try {
-      final directory = await _getProfileImagesDirectory();
-
-      if (!await directory.exists()) {
-        return [];
-      }
-
-      final files = directory
-          .listSync()
-          .whereType<File>()
-          .where((file) => file.path.contains(RegExp(r'picture_\d+\.jpg')))
-          .toList();
-
-      files.sort((a, b) {
-        final numA = _extractPictureNum(a.path);
-        final numB = _extractPictureNum(b.path);
-        return numA.compareTo(numB);
-      });
-
-      return files
-          .map((file) => ImageManagerData(
-                name: p.basename(file.path),
-                file: file,
-              ))
-          .toList();
-    } catch (e) {
-      debugLogger("IMAGE_SERVICE", "Error getting current profile images: $e");
-      return [];
-    }
-  }
-
+  /// --------------------------- STORY Feature --------------------------- ///
   Future<ImageManagerData?> pickStory(
     String userId,
   ) async {
@@ -198,7 +168,6 @@ class ImageService {
     return storyDir;
   }
 
-// Extract story number from filename (FIXED REGEX)
   int _extractStoryNum(String path) {
     // Changed from picture_(\d+) to story_(\d+)
     final match = RegExp(r'story_(\d+)_\d+\.jpg').firstMatch(path);

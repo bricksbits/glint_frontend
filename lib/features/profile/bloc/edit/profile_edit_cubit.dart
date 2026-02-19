@@ -142,7 +142,17 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
     }
   }
 
-  void updateRelationshipGoal(String newGoal) {}
+  void updateRelationshipGoal(String newGoal) {
+    final updatedModelWithRelationShipGoal =
+        state.previewProfileModel?.copyWith(
+      lookingFor: newGoal,
+    );
+    emitNewState(
+        state.copyWith(previewProfileModel: updatedModelWithRelationShipGoal));
+    if (updatedModelWithRelationShipGoal != null) {
+      updateProfileLocally(updatedModelWithRelationShipGoal);
+    }
+  }
 
   void updatePronouns(String newPronoun) {}
 

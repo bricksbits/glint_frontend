@@ -28,217 +28,174 @@ class _PeopleScreenState extends State<PeopleScreen> {
 
   @override
   void initState() {
-    context.read<PeopleCardsBloc>().setCardController(_cardSwiperController);
+    context.read<PeopleCardsBloc>().add(
+          PeopleCardsEvent.setupSwipeController(_cardSwiperController),
+        );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final streamClient = StreamChat.of(context).client;
-    return BlocListener<PeopleCardsBloc, PeopleCardsState>(
-      listenWhen: (pre, curr) => curr.error.isNotEmpty,
-      listener: (context, state) {
-        showCustomSnackbar(
-          context,
-          message: state.error,
-          isError: true,
-        );
-      },
-      child: BlocBuilder<PeopleCardsBloc, PeopleCardsState>(
+    return Scaffold(
+      body: BlocConsumer<PeopleCardsBloc, PeopleCardsState>(
+        // Error changes (e.g. "nothing to undo") should NOT trigger a rebuild.
+        buildWhen: (prev, curr) =>
+            prev.displayCards != curr.displayCards ||
+            prev.currentIndex != curr.currentIndex ||
+            prev.isLoading != curr.isLoading,
+
+        listenWhen: (prev, curr) =>
+            curr.error != null && prev.error != curr.error,
+        listener: (context, state) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.error!)),
+          );
+        },
+
         builder: (context, state) {
-          return state.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : state.displayCards.isEmpty
-                  ? _showEmptyState(context)
-                  : CardSwiper(
-                      key: ValueKey(state.lastActionWasUndo),
-                      cardsCount: state.displayCards.length,
-                      allowedSwipeDirection: const AllowedSwipeDirection.only(
-                        left: true,
-                        right: true,
-                        up: true,
-                        down: false,
-                      ),
-                      controller: _cardSwiperController,
-                      isLoop: false,
-                      numberOfCardsDisplayed:
-                          state.displayCards.length >= 2 ? 2 : 1,
-                      onSwipe: (prevIndex, currentIndex, swipeDirection) {
-                        // Use prevIndex to get the model of the card that was just swiped
-                        final prevSwipedCard = state.displayCards[prevIndex];
+          final remainingCards = state.displayCards.length - state.currentIndex;
+          if (state.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-                        switch (swipeDirection) {
-                          case CardSwiperDirection.none:
-                            return false;
-                          case CardSwiperDirection.left:
-                            GlintAnalyticService.onCardActionEvent(
-                              GlintSwipeGestureAnalyticsEvents.LEFT,
-                              false,
-                            );
-                            context.read<PeopleCardsBloc>().add(
-                                  PeopleCardsEvent.onLeftSwiped(
-                                    prevSwipedCard.userId,
-                                  ),
-                                );
-                            break;
-                          case CardSwiperDirection.right:
-                            GlintAnalyticService.onCardActionEvent(
-                              GlintSwipeGestureAnalyticsEvents.RIGHT,
-                              false,
-                            );
-                            context.read<PeopleCardsBloc>().add(
-                                  PeopleCardsEvent.onRightSwiped(
-                                      prevSwipedCard.userId),
-                                );
-                            break;
-                          case CardSwiperDirection.top:
-                            return _superLikeUser(
-                              context,
-                              prevSwipedCard.userId,
-                            );
-                          case CardSwiperDirection.bottom:
-                            return false;
-                        }
+          if (remainingCards == 0) {
+            return _showEmptyState(context);
+          }
 
-                        // Triggers the Pagination
-                        if (state.displayCards.length - (currentIndex ?? 0) <=
-                            2) {
-                          context.read<PeopleCardsBloc>().add(
-                                const PeopleCardsEvent.fetchNextCards(),
-                              );
-                        }
+          return CardSwiper(
+            key: const ValueKey('people_card_swiper'),
+            cardsCount: state.displayCards.length,
+            initialIndex: state.currentIndex,
+            showBackCardOnUndo: true,
+            numberOfCardsDisplayed: remainingCards >= 2 ? 2 : 1,
+            allowedSwipeDirection: const AllowedSwipeDirection.only(
+              left: true,
+              right: true,
+              up: true,
+              down: false,
+            ),
+            controller: _cardSwiperController,
+            isLoop: false,
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
 
-                        return true;
-                      },
-                      onUndo:
-                          (previousIndex, currentIndex, cardSwipeDirection) {
-                        context
-                            .read<PeopleCardsBloc>()
-                            .add(const PeopleCardsEvent.undo());
-                        return true;
-                      },
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                      ),
-                      cardBuilder: (context, index, percentThresholdX,
-                          percentThresholdY) {
-                        if (index >= state.displayCards.length) {
-                          return _showEmptyState(context);
-                        }
-                        final user = state.displayCards[index];
-                        return ScrollableProfileView(
-                          key: ObjectKey(user.userId),
-                          peopleUiModel: user,
-                          onLiked: (userId) {
-                            debugLogger(
-                                "Manual SWIPE", "UserId : $userId to Right");
-                            _cardSwiperController
-                                .swipe(CardSwiperDirection.right);
-                          },
-                          onDisLiked: (userId) {
-                            debugLogger(
-                                "Manual SWIPE", "UserId : $userId to Left");
-                            _cardSwiperController
-                                .swipe(CardSwiperDirection.left);
-                          },
-                          onDm: (userId) {
-                            final isSuperDmAvailable = context
-                                .read<UserInfoManagerCubit>()
-                                .superDmClicked();
-                            if (isSuperDmAvailable) {
-                              GlintAnalyticService.onCardActionEvent(
-                                GlintSwipeGestureAnalyticsEvents.DM,
-                                true,
-                              );
-                              SuperDmDialog.show(
-                                context: context,
-                                name: user.username,
-                                bio: user.bio,
-                                onSend: (message) {
-                                  context
-                                      .read<UserInfoManagerCubit>()
-                                      .sendSuperDm(
-                                        userId,
-                                        message,
-                                        streamClient,
-                                      );
-                                },
-                              );
-                            } else {
-                              GlintAnalyticService.onCardActionEvent(
-                                GlintSwipeGestureAnalyticsEvents.DM,
-                                false,
-                              );
-                            }
-                          },
-                          onSuperLiked: (userId) {
-                            _cardSwiperController
-                                .swipe(CardSwiperDirection.top);
-                          },
-                        );
-                      },
-                    );
+            // ── Swipe callback ────────────────────────────────────────────────────
+            onSwipe: (prevIndex, currentIndex, direction) {
+              // prevIndex = the card that just left the screen
+              final swipedCard = state.displayCards[prevIndex];
+
+              switch (direction) {
+                case CardSwiperDirection.left:
+                  GlintAnalyticService.onCardActionEvent(
+                      GlintSwipeGestureAnalyticsEvents.LEFT, false);
+                  context
+                      .read<PeopleCardsBloc>()
+                      .add(PeopleCardsEvent.onLeftSwiped(swipedCard.userId));
+
+                case CardSwiperDirection.right:
+                  GlintAnalyticService.onCardActionEvent(
+                      GlintSwipeGestureAnalyticsEvents.RIGHT, false);
+                  context
+                      .read<PeopleCardsBloc>()
+                      .add(PeopleCardsEvent.onRightSwiped(swipedCard.userId));
+
+                case CardSwiperDirection.top:
+                  return true;
+
+                case CardSwiperDirection.none:
+                case CardSwiperDirection.bottom:
+                  return false;
+              }
+              return true;
+            },
+
+            // ── Undo callback ─────────────────────────────────────────────────────
+            onUndo: (previousIndex, currentIndex, direction) {
+              context
+                  .read<PeopleCardsBloc>()
+                  .add(const PeopleCardsEvent.undo());
+              return true;
+            },
+
+            // ── Card builder ──────────────────────────────────────────────────────
+            cardBuilder:
+                (context, index, percentThresholdX, percentThresholdY) {
+              if (index >= state.displayCards.length) {
+                return _showEmptyState(context);
+              }
+
+              final user = state.displayCards[index];
+
+              return ScrollableProfileView(
+                key: ObjectKey(user.userId),
+                peopleUiModel: user,
+                onLiked: (_) =>
+                    _cardSwiperController.swipe(CardSwiperDirection.right),
+                onDisLiked: (_) =>
+                    _cardSwiperController.swipe(CardSwiperDirection.left),
+                onSuperLiked: (_) {
+                  final executeSuperLikeIfAvailable = context
+                      .read<PeopleCardsBloc>()
+                      .superLikeUser(user.userId);
+                  if (executeSuperLikeIfAvailable) {
+                    _cardSwiperController.swipe(CardSwiperDirection.top);
+                  }
+                },
+                onDm: (userId) => _handleDm(
+                  context,
+                  user,
+                  userId,
+                  streamClient,
+                ),
+              );
+            },
+          );
         },
       ),
     );
   }
 
-  int numberOfCardsToBeDisplayed(int currentCardsAvailable) {
-    if (currentCardsAvailable >= 2) {
-      return 2;
-    } else if (currentCardsAvailable == 1) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
-
-  bool _superLikeUser(
-    BuildContext passedContext,
+  void _handleDm(
+    BuildContext context,
+    PeopleCardModel user,
     String userId,
+    StreamChatClient streamClient,
   ) {
-    final isSuperLikesAvailable =
-        context.read<UserInfoManagerCubit>().superLikeClicked();
+    final cubit = context.read<UserInfoManagerCubit>();
+    final isAvailable = cubit.superDmClicked();
 
-    if (isSuperLikesAvailable) {
-      GlintAnalyticService.onCardActionEvent(
-        GlintSwipeGestureAnalyticsEvents.SUPER,
-        true,
-      );
-      context.read<PeopleCardsBloc>().add(
-            PeopleCardsEvent.onSuperLiked(
-              userId,
-            ),
-          );
-      _cardSwiperController.swipe(
-        CardSwiperDirection.top,
-      );
-      context.read<UserInfoManagerCubit>().superLikedUsed();
-      return true;
-    } else {
-      GlintAnalyticService.onCardActionEvent(
-        GlintSwipeGestureAnalyticsEvents.SUPER,
-        false,
-      );
-      return false;
-    }
+    GlintAnalyticService.onCardActionEvent(
+      GlintSwipeGestureAnalyticsEvents.DM,
+      isAvailable,
+    );
+
+    if (!isAvailable) return;
+
+    SuperDmDialog.show(
+      context: context,
+      name: user.username,
+      bio: user.bio,
+      onSend: (message) => cubit.sendSuperDm(userId, message, streamClient),
+    );
   }
 
   Widget _showEmptyState(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            "Its a little quiet here",
-            style: AppTheme.headingOne,
+            "Its a little quiet here\n,Adjust your preferences for better results.",
+            style: AppTheme.headingFour,
+            textAlign: TextAlign.center,
           ),
           const SizedBox(
             height: 16,
           ),
           GlintElevatedButton(
-            label: "Adjust Search for better results",
+            label: "Search",
             onPressed: () {
               context.pushNamed(
                 GlintMainRoutes.filter.name,

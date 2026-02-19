@@ -97,6 +97,10 @@ class _InterestsAndVibeOnboardingScreenState
                                       showCustomSnackbar(context,
                                           message:
                                               "Please select $remainingInterests more");
+                                    } else {
+                                      showCustomSnackbar(context,
+                                          message:
+                                          "Please select 5 more");
                                     }
                                   }
                                 },

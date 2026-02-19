@@ -4,7 +4,7 @@ import 'package:glint_frontend/data/remote/model/request/auth/login_request_body
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/application_logic/auth/sign_in_user_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
-import 'package:glint_frontend/features/chat/chat_screen.dart';
+import 'package:glint_frontend/features/chat/base/chat_screen.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 part 'login_event.dart';

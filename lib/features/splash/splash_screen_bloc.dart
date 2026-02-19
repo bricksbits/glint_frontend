@@ -5,6 +5,7 @@ import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/application_logic/auth/is_user_logged_in_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
+import 'package:glint_frontend/domain/business_logic/repo/chat/chat_repo.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -16,9 +17,10 @@ part 'splash_screen_state.dart';
 part 'splash_screen_bloc.freezed.dart';
 
 class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
-  final IsUserLoggedInUsecase isUserLoggedInUsecase = getIt.get();
-  final AsyncEncryptedSharedPreferenceHelper sharedPreferenceHelper =
-      getIt.get();
+  final isUserLoggedInUsecase = getIt.get<IsUserLoggedInUsecase>();
+  final sharedPreferenceHelper =
+      getIt.get<AsyncEncryptedSharedPreferenceHelper>();
+  final ChatRepo chatRepo = getIt.get<ChatRepo>();
 
   SplashScreenBloc() : super(const SplashScreenState.initial()) {
     on<_Started>((event, emit) async {
@@ -90,76 +92,11 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
       final newState = event.passedState;
       emit(newState);
     });
-
-    on<_ConnectToStreamClient>((event, emit) {
-      _connectToStreamClient();
-    });
   }
 
   void emitStates(SplashScreenState states) {}
 
   Future<void> _connectToStreamClient() async {
-    final StreamChatClient chatClient = getIt.get<StreamChatClient>();
-    final userId = await getUserId();
-    final userToken = await getUserToken();
-    final userName = await getUserName();
-    final userImage = await getUserImage();
-    try {
-      await chatClient.connectUser(
-        User(
-          id: userId,
-          name: userName,
-          image: userImage,
-        ),
-        userToken,
-      );
-
-      final currentConnectedUser = chatClient.state.currentUser;
-      debugLogger(
-          "[]SplashBloc", "Current Connect User : $currentConnectedUser");
-    } on StreamChatError catch (streamError) {
-      debugLogger(
-          "SPLASH", "Stream chat doesn't initialized, ${streamError.message}");
-    } catch (e) {
-      debugLogger("SPLASH", "Stream chat doesn't initialized, ${e.toString()}");
-    }
-
-    if (userToken.isEmpty ||
-        userId.isEmpty ||
-        userImage.isEmpty ||
-        userName.isEmpty) {
-      add(
-        SplashScreenEvent.emitNewStates(
-          SplashScreenState.navigateTo(
-            GlintMainRoutes.home.name,
-          ),
-        ),
-      );
-      return;
-    }
-  }
-
-  Future<String> getUserImage() async {
-    final pic = await sharedPreferenceHelper
-        .getString(SharedPreferenceKeys.userPrimaryPicUrlKey);
-    return pic;
-  }
-
-  Future<String> getUserId() async {
-    final userId =
-        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
-    return userId;
-  }
-
-  Future<String> getUserName() async {
-    final userName = await sharedPreferenceHelper
-        .getString(SharedPreferenceKeys.userNameKey);
-    return userName;
-  }
-
-  Future<String> getUserToken() async {
-    final userToken = await sharedPreferenceHelper
-        .getString(SharedPreferenceKeys.streamTokenKey);
-    return userToken;
+    chatRepo.connectToServer();
   }
 }
