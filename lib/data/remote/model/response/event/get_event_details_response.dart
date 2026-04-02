@@ -15,9 +15,7 @@ class GetEventDetailsResponse {
   });
 
   GetEventDetailsResponse.fromJson(dynamic json) {
-    eventDetails = json['event_details'] != null
-        ? EventDetails.fromJson(json['event_details'])
-        : null;
+    eventDetails = EventDetails.fromJson(json);
   }
 
   EventDetails? eventDetails;

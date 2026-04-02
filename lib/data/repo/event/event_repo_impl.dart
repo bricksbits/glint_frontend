@@ -31,15 +31,29 @@ class EventRepoImpl extends EventRepo {
 
   @override
   Future<Result<List<PeopleCardModel>>> fetchInterestedProfiles(
-      int? eventId) async {
+    int? eventId, {
+    int? minAge,
+    int? maxAge,
+    int offset = 0,
+    int? distance,
+    String? relationshipGoals,
+    String? interests,
+  }) async {
     if (eventId == null) return Result.failure(Exception("Event Id is null"));
+
+    final queryParams = <String, dynamic>{'offset': offset};
+    if (minAge != null) queryParams['min-age'] = minAge;
+    if (maxAge != null) queryParams['max-age'] = maxAge;
+    if (distance != null) queryParams['distance'] = distance;
+    if (relationshipGoals != null) queryParams['relationship-goals'] = relationshipGoals;
+    if (interests != null) queryParams['interests'] = interests;
 
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       endpoint: "/event/$eventId/profiles",
       requestBody: null,
-      passedQueryParameters: null,
+      passedQueryParameters: queryParams,
     );
 
     switch (response) {
@@ -60,13 +74,19 @@ class EventRepoImpl extends EventRepo {
   }
 
   @override
-  Future<Result<List<EventListDomainModel>>> getAllEvents() async {
+  Future<Result<List<EventListDomainModel>>> getAllEvents({
+    int offset = 0,
+    String? category,
+  }) async {
+    final queryParams = <String, dynamic>{'offset': offset};
+    if (category != null) queryParams['category'] = category;
+
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       endpoint: "/event",
       requestBody: null,
-      passedQueryParameters: null,
+      passedQueryParameters: queryParams,
     );
 
     switch (response) {

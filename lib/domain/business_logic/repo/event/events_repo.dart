@@ -4,11 +4,22 @@ import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 abstract class EventRepo {
-  Future<Result<List<EventListDomainModel>>> getAllEvents();
+  Future<Result<List<EventListDomainModel>>> getAllEvents({
+    int offset = 0,
+    String? category,
+  });
 
   Future<Result<EventDetailsDomainModel>> getEventDetails(int? eventId);
 
   Future<Result<void>> userInterested(int? eventId);
 
-  Future<Result<List<PeopleCardModel>>> fetchInterestedProfiles(int? eventId);
+  Future<Result<List<PeopleCardModel>>> fetchInterestedProfiles(
+    int? eventId, {
+    int? minAge,
+    int? maxAge,
+    int offset = 0,
+    int? distance,
+    String? relationshipGoals,
+    String? interests,
+  });
 }

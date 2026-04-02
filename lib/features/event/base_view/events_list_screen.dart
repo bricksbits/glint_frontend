@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
-import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
+import 'package:glint_frontend/features/event/empty_event_container.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -58,11 +58,19 @@ class _EventsListScreenState extends State<EventsListScreen> {
 
               // Event banner
               SliverToBoxAdapter(child: _buildEventBanner()),
+
               const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
 
               // Filter chips
               // SliverToBoxAdapter(child: _buildFilterChips()),
               const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
+
+              // If no events to list, show the empty component,
+              SliverToBoxAdapter(
+                child: state.hotEvents.isEmpty && state.normalEvents.isEmpty
+                    ? const EmptyEventContainer()
+                    : const SizedBox.shrink(),
+              ),
 
               // Hot Events List
               SliverList(

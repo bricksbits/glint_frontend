@@ -1,11 +1,46 @@
 import 'dart:convert';
-GetTicketHistoryResponse getTicketHistoryResponseFromJson(String str) => GetTicketHistoryResponse.fromJson(json.decode(str));
-String getTicketHistoryResponseToJson(GetTicketHistoryResponse data) => json.encode(data.toJson());
-class GetTicketHistoryResponse {
-  GetTicketHistoryResponse({
+GetTicketHisotryResponse getTicketHisotryResponseFromJson(String str) => GetTicketHisotryResponse.fromJson(json.decode(str));
+String getTicketHisotryResponseToJson(GetTicketHisotryResponse data) => json.encode(data.toJson());
+class GetTicketHisotryResponse {
+  GetTicketHisotryResponse({
+      this.success, 
+      this.message, 
+      this.data,});
+
+  GetTicketHisotryResponse.fromJson(dynamic json) {
+    success = json['success'];
+    message = json['message'];
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+  }
+  bool? success;
+  String? message;
+  Data? data;
+GetTicketHisotryResponse copyWith({  bool? success,
+  String? message,
+  Data? data,
+}) => GetTicketHisotryResponse(  success: success ?? this.success,
+  message: message ?? this.message,
+  data: data ?? this.data,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['success'] = success;
+    map['message'] = message;
+    if (data != null) {
+      map['data'] = data?.toJson();
+    }
+    return map;
+  }
+
+}
+
+Data dataFromJson(String str) => Data.fromJson(json.decode(str));
+String dataToJson(Data data) => json.encode(data.toJson());
+class Data {
+  Data({
       this.tickets,});
 
-  GetTicketHistoryResponse.fromJson(dynamic json) {
+  Data.fromJson(dynamic json) {
     if (json['tickets'] != null) {
       tickets = [];
       json['tickets'].forEach((v) {
@@ -14,8 +49,8 @@ class GetTicketHistoryResponse {
     }
   }
   List<Tickets>? tickets;
-GetTicketHistoryResponse copyWith({  List<Tickets>? tickets,
-}) => GetTicketHistoryResponse(  tickets: tickets ?? this.tickets,
+Data copyWith({  List<Tickets>? tickets,
+}) => Data(  tickets: tickets ?? this.tickets,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -49,6 +84,7 @@ class Tickets {
       this.matchId, 
       this.bookedAtTime, 
       this.ticketPrice, 
+      this.ticketStatus, 
       this.bookedStatus,});
 
   Tickets.fromJson(dynamic json) {
@@ -70,6 +106,7 @@ class Tickets {
     matchId = json['match_id'];
     bookedAtTime = json['booked_at_time'];
     ticketPrice = json['ticket_price'];
+    ticketStatus = json['ticket_status'];
     bookedStatus = json['booked_status'];
   }
   int? eventId;
@@ -90,6 +127,7 @@ class Tickets {
   int? matchId;
   String? bookedAtTime;
   int? ticketPrice;
+  String? ticketStatus;
   String? bookedStatus;
 Tickets copyWith({  int? eventId,
   String? eventName,
@@ -109,6 +147,7 @@ Tickets copyWith({  int? eventId,
   int? matchId,
   String? bookedAtTime,
   int? ticketPrice,
+  String? ticketStatus,
   String? bookedStatus,
 }) => Tickets(  eventId: eventId ?? this.eventId,
   eventName: eventName ?? this.eventName,
@@ -128,6 +167,7 @@ Tickets copyWith({  int? eventId,
   matchId: matchId ?? this.matchId,
   bookedAtTime: bookedAtTime ?? this.bookedAtTime,
   ticketPrice: ticketPrice ?? this.ticketPrice,
+  ticketStatus: ticketStatus ?? this.ticketStatus,
   bookedStatus: bookedStatus ?? this.bookedStatus,
 );
   Map<String, dynamic> toJson() {
@@ -156,6 +196,7 @@ Tickets copyWith({  int? eventId,
     map['match_id'] = matchId;
     map['booked_at_time'] = bookedAtTime;
     map['ticket_price'] = ticketPrice;
+    map['ticket_status'] = ticketStatus;
     map['booked_status'] = bookedStatus;
     return map;
   }
