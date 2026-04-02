@@ -3,6 +3,7 @@
     "allow": [
       "mcp__postman__getCollectionRequest",
       "mcp__postman__getCollectionResponse",
+      "mcp__postman__getCollectionResponse",
       "mcp__postman__getWorkspaces",
       "mcp__postman__getWorkspace",
       "mcp__postman__getCollection",
