@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/db/entities/profile_entity.dart';
@@ -23,7 +21,6 @@ import 'package:glint_frontend/domain/business_logic/models/admin/event_ticket_b
 import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_repo.dart';
-import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:injectable/injectable.dart';
