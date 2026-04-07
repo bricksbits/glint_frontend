@@ -1,6 +1,8 @@
 import 'package:glint_frontend/domain/business_logic/models/admin/event_interested_user_domain_model.dart';
+import 'package:glint_frontend/domain/business_logic/models/admin/event_stats_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_ticket_bought_domain_model.dart';
 
+import 'get_event_stats_for_admin.dart';
 import 'get_interested_users_response.dart';
 import 'get_ticket_booked_response.dart';
 
@@ -32,12 +34,50 @@ extension GetInterestedUsersMapper on GetInterestedUsersResponse {
   List<EventInterestedUserDomainModel> mapToDomain() {
     var items = response?.map((users) {
           return EventInterestedUserDomainModel(
-              id: users.userId.toString() ?? "",
+              id: users.userId.toString(),
               name: users.username ?? "",
-              emailId: users.username ?? "",
-              thumbnailUrl: users.username ?? "");
+              emailId: users.emailId ?? "",
+              thumbnailUrl: users.profilePicture?.presignedUrl ?? "");
         }).toList() ??
         [];
     return items;
+  }
+}
+
+extension GetEventStatsMapper on GetEventStatsForAdmin {
+  EventStatsDomainModel mapToDomain() {
+    final stats = response;
+    final interestedUsers = stats?.interestedUserInfo
+            ?.map((u) => EventInterestedUserDomainModel(
+                  id: u.userId.toString(),
+                  name: u.username ?? "",
+                  emailId: u.emailId ?? "",
+                  thumbnailUrl: u.profilePicture?.presignedUrl ?? "",
+                ))
+            .toList() ??
+        [];
+    final ticketsBought = stats?.ticketsBooked
+            ?.map((t) => EventTicketBoughtDomainModel(
+                  EventInterestedUserDomainModel(
+                    id: t.user1Id.toString(),
+                    name: t.user1Username ?? "",
+                    emailId: t.user1EmailId ?? "",
+                    thumbnailUrl: t.user1ProfilePictureUrl?.presignedUrl ?? "",
+                  ),
+                  EventInterestedUserDomainModel(
+                    id: t.user2Id.toString(),
+                    name: t.user2Username ?? "",
+                    emailId: t.user2EmailId ?? "",
+                    thumbnailUrl: t.user2ProfilePictureUrl?.presignedUrl ?? "",
+                  ),
+                ))
+            .toList() ??
+        [];
+    return EventStatsDomainModel(
+      (stats?.revenueGenerated ?? 0).toString(),
+      (stats?.ticketsBooked?.length ?? 0).toString(),
+      interestedUsers,
+      ticketsBought,
+    );
   }
 }

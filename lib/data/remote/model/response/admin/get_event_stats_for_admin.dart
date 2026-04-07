@@ -6,7 +6,7 @@ class GetEventStatsForAdmin {
       this.response,});
 
   GetEventStatsForAdmin.fromJson(dynamic json) {
-    response = json['response'] != null ? Response.fromJson(json['response']) : null;
+    response = json != null ? Response.fromJson(json) : null;
   }
   Response? response;
 GetEventStatsForAdmin copyWith({  Response? response,

@@ -147,4 +147,25 @@ class MyDioClient {
       return Failure(exception, message: "Something went wrong.");
     }
   }
+
+  /// DELETE with an optional JSON body (or no body at all).
+  Future<Result<dynamic>> deleteRequest({
+    required String endpoint,
+    dynamic body,
+  }) async {
+    try {
+      final response = await dioHttpClient.delete(endpoint, data: body);
+      return networkResponseHandler(response);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return networkResponseHandler(e.response);
+      }
+      return Failure(
+        Exception(e.message),
+        message: "Poor connection, request failed",
+      );
+    } on Exception catch (exception) {
+      return Failure(exception, message: "Something went wrong.");
+    }
+  }
 }

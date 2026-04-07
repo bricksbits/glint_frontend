@@ -57,6 +57,7 @@ class EventDetails {
     this.eventLatitude,
     this.startTime,
     this.endTime,
+    this.pictureCount,
     this.pictureUrlList,
     this.videoUrlList,
   });
@@ -72,10 +73,11 @@ class EventDetails {
     discountActivated = json['discount_activated'];
     ticketsBought = json['tickets_bought'];
     interestedUsersCount = json['interested_users_count'];
-    eventLongitude = (json['event_longitude'] as num).toDouble();
-    eventLatitude = (json['event_latitude'] as num).toDouble();
+    eventLongitude = (json['event_longitude'] as num?)?.toDouble();
+    eventLatitude = (json['event_latitude'] as num?)?.toDouble();
     startTime = json['start_time'];
     endTime = json['end_time'];
+    pictureCount = json['picture_count'];
     if (json['picture_url_list'] != null) {
       pictureUrlList = [];
       json['picture_url_list'].forEach((v) {
@@ -101,6 +103,7 @@ class EventDetails {
   double? eventLatitude;
   String? startTime;
   String? endTime;
+  int? pictureCount;
   List<PictureUrlList>? pictureUrlList;
   List<String>? videoUrlList;
 
@@ -119,6 +122,7 @@ class EventDetails {
     double? eventLatitude,
     String? startTime,
     String? endTime,
+    int? pictureCount,
     List<PictureUrlList>? pictureUrlList,
     List<String>? videoUrlList,
   }) =>
@@ -139,6 +143,7 @@ class EventDetails {
         eventLatitude: eventLatitude ?? this.eventLatitude,
         startTime: startTime ?? this.startTime,
         endTime: endTime ?? this.endTime,
+        pictureCount: pictureCount ?? this.pictureCount,
         pictureUrlList: pictureUrlList ?? this.pictureUrlList,
         videoUrlList: videoUrlList ?? this.videoUrlList,
       );
@@ -159,6 +164,7 @@ class EventDetails {
     map['event_latitude'] = eventLatitude;
     map['start_time'] = startTime;
     map['end_time'] = endTime;
+    map['picture_count'] = pictureCount;
     if (pictureUrlList != null) {
       map['picture_url_list'] = pictureUrlList?.map((v) => v.toJson()).toList();
     }
