@@ -4,12 +4,15 @@ import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
+import 'package:glint_frontend/notifications/fcm_background_handler.dart';
+import 'package:glint_frontend/notifications/service/glint_notification_service.dart';
 import 'package:glint_frontend/utils/app_config.dart';
 import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 import 'package:logging/logging.dart';
@@ -23,9 +26,13 @@ Future<void> bootstrap(
   WidgetsFlutterBinding.ensureInitialized();
   await AppConfig.initialize();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(
+    glintFirebaseMessagingBackgroundHandler,
+  );
   await setupFirebaseCrashlytics();
   GlintAnalyticService.setAnalyticsEnable();
   await configureDependencies();
+  await getIt.get<GlintNotificationService>().initialize();
   final connectivity = Connectivity();
   flutterLogError();
 

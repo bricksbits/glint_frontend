@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/application_logic/logout_usecase.dart';
@@ -20,15 +22,16 @@ class ProfileSettingsScreen extends StatefulWidget {
 
 class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   final _locationController = TextEditingController();
+  final _prefs = GetIt.instance.get<AsyncEncryptedSharedPreferenceHelper>();
   String _appVersion = '';
   String _envName = '';
 
   @override
   void initState() {
     super.initState();
-    // Initialize with default values if needed
     _locationController.text = '';
     _getAppVersion();
+    _loadNotificationPrefs();
   }
 
   // Add this method to get the app version
@@ -48,10 +51,33 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   }
 
   bool _isNotificationsEnabled = true;
-  bool _isLikesNotificationEnabled = false;
-  bool _isEventsNotificationEnabled = false;
-  bool _isNewMatchesNotificationEnabled = false;
-  bool _isNewMessagesNotificationEnabled = false;
+  bool _isMatchesEnabled = true;
+  bool _isEventsEnabled = true;
+  bool _isTicketsEnabled = true;
+  bool _isRemindersEnabled = true;
+
+  Future<void> _loadNotificationPrefs() async {
+    final matches =
+        await _prefs.getBoolean(SharedPreferenceKeys.notifMatchesEnabledKey);
+    final events =
+        await _prefs.getBoolean(SharedPreferenceKeys.notifEventsEnabledKey);
+    final tickets =
+        await _prefs.getBoolean(SharedPreferenceKeys.notifTicketsEnabledKey);
+    final reminders =
+        await _prefs.getBoolean(SharedPreferenceKeys.notifRemindersEnabledKey);
+    // getBoolean returns false as default — treat false as "not yet set" and
+    // default to true for a fresh install.
+    setState(() {
+      _isMatchesEnabled = matches;
+      _isEventsEnabled = events;
+      _isTicketsEnabled = tickets;
+      _isRemindersEnabled = reminders;
+    });
+  }
+
+  Future<void> _saveNotificationPref(String key, bool value) async {
+    await _prefs.saveBoolean(key, value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -345,10 +371,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10.0)
-                    .copyWith(
-              right: 16.0,
-              bottom: 4.0,
-            ),
+                    .copyWith(right: 16.0, bottom: 4.0),
             child: Row(
               children: [
                 SvgPicture.asset(
@@ -358,7 +381,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                 ),
                 const Gap(12.0),
                 Text(
-                  'Allow Notification',
+                  'Allow Notifications',
                   style: AppTheme.simpleBodyText.copyWith(
                     color: AppColours.black,
                   ),
@@ -370,24 +393,13 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   onChanged: (value) {
                     GlintAnalyticService.onNotificationSettingsUpdateEvent();
-                    setState(() {
-                      _isNotificationsEnabled = value;
-                      debugPrint('Notifications master toggle: $value');
-
-                      // If notifications are disabled, log that others won't work
-                      if (!value) {
-                        debugPrint(
-                            'All notification subtypes are effectively disabled');
-                      }
-                    });
+                    setState(() => _isNotificationsEnabled = value);
                   },
                 ),
               ],
             ),
           ),
-          const Divider(
-            color: AppColours.borderGray,
-          ),
+          const Divider(color: AppColours.borderGray),
           const Gap(12.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0)
@@ -395,46 +407,46 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
             child: Column(
               children: [
                 _buildNotificationSwitch(
-                  'Likes',
-                  _isLikesNotificationEnabled,
+                  'Matches',
+                  'New matches, super likes & stories',
+                  _isMatchesEnabled,
                   (value) {
-                    setState(() {
-                      _isLikesNotificationEnabled = value;
-                      debugPrint('Likes notifications: $value');
-                    });
+                    setState(() => _isMatchesEnabled = value);
+                    _saveNotificationPref(
+                        SharedPreferenceKeys.notifMatchesEnabledKey, value);
                   },
                 ),
                 const Gap(8.0),
                 _buildNotificationSwitch(
                   'Events',
-                  _isEventsNotificationEnabled,
+                  'New events near you & approvals',
+                  _isEventsEnabled,
                   (value) {
-                    setState(() {
-                      _isEventsNotificationEnabled = value;
-                      debugPrint('Events notifications: $value');
-                    });
+                    setState(() => _isEventsEnabled = value);
+                    _saveNotificationPref(
+                        SharedPreferenceKeys.notifEventsEnabledKey, value);
                   },
                 ),
                 const Gap(8.0),
                 _buildNotificationSwitch(
-                  'New Matches',
-                  _isNewMatchesNotificationEnabled,
+                  'Tickets',
+                  'Bookings, cancellations & refunds',
+                  _isTicketsEnabled,
                   (value) {
-                    setState(() {
-                      _isNewMatchesNotificationEnabled = value;
-                      debugPrint('New Matches notifications: $value');
-                    });
+                    setState(() => _isTicketsEnabled = value);
+                    _saveNotificationPref(
+                        SharedPreferenceKeys.notifTicketsEnabledKey, value);
                   },
                 ),
                 const Gap(8.0),
                 _buildNotificationSwitch(
-                  'New Messages',
-                  _isNewMessagesNotificationEnabled,
+                  'Reminders',
+                  'Event reminders & membership alerts',
+                  _isRemindersEnabled,
                   (value) {
-                    setState(() {
-                      _isNewMessagesNotificationEnabled = value;
-                      debugPrint('New Messages notifications: $value');
-                    });
+                    setState(() => _isRemindersEnabled = value);
+                    _saveNotificationPref(
+                        SharedPreferenceKeys.notifRemindersEnabledKey, value);
                   },
                 ),
               ],
@@ -447,16 +459,28 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
 
   Widget _buildNotificationSwitch(
     String label,
+    String subtitle,
     bool value,
     Function(bool) onChanged,
   ) {
     return Row(
       children: [
-        Text(
-          label,
-          style: AppTheme.simpleText,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: AppTheme.simpleText),
+              const Gap(2.0),
+              Text(
+                subtitle,
+                style: AppTheme.simpleText.copyWith(
+                  fontSize: 11.0,
+                  color: AppColours.darkGray,
+                ),
+              ),
+            ],
+          ),
         ),
-        const Spacer(),
         Switch.adaptive(
           value: value,
           activeColor: AppColours.primaryBlue,
