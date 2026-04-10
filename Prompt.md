@@ -4,5 +4,4 @@
 ## TOdo
 - Settings Screens needed its Bloc 
 - Remove the duplicate injection and inconsistent usage of the FirebaseMessaging.instance method 
-- Create a Permission Handler and ask those Permission at right time 
-- 
+- Create a Permission Handler and ask those Permission at right time

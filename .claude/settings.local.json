@@ -6,7 +6,11 @@
       "mcp__postman__getWorkspaces",
       "mcp__postman__getWorkspace",
       "mcp__postman__getCollection",
-      "mcp__postman__getCollectionFolder"
+      "mcp__postman__getCollectionFolder",
+      "mcp__composio__COMPOSIO_REMOTE_BASH_TOOL",
+      "mcp__composio__COMPOSIO_REMOTE_WORKBENCH",
+      "mcp__plugin_figma_figma__get_metadata",
+      "mcp__plugin_figma_figma__use_figma"
     ]
   }
 }
