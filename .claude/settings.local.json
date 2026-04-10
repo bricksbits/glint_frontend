@@ -10,7 +10,8 @@
       "mcp__composio__COMPOSIO_REMOTE_BASH_TOOL",
       "mcp__composio__COMPOSIO_REMOTE_WORKBENCH",
       "mcp__plugin_figma_figma__get_metadata",
-      "mcp__plugin_figma_figma__use_figma"
+      "mcp__plugin_figma_figma__use_figma",
+      "Bash(fvm flutter:*)"
     ]
   }
 }

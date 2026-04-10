@@ -26,7 +26,6 @@ class GlintNotificationService {
   Future<void> initialize() async {
     await _createAndroidChannels();
     await _initLocalNotifications();
-    await _requestPermissions();
     await _fcm.setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
@@ -68,17 +67,6 @@ class GlintNotificationService {
         }
       },
     );
-  }
-
-  // ── Permission requests ───────────────────────────────────────────────────
-
-  Future<void> _requestPermissions() async {
-    await _fcm.requestPermission(alert: true, badge: true, sound: true);
-    // Android 13+ explicit POST_NOTIFICATIONS permission
-    final androidPlugin = _localNotifications
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
-    await androidPlugin?.requestNotificationsPermission();
   }
 
   // ── Foreground message handler ────────────────────────────────────────────

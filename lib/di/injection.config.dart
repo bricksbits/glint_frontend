@@ -82,6 +82,7 @@ import '../notifications/service/glint_notification_service.dart' as _i323;
 import '../services/chat_service.dart' as _i698;
 import '../services/image_manager_service.dart' as _i43;
 import '../services/location_permission_service.dart' as _i700;
+import '../services/notification_permission_service.dart' as _i82;
 import '../services/swipe_cache_manager.dart' as _i517;
 import '../utils/user_info/user_info_manager_cubit.dart' as _i141;
 import 'local_module.dart' as _i519;
@@ -138,6 +139,11 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i361.Dio>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
+    gh.lazySingleton<_i82.NotificationPermissionService>(
+        () => _i82.NotificationPermissionService(
+              gh<_i892.FirebaseMessaging>(),
+              gh<_i163.FlutterLocalNotificationsPlugin>(),
+            ));
     gh.factory<_i757.EventRepo>(() => _i390.EventRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i863.EventLikeDao>(),
