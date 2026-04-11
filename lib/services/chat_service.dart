@@ -18,12 +18,19 @@ class ChatService {
 
   /// Call this after your auth flow gives you the user data + Stream token.
   /// Works identically for login and fresh account creation.
+  /// Safe to call on every cold start — skips reconnection if the same user
+  /// is already connected.
   Future<void> connectUser({
     required String userId,
     required String userName,
     required String userToken,
     required String profileImageUrl,
   }) async {
+    // Guard: skip if already connected as this user to avoid StreamChatError.
+    if (isConnected && client.state.currentUser?.id == userId) {
+      return;
+    }
+
     client.chatPersistenceClient = persistenceClient;
     await persistenceClient.connect(userId);
 
@@ -37,14 +44,22 @@ class ChatService {
     );
   }
 
-  //Todo: Research is needed to make it work
-  // Delegate to Phase 2
-  Future<void> _registerFcmToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-    if (token != null) {
-      await client.addDevice(token, PushProvider.firebase);
+  /// Registers the device for push notifications via Stream + FCM.
+  /// Pass [cachedToken] (from SharedPreferences) for an immediate registration
+  /// before Firebase returns a fresh token; both paths are tried.
+  Future<void> registerDevice({String? cachedToken}) async {
+    // Use the cached token immediately if available so there's no delay.
+    if (cachedToken != null && cachedToken.isNotEmpty) {
+      await client.addDevice(cachedToken, PushProvider.firebase);
     }
 
+    // Fetch a fresh token in case the cached one is stale.
+    final freshToken = await FirebaseMessaging.instance.getToken();
+    if (freshToken != null && freshToken != cachedToken) {
+      await client.addDevice(freshToken, PushProvider.firebase);
+    }
+
+    // Keep the registration up-to-date on token rotation.
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
       client.addDevice(newToken, PushProvider.firebase);
     });

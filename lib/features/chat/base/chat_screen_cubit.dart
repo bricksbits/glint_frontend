@@ -10,16 +10,10 @@ import 'package:glint_frontend/services/chat_service.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart'
-    show
-        StreamChatClient,
-        User,
-        ConnectionStatus,
-        StreamChannelListController,
-        StreamChatError,
-        EventType;
+    show User, ConnectionStatus, StreamChannelListController, EventType;
 
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart'
-    show Filter, SortOption, Channel;
+    show Filter, SortOption;
 
 part 'chat_screen_state.dart';
 
@@ -32,8 +26,10 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   // Stream Managers and Controllers
   StreamSubscription<Result<List<RecentMatchesModel>>>?
       _recentMatchesSubscription;
-  late final StreamChannelListController? _channelListController;
-  late final StreamSubscription? _channelsEventsSubscription;
+  // Not `late final` — setupTheChannelListController() may be called more than
+  // once (e.g., after a reconnect), so we need to dispose and reassign.
+  StreamChannelListController? _channelListController;
+  StreamSubscription? _channelsEventsSubscription;
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
     chatFacade();
@@ -96,10 +92,23 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     }
   }
 
+  /// Called by the UI on app-resume to re-establish the Stream WS when needed.
+  void reconnectIfNeeded() {
+    if (!_isChatConnected()) {
+      _connectToStreamClient();
+    }
+  }
+
   void setupTheChannelListController() {
     if (!_isChatConnected()) {
       return;
     }
+
+    // Dispose existing controller and subscription before reassigning so we
+    // don't leak listeners on reconnect.
+    _channelsEventsSubscription?.cancel();
+    _channelListController?.dispose();
+
     _channelListController = StreamChannelListController(
       client: chatService.client,
       filter: Filter.and([
