@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   static final List<Widget> _bottomNavScreens = [
     const ProfileScreen(),
     const EventBaseScreen(),
-    PeopleScreen(),
+    const PeopleScreen(),
     const ChatScreen(),
   ];
 

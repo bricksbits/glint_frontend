@@ -34,7 +34,10 @@ import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:glint_frontend/features/payment/payment_screen.dart';
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/features/profile/exports.dart';
+import 'package:glint_frontend/features/profile/settings_cubit.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
 import 'package:glint_frontend/features/splash/splash_screen.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
@@ -291,7 +294,12 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintMainRoutes.settings.name}',
       name: GlintMainRoutes.settings.name,
-      builder: (context, state) => const ProfileSettingsScreen(),
+      builder: (context, state) => BlocProvider(
+        create: (_) => SettingsCubit(
+          getIt.get<AsyncEncryptedSharedPreferenceHelper>(),
+        ),
+        child: const ProfileSettingsScreen(),
+      ),
     ),
     GoRoute(
       path: '/${GlintMainRoutes.notifications.name}',

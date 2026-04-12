@@ -28,4 +28,10 @@ class SharedPreferenceKeys {
 
   // FCM
   static const String deviceFcmTokenKey = "fcmToken";
+
+  // Notification channel preferences
+  static const String notifMatchesEnabledKey = "notifMatchesEnabled";
+  static const String notifEventsEnabledKey = "notifEventsEnabled";
+  static const String notifTicketsEnabledKey = "notifTicketsEnabled";
+  static const String notifRemindersEnabledKey = "notifRemindersEnabled";
 }
