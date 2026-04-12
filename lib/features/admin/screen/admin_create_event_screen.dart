@@ -9,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
-import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
 import 'package:glint_frontend/features/admin/bloc/create/admin_create_event_cubit.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -17,6 +16,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 enum EventType { hot, normal, notMentioned }
+
+const _kCategories = ['Music', 'Meetup', 'Social'];
 
 class AdminCreateEventScreen extends StatefulWidget {
   const AdminCreateEventScreen({
@@ -41,22 +42,16 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
       TextEditingController();
   late final TextEditingController _eventDescriptionController =
       TextEditingController();
-
-  EventType _selectedChip = EventType.normal;
-  int _selectedNumberOfPerson = 10;
-
-  String? _selectedStartDate;
-  String? _selectedStartTime;
-  String? _selectedEndDate;
-  String? _selectedEndTime;
+  late final TextEditingController _googleMapUrlController =
+      TextEditingController();
+  late final TextEditingController _latController = TextEditingController();
+  late final TextEditingController _longController = TextEditingController();
+  late final TextEditingController _eventByController =
+      TextEditingController();
 
   final List<Map<EventType, String>> eventTypeOptions = [
-    {
-      EventType.hot: '🔥 Hot Event',
-    },
-    {
-      EventType.normal: 'Normal',
-    },
+    {EventType.hot: '🔥 Hot Event'},
+    {EventType.normal: 'Normal'},
   ];
 
   @override
@@ -66,80 +61,86 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     _discountPriceController.dispose();
     _locationController.dispose();
     _eventDescriptionController.dispose();
+    _googleMapUrlController.dispose();
+    _latController.dispose();
+    _longController.dispose();
+    _eventByController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
+    super.initState();
     context
         .read<AdminCreateEventCubit>()
         .getEventDetailsAndUpdateTheCreateEventBody(
           widget.navArguments?.updateExistingEventId,
         );
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AdminCreateEventCubit, AdminCreateEventState>(
+      // Only populate text controllers once — when existing event details finish loading.
+      listenWhen: (previous, current) =>
+          previous.isLoading && !current.isLoading && current.eventDetailModel != null,
       listener: (context, state) {
-        if (state.eventPublished) {
-          print("CALL BACK CALLED");
-          widget.navArguments?.onReturn.call("updated");
-          context.pop();
-        }
-
-        if (state.eventUpdated) {
-          context.pop();
-          context.goNamed(
-            GlintAdminDasboardRoutes.liveEvent.name,
-            extra: state.createEventBody?.mapToDomainModel(),
-          );
-        }
-
-        if (state.createEventBody != null) {
-          final currentEventState = state.createEventBody;
-          _eventNameController.text = currentEventState?.eventName ?? "";
-          _actualPriceController.text =
-              currentEventState?.originalPrice.toString() ?? "";
-          _discountPriceController.text =
-              currentEventState?.discountedPrice.toString() ?? "";
-          _eventDescriptionController.text =
-              currentEventState?.eventDescription ?? "";
-          _locationController.text = currentEventState?.eventLocationName ?? "";
-          _selectedChip = currentEventState?.isHotEvent ?? false
-              ? EventType.hot
-              : EventType.normal;
-
-          _selectedNumberOfPerson = currentEventState?.totalTicket ?? 10;
-
-          _selectedStartDate = currentEventState?.startDateAndTime;
-          _selectedStartTime = currentEventState?.startDateAndTime;
-
-          _selectedEndDate = currentEventState?.endDateAndTime;
-          _selectedEndTime = currentEventState?.endDateAndTime;
-        }
+        final body = state.createEventBody;
+        if (body == null) return;
+        _eventNameController.text = body.eventName;
+        _actualPriceController.text = body.originalPrice.toString();
+        _discountPriceController.text = body.discountedPrice.toString();
+        _eventDescriptionController.text = body.eventDescription;
+        _locationController.text = body.eventLocationName;
+        _googleMapUrlController.text = body.googleMapUrl;
+        _latController.text =
+            body.eventLocationLat != 0.0 ? body.eventLocationLat.toString() : '';
+        _longController.text =
+            body.eventLocationLong != 0.0 ? body.eventLocationLong.toString() : '';
+        _eventByController.text = body.eventBy;
       },
-      child: BlocBuilder<AdminCreateEventCubit, AdminCreateEventState>(
+      child: BlocConsumer<AdminCreateEventCubit, AdminCreateEventState>(
+        listenWhen: (_, current) =>
+            current.eventPublished || current.eventUpdated || current.error.isNotEmpty,
+        listener: (context, state) {
+          if (state.eventPublished) {
+            widget.navArguments?.onReturn.call("updated");
+            context.pop();
+          }
+
+          if (state.eventUpdated) {
+            context.pop();
+            context.goNamed(
+              GlintAdminDasboardRoutes.liveEvent.name,
+              extra: state.createEventBody?.mapToDomainModel(),
+            );
+          }
+
+          if (state.error.isNotEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error)),
+            );
+          }
+        },
         builder: (context, state) {
           return GestureDetector(
             behavior: HitTestBehavior.translucent,
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
+            onTap: () => FocusScope.of(context).unfocus(),
             child: Scaffold(
               backgroundColor: AppColours.white,
               appBar: AppBar(
                 titleSpacing: 32.0,
                 scrolledUnderElevation: 0,
-                title: const Text(
-                  'Create Event',
+                title: Text(
+                  widget.navArguments?.updateExistingEventId != null
+                      ? 'Edit Event'
+                      : 'Create Event',
                   style: AppTheme.heavyBodyText,
                 ),
                 centerTitle: false,
                 backgroundColor: AppColours.white,
                 actions: [
-                  // save icon
+                  // Publish button
                   GestureDetector(
                     onTap: () {
                       context.read<AdminCreateEventCubit>().publishEvent(
@@ -159,38 +160,27 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                     ),
                   ),
 
-                  //gap
                   const Gap(12.0),
 
-                  // preview icon
+                  // Preview button
                   GestureDetector(
                     onTap: () {
-                      if (state.currentUserType == UsersType.SUPER_ADMIN) {
-                        context.pushNamed(
-                          GlintAdminDasboardRoutes.previewEvent.name,
-                          extra: EventDetailsNavArguments(
-                            eventId: null,
-                            eventDetails: state.eventDetailModel,
-                            unUploadedFiles: null,
-                          ),
-                        );
-                      }
-                      if (state.currentUserType == UsersType.ADMIN) {
-                        context.pushNamed(
-                          GlintAdminDasboardRoutes.previewEvent.name,
-                          extra: EventDetailsNavArguments(
-                            eventId: null,
-                            eventDetails: state.eventDetailModel,
-                            unUploadedFiles:
-                                state.eventDetailModel?.eventCoverImageUrl !=
-                                            null &&
-                                        state.eventDetailModel!
-                                            .eventCoverImageUrl.isEmpty
-                                    ? state.pictureUploaded
-                                    : [],
-                          ),
-                        );
-                      }
+                      final previewDetails =
+                          state.eventDetailModel ?? state.createEventBody?.toPreviewEventDetails();
+
+                      if (previewDetails == null) return;
+
+                      context.pushNamed(
+                        GlintAdminDasboardRoutes.previewEvent.name,
+                        extra: EventDetailsNavArguments(
+                          eventId: null,
+                          eventDetails: previewDetails,
+                          unUploadedFiles: state.eventDetailModel == null ||
+                                  state.eventDetailModel!.eventCoverImageUrl.isEmpty
+                              ? state.pictureUploaded
+                              : [],
+                        ),
+                      );
                     },
                     child: Container(
                       height: 40.0,
@@ -214,90 +204,52 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                   : SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 28.0)
-                            .copyWith(
-                          bottom: 28.0,
-                        ),
-                        child: SizedBox(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Gap(20.0),
-                              // event name text input field
-                              _buildEventNameTextField(),
-
-                              const Gap(24.0),
-
-                              // event type selector
-                              _buildEventTypeSelector(),
-
-                              const Gap(20.0),
-                              // no. of person selector
-                              _builtNumberOfPersonSelector(),
-
-                              const Gap(24.0),
-
-                              //actual price
-                              _buildActualPriceField(),
-
-                              const Gap(12.0),
-
-                              //discount price
-                              _buildDiscountPriceField(),
-
-                              const Gap(24.0),
-                              // event date picker
-                              _buildEventStartDatePicker(),
-
-                              const Gap(12.0),
-                              //event time picker
-                              _buildEventStartTimePicker(),
-
-                              const Gap(24.0),
-                              // event date picker
-                              _buildEventEndDatePicker(),
-
-                              const Gap(12.0),
-                              //event time picker
-                              _buildEventEndTimePicker(),
-
-                              const Gap(12.0),
-                              //event location picker
-                              _buildEventLocationField(),
-
-                              const Gap(24.0),
-
-                              // event images upload container
-                              widget.navArguments?.updateExistingEventId != null
-                                  ? _buildEventImagesUploadContainer(() {
-                                      context
-                                          .read<AdminCreateEventCubit>()
-                                          .pickUpImages();
-                                    }, (fileToRemove) {
-                                      // context
-                                      //     .read<AdminCreateEventCubit>()
-                                      //     .pickUpImages();
-                                    },
-                                      context
-                                          .read<AdminCreateEventCubit>()
-                                          .state
-                                          .pictureUploaded,
-                                      context
-                                          .read<AdminCreateEventCubit>()
-                                          .state
-                                          .eventDetailModel
-                                          ?.eventCoverImageUrl,
-                                      state.eventDetailModel?.eventCoverImageUrl
-                                              .length
-                                              .toString() ??
-                                          "")
-                                  : const SizedBox.shrink(),
-
-                              const Gap(36.0),
-                              // enter event description
-                              _buildEventDescriptionField(),
-                            ],
-                          ),
+                            .copyWith(bottom: 28.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Gap(20.0),
+                            _buildEventNameTextField(),
+                            const Gap(24.0),
+                            _buildEventTypeSelector(state),
+                            const Gap(20.0),
+                            _buildCategorySelector(state),
+                            const Gap(20.0),
+                            _builtNumberOfPersonSelector(state),
+                            const Gap(24.0),
+                            _buildActualPriceField(),
+                            const Gap(12.0),
+                            _buildDiscountPriceField(),
+                            const Gap(12.0),
+                            _buildDiscountToggle(state),
+                            const Gap(24.0),
+                            _buildEventStartDatePicker(state),
+                            const Gap(12.0),
+                            _buildEventStartTimePicker(state),
+                            const Gap(24.0),
+                            _buildEventEndDatePicker(state),
+                            const Gap(12.0),
+                            _buildEventEndTimePicker(state),
+                            const Gap(12.0),
+                            _buildEventLocationField(),
+                            const Gap(12.0),
+                            _buildEventByField(),
+                            const Gap(12.0),
+                            _buildGoogleMapUrlField(),
+                            const Gap(12.0),
+                            _buildLatLongFields(),
+                            const Gap(24.0),
+                            _buildEventImagesUploadContainer(
+                              onImagePickUp: () => context
+                                  .read<AdminCreateEventCubit>()
+                                  .pickUpImages(),
+                              selectedImagesFileList: state.pictureUploaded,
+                              fetchedEventImagesList:
+                                  state.eventDetailModel?.eventCoverImageUrl,
+                            ),
+                            const Gap(36.0),
+                            _buildEventDescriptionField(),
+                          ],
                         ),
                       ),
                     ),
@@ -308,34 +260,19 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     );
   }
 
+  // ── Form widgets ──────────────────────────────────────────────────────────
+
   Widget _buildEventNameTextField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // label
-        RichText(
-          text: TextSpan(
-            children: [
-              const TextSpan(
-                text: 'Event Name',
-                style: AppTheme.smallBodyText,
-              ),
-              TextSpan(
-                text: ' (Not Editable)',
-                style: AppTheme.smallBodyText.copyWith(
-                  color: AppColours.gray60,
-                ),
-              ),
-            ],
-          ),
-        ),
+        const Text('Event Name', style: AppTheme.smallBodyText),
         const Gap(10.0),
-        // input field
         GlintTextInputField(
           controller: _eventNameController,
           borderRadius: 10.0,
           hintText: 'The Indian Food Festival',
-          onChanged: (newValue) {
+          onChanged: (_) {
             context
                 .read<AdminCreateEventCubit>()
                 .observeEventTitle(_eventNameController.text);
@@ -345,79 +282,116 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     );
   }
 
-  Widget _buildEventTypeSelector() {
+  Widget _buildEventTypeSelector(AdminCreateEventState state) {
+    final isHot = state.createEventBody?.isHotEvent ?? false;
+    final selectedChip = isHot ? EventType.hot : EventType.normal;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Event Type:',
-          style: AppTheme.smallBodyText,
-        ),
+        const Text('Event Type:', style: AppTheme.smallBodyText),
         const Gap(16.0),
         Wrap(
           spacing: 8.0,
           runSpacing: 8.0,
-          children: eventTypeOptions.map(
-            (option) {
-              final chipEnum = option.keys.first;
-              final chipLabel = option.values.first;
-              final isSelected = _selectedChip == chipEnum;
+          children: eventTypeOptions.map((option) {
+            final chipEnum = option.keys.first;
+            final chipLabel = option.values.first;
+            final isSelected = selectedChip == chipEnum;
 
-              return GestureDetector(
-                onTap: () {
-                  context
-                      .read<AdminCreateEventCubit>()
-                      .enterEventTyped(chipEnum);
-                  setState(() {
-                    _selectedChip = chipEnum;
-                  });
-                },
-                child: Chip(
-                  shape: const StadiumBorder(
-                    side: BorderSide(
-                      color: AppColours.backgroundShade,
-                      width: 1.4,
-                    ),
+            return GestureDetector(
+              onTap: () {
+                context
+                    .read<AdminCreateEventCubit>()
+                    .enterEventTyped(chipEnum);
+              },
+              child: Chip(
+                shape: const StadiumBorder(
+                  side: BorderSide(
+                    color: AppColours.backgroundShade,
+                    width: 1.4,
                   ),
-                  label: Text(
-                    chipLabel,
-                    style: AppTheme.smallBodyText.copyWith(
-                        fontSize: 12.0,
-                        color: isSelected
-                            ? AppColours.primaryBlue
-                            : AppColours.black),
-                  ),
-                  backgroundColor: isSelected
-                      ? AppColours.chipBackgroundShade
-                      : AppColours.white,
                 ),
-              );
-            },
-          ).toList(),
-        )
+                label: Text(
+                  chipLabel,
+                  style: AppTheme.smallBodyText.copyWith(
+                    fontSize: 12.0,
+                    color: isSelected
+                        ? AppColours.primaryBlue
+                        : AppColours.black,
+                  ),
+                ),
+                backgroundColor: isSelected
+                    ? AppColours.chipBackgroundShade
+                    : AppColours.white,
+              ),
+            );
+          }).toList(),
+        ),
       ],
     );
   }
 
-  Widget _builtNumberOfPersonSelector() {
+  Widget _buildCategorySelector(AdminCreateEventState state) {
+    final selected = state.createEventBody?.categoryList ?? [];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Select Number of Persons:',
-          style: AppTheme.smallBodyText,
+        const Text('Category:', style: AppTheme.smallBodyText),
+        const Gap(12.0),
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 8.0,
+          children: _kCategories.map((category) {
+            final isSelected = selected.contains(category);
+            return GestureDetector(
+              onTap: () {
+                context
+                    .read<AdminCreateEventCubit>()
+                    .toggleCategory(category);
+              },
+              child: Chip(
+                shape: const StadiumBorder(
+                  side: BorderSide(
+                    color: AppColours.backgroundShade,
+                    width: 1.4,
+                  ),
+                ),
+                label: Text(
+                  category,
+                  style: AppTheme.smallBodyText.copyWith(
+                    fontSize: 12.0,
+                    color: isSelected
+                        ? AppColours.primaryBlue
+                        : AppColours.black,
+                  ),
+                ),
+                backgroundColor: isSelected
+                    ? AppColours.chipBackgroundShade
+                    : AppColours.white,
+              ),
+            );
+          }).toList(),
         ),
+      ],
+    );
+  }
+
+  Widget _builtNumberOfPersonSelector(AdminCreateEventState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Select Number of Persons:', style: AppTheme.smallBodyText),
         const Gap(10.0),
         NumberOfPersonSelector(
-          initialValue: _selectedNumberOfPerson,
+          initialValue: state.createEventBody?.totalTicket ?? 10,
           onChanged: (int selected) {
-            context.read<AdminCreateEventCubit>().enterNumberOfPerson(selected);
-            setState(() {
-              _selectedNumberOfPerson = selected;
-            });
-            debugPrint('Selected number : $selected');
+            context
+                .read<AdminCreateEventCubit>()
+                .enterNumberOfPerson(selected);
           },
-        )
+        ),
       ],
     );
   }
@@ -431,8 +405,8 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
             children: [
               TextSpan(
                 text: 'Actual Price',
-                style: AppTheme.smallBodyText
-                    .copyWith(fontWeight: FontWeight.w700),
+                style:
+                    AppTheme.smallBodyText.copyWith(fontWeight: FontWeight.w700),
               ),
               const TextSpan(
                 text: ' of ticket per person',
@@ -445,9 +419,12 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         PriceInputField(
           controller: _actualPriceController,
           onChanged: (newValue) {
-            context
-                .read<AdminCreateEventCubit>()
-                .enterEventActualPrice(int.parse(newValue));
+            final parsed = int.tryParse(newValue);
+            if (parsed != null) {
+              context
+                  .read<AdminCreateEventCubit>()
+                  .enterEventActualPrice(parsed);
+            }
           },
         ),
       ],
@@ -463,8 +440,8 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
             children: [
               TextSpan(
                 text: 'Discount Price',
-                style: AppTheme.smallBodyText
-                    .copyWith(fontWeight: FontWeight.w700),
+                style:
+                    AppTheme.smallBodyText.copyWith(fontWeight: FontWeight.w700),
               ),
               const TextSpan(
                 text: ' (This amount will be charged)',
@@ -476,143 +453,142 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         const Gap(10.0),
         PriceInputField(
           controller: _discountPriceController,
-          onChanged: (discountPrice) {
-            context.read<AdminCreateEventCubit>().enterEventDiscountedPrice(
-                int.parse(_discountPriceController.text));
+          onChanged: (_) {
+            final parsed = int.tryParse(_discountPriceController.text);
+            if (parsed != null) {
+              context
+                  .read<AdminCreateEventCubit>()
+                  .enterEventDiscountedPrice(parsed);
+            }
           },
         ),
       ],
     );
   }
 
-  Widget _buildEventStartDatePicker() {
+  Widget _buildDiscountToggle(AdminCreateEventState state) {
+    final activated = state.createEventBody?.discountActivated ?? false;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text('Discount Activated', style: AppTheme.smallBodyText),
+        Switch(
+          value: activated,
+          activeColor: AppColours.primaryBlue,
+          onChanged: (val) {
+            context
+                .read<AdminCreateEventCubit>()
+                .setDiscountActivated(val);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEventStartDatePicker(AdminCreateEventState state) {
+    final displayDate = state.selectedStartTime != null
+        ? DateFormat('dd/MMM/yyyy').format(state.selectedStartTime!)
+        : null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Select Event Start Date*',
-          style: AppTheme.smallBodyText,
-        ),
+        const Text('Select Event Start Date*', style: AppTheme.smallBodyText),
         const Gap(10.0),
         CreateEventSuffixIconField(
           onPressed: () {
-            showBottomDatePicker((startDate) {
+            _showBottomDatePicker((startDate) {
               context
                   .read<AdminCreateEventCubit>()
                   .collectEventStartDate(startDate);
-              String formattedDate =
-                  DateFormat('dd/MMM/yyyy').format(startDate);
-              setState(() {
-                _selectedStartDate = formattedDate;
-              });
             });
           },
           assetPath: 'lib/assets/icons/calendar_icon.svg',
-          child: _selectedStartDate == null
-              ? const SizedBox.shrink()
-              : Text(
-                  _selectedStartDate!,
-                  style: AppTheme.simpleText,
-                ),
+          child: displayDate != null
+              ? Text(displayDate, style: AppTheme.simpleText)
+              : const SizedBox.shrink(),
         ),
       ],
     );
   }
 
-  Widget _buildEventStartTimePicker() {
+  Widget _buildEventStartTimePicker(AdminCreateEventState state) {
+    final displayTime = state.selectedStartTime != null
+        ? DateFormat('hh:mm a').format(state.selectedStartTime!)
+        : null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Select Event Start Time*',
-          style: AppTheme.smallBodyText,
-        ),
+        const Text('Select Event Start Time*', style: AppTheme.smallBodyText),
         const Gap(10.0),
         CreateEventSuffixIconField(
           onPressed: () {
-            showBottomTimePicker((timeSelected) {
-              context.read<AdminCreateEventCubit>().collectEventStartTime(
-                    timeSelected,
-                  );
-              String formattedTime = DateFormat('hh:mm a').format(timeSelected);
-              setState(() {
-                _selectedStartTime = formattedTime;
-              });
+            _showBottomTimePicker((timeSelected) {
+              context
+                  .read<AdminCreateEventCubit>()
+                  .collectEventStartTime(timeSelected);
             });
           },
           icon: Icons.timelapse_rounded,
-          child: _selectedStartTime == null
-              ? const SizedBox.shrink()
-              : Text(
-                  _selectedStartTime!,
-                  style: AppTheme.simpleText,
-                ),
+          child: displayTime != null
+              ? Text(displayTime, style: AppTheme.simpleText)
+              : const SizedBox.shrink(),
         ),
       ],
     );
   }
 
-  Widget _buildEventEndDatePicker() {
+  Widget _buildEventEndDatePicker(AdminCreateEventState state) {
+    final displayDate = state.selectedEntTime != null
+        ? DateFormat('dd/MMM/yyyy').format(state.selectedEntTime!)
+        : null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Select Event End Date*',
-          style: AppTheme.smallBodyText,
-        ),
+        const Text('Select Event End Date*', style: AppTheme.smallBodyText),
         const Gap(10.0),
         CreateEventSuffixIconField(
           onPressed: () {
-            showBottomDatePicker((endDate) {
+            _showBottomDatePicker((endDate) {
               context
                   .read<AdminCreateEventCubit>()
                   .collectEventEndDate(endDate);
-              String formattedDate = DateFormat('dd/MMM/yyyy').format(endDate);
-              setState(() {
-                _selectedEndDate = formattedDate;
-              });
             });
           },
           assetPath: 'lib/assets/icons/calendar_icon.svg',
-          child: _selectedEndDate == null
-              ? const SizedBox.shrink()
-              : Text(
-                  _selectedEndDate!,
-                  style: AppTheme.simpleText,
-                ),
+          child: displayDate != null
+              ? Text(displayDate, style: AppTheme.simpleText)
+              : const SizedBox.shrink(),
         ),
       ],
     );
   }
 
-  Widget _buildEventEndTimePicker() {
+  Widget _buildEventEndTimePicker(AdminCreateEventState state) {
+    final displayTime = state.selectedEntTime != null
+        ? DateFormat('hh:mm a').format(state.selectedEntTime!)
+        : null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Select Event Start Time*',
-          style: AppTheme.smallBodyText,
-        ),
+        const Text('Select Event End Time*', style: AppTheme.smallBodyText),
         const Gap(10.0),
         CreateEventSuffixIconField(
           onPressed: () {
-            showBottomTimePicker((endTime) {
+            _showBottomTimePicker((endTime) {
               context
                   .read<AdminCreateEventCubit>()
                   .collectEventEndTime(endTime);
-              String formattedTime = DateFormat('hh:mm a').format(endTime);
-              setState(() {
-                _selectedEndTime = formattedTime;
-              });
             });
           },
           icon: Icons.timelapse_rounded,
-          child: _selectedEndTime == null
-              ? const SizedBox.shrink()
-              : Text(
-                  _selectedEndTime!,
-                  style: AppTheme.simpleText,
-                ),
+          child: displayTime != null
+              ? Text(displayTime, style: AppTheme.simpleText)
+              : const SizedBox.shrink(),
         ),
       ],
     );
@@ -622,10 +598,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Select Event Location*',
-          style: AppTheme.smallBodyText,
-        ),
+        const Text('Event Location*', style: AppTheme.smallBodyText),
         const Gap(10.0),
         CreateEventSuffixIconField(
           icon: Icons.location_on_outlined,
@@ -637,10 +610,10 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
               counter: SizedBox.shrink(),
             ),
             controller: _locationController,
-            onChanged: (newLocationName) {
-              context.read<AdminCreateEventCubit>().enterEventLocationName(
-                    _locationController.text,
-                  );
+            onChanged: (_) {
+              context
+                  .read<AdminCreateEventCubit>()
+                  .enterEventLocationName(_locationController.text);
             },
           ),
         ),
@@ -648,26 +621,127 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     );
   }
 
-  Widget _buildEventImagesUploadContainer(
-    VoidCallback onImagePickUp,
-    Function(File) onImageRemoved,
-    List<File?>? selectedImagesFileList,
-    List<String?>? fetchedEventImagesList,
-    String tempText,
-  ) {
+  Widget _buildEventByField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Upload Event Images*',
-          style: AppTheme.smallBodyText,
+        const Text('Event By', style: AppTheme.smallBodyText),
+        const Gap(10.0),
+        GlintTextInputField(
+          controller: _eventByController,
+          borderRadius: 10.0,
+          hintText: 'Organiser / Company name',
+          onChanged: (_) {
+            context
+                .read<AdminCreateEventCubit>()
+                .enterEventBy(_eventByController.text);
+          },
         ),
+      ],
+    );
+  }
+
+  Widget _buildGoogleMapUrlField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Google Map URL', style: AppTheme.smallBodyText),
+        const Gap(10.0),
+        GlintTextInputField(
+          controller: _googleMapUrlController,
+          borderRadius: 10.0,
+          hintText: 'https://maps.google.com/...',
+          onChanged: (_) {
+            context
+                .read<AdminCreateEventCubit>()
+                .enterGoogleMapUrl(_googleMapUrlController.text);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLatLongFields() {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Latitude', style: AppTheme.smallBodyText),
+              const Gap(10.0),
+              _buildCoordInputField(
+                controller: _latController,
+                hint: '28.6139',
+                onChanged: (_) => context
+                    .read<AdminCreateEventCubit>()
+                    .enterEventLat(_latController.text),
+              ),
+            ],
+          ),
+        ),
+        const Gap(12.0),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Longitude', style: AppTheme.smallBodyText),
+              const Gap(10.0),
+              _buildCoordInputField(
+                controller: _longController,
+                hint: '77.2090',
+                onChanged: (_) => context
+                    .read<AdminCreateEventCubit>()
+                    .enterEventLong(_longController.text),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCoordInputField({
+    required TextEditingController controller,
+    required String hint,
+    required ValueChanged<String> onChanged,
+  }) {
+    return Container(
+      height: 56.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(color: AppColours.backgroundShade, width: 1.0),
+      ),
+      child: TextField(
+        controller: controller,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        style: AppTheme.simpleText,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: hint,
+          hintStyle: AppTheme.simpleText,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEventImagesUploadContainer({
+    required VoidCallback onImagePickUp,
+    required List<File?> selectedImagesFileList,
+    required List<String>? fetchedEventImagesList,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Upload Event Images*', style: AppTheme.smallBodyText),
         const Gap(16.0),
         UploadEventImagesContainers(
           selectedImagesFileList: selectedImagesFileList,
           fetchedEventImagesList: fetchedEventImagesList,
           onImagePickUp: onImagePickUp,
-          onImageRemoved: onImageRemoved,
+          onImageRemoved: (_) {},
         ),
       ],
     );
@@ -677,10 +751,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Event Description*',
-          style: AppTheme.smallBodyText,
-        ),
+        const Text('Event Description*', style: AppTheme.smallBodyText),
         const Gap(12.0),
         Container(
           width: double.infinity,
@@ -718,14 +789,12 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     );
   }
 
-  void showBottomTimePicker(
-    Function(DateTime) onTimeSelected,
-  ) {
+  // ── Pickers ───────────────────────────────────────────────────────────────
+
+  void _showBottomTimePicker(Function(DateTime) onTimeSelected) {
     BottomPicker.time(
       use24hFormat: false,
-      onSubmit: (time) {
-        onTimeSelected(time);
-      },
+      onSubmit: (time) => onTimeSelected(time),
       dismissable: true,
       displayCloseIcon: false,
       bottomPickerTheme: BottomPickerTheme.plumPlate,
@@ -739,9 +808,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     ).show(context);
   }
 
-  void showBottomDatePicker(
-    Function(DateTime) onDateSelected,
-  ) {
+  void _showBottomDatePicker(Function(DateTime) onDateSelected) {
     BottomPicker.date(
       dateOrder: DatePickerDateOrder.dmy,
       initialDateTime: DateTime(
@@ -749,9 +816,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         DateTime.now().month,
         DateTime.now().day + 1,
       ),
-      pickerTextStyle: AppTheme.simpleText.copyWith(
-        fontSize: 16.0,
-      ),
+      pickerTextStyle: AppTheme.simpleText.copyWith(fontSize: 16.0),
       maxDateTime: DateTime(
         DateTime.now().year + 10,
         DateTime.now().month,
@@ -762,9 +827,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         DateTime.now().month,
         DateTime.now().day - 1,
       ),
-      onSubmit: (date) {
-        onDateSelected(date);
-      },
+      onSubmit: (date) => onDateSelected(date),
       dismissable: true,
       displayCloseIcon: false,
       bottomPickerTheme: BottomPickerTheme.plumPlate,

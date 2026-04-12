@@ -6,8 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:file_picker/file_picker.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 import '../utils/image_manager/image_manager_data.dart';
 
@@ -323,6 +321,19 @@ class ImageService {
       }
     } catch (e) {
       debugLogger("Clear App Directory", "Cleaning failed");
+    }
+  }
+
+  Future<void> clearEventImagesDirectory(String eventId) async {
+    try {
+      final appDir = await getApplicationDocumentsDirectory();
+      final eventDir = Directory(p.join(appDir.path, eventId));
+      if (await eventDir.exists()) {
+        await eventDir.delete(recursive: true);
+        debugLogger("IMAGE_SERVICE", "Event images directory deleted: $eventId");
+      }
+    } catch (e) {
+      debugLogger("IMAGE_SERVICE", "Error clearing event images ($eventId): $e");
     }
   }
 }

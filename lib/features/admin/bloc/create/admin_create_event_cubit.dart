@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:glint_frontend/data/remote/model/request/admin/create_event_request_body.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
@@ -17,6 +16,8 @@ import 'package:glint_frontend/utils/result_sealed.dart';
 part 'admin_create_event_state.dart';
 
 part 'admin_create_event_cubit.freezed.dart';
+
+const _kPendingEventDir = "pending_event";
 
 class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
   final adminDashboardRepo = getIt.get<AdminDashboardRepo>();
@@ -54,110 +55,108 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
         emitNewState(
           state.copyWith(
             isLoading: false,
-            error: "${eventResponse.error}, Can't Publish the event",
+            error: "${eventResponse.error}, Can't load the event",
           ),
         );
         break;
     }
   }
 
-  void publishEvent(int? eventId) {
-    eventId != null ? uploadMedia() : createEvent();
-  }
-
-  Future<void> createEvent() async {
-    emitNewState(
-      state.copyWith(
-        isLoading: true,
-      ),
-    );
-    var createEventBody = state.createEventBody;
-    if (createEventBody != null) {
-      final response = await adminDashboardRepo.createEvent(createEventBody);
-      switch (response) {
-        case Success<void>():
-          emitNewState(state.copyWith(eventPublished: true));
-          break;
-        case Failure<void>():
-          emitNewState(
-            state.copyWith(
-              isLoading: false,
-              error: "${response.error}, Can't Publish the event",
-            ),
-          );
-          break;
-      }
+  Future<void> publishEvent(int? eventId) async {
+    if (eventId != null) {
+      await _updateEvent(eventId);
     } else {
-      emitNewState(
-        state.copyWith(
-          isLoading: false,
-          error: "No Data found",
-        ),
-      );
+      await _uploadTempImagesAndCreate();
     }
   }
 
-  //Todo: This API Is not working as expected
-  Future<void> updateEvent(int eventId) async {
-    var createEventBody = state.createEventBody;
-    if (createEventBody != null) {
-      final response = await adminDashboardRepo.editEvent(createEventBody);
-      switch (response) {
-        case Success<void>():
-          uploadMedia();
+  Future<void> _uploadTempImagesAndCreate() async {
+    emitNewState(state.copyWith(isLoading: true, error: ""));
+
+    final images = state.pictureUploaded.whereType<File>().toList();
+    CreateEventRequestDomainModel? bodyToSend = state.createEventBody;
+
+    if (bodyToSend == null) {
+      emitNewState(state.copyWith(isLoading: false, error: "No event data found"));
+      return;
+    }
+
+    // Step 1: upload temp images if any were selected
+    if (images.isNotEmpty) {
+      final uploadResult = await adminDashboardRepo.uploadTempEventImages(images);
+      switch (uploadResult) {
+        case Success<String>():
+          bodyToSend = bodyToSend.copyWith(tempImageIds: [uploadResult.data]);
+          emitNewState(state.copyWith(createEventBody: bodyToSend));
           break;
-        case Failure<void>():
-          emitNewState(
-            state.copyWith(
-              isLoading: false,
-              error: "${response.error}, Can't Publish the event",
-            ),
-          );
-          break;
+        case Failure<String>():
+          emitNewState(state.copyWith(
+            isLoading: false,
+            error: "${uploadResult.error}, Can't upload images",
+          ));
+          return;
       }
     }
+
+    // Step 2: create the event
+    final createResult = await adminDashboardRepo.createEvent(bodyToSend);
+    switch (createResult) {
+      case Success<void>():
+        // Clean up locally stored images after successful publish
+        await imageService.clearEventImagesDirectory(_kPendingEventDir);
+        emitNewState(state.copyWith(eventPublished: true, isLoading: false));
+        break;
+      case Failure<void>():
+        emitNewState(state.copyWith(
+          isLoading: false,
+          error: "${createResult.error}, Can't publish the event",
+        ));
+    }
   }
+
+  Future<void> _updateEvent(int eventId) async {
+    emitNewState(state.copyWith(isLoading: true, error: ""));
+    final createEventBody = state.createEventBody;
+    if (createEventBody == null) {
+      emitNewState(state.copyWith(isLoading: false, error: "No event data found"));
+      return;
+    }
+
+    final response = await adminDashboardRepo.editEvent(createEventBody);
+    switch (response) {
+      case Success<void>():
+        emitNewState(state.copyWith(eventUpdated: true, isLoading: false));
+        break;
+      case Failure<void>():
+        emitNewState(state.copyWith(
+          isLoading: false,
+          error: "${response.error}, Can't update the event",
+        ));
+    }
+  }
+
 
   Future<void> pickUpImages() async {
-    if (state.passedEventId != null) {
-      final pickedImages = await imageService.pickImagesForEvent(
-          eventId: state.passedEventId.toString(), maxCount: 6);
-      emitNewState(
-        state.copyWith(
-          pictureUploaded: pickedImages.map((image) => image.file).toList(),
-        ),
-      );
-    }
+    final eventDirId = state.passedEventId?.toString() ?? _kPendingEventDir;
+    final pickedImages = await imageService.pickImagesForEvent(
+      eventId: eventDirId,
+      maxCount: 6,
+    );
+    if (pickedImages.isEmpty) return;
+
+    final existing = List<File?>.from(state.pictureUploaded);
+    final newFiles = pickedImages.map((img) => img.file).toList();
+    emitNewState(
+      state.copyWith(pictureUploaded: [...existing, ...newFiles]),
+    );
   }
 
-  Future<void> uploadMedia() async {
-    var images = state.pictureUploaded.map((item) => item!).toList();
-    if (state.passedEventId != null) {
-      final imageUploadResponse = await adminDashboardRepo
-          .uploadEventMediaFiles(state.passedEventId.toString(), images);
-      switch (imageUploadResponse) {
-        case Success<void>():
-          emit(
-            state.copyWith(eventUpdated: true, isLoading: false),
-          );
-        case Failure<void>():
-          emit(state.copyWith(
-              isLoading: false,
-              error: "${imageUploadResponse.error}, Can't upload the media"));
-      }
-    }
-  }
-
-  CreateEventRequestDomainModel? getCurrentBodyState() {
-    return state.createEventBody;
-  }
+  // ── Form field handlers ──────────────────────────────────────────────────
 
   void observeEventTitle(String eventTitle) {
     emitNewState(
       state.copyWith(
-        createEventBody: getCurrentBodyState()?.copyWith(
-          eventName: eventTitle,
-        ),
+        createEventBody: getCurrentBodyState()?.copyWith(eventName: eventTitle),
       ),
     );
   }
@@ -200,64 +199,138 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
     );
   }
 
-  void collectEventStartDate(DateTime passedTime) {
+  void setDiscountActivated(bool activated) {
     emitNewState(
       state.copyWith(
-        selectedStartTime: passedTime,
+        createEventBody:
+            getCurrentBodyState()?.copyWith(discountActivated: activated),
+      ),
+    );
+  }
+
+  void enterGoogleMapUrl(String url) {
+    emitNewState(
+      state.copyWith(
+        createEventBody: getCurrentBodyState()?.copyWith(googleMapUrl: url),
+      ),
+    );
+  }
+
+  void enterEventLat(String latText) {
+    final lat = double.tryParse(latText) ?? 0.0;
+    emitNewState(
+      state.copyWith(
+        createEventBody:
+            getCurrentBodyState()?.copyWith(eventLocationLat: lat),
+      ),
+    );
+  }
+
+  void enterEventLong(String longText) {
+    final lng = double.tryParse(longText) ?? 0.0;
+    emitNewState(
+      state.copyWith(
+        createEventBody:
+            getCurrentBodyState()?.copyWith(eventLocationLong: lng),
+      ),
+    );
+  }
+
+  void enterEventBy(String eventBy) {
+    emitNewState(
+      state.copyWith(
+        createEventBody: getCurrentBodyState()?.copyWith(eventBy: eventBy),
+      ),
+    );
+  }
+
+  void toggleCategory(String category) {
+    final current =
+        List<String>.from(state.createEventBody?.categoryList ?? []);
+    if (current.contains(category)) {
+      current.remove(category);
+    } else {
+      current.add(category);
+    }
+    emitNewState(
+      state.copyWith(
+        createEventBody:
+            getCurrentBodyState()?.copyWith(categoryList: current),
+      ),
+    );
+  }
+
+  // ── Date / time ──────────────────────────────────────────────────────────
+
+  void collectEventStartDate(DateTime passedDate) {
+    // Preserve any previously-selected time component
+    final existing = state.selectedStartTime;
+    final combined = existing != null
+        ? DateTime(passedDate.year, passedDate.month, passedDate.day,
+            existing.hour, existing.minute)
+        : DateTime(passedDate.year, passedDate.month, passedDate.day);
+
+    emitNewState(
+      state.copyWith(
+        selectedStartTime: combined,
+        createEventBody: getCurrentBodyState()?.copyWith(
+          startDateAndTime: combined.formatToStandard(),
+          bookTime: combined.formatToStandard(),
+        ),
       ),
     );
   }
 
   void collectEventStartTime(DateTime passedTime) {
-    var currentTime = state.selectedStartTime;
-    if (currentTime != null) {
-      var newStartDateAndTime = DateTime(currentTime.year, currentTime.month,
-          currentTime.day, passedTime.hour, passedTime.minute);
+    final base = state.selectedStartTime ?? DateTime.now();
+    final combined = DateTime(
+        base.year, base.month, base.day, passedTime.hour, passedTime.minute);
 
-      emit(
-        state.copyWith(
-          selectedStartTime: newStartDateAndTime,
-          createEventBody: getCurrentBodyState()?.copyWith(
-            createdTime: DateTime.now().formatToStandard(),
-            startDateAndTime: newStartDateAndTime.formatToStandard(),
-            bookTime: newStartDateAndTime.formatToStandard(),
-          ),
-        ),
-      );
-    }
-  }
-
-  void collectEventEndDate(DateTime passedTime) {
     emitNewState(
       state.copyWith(
-        selectedEntTime: passedTime,
+        selectedStartTime: combined,
         createEventBody: getCurrentBodyState()?.copyWith(
-          endDateAndTime: passedTime.formatToStandard(),
+          createdTime: DateTime.now().formatToStandard(),
+          startDateAndTime: combined.formatToStandard(),
+          bookTime: combined.formatToStandard(),
+        ),
+      ),
+    );
+  }
+
+  void collectEventEndDate(DateTime passedDate) {
+    final existing = state.selectedEntTime;
+    final combined = existing != null
+        ? DateTime(passedDate.year, passedDate.month, passedDate.day,
+            existing.hour, existing.minute)
+        : DateTime(passedDate.year, passedDate.month, passedDate.day);
+
+    emitNewState(
+      state.copyWith(
+        selectedEntTime: combined,
+        createEventBody: getCurrentBodyState()?.copyWith(
+          endDateAndTime: combined.formatToStandard(),
         ),
       ),
     );
   }
 
   void collectEventEndTime(DateTime passedTime) {
-    var currentTime = state.selectedEntTime;
-    if (currentTime != null) {
-      var newEndDateAndTime = DateTime(currentTime.year, currentTime.month,
-          currentTime.day, passedTime.hour, passedTime.minute);
+    final base = state.selectedEntTime ?? DateTime.now();
+    final combined = DateTime(
+        base.year, base.month, base.day, passedTime.hour, passedTime.minute);
 
-      emit(
-        state.copyWith(
-          selectedEntTime: newEndDateAndTime,
-          createEventBody: getCurrentBodyState()?.copyWith(
-            endDateAndTime: newEndDateAndTime.formatToStandard(),
-          ),
+    emitNewState(
+      state.copyWith(
+        selectedEntTime: combined,
+        createEventBody: getCurrentBodyState()?.copyWith(
+          endDateAndTime: combined.formatToStandard(),
         ),
-      );
-    }
+      ),
+    );
   }
 
-  void enterEventLocationName(
-    String? eventLocationName,
-  ) {
+  void enterEventLocationName(String? eventLocationName) {
     if (eventLocationName != null) {
       emitNewState(
         state.copyWith(
@@ -272,15 +345,14 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
   void enterEventDescription(String eventDesc) {
     emitNewState(
       state.copyWith(
-        createEventBody: getCurrentBodyState()?.copyWith(
-          eventDescription: eventDesc,
-        ),
+        createEventBody:
+            getCurrentBodyState()?.copyWith(eventDescription: eventDesc),
       ),
     );
   }
 
-  bool validateAllFieldsBeforePublishing() {
-    return false;
+  CreateEventRequestDomainModel? getCurrentBodyState() {
+    return state.createEventBody;
   }
 
   void emitNewState(AdminCreateEventState state) {
