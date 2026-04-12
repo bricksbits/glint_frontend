@@ -62,6 +62,45 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
     }
   }
 
+  // ── Validation ────────────────────────────────────────────────────────────
+
+  /// Returns a list of human-readable errors. Empty list means the form is valid.
+  List<String> getValidationErrors() {
+    final errors = <String>[];
+    final body = state.createEventBody;
+
+    if (body == null) {
+      errors.add("Form data is missing.");
+      return errors;
+    }
+
+    if (body.eventName.trim().isEmpty) errors.add("• Event name is required.");
+    if (state.selectedStartTime == null) {
+      errors.add("• Start date & time must be selected.");
+    }
+    if (state.selectedEntTime == null) {
+      errors.add("• End date & time must be selected.");
+    }
+    if (body.eventLocationName.trim().isEmpty) {
+      errors.add("• Event location is required.");
+    }
+    if (body.eventDescription.trim().isEmpty) {
+      errors.add("• Event description is required.");
+    }
+
+    // Images required only for new events (not edits)
+    if (state.passedEventId == null &&
+        !state.pictureUploaded.any((f) => f != null)) {
+      errors.add("• At least one event image must be uploaded.");
+    }
+
+    return errors;
+  }
+
+  bool get isFormValid => getValidationErrors().isEmpty;
+
+  // ── Publish (single-click) ───────────────────────────────────────────────
+
   Future<void> publishEvent(int? eventId) async {
     if (eventId != null) {
       await _updateEvent(eventId);
@@ -71,6 +110,14 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
   }
 
   Future<void> _uploadTempImagesAndCreate() async {
+    final errors = getValidationErrors();
+    if (errors.isNotEmpty) {
+      emitNewState(state.copyWith(
+        error: "Please complete the form:\n${errors.join('\n')}",
+      ));
+      return;
+    }
+
     emitNewState(state.copyWith(isLoading: true, error: ""));
 
     final images = state.pictureUploaded.whereType<File>().toList();

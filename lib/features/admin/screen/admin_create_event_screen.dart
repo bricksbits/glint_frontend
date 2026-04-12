@@ -54,43 +54,6 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     {EventType.normal: 'Normal'},
   ];
 
-  // Todo : Validation logic should be under the Cubit
-
-  bool _isFormValid(AdminCreateEventState state) =>
-      _getValidationErrors(state).isEmpty;
-
-  List<String> _getValidationErrors(AdminCreateEventState state) {
-    final errors = <String>[];
-    final body = state.createEventBody;
-
-    if (body == null) {
-      errors.add("Form data is missing.");
-      return errors;
-    }
-
-    if (body.eventName.trim().isEmpty) errors.add("• Event name is required.");
-    if (state.selectedStartTime == null) {
-      errors.add("• Start date & time must be selected.");
-    }
-    if (state.selectedEntTime == null) {
-      errors.add("• End date & time must be selected.");
-    }
-    if (body.eventLocationName.trim().isEmpty) {
-      errors.add("• Event location is required.");
-    }
-    if (body.eventDescription.trim().isEmpty) {
-      errors.add("• Event description is required.");
-    }
-
-    // Images are required only when creating a new event
-    if (state.passedEventId == null &&
-        !state.pictureUploaded.any((f) => f != null)) {
-      errors.add("• At least one event image must be uploaded.");
-    }
-
-    return errors;
-  }
-
   @override
   void dispose() {
     _eventNameController.dispose();
@@ -180,7 +143,8 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                   // Publish button
                   GestureDetector(
                     onTap: () {
-                      final errors = _getValidationErrors(state);
+                      final cubit = context.read<AdminCreateEventCubit>();
+                      final errors = cubit.getValidationErrors();
                       if (errors.isNotEmpty) {
                         ScaffoldMessenger.of(context)
                           ..hideCurrentSnackBar()
@@ -196,7 +160,7 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                           );
                         return;
                       }
-                      context.read<AdminCreateEventCubit>().publishEvent(
+                      cubit.publishEvent(
                           widget.navArguments?.updateExistingEventId);
                     },
                     child: AnimatedContainer(
@@ -206,7 +170,9 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                       padding: const EdgeInsets.all(12.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        color: _isFormValid(state)
+                        color: context
+                                .read<AdminCreateEventCubit>()
+                                .isFormValid
                             ? AppColours.black
                             : AppColours.gray60,
                       ),

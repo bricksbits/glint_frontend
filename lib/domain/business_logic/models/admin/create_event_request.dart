@@ -142,6 +142,7 @@ extension CreateEventRequestMapper on CreateEventRequestDomainModel {
       eventLocationName: eventLocationName,
       categoryList: categoryList,
       tempImageIds: tempImageIds,
+      eventBy: eventBy,
     );
   }
 
