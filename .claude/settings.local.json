@@ -13,7 +13,10 @@
       "mcp__plugin_figma_figma__use_figma",
       "Bash(fvm flutter:*)",
       "Bash(find:*)",
-      "Bash(grep -v \"^$\")"
+      "Bash(grep -v \"^$\")",
+      "Bash(grep -v \"^$\")",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)"
     ]
   }
 }
