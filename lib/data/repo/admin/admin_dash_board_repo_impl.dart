@@ -148,42 +148,6 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   }
 
   @override
-  Future<Result<void>> uploadEventMediaFiles(
-      String eventId, List<File> event) async {
-    FormData formData = FormData();
-    for (int i = 0; i < event.length; i++) {
-      final file = event[i];
-      if (file != null) {
-        formData.files.add(
-          MapEntry(
-            "picture",
-            await MultipartFile.fromFile(
-              file.path,
-              filename: file.path.split('/').last,
-            ),
-          ),
-        );
-      }
-    }
-
-    final response = await apiCallHandler(
-      httpClient: httpClient,
-      requestType: HttpRequestEnum.UPLOAD,
-      endpoint: "event/$eventId/content",
-      uploadFilesFormData: formData,
-    );
-
-    switch (response) {
-      case Success():
-        return const Success("File Uploaded successfully");
-      case Failure():
-        return Failure(
-          Exception("Not able to upload files currently, please try again."),
-        );
-    }
-  }
-
-  @override
   Future<Result<void>> deleteEventContent(
     String eventId,
     List<String> pictureList,

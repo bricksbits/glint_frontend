@@ -1,5 +1,6 @@
 import 'package:glint_frontend/data/remote/model/request/admin/create_event_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/update_event_request_body.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_detail_domain.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
 
 class CreateEventRequestDomainModel {
@@ -19,6 +20,7 @@ class CreateEventRequestDomainModel {
   int ticketsRemaining;
   int totalTicket;
   String eventLocationName;
+  String eventBy;
   List<String> categoryList;
   List<String> tempImageIds;
 
@@ -43,6 +45,7 @@ class CreateEventRequestDomainModel {
     required this.totalTicket,
     required this.categoryList,
     required this.eventLocationName,
+    required this.eventBy,
     required this.tempImageIds,
     this.eventId,
   });
@@ -65,6 +68,7 @@ class CreateEventRequestDomainModel {
       ticketsRemaining: 100,
       totalTicket: 100,
       eventLocationName: "",
+      eventBy: "",
       categoryList: [],
       tempImageIds: [],
     );
@@ -88,6 +92,7 @@ class CreateEventRequestDomainModel {
     int? totalTicket,
     List<String>? categoryList,
     String? eventLocationName,
+    String? eventBy,
     List<String>? tempImageIds,
     String? eventId,
   }) {
@@ -108,6 +113,7 @@ class CreateEventRequestDomainModel {
       ticketsRemaining: ticketsRemaining ?? this.ticketsRemaining,
       totalTicket: totalTicket ?? this.totalTicket,
       eventLocationName: eventLocationName ?? this.eventLocationName,
+      eventBy: eventBy ?? this.eventBy,
       categoryList: categoryList ?? List<String>.from(this.categoryList),
       tempImageIds: tempImageIds ?? List<String>.from(this.tempImageIds),
       eventId: eventId ?? this.eventId,
@@ -136,6 +142,7 @@ extension CreateEventRequestMapper on CreateEventRequestDomainModel {
       eventLocationName: eventLocationName,
       categoryList: categoryList,
       tempImageIds: tempImageIds,
+      eventBy: eventBy,
     );
   }
 
@@ -176,6 +183,27 @@ extension CreateEventRequestMapper on CreateEventRequestDomainModel {
       peopleInterested: 0,
       isHotEvent: isHotEvent,
       location: {},
+    );
+  }
+
+  EventDetailsDomainModel toPreviewEventDetails() {
+    return EventDetailsDomainModel(
+      eventId: eventId ?? "",
+      eventName: eventName,
+      eventCoverImageUrl: [],
+      eventdate: startDateAndTime,
+      eventTime: endDateAndTime,
+      eventLocation: eventLocationName,
+      eventOldPrice: originalPrice.toString(),
+      eventCurrentPrice: discountedPrice.toString(),
+      daysLeft: "7",
+      peopleInterested: 0,
+      aboutEvent: eventDescription,
+      location: {
+        "lat": eventLocationLat.toString(),
+        "long": eventLocationLong.toString(),
+      },
+      eventBy: eventBy,
     );
   }
 }

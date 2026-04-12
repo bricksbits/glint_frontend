@@ -32,8 +32,6 @@ abstract class AdminDashboardRepo {
     CreateEventRequestDomainModel createEventRequest,
   );
 
-  Future<Result<void>> uploadEventMediaFiles(String eventId, List<File> event);
-
   Future<Result<void>> deleteEventContent(
     String eventId,
     List<String> pictureList,

@@ -103,6 +103,7 @@ extension EventDetailsToCreateEventMapper on EventDetailsDomainModel {
       ticketsRemaining: 30,
       totalTicket: 100,
       eventLocationName: eventLocation,
+      eventBy: eventBy,
       categoryList: [],
       tempImageIds: [],
     );
