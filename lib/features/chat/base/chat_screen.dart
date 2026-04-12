@@ -23,7 +23,29 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// When the app returns to the foreground, trigger a reconnect if the Stream
+  /// WebSocket dropped while the app was backgrounded.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      context.read<ChatScreenCubit>().reconnectIfNeeded();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChatScreenCubit, ChatScreenState>(
@@ -144,6 +166,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       final currentUser =
                                           StreamChat.of(context).currentUser;
                                       return ChatChannelTile(
+                                        key: ValueKey(channels[index].id),
                                         channel: channels[index],
                                         currentUserId: currentUser?.id,
                                         onTap: () => context.pushNamed(

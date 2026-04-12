@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
+import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/chat/chat_circular_icon_button.dart';
@@ -13,6 +14,15 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+
+// Reaction config — 5 basic emojis mapped to Stream reaction types.
+const _kReactions = [
+  ('like', '👍'),
+  ('love', '❤️'),
+  ('haha', '😂'),
+  ('wow', '😮'),
+  ('sad', '😢'),
+];
 
 class ChatWithScreen extends StatefulWidget {
   final ChatWithNavArguments chatWithNavArguments;
@@ -126,12 +136,8 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                 widget.chatWithNavArguments.matchId ?? "--",
               );
             },
-            child: CircleAvatar(
-              radius: 16,
-              //todo: Add the loading and Error builder
-              backgroundImage: NetworkImage(
-                oppositeUserImageUrl,
-              ),
+            child: ClipOval(
+              child: _HeaderAvatar(imageUrl: oppositeUserImageUrl),
             ),
           ),
         ],
@@ -200,24 +206,48 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
         final message = details.message;
         final isMine = details.isMyMessage;
         final attachments = details.message.attachments;
-        bool hasAttachments = attachments.isNotEmpty;
-        bool isOneTimeView = true;
+        final bool hasAttachments = attachments.isNotEmpty;
         bool hasBeenViewed = false;
         final imageUrls = attachments.map((file) => file.imageUrl).toList();
 
         if (hasAttachments) {
           final imageReceived = attachments.first;
-          isOneTimeView = imageReceived.extraData[oneTimeViewKey] == true;
           hasBeenViewed = imageReceived.extraData[viewedKey] == true;
         }
 
-        final canViewPhoto =
-            hasAttachments && !isMine && isOneTimeView && !hasBeenViewed;
-
-        // Determine display state for the bubble
         final oneTimePhotoLabel = hasBeenViewed
             ? MediaMessageViewType.Viewed.name
             : MediaMessageViewType.Photo.name;
+
+        // Bubble widget (image or text).
+        final bubble = hasAttachments
+            ? _chatImageMessageBubble(
+                onImageMessageTap: isMine
+                    ? () => showCustomSnackbar(
+                          context,
+                          message: "Once sent, can't be viewed again.",
+                        )
+                    : () {
+                        context.pushNamed(
+                          GlintChatRoutes.oneTimePhotoView.name,
+                          extra: OneTimeViewNavArguments(
+                            imageUrls.first,
+                            message.text,
+                          ),
+                        );
+                      },
+                oneTimeViewPhotoLabel: oneTimePhotoLabel,
+              )
+            : GestureDetector(
+                onLongPress: () => _showReactionPicker(context, message),
+                child: _buildMessageBubble(message, isMine),
+              );
+
+        // Reaction counts row (shown below the bubble when reactions exist).
+        final reactionCounts = message.reactionCounts ?? {};
+        final reactionRow = reactionCounts.isNotEmpty
+            ? _buildReactionRow(context, message, isMine)
+            : const SizedBox.shrink();
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
@@ -227,49 +257,21 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                 isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               if (isMine) ...[
-                // Time on the left for receiver
                 Text(
                   DateFormat('h:mm a').format(message.createdAt.toLocal()),
                   style: const TextStyle(fontSize: 10, color: Colors.grey),
                 ),
                 const SizedBox(width: 8),
-                hasAttachments
-                    ? _chatImageMessageBubble(
-                        onImageMessageTap: () {
-                          showCustomSnackbar(
-                            context,
-                            message: "Once sent, can't be viewed again.",
-                          );
-                        },
-                        oneTimeViewPhotoLabel: oneTimePhotoLabel,
-                      )
-                    : _buildMessageBubble(message, isMine),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [bubble, reactionRow],
+                ),
               ] else ...[
-                hasAttachments
-                    ? _chatImageMessageBubble(
-                        onImageMessageTap: () {
-                          context.pushNamed(
-                            GlintChatRoutes.oneTimePhotoView.name,
-                            extra: OneTimeViewNavArguments(
-                              imageUrls.first,
-                              message.text,
-                            ),
-                          );
-
-                          /// Stream doesn't allow others message to get update by current user.
-                          /// Backend Dependency
-                          // Mark as viewed using your chosen method
-                          // context
-                          //     .read<ChatWithCubit>()
-                          //     .markTheOneTimeViewImageAsViewed(
-                          //       message,
-                          //     );
-                        },
-                        oneTimeViewPhotoLabel: oneTimePhotoLabel,
-                      )
-                    : _buildMessageBubble(message, isMine),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [bubble, reactionRow],
+                ),
                 const SizedBox(width: 8),
-                // Time on the right for sender
                 Text(
                   DateFormat('h:mm a').format(message.createdAt.toLocal()),
                   style: const TextStyle(fontSize: 10, color: Colors.grey),
@@ -293,6 +295,117 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
       },
     );
   }
+
+  // ------------------- Reaction Picker ----------------------------
+
+  void _showReactionPicker(BuildContext context, Message message) {
+    showDialog<void>(
+      context: context,
+      barrierColor: Colors.black26,
+      builder: (_) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: _kReactions.map((pair) {
+                final type = pair.$1;
+                final emoji = pair.$2;
+                final hasReacted =
+                    message.ownReactions?.any((r) => r.type == type) ??
+                        false;
+                return InkWell(
+                  borderRadius: BorderRadius.circular(32),
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    context
+                        .read<ChatWithCubit>()
+                        .toggleReaction(message, type);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                      emoji,
+                      style: TextStyle(
+                        fontSize: 26,
+                        // Highlight if the user already picked this one.
+                        shadows: hasReacted
+                            ? [
+                                const Shadow(
+                                  color: AppColours.primaryBlue,
+                                  blurRadius: 12,
+                                )
+                              ]
+                            : null,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildReactionRow(
+      BuildContext context, Message message, bool isMine) {
+    final counts = message.reactionCounts ?? {};
+    final ownTypes = {
+      for (final r in message.ownReactions ?? []) r.type,
+    };
+
+    final chips = counts.entries
+        .where((e) => e.value > 0)
+        .map((e) {
+          final emoji = _kReactions
+              .firstWhere(
+                (r) => r.$1 == e.key,
+                orElse: () => (e.key, ''),
+              )
+              .$2;
+          if (emoji.isEmpty) return const SizedBox.shrink();
+          final mine = ownTypes.contains(e.key);
+          return GestureDetector(
+            onTap: () => context
+                .read<ChatWithCubit>()
+                .toggleReaction(message, e.key),
+            child: Container(
+              margin: const EdgeInsets.only(top: 4, right: 4),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: mine
+                    ? AppColours.backgroundShade
+                    : AppColours.lightGray,
+                borderRadius: BorderRadius.circular(12),
+                border: mine
+                    ? Border.all(color: AppColours.primaryBlue, width: 1)
+                    : null,
+              ),
+              child: Text(
+                '$emoji ${e.value}',
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          );
+        })
+        .toList();
+
+    if (chips.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 2),
+      child: Wrap(children: chips),
+    );
+  }
+
+  // ------------------- Message Input ----------------------------
 
   StreamMessageInput setupMessageInput(Channel? currentChannel) {
     return StreamMessageInput(
@@ -416,7 +529,6 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
     );
   }
 
-  /// Handle the Image Message for both the users type,
   Widget _chatImageMessageBubble({
     required VoidCallback onImageMessageTap,
     required String oneTimeViewPhotoLabel,
@@ -429,13 +541,12 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
           bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(0), // No radius here
+          bottomRight: Radius.circular(0),
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Placeholder Icon (replace with your image icon later)
           Container(
             width: 40,
             height: 40,
@@ -443,8 +554,8 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 1.5),
             ),
-            child:
-                const Icon(Icons.image_outlined, color: Colors.white, size: 24),
+            child: const Icon(Icons.image_outlined,
+                color: Colors.white, size: 24),
           ),
           const SizedBox(width: 12),
           GestureDetector(
@@ -459,6 +570,40 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Private header avatar — handles empty/null URL gracefully.
+// ---------------------------------------------------------------------------
+class _HeaderAvatar extends StatelessWidget {
+  const _HeaderAvatar({required this.imageUrl});
+
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageUrl.isEmpty) {
+      return Container(
+        width: 32,
+        height: 32,
+        color: AppColours.mediumGray,
+        child: const Icon(Icons.person, size: 18, color: AppColours.darkGray),
+      );
+    }
+    return FadeInImage.assetNetwork(
+      placeholder: 'lib/assets/images/temp_place_holder.png',
+      image: imageUrl,
+      width: 32,
+      height: 32,
+      fit: BoxFit.cover,
+      imageErrorBuilder: (_, __, ___) => Image.asset(
+        'lib/assets/images/temp_place_holder.png',
+        width: 32,
+        height: 32,
+        fit: BoxFit.cover,
       ),
     );
   }

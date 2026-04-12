@@ -4,7 +4,10 @@ import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/services/chat_service.dart';
 import 'package:glint_frontend/utils/logger.dart';
-import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart'
+    hide Member;
+import 'package:stream_chat_flutter/stream_chat_flutter.dart'
+    show Reaction, Member;
 
 part 'chat_with_state.dart';
 
@@ -80,6 +83,26 @@ class ChatWithCubit extends Cubit<ChatWithState> {
     } catch (e, st) {
       debugLogger(
           logPrefix, "${messageWithMedia?.id} update failed with, Error : $e");
+    }
+  }
+
+  /// Toggles a reaction on a message. Sends the reaction if the current user
+  /// hasn't reacted with [reactionType] yet; removes it if they have.
+  Future<void> toggleReaction(Message message, String reactionType) async {
+    final channel = state.currentChannel;
+    if (channel == null) return;
+
+    final hasReacted =
+        message.ownReactions?.any((r) => r.type == reactionType) ?? false;
+
+    try {
+      if (hasReacted) {
+        await channel.deleteReaction(message, Reaction(type: reactionType));
+      } else {
+        await channel.sendReaction(message, reactionType);
+      }
+    } catch (e) {
+      debugLogger(logPrefix, "toggleReaction failed: $e");
     }
   }
 

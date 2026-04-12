@@ -111,6 +111,9 @@ class ChatRepoImpl extends ChatRepo {
     final userStreamToken = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.streamTokenKey);
 
+    final cachedFcmToken = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.deviceFcmTokenKey);
+
     try {
       if (isUserDetailsAvailable(userId, userName, userStreamToken)) {
         await chatService.connectUser(
@@ -119,6 +122,14 @@ class ChatRepoImpl extends ChatRepo {
           userToken: userStreamToken,
           profileImageUrl: userProfile,
         );
+
+        // Register device for push notifications after a successful connection.
+        // Uses the locally cached FCM token for an immediate registration and
+        // fetches a fresh one in case it has rotated.
+        chatService.registerDevice(
+          cachedToken: cachedFcmToken.isNotEmpty ? cachedFcmToken : null,
+        );
+
         return const Result.success('');
       }
       return Failure(Exception(), message: "No User data found");
