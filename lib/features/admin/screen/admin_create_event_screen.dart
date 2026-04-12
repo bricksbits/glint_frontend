@@ -54,6 +54,43 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     {EventType.normal: 'Normal'},
   ];
 
+  // Todo : Validation logic should be under the Cubit
+
+  bool _isFormValid(AdminCreateEventState state) =>
+      _getValidationErrors(state).isEmpty;
+
+  List<String> _getValidationErrors(AdminCreateEventState state) {
+    final errors = <String>[];
+    final body = state.createEventBody;
+
+    if (body == null) {
+      errors.add("Form data is missing.");
+      return errors;
+    }
+
+    if (body.eventName.trim().isEmpty) errors.add("• Event name is required.");
+    if (state.selectedStartTime == null) {
+      errors.add("• Start date & time must be selected.");
+    }
+    if (state.selectedEntTime == null) {
+      errors.add("• End date & time must be selected.");
+    }
+    if (body.eventLocationName.trim().isEmpty) {
+      errors.add("• Event location is required.");
+    }
+    if (body.eventDescription.trim().isEmpty) {
+      errors.add("• Event description is required.");
+    }
+
+    // Images are required only when creating a new event
+    if (state.passedEventId == null &&
+        !state.pictureUploaded.any((f) => f != null)) {
+      errors.add("• At least one event image must be uploaded.");
+    }
+
+    return errors;
+  }
+
   @override
   void dispose() {
     _eventNameController.dispose();
@@ -143,16 +180,35 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                   // Publish button
                   GestureDetector(
                     onTap: () {
+                      final errors = _getValidationErrors(state);
+                      if (errors.isNotEmpty) {
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Please complete the form:\n${errors.join('\n')}",
+                                style: const TextStyle(fontSize: 13.0),
+                              ),
+                              backgroundColor: Colors.red.shade700,
+                              duration: const Duration(seconds: 4),
+                            ),
+                          );
+                        return;
+                      }
                       context.read<AdminCreateEventCubit>().publishEvent(
                           widget.navArguments?.updateExistingEventId);
                     },
-                    child: Container(
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
                       height: 40.0,
                       width: 40.0,
                       padding: const EdgeInsets.all(12.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        color: AppColours.black,
+                        color: _isFormValid(state)
+                            ? AppColours.black
+                            : AppColours.gray60,
                       ),
                       child: SvgPicture.asset(
                         'lib/assets/icons/profile/save_icon.svg',
