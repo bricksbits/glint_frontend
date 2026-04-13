@@ -208,6 +208,8 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
   }
 
   /// Called on startup. Uses local cache if warm enough, otherwise fetches.
+  /// Only applicable for People's data
+  /// Not Event People's data
   Future<void> _validateCacheOrFetch(Emitter<PeopleCardsState> emit) async {
     final result = await peopleRepo.getProfilesFromDB();
 
