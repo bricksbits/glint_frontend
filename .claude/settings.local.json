@@ -18,7 +18,8 @@
       "Bash(grep -v \"^$\")",
       "Bash(git add:*)",
       "Bash(git commit -m ':*)",
-      "Bash(xargs cat:*)"
+      "Bash(xargs cat:*)",
+      "Bash(grep -E \"\\\\.\\(dart\\)$\")"
     ]
   }
 }

@@ -3995,6 +3995,8 @@ mixin _$PeopleCardsState {
   int get lastActionWasUndo => throw _privateConstructorUsedError;
   int get currentIndex => throw _privateConstructorUsedError;
   bool get hasReachedEnd => throw _privateConstructorUsedError;
+  PeopleScreenType get screenType => throw _privateConstructorUsedError;
+  int? get activeEventId => throw _privateConstructorUsedError;
 
   /// Create a copy of PeopleCardsState
   /// with the given fields replaced by the non-null parameter values.
@@ -4021,7 +4023,9 @@ abstract class $PeopleCardsStateCopyWith<$Res> {
       Set<String> alreadySwipedIds,
       int lastActionWasUndo,
       int currentIndex,
-      bool hasReachedEnd});
+      bool hasReachedEnd,
+      PeopleScreenType screenType,
+      int? activeEventId});
 }
 
 /// @nodoc
@@ -4051,6 +4055,8 @@ class _$PeopleCardsStateCopyWithImpl<$Res, $Val extends PeopleCardsState>
     Object? lastActionWasUndo = null,
     Object? currentIndex = null,
     Object? hasReachedEnd = null,
+    Object? screenType = null,
+    Object? activeEventId = freezed,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -4101,6 +4107,14 @@ class _$PeopleCardsStateCopyWithImpl<$Res, $Val extends PeopleCardsState>
           ? _value.hasReachedEnd
           : hasReachedEnd // ignore: cast_nullable_to_non_nullable
               as bool,
+      screenType: null == screenType
+          ? _value.screenType
+          : screenType // ignore: cast_nullable_to_non_nullable
+              as PeopleScreenType,
+      activeEventId: freezed == activeEventId
+          ? _value.activeEventId
+          : activeEventId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -4125,7 +4139,9 @@ abstract class _$$PeopleCardStateImplCopyWith<$Res>
       Set<String> alreadySwipedIds,
       int lastActionWasUndo,
       int currentIndex,
-      bool hasReachedEnd});
+      bool hasReachedEnd,
+      PeopleScreenType screenType,
+      int? activeEventId});
 }
 
 /// @nodoc
@@ -4153,6 +4169,8 @@ class __$$PeopleCardStateImplCopyWithImpl<$Res>
     Object? lastActionWasUndo = null,
     Object? currentIndex = null,
     Object? hasReachedEnd = null,
+    Object? screenType = null,
+    Object? activeEventId = freezed,
   }) {
     return _then(_$PeopleCardStateImpl(
       isLoading: null == isLoading
@@ -4203,6 +4221,14 @@ class __$$PeopleCardStateImplCopyWithImpl<$Res>
           ? _value.hasReachedEnd
           : hasReachedEnd // ignore: cast_nullable_to_non_nullable
               as bool,
+      screenType: null == screenType
+          ? _value.screenType
+          : screenType // ignore: cast_nullable_to_non_nullable
+              as PeopleScreenType,
+      activeEventId: freezed == activeEventId
+          ? _value.activeEventId
+          : activeEventId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -4222,7 +4248,9 @@ class _$PeopleCardStateImpl extends _PeopleCardState {
       final Set<String> alreadySwipedIds = const {},
       this.lastActionWasUndo = 0,
       this.currentIndex = 0,
-      this.hasReachedEnd = false})
+      this.hasReachedEnd = false,
+      this.screenType = PeopleScreenType.discover,
+      this.activeEventId})
       : _displayCards = displayCards,
         _swipedHistoryCards = swipedHistoryCards,
         _alreadySwipedIds = alreadySwipedIds,
@@ -4283,10 +4311,15 @@ class _$PeopleCardStateImpl extends _PeopleCardState {
   @override
   @JsonKey()
   final bool hasReachedEnd;
+  @override
+  @JsonKey()
+  final PeopleScreenType screenType;
+  @override
+  final int? activeEventId;
 
   @override
   String toString() {
-    return 'PeopleCardsState(isLoading: $isLoading, isFetchingMoreProfile: $isFetchingMoreProfile, displayCards: $displayCards, userId: $userId, error: $error, currentOffset: $currentOffset, swipedHistoryCards: $swipedHistoryCards, cardSwipeController: $cardSwipeController, alreadySwipedIds: $alreadySwipedIds, lastActionWasUndo: $lastActionWasUndo, currentIndex: $currentIndex, hasReachedEnd: $hasReachedEnd)';
+    return 'PeopleCardsState(isLoading: $isLoading, isFetchingMoreProfile: $isFetchingMoreProfile, displayCards: $displayCards, userId: $userId, error: $error, currentOffset: $currentOffset, swipedHistoryCards: $swipedHistoryCards, cardSwipeController: $cardSwipeController, alreadySwipedIds: $alreadySwipedIds, lastActionWasUndo: $lastActionWasUndo, currentIndex: $currentIndex, hasReachedEnd: $hasReachedEnd, screenType: $screenType, activeEventId: $activeEventId)';
   }
 
   @override
@@ -4315,7 +4348,11 @@ class _$PeopleCardStateImpl extends _PeopleCardState {
             (identical(other.currentIndex, currentIndex) ||
                 other.currentIndex == currentIndex) &&
             (identical(other.hasReachedEnd, hasReachedEnd) ||
-                other.hasReachedEnd == hasReachedEnd));
+                other.hasReachedEnd == hasReachedEnd) &&
+            (identical(other.screenType, screenType) ||
+                other.screenType == screenType) &&
+            (identical(other.activeEventId, activeEventId) ||
+                other.activeEventId == activeEventId));
   }
 
   @override
@@ -4332,7 +4369,9 @@ class _$PeopleCardStateImpl extends _PeopleCardState {
       const DeepCollectionEquality().hash(_alreadySwipedIds),
       lastActionWasUndo,
       currentIndex,
-      hasReachedEnd);
+      hasReachedEnd,
+      screenType,
+      activeEventId);
 
   /// Create a copy of PeopleCardsState
   /// with the given fields replaced by the non-null parameter values.
@@ -4357,7 +4396,9 @@ abstract class _PeopleCardState extends PeopleCardsState {
       final Set<String> alreadySwipedIds,
       final int lastActionWasUndo,
       final int currentIndex,
-      final bool hasReachedEnd}) = _$PeopleCardStateImpl;
+      final bool hasReachedEnd,
+      final PeopleScreenType screenType,
+      final int? activeEventId}) = _$PeopleCardStateImpl;
   const _PeopleCardState._() : super._();
 
   @override
@@ -4384,6 +4425,10 @@ abstract class _PeopleCardState extends PeopleCardsState {
   int get currentIndex;
   @override
   bool get hasReachedEnd;
+  @override
+  PeopleScreenType get screenType;
+  @override
+  int? get activeEventId;
 
   /// Create a copy of PeopleCardsState
   /// with the given fields replaced by the non-null parameter values.
