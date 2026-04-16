@@ -1,16 +1,17 @@
-import 'dart:convert';
-
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/payment/book_event_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/payment/buy_membership_request.dart';
 import 'package:glint_frontend/data/remote/model/request/payment/verify_payment_request_body.dart';
+import 'package:glint_frontend/data/remote/model/response/event/get_payment_history_response.dart';
+import 'package:glint_frontend/data/remote/model/response/mapper/event_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/payment/book_event_response.dart'
     as bookEventResponse;
 import 'package:glint_frontend/data/remote/model/response/payment/buy_membership_response.dart';
 import 'package:glint_frontend/data/remote/model/response/payment/payment_history_response.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/payment_history_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/repo/payment/payment_repo.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
@@ -97,9 +98,59 @@ class PaymentRepoImpl extends PaymentRepo {
   }
 
   @override
+  Future<Result<void>> cancelTicket(int orderId) async {
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.PUT,
+      endpoint: "/event/ticket/cancel",
+      requestBody: {'order_id': orderId},
+      passedQueryParameters: null,
+    );
+
+    switch (response) {
+      case Success():
+        return const Success("");
+      case Failure():
+        return Failure(Exception(response.error));
+    }
+  }
+
+  @override
   Future<Result<void>> cancelOrder(String orderId) async {
-    // TODO: implement cancelOrder
-    throw UnimplementedError();
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.PUT,
+      endpoint: "/user/cancel-order",
+      requestBody: {'order_id': int.parse(orderId)},
+      passedQueryParameters: null,
+    );
+
+    switch (response) {
+      case Success():
+        return const Success("");
+      case Failure():
+        return Failure(Exception(response.error));
+    }
+  }
+
+  @override
+  Future<Result<List<PaymentHistoryDomainModel>>> getPaymentHistory() async {
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      endpoint: "/user/payment-history",
+      requestBody: null,
+      passedQueryParameters: null,
+    );
+
+    switch (response) {
+      case Success():
+        final paymentHistoryResponse =
+            GetPaymentHistoryResponse.fromJson(response.data['data']);
+        return Success(paymentHistoryResponse.mapToDomainModel());
+      case Failure():
+        return Failure(Exception(response.error));
+    }
   }
 
   @Deprecated(
