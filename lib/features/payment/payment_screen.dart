@@ -8,6 +8,7 @@ import 'package:glint_frontend/design/common/app_theme.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:go_router/go_router.dart';
@@ -401,19 +402,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse successResponse) {
-    print("Success Payment callback called $successResponse");
-    if (context.mounted) {
-      if (successResponse.data != null) {
-        if (successResponse.orderId != null &&
-            successResponse.paymentId != null &&
-            successResponse.signature != null) {
-          context.read<PaymentCubit>().updateTheMembershipDetails();
-          showCustomSnackbar(context, message: "Payment Successful");
-          context.goNamed(GlintMainRoutes.home.name);
-        }
-      }
-    } else {
-      print("Context changes, can't find payment");
+    if (!context.mounted) return;
+
+    if (successResponse.orderId == null) return;
+
+    showCustomSnackbar(context, message: "Payment Successful");
+
+    final cubitState = context.read<PaymentCubit>().state;
+    final paymentType = cubitState.isMembershipRequest
+        ? PaymentType.membership
+        : PaymentType.eventTicket;
+
+    switch (paymentType) {
+      case PaymentType.membership:
+        context.read<PaymentCubit>().updateTheMembershipDetails();
+        context.goNamed(GlintMainRoutes.home.name);
+      case PaymentType.eventTicket:
+        context.pushReplacementNamed(
+          GlintMainRoutes.confirmTicket.name,
+          extra: ConfirmTicketNavArguments(
+            eventId: cubitState.paymentModel?.eventId ?? "",
+            matchId: cubitState.paymentModel?.matchId ?? "",
+            matchedUser: cubitState.paymentModel?.userTwo,
+            totalAmount: cubitState.totalAmount ?? "",
+          ),
+        );
     }
   }
 

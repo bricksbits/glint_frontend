@@ -9,11 +9,12 @@ import 'package:glint_frontend/domain/business_logic/repo/payment/payment_repo.d
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/model/razorpay_order_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
-import 'package:injectable/injectable.dart';
 
 part 'payment_state.dart';
 
 part 'payment_cubit.freezed.dart';
+
+enum PaymentType { membership, eventTicket }
 
 class PaymentCubit extends Cubit<PaymentState> {
   final PaymentRepo paymentRepo = getIt.get<PaymentRepo>();
