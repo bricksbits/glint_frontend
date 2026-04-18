@@ -50,9 +50,13 @@ import '../domain/application_logic/admin/get_all_publish_events_use_case.dart'
     as _i38;
 import '../domain/application_logic/admin/get_all_ticket_bought_users_use_case.dart'
     as _i907;
+import '../domain/application_logic/admin/get_event_admin_stats_use_case.dart'
+    as _i605;
 import '../domain/application_logic/admin/publish_event_use_case.dart' as _i354;
 import '../domain/application_logic/admin/reject_published_event_usecase.dart'
     as _i579;
+import '../domain/application_logic/admin/toggle_pause_event_use_case.dart'
+    as _i804;
 import '../domain/application_logic/admin/update_publish_event_use_case.dart'
     as _i130;
 import '../domain/application_logic/auth/is_user_logged_in_use_case.dart'
@@ -247,6 +251,10 @@ extension GetItInjectableX on _i174.GetIt {
         _i907.GetAllTicketBoughtUsersUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i386.GetAllInterestedUsersUseCase>(() =>
         _i386.GetAllInterestedUsersUseCase(gh<_i1000.AdminDashboardRepo>()));
+    gh.lazySingleton<_i605.GetEventAdminStatsUseCase>(
+        () => _i605.GetEventAdminStatsUseCase(gh<_i1000.AdminDashboardRepo>()));
+    gh.lazySingleton<_i804.TogglePauseEventUseCase>(
+        () => _i804.TogglePauseEventUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i662.ProfileRepo>(() => _i548.ProfileRepoImpl(
           httpClient: gh<_i368.MyDioClient>(),
           sharedPreferenceHelper:

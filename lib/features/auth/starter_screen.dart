@@ -123,22 +123,22 @@ class _AuthButtons extends StatelessWidget {
               },
             ),
           ),
-          // const Gap(12.0),
-          // SizedBox(
-          //   width: double.infinity,
-          //   child: GlintElevatedButton(
-          //     label: 'Create Admin Account',
-          //     backgroundColor: AppColours.white,
-          //     customBorderRadius: 30.0,
-          //     customTextStyle: AppTheme.simpleBodyText,
-          //     onPressed: () {
-          //       context.push(
-          //         "/${GlintMainRoutes.register.name}",
-          //         extra: true,
-          //       );
-          //     },
-          //   ),
-          // ),
+          const Gap(12.0),
+          SizedBox(
+            width: double.infinity,
+            child: GlintElevatedButton(
+              label: 'Create Admin Account',
+              backgroundColor: AppColours.white,
+              customBorderRadius: 30.0,
+              customTextStyle: AppTheme.simpleBodyText,
+              onPressed: () {
+                context.push(
+                  "/${GlintMainRoutes.register.name}",
+                  extra: true,
+                );
+              },
+            ),
+          ),
           const Gap(12.0),
           // Login elevated button
           GlintCustomBorderedElevatedButton(

@@ -48,6 +48,7 @@ class EventDetails {
     this.coordinatorUserUsername,
     this.eventName,
     this.eventDescription,
+    this.eventLocationName,
     this.ticketPrice,
     this.discountTicketPrice,
     this.discountActivated,
@@ -60,6 +61,7 @@ class EventDetails {
     this.pictureCount,
     this.pictureUrlList,
     this.videoUrlList,
+    this.isPaused,
   });
 
   EventDetails.fromJson(dynamic json) {
@@ -68,6 +70,7 @@ class EventDetails {
     coordinatorUserUsername = json['coordinator_user_username'];
     eventName = json['event_name'];
     eventDescription = json['event_description'];
+    eventLocationName = json['event_location_name'];
     ticketPrice = json['ticket_price'];
     discountTicketPrice = json['discount_ticket_price'];
     discountActivated = json['discount_activated'];
@@ -87,6 +90,7 @@ class EventDetails {
     videoUrlList = json['video_url_list'] != null
         ? json['video_url_list'].cast<String>()
         : [];
+    isPaused = json['is_paused'];
   }
 
   int? coordinatorUserId;
@@ -94,6 +98,7 @@ class EventDetails {
   String? coordinatorUserUsername;
   String? eventName;
   String? eventDescription;
+  String? eventLocationName;
   int? ticketPrice;
   int? discountTicketPrice;
   bool? discountActivated;
@@ -106,6 +111,7 @@ class EventDetails {
   int? pictureCount;
   List<PictureUrlList>? pictureUrlList;
   List<String>? videoUrlList;
+  bool? isPaused;
 
   EventDetails copyWith({
     int? coordinatorUserId,
@@ -113,6 +119,7 @@ class EventDetails {
     String? coordinatorUserUsername,
     String? eventName,
     String? eventDescription,
+    String? eventLocationName,
     int? ticketPrice,
     int? discountTicketPrice,
     bool? discountActivated,
@@ -125,6 +132,7 @@ class EventDetails {
     int? pictureCount,
     List<PictureUrlList>? pictureUrlList,
     List<String>? videoUrlList,
+    bool? isPaused,
   }) =>
       EventDetails(
         coordinatorUserId: coordinatorUserId ?? this.coordinatorUserId,
@@ -134,6 +142,7 @@ class EventDetails {
             coordinatorUserUsername ?? this.coordinatorUserUsername,
         eventName: eventName ?? this.eventName,
         eventDescription: eventDescription ?? this.eventDescription,
+        eventLocationName: eventLocationName ?? this.eventLocationName,
         ticketPrice: ticketPrice ?? this.ticketPrice,
         discountTicketPrice: discountTicketPrice ?? this.discountTicketPrice,
         discountActivated: discountActivated ?? this.discountActivated,
@@ -146,6 +155,7 @@ class EventDetails {
         pictureCount: pictureCount ?? this.pictureCount,
         pictureUrlList: pictureUrlList ?? this.pictureUrlList,
         videoUrlList: videoUrlList ?? this.videoUrlList,
+        isPaused: isPaused ?? this.isPaused,
       );
 
   Map<String, dynamic> toJson() {
@@ -155,6 +165,7 @@ class EventDetails {
     map['coordinator_user_username'] = coordinatorUserUsername;
     map['event_name'] = eventName;
     map['event_description'] = eventDescription;
+    map['event_location_name'] = eventLocationName;
     map['ticket_price'] = ticketPrice;
     map['discount_ticket_price'] = discountTicketPrice;
     map['discount_activated'] = discountActivated;
@@ -169,6 +180,7 @@ class EventDetails {
       map['picture_url_list'] = pictureUrlList?.map((v) => v.toJson()).toList();
     }
     map['video_url_list'] = videoUrlList;
+    map['is_paused'] = isPaused;
     return map;
   }
 }
@@ -186,7 +198,7 @@ extension EventDetailsMapper on GetEventDetailsResponse {
         eventCoverImageUrl: images ?? [],
         eventdate: detail?.startTime?.toFormattedDateTime() ?? "",
         eventTime: detail?.endTime?.toFormattedDateTime() ?? "",
-        eventLocation: "Location - ",
+        eventLocation: detail?.eventLocationName ?? "",
         eventOldPrice: detail?.ticketPrice.toString() ?? "",
         eventCurrentPrice: detail?.discountTicketPrice.toString() ?? "",
         daysLeft: calculateDaysBetween(detail?.startTime, detail?.endTime),
@@ -196,7 +208,8 @@ extension EventDetailsMapper on GetEventDetailsResponse {
           "lat": detail?.eventLatitude.toString() ?? "",
           "long": detail?.eventLongitude.toString() ?? ""
         },
-        eventBy: "Partner with Glint");
+        eventBy: "Partner with Glint",
+        isPaused: detail?.isPaused ?? false);
   }
 }
 

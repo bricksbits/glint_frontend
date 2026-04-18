@@ -20,6 +20,9 @@ mixin _$TrackAdminEventState {
   String get eventTitle => throw _privateConstructorUsedError;
   String get eventDate => throw _privateConstructorUsedError;
   String get eventImageUrl => throw _privateConstructorUsedError;
+  String get eventLocation => throw _privateConstructorUsedError;
+  bool get isPaused => throw _privateConstructorUsedError;
+  bool get isTogglingPause => throw _privateConstructorUsedError;
   String get interestedUserCount => throw _privateConstructorUsedError;
   String get revenueGenerated => throw _privateConstructorUsedError;
   List<EventTicketBoughtDomainModel> get ticketBoughtUsers =>
@@ -43,6 +46,9 @@ mixin _$TrackAdminEventState {
             String eventTitle,
             String eventDate,
             String eventImageUrl,
+            String eventLocation,
+            bool isPaused,
+            bool isTogglingPause,
             String interestedUserCount,
             String revenueGenerated,
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
@@ -65,6 +71,9 @@ mixin _$TrackAdminEventState {
             String eventTitle,
             String eventDate,
             String eventImageUrl,
+            String eventLocation,
+            bool isPaused,
+            bool isTogglingPause,
             String interestedUserCount,
             String revenueGenerated,
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
@@ -87,6 +96,9 @@ mixin _$TrackAdminEventState {
             String eventTitle,
             String eventDate,
             String eventImageUrl,
+            String eventLocation,
+            bool isPaused,
+            bool isTogglingPause,
             String interestedUserCount,
             String revenueGenerated,
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
@@ -138,6 +150,9 @@ abstract class $TrackAdminEventStateCopyWith<$Res> {
       String eventTitle,
       String eventDate,
       String eventImageUrl,
+      String eventLocation,
+      bool isPaused,
+      bool isTogglingPause,
       String interestedUserCount,
       String revenueGenerated,
       List<EventTicketBoughtDomainModel> ticketBoughtUsers,
@@ -172,6 +187,9 @@ class _$TrackAdminEventStateCopyWithImpl<$Res,
     Object? eventTitle = null,
     Object? eventDate = null,
     Object? eventImageUrl = null,
+    Object? eventLocation = null,
+    Object? isPaused = null,
+    Object? isTogglingPause = null,
     Object? interestedUserCount = null,
     Object? revenueGenerated = null,
     Object? ticketBoughtUsers = null,
@@ -202,6 +220,18 @@ class _$TrackAdminEventStateCopyWithImpl<$Res,
           ? _value.eventImageUrl
           : eventImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      eventLocation: null == eventLocation
+          ? _value.eventLocation
+          : eventLocation // ignore: cast_nullable_to_non_nullable
+              as String,
+      isPaused: null == isPaused
+          ? _value.isPaused
+          : isPaused // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isTogglingPause: null == isTogglingPause
+          ? _value.isTogglingPause
+          : isTogglingPause // ignore: cast_nullable_to_non_nullable
+              as bool,
       interestedUserCount: null == interestedUserCount
           ? _value.interestedUserCount
           : interestedUserCount // ignore: cast_nullable_to_non_nullable
@@ -267,6 +297,9 @@ abstract class _$$TrackEventStateImplCopyWith<$Res>
       String eventTitle,
       String eventDate,
       String eventImageUrl,
+      String eventLocation,
+      bool isPaused,
+      bool isTogglingPause,
       String interestedUserCount,
       String revenueGenerated,
       List<EventTicketBoughtDomainModel> ticketBoughtUsers,
@@ -298,6 +331,9 @@ class __$$TrackEventStateImplCopyWithImpl<$Res>
     Object? eventTitle = null,
     Object? eventDate = null,
     Object? eventImageUrl = null,
+    Object? eventLocation = null,
+    Object? isPaused = null,
+    Object? isTogglingPause = null,
     Object? interestedUserCount = null,
     Object? revenueGenerated = null,
     Object? ticketBoughtUsers = null,
@@ -328,6 +364,18 @@ class __$$TrackEventStateImplCopyWithImpl<$Res>
           ? _value.eventImageUrl
           : eventImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      eventLocation: null == eventLocation
+          ? _value.eventLocation
+          : eventLocation // ignore: cast_nullable_to_non_nullable
+              as String,
+      isPaused: null == isPaused
+          ? _value.isPaused
+          : isPaused // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isTogglingPause: null == isTogglingPause
+          ? _value.isTogglingPause
+          : isTogglingPause // ignore: cast_nullable_to_non_nullable
+              as bool,
       interestedUserCount: null == interestedUserCount
           ? _value.interestedUserCount
           : interestedUserCount // ignore: cast_nullable_to_non_nullable
@@ -388,8 +436,11 @@ class _$TrackEventStateImpl implements _TrackEventState {
       this.eventTitle = "",
       this.eventDate = "",
       this.eventImageUrl = "",
+      this.eventLocation = "",
+      this.isPaused = false,
+      this.isTogglingPause = false,
       this.interestedUserCount = "0",
-      this.revenueGenerated = "000",
+      this.revenueGenerated = "0",
       final List<EventTicketBoughtDomainModel> ticketBoughtUsers = const [],
       final List<EventInterestedUserDomainModel> interestedUsers = const [],
       this.isLoading = false,
@@ -415,6 +466,15 @@ class _$TrackEventStateImpl implements _TrackEventState {
   @override
   @JsonKey()
   final String eventImageUrl;
+  @override
+  @JsonKey()
+  final String eventLocation;
+  @override
+  @JsonKey()
+  final bool isPaused;
+  @override
+  @JsonKey()
+  final bool isTogglingPause;
   @override
   @JsonKey()
   final String interestedUserCount;
@@ -469,7 +529,7 @@ class _$TrackEventStateImpl implements _TrackEventState {
 
   @override
   String toString() {
-    return 'TrackAdminEventState.trackEventState(eventId: $eventId, eventTitle: $eventTitle, eventDate: $eventDate, eventImageUrl: $eventImageUrl, interestedUserCount: $interestedUserCount, revenueGenerated: $revenueGenerated, ticketBoughtUsers: $ticketBoughtUsers, interestedUsers: $interestedUsers, isLoading: $isLoading, error: $error, interestedOffset: $interestedOffset, isLoadingMoreInterested: $isLoadingMoreInterested, hasMoreInterested: $hasMoreInterested, ticketBoughtOffset: $ticketBoughtOffset, isLoadingMoreTicketBought: $isLoadingMoreTicketBought, hasMoreTicketBought: $hasMoreTicketBought)';
+    return 'TrackAdminEventState.trackEventState(eventId: $eventId, eventTitle: $eventTitle, eventDate: $eventDate, eventImageUrl: $eventImageUrl, eventLocation: $eventLocation, isPaused: $isPaused, isTogglingPause: $isTogglingPause, interestedUserCount: $interestedUserCount, revenueGenerated: $revenueGenerated, ticketBoughtUsers: $ticketBoughtUsers, interestedUsers: $interestedUsers, isLoading: $isLoading, error: $error, interestedOffset: $interestedOffset, isLoadingMoreInterested: $isLoadingMoreInterested, hasMoreInterested: $hasMoreInterested, ticketBoughtOffset: $ticketBoughtOffset, isLoadingMoreTicketBought: $isLoadingMoreTicketBought, hasMoreTicketBought: $hasMoreTicketBought)';
   }
 
   @override
@@ -484,6 +544,12 @@ class _$TrackEventStateImpl implements _TrackEventState {
                 other.eventDate == eventDate) &&
             (identical(other.eventImageUrl, eventImageUrl) ||
                 other.eventImageUrl == eventImageUrl) &&
+            (identical(other.eventLocation, eventLocation) ||
+                other.eventLocation == eventLocation) &&
+            (identical(other.isPaused, isPaused) ||
+                other.isPaused == isPaused) &&
+            (identical(other.isTogglingPause, isTogglingPause) ||
+                other.isTogglingPause == isTogglingPause) &&
             (identical(other.interestedUserCount, interestedUserCount) ||
                 other.interestedUserCount == interestedUserCount) &&
             (identical(other.revenueGenerated, revenueGenerated) ||
@@ -512,24 +578,28 @@ class _$TrackEventStateImpl implements _TrackEventState {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      eventId,
-      eventTitle,
-      eventDate,
-      eventImageUrl,
-      interestedUserCount,
-      revenueGenerated,
-      const DeepCollectionEquality().hash(_ticketBoughtUsers),
-      const DeepCollectionEquality().hash(_interestedUsers),
-      isLoading,
-      error,
-      interestedOffset,
-      isLoadingMoreInterested,
-      hasMoreInterested,
-      ticketBoughtOffset,
-      isLoadingMoreTicketBought,
-      hasMoreTicketBought);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        eventId,
+        eventTitle,
+        eventDate,
+        eventImageUrl,
+        eventLocation,
+        isPaused,
+        isTogglingPause,
+        interestedUserCount,
+        revenueGenerated,
+        const DeepCollectionEquality().hash(_ticketBoughtUsers),
+        const DeepCollectionEquality().hash(_interestedUsers),
+        isLoading,
+        error,
+        interestedOffset,
+        isLoadingMoreInterested,
+        hasMoreInterested,
+        ticketBoughtOffset,
+        isLoadingMoreTicketBought,
+        hasMoreTicketBought
+      ]);
 
   /// Create a copy of TrackAdminEventState
   /// with the given fields replaced by the non-null parameter values.
@@ -548,6 +618,9 @@ class _$TrackEventStateImpl implements _TrackEventState {
             String eventTitle,
             String eventDate,
             String eventImageUrl,
+            String eventLocation,
+            bool isPaused,
+            bool isTogglingPause,
             String interestedUserCount,
             String revenueGenerated,
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
@@ -567,6 +640,9 @@ class _$TrackEventStateImpl implements _TrackEventState {
         eventTitle,
         eventDate,
         eventImageUrl,
+        eventLocation,
+        isPaused,
+        isTogglingPause,
         interestedUserCount,
         revenueGenerated,
         ticketBoughtUsers,
@@ -589,6 +665,9 @@ class _$TrackEventStateImpl implements _TrackEventState {
             String eventTitle,
             String eventDate,
             String eventImageUrl,
+            String eventLocation,
+            bool isPaused,
+            bool isTogglingPause,
             String interestedUserCount,
             String revenueGenerated,
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
@@ -608,6 +687,9 @@ class _$TrackEventStateImpl implements _TrackEventState {
         eventTitle,
         eventDate,
         eventImageUrl,
+        eventLocation,
+        isPaused,
+        isTogglingPause,
         interestedUserCount,
         revenueGenerated,
         ticketBoughtUsers,
@@ -630,6 +712,9 @@ class _$TrackEventStateImpl implements _TrackEventState {
             String eventTitle,
             String eventDate,
             String eventImageUrl,
+            String eventLocation,
+            bool isPaused,
+            bool isTogglingPause,
             String interestedUserCount,
             String revenueGenerated,
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
@@ -651,6 +736,9 @@ class _$TrackEventStateImpl implements _TrackEventState {
           eventTitle,
           eventDate,
           eventImageUrl,
+          eventLocation,
+          isPaused,
+          isTogglingPause,
           interestedUserCount,
           revenueGenerated,
           ticketBoughtUsers,
@@ -702,6 +790,9 @@ abstract class _TrackEventState implements TrackAdminEventState {
       final String eventTitle,
       final String eventDate,
       final String eventImageUrl,
+      final String eventLocation,
+      final bool isPaused,
+      final bool isTogglingPause,
       final String interestedUserCount,
       final String revenueGenerated,
       final List<EventTicketBoughtDomainModel> ticketBoughtUsers,
@@ -723,6 +814,12 @@ abstract class _TrackEventState implements TrackAdminEventState {
   String get eventDate;
   @override
   String get eventImageUrl;
+  @override
+  String get eventLocation;
+  @override
+  bool get isPaused;
+  @override
+  bool get isTogglingPause;
   @override
   String get interestedUserCount;
   @override
