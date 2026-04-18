@@ -1,27 +1,29 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
 
 import '../../common/app_colours.dart';
 
 class TicketHolderView extends StatelessWidget {
-  const TicketHolderView(
-      {super.key,
-      required this.person1Name,
-      required this.person2Name,
-      required this.totalAmount});
+  const TicketHolderView({
+    super.key,
+    required this.person1,
+    required this.person2,
+    required this.totalAmount,
+  });
 
-  final String person1Name;
-  final String person2Name;
+  final UserTicketHolderModel person1;
+  final UserTicketHolderModel person2;
   final String totalAmount;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Column(
         children: [
-          // top side - labels and amount paid
           Row(
             children: [
               Text(
@@ -43,7 +45,7 @@ class TicketHolderView extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: '₹499',
+                      text: '₹$totalAmount',
                       style: AppTheme.smallBodyText.copyWith(
                         color: AppColours.white,
                       ),
@@ -53,41 +55,40 @@ class TicketHolderView extends StatelessWidget {
               ),
             ],
           ),
-
           const Gap(16.0),
-
-          //bottom side - ticket holders
           Row(
             children: [
-              _buildUserAvatar(
-                imageUrl: 'lib/assets/images/temp_place_holder.png',
-                name: 'Shubham (You)',
-              ),
+              _TicketHolderAvatar(holder: person1),
               const Gap(20.0),
-              _buildUserAvatar(
-                imageUrl: 'lib/assets/images/temp_place_holder.png',
-                name: 'Gajgamini',
-              ),
+              _TicketHolderAvatar(holder: person2),
             ],
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildUserAvatar({required String imageUrl, required String name}) {
+class _TicketHolderAvatar extends StatelessWidget {
+  const _TicketHolderAvatar({required this.holder});
+
+  final UserTicketHolderModel holder;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         CircleAvatar(
           radius: 16,
-          backgroundImage: AssetImage(imageUrl),
+          backgroundColor: AppColours.borderGray,
+          backgroundImage: holder.imageUrl.startsWith('http')
+              ? CachedNetworkImageProvider(holder.imageUrl)
+              : AssetImage(holder.imageUrl) as ImageProvider,
         ),
         const Gap(8.0),
         Text(
-          name,
-          style: AppTheme.simpleText.copyWith(
-            color: AppColours.white,
-          ),
+          holder.username,
+          style: AppTheme.simpleText.copyWith(color: AppColours.white),
         ),
       ],
     );

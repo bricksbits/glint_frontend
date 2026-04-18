@@ -1,6 +1,7 @@
 import 'package:glint_frontend/data/remote/model/response/payment/book_event_response.dart';
 import 'package:glint_frontend/data/remote/model/response/payment/buy_membership_response.dart';
 import 'package:glint_frontend/data/remote/model/response/payment/payment_history_response.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/payment_history_domain_model.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
@@ -21,7 +22,11 @@ abstract class PaymentRepo {
     String razorpaySignature,
   );
 
+  Future<Result<void>> cancelTicket(int orderId);
+
   Future<Result<void>> cancelOrder(String orderId);
+
+  Future<Result<List<PaymentHistoryDomainModel>>> getPaymentHistory();
 
   Future<Result<(List<EventPaymentHistory>, List<MembershipPaymentHistory>)>>
       fetchPaymentHistory();

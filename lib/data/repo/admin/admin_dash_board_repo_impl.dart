@@ -250,8 +250,9 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
 
   @override
   Future<Result<List<EventTicketBoughtDomainModel>>> fetchBookedTicketList(
-    int eventId,
-  ) async {
+    int eventId, {
+    int offset = 0,
+  }) async {
     late String fetchTicketBoughtUserEndpoint;
     var currentUserKey = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.userRoleKey);
@@ -275,7 +276,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       endpoint: fetchTicketBoughtUserEndpoint,
-      passedQueryParameters: {"offset": 0},
+      passedQueryParameters: {"offset": offset},
     );
 
     switch (ticketBookedUsers) {
@@ -297,7 +298,9 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
 
   @override
   Future<Result<List<EventInterestedUserDomainModel>>> fetchInterestedProfiles(
-      int eventId) async {
+    int eventId, {
+    int offset = 0,
+  }) async {
     late String fetchInterestedUserEndpoint;
     var currentUserKey = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.userRoleKey);
@@ -321,7 +324,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       endpoint: fetchInterestedUserEndpoint,
-      passedQueryParameters: {"offset": 0},
+      passedQueryParameters: {"offset": offset},
     );
 
     switch (interestedProfilesResponse) {

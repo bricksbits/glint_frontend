@@ -1,21 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/components/chat/event_ticket_view.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
+import 'package:glint_frontend/features/chat/misc/confirm_ticket_cubit.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
 
-class ConfirmTicketScreen extends StatelessWidget {
-  const ConfirmTicketScreen({super.key});
+class ConfirmTicketScreen extends StatefulWidget {
+  final ConfirmTicketNavArguments navArguments;
+
+  const ConfirmTicketScreen({super.key, required this.navArguments});
+
+  @override
+  State<ConfirmTicketScreen> createState() => _ConfirmTicketScreenState();
+}
+
+class _ConfirmTicketScreenState extends State<ConfirmTicketScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ConfirmTicketCubit>().init(widget.navArguments);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColours.white,
-      body: Center(
-        child: EventTicketView(
-          eventName:
-              'https://s3-alpha-sig.figma.com/img/d546/c4ca/0dc3085e1152c4b71fb15bd95d600c2e?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=HjVHs2IFdAC81gMZOgDbUoHESp3N~z8rLg3XEeHApUcqU84~T6ZIrFU4uMUvib4VFxD2uUCJYHhXia9ZBJBgTvu-YHM8W4pucDJ6dBiaKwUeK7yIbV~2fY0wIEPJ-5y7eviS~p2o0yZbDRawIH9zDL8J3dE-DqsZMugVnI62qs~KrOWxaCi4-sEQKr86G40ElHYZlxvR6FmbXc4bWTH-9ZTSi1VMogOm8XRfvPfa40YPTHxTGUDZXi2fNpku92XnRGfzHGX4K3g1RGcXShX7J6kli8HWwOZ0r-z2Ru0JL~d3LN185Q91LjlWxS5mN422HDsTtEiPChC~jwK1M5ALdA__',
-          onDowloadTicket: () {},
-        ),
-      ),
+    return BlocBuilder<ConfirmTicketCubit, ConfirmTicketState>(
+      builder: (context, state) {
+        if (state.isLoading) {
+          return const Scaffold(
+            backgroundColor: AppColours.white,
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (state.error != null && state.eventDetails == null) {
+          return Scaffold(
+            backgroundColor: AppColours.white,
+            body: Center(child: Text(state.error!)),
+          );
+        }
+
+        final eventDetails = state.eventDetails;
+        if (eventDetails == null) {
+          return const Scaffold(
+            backgroundColor: AppColours.white,
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final lat =
+            double.tryParse(eventDetails.location["lat"] ?? "0") ?? 0.0;
+        final long =
+            double.tryParse(eventDetails.location["long"] ?? "0") ?? 0.0;
+        final googleMapsUrl =
+            "https://maps.google.com/maps?q=$lat,$long";
+        final bannerImageUrl = eventDetails.eventCoverImageUrl.isNotEmpty
+            ? eventDetails.eventCoverImageUrl.first
+            : 'lib/assets/images/chat/chat_ticket_info_pace_holder.png';
+
+        return Scaffold(
+          backgroundColor: AppColours.white,
+          body: SingleChildScrollView(
+            child: EventTicketView(
+              eventName: eventDetails.eventName,
+              eventDate: eventDetails.eventdate,
+              eventTime: eventDetails.eventTime,
+              eventLocation: eventDetails.eventLocation,
+              couponCode: state.couponCode ?? "",
+              expiryDate: eventDetails.eventdate,
+              totalAmount: state.totalAmount ?? "",
+              googleMapsUrl: googleMapsUrl,
+              latitude: lat,
+              longitude: long,
+              bannerImageUrl: bannerImageUrl,
+              person1: state.currentUser ??
+                  UserTicketHolderModel(
+                    userId: "",
+                    username: "You",
+                    imageUrl: "",
+                  ),
+              person2: state.matchedUser ??
+                  UserTicketHolderModel(
+                    userId: "",
+                    username: "Partner",
+                    imageUrl: "",
+                  ),
+              onInfoClicked: () {},
+              onClosedClicked: () {},
+            ),
+          ),
+        );
+      },
     );
   }
 }

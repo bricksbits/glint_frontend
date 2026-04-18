@@ -7,7 +7,9 @@ import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/chat/chat_circular_icon_button.dart';
 import 'package:glint_frontend/design/components/chat/empty_chat_state_view.dart';
 import 'package:glint_frontend/design/components/chat/get_ticket_gradient_view.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
 import 'package:glint_frontend/features/chat/chat_with/chat_with_cubit.dart';
+import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -81,8 +83,41 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                                   state.chatNavArgs!.eventStartTime.toString(),
                               eventOffers: "",
                               onGetTicketClicked: () {
+                                final chatArgs = state.chatNavArgs!;
                                 context.pushNamed(
                                   GlintChatRoutes.getTicket.name,
+                                  extra: GetTicketArgumentModel(
+                                    eventId: chatArgs.eventId ?? "",
+                                    matchId: chatArgs.matchId ?? "",
+                                    eventName: chatArgs.eventName ?? "",
+                                    eventDate: chatArgs.eventStartTime ?? "",
+                                    eventTime: chatArgs.eventStartTime ?? "",
+                                    eventInitialPrice: "",
+                                    eventFinalPrice: "",
+                                    dayLeftForEvent: "",
+                                    eventLocation: "",
+                                    currentUser: UserTicketHolderModel(
+                                      userId:
+                                          state.currentUserDetails?.id ?? "",
+                                      username:
+                                          state.currentUserDetails?.name ??
+                                              "You",
+                                      imageUrl:
+                                          state.currentUserDetails?.image ??
+                                              "",
+                                    ),
+                                    matchedUser: UserTicketHolderModel(
+                                      userId:
+                                          state.oppositeUserDetails?.id ?? "",
+                                      username:
+                                          state.oppositeUserDetails?.name ??
+                                              "Partner",
+                                      imageUrl:
+                                          state.oppositeUserDetails?.image ??
+                                              "",
+                                    ),
+                                    eventBanner: null,
+                                  ),
                                 );
                               },
                             )
@@ -190,10 +225,12 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
       emptyBuilder: (context) {
         return Center(
           child: EmptyChatStateView(
-            isEventMatch: false,
-            matchUserId: "0",
+            isEventMatch: widget.chatWithNavArguments.eventId != null,
+            matchUserId: widget.chatWithNavArguments.matchId ?? "",
             matchUserName: oppositeUserName,
-            upgradePlanCallBack: () {},
+            upgradePlanCallBack: () {
+              // Todo: Take the User to the Profile Tab of the Bottom Nav Stack
+            },
           ),
         );
       },

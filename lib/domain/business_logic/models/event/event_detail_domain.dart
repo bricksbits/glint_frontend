@@ -14,6 +14,7 @@ class EventDetailsDomainModel {
   final String aboutEvent;
   final Map<String, String> location;
   final String eventBy;
+  final bool isPaused;
 
   EventDetailsDomainModel({
     required this.eventId,
@@ -29,6 +30,7 @@ class EventDetailsDomainModel {
     required this.aboutEvent,
     required this.location,
     required this.eventBy,
+    this.isPaused = false,
   });
 
   EventDetailsDomainModel copyWith({
@@ -45,6 +47,7 @@ class EventDetailsDomainModel {
     String? aboutEvent,
     Map<String, String>? location,
     String? eventBy,
+    bool? isPaused,
   }) {
     return EventDetailsDomainModel(
       eventId: eventId ?? this.eventId,
@@ -60,6 +63,7 @@ class EventDetailsDomainModel {
       aboutEvent: aboutEvent ?? this.aboutEvent,
       location: location ?? this.location,
       eventBy: eventBy ?? this.eventBy,
+      isPaused: isPaused ?? this.isPaused,
     );
   }
 

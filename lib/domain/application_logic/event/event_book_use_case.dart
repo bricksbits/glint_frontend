@@ -1,21 +1,24 @@
 import 'dart:async';
 
 import 'package:glint_frontend/data/remote/model/request/event/event_booking_request_body.dart';
-import 'package:glint_frontend/domain/business_logic/repo/event/event_booking_repo.dart';
+import 'package:glint_frontend/domain/business_logic/repo/payment/payment_repo.dart';
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 class EventBookUseCase extends UseCase<void, EventBookingRequestBody> {
-  final EventBookingRepo eventBookingRepo;
+  final PaymentRepo paymentRepo;
 
-  EventBookUseCase(this.eventBookingRepo);
+  EventBookUseCase(this.paymentRepo);
 
   @override
   Future<Stream<void>> buildUseCaseStream(
       EventBookingRequestBody? params) async {
     final StreamController<Result<bool>> controller = StreamController();
     try {
-      final eventBookingResponse = await eventBookingRepo.bookEvent(params!);
+      final eventBookingResponse = await paymentRepo.bookEvent(
+        params!.eventId.toString(),
+        params.matchId.toString(),
+      );
       switch (eventBookingResponse) {
         case Success():
           controller.add(const Success(true));

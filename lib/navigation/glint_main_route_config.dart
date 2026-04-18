@@ -16,6 +16,7 @@ import 'package:glint_frontend/features/chat/base/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/chat_with/chat_with_cubit.dart';
 import 'package:glint_frontend/features/chat/chat_with/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/misc/chat_with_video_call_screen.dart';
+import 'package:glint_frontend/features/chat/misc/confirm_ticket_cubit.dart';
 import 'package:glint_frontend/features/chat/misc/confirm_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/misc/get_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
@@ -24,6 +25,7 @@ import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.da
 import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/exports.dart';
+import 'package:glint_frontend/features/event/ticket/bloc/ticket_history_cubit.dart';
 import 'package:glint_frontend/features/event/people/people_interested_for_event_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 import 'package:glint_frontend/features/likes/likes_screen.dart';
@@ -194,11 +196,6 @@ final glintMainRoutes = GoRouter(
           builder: (context, state) => const ChatWithVideoCallScreen(),
         ),
         GoRoute(
-          path: '/${GlintChatRoutes.ticket.name}',
-          name: GlintChatRoutes.ticket.name,
-          builder: (context, state) => const ConfirmTicketScreen(),
-        ),
-        GoRoute(
           path: '/${GlintChatRoutes.oneTimePhotoView.name}',
           name: GlintChatRoutes.oneTimePhotoView.name,
           builder: (context, state) {
@@ -262,7 +259,7 @@ final glintMainRoutes = GoRouter(
           builder: (context, state) {
             return BlocProvider(
               lazy: true,
-              create: (context) => EventBaseCubit(),
+              create: (context) => TicketHistoryCubit(),
               child: const EventTicketHistoryScreen(),
             );
           },
@@ -329,6 +326,18 @@ final glintMainRoutes = GoRouter(
               paymentArgumentModel: paymentArgumentModel,
             ),
           ),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/${GlintMainRoutes.confirmTicket.name}',
+      name: GlintMainRoutes.confirmTicket.name,
+      builder: (context, state) {
+        final args = state.extra as ConfirmTicketNavArguments;
+        return BlocProvider(
+          lazy: true,
+          create: (_) => ConfirmTicketCubit(),
+          child: ConfirmTicketScreen(navArguments: args),
         );
       },
     ),

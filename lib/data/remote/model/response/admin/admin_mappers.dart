@@ -11,23 +11,30 @@ extension GetTicketBoughtUsersResponseMappper on GetTicketBookedResponse {
     var items = response
         ?.map(
           (user) => EventTicketBoughtDomainModel(
-            EventInterestedUserDomainModel(
+            userOne: EventInterestedUserDomainModel(
               id: user.user1Id.toString(),
               name: user.user1Username ?? "",
               emailId: user.user1EmailId ?? "",
               thumbnailUrl: user.user1ProfilePictureUrl?.presignedUrl ?? "",
             ),
-            EventInterestedUserDomainModel(
-                id: user.user2Id.toString(),
-                name: user.user2Username ?? "",
-                emailId: user.user2EmailId ?? "",
-                thumbnailUrl: user.user2ProfilePictureUrl?.presignedUrl ?? ""),
+            userTwo: EventInterestedUserDomainModel(
+              id: user.user2Id.toString(),
+              name: user.user2Username ?? "",
+              emailId: user.user2EmailId ?? "",
+              thumbnailUrl: user.user2ProfilePictureUrl?.presignedUrl ?? "",
+            ),
+            bookedAt: _parseBookedAt(user.bookedAtTime),
           ),
         )
         .toList();
 
     return items ?? [];
   }
+}
+
+DateTime? _parseBookedAt(String? raw) {
+  if (raw == null || raw.isEmpty) return null;
+  return DateTime.tryParse(raw)?.toLocal();
 }
 
 extension GetInterestedUsersMapper on GetInterestedUsersResponse {
@@ -58,18 +65,19 @@ extension GetEventStatsMapper on GetEventStatsForAdmin {
         [];
     final ticketsBought = stats?.ticketsBooked
             ?.map((t) => EventTicketBoughtDomainModel(
-                  EventInterestedUserDomainModel(
+                  userOne: EventInterestedUserDomainModel(
                     id: t.user1Id.toString(),
                     name: t.user1Username ?? "",
                     emailId: t.user1EmailId ?? "",
                     thumbnailUrl: t.user1ProfilePictureUrl?.presignedUrl ?? "",
                   ),
-                  EventInterestedUserDomainModel(
+                  userTwo: EventInterestedUserDomainModel(
                     id: t.user2Id.toString(),
                     name: t.user2Username ?? "",
                     emailId: t.user2EmailId ?? "",
                     thumbnailUrl: t.user2ProfilePictureUrl?.presignedUrl ?? "",
                   ),
+                  bookedAt: _parseBookedAt(t.bookedAtTime),
                 ))
             .toList() ??
         [];

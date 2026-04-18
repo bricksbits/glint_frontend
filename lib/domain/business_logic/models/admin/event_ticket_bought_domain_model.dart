@@ -3,6 +3,11 @@ import 'package:glint_frontend/domain/business_logic/models/admin/event_interest
 class EventTicketBoughtDomainModel {
   final EventInterestedUserDomainModel userOne;
   final EventInterestedUserDomainModel userTwo;
+  final DateTime? bookedAt;
 
-  EventTicketBoughtDomainModel(this.userOne, this.userTwo);
+  EventTicketBoughtDomainModel({
+    required this.userOne,
+    required this.userTwo,
+    this.bookedAt,
+  });
 }

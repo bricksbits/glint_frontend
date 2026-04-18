@@ -1,5 +1,6 @@
 import 'package:glint_frontend/domain/business_logic/models/event/event_detail_domain.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_ticket_history_domain_model.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
@@ -21,5 +22,9 @@ abstract class EventRepo {
     int? distance,
     String? relationshipGoals,
     String? interests,
+  });
+
+  Future<Result<List<EventTicketHistoryDomainModel>>> getEventTicketHistory({
+    int offset = 0,
   });
 }

@@ -7,7 +7,6 @@ import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
-import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 enum GlintAppBarActions {
@@ -128,20 +127,10 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
           GestureDetector(
             onTap: () {
               GlintAnalyticService.onRewindEvent(false);
-              // Replace with rollback functionality
+              context.read<PeopleCardsBloc>().rewindUsingSwipeController();
             },
             child: SvgPicture.asset(
               'lib/assets/icons/glint_rollback.svg',
-            ),
-          ),
-          const Gap(18.0),
-          GestureDetector(
-            onTap: () {
-              GlintAnalyticService.onSearchScreenEvent(false);
-              context.pushNamed(GlintMainRoutes.filter.name);
-            },
-            child: SvgPicture.asset(
-              'lib/assets/icons/glint_filter.svg',
             ),
           ),
           const Gap(20.0),

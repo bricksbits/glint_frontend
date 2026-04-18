@@ -42,24 +42,24 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
     });
 
     on<_fetchInterestedUsersForEvent>((event, emit) async {
-      emit(state.copyWith(
-        isLoading: true,
-        // error: null,
-      ));
+      emit(state.copyWith(isLoading: true));
       final userId = await peopleRepo.getUserId();
       final result = await eventRepo.fetchInterestedProfiles(event.eventId);
 
       switch (result) {
         case Success<List<PeopleCardModel>>():
           emit(state.copyWith(
-            // Full reset for event-specific stacks
             displayCards: result.data,
             currentIndex: 0,
             swipedHistoryCards: [],
             alreadySwipedIds: {},
             userId: userId,
             isLoading: false,
-            // error: null,
+            screenType: PeopleScreenType.interestedInEvent,
+            activeEventId: event.eventId,
+            // Use actual returned count so next page offset is accurate.
+            currentOffset: result.data.length,
+            hasReachedEnd: false,
           ));
         case Failure<List<PeopleCardModel>>():
           emit(state.copyWith(
@@ -109,18 +109,51 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
     on<_FetchNextCards>((event, emit) async {
       if (state.isFetchingMoreProfile || state.hasReachedEnd) return;
 
-      final nextOffset = state.currentOffset + 5;
       emit(state.copyWith(isFetchingMoreProfile: true));
 
-      final result = await peopleRepo.fetchProfiles(nextOffset);
+      if (state.screenType == PeopleScreenType.interestedInEvent) {
+        final result = await eventRepo.fetchInterestedProfiles(
+          state.activeEventId,
+          offset: state.currentOffset,
+        );
 
-      switch (result) {
-        case Success<void>():
-          emit(state.copyWith(currentOffset: nextOffset));
-          add(const PeopleCardsEvent.appendProfilesFromDb());
+        switch (result) {
+          case Success<List<PeopleCardModel>>():
+            final incoming = result.data;
+            if (incoming.isEmpty) {
+              emit(state.copyWith(
+                isFetchingMoreProfile: false,
+                hasReachedEnd: true,
+              ));
+              return;
+            }
+            final newUnique = incoming
+                .where((p) =>
+                    !state.alreadySwipedIds.contains(p.userId) &&
+                    !state.displayCards.any((e) => e.userId == p.userId))
+                .toList();
+            emit(state.copyWith(
+              displayCards: [...state.displayCards, ...newUnique],
+              currentOffset: state.currentOffset + incoming.length,
+              isFetchingMoreProfile: false,
+              hasReachedEnd: newUnique.isEmpty,
+            ));
 
-        case Failure<void>():
-          emit(state.copyWith(isFetchingMoreProfile: false));
+          case Failure<List<PeopleCardModel>>():
+            emit(state.copyWith(isFetchingMoreProfile: false));
+        }
+      } else {
+        final nextOffset = state.currentOffset + 5;
+        final result = await peopleRepo.fetchProfiles(nextOffset);
+
+        switch (result) {
+          case Success<void>():
+            emit(state.copyWith(currentOffset: nextOffset));
+            add(const PeopleCardsEvent.appendProfilesFromDb());
+
+          case Failure<void>():
+            emit(state.copyWith(isFetchingMoreProfile: false));
+        }
       }
     });
 
@@ -208,6 +241,8 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
   }
 
   /// Called on startup. Uses local cache if warm enough, otherwise fetches.
+  /// Only applicable for People's data
+  /// Not Event People's data
   Future<void> _validateCacheOrFetch(Emitter<PeopleCardsState> emit) async {
     final result = await peopleRepo.getProfilesFromDB();
 

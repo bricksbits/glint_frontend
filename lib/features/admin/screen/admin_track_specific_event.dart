@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/admin/bloc/track_specific_event/track_admin_event_cubit.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
@@ -25,9 +26,6 @@ class AdminTrackSpecificEvent extends StatefulWidget {
 }
 
 class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
-  final GlobalKey _menuKey = GlobalKey();
-  bool eventPaused = false;
-
   @override
   void initState() {
     context.read<TrackAdminEventCubit>().collectTheArguments(
@@ -60,41 +58,37 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
                     child: Column(
                       children: [
                         const Gap(32.0),
-                        // event details
                         EventInfoImageContainer(
-                          eventName: widget.eventTitle,
-                          eventDate: widget.eventDate,
-                          eventLocation: "--",
-                          eventTime: "--,--",
+                          eventName: state.eventTitle.isEmpty
+                              ? widget.eventTitle
+                              : state.eventTitle,
+                          eventDate: state.eventDate.isEmpty
+                              ? widget.eventDate
+                              : state.eventDate,
+                          eventLocation: state.eventLocation,
+                          eventTime: "",
+                          eventImageUrl: state.eventImageUrl,
+                          status: EventStatus.live,
                         ),
-
-                        const Gap(36.0),
-
-                        // action buttons
-                        _buildEventActionButtons(
-                          context,
-                          widget.eventId,
+                        const Gap(28.0),
+                        _EventActionRow(
+                          isPaused: state.isPaused,
+                          isTogglingPause: state.isTogglingPause,
+                          onPauseToggle: () => _handlePauseToggle(context),
+                          onEdit: () => _openEditFlow(context),
                         ),
-
                         const Gap(24.0),
-
-                        // event stats
                         TrackEventStats(
-                          interestedUsers: state.interestedUsers.length,
-                          revenueGenerated: int.parse(state.revenueGenerated),
+                          interestedUsers:
+                              int.tryParse(state.interestedUserCount) ?? 0,
+                          revenueGenerated:
+                              int.tryParse(state.revenueGenerated) ?? 0,
                         ),
-
                         const Gap(20.0),
-
-                        // interested people
                         const InterestedPeopleWidget(),
-
                         const Gap(20.0),
-
-                        // tickets bought
                         const TicketsBoughtWidget(),
-
-                        const Gap(32.0), // bottom spacing
+                        const Gap(32.0),
                       ],
                     ),
                   ),
@@ -104,173 +98,112 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
     );
   }
 
-  void _showMenuItems(BuildContext context, RelativeRect position) {
-    showMenu(
-      context: context,
-      position: position,
-      color: AppColours.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+  void _openEditFlow(BuildContext context) {
+    context.pushNamed(
+      GlintAdminDasboardRoutes.createEvent.name,
+      extra: AdminCreateEventNavArguments(
+        widget.eventId,
+        (_) {
+          // No-op; the edit flow handles its own navigation.
+        },
       ),
-      items: [
-        PopupMenuItem(
-          child: const Row(
-            children: [
-              Icon(Icons.remove_red_eye, size: 20),
-              SizedBox(width: 12),
-              Text(
-                'Preview',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-          onTap: () {
-            context.pushNamed(GlintAdminDasboardRoutes.previewEvent.name);
-          },
-        ),
-        PopupMenuItem(
-          child: Row(
-            children: [
-              Icon(Icons.cancel, size: 20, color: Colors.red[400]),
-              const SizedBox(width: 12),
-              Text(
-                'End Event',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.red[400],
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-          onTap: () {
-            _showEndEventDialog(context);
-          },
-        ),
-      ],
     );
   }
 
-  void _showEndEventDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 28.0,
-              vertical: 32.0,
-            ),
-            decoration: BoxDecoration(
-              color: AppColours.white,
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.cancel,
-                  color: AppColours.red,
-                  size: 24.0,
-                ),
-                const Gap(12.0),
-                const Text(
-                  "End Event?",
-                  style: AppTheme.heavyBodyText,
-                ),
-                const Text(
-                  "Are you sure you want to end this event?",
-                  style: AppTheme.simpleText,
-                ),
-                const Gap(28.0),
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: 'Ending this event will ',
-                    style: AppTheme.smallBodyText,
-                    children: [
-                      TextSpan(
-                        text: 'permanently remove it\n ',
-                        style: AppTheme.smallBodyText.copyWith(
-                          fontWeight: FontWeight.w600,
+  Future<void> _handlePauseToggle(BuildContext context) async {
+    final cubit = context.read<TrackAdminEventCubit>();
+    final wasPaused = cubit.state.isPaused;
+    final messenger = ScaffoldMessenger.of(context);
+
+    final success = await cubit.togglePauseState();
+    if (!mounted) return;
+
+    if (success) {
+      final msg =
+          wasPaused ? 'Event resumed successfully' : 'Event paused successfully';
+      showCustomSnackbar(context, message: msg);
+    } else {
+      // Use the captured messenger in case the widget tree changed mid-await.
+      messenger.hideCurrentSnackBar();
+      showCustomSnackbar(
+        context,
+        message: 'Could not update event state. Please try again.',
+        isError: true,
+      );
+    }
+  }
+}
+
+class _EventActionRow extends StatelessWidget {
+  const _EventActionRow({
+    required this.isPaused,
+    required this.isTogglingPause,
+    required this.onPauseToggle,
+    required this.onEdit,
+  });
+
+  final bool isPaused;
+  final bool isTogglingPause;
+  final VoidCallback onPauseToggle;
+  final VoidCallback onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 48.0,
+            child: GlintIconElevatedButton(
+              customBorderRadius: 10.0,
+              backgroundColor: AppColours.white,
+              foregroundColor: AppColours.primaryBlue,
+              customBorderSide: const BorderSide(
+                color: AppColours.primaryBlue,
+                width: 1.2,
+              ),
+              onPressed: isTogglingPause ? null : onPauseToggle,
+              label: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (isTogglingPause)
+                    const SizedBox(
+                      width: 16.0,
+                      height: 16.0,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColours.primaryBlue,
                         ),
                       ),
-                      const TextSpan(
-                        text:
-                            'from you Glint Event Screens. This can\'t be undone.',
-                        style: AppTheme.smallBodyText,
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(24.0),
-                SizedBox(
-                  width: 300,
-                  height: 56.0,
-                  child: GlintElevatedButton(
-                    label: 'End this Event',
-                    onPressed: () {},
-                    customTextStyle: AppTheme.simpleBodyText.copyWith(
-                      color: AppColours.white,
+                    )
+                  else
+                    Icon(
+                      isPaused ? Icons.play_arrow : Icons.pause,
+                      size: 18.0,
+                      color: AppColours.primaryBlue,
                     ),
-                    backgroundColor: AppColours.pink,
-                    customBorderRadius: 10.0,
-                  ),
-                ),
-                SizedBox(
-                  width: 300,
-                  height: 56.0,
-                  child: GlintElevatedButton(
-                    label: 'Cancel',
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    customTextStyle: AppTheme.simpleBodyText.copyWith(
-                      fontWeight: FontWeight.w400,
+                  const Gap(8.0),
+                  Text(
+                    isPaused ? 'Unpause Event' : 'Pause Event',
+                    style: AppTheme.simpleText.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColours.primaryBlue,
                     ),
-                    backgroundColor: Colors.transparent,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        );
-      },
-    );
-  }
-
-  Widget _buildEventActionButtons(
-    BuildContext context,
-    int? eventId,
-  ) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Gap(16.0),
+        ),
+        const Gap(12.0),
         Expanded(
           child: SizedBox(
             height: 48.0,
             child: GlintIconElevatedButton(
               customBorderRadius: 10.0,
               backgroundColor: AppColours.black,
-              onPressed: () {
-                context.pushNamed(
-                  GlintAdminDasboardRoutes.createEvent.name,
-                  extra: AdminCreateEventNavArguments(
-                    eventId,
-                    (_) {
-                      // Ignore this callback
-                    },
-                  ),
-                );
-              },
+              onPressed: onEdit,
               label: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -292,26 +225,6 @@ class _AdminTrackSpecificEventState extends State<AdminTrackSpecificEvent> {
             ),
           ),
         ),
-        const Gap(16.0),
-        // IconButton(
-        //   key: _menuKey,
-        //   onPressed: () {
-        //     final RenderBox renderBox =
-        //         _menuKey.currentContext!.findRenderObject() as RenderBox;
-        //     final Offset offset = renderBox.localToGlobal(Offset.zero);
-        //
-        //     _showMenuItems(
-        //       context,
-        //       RelativeRect.fromLTRB(
-        //         offset.dx,
-        //         offset.dy + renderBox.size.height + 12,
-        //         offset.dx + renderBox.size.width,
-        //         offset.dy + renderBox.size.height,
-        //       ),
-        //     );
-        //   },
-        //   icon: const Icon(Icons.more_vert),
-        // )
       ],
     );
   }

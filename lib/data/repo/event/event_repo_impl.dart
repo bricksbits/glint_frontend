@@ -6,11 +6,14 @@ import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_all_events_response.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_event_details_response.dart';
+import 'package:glint_frontend/data/remote/model/response/event/get_ticket_hisotry_response.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_user_interested_for_event_response.dart';
+import 'package:glint_frontend/data/remote/model/response/mapper/event_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_detail_domain.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_ticket_history_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/repo/event/events_repo.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/logger.dart';
@@ -177,6 +180,28 @@ class EventRepoImpl extends EventRepo {
       }
     } else {
       return const Success("User Already liked the event");
+    }
+  }
+
+  @override
+  Future<Result<List<EventTicketHistoryDomainModel>>> getEventTicketHistory({
+    int offset = 0,
+  }) async {
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      endpoint: "/event/ticket/history",
+      requestBody: null,
+      passedQueryParameters: {'offset': offset},
+    );
+
+    switch (response) {
+      case Success():
+        final historyResponse =
+            GetTicketHisotryResponse.fromJson(response.data);
+        return Success(historyResponse.mapToDomainModel());
+      case Failure():
+        return Failure(Exception(response.error));
     }
   }
 }

@@ -16,6 +16,7 @@ class TicketDetailsComponent extends StatelessWidget {
     required this.eventFinalPrice,
     required this.dayLeftForEvent,
     this.isTicketBanner = false,
+    this.onDownloadTap,
   });
 
   final String eventName;
@@ -26,18 +27,17 @@ class TicketDetailsComponent extends StatelessWidget {
   final String eventFinalPrice;
   final String dayLeftForEvent;
   final bool? isTicketBanner;
+  final VoidCallback? onDownloadTap;
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = isTicketBanner == true;
+    final Color textColor = isDark ? AppColours.white : AppColours.black;
+
     return Container(
-      color: isTicketBanner == true
-          ? AppColours.ticketBackgroundDark
-          : AppColours.backgroundShade,
+      color: isDark ? AppColours.ticketBackgroundDark : AppColours.backgroundShade,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24.0,
-          vertical: 18.0,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 18.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -46,30 +46,22 @@ class TicketDetailsComponent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  eventName,
-                  textAlign: TextAlign.center,
-                  style: AppTheme.headingFour.copyWith(
-                    fontStyle: FontStyle.normal,
-                    fontSize: 18.0,
-                    color: isTicketBanner == true
-                        ? AppColours.white
-                        : AppColours.black,
-                  ),
-                ),
-                if (isTicketBanner == true)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: const Icon(
-                        Icons.download,
-                        size: 24.0,
-                        color: AppColours.white,
-                      ),
+                Expanded(
+                  child: Text(
+                    eventName,
+                    style: AppTheme.headingFour.copyWith(
+                      fontStyle: FontStyle.normal,
+                      fontSize: 18.0,
+                      color: textColor,
                     ),
                   ),
-                if (isTicketBanner == false)
+                ),
+                if (isDark && onDownloadTap != null)
+                  GestureDetector(
+                    onTap: onDownloadTap,
+                    child: Icon(Icons.download, size: 24.0, color: textColor),
+                  ),
+                if (!isDark)
                   Container(
                     decoration: BoxDecoration(
                       color: AppColours.black,
@@ -91,7 +83,7 @@ class TicketDetailsComponent extends StatelessWidget {
                   ),
               ],
             ),
-            Gap(isTicketBanner == true ? 8.0 : 24.0),
+            Gap(isDark ? 8.0 : 24.0),
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,17 +92,17 @@ class TicketDetailsComponent extends StatelessWidget {
                 GlintIconLabel(
                   iconPath: 'lib/assets/icons/calendar_icon.svg',
                   label: '$eventDate • $eventTime',
-                  style: AppTheme.simpleText.copyWith(color: AppColours.white),
-                  svgColor:
-                      isTicketBanner == true ? AppColours.warning400 : null,
+                  style: AppTheme.simpleText.copyWith(color: textColor),
+                  svgColor: isDark ? AppColours.warning400 : null,
                 ),
-                if (isTicketBanner == false)
+                if (!isDark)
                   Row(
                     children: [
-                      const Text('₹ ', style: AppTheme.simpleText),
+                      Text('₹ ', style: AppTheme.simpleText.copyWith(color: textColor)),
                       Text(
                         eventInitialPrice,
                         style: AppTheme.simpleText.copyWith(
+                          color: textColor,
                           decoration: TextDecoration.lineThrough,
                           fontWeight: FontWeight.w300,
                         ),
@@ -128,11 +120,10 @@ class TicketDetailsComponent extends StatelessWidget {
                 GlintIconLabel(
                   iconPath: 'lib/assets/icons/location_icon.svg',
                   label: eventLocation,
-                  style: AppTheme.simpleText.copyWith(color: AppColours.white),
-                  svgColor:
-                      isTicketBanner == true ? AppColours.warning400 : null,
+                  style: AppTheme.simpleText.copyWith(color: textColor),
+                  svgColor: isDark ? AppColours.warning400 : null,
                 ),
-                if (isTicketBanner == false)
+                if (!isDark)
                   RichText(
                     text: TextSpan(
                       children: [

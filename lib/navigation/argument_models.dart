@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_detail_domain.dart';
 
 class EventDetailsNavArguments {
@@ -54,4 +55,18 @@ class OneTimeViewNavArguments {
   final String? message;
 
   OneTimeViewNavArguments(this.imageUrl, this.message);
+}
+
+class ConfirmTicketNavArguments {
+  final String eventId;
+  final String matchId;
+  final UserTicketHolderModel? matchedUser;
+  final String totalAmount;
+
+  ConfirmTicketNavArguments({
+    required this.eventId,
+    required this.matchId,
+    this.matchedUser,
+    required this.totalAmount,
+  });
 }
