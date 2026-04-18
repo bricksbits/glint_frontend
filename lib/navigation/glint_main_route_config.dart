@@ -25,6 +25,7 @@ import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.da
 import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/exports.dart';
+import 'package:glint_frontend/features/event/ticket/bloc/ticket_history_cubit.dart';
 import 'package:glint_frontend/features/event/people/people_interested_for_event_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 import 'package:glint_frontend/features/likes/likes_screen.dart';
@@ -258,7 +259,7 @@ final glintMainRoutes = GoRouter(
           builder: (context, state) {
             return BlocProvider(
               lazy: true,
-              create: (context) => EventBaseCubit(),
+              create: (context) => TicketHistoryCubit(),
               child: const EventTicketHistoryScreen(),
             );
           },

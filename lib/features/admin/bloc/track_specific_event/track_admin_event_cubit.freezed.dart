@@ -27,7 +27,15 @@ mixin _$TrackAdminEventState {
   List<EventInterestedUserDomainModel> get interestedUsers =>
       throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
-  String get error => throw _privateConstructorUsedError;
+  String get error =>
+      throw _privateConstructorUsedError; // Pagination — interested users
+  int get interestedOffset => throw _privateConstructorUsedError;
+  bool get isLoadingMoreInterested => throw _privateConstructorUsedError;
+  bool get hasMoreInterested =>
+      throw _privateConstructorUsedError; // Pagination — ticket-bought users
+  int get ticketBoughtOffset => throw _privateConstructorUsedError;
+  bool get isLoadingMoreTicketBought => throw _privateConstructorUsedError;
+  bool get hasMoreTicketBought => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -40,7 +48,13 @@ mixin _$TrackAdminEventState {
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
             List<EventInterestedUserDomainModel> interestedUsers,
             bool isLoading,
-            String error)
+            String error,
+            int interestedOffset,
+            bool isLoadingMoreInterested,
+            bool hasMoreInterested,
+            int ticketBoughtOffset,
+            bool isLoadingMoreTicketBought,
+            bool hasMoreTicketBought)
         trackEventState,
   }) =>
       throw _privateConstructorUsedError;
@@ -56,7 +70,13 @@ mixin _$TrackAdminEventState {
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
             List<EventInterestedUserDomainModel> interestedUsers,
             bool isLoading,
-            String error)?
+            String error,
+            int interestedOffset,
+            bool isLoadingMoreInterested,
+            bool hasMoreInterested,
+            int ticketBoughtOffset,
+            bool isLoadingMoreTicketBought,
+            bool hasMoreTicketBought)?
         trackEventState,
   }) =>
       throw _privateConstructorUsedError;
@@ -72,7 +92,13 @@ mixin _$TrackAdminEventState {
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
             List<EventInterestedUserDomainModel> interestedUsers,
             bool isLoading,
-            String error)?
+            String error,
+            int interestedOffset,
+            bool isLoadingMoreInterested,
+            bool hasMoreInterested,
+            int ticketBoughtOffset,
+            bool isLoadingMoreTicketBought,
+            bool hasMoreTicketBought)?
         trackEventState,
     required TResult orElse(),
   }) =>
@@ -117,7 +143,13 @@ abstract class $TrackAdminEventStateCopyWith<$Res> {
       List<EventTicketBoughtDomainModel> ticketBoughtUsers,
       List<EventInterestedUserDomainModel> interestedUsers,
       bool isLoading,
-      String error});
+      String error,
+      int interestedOffset,
+      bool isLoadingMoreInterested,
+      bool hasMoreInterested,
+      int ticketBoughtOffset,
+      bool isLoadingMoreTicketBought,
+      bool hasMoreTicketBought});
 }
 
 /// @nodoc
@@ -146,6 +178,12 @@ class _$TrackAdminEventStateCopyWithImpl<$Res,
     Object? interestedUsers = null,
     Object? isLoading = null,
     Object? error = null,
+    Object? interestedOffset = null,
+    Object? isLoadingMoreInterested = null,
+    Object? hasMoreInterested = null,
+    Object? ticketBoughtOffset = null,
+    Object? isLoadingMoreTicketBought = null,
+    Object? hasMoreTicketBought = null,
   }) {
     return _then(_value.copyWith(
       eventId: freezed == eventId
@@ -188,6 +226,30 @@ class _$TrackAdminEventStateCopyWithImpl<$Res,
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String,
+      interestedOffset: null == interestedOffset
+          ? _value.interestedOffset
+          : interestedOffset // ignore: cast_nullable_to_non_nullable
+              as int,
+      isLoadingMoreInterested: null == isLoadingMoreInterested
+          ? _value.isLoadingMoreInterested
+          : isLoadingMoreInterested // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hasMoreInterested: null == hasMoreInterested
+          ? _value.hasMoreInterested
+          : hasMoreInterested // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ticketBoughtOffset: null == ticketBoughtOffset
+          ? _value.ticketBoughtOffset
+          : ticketBoughtOffset // ignore: cast_nullable_to_non_nullable
+              as int,
+      isLoadingMoreTicketBought: null == isLoadingMoreTicketBought
+          ? _value.isLoadingMoreTicketBought
+          : isLoadingMoreTicketBought // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hasMoreTicketBought: null == hasMoreTicketBought
+          ? _value.hasMoreTicketBought
+          : hasMoreTicketBought // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -210,7 +272,13 @@ abstract class _$$TrackEventStateImplCopyWith<$Res>
       List<EventTicketBoughtDomainModel> ticketBoughtUsers,
       List<EventInterestedUserDomainModel> interestedUsers,
       bool isLoading,
-      String error});
+      String error,
+      int interestedOffset,
+      bool isLoadingMoreInterested,
+      bool hasMoreInterested,
+      int ticketBoughtOffset,
+      bool isLoadingMoreTicketBought,
+      bool hasMoreTicketBought});
 }
 
 /// @nodoc
@@ -236,6 +304,12 @@ class __$$TrackEventStateImplCopyWithImpl<$Res>
     Object? interestedUsers = null,
     Object? isLoading = null,
     Object? error = null,
+    Object? interestedOffset = null,
+    Object? isLoadingMoreInterested = null,
+    Object? hasMoreInterested = null,
+    Object? ticketBoughtOffset = null,
+    Object? isLoadingMoreTicketBought = null,
+    Object? hasMoreTicketBought = null,
   }) {
     return _then(_$TrackEventStateImpl(
       eventId: freezed == eventId
@@ -278,6 +352,30 @@ class __$$TrackEventStateImplCopyWithImpl<$Res>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String,
+      interestedOffset: null == interestedOffset
+          ? _value.interestedOffset
+          : interestedOffset // ignore: cast_nullable_to_non_nullable
+              as int,
+      isLoadingMoreInterested: null == isLoadingMoreInterested
+          ? _value.isLoadingMoreInterested
+          : isLoadingMoreInterested // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hasMoreInterested: null == hasMoreInterested
+          ? _value.hasMoreInterested
+          : hasMoreInterested // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ticketBoughtOffset: null == ticketBoughtOffset
+          ? _value.ticketBoughtOffset
+          : ticketBoughtOffset // ignore: cast_nullable_to_non_nullable
+              as int,
+      isLoadingMoreTicketBought: null == isLoadingMoreTicketBought
+          ? _value.isLoadingMoreTicketBought
+          : isLoadingMoreTicketBought // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hasMoreTicketBought: null == hasMoreTicketBought
+          ? _value.hasMoreTicketBought
+          : hasMoreTicketBought // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -295,7 +393,13 @@ class _$TrackEventStateImpl implements _TrackEventState {
       final List<EventTicketBoughtDomainModel> ticketBoughtUsers = const [],
       final List<EventInterestedUserDomainModel> interestedUsers = const [],
       this.isLoading = false,
-      this.error = ""})
+      this.error = "",
+      this.interestedOffset = 0,
+      this.isLoadingMoreInterested = false,
+      this.hasMoreInterested = true,
+      this.ticketBoughtOffset = 0,
+      this.isLoadingMoreTicketBought = false,
+      this.hasMoreTicketBought = true})
       : _ticketBoughtUsers = ticketBoughtUsers,
         _interestedUsers = interestedUsers;
 
@@ -342,10 +446,30 @@ class _$TrackEventStateImpl implements _TrackEventState {
   @override
   @JsonKey()
   final String error;
+// Pagination — interested users
+  @override
+  @JsonKey()
+  final int interestedOffset;
+  @override
+  @JsonKey()
+  final bool isLoadingMoreInterested;
+  @override
+  @JsonKey()
+  final bool hasMoreInterested;
+// Pagination — ticket-bought users
+  @override
+  @JsonKey()
+  final int ticketBoughtOffset;
+  @override
+  @JsonKey()
+  final bool isLoadingMoreTicketBought;
+  @override
+  @JsonKey()
+  final bool hasMoreTicketBought;
 
   @override
   String toString() {
-    return 'TrackAdminEventState.trackEventState(eventId: $eventId, eventTitle: $eventTitle, eventDate: $eventDate, eventImageUrl: $eventImageUrl, interestedUserCount: $interestedUserCount, revenueGenerated: $revenueGenerated, ticketBoughtUsers: $ticketBoughtUsers, interestedUsers: $interestedUsers, isLoading: $isLoading, error: $error)';
+    return 'TrackAdminEventState.trackEventState(eventId: $eventId, eventTitle: $eventTitle, eventDate: $eventDate, eventImageUrl: $eventImageUrl, interestedUserCount: $interestedUserCount, revenueGenerated: $revenueGenerated, ticketBoughtUsers: $ticketBoughtUsers, interestedUsers: $interestedUsers, isLoading: $isLoading, error: $error, interestedOffset: $interestedOffset, isLoadingMoreInterested: $isLoadingMoreInterested, hasMoreInterested: $hasMoreInterested, ticketBoughtOffset: $ticketBoughtOffset, isLoadingMoreTicketBought: $isLoadingMoreTicketBought, hasMoreTicketBought: $hasMoreTicketBought)';
   }
 
   @override
@@ -370,7 +494,21 @@ class _$TrackEventStateImpl implements _TrackEventState {
                 .equals(other._interestedUsers, _interestedUsers) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.interestedOffset, interestedOffset) ||
+                other.interestedOffset == interestedOffset) &&
+            (identical(
+                    other.isLoadingMoreInterested, isLoadingMoreInterested) ||
+                other.isLoadingMoreInterested == isLoadingMoreInterested) &&
+            (identical(other.hasMoreInterested, hasMoreInterested) ||
+                other.hasMoreInterested == hasMoreInterested) &&
+            (identical(other.ticketBoughtOffset, ticketBoughtOffset) ||
+                other.ticketBoughtOffset == ticketBoughtOffset) &&
+            (identical(other.isLoadingMoreTicketBought,
+                    isLoadingMoreTicketBought) ||
+                other.isLoadingMoreTicketBought == isLoadingMoreTicketBought) &&
+            (identical(other.hasMoreTicketBought, hasMoreTicketBought) ||
+                other.hasMoreTicketBought == hasMoreTicketBought));
   }
 
   @override
@@ -385,7 +523,13 @@ class _$TrackEventStateImpl implements _TrackEventState {
       const DeepCollectionEquality().hash(_ticketBoughtUsers),
       const DeepCollectionEquality().hash(_interestedUsers),
       isLoading,
-      error);
+      error,
+      interestedOffset,
+      isLoadingMoreInterested,
+      hasMoreInterested,
+      ticketBoughtOffset,
+      isLoadingMoreTicketBought,
+      hasMoreTicketBought);
 
   /// Create a copy of TrackAdminEventState
   /// with the given fields replaced by the non-null parameter values.
@@ -409,7 +553,13 @@ class _$TrackEventStateImpl implements _TrackEventState {
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
             List<EventInterestedUserDomainModel> interestedUsers,
             bool isLoading,
-            String error)
+            String error,
+            int interestedOffset,
+            bool isLoadingMoreInterested,
+            bool hasMoreInterested,
+            int ticketBoughtOffset,
+            bool isLoadingMoreTicketBought,
+            bool hasMoreTicketBought)
         trackEventState,
   }) {
     return trackEventState(
@@ -422,7 +572,13 @@ class _$TrackEventStateImpl implements _TrackEventState {
         ticketBoughtUsers,
         interestedUsers,
         isLoading,
-        error);
+        error,
+        interestedOffset,
+        isLoadingMoreInterested,
+        hasMoreInterested,
+        ticketBoughtOffset,
+        isLoadingMoreTicketBought,
+        hasMoreTicketBought);
   }
 
   @override
@@ -438,7 +594,13 @@ class _$TrackEventStateImpl implements _TrackEventState {
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
             List<EventInterestedUserDomainModel> interestedUsers,
             bool isLoading,
-            String error)?
+            String error,
+            int interestedOffset,
+            bool isLoadingMoreInterested,
+            bool hasMoreInterested,
+            int ticketBoughtOffset,
+            bool isLoadingMoreTicketBought,
+            bool hasMoreTicketBought)?
         trackEventState,
   }) {
     return trackEventState?.call(
@@ -451,7 +613,13 @@ class _$TrackEventStateImpl implements _TrackEventState {
         ticketBoughtUsers,
         interestedUsers,
         isLoading,
-        error);
+        error,
+        interestedOffset,
+        isLoadingMoreInterested,
+        hasMoreInterested,
+        ticketBoughtOffset,
+        isLoadingMoreTicketBought,
+        hasMoreTicketBought);
   }
 
   @override
@@ -467,7 +635,13 @@ class _$TrackEventStateImpl implements _TrackEventState {
             List<EventTicketBoughtDomainModel> ticketBoughtUsers,
             List<EventInterestedUserDomainModel> interestedUsers,
             bool isLoading,
-            String error)?
+            String error,
+            int interestedOffset,
+            bool isLoadingMoreInterested,
+            bool hasMoreInterested,
+            int ticketBoughtOffset,
+            bool isLoadingMoreTicketBought,
+            bool hasMoreTicketBought)?
         trackEventState,
     required TResult orElse(),
   }) {
@@ -482,7 +656,13 @@ class _$TrackEventStateImpl implements _TrackEventState {
           ticketBoughtUsers,
           interestedUsers,
           isLoading,
-          error);
+          error,
+          interestedOffset,
+          isLoadingMoreInterested,
+          hasMoreInterested,
+          ticketBoughtOffset,
+          isLoadingMoreTicketBought,
+          hasMoreTicketBought);
     }
     return orElse();
   }
@@ -527,7 +707,13 @@ abstract class _TrackEventState implements TrackAdminEventState {
       final List<EventTicketBoughtDomainModel> ticketBoughtUsers,
       final List<EventInterestedUserDomainModel> interestedUsers,
       final bool isLoading,
-      final String error}) = _$TrackEventStateImpl;
+      final String error,
+      final int interestedOffset,
+      final bool isLoadingMoreInterested,
+      final bool hasMoreInterested,
+      final int ticketBoughtOffset,
+      final bool isLoadingMoreTicketBought,
+      final bool hasMoreTicketBought}) = _$TrackEventStateImpl;
 
   @override
   int? get eventId;
@@ -548,7 +734,19 @@ abstract class _TrackEventState implements TrackAdminEventState {
   @override
   bool get isLoading;
   @override
-  String get error;
+  String get error; // Pagination — interested users
+  @override
+  int get interestedOffset;
+  @override
+  bool get isLoadingMoreInterested;
+  @override
+  bool get hasMoreInterested; // Pagination — ticket-bought users
+  @override
+  int get ticketBoughtOffset;
+  @override
+  bool get isLoadingMoreTicketBought;
+  @override
+  bool get hasMoreTicketBought;
 
   /// Create a copy of TrackAdminEventState
   /// with the given fields replaced by the non-null parameter values.

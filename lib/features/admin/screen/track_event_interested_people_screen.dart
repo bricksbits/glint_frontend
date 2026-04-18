@@ -104,7 +104,7 @@ class TrackEventInterestedPeopleScreen extends StatelessWidget {
               const Expanded(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 28.0),
-                  child: InterestedPeopleListTiles(),
+                  child: InterestedPeopleListTiles(enablePagination: true),
                 ),
               ),
 

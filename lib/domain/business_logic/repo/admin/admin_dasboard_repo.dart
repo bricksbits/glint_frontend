@@ -48,10 +48,14 @@ abstract class AdminDashboardRepo {
 
   /// ---------------------- COMMON [ADMINS, SUPER ADMINS] ----------------------------- *
   Future<Result<List<EventInterestedUserDomainModel>>> fetchInterestedProfiles(
-      int eventId);
+    int eventId, {
+    int offset = 0,
+  });
 
   Future<Result<List<EventTicketBoughtDomainModel>>> fetchBookedTicketList(
-      int eventId);
+    int eventId, {
+    int offset = 0,
+  });
 
   /// ---------------------- UTILS  ----------------------------- *
   Future<UsersType> getCurrentUserType();

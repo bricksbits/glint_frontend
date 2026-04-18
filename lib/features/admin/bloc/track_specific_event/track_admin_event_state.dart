@@ -13,5 +13,13 @@ class TrackAdminEventState with _$TrackAdminEventState {
     @Default([]) List<EventInterestedUserDomainModel> interestedUsers,
     @Default(false) bool isLoading,
     @Default("") String error,
+    // Pagination — interested users
+    @Default(0) int interestedOffset,
+    @Default(false) bool isLoadingMoreInterested,
+    @Default(true) bool hasMoreInterested,
+    // Pagination — ticket-bought users
+    @Default(0) int ticketBoughtOffset,
+    @Default(false) bool isLoadingMoreTicketBought,
+    @Default(true) bool hasMoreTicketBought,
   }) = _TrackEventState;
 }

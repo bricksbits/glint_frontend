@@ -61,6 +61,8 @@ import '../domain/application_logic/auth/reset_password_with_otp_use_case.dart'
     as _i804;
 import '../domain/application_logic/auth/send_otp_use_case.dart' as _i786;
 import '../domain/application_logic/auth/sign_in_user_use_case.dart' as _i972;
+import '../domain/application_logic/event/fetch_ticket_history_use_case.dart'
+    as _i668;
 import '../domain/application_logic/logout_usecase.dart' as _i789;
 import '../domain/business_logic/repo/admin/admin_dasboard_repo.dart' as _i1000;
 import '../domain/business_logic/repo/auth/authentication_repo.dart' as _i873;
@@ -193,6 +195,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           gh<_i719.ProfileDao>(),
         ));
+    gh.lazySingleton<_i668.FetchTicketHistoryUseCase>(
+        () => _i668.FetchTicketHistoryUseCase(gh<_i757.EventRepo>()));
     gh.lazySingleton<_i38.ChatWithRepo>(() => _i112.ChatWithRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i698.ChatService>(),
