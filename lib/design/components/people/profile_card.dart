@@ -38,7 +38,7 @@ class ProfileCard extends StatelessWidget {
                 height: availableHeight,
                 width: screenWidth,
                 fit: BoxFit.cover,
-                'lib/assets/images/temp_place_holder.png',
+                'lib/assets/images/no_profile_image_placeholder.jpg',
               );
             },
           ),

@@ -150,6 +150,8 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     emit(newState);
   }
 
+  Future<void> refreshStories() => _getStories();
+
   Future<void> _getStories() async {
     updateState(state.copyWith(isLoading: true));
     final response = await chatRepo.fetchStories();

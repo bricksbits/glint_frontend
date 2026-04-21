@@ -4,13 +4,17 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_events.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
+import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/exports.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_view.dart';
+import 'package:glint_frontend/design/components/profile/super_dm_dialog.dart';
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
+import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class PeopleInterestedForEventScreen extends StatefulWidget {
   const PeopleInterestedForEventScreen({
@@ -35,6 +39,26 @@ class _PeopleInterestedForEventScreenState
     context.read<PeopleCardsBloc>().add(
           PeopleCardsEvent.setupSwipeController(_cardSwiperController),
         );
+  }
+
+  void _handleDm(BuildContext context, String userId, String name, String bio) {
+    final cubit = context.read<UserInfoManagerCubit>();
+    final isAvailable = cubit.superDmClicked();
+    final streamClient = StreamChat.of(context).client;
+
+    GlintAnalyticService.onCardActionEvent(
+      GlintSwipeGestureAnalyticsEvents.DM,
+      isAvailable,
+    );
+
+    if (!isAvailable) return;
+
+    SuperDmDialog.show(
+      context: context,
+      name: name,
+      bio: bio,
+      onSend: (message) => cubit.sendSuperDm(userId, message, streamClient),
+    );
   }
 
   @override
@@ -63,7 +87,7 @@ class _PeopleInterestedForEventScreenState
           final remainingCards = state.displayCards.length - state.currentIndex;
 
           if (remainingCards == 0) {
-            return _EventPeopleEmptyState();
+            return const _EventPeopleEmptyState();
           }
 
           return CardSwiper(
@@ -100,8 +124,6 @@ class _PeopleInterestedForEventScreenState
                       .add(PeopleCardsEvent.onRightSwiped(swipedCard.userId));
 
                 case CardSwiperDirection.top:
-                  // Super like is triggered directly via superLikeUser();
-                  // the swipe direction.top callback fires after the animation.
                   return true;
 
                 case CardSwiperDirection.none:
@@ -118,7 +140,7 @@ class _PeopleInterestedForEventScreenState
             },
             cardBuilder: (context, index, percentThresholdX, percentThresholdY) {
               if (index >= state.displayCards.length) {
-                return _EventPeopleEmptyState();
+                return const _EventPeopleEmptyState();
               }
 
               final user = state.displayCards[index];
@@ -131,14 +153,15 @@ class _PeopleInterestedForEventScreenState
                 onDisLiked: (_) =>
                     _cardSwiperController.swipe(CardSwiperDirection.left),
                 onSuperLiked: (_) {
-                  final executed = context
-                      .read<PeopleCardsBloc>()
-                      .superLikeUser(user.userId);
-                  if (executed) {
-                    _cardSwiperController.swipe(CardSwiperDirection.top);
-                  }
+                  showCustomSnackbar(context,
+                      message: "Super Likes not available for Event profile");
                 },
-                onDm: (_) {},
+                onDm: (_) => _handleDm(
+                  context,
+                  user.userId,
+                  user.username,
+                  user.bio,
+                ),
               );
             },
           );
@@ -149,23 +172,42 @@ class _PeopleInterestedForEventScreenState
 }
 
 class _EventPeopleEmptyState extends StatelessWidget {
+  const _EventPeopleEmptyState();
+
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text(
-            "No one here yet.\nCheck back closer to the event.",
-            style: AppTheme.headingFour,
-            textAlign: TextAlign.center,
-          ),
-          const Gap(16.0),
-          GlintElevatedButton(
-            label: "Go Back",
-            onPressed: () => context.pop(),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'lib/assets/images/no_data_found_placeholder.jpg',
+              width: 180,
+              height: 180,
+              fit: BoxFit.contain,
+              cacheWidth: 360,
+            ),
+            const Gap(24),
+            Text(
+              'No one around yet',
+              style: AppTheme.heavyBodyText,
+              textAlign: TextAlign.center,
+            ),
+            const Gap(8),
+            Text(
+              'Check back soon — new people appear as they join the event.',
+              style: AppTheme.simpleText.copyWith(color: AppColours.darkGray),
+              textAlign: TextAlign.center,
+            ),
+            const Gap(24),
+            GlintElevatedButton(
+              label: 'Go Back',
+              onPressed: () => context.pop(),
+            ),
+          ],
+        ),
       ),
     );
   }
