@@ -59,6 +59,9 @@ class _FilterPreferenceScreenState extends State<FilterPreferenceScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: GlintAgeDistanceCard(
                       hasBorders: true,
+                      initialMinAge: state.minAge,
+                      initialMaxAge: state.maxAge,
+                      initialMaxDistance: state.maxDistance,
                       collectMaxDistance: (maxDistance) {
                         _distance = maxDistance;
                         context

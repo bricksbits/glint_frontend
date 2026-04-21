@@ -30,7 +30,10 @@ class FilterPreferencesCubit extends Cubit<FilterPreferencesState> {
     final (minAge, maxAge, maxDistance) =
         await peopleRepo.getSavedSearchConfig();
     emitNewState(state.copyWith(
-        minAge: minAge, maxAge: maxAge, maxDistance: maxDistance));
+      minAge: minAge > 0 ? minAge : state.minAge,
+      maxAge: maxAge > 0 ? maxAge : state.maxAge,
+      maxDistance: maxDistance > 0 ? maxDistance : state.maxDistance,
+    ));
   }
 
   void emitNewState(FilterPreferencesState newState) {

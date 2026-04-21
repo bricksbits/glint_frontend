@@ -275,10 +275,6 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
 
     userInfoManagerCubit.superLikedUsed();
     add(PeopleCardsEvent.onSuperLiked(userId));
-    state.cardSwipeController?.swipe(
-      CardSwiperDirection.top,
-    );
-
     return true;
   }
 

@@ -9,11 +9,17 @@ class GlintAgeDistanceCard extends StatefulWidget {
   const GlintAgeDistanceCard({
     super.key,
     this.hasBorders = false,
+    this.initialMinAge,
+    this.initialMaxAge,
+    this.initialMaxDistance,
     required this.collectMinAndMaxAgeCallback,
     required this.collectMaxDistance,
   });
 
   final bool hasBorders;
+  final int? initialMinAge;
+  final int? initialMaxAge;
+  final int? initialMaxDistance;
   final Function(int, int) collectMinAndMaxAgeCallback;
   final Function(int) collectMaxDistance;
 
@@ -31,6 +37,45 @@ class _GlintAgeDistanceCardState extends State<GlintAgeDistanceCard> {
 
   bool isLocationEnabled = false;
   bool showFurtherProfiles = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialMinAge != null && widget.initialMinAge! > 0) {
+      fromAge = widget.initialMinAge!.toDouble();
+    }
+    if (widget.initialMaxAge != null && widget.initialMaxAge! > 0) {
+      toAge = widget.initialMaxAge!.toDouble();
+    }
+    if (widget.initialMaxDistance != null && widget.initialMaxDistance! > 0) {
+      distance = widget.initialMaxDistance!.toDouble();
+    }
+  }
+
+  @override
+  void didUpdateWidget(GlintAgeDistanceCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    bool needsUpdate = false;
+    if (widget.initialMinAge != oldWidget.initialMinAge &&
+        widget.initialMinAge != null &&
+        widget.initialMinAge! > 0) {
+      fromAge = widget.initialMinAge!.toDouble();
+      needsUpdate = true;
+    }
+    if (widget.initialMaxAge != oldWidget.initialMaxAge &&
+        widget.initialMaxAge != null &&
+        widget.initialMaxAge! > 0) {
+      toAge = widget.initialMaxAge!.toDouble();
+      needsUpdate = true;
+    }
+    if (widget.initialMaxDistance != oldWidget.initialMaxDistance &&
+        widget.initialMaxDistance != null &&
+        widget.initialMaxDistance! > 0) {
+      distance = widget.initialMaxDistance!.toDouble();
+      needsUpdate = true;
+    }
+    if (needsUpdate) setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
