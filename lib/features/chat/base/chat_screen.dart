@@ -68,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen>
               GestureDetector(
                 onTap: () {
                   showCustomSnackbar(context,
-                      message: "Story Likes will be available soon");
+                      message: "Story likes data will be available soon");
                   // context.pushNamed(GlintChatRoutes.stories.name);
                 },
                 child: SvgPicture.asset(
@@ -77,9 +77,13 @@ class _ChatScreenState extends State<ChatScreen>
               ),
               const Gap(18.0),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   GlintAnalyticService.onUploadStoriesEvent();
-                  context.pushNamed(GlintChatRoutes.uploadStory.name);
+                  final bool? uploaded = await context
+                      .pushNamed<bool>(GlintChatRoutes.uploadStory.name);
+                  if (uploaded == true && mounted) {
+                    _getStories();
+                  }
                 },
                 child: SvgPicture.asset(
                   'lib/assets/icons/upload_story.svg',
@@ -455,6 +459,10 @@ class _ChatScreenState extends State<ChatScreen>
         ],
       ),
     );
+  }
+
+  void _getStories() {
+    context.read<ChatScreenCubit>().refreshStories();
   }
 
   String formatDateTime(String isoDateString) {

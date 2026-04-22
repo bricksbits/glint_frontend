@@ -204,7 +204,7 @@ class LikesScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final likedProfile = likedAndSuperLikedProfiles.elementAt(index);
               return GlintLikedYouProfileContainer(
-                imageUrl: likedProfile.pictureUrlList.first,
+                imageUrl: likedProfile.pictureUrlList.firstOrNull ?? "",
                 name: likedProfile.username,
                 age: int.parse(likedProfile.age),
                 userId: likedProfile.userId,

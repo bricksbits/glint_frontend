@@ -631,13 +631,13 @@ class _HeaderAvatar extends StatelessWidget {
       );
     }
     return FadeInImage.assetNetwork(
-      placeholder: 'lib/assets/images/temp_place_holder.png',
+      placeholder: 'lib/assets/images/new_default_profile_place_holder.jpg',
       image: imageUrl,
       width: 32,
       height: 32,
       fit: BoxFit.cover,
       imageErrorBuilder: (_, __, ___) => Image.asset(
-        'lib/assets/images/temp_place_holder.png',
+        'lib/assets/images/new_default_profile_place_holder.jpg',
         width: 32,
         height: 32,
         fit: BoxFit.cover,

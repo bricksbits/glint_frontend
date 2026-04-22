@@ -47,7 +47,7 @@ class ProfileInfoColumn extends StatelessWidget {
                   errorWidget: (context, error, stack) {
                     return Image.asset(
                       fit: BoxFit.cover,
-                      'lib/assets/images/temp_place_holder.png',
+                      'lib/assets/images/new_default_profile_place_holder.jpg',
                     );
                   },
                 ),

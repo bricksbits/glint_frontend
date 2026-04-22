@@ -35,5 +35,6 @@ abstract class NetworkModule {
       ChatService(
         client: client,
         persistenceClient: persistenceClient,
+        pushProviderName: AppConfig.streamPushProviderName,
       );
 }
