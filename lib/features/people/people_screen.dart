@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:glint_frontend/analytics/glint_analytics_events.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
-import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/exports.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_view.dart';
 import 'package:glint_frontend/design/components/profile/super_dm_dialog.dart';
@@ -11,7 +10,6 @@ import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
-import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -146,6 +144,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
                   user,
                   userId,
                   streamClient,
+                  _cardSwiperController,
                 ),
               );
             },
@@ -160,6 +159,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
     PeopleCardModel user,
     String userId,
     StreamChatClient streamClient,
+    CardSwiperController swiperController,
   ) {
     final cubit = context.read<UserInfoManagerCubit>();
     final isAvailable = cubit.superDmClicked();
@@ -175,7 +175,10 @@ class _PeopleScreenState extends State<PeopleScreen> {
       context: context,
       name: user.username,
       bio: user.bio,
-      onSend: (message) => cubit.sendSuperDm(userId, message, streamClient),
+      onSend: (message) {
+        cubit.sendSuperDm(userId, message, streamClient);
+        swiperController.swipe(CardSwiperDirection.right);
+      },
     );
   }
 

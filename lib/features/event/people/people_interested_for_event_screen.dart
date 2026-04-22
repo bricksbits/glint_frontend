@@ -57,7 +57,10 @@ class _PeopleInterestedForEventScreenState
       context: context,
       name: name,
       bio: bio,
-      onSend: (message) => cubit.sendSuperDm(userId, message, streamClient),
+      onSend: (message) {
+        cubit.sendSuperDm(userId, message, streamClient);
+        _cardSwiperController.swipe(CardSwiperDirection.right);
+      },
     );
   }
 

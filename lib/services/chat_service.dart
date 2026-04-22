@@ -10,10 +10,12 @@ const String chatWithEventStartTime = "CHAT_WITH_EVENT_START_TIME";
 class ChatService {
   final StreamChatClient client;
   final StreamChatPersistenceClient persistenceClient;
+  final String pushProviderName;
 
   ChatService({
     required this.client,
     required this.persistenceClient,
+    required this.pushProviderName,
   });
 
   /// Call this after your auth flow gives you the user data + Stream token.
@@ -48,20 +50,17 @@ class ChatService {
   /// Pass [cachedToken] (from SharedPreferences) for an immediate registration
   /// before Firebase returns a fresh token; both paths are tried.
   Future<void> registerDevice({String? cachedToken}) async {
-    // Use the cached token immediately if available so there's no delay.
     if (cachedToken != null && cachedToken.isNotEmpty) {
-      await client.addDevice(cachedToken, PushProvider.firebase);
+      await client.addDevice(cachedToken, PushProvider.firebase, pushProviderName: pushProviderName);
     }
 
-    // Fetch a fresh token in case the cached one is stale.
     final freshToken = await FirebaseMessaging.instance.getToken();
     if (freshToken != null && freshToken != cachedToken) {
-      await client.addDevice(freshToken, PushProvider.firebase);
+      await client.addDevice(freshToken, PushProvider.firebase, pushProviderName: pushProviderName);
     }
 
-    // Keep the registration up-to-date on token rotation.
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
-      client.addDevice(newToken, PushProvider.firebase);
+      client.addDevice(newToken, PushProvider.firebase, pushProviderName: pushProviderName);
     });
   }
 
