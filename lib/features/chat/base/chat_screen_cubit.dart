@@ -36,6 +36,9 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   }
 
   void chatFacade() async {
+    // Cancel any stale subscription before re-subscribing to avoid duplicate
+    // events when chatFacade is called again on pull-to-refresh.
+    _recentMatchesSubscription?.cancel();
     _getRecentMatches();
     _observeRecentMatches();
     _checkChatClientStatus();
@@ -178,7 +181,6 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   Future<void> close() {
     _channelListController?.dispose();
     _recentMatchesSubscription?.cancel();
-    chatRepo.disposeRecentChatStream();
     _channelsEventsSubscription?.cancel();
     return super.close();
   }

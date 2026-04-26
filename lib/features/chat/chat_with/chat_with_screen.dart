@@ -561,7 +561,7 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
       ),
       child: Text(
         message.text ?? '',
-        style: AppTheme.simpleBodyText,
+        style: AppTheme.simpleBodyText.copyWith(fontWeight: FontWeight.w400),
       ),
     );
   }

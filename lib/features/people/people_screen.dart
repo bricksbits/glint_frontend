@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:glint_frontend/analytics/glint_analytics_events.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
-import 'package:glint_frontend/design/components/exports.dart';
+import 'package:glint_frontend/design/components/people/empty_people_state_view.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_view.dart';
 import 'package:glint_frontend/design/components/profile/super_dm_dialog.dart';
-import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -58,7 +57,13 @@ class _PeopleScreenState extends State<PeopleScreen> {
           }
 
           if (remainingCards == 0) {
-            return _showEmptyState(context);
+            return EmptyPeopleStateView(
+              title: "It's a little quiet here",
+              subtitle: 'Adjust your preferences for better results.',
+              buttonLabel: 'Search',
+              onButtonPressed: () =>
+                  context.pushNamed(GlintMainRoutes.filter.name),
+            );
           }
 
           return CardSwiper(
@@ -119,7 +124,13 @@ class _PeopleScreenState extends State<PeopleScreen> {
             cardBuilder:
                 (context, index, percentThresholdX, percentThresholdY) {
               if (index >= state.displayCards.length) {
-                return _showEmptyState(context);
+                return EmptyPeopleStateView(
+                  title: "It's a little quiet here",
+                  subtitle: 'Adjust your preferences for better results.',
+                  buttonLabel: 'Search',
+                  onButtonPressed: () =>
+                      context.pushNamed(GlintMainRoutes.filter.name),
+                );
               }
 
               final user = state.displayCards[index];
@@ -182,31 +193,4 @@ class _PeopleScreenState extends State<PeopleScreen> {
     );
   }
 
-  Widget _showEmptyState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            "Its a little quiet here\n,Adjust your preferences for better results.",
-            style: AppTheme.headingFour,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          GlintElevatedButton(
-            label: "Search",
-            onPressed: () {
-              context.pushNamed(
-                GlintMainRoutes.filter.name,
-              );
-            },
-          )
-        ],
-      ),
-    );
-  }
 }

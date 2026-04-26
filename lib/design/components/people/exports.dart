@@ -1,3 +1,4 @@
+export 'empty_people_state_view.dart';
 export 'profile_card.dart';
 export 'profile_card_about_box.dart';
 export 'profile_card_bio_box.dart';

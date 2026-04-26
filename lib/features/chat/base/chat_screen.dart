@@ -108,61 +108,68 @@ class _ChatScreenState extends State<ChatScreen>
                           style: AppTheme.headingThree,
                         ),
                       )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                    : CustomScrollView(
+                        // AlwaysScrollableScrollPhysics lets the RefreshIndicator
+                        // trigger even when the header slivers alone fill the screen.
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        slivers: [
                           // ------------------------- Stories Section --------------------------- //
-                          state.stories != null &&
-                                  state.stories?.isNotEmpty == true
-                              ? _buildStoriesSection(state.stories!,
+                          if (state.stories != null &&
+                              state.stories!.isNotEmpty)
+                            SliverToBoxAdapter(
+                              child: _buildStoriesSection(state.stories!,
                                   (selectedIndex) {
-                                  context.pushNamed(
-                                    GlintChatRoutes.stories.name,
-                                    extra: (
-                                      index: selectedIndex,
-                                      stories: state.stories
-                                    ),
-                                  );
-                                })
-                              : const SizedBox.shrink(),
+                                context.pushNamed(
+                                  GlintChatRoutes.stories.name,
+                                  extra: (
+                                    index: selectedIndex,
+                                    stories: state.stories
+                                  ),
+                                );
+                              }),
+                            ),
 
                           // ------------------------- Recent Matches Section --------------------------- //
-
-                          _buildRecentMatchesSection(state.recentMatches ?? [],
+                          SliverToBoxAdapter(
+                            child: _buildRecentMatchesSection(
+                              state.recentMatches ?? [],
                               (match) {
-                            context.pushNamed(
-                              GlintChatRoutes.chatWith.name,
-                              extra: ChatWithNavArguments(
-                                channelId: match.chatChannelId,
-                                eventId: match.eventId,
-                                eventName: match.eventName,
-                                eventStartTime: match.eventStartTime,
-                                matchId: match.matchId,
-                              ),
-                            );
-                          },
+                                context.pushNamed(
+                                  GlintChatRoutes.chatWith.name,
+                                  extra: ChatWithNavArguments(
+                                    channelId: match.chatChannelId,
+                                    eventId: match.eventId,
+                                    eventName: match.eventName,
+                                    eventStartTime: match.eventStartTime,
+                                    matchId: match.matchId,
+                                  ),
+                                );
+                              },
                               noRecentMatches:
-                                  state.recentMatches?.isEmpty ?? false),
-                          const Gap(12.0),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Text(
-                              'Chats',
-                              textAlign: TextAlign.start,
-                              style: AppTheme.headingThree.copyWith(
-                                fontStyle: FontStyle.normal,
-                                fontSize: 18.0,
+                                  state.recentMatches?.isEmpty ?? false,
+                            ),
+                          ),
+
+                          const SliverToBoxAdapter(child: Gap(12.0)),
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Text(
+                                'Chats',
+                                textAlign: TextAlign.start,
+                                style: AppTheme.headingThree.copyWith(
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 18.0,
+                                ),
                               ),
                             ),
                           ),
 
                           // ------------------------- Chat Channels --------------------------- //
-
                           state.channelListController != null &&
                                   state.isChatReady
-                              ? Expanded(
+                              ? SliverFillRemaining(
                                   child: StreamChannelListView(
                                     controller: state.channelListController!,
                                     itemBuilder: (context, channels, index,
@@ -184,10 +191,12 @@ class _ChatScreenState extends State<ChatScreen>
                                     },
                                   ),
                                 )
-                              : const Center(
-                                  child: Text(
-                                    "Chat Server busy,",
-                                    style: AppTheme.headingThree,
+                              : const SliverFillRemaining(
+                                  child: Center(
+                                    child: Text(
+                                      "Chat servers down, please try after sometime.",
+                                      style: AppTheme.headingThree,
+                                    ),
                                   ),
                                 ),
                         ],

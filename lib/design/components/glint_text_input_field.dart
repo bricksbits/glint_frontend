@@ -42,7 +42,7 @@ class GlintTextInputField extends StatelessWidget {
       child: TextField(
         onChanged: onChanged,
         autocorrect: true,
-        maxLength: 25,
+        maxLength: 300,
         textAlign: isCenter == true ? TextAlign.center : TextAlign.start,
         controller: controller,
         cursorColor: AppColours.primaryBlue,
