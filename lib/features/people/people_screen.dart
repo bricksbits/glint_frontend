@@ -93,14 +93,20 @@ class _PeopleScreenState extends State<PeopleScreen> {
                       GlintSwipeGestureAnalyticsEvents.LEFT, false);
                   context
                       .read<PeopleCardsBloc>()
-                      .add(PeopleCardsEvent.onLeftSwiped(swipedCard.userId));
+                      .add(PeopleCardsEvent.onLeftSwiped(
+                        swipedCard.userId,
+                        null,
+                      ));
 
                 case CardSwiperDirection.right:
                   GlintAnalyticService.onCardActionEvent(
                       GlintSwipeGestureAnalyticsEvents.RIGHT, false);
                   context
                       .read<PeopleCardsBloc>()
-                      .add(PeopleCardsEvent.onRightSwiped(swipedCard.userId));
+                      .add(PeopleCardsEvent.onRightSwiped(
+                        swipedCard.userId,
+                        null,
+                      ));
 
                 case CardSwiperDirection.top:
                   return true;
@@ -143,9 +149,11 @@ class _PeopleScreenState extends State<PeopleScreen> {
                 onDisLiked: (_) =>
                     _cardSwiperController.swipe(CardSwiperDirection.left),
                 onSuperLiked: (_) {
-                  final executeSuperLikeIfAvailable = context
-                      .read<PeopleCardsBloc>()
-                      .superLikeUser(user.userId);
+                  final executeSuperLikeIfAvailable =
+                      context.read<PeopleCardsBloc>().superLikeUser(
+                            user.userId,
+                            null,
+                          );
                   if (executeSuperLikeIfAvailable) {
                     _cardSwiperController.swipe(CardSwiperDirection.top);
                   }
@@ -192,5 +200,4 @@ class _PeopleScreenState extends State<PeopleScreen> {
       },
     );
   }
-
 }

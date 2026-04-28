@@ -38,7 +38,7 @@ class EventRepoImpl extends EventRepo {
     int? minAge,
     int? maxAge,
     int offset = 0,
-    int? distance,
+    int? distance = 50000,
     String? relationshipGoals,
     String? interests,
   }) async {

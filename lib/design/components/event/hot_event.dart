@@ -98,7 +98,7 @@ class HotEvent extends StatelessWidget {
                               GlintIconLabel(
                                 iconPath: 'lib/assets/icons/calendar_icon.svg',
                                 svgColor: AppColours.vibrantYellow,
-                                label: eventModel.eventdate,
+                                label: "${eventModel.eventdate}, ${eventModel.eventTime}",
                                 style: AppTheme.simpleText.copyWith(
                                   fontSize: 12.0,
                                   color: AppColours.white,

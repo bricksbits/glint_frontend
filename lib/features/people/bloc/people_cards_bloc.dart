@@ -75,16 +75,26 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
     // ────────────────────────────────────────────────────────────────────────
 
     on<_RightSwiped>((event, emit) {
-      _handleSwipe(emit, userId: event.onUserId, action: SwipeActionType.RIGHT);
+      _handleSwipe(
+        emit,
+        userId: event.onUserId,
+        onEventId: event.onEventId,
+        action: SwipeActionType.RIGHT,
+      );
     });
 
     on<_LeftSwiped>((event, emit) {
-      _handleSwipe(emit, userId: event.onUserId, action: SwipeActionType.LEFT);
+      _handleSwipe(emit,
+          userId: event.onUserId,
+          onEventId: event.onEventId,
+          action: SwipeActionType.LEFT);
     });
 
     on<_SuperLiked>((event, emit) {
       _handleSwipe(emit,
-          userId: event.onUserId, action: SwipeActionType.SUPER_LIKE);
+          userId: event.onUserId,
+          onEventId: event.onEventId,
+          action: SwipeActionType.SUPER_LIKE);
     });
 
     on<_UndoCard>((event, emit) {
@@ -195,6 +205,7 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
   void _handleSwipe(
     Emitter<PeopleCardsState> emit, {
     required String userId,
+    required String? onEventId,
     required SwipeActionType action,
   }) {
     if (state.currentIndex >= state.displayCards.length) return;
@@ -226,6 +237,7 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
 
     swipeBufferManager.bufferSwipe(SwipeActionEntity(
       currentUserId: state.userId.toString(),
+      onEventId: onEventId ?? "0",
       swipedOnUserId: userId,
       action: action,
       timestamp: DateTime.now(),
@@ -262,7 +274,7 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
     }
   }
 
-  bool superLikeUser(String userId) {
+  bool superLikeUser(String userId, String? onEventId) {
     final isSuperLikesAvailable = userInfoManagerCubit.superLikeClicked();
     GlintAnalyticService.onCardActionEvent(
       GlintSwipeGestureAnalyticsEvents.SUPER,
@@ -274,7 +286,7 @@ class PeopleCardsBloc extends Bloc<PeopleCardsEvent, PeopleCardsState> {
     }
 
     userInfoManagerCubit.superLikedUsed();
-    add(PeopleCardsEvent.onSuperLiked(userId));
+    add(PeopleCardsEvent.onSuperLiked(userId, onEventId));
     return true;
   }
 

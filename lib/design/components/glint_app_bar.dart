@@ -61,7 +61,7 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
                 context,
                 message: "No ticket history available",
               );
-              // context.pushNamed(GlintEventRoutes.tickets.name);
+              context.pushNamed(GlintEventRoutes.tickets.name);
               GlintAnalyticService.onEventsTicketHistoryClickedEvent();
             },
             child: SvgPicture.asset(

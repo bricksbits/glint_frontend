@@ -120,14 +120,20 @@ class _PeopleInterestedForEventScreenState
                       GlintSwipeGestureAnalyticsEvents.LEFT, false);
                   context
                       .read<PeopleCardsBloc>()
-                      .add(PeopleCardsEvent.onLeftSwiped(swipedCard.userId));
+                      .add(PeopleCardsEvent.onLeftSwiped(
+                        swipedCard.userId,
+                        widget.navArguments.eventId.toString(),
+                      ));
 
                 case CardSwiperDirection.right:
                   GlintAnalyticService.onCardActionEvent(
                       GlintSwipeGestureAnalyticsEvents.RIGHT, false);
                   context
                       .read<PeopleCardsBloc>()
-                      .add(PeopleCardsEvent.onRightSwiped(swipedCard.userId));
+                      .add(PeopleCardsEvent.onRightSwiped(
+                        swipedCard.userId,
+                        widget.navArguments.eventId.toString(),
+                      ));
 
                 case CardSwiperDirection.top:
                   return true;
@@ -144,7 +150,8 @@ class _PeopleInterestedForEventScreenState
                   .add(const PeopleCardsEvent.undo());
               return true;
             },
-            cardBuilder: (context, index, percentThresholdX, percentThresholdY) {
+            cardBuilder:
+                (context, index, percentThresholdX, percentThresholdY) {
               if (index >= state.displayCards.length) {
                 return EmptyPeopleStateView(
                   title: 'No one around yet',
@@ -182,4 +189,3 @@ class _PeopleInterestedForEventScreenState
     );
   }
 }
-

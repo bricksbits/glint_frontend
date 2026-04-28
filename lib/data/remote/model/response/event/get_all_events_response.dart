@@ -175,7 +175,7 @@ extension GetEventRequestMapper on GetAllEventsResponse {
             eventCoverImageUrl: pictureUrl ?? "",
             eventdate: eventDate,
             eventTime: eventTime,
-            eventLocation: "--",
+            eventLocation: "Tap info button",
             eventOldPrice: event.ticketPrice.toString(),
             eventCurrentPrice: event.ticketPrice.toString(),
             daysLeft: event.timeRemaining?.toString() ?? "--",

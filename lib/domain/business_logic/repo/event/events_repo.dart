@@ -18,7 +18,7 @@ abstract class EventRepo {
     int? eventId, {
     int? minAge,
     int? maxAge,
-    int offset = 0,
+    int offset = 20,
     int? distance,
     String? relationshipGoals,
     String? interests,

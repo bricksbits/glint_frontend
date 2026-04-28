@@ -113,13 +113,16 @@ class SwipeBufferManager {
   Future<bool> _sendBatchToServer(List<SwipeActionEntity> batch) async {
     debugLogger(logPrefix, "${batch.length} Items Processing to Server");
     var userActionRequestModel = batch
-        .map((item) => Actions(
+        .map((item) {
+          return Actions(
             onUserId: int.parse(item.swipedOnUserId),
+            onEventId: int.parse(item.onEventId ?? "0"),
             action: switch (item.action) {
               SwipeActionType.RIGHT => "right swipe",
               SwipeActionType.LEFT => "left swipe",
               SwipeActionType.SUPER_LIKE => "super like",
-            }))
+            });
+        })
         .toList();
 
     var requestModel = UserActionRequestModel(actions: userActionRequestModel);

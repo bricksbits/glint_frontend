@@ -81,7 +81,7 @@ class Profiles {
         ? json['relationship_goals'].cast<String>()
         : [];
     bio = json['bio'];
-    height = json['height'];
+    height = (json['height'] as num).toDouble();
     occupation = json['occupation'];
     education = json['education'];
     workoutHabit = json['workout_habit'];
@@ -108,7 +108,7 @@ class Profiles {
   List<String>? interests;
   List<String>? relationshipGoals;
   String? bio;
-  int? height;
+  double? height;
   String? occupation;
   String? education;
   String? workoutHabit;
@@ -128,7 +128,7 @@ class Profiles {
     List<String>? interests,
     List<String>? relationshipGoals,
     String? bio,
-    int? height,
+    double? height,
     String? occupation,
     String? education,
     String? workoutHabit,
@@ -253,7 +253,7 @@ extension GetUserInterestedForEventMapper on GetUserInterestedForEventResponse {
                 interests: element.interests ?? [],
                 pictureUrlList: element.pictureUrlList
                         ?.map(
-                            (pic) => "${pic.presignedUrl}${pic.fileExtension}")
+                            (pic) => "${pic.presignedUrl}")
                         .toList() ??
                     [],
                 gender: element.gender ?? "",

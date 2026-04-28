@@ -9,6 +9,7 @@ class SwipeActionEntity {
   final int? collabId;
   final String currentUserId;
   final String swipedOnUserId;
+  final String? onEventId;
   final bool isUnsent;
 
   @TypeConverters([SwipeActionTypeConverter])
@@ -21,6 +22,7 @@ class SwipeActionEntity {
     this.collabId,
     required this.currentUserId,
     required this.swipedOnUserId,
+    this.onEventId,
     this.isUnsent = false,
     required this.action,
     required this.timestamp,
