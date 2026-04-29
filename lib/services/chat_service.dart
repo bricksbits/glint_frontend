@@ -1,11 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:stream_chat_persistence/stream_chat_persistence.dart';
 
-const String chatWithEventId = "CHAT_WITH_EVENT_ID";
-const String chatWithEventName = "CHAT_WITH_EVENT_NAME";
-const String chatWithEventStartTime = "CHAT_WITH_EVENT_START_TIME";
+const String chatWithEventId = "event_id";
+const String chatWithEventName = "event_name";
+const String chatWithEventStartTime = "event_start_time";
+const String chatWithMatchId = "matched_via";
 
 class ChatService {
   final StreamChatClient client;
@@ -71,20 +71,6 @@ class ChatService {
       'messaging',
       id: channelId,
     );
-  }
-
-  Future<Channel> setupChannelWithNavArgs(ChatWithNavArguments args) async {
-    final currentChannel = client.channel(
-      'messaging',
-      id: args.channelId,
-      extraData: {
-        chatWithEventId: args.eventId,
-        chatWithEventName: args.eventName,
-        chatWithEventStartTime: args.eventStartTime,
-      },
-    );
-    currentChannel.watch();
-    return currentChannel;
   }
 
   /// Watch a channel — this subscribes to live updates (messages, reads, etc.)

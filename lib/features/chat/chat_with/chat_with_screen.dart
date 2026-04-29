@@ -124,7 +124,9 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                           : const SizedBox.shrink(),
                       Expanded(
                         child: getMessageListView(
-                            state.oppositeUserDetails?.name ?? "Chat"),
+                          state.oppositeUserDetails?.name ?? "Chat",
+                          state.chatNavArgs,
+                        ),
                       ),
                       setupMessageInput(state.currentChannel),
                     ],
@@ -215,6 +217,7 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
   // ------------------- Message List View ----------------------------
   StreamMessageListView getMessageListView(
     String oppositeUserName,
+    ChatWithNavArguments? effectiveNavArgs,
   ) {
     return StreamMessageListView(
       loadingBuilder: (context) {
@@ -225,8 +228,8 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
       emptyBuilder: (context) {
         return Center(
           child: EmptyChatStateView(
-            isEventMatch: widget.chatWithNavArguments.eventId != null,
-            matchUserId: widget.chatWithNavArguments.matchId ?? "",
+            isEventMatch: effectiveNavArgs?.eventId != null,
+            matchUserId: effectiveNavArgs?.matchId ?? "",
             matchUserName: oppositeUserName,
             upgradePlanCallBack: () {
               // Todo: Take the User to the Profile Tab of the Bottom Nav Stack

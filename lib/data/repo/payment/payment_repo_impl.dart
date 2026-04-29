@@ -7,6 +7,7 @@ import 'package:glint_frontend/data/remote/model/response/event/get_payment_hist
 import 'package:glint_frontend/data/remote/model/response/mapper/event_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/payment/book_event_response.dart'
     as bookEventResponse;
+import 'package:glint_frontend/data/remote/model/response/payment/book_event_response.dart';
 import 'package:glint_frontend/data/remote/model/response/payment/buy_membership_response.dart';
 import 'package:glint_frontend/data/remote/model/response/payment/payment_history_response.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
@@ -43,13 +44,9 @@ class PaymentRepoImpl extends PaymentRepo {
 
     switch (response) {
       case Success():
-        final successResponse = UniversalSuccessResponseBody<
-            bookEventResponse.BookEventResponse>.fromJson(
-          response.data,
-          (json) => bookEventResponse.BookEventResponse.fromJson(response.data),
-        );
-        if (successResponse.success && successResponse.data != null) {
-          return Success(successResponse.data!);
+        final successResponse = BookEventResponse.fromJson(response.data);
+        if (successResponse.success == true && successResponse.data != null) {
+          return Success(successResponse);
         } else {
           return Failure(Exception(successResponse.message));
         }

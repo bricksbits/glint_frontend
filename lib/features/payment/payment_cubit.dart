@@ -8,6 +8,7 @@ import 'package:glint_frontend/domain/business_logic/repo/background/info/user_i
 import 'package:glint_frontend/domain/business_logic/repo/payment/payment_repo.dart';
 import 'package:glint_frontend/features/payment/model/payment_argument_model.dart';
 import 'package:glint_frontend/features/payment/model/razorpay_order_model.dart';
+import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
 part 'payment_state.dart';
@@ -47,22 +48,22 @@ class PaymentCubit extends Cubit<PaymentState> {
       switch (eventResponse) {
         case Success<bookEventResponse.BookEventResponse>():
           final orderResponse = eventResponse.data;
-          final orderIdReceived = orderResponse.success?.orderId;
+          final orderIdReceived = orderResponse.data?.orderId;
           if (orderIdReceived != null) {
             emitNewState(state.copyWith(
               orderId: orderIdReceived,
               totalAmount: amount,
             ));
           }
-          final razorPayKey = orderResponse.success?.razorpayKey;
-          final razorPayOrderId = orderResponse.success?.razorpayOrderId;
+          final razorPayKey = orderResponse.data?.razorpayKey;
+          final razorPayOrderId = orderResponse.data?.razorpayOrderId;
           if (razorPayOrderId != null &&
               razorPayKey != null &&
               amount != null) {
             generateTheOrderId(razorPayKey, razorPayOrderId, "1200");
           }
         case Failure<bookEventResponse.BookEventResponse>():
-          print("BookEvent : Failed ${eventResponse.error}");
+          debugLogger("BookEvent", "Failed ${eventResponse.error}");
       }
     } else {
       emit(state.copyWith(
@@ -119,7 +120,7 @@ class PaymentCubit extends Cubit<PaymentState> {
     String razorpayOrderId,
     String amount,
   ) {
-    print("Order Generated with Id: $razorpayOrderId and Key: $razorpayKey");
+    debugLogger("Order Generated with Id","$razorpayOrderId and Key: $razorpayKey");
     final orderObject = RazorpayOrderModel(
       razorpayKey: razorpayKey,
       razorpayOrderId: razorpayOrderId,

@@ -3,34 +3,46 @@ BookEventResponse bookEventResponseFromJson(String str) => BookEventResponse.fro
 String bookEventResponseToJson(BookEventResponse data) => json.encode(data.toJson());
 class BookEventResponse {
   BookEventResponse({
-      this.success,});
+      this.success, 
+      this.message, 
+      this.data,});
 
   BookEventResponse.fromJson(dynamic json) {
-    success = json['success'] != null ? Success.fromJson(json['success']) : null;
+    success = json['success'];
+    message = json['message'];
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
-  Success? success;
-BookEventResponse copyWith({  Success? success,
+  bool? success;
+  String? message;
+  Data? data;
+BookEventResponse copyWith({  bool? success,
+  String? message,
+  Data? data,
 }) => BookEventResponse(  success: success ?? this.success,
+  message: message ?? this.message,
+  data: data ?? this.data,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    if (success != null) {
-      map['success'] = success?.toJson();
+    map['success'] = success;
+    map['message'] = message;
+    if (data != null) {
+      map['data'] = data?.toJson();
     }
     return map;
   }
 
 }
 
-Success successFromJson(String str) => Success.fromJson(json.decode(str));
-String successToJson(Success data) => json.encode(data.toJson());
-class Success {
-  Success({
+Data dataFromJson(String str) => Data.fromJson(json.decode(str));
+String dataToJson(Data data) => json.encode(data.toJson());
+class Data {
+  Data({
       this.orderId, 
       this.razorpayOrderId, 
       this.razorpayKey,});
 
-  Success.fromJson(dynamic json) {
+  Data.fromJson(dynamic json) {
     orderId = json['order_id'];
     razorpayOrderId = json['razorpay_order_id'];
     razorpayKey = json['razorpay_key'];
@@ -38,10 +50,10 @@ class Success {
   int? orderId;
   String? razorpayOrderId;
   String? razorpayKey;
-Success copyWith({  int? orderId,
+Data copyWith({  int? orderId,
   String? razorpayOrderId,
   String? razorpayKey,
-}) => Success(  orderId: orderId ?? this.orderId,
+}) => Data(  orderId: orderId ?? this.orderId,
   razorpayOrderId: razorpayOrderId ?? this.razorpayOrderId,
   razorpayKey: razorpayKey ?? this.razorpayKey,
 );

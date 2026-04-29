@@ -55,8 +55,7 @@ extension DateTimeFormatter on DateTime {
 }
 
 DateTime dateFromStandardResponse(String date) {
-  final format = DateFormat("yyyy-MM-dd HH:mm:ss");
-  return format.parse(date);
+  return DateTime.parse(date);
 }
 
 extension DateTimeFormatting on String {
