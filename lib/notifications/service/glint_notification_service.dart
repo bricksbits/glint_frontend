@@ -116,7 +116,7 @@ class GlintNotificationService {
     // App was terminated when the user tapped the notification
     _fcm.getInitialMessage().then((message) {
       if (message == null) return;
-      // Small delay to let the navigator finish mounting
+      // Small delay to let the navigator finish mounting after cold start.
       Future.delayed(const Duration(milliseconds: 500), () {
         NotificationHandler.handleNavigation(message.data);
       });
