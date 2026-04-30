@@ -24,15 +24,19 @@ Future<void> bootstrap(
   FutureOr<Widget> Function() builder,
 ) async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AppConfig.initialize();
-  await Firebase.initializeApp();
+
+  // AppConfig (env file) and Firebase have no dependency on each other — run in parallel.
+  await Future.wait([
+    AppConfig.initialize(),
+    Firebase.initializeApp(),
+  ]);
+
   FirebaseMessaging.onBackgroundMessage(
     glintFirebaseMessagingBackgroundHandler,
   );
   await setupFirebaseCrashlytics();
   GlintAnalyticService.setAnalyticsEnable();
   await configureDependencies();
-  await getIt.get<GlintNotificationService>().initialize();
   final connectivity = Connectivity();
   flutterLogError();
 
@@ -58,6 +62,11 @@ Future<void> bootstrap(
       child: await builder(),
     ),
   );
+
+  // Defer notification service init to after the first frame — not needed for the splash screen.
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    getIt.get<GlintNotificationService>().initialize();
+  });
 }
 
 Future<void> setupFirebaseCrashlytics() async {

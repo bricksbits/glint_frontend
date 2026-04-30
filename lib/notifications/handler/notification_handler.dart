@@ -49,6 +49,7 @@ class NotificationHandler {
     if (context == null) return;
 
     switch (payload.type) {
+      case GlintNotificationType.newMessage:
       case GlintNotificationType.match:
       case GlintNotificationType.matchStory:
       case GlintNotificationType.storyLike:
