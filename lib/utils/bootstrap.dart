@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
-import 'package:glint_frontend/notifications/fcm_background_handler.dart';
+import 'package:glint_frontend/notifications/service/fcm_background_handler.dart';
 import 'package:glint_frontend/notifications/service/glint_notification_service.dart';
 import 'package:glint_frontend/utils/app_config.dart';
 import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';

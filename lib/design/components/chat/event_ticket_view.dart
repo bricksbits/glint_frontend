@@ -2,15 +2,13 @@ import 'dart:ui' as ui;
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/components/chat/common_ticket_banner.dart';
 import 'package:glint_frontend/design/components/chat/ticket_code_view.dart';
 import 'package:glint_frontend/design/components/chat/ticket_holders_view.dart';
+import 'package:glint_frontend/design/components/shared/event_location_map_button.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'ticket_details_component.dart';
 
@@ -52,13 +50,6 @@ class EventTicketView extends StatelessWidget {
   final VoidCallback onClosedClicked;
   final VoidCallback? onDownloadTap;
 
-  Future<void> _openMaps() async {
-    final uri = Uri.parse(googleMapsUrl);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -95,10 +86,12 @@ class EventTicketView extends StatelessWidget {
                 onDownloadTap: onDownloadTap,
               ),
               const Gap(8.0),
-              _MapPreview(
+              EventLocationMapButton(
                 latitude: latitude,
                 longitude: longitude,
-                onTap: _openMaps,
+                googleMapsUrl: googleMapsUrl,
+                height: 90,
+                horizontalPadding: 22.0,
               ),
               const Gap(16.0),
               TicketHolderView(
@@ -114,76 +107,6 @@ class EventTicketView extends StatelessWidget {
               ),
               const Gap(48.0),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _MapPreview extends StatelessWidget {
-  const _MapPreview({
-    required this.latitude,
-    required this.longitude,
-    required this.onTap,
-  });
-
-  final double latitude;
-  final double longitude;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22.0),
-      child: GestureDetector(
-        onTap: onTap,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: SizedBox(
-            height: 90,
-            width: double.infinity,
-            child: Stack(
-              children: [
-                FlutterMap(
-                  options: MapOptions(
-                    initialCenter: LatLng(latitude, longitude),
-                    initialZoom: 15.0,
-                    interactionOptions: const InteractionOptions(
-                      flags: InteractiveFlag.none,
-                    ),
-                  ),
-                  children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      userAgentPackageName: 'com.glint.glint_frontend',
-                    ),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: LatLng(latitude, longitude),
-                          child: const Icon(
-                            Icons.location_pin,
-                            color: Colors.red,
-                            size: 32,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Positioned(
-                  bottom: 8,
-                  right: 8,
-                  child: Image.asset(
-                    'lib/assets/icons/export-arrow.png',
-                    height: 24.0,
-                    width: 24.0,
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
       ),

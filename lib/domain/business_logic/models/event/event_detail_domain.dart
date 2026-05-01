@@ -16,6 +16,23 @@ class EventDetailsDomainModel {
   final String eventBy;
   final bool isPaused;
 
+  // Common extended fields
+  final bool discountActivated;
+  final int? ticketsBought;
+  final String? coordinatorUsername;
+
+  // Admin-only fields
+  final String? googleMapUrl;
+  final DateTime? bookByTime;
+  final int? totalTickets;
+  final int? ticketsRemaining;
+  final List<String>? categories;
+  final String? approvalStatus;
+  final bool? isHotEvent;
+  final String? coordinatorEmail;
+  final int? interestedCount;
+  final int? confirmedTicketsCount;
+
   EventDetailsDomainModel({
     required this.eventId,
     required this.eventName,
@@ -31,7 +48,25 @@ class EventDetailsDomainModel {
     required this.location,
     required this.eventBy,
     this.isPaused = false,
+    this.discountActivated = false,
+    this.ticketsBought,
+    this.coordinatorUsername,
+    this.googleMapUrl,
+    this.bookByTime,
+    this.totalTickets,
+    this.ticketsRemaining,
+    this.categories,
+    this.approvalStatus,
+    this.isHotEvent,
+    this.coordinatorEmail,
+    this.interestedCount,
+    this.confirmedTicketsCount,
   });
+
+  double get latitude => double.tryParse(location["lat"] ?? "0") ?? 0.0;
+  double get longitude => double.tryParse(location["long"] ?? "0") ?? 0.0;
+
+  bool get isAdminView => totalTickets != null || googleMapUrl != null;
 
   EventDetailsDomainModel copyWith({
     String? eventId,
@@ -48,6 +83,19 @@ class EventDetailsDomainModel {
     Map<String, String>? location,
     String? eventBy,
     bool? isPaused,
+    bool? discountActivated,
+    int? ticketsBought,
+    String? coordinatorUsername,
+    String? googleMapUrl,
+    DateTime? bookByTime,
+    int? totalTickets,
+    int? ticketsRemaining,
+    List<String>? categories,
+    String? approvalStatus,
+    bool? isHotEvent,
+    String? coordinatorEmail,
+    int? interestedCount,
+    int? confirmedTicketsCount,
   }) {
     return EventDetailsDomainModel(
       eventId: eventId ?? this.eventId,
@@ -64,6 +112,19 @@ class EventDetailsDomainModel {
       location: location ?? this.location,
       eventBy: eventBy ?? this.eventBy,
       isPaused: isPaused ?? this.isPaused,
+      discountActivated: discountActivated ?? this.discountActivated,
+      ticketsBought: ticketsBought ?? this.ticketsBought,
+      coordinatorUsername: coordinatorUsername ?? this.coordinatorUsername,
+      googleMapUrl: googleMapUrl ?? this.googleMapUrl,
+      bookByTime: bookByTime ?? this.bookByTime,
+      totalTickets: totalTickets ?? this.totalTickets,
+      ticketsRemaining: ticketsRemaining ?? this.ticketsRemaining,
+      categories: categories ?? this.categories,
+      approvalStatus: approvalStatus ?? this.approvalStatus,
+      isHotEvent: isHotEvent ?? this.isHotEvent,
+      coordinatorEmail: coordinatorEmail ?? this.coordinatorEmail,
+      interestedCount: interestedCount ?? this.interestedCount,
+      confirmedTicketsCount: confirmedTicketsCount ?? this.confirmedTicketsCount,
     );
   }
 
@@ -92,23 +153,23 @@ extension EventDetailsToCreateEventMapper on EventDetailsDomainModel {
     return CreateEventRequestDomainModel(
       eventId: eventId,
       eventName: eventName,
-      isHotEvent: false,
+      isHotEvent: isHotEvent ?? false,
       eventDescription: aboutEvent,
-      googleMapUrl: "",
-      eventLocationLat: double.tryParse(location["lat"] ?? "") ?? 0.0,
-      eventLocationLong: double.tryParse(location["long"] ?? "") ?? 0.0,
+      googleMapUrl: googleMapUrl ?? "",
+      eventLocationLat: latitude,
+      eventLocationLong: longitude,
       createdTime: eventdate,
       bookTime: eventdate,
       startDateAndTime: eventdate,
       endDateAndTime: eventTime,
       originalPrice: int.tryParse(eventOldPrice) ?? 0,
       discountedPrice: int.tryParse(eventCurrentPrice) ?? 0,
-      discountActivated: false,
-      ticketsRemaining: 30,
-      totalTicket: 100,
+      discountActivated: discountActivated,
+      ticketsRemaining: ticketsRemaining ?? 30,
+      totalTicket: totalTickets ?? 100,
       eventLocationName: eventLocation,
       eventBy: eventBy,
-      categoryList: [],
+      categoryList: categories ?? [],
       tempImageIds: [],
     );
   }

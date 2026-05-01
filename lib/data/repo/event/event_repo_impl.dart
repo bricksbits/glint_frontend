@@ -5,7 +5,7 @@ import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_all_events_response.dart';
-import 'package:glint_frontend/data/remote/model/response/event/get_event_details_response.dart';
+import 'package:glint_frontend/data/remote/model/response/event/event_details_response.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_ticket_hisotry_response.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_user_interested_for_event_response.dart';
 import 'package:glint_frontend/data/remote/model/response/mapper/event_mapper.dart';
@@ -128,15 +128,14 @@ class EventRepoImpl extends EventRepo {
     switch (response) {
       case Success():
         final details =
-            UniversalSuccessResponseBody<GetEventDetailsResponse>.fromJson(
+            UniversalSuccessResponseBody<EventDetailsResponseWrapper>.fromJson(
           response.data,
-          (json) => GetEventDetailsResponse.fromJson(json),
+          (json) => EventDetailsResponseWrapper.fromJson(json),
         );
         if (details.success && details.data != null) {
           return Success(details.data!.mapToDomain());
-        } else {
-          return Failure(Exception(details.message));
         }
+        return Failure(Exception(details.message));
       case Failure():
         return Failure(Exception(response.error));
     }

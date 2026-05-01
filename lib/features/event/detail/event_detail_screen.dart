@@ -1,9 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:glint_frontend/design/components/shared/event_location_map_button.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_detail_domain.dart';
 import 'package:glint_frontend/features/event/detail/event_detail_cubit.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
 
@@ -39,169 +40,217 @@ class EventDetailScreen extends StatelessWidget {
                     : AppTheme.headingTwo.copyWith(fontSize: 20.0),
               ),
             ),
-            body: state.isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        state.eventDetails?.eventCoverImageUrl != null &&
-                                state
-                                    .eventDetails!.eventCoverImageUrl.isNotEmpty
-                            ? CarouselSlider(
-                                options: CarouselOptions(
-                                  height: 264,
-                                  enlargeCenterPage: true,
-                                  autoPlay: true,
-                                ),
-                                items: state.eventDetails?.eventCoverImageUrl
-                                    .map((imageUrl) {
-                                  return Image.network(imageUrl,
-                                      fit: BoxFit.cover,
-                                      width: double.infinity, errorBuilder:
-                                          (context, error, stackTrace) {
-                                    return Image.asset(
-                                      'lib/assets/images/event/event_banner_placeholder.png',
-                                      fit: BoxFit.cover,
-                                    );
-                                  });
-                                }).toList(),
-                              )
-                            : eventArguments.unUploadedFiles == null
-                                ? CarouselSlider(
-                                    options: CarouselOptions(
-                                      height: 264,
-                                      enlargeCenterPage: true,
-                                      autoPlay: true,
-                                    ),
-                                    items: state
-                                        .eventDetails?.eventCoverImageUrl
-                                        .map((imageUrl) {
-                                      return Image.network(imageUrl,
-                                          fit: BoxFit.cover,
-                                          width: double.infinity, errorBuilder:
-                                              (context, error, stackTrace) {
-                                        return Image.asset(
-                                          'lib/assets/images/event/event_banner_placeholder.png',
-                                          fit: BoxFit.cover,
-                                        );
-                                      });
-                                    }).toList(),
-                                  )
-                                : eventArguments.unUploadedFiles != null
-                                    ? CarouselSlider(
-                                        options: CarouselOptions(
-                                          height: 264,
-                                          enlargeCenterPage: true,
-                                          autoPlay: true,
-                                        ),
-                                        items: eventArguments.unUploadedFiles
-                                            ?.where((item) => item != null)
-                                            .map((imageUrl) {
-                                          return Image.file(
-                                            imageUrl!,
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,
-                                          );
-                                        }).toList(),
-                                      )
-                                    : Image.asset(
-                                        'lib/assets/images/event/main_event_banner.svg',
-                                        fit: BoxFit.fill,
-                                        height: 264,
-                                      ),
-
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Gap(40.0),
-                              _EventTitle(
-                                  title: state.eventDetails?.eventName ?? ""),
-                              const Gap(20.0),
-                              _EventDetails(
-                                date: state.eventDetails?.eventdate ?? "",
-                                time: state.eventDetails?.eventTime ?? "",
-                                location:
-                                    state.eventDetails?.eventLocation ?? "",
-                              ),
-                              const Gap(24.0),
-                              _EventPricing(
-                                oldPrice:
-                                    state.eventDetails?.eventOldPrice ?? "",
-                                newPrice:
-                                    state.eventDetails?.eventCurrentPrice ?? "",
-                                daysLeft: state.eventDetails?.daysLeft ?? "",
-                              ),
-
-                              const Gap(24.0),
-
-                              // about event
-                              _AboutEvent(
-                                eventDescription:
-                                    state.eventDetails?.aboutEvent ?? "",
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // interested profiles
-                        // _BuildInterestedProfiles(
-                        //   interestedProfiles: interactedUsers,
-                        //   showProfileIconsOnly: state.isEventPreviewForAdmin,
-                        // ),
-
-                        const Gap(24.0),
-
-                        // event by
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: 'Event is, ',
-                                    style: AppTheme.simpleText,
-                                  ),
-                                  TextSpan(
-                                    text: state.eventDetails?.eventBy,
-                                    style: AppTheme.simpleText.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Gap(20.0),
-                      ],
-                    ),
-                  ),
+            body: _buildBody(context, state),
           );
         },
       ),
     );
   }
+
+  Widget _buildBody(BuildContext context, EventDetailState state) {
+    if (state.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.errorMessage != null && state.eventDetails == null) {
+      return _ErrorState(
+        message: state.errorMessage!,
+        onRetry: () => context.read<EventDetailCubit>().retry(),
+      );
+    }
+
+    final details = state.eventDetails;
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildImageSection(state),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Gap(40.0),
+                _EventTitle(title: details?.eventName ?? ""),
+                const Gap(20.0),
+                _EventDetails(
+                  date: details?.eventdate ?? "",
+                  time: details?.eventTime ?? "",
+                  location: details?.eventLocation ?? "",
+                ),
+                const Gap(24.0),
+                _EventPricing(
+                  oldPrice: details?.eventOldPrice ?? "",
+                  newPrice: details?.eventCurrentPrice ?? "",
+                  daysLeft: details?.daysLeft ?? "",
+                  discountActivated: details?.discountActivated ?? false,
+                ),
+                const Gap(24.0),
+                _AboutEvent(eventDescription: details?.aboutEvent ?? ""),
+              ],
+            ),
+          ),
+
+          const Gap(24.0),
+
+          // Event by
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'Event is, ',
+                      style: AppTheme.simpleText,
+                    ),
+                    TextSpan(
+                      text: details?.eventBy,
+                      style: AppTheme.simpleText.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Location map — shown when valid coordinates are available
+          if (details != null &&
+              (details.latitude != 0.0 || details.longitude != 0.0)) ...[
+            const Gap(20.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Location',
+                  style: AppTheme.simpleBodyText.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+            const Gap(8.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: EventLocationMapButton(
+                latitude: details.latitude,
+                longitude: details.longitude,
+                googleMapsUrl: details.googleMapUrl,
+                height: 150.0,
+              ),
+            ),
+          ],
+
+          // Admin-only section
+          if (details != null && details.isAdminView) ...[
+            const Gap(24.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: _AdminEventDetails(details: details),
+            ),
+          ],
+
+          const Gap(20.0),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImageSection(EventDetailState state) {
+    if (state.eventDetails?.eventCoverImageUrl != null &&
+        state.eventDetails!.eventCoverImageUrl.isNotEmpty) {
+      return CarouselSlider(
+        options: CarouselOptions(
+          height: 264,
+          enlargeCenterPage: true,
+          autoPlay: true,
+        ),
+        items: state.eventDetails!.eventCoverImageUrl.map((imageUrl) {
+          return Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            errorBuilder: (context, error, stackTrace) => Image.asset(
+              'lib/assets/images/event/event_banner_placeholder.png',
+              fit: BoxFit.cover,
+            ),
+          );
+        }).toList(),
+      );
+    }
+
+    if (eventArguments.unUploadedFiles != null) {
+      return CarouselSlider(
+        options: CarouselOptions(
+          height: 264,
+          enlargeCenterPage: true,
+          autoPlay: true,
+        ),
+        items: eventArguments.unUploadedFiles!
+            .where((item) => item != null)
+            .map((imageUrl) {
+          return Image.file(
+            imageUrl!,
+            fit: BoxFit.cover,
+            width: double.infinity,
+          );
+        }).toList(),
+      );
+    }
+
+    return Image.asset(
+      'lib/assets/images/event/event_banner_placeholder.png',
+      fit: BoxFit.cover,
+      height: 264,
+      width: double.infinity,
+    );
+  }
 }
 
-class _EventImage extends StatelessWidget {
-  final String imageUrl;
+class _ErrorState extends StatelessWidget {
+  const _ErrorState({required this.message, required this.onRetry});
 
-  const _EventImage({required this.imageUrl});
+  final String message;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 280.0,
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        fit: BoxFit.cover,
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: AppColours.gray),
+            const Gap(16.0),
+            Text(
+              'Failed to load event details',
+              style: AppTheme.simpleBodyText.copyWith(fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
+            ),
+            const Gap(8.0),
+            Text(
+              message,
+              style: AppTheme.simpleText,
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const Gap(24.0),
+            ElevatedButton(
+              onPressed: onRetry,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColours.primaryBlue,
+                foregroundColor: AppColours.white,
+              ),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -260,30 +309,35 @@ class _EventPricing extends StatelessWidget {
   final String oldPrice;
   final String newPrice;
   final String daysLeft;
+  final bool discountActivated;
 
   const _EventPricing({
     required this.oldPrice,
     required this.newPrice,
     required this.daysLeft,
+    required this.discountActivated,
   });
 
   @override
   Widget build(BuildContext context) {
+    final showDiscount = discountActivated && oldPrice.isNotEmpty && oldPrice != newPrice;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            const Text('₹ ', style: AppTheme.simpleText),
-            Text(
-              oldPrice,
-              style: AppTheme.simpleText.copyWith(
-                decoration: TextDecoration.lineThrough,
-                fontWeight: FontWeight.w300,
+        if (showDiscount)
+          Row(
+            children: [
+              const Text('₹ ', style: AppTheme.simpleText),
+              Text(
+                oldPrice,
+                style: AppTheme.simpleText.copyWith(
+                  decoration: TextDecoration.lineThrough,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -338,69 +392,8 @@ class _EventPricing extends StatelessWidget {
   }
 }
 
-class _BuildInterestedProfiles extends StatelessWidget {
-  const _BuildInterestedProfiles(
-      {required this.interestedProfiles, required this.showProfileIconsOnly});
-
-  final List<String> interestedProfiles;
-  final bool showProfileIconsOnly;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-      decoration: const BoxDecoration(
-        color: AppColours.black,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ...interestedProfiles.map(
-            (userImage) => Align(
-              widthFactor: 0.5,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 6),
-                child: CircleAvatar(
-                  radius: 10.0,
-                  backgroundImage:
-                      showProfileIconsOnly ? null : NetworkImage(userImage),
-                  backgroundColor:
-                      showProfileIconsOnly ? AppColours.gray : null,
-                  child: showProfileIconsOnly
-                      ? const Icon(
-                          Icons.person,
-                          color: AppColours.white,
-                          size: 16.0,
-                        )
-                      : null,
-                ),
-              ),
-            ),
-          ),
-          const Gap(20.0),
-          Text(
-            'See interested profiles',
-            style: AppTheme.simpleText.copyWith(
-              fontWeight: FontWeight.w500,
-              color: AppColours.white,
-            ),
-          ),
-          const Gap(2.0),
-          const Icon(
-            Icons.chevron_right,
-            color: AppColours.warning300,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _AboutEvent extends StatelessWidget {
-  const _AboutEvent({
-    required this.eventDescription,
-  });
+  const _AboutEvent({required this.eventDescription});
 
   final String eventDescription;
 
@@ -412,16 +405,102 @@ class _AboutEvent extends StatelessWidget {
       children: [
         Text(
           'About Event',
-          style: AppTheme.simpleBodyText.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+          style: AppTheme.simpleBodyText.copyWith(fontWeight: FontWeight.w700),
         ),
         const Gap(6.0),
-        Text(
-          eventDescription,
-          style: AppTheme.simpleText,
-        ),
+        Text(eventDescription, style: AppTheme.simpleText),
       ],
+    );
+  }
+}
+
+class _AdminEventDetails extends StatelessWidget {
+  const _AdminEventDetails({required this.details});
+
+  final EventDetailsDomainModel details;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Event Management',
+          style: AppTheme.simpleBodyText.copyWith(fontWeight: FontWeight.w700),
+        ),
+        const Gap(12.0),
+        if (details.totalTickets != null)
+          _AdminInfoRow(
+            label: 'Tickets',
+            value:
+                '${details.ticketsRemaining ?? "—"} / ${details.totalTickets} remaining',
+          ),
+        if (details.approvalStatus != null)
+          _AdminInfoRow(label: 'Status', value: details.approvalStatus!),
+        if (details.isHotEvent == true)
+          const _AdminInfoRow(label: 'Hot Event', value: '🔥 Yes'),
+        if (details.confirmedTicketsCount != null)
+          _AdminInfoRow(
+            label: 'Confirmed',
+            value: '${details.confirmedTicketsCount} ticket(s)',
+          ),
+        if (details.coordinatorEmail != null)
+          _AdminInfoRow(
+            label: 'Coordinator',
+            value:
+                '${details.coordinatorUsername ?? ""} · ${details.coordinatorEmail}',
+          ),
+        if (details.bookByTime != null)
+          _AdminInfoRow(
+            label: 'Book by',
+            value: _formatDate(details.bookByTime!),
+          ),
+        if (details.categories != null && details.categories!.isNotEmpty)
+          _AdminInfoRow(
+            label: 'Categories',
+            value: details.categories!.join(', '),
+          ),
+      ],
+    );
+  }
+
+  String _formatDate(DateTime dt) {
+    final months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    ];
+    return '${dt.day} ${months[dt.month - 1]} ${dt.year}';
+  }
+}
+
+class _AdminInfoRow extends StatelessWidget {
+  const _AdminInfoRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: AppTheme.simpleText.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColours.gray,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(value, style: AppTheme.simpleText),
+          ),
+        ],
+      ),
     );
   }
 }
