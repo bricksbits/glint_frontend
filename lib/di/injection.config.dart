@@ -239,6 +239,8 @@ extension GetItInjectableX on _i174.GetIt {
           swipeActionDao: gh<_i1004.SwipeActionDao>(),
           chatRepo: gh<_i849.ChatRepo>(),
         ));
+    gh.lazySingleton<_i605.GetEventAdminStatsUseCase>(
+        () => _i605.GetEventAdminStatsUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i130.PublishEventUseCase>(
         () => _i130.PublishEventUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i38.GetAllPublishEventsUsecase>(
@@ -249,12 +251,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1027.GetAllEventsUsecase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i907.GetAllTicketBoughtUsersUseCase>(() =>
         _i907.GetAllTicketBoughtUsersUseCase(gh<_i1000.AdminDashboardRepo>()));
-    gh.lazySingleton<_i386.GetAllInterestedUsersUseCase>(() =>
-        _i386.GetAllInterestedUsersUseCase(gh<_i1000.AdminDashboardRepo>()));
-    gh.lazySingleton<_i605.GetEventAdminStatsUseCase>(
-        () => _i605.GetEventAdminStatsUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i804.TogglePauseEventUseCase>(
         () => _i804.TogglePauseEventUseCase(gh<_i1000.AdminDashboardRepo>()));
+    gh.lazySingleton<_i386.GetAllInterestedUsersUseCase>(() =>
+        _i386.GetAllInterestedUsersUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i662.ProfileRepo>(() => _i548.ProfileRepoImpl(
           httpClient: gh<_i368.MyDioClient>(),
           sharedPreferenceHelper:

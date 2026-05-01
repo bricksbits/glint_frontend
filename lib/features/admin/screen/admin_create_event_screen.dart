@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:bottom_picker/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,6 +46,10 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
   late final TextEditingController _longController = TextEditingController();
   late final TextEditingController _eventByController =
       TextEditingController();
+  late final TextEditingController _ticketsRemainingController =
+      TextEditingController();
+  late final TextEditingController _totalTicketsController =
+      TextEditingController();
 
   final List<Map<EventType, String>> eventTypeOptions = [
     {EventType.hot: '🔥 Hot Event'},
@@ -65,6 +67,8 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     _latController.dispose();
     _longController.dispose();
     _eventByController.dispose();
+    _ticketsRemainingController.dispose();
+    _totalTicketsController.dispose();
     super.dispose();
   }
 
@@ -98,6 +102,8 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
         _longController.text =
             body.eventLocationLong != 0.0 ? body.eventLocationLong.toString() : '';
         _eventByController.text = body.eventBy;
+        _ticketsRemainingController.text = body.ticketsRemaining.toString();
+        _totalTicketsController.text = body.totalTicket.toString();
       },
       child: BlocConsumer<AdminCreateEventCubit, AdminCreateEventState>(
         listenWhen: (_, current) =>
@@ -221,7 +227,9 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                   const Gap(32.0),
                 ],
               ),
-              body: state.isLoading
+              body: (state.isLoading ||
+                      (widget.navArguments?.updateExistingEventId != null &&
+                          state.eventDetailModel == null))
                   ? const Center(child: CircularProgressIndicator())
                   : SingleChildScrollView(
                       child: Padding(
@@ -235,9 +243,11 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                             const Gap(24.0),
                             _buildEventTypeSelector(state),
                             const Gap(20.0),
-                            _buildCategorySelector(state),
+                            _buildCategorySection(state),
                             const Gap(20.0),
-                            _builtNumberOfPersonSelector(state),
+                            _builtTotalTicketsSection(state),
+                            const Gap(12.0),
+                            _buildTicketsRemainingField(),
                             const Gap(24.0),
                             _buildActualPriceField(),
                             const Gap(12.0),
@@ -252,6 +262,10 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                             _buildEventEndDatePicker(state),
                             const Gap(12.0),
                             _buildEventEndTimePicker(state),
+                            const Gap(24.0),
+                            _buildBookByDatePicker(state),
+                            const Gap(12.0),
+                            _buildBookByTimePicker(state),
                             const Gap(12.0),
                             _buildEventLocationField(),
                             const Gap(12.0),
@@ -261,13 +275,9 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
                             const Gap(12.0),
                             _buildLatLongFields(),
                             const Gap(24.0),
-                            _buildEventImagesUploadContainer(
-                              onImagePickUp: () => context
-                                  .read<AdminCreateEventCubit>()
-                                  .pickUpImages(),
-                              selectedImagesFileList: state.pictureUploaded,
-                              fetchedEventImagesList:
-                                  state.eventDetailModel?.eventCoverImageUrl,
+                            _buildEventImagesSection(
+                              state: state,
+                              isEditMode: widget.navArguments?.updateExistingEventId != null,
                             ),
                             const Gap(36.0),
                             _buildEventDescriptionField(),
@@ -354,25 +364,37 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     );
   }
 
-  Widget _buildCategorySelector(AdminCreateEventState state) {
+  Widget _buildCategorySection(AdminCreateEventState state) {
+    final isEditMode = widget.navArguments?.updateExistingEventId != null;
     final selected = state.createEventBody?.categoryList ?? [];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Category:', style: AppTheme.smallBodyText),
+        if (isEditMode) ...[
+          const Gap(4.0),
+          const Text(
+            'Categories cannot be changed after creation',
+            style: TextStyle(
+              fontFamily: 'AlbertSans',
+              fontSize: 11.0,
+              color: AppColours.gray,
+            ),
+          ),
+        ],
         const Gap(12.0),
         Wrap(
           spacing: 8.0,
           runSpacing: 8.0,
-          children: _kCategories.map((category) {
-            final isSelected = selected.contains(category);
+          children: (isEditMode ? selected : _kCategories).map((category) {
+            final isSelected = isEditMode ? true : selected.contains(category);
             return GestureDetector(
-              onTap: () {
-                context
-                    .read<AdminCreateEventCubit>()
-                    .toggleCategory(category);
-              },
+              onTap: isEditMode
+                  ? null
+                  : () => context
+                      .read<AdminCreateEventCubit>()
+                      .toggleCategory(category),
               child: Chip(
                 shape: const StadiumBorder(
                   side: BorderSide(
@@ -400,7 +422,46 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     );
   }
 
-  Widget _builtNumberOfPersonSelector(AdminCreateEventState state) {
+  Widget _builtTotalTicketsSection(AdminCreateEventState state) {
+    final isEditMode = widget.navArguments?.updateExistingEventId != null;
+
+    if (isEditMode) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Total Tickets', style: AppTheme.smallBodyText),
+          const Gap(10.0),
+          Container(
+            height: 56.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              border:
+                  Border.all(color: AppColours.backgroundShade, width: 1.0),
+            ),
+            child: TextField(
+              controller: _totalTicketsController,
+              keyboardType: TextInputType.number,
+              style: AppTheme.simpleText,
+              onChanged: (_) {
+                final parsed = int.tryParse(_totalTicketsController.text);
+                if (parsed != null) {
+                  context
+                      .read<AdminCreateEventCubit>()
+                      .enterNumberOfPerson(parsed);
+                }
+              },
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: '100',
+                hintStyle: AppTheme.simpleText,
+                contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -749,20 +810,151 @@ class _AdminCreateEventScreenState extends State<AdminCreateEventScreen> {
     );
   }
 
-  Widget _buildEventImagesUploadContainer({
-    required VoidCallback onImagePickUp,
-    required List<File?> selectedImagesFileList,
-    required List<String>? fetchedEventImagesList,
+  Widget _buildTicketsRemainingField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Tickets Remaining', style: AppTheme.smallBodyText),
+        const Gap(10.0),
+        Container(
+          height: 56.0,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(color: AppColours.backgroundShade, width: 1.0),
+          ),
+          child: TextField(
+            controller: _ticketsRemainingController,
+            keyboardType: TextInputType.number,
+            style: AppTheme.simpleText,
+            onChanged: (_) {
+              final parsed = int.tryParse(_ticketsRemainingController.text);
+              if (parsed != null) {
+                context.read<AdminCreateEventCubit>().enterTicketsRemaining(parsed);
+              }
+            },
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: '0',
+              hintStyle: AppTheme.simpleText,
+              contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBookByDatePicker(AdminCreateEventState state) {
+    final displayDate = state.selectedBookByTime != null
+        ? DateFormat('dd/MMM/yyyy').format(state.selectedBookByTime!)
+        : null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Book By Date*', style: AppTheme.smallBodyText),
+        const Gap(10.0),
+        CreateEventSuffixIconField(
+          onPressed: () {
+            _showBottomDatePicker((date) {
+              context.read<AdminCreateEventCubit>().collectBookByDate(date);
+            });
+          },
+          assetPath: 'lib/assets/icons/calendar_icon.svg',
+          child: displayDate != null
+              ? Text(displayDate, style: AppTheme.simpleText)
+              : const SizedBox.shrink(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBookByTimePicker(AdminCreateEventState state) {
+    final displayTime = state.selectedBookByTime != null
+        ? DateFormat('hh:mm a').format(state.selectedBookByTime!)
+        : null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Book By Time*', style: AppTheme.smallBodyText),
+        const Gap(10.0),
+        CreateEventSuffixIconField(
+          onPressed: () {
+            _showBottomTimePicker((time) {
+              context.read<AdminCreateEventCubit>().collectBookByTime(time);
+            });
+          },
+          icon: Icons.timelapse_rounded,
+          child: displayTime != null
+              ? Text(displayTime, style: AppTheme.simpleText)
+              : const SizedBox.shrink(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEventImagesSection({
+    required AdminCreateEventState state,
+    required bool isEditMode,
   }) {
+    if (isEditMode) {
+      final images = state.eventDetailModel?.eventCoverImageUrl ?? [];
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Event Images', style: AppTheme.smallBodyText),
+          const Gap(8.0),
+          const Text(
+            'Images cannot be changed after upload',
+            style: TextStyle(
+              fontFamily: 'AlbertSans',
+              fontSize: 12.0,
+              color: AppColours.gray,
+            ),
+          ),
+          const Gap(12.0),
+          if (images.isEmpty)
+            const Text('No images available', style: AppTheme.simpleText)
+          else
+            SizedBox(
+              height: 100.0,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: images.length,
+                separatorBuilder: (_, __) => const Gap(8.0),
+                itemBuilder: (_, index) => ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.network(
+                    images[index],
+                    width: 100.0,
+                    height: 100.0,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      width: 100.0,
+                      height: 100.0,
+                      color: AppColours.backgroundShade,
+                      child: const Icon(Icons.broken_image_outlined,
+                          color: AppColours.gray),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Upload Event Images*', style: AppTheme.smallBodyText),
         const Gap(16.0),
         UploadEventImagesContainers(
-          selectedImagesFileList: selectedImagesFileList,
-          fetchedEventImagesList: fetchedEventImagesList,
-          onImagePickUp: onImagePickUp,
+          selectedImagesFileList: state.pictureUploaded,
+          fetchedEventImagesList: state.eventDetailModel?.eventCoverImageUrl,
+          onImagePickUp: () =>
+              context.read<AdminCreateEventCubit>().pickUpImages(),
           onImageRemoved: (_) {},
         ),
       ],

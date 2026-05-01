@@ -4,6 +4,8 @@ import 'package:glint_frontend/data/local/persist/async_encrypted_shared_prefere
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/notifications/background/stream_background_prefs.dart';
+import 'package:glint_frontend/utils/app_config.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/get_recent_matches_response.dart';
 import 'package:glint_frontend/data/remote/model/response/story/story_response_body.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
@@ -128,6 +130,15 @@ class ChatRepoImpl extends ChatRepo {
         // fetches a fresh one in case it has rotated.
         chatService.registerDevice(
           cachedToken: cachedFcmToken.isNotEmpty ? cachedFcmToken : null,
+        );
+
+        // Persist minimal credentials for the FCM background isolate so it
+        // can authenticate with Stream and fetch message content to display
+        // in the notification banner.
+        StreamBackgroundPrefs.save(
+          apiKey: AppConfig.streamApiKey,
+          userId: userId,
+          token: userStreamToken,
         );
 
         return const Result.success('');

@@ -23,11 +23,6 @@ class HotEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    const interactedUsers = [
-      'https://avatars.githubusercontent.com/u/70279771?v=4',
-      'https://avatars.githubusercontent.com/u/70279771?v=4',
-      'https://avatars.githubusercontent.com/u/70279771?v=4',
-    ];
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Stack(
@@ -98,7 +93,7 @@ class HotEvent extends StatelessWidget {
                               GlintIconLabel(
                                 iconPath: 'lib/assets/icons/calendar_icon.svg',
                                 svgColor: AppColours.vibrantYellow,
-                                label: eventModel.eventdate,
+                                label: "${eventModel.eventdate}, ${eventModel.eventTime}",
                                 style: AppTheme.simpleText.copyWith(
                                   fontSize: 12.0,
                                   color: AppColours.white,
@@ -123,7 +118,7 @@ class HotEvent extends StatelessWidget {
                             eventOldPrice: eventModel.eventOldPrice,
                             eventNewPrice: eventModel.eventCurrentPrice,
                             eventDiscountDaysLeft: eventModel.daysLeft,
-                            interactedUsers: interactedUsers,
+                            interactedUsers: eventModel.interestedProfiles,
                             isHotEvent: true,
                           ),
                         ],
@@ -286,44 +281,50 @@ class HotEventDiscountAndInterestedProfiles extends StatelessWidget {
 
         const Gap(16.0),
 
-        // see profiles widget
-        // when clicked here, it will mark user as interested in event
-        GestureDetector(
-          onTap: () {
-            debugPrint('user as interested clicked for event $eventId');
-            debugPrint('user as interested clicked');
-          },
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ...interactedUsers.map(
-                (userImage) => Align(
-                  widthFactor: 0.5,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 6),
-                    child: CircleAvatar(
-                      radius: 10.0,
-                      backgroundImage: NetworkImage(userImage),
+        if (interactedUsers.isEmpty)
+          Text(
+            'No active profiles so far',
+            style: AppTheme.simpleText.copyWith(
+              color: AppColours.white.withAlpha(153),
+              fontSize: 12.0,
+            ),
+          )
+        else
+          GestureDetector(
+            onTap: () {
+              debugPrint('user as interested clicked for event $eventId');
+            },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ...interactedUsers.map(
+                  (userImage) => Align(
+                    widthFactor: 0.5,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 6),
+                      child: CircleAvatar(
+                        radius: 10.0,
+                        backgroundImage: NetworkImage(userImage),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const Gap(20.0),
-              Text(
-                'See profiles',
-                style: AppTheme.simpleText.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: AppColours.white,
+                const Gap(20.0),
+                Text(
+                  'See profiles',
+                  style: AppTheme.simpleText.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColours.white,
+                  ),
                 ),
-              ),
-              const Gap(2.0),
-              const Icon(
-                Icons.chevron_right,
-                color: AppColours.vibrantYellow,
-              ),
-            ],
+                const Gap(2.0),
+                const Icon(
+                  Icons.chevron_right,
+                  color: AppColours.vibrantYellow,
+                ),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }

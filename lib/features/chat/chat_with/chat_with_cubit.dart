@@ -20,21 +20,43 @@ class ChatWithCubit extends Cubit<ChatWithState> {
   ChatWithCubit() : super(const ChatWithState.initial());
 
   Future<void> connectToChannel(ChatWithNavArguments navArguments) async {
-    chatService.setupChannelWithNavArgs(navArguments).then((connectedChannel) {
+    try {
+      final channel = chatService.getChannel(navArguments.channelId);
+      await channel.watch();
+
+      final extraData = channel.extraData;
+
+      // Channel extraData (written by the backend) is the primary source;
+      // nav args are the fallback for older channels or propagation delays.
+      // event_start_time is not yet sent by the backend — use nav args only.
+      final effectiveEventId =
+          extraData[chatWithEventId] as String? ?? navArguments.eventId;
+      final effectiveEventName =
+          extraData[chatWithEventName] as String? ?? navArguments.eventName;
+      final effectiveMatchId =
+          extraData[chatWithMatchId] as String? ?? navArguments.matchId;
+
       emit(state.copyWith(
         isLoading: false,
         chatAvailable: true,
-        currentChannel: connectedChannel,
-        chatNavArgs: navArguments,
+        currentChannel: channel,
+        chatNavArgs: ChatWithNavArguments(
+          channelId: navArguments.channelId,
+          eventId: effectiveEventId,
+          eventName: effectiveEventName,
+          eventStartTime: navArguments.eventStartTime,
+          matchId: effectiveMatchId,
+        ),
       ));
       setupOppositeUserData();
-    }, onError: (error) {
+    } catch (error) {
       emit(state.copyWith(
-          isLoading: false,
-          chatAvailable: false,
-          currentChannel: null,
-          error: "Chat Unavailable, Servers went out"));
-    });
+        isLoading: false,
+        chatAvailable: false,
+        currentChannel: null,
+        error: "Chat Unavailable, Servers went out",
+      ));
+    }
   }
 
   void setupOppositeUserData() {

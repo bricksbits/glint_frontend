@@ -91,8 +91,8 @@ class Tickets {
     eventId = json['event_id'];
     eventName = json['event_name'];
     eventLocationName = json['event_location_name'];
-    locationLongitude = json['location_longitude'];
-    locationLatitude = json['location_latitude'];
+    locationLongitude = (json['location_longitude'] as num?)?.toDouble();
+    locationLatitude = (json['location_latitude'] as num?)?.toDouble();
     eventPictureUrl = json['event_picture_url'] != null ? EventPictureUrl.fromJson(json['event_picture_url']) : null;
     eventStartTime = json['event_start_time'];
     user1Id = json['user1_id'];

@@ -19,7 +19,9 @@
       "Bash(git add:*)",
       "Bash(git commit -m ':*)",
       "Bash(xargs cat:*)",
-      "Bash(grep -E \"\\\\.\\(dart\\)$\")"
+      "Bash(grep -E \"\\\\.\\(dart\\)$\")",
+      "Bash(xargs ls *)",
+      "WebFetch(domain:getstream.io)"
     ]
   }
 }

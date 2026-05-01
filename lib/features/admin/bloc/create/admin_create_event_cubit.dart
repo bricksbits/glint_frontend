@@ -44,11 +44,15 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
     final eventResponse = await eventRepo.getEventDetails(eventId);
     switch (eventResponse) {
       case Success<EventDetailsDomainModel>():
-        final createEventBody = eventResponse.data.mapToCreateEvent();
+        final detail = eventResponse.data;
+        final createEventBody = detail.mapToCreateEvent();
         emitNewState(state.copyWith(
           createEventBody: createEventBody,
-          eventDetailModel: eventResponse.data,
+          eventDetailModel: detail,
           isLoading: false,
+          selectedStartTime: detail.startDateTime,
+          selectedEntTime: detail.endDateTime,
+          selectedBookByTime: detail.bookByTime,
         ));
         break;
       case Failure<EventDetailsDomainModel>():
@@ -74,24 +78,81 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
       return errors;
     }
 
-    if (body.eventName.trim().isEmpty) errors.add("• Event name is required.");
-    if (state.selectedStartTime == null) {
-      errors.add("• Start date & time must be selected.");
+    final name = body.eventName.trim();
+    if (name.isEmpty) {
+      errors.add("Event name is required.");
+    } else if (name.length < 3) {
+      errors.add("Event name must be at least 3 characters.");
     }
-    if (state.selectedEntTime == null) {
-      errors.add("• End date & time must be selected.");
+
+    final desc = body.eventDescription.trim();
+    if (desc.isEmpty) {
+      errors.add("Event description is required.");
+    } else if (desc.length < 10) {
+      errors.add("Event description must be at least 10 characters.");
     }
+
     if (body.eventLocationName.trim().isEmpty) {
-      errors.add("• Event location is required.");
+      errors.add("Event location is required.");
     }
-    if (body.eventDescription.trim().isEmpty) {
-      errors.add("• Event description is required.");
+
+    final mapUrl = body.googleMapUrl.trim();
+    if (mapUrl.isEmpty) {
+      errors.add("Google Map URL is required.");
+    } else if (!mapUrl.startsWith('http://') && !mapUrl.startsWith('https://')) {
+      errors.add("Google Map URL must be a valid URL.");
+    }
+
+    if (body.categoryList.isEmpty) {
+      errors.add("At least one category must be selected.");
+    }
+
+    if (body.originalPrice <= 0) {
+      errors.add("Ticket price must be greater than 0.");
+    }
+
+    if (body.totalTicket <= 0) {
+      errors.add("Total tickets must be greater than 0.");
+    }
+
+    if (body.ticketsRemaining < 0) {
+      errors.add("Tickets remaining cannot be negative.");
+    } else if (body.ticketsRemaining > body.totalTicket) {
+      errors.add("Tickets remaining cannot exceed total tickets.");
+    }
+
+    if (body.discountActivated) {
+      if (body.discountedPrice <= 0) {
+        errors.add("Discount price must be greater than 0.");
+      } else if (body.discountedPrice >= body.originalPrice) {
+        errors.add("Discount price must be less than the ticket price.");
+      }
+    }
+
+    final start = state.selectedStartTime;
+    final end = state.selectedEntTime;
+    final bookBy = state.selectedBookByTime;
+
+    if (start == null) {
+      errors.add("Start date & time must be selected.");
+    }
+    if (end == null) {
+      errors.add("End date & time must be selected.");
+    }
+    if (start != null && end != null && !end.isAfter(start)) {
+      errors.add("End time must be after start time.");
+    }
+    if (bookBy == null) {
+      errors.add("Book-by date & time must be selected.");
+    }
+    if (bookBy != null && start != null && !bookBy.isBefore(start)) {
+      errors.add("Book-by time must be before the event start time.");
     }
 
     // Images required only for new events (not edits)
     if (state.passedEventId == null &&
         !state.pictureUploaded.any((f) => f != null)) {
-      errors.add("• At least one event image must be uploaded.");
+      errors.add("At least one event image must be uploaded.");
     }
 
     return errors;
@@ -218,11 +279,24 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
   }
 
   void enterNumberOfPerson(int totalTickets) {
+    final isEditMode = state.passedEventId != null;
     emitNewState(
       state.copyWith(
         createEventBody: getCurrentBodyState()?.copyWith(
           totalTicket: totalTickets,
-          ticketsRemaining: totalTickets,
+          // In create mode, remaining defaults to total (no tickets sold yet).
+          // In edit mode, remaining is managed via its own field.
+          ticketsRemaining: isEditMode ? null : totalTickets,
+        ),
+      ),
+    );
+  }
+
+  void enterTicketsRemaining(int remaining) {
+    emitNewState(
+      state.copyWith(
+        createEventBody: getCurrentBodyState()?.copyWith(
+          ticketsRemaining: remaining,
         ),
       ),
     );
@@ -372,6 +446,38 @@ class AdminCreateEventCubit extends Cubit<AdminCreateEventState> {
         selectedEntTime: combined,
         createEventBody: getCurrentBodyState()?.copyWith(
           endDateAndTime: combined.formatToStandard(),
+        ),
+      ),
+    );
+  }
+
+  void collectBookByDate(DateTime passedDate) {
+    final existing = state.selectedBookByTime;
+    final combined = existing != null
+        ? DateTime(passedDate.year, passedDate.month, passedDate.day,
+            existing.hour, existing.minute)
+        : DateTime(passedDate.year, passedDate.month, passedDate.day);
+
+    emitNewState(
+      state.copyWith(
+        selectedBookByTime: combined,
+        createEventBody: getCurrentBodyState()?.copyWith(
+          bookTime: combined.formatToStandard(),
+        ),
+      ),
+    );
+  }
+
+  void collectBookByTime(DateTime passedTime) {
+    final base = state.selectedBookByTime ?? DateTime.now();
+    final combined = DateTime(
+        base.year, base.month, base.day, passedTime.hour, passedTime.minute);
+
+    emitNewState(
+      state.copyWith(
+        selectedBookByTime: combined,
+        createEventBody: getCurrentBodyState()?.copyWith(
+          bookTime: combined.formatToStandard(),
         ),
       ),
     );

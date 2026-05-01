@@ -113,6 +113,11 @@ class PeopleRepoImpl extends PeopleRepo {
           "distance", () => maxDistance * 1000);
     }
 
+    if(maxDistance == 0){
+      fetchProfilesQueryParameters.putIfAbsent(
+          "distance", () => 50 * 1000);
+    }
+
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,

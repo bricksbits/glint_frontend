@@ -13,6 +13,7 @@ enum GlintNotificationType {
   refundProcessed,
   eventReminder,
   membershipExpiryReminder,
+  newMessage,
   unknown;
 
   static GlintNotificationType fromString(String? type) {
@@ -43,6 +44,8 @@ enum GlintNotificationType {
         return GlintNotificationType.eventReminder;
       case 'membership_expiry_reminder':
         return GlintNotificationType.membershipExpiryReminder;
+      case 'new_message':
+        return GlintNotificationType.newMessage;
       default:
         return GlintNotificationType.unknown;
     }

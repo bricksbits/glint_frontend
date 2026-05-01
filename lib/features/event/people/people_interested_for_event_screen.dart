@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
-import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_events.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
-import 'package:glint_frontend/design/common/app_colours.dart';
-import 'package:glint_frontend/design/common/app_theme.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/components/exports.dart';
 import 'package:glint_frontend/design/components/people/scrollable_profile_view.dart';
@@ -90,7 +87,13 @@ class _PeopleInterestedForEventScreenState
           final remainingCards = state.displayCards.length - state.currentIndex;
 
           if (remainingCards == 0) {
-            return const _EventPeopleEmptyState();
+            return EmptyPeopleStateView(
+              title: 'No one around yet',
+              subtitle:
+                  'Check back soon — new people appear as they join the event.',
+              buttonLabel: 'Go Back',
+              onButtonPressed: () => context.pop(),
+            );
           }
 
           return CardSwiper(
@@ -117,14 +120,20 @@ class _PeopleInterestedForEventScreenState
                       GlintSwipeGestureAnalyticsEvents.LEFT, false);
                   context
                       .read<PeopleCardsBloc>()
-                      .add(PeopleCardsEvent.onLeftSwiped(swipedCard.userId));
+                      .add(PeopleCardsEvent.onLeftSwiped(
+                        swipedCard.userId,
+                        widget.navArguments.eventId.toString(),
+                      ));
 
                 case CardSwiperDirection.right:
                   GlintAnalyticService.onCardActionEvent(
                       GlintSwipeGestureAnalyticsEvents.RIGHT, false);
                   context
                       .read<PeopleCardsBloc>()
-                      .add(PeopleCardsEvent.onRightSwiped(swipedCard.userId));
+                      .add(PeopleCardsEvent.onRightSwiped(
+                        swipedCard.userId,
+                        widget.navArguments.eventId.toString(),
+                      ));
 
                 case CardSwiperDirection.top:
                   return true;
@@ -141,9 +150,16 @@ class _PeopleInterestedForEventScreenState
                   .add(const PeopleCardsEvent.undo());
               return true;
             },
-            cardBuilder: (context, index, percentThresholdX, percentThresholdY) {
+            cardBuilder:
+                (context, index, percentThresholdX, percentThresholdY) {
               if (index >= state.displayCards.length) {
-                return const _EventPeopleEmptyState();
+                return EmptyPeopleStateView(
+                  title: 'No one around yet',
+                  subtitle:
+                      'Check back soon — new people appear as they join the event.',
+                  buttonLabel: 'Go Back',
+                  onButtonPressed: () => context.pop(),
+                );
               }
 
               final user = state.displayCards[index];
@@ -169,48 +185,6 @@ class _PeopleInterestedForEventScreenState
             },
           );
         },
-      ),
-    );
-  }
-}
-
-class _EventPeopleEmptyState extends StatelessWidget {
-  const _EventPeopleEmptyState();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'lib/assets/images/no_data_found_placeholder.jpg',
-              width: 180,
-              height: 180,
-              fit: BoxFit.contain,
-              cacheWidth: 360,
-            ),
-            const Gap(24),
-            Text(
-              'No one around yet',
-              style: AppTheme.heavyBodyText,
-              textAlign: TextAlign.center,
-            ),
-            const Gap(8),
-            Text(
-              'Check back soon — new people appear as they join the event.',
-              style: AppTheme.simpleText.copyWith(color: AppColours.darkGray),
-              textAlign: TextAlign.center,
-            ),
-            const Gap(24),
-            GlintElevatedButton(
-              label: 'Go Back',
-              onPressed: () => context.pop(),
-            ),
-          ],
-        ),
       ),
     );
   }

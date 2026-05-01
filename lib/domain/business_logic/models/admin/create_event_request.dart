@@ -23,6 +23,7 @@ class CreateEventRequestDomainModel {
   String eventBy;
   List<String> categoryList;
   List<String> tempImageIds;
+  List<String> originalCategoryList;
 
   /// Only used when editing an existing event.
   String? eventId;
@@ -47,6 +48,7 @@ class CreateEventRequestDomainModel {
     required this.eventLocationName,
     required this.eventBy,
     required this.tempImageIds,
+    this.originalCategoryList = const [],
     this.eventId,
   });
 
@@ -94,6 +96,7 @@ class CreateEventRequestDomainModel {
     String? eventLocationName,
     String? eventBy,
     List<String>? tempImageIds,
+    List<String>? originalCategoryList,
     String? eventId,
   }) {
     return CreateEventRequestDomainModel(
@@ -116,6 +119,7 @@ class CreateEventRequestDomainModel {
       eventBy: eventBy ?? this.eventBy,
       categoryList: categoryList ?? List<String>.from(this.categoryList),
       tempImageIds: tempImageIds ?? List<String>.from(this.tempImageIds),
+      originalCategoryList: originalCategoryList ?? List<String>.from(this.originalCategoryList),
       eventId: eventId ?? this.eventId,
     );
   }
@@ -164,7 +168,7 @@ extension CreateEventRequestMapper on CreateEventRequestDomainModel {
       discountActivated: discountActivated,
       ticketsRemaining: ticketsRemaining,
       totalTickets: totalTicket,
-      addCategoryList: categoryList,
+      addCategoryList: [],
       deleteCategoryList: [],
     );
   }
@@ -180,7 +184,6 @@ extension CreateEventRequestMapper on CreateEventRequestDomainModel {
       eventOldPrice: originalPrice.toString(),
       eventCurrentPrice: discountedPrice.toString(),
       daysLeft: "7",
-      peopleInterested: 0,
       isHotEvent: isHotEvent,
       location: {},
     );

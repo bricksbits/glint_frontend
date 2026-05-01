@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:glint_frontend/data/local/db/dao/profile_dao.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/notifications/background/stream_background_prefs.dart';
 import 'package:glint_frontend/services/chat_service.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
@@ -28,6 +29,7 @@ class LogoutUserUsecase extends UseCase<bool, void> {
     final StreamController<bool> controller = StreamController();
     try {
       await asyncEncryptedSharedPreferenceHelper.clearEncryptedPrefs();
+      await StreamBackgroundPrefs.clear();
       await dao.clearProfileTable();
       await imageService.clearAllAppData();
       await chatService.disconnectUser();

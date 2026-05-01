@@ -104,11 +104,11 @@ class _$GlintDatabase extends GlintDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `profiles` (`userId` TEXT NOT NULL, `username` TEXT NOT NULL, `age` TEXT NOT NULL, `gender` TEXT NOT NULL, `genderPreference` TEXT NOT NULL, `interests` TEXT NOT NULL, `lookingFor` TEXT NOT NULL, `bio` TEXT NOT NULL, `height` TEXT, `occupation` TEXT, `education` TEXT, `workoutHabit` TEXT, `drinkingHabit` TEXT, `smokingHabit` TEXT, `profileViews` TEXT NOT NULL, `profileLikes` TEXT NOT NULL, `pictureUrlList` TEXT NOT NULL, `profileTag` TEXT, `lastLocation` TEXT, `location` TEXT, `dateOfBirthFormatted` TEXT, PRIMARY KEY (`userId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `swipe_actions` (`collabId` INTEGER PRIMARY KEY AUTOINCREMENT, `currentUserId` TEXT NOT NULL, `swipedOnUserId` TEXT NOT NULL, `isUnsent` INTEGER NOT NULL, `action` TEXT NOT NULL, `timestamp` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `swipe_actions` (`collabId` INTEGER PRIMARY KEY AUTOINCREMENT, `currentUserId` TEXT NOT NULL, `swipedOnUserId` TEXT NOT NULL, `onEventId` TEXT, `isUnsent` INTEGER NOT NULL, `action` TEXT NOT NULL, `timestamp` INTEGER NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `memberships` (`userId` TEXT NOT NULL, `superLikes` INTEGER NOT NULL, `aiMessages` INTEGER NOT NULL, `rewinds` INTEGER NOT NULL, `superDm` INTEGER NOT NULL, `isPremium` INTEGER NOT NULL, FOREIGN KEY (`userId`) REFERENCES `profiles` (`userId`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`userId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `user_event_likes` (`userId` TEXT NOT NULL, `eventId` TEXT NOT NULL, FOREIGN KEY (`userId`) REFERENCES `profiles` (`userId`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`userId`, `eventId`))');
+            'CREATE TABLE IF NOT EXISTS `user_event_likes` (`userId` TEXT NOT NULL, `eventId` TEXT NOT NULL, PRIMARY KEY (`userId`, `eventId`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -439,6 +439,7 @@ class _$SwipeActionDao extends SwipeActionDao {
                   'collabId': item.collabId,
                   'currentUserId': item.currentUserId,
                   'swipedOnUserId': item.swipedOnUserId,
+                  'onEventId': item.onEventId,
                   'isUnsent': item.isUnsent ? 1 : 0,
                   'action': _swipeActionTypeConverter.encode(item.action),
                   'timestamp': _dateTimeConverter.encode(item.timestamp)
@@ -461,6 +462,7 @@ class _$SwipeActionDao extends SwipeActionDao {
             collabId: row['collabId'] as int?,
             currentUserId: row['currentUserId'] as String,
             swipedOnUserId: row['swipedOnUserId'] as String,
+            onEventId: row['onEventId'] as String?,
             isUnsent: (row['isUnsent'] as int) != 0,
             action: _swipeActionTypeConverter.decode(row['action'] as String),
             timestamp: _dateTimeConverter.decode(row['timestamp'] as int)));
@@ -474,6 +476,7 @@ class _$SwipeActionDao extends SwipeActionDao {
             collabId: row['collabId'] as int?,
             currentUserId: row['currentUserId'] as String,
             swipedOnUserId: row['swipedOnUserId'] as String,
+            onEventId: row['onEventId'] as String?,
             isUnsent: (row['isUnsent'] as int) != 0,
             action: _swipeActionTypeConverter.decode(row['action'] as String),
             timestamp: _dateTimeConverter.decode(row['timestamp'] as int)),

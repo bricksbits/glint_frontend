@@ -135,7 +135,9 @@ final glintMainRoutes = GoRouter(
             create: (_) => EventBaseCubit(),
           ),
         ],
-        child: const HomeScreen(),
+        child: HomeScreen(
+          initialTab: state.extra as int? ?? HomeScreen.kTabPeople,
+        ),
       ),
     ),
     GoRoute(
