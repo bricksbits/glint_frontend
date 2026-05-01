@@ -74,11 +74,7 @@ class NearbyEventCard extends StatelessWidget {
                     eventOldPrice: eventModel.eventOldPrice,
                     eventNewPrice: eventModel.eventCurrentPrice,
                     eventDiscountDaysLeft: eventModel.daysLeft,
-                    interactedUsers: const [
-                      'https://avatars.githubusercontent.com/u/70279771?v=4',
-                      'https://avatars.githubusercontent.com/u/70279771?v=4',
-                      'https://avatars.githubusercontent.com/u/70279771?v=4',
-                    ],
+                    interactedUsers: eventModel.interestedProfiles,
                     isHotEvent: false,
                   ),
                 ],

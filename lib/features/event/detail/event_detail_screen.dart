@@ -102,7 +102,7 @@ class EventDetailScreen extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     const TextSpan(
-                      text: 'Event is, ',
+                      text: 'Event by ',
                       style: AppTheme.simpleText,
                     ),
                     TextSpan(
@@ -119,7 +119,7 @@ class EventDetailScreen extends StatelessWidget {
 
           // Location map — shown when valid coordinates are available
           if (details != null &&
-              (details.latitude != 0.0 || details.longitude != 0.0)) ...[
+              (details.googleMapUrl != null))...[
             const Gap(20.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),

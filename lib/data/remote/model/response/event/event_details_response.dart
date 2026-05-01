@@ -159,6 +159,7 @@ class EventDetailsResponseWrapper {
   bool get isAdminResponse => _adminResponse != null;
 
   EventDetailsResponseWrapper._user(this._userResponse) : _adminResponse = null;
+
   EventDetailsResponseWrapper._admin(this._adminResponse)
       : _userResponse = null;
 
@@ -192,7 +193,9 @@ class EventDetailsResponseWrapper {
       eventLocation: r.eventLocationName ?? "",
       eventOldPrice: r.ticketPrice?.toString() ?? "",
       eventCurrentPrice: r.discountActivated == true
-          ? (r.discountTicketPrice?.toString() ?? r.ticketPrice?.toString() ?? "")
+          ? (r.discountTicketPrice?.toString() ??
+              r.ticketPrice?.toString() ??
+              "")
           : (r.ticketPrice?.toString() ?? ""),
       daysLeft: _daysBetween(start, end),
       peopleInterested: r.interestedUsersCount ?? 0,
@@ -201,7 +204,8 @@ class EventDetailsResponseWrapper {
         "lat": r.eventLatitude?.toString() ?? "0",
         "long": r.eventLongitude?.toString() ?? "0",
       },
-      eventBy: "Partner with Glint",
+      eventBy:
+          "${r.coordinatorUserUsername}, - ${r.coordinatorUserPhoneNumber}",
       isPaused: r.isPaused ?? false,
       discountActivated: r.discountActivated ?? false,
       ticketsBought: r.ticketsBought,
@@ -221,7 +225,9 @@ class EventDetailsResponseWrapper {
       eventLocation: r.eventLocationName ?? "",
       eventOldPrice: r.ticketPrice?.toString() ?? "",
       eventCurrentPrice: r.discountActivated == true
-          ? (r.discountTicketPrice?.toString() ?? r.ticketPrice?.toString() ?? "")
+          ? (r.discountTicketPrice?.toString() ??
+              r.ticketPrice?.toString() ??
+              "")
           : (r.ticketPrice?.toString() ?? ""),
       daysLeft: _daysBetween(start, end),
       peopleInterested: r.interestedCount ?? 0,
@@ -230,13 +236,12 @@ class EventDetailsResponseWrapper {
         "lat": r.locationLatitude?.toString() ?? "0",
         "long": r.locationLongitude?.toString() ?? "0",
       },
-      eventBy: r.eventBy ?? "Glint",
+      eventBy: "${r.eventBy}, - ${r.coordinatorUsername}",
       isPaused: r.isPaused ?? false,
       discountActivated: r.discountActivated ?? false,
       coordinatorUsername: r.coordinatorUsername,
       googleMapUrl: r.googleMapUrl,
-      bookByTime:
-          r.bookByTime != null ? _parseEventTime(r.bookByTime) : null,
+      bookByTime: r.bookByTime != null ? _parseEventTime(r.bookByTime) : null,
       totalTickets: r.totalTickets,
       ticketsRemaining: r.ticketsRemaining,
       categories: r.categoryList,

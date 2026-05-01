@@ -180,7 +180,6 @@ extension CreateEventRequestMapper on CreateEventRequestDomainModel {
       eventOldPrice: originalPrice.toString(),
       eventCurrentPrice: discountedPrice.toString(),
       daysLeft: "7",
-      peopleInterested: 0,
       isHotEvent: isHotEvent,
       location: {},
     );
