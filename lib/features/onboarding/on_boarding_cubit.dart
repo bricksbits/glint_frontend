@@ -435,6 +435,10 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     }
   }
 
+  void resetLocationPermissionDenied() {
+    emit(state.copyWith(locationPermissionDenied: null));
+  }
+
   bool validateIfImageProvidedOrNot() {
     if (state.uploadedFilePaths.isEmpty) {
       emitNewState(state.copyWith(error: "Minimum one image required."));

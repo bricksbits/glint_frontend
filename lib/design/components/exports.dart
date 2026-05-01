@@ -18,6 +18,7 @@ export 'glint_icon_elevated_button.dart';
 export 'glint_icon_label.dart';
 export 'glint_notification_tile.dart';
 export 'glint_pagination_loader.dart';
+export 'permission_button.dart';
 export 'glint_profile_image_selector.dart';
 export 'glint_text_input_field.dart';
 export 'likes/glint_liked_you_profile_container.dart';
