@@ -29,6 +29,7 @@ mixin _$AdminCreateEventState {
   UsersType? get currentUserType => throw _privateConstructorUsedError;
   DateTime? get selectedStartTime => throw _privateConstructorUsedError;
   DateTime? get selectedEntTime => throw _privateConstructorUsedError;
+  DateTime? get selectedBookByTime => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -42,7 +43,8 @@ mixin _$AdminCreateEventState {
             int? passedEventId,
             UsersType? currentUserType,
             DateTime? selectedStartTime,
-            DateTime? selectedEntTime)
+            DateTime? selectedEntTime,
+            DateTime? selectedBookByTime)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -59,7 +61,8 @@ mixin _$AdminCreateEventState {
             int? passedEventId,
             UsersType? currentUserType,
             DateTime? selectedStartTime,
-            DateTime? selectedEntTime)?
+            DateTime? selectedEntTime,
+            DateTime? selectedBookByTime)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -76,7 +79,8 @@ mixin _$AdminCreateEventState {
             int? passedEventId,
             UsersType? currentUserType,
             DateTime? selectedStartTime,
-            DateTime? selectedEntTime)?
+            DateTime? selectedEntTime,
+            DateTime? selectedBookByTime)?
         initial,
     required TResult orElse(),
   }) =>
@@ -122,7 +126,8 @@ abstract class $AdminCreateEventStateCopyWith<$Res> {
       int? passedEventId,
       UsersType? currentUserType,
       DateTime? selectedStartTime,
-      DateTime? selectedEntTime});
+      DateTime? selectedEntTime,
+      DateTime? selectedBookByTime});
 }
 
 /// @nodoc
@@ -152,6 +157,7 @@ class _$AdminCreateEventStateCopyWithImpl<$Res,
     Object? currentUserType = freezed,
     Object? selectedStartTime = freezed,
     Object? selectedEntTime = freezed,
+    Object? selectedBookByTime = freezed,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -198,6 +204,10 @@ class _$AdminCreateEventStateCopyWithImpl<$Res,
           ? _value.selectedEntTime
           : selectedEntTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      selectedBookByTime: freezed == selectedBookByTime
+          ? _value.selectedBookByTime
+          : selectedBookByTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -221,7 +231,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       int? passedEventId,
       UsersType? currentUserType,
       DateTime? selectedStartTime,
-      DateTime? selectedEntTime});
+      DateTime? selectedEntTime,
+      DateTime? selectedBookByTime});
 }
 
 /// @nodoc
@@ -248,6 +259,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? currentUserType = freezed,
     Object? selectedStartTime = freezed,
     Object? selectedEntTime = freezed,
+    Object? selectedBookByTime = freezed,
   }) {
     return _then(_$InitialImpl(
       isLoading: null == isLoading
@@ -294,6 +306,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.selectedEntTime
           : selectedEntTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      selectedBookByTime: freezed == selectedBookByTime
+          ? _value.selectedBookByTime
+          : selectedBookByTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -312,7 +328,8 @@ class _$InitialImpl implements _Initial {
       this.passedEventId = null,
       this.currentUserType = null,
       this.selectedStartTime = null,
-      this.selectedEntTime = null})
+      this.selectedEntTime = null,
+      this.selectedBookByTime = null})
       : _pictureUploaded = pictureUploaded;
 
   @override
@@ -354,10 +371,13 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final DateTime? selectedEntTime;
+  @override
+  @JsonKey()
+  final DateTime? selectedBookByTime;
 
   @override
   String toString() {
-    return 'AdminCreateEventState.initial(isLoading: $isLoading, error: $error, createEventBody: $createEventBody, eventDetailModel: $eventDetailModel, pictureUploaded: $pictureUploaded, eventPublished: $eventPublished, eventUpdated: $eventUpdated, passedEventId: $passedEventId, currentUserType: $currentUserType, selectedStartTime: $selectedStartTime, selectedEntTime: $selectedEntTime)';
+    return 'AdminCreateEventState.initial(isLoading: $isLoading, error: $error, createEventBody: $createEventBody, eventDetailModel: $eventDetailModel, pictureUploaded: $pictureUploaded, eventPublished: $eventPublished, eventUpdated: $eventUpdated, passedEventId: $passedEventId, currentUserType: $currentUserType, selectedStartTime: $selectedStartTime, selectedEntTime: $selectedEntTime, selectedBookByTime: $selectedBookByTime)';
   }
 
   @override
@@ -385,7 +405,9 @@ class _$InitialImpl implements _Initial {
             (identical(other.selectedStartTime, selectedStartTime) ||
                 other.selectedStartTime == selectedStartTime) &&
             (identical(other.selectedEntTime, selectedEntTime) ||
-                other.selectedEntTime == selectedEntTime));
+                other.selectedEntTime == selectedEntTime) &&
+            (identical(other.selectedBookByTime, selectedBookByTime) ||
+                other.selectedBookByTime == selectedBookByTime));
   }
 
   @override
@@ -401,7 +423,8 @@ class _$InitialImpl implements _Initial {
       passedEventId,
       currentUserType,
       selectedStartTime,
-      selectedEntTime);
+      selectedEntTime,
+      selectedBookByTime);
 
   /// Create a copy of AdminCreateEventState
   /// with the given fields replaced by the non-null parameter values.
@@ -425,7 +448,8 @@ class _$InitialImpl implements _Initial {
             int? passedEventId,
             UsersType? currentUserType,
             DateTime? selectedStartTime,
-            DateTime? selectedEntTime)
+            DateTime? selectedEntTime,
+            DateTime? selectedBookByTime)
         initial,
   }) {
     return initial(
@@ -439,7 +463,8 @@ class _$InitialImpl implements _Initial {
         passedEventId,
         currentUserType,
         selectedStartTime,
-        selectedEntTime);
+        selectedEntTime,
+        selectedBookByTime);
   }
 
   @override
@@ -456,7 +481,8 @@ class _$InitialImpl implements _Initial {
             int? passedEventId,
             UsersType? currentUserType,
             DateTime? selectedStartTime,
-            DateTime? selectedEntTime)?
+            DateTime? selectedEntTime,
+            DateTime? selectedBookByTime)?
         initial,
   }) {
     return initial?.call(
@@ -470,7 +496,8 @@ class _$InitialImpl implements _Initial {
         passedEventId,
         currentUserType,
         selectedStartTime,
-        selectedEntTime);
+        selectedEntTime,
+        selectedBookByTime);
   }
 
   @override
@@ -487,7 +514,8 @@ class _$InitialImpl implements _Initial {
             int? passedEventId,
             UsersType? currentUserType,
             DateTime? selectedStartTime,
-            DateTime? selectedEntTime)?
+            DateTime? selectedEntTime,
+            DateTime? selectedBookByTime)?
         initial,
     required TResult orElse(),
   }) {
@@ -503,7 +531,8 @@ class _$InitialImpl implements _Initial {
           passedEventId,
           currentUserType,
           selectedStartTime,
-          selectedEntTime);
+          selectedEntTime,
+          selectedBookByTime);
     }
     return orElse();
   }
@@ -549,7 +578,8 @@ abstract class _Initial implements AdminCreateEventState {
       final int? passedEventId,
       final UsersType? currentUserType,
       final DateTime? selectedStartTime,
-      final DateTime? selectedEntTime}) = _$InitialImpl;
+      final DateTime? selectedEntTime,
+      final DateTime? selectedBookByTime}) = _$InitialImpl;
 
   @override
   bool get isLoading;
@@ -573,6 +603,8 @@ abstract class _Initial implements AdminCreateEventState {
   DateTime? get selectedStartTime;
   @override
   DateTime? get selectedEntTime;
+  @override
+  DateTime? get selectedBookByTime;
 
   /// Create a copy of AdminCreateEventState
   /// with the given fields replaced by the non-null parameter values.

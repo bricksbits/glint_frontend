@@ -210,6 +210,8 @@ class EventDetailsResponseWrapper {
       discountActivated: r.discountActivated ?? false,
       ticketsBought: r.ticketsBought,
       coordinatorUsername: r.coordinatorUserUsername,
+      startDateTime: start,
+      endDateTime: end,
     );
   }
 
@@ -240,6 +242,8 @@ class EventDetailsResponseWrapper {
       isPaused: r.isPaused ?? false,
       discountActivated: r.discountActivated ?? false,
       coordinatorUsername: r.coordinatorUsername,
+      startDateTime: start,
+      endDateTime: end,
       googleMapUrl: r.googleMapUrl,
       bookByTime: r.bookByTime != null ? _parseEventTime(r.bookByTime) : null,
       totalTickets: r.totalTickets,

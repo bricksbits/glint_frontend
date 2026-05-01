@@ -1,4 +1,5 @@
 import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
+import 'package:glint_frontend/utils/date_and_time_extensions.dart';
 
 class EventDetailsDomainModel {
   final String eventId;
@@ -20,6 +21,9 @@ class EventDetailsDomainModel {
   final bool discountActivated;
   final int? ticketsBought;
   final String? coordinatorUsername;
+
+  final DateTime? startDateTime;
+  final DateTime? endDateTime;
 
   // Admin-only fields
   final String? googleMapUrl;
@@ -51,6 +55,8 @@ class EventDetailsDomainModel {
     this.discountActivated = false,
     this.ticketsBought,
     this.coordinatorUsername,
+    this.startDateTime,
+    this.endDateTime,
     this.googleMapUrl,
     this.bookByTime,
     this.totalTickets,
@@ -86,6 +92,8 @@ class EventDetailsDomainModel {
     bool? discountActivated,
     int? ticketsBought,
     String? coordinatorUsername,
+    DateTime? startDateTime,
+    DateTime? endDateTime,
     String? googleMapUrl,
     DateTime? bookByTime,
     int? totalTickets,
@@ -115,6 +123,8 @@ class EventDetailsDomainModel {
       discountActivated: discountActivated ?? this.discountActivated,
       ticketsBought: ticketsBought ?? this.ticketsBought,
       coordinatorUsername: coordinatorUsername ?? this.coordinatorUsername,
+      startDateTime: startDateTime ?? this.startDateTime,
+      endDateTime: endDateTime ?? this.endDateTime,
       googleMapUrl: googleMapUrl ?? this.googleMapUrl,
       bookByTime: bookByTime ?? this.bookByTime,
       totalTickets: totalTickets ?? this.totalTickets,
@@ -150,6 +160,7 @@ class EventDetailsDomainModel {
 
 extension EventDetailsToCreateEventMapper on EventDetailsDomainModel {
   CreateEventRequestDomainModel mapToCreateEvent() {
+    final now = DateTime.now();
     return CreateEventRequestDomainModel(
       eventId: eventId,
       eventName: eventName,
@@ -158,10 +169,10 @@ extension EventDetailsToCreateEventMapper on EventDetailsDomainModel {
       googleMapUrl: googleMapUrl ?? "",
       eventLocationLat: latitude,
       eventLocationLong: longitude,
-      createdTime: eventdate,
-      bookTime: eventdate,
-      startDateAndTime: eventdate,
-      endDateAndTime: eventTime,
+      createdTime: now.formatToStandard(),
+      bookTime: bookByTime?.formatToStandard() ?? startDateTime?.formatToStandard() ?? "",
+      startDateAndTime: startDateTime?.formatToStandard() ?? "",
+      endDateAndTime: endDateTime?.formatToStandard() ?? "",
       originalPrice: int.tryParse(eventOldPrice) ?? 0,
       discountedPrice: int.tryParse(eventCurrentPrice) ?? 0,
       discountActivated: discountActivated,
@@ -170,6 +181,7 @@ extension EventDetailsToCreateEventMapper on EventDetailsDomainModel {
       eventLocationName: eventLocation,
       eventBy: eventBy,
       categoryList: categories ?? [],
+      originalCategoryList: categories ?? [],
       tempImageIds: [],
     );
   }

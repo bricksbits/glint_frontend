@@ -2,35 +2,30 @@
 
 # Events 
 - For Users fetching Event Cards, there is missing location Name needed to fix it, remove the static 3 profile rows and make it only see profiles 
-- For fetching the Interested User, apply the pagination with offset as 20 
-- For Admin when tracking particular Event, Update the Location 
+- For Admin when tracking particular Event, Update the Location Label 
 - For All user type in the Event Details Screen we wanted to showcase the Maps URL link in the Preview as we are doing in the Confirm ticket screen.
 - Whenever some Clicks on the Explore Tab and click on any List Item, show a Snackbar showing that static categories will be available soon.
+- Fix the long text at each screen, [Chat, PeopleCard, Event, AdminCard, Ticket History, Payment History] Where ever we are showing the data, not filling it.
 
+# Tasks : Improve permission Handling of the entire app 
+We take two permissions from our Users, 
+1. Location 
+2. Notification 
 
-# Notifications 
-- As Notifications are working perfectly, I wanted to make certain improvements here 
-1. The Logo of the app should be visible at compress rate, ask me for the logo Its here : lib/assets/icons/glint_logo.svg
-2. And When I tap on the Notifications, I am getting missing BlocProvider as the Root entrance, What we can do here? For example if I get a Match, its says that ChatCubit is missing, 
-   a.I just can initialize all the Cubit at the Root, this will make the initialization time stretch and unnecessary API calls, 
-   b.What if We do step wise steps, We first Open Home and then the Chat Cubit? 
-   c.This approach is only for the sub routes, for independent routes we are good? 
+While onboarding as User ( primary customer ) we ask their permission consent, The Location Permission btn works fine 
+- Showing state like Enabling, Make it enable 
 
+I wanted something similar for the Notification permission as well, 
+Generally when the Location permission is provided even without the Notification permission the app move forward to other screen, 
+I want scenarios where once the user have either accepted or rejected any of the 2 permissions they can enter the app, 
+Or press the `procced anyway` btn 
 
-## Tasks : Update the metadata btw two User in Stream DB for a specific channel, 
-My app have a mechanism where whenever a match happens a Stream Channel ID Atomic is being created btw those two users, 
-And as a Channel is created the Channel Id is popped up in the Message View 
-And user can always enter the chat pressing that Channel respectively, 
+Also in few old devices, once the user is trying to provide the location permission it take the app lot of time to collect it and register as granted or rejected, 
+Can anything we can do here to improve it? 
 
-Here is a twist, I have two kind of channels that I wanted to maintain, First user who matched normally, where the meta data is as low as current infra, 
-But there are channels where the Members are connected via Event Details, 
-So if you review the ChatWithScreen, if enter through the RecentMatches List Tap, We get the required arguments and the TicketGradient View is visible, 
-but if not that done in this way and the Stream Channel from MessageView is clicked th Event Details are missing, 
+Also if you in the Home Screen whenever the user comes back to the App from Background to Foreground we ask for the Permissions again, 
+I want changes in this behaviour, the asking of the permission should only be done if the permission are rejected or not provided, 
+Also should be called when entering the Home Screen 
 
-We wanted to have a central Global solution to fix this issue, 
-Because there can be possibilities that user never touch the Recent Matches List item if there is already a Stream Channel btw two user exists, 
-
-Can we have a pushing meta data btw channels in Stream while fetching the Recent Matches? And Set it to the Stream Server 
-And take those values from the Server and show in the ChatWithScreen, so that user enter the ChatScreen from anywhere the data remains constant? 
-And the Behaviour remains consistent? 
-
+You can have a look at those files 
+: 
