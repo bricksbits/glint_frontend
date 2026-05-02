@@ -31,6 +31,8 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   StreamChannelListController? _channelListController;
   StreamSubscription? _channelsEventsSubscription;
 
+  bool _streamTokenExpired = false;
+
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
     chatFacade();
   }
@@ -77,22 +79,32 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   }
 
   Future<void> _connectToStreamClient() async {
-    if (!_isChatConnected()) {
-      chatRepo.connectToServer().then((onValue) {
-        switch (onValue) {
-          case Success<void>():
-            setupTheChannelListController();
-            updateState(state.copyWith(isLoading: false));
-            break;
-          case Failure<void>():
+    if (_streamTokenExpired || _isChatConnected()) return;
+
+    chatRepo.connectToServer().then((onValue) {
+      switch (onValue) {
+        case Success<void>():
+          setupTheChannelListController();
+          updateState(state.copyWith(isLoading: false));
+          break;
+        case Failure<void>():
+          if (onValue.message == kStreamTokenExpiredMessage) {
+            _streamTokenExpired = true;
+            updateState(state.copyWith(
+              isLoading: false,
+              isChatReady: false,
+              requiresReAuthentication: true,
+              error: "Your session has expired. Please log in again.",
+            ));
+          } else {
             updateState(state.copyWith(
               isLoading: false,
               error: onValue.message.toString(),
             ));
-            break;
-        }
-      });
-    }
+          }
+          break;
+      }
+    });
   }
 
   /// Called by the UI on app-resume to re-establish the Stream WS when needed.
@@ -196,7 +208,9 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
             debugLogger("STREAM_CHAT_CONNECTION_STATUS", status.name);
             break;
           case ConnectionStatus.disconnected:
-            _connectToStreamClient();
+            if (!_streamTokenExpired) {
+              _connectToStreamClient();
+            }
             break;
         }
       },

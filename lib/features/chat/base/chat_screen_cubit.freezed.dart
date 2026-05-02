@@ -25,7 +25,9 @@ mixin _$ChatScreenState {
       throw _privateConstructorUsedError; // For Stories
   List<ViewStoryModel>? get stories => throw _privateConstructorUsedError;
   int? get selectedIndex => throw _privateConstructorUsedError; // For Chat
-  User? get currentUser => throw _privateConstructorUsedError;
+  User? get currentUser =>
+      throw _privateConstructorUsedError; // true when the Stream JWT has expired — UI should force re-login
+  bool get requiresReAuthentication => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -36,7 +38,8 @@ mixin _$ChatScreenState {
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
             int? selectedIndex,
-            User? currentUser)
+            User? currentUser,
+            bool requiresReAuthentication)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -50,7 +53,8 @@ mixin _$ChatScreenState {
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
             int? selectedIndex,
-            User? currentUser)?
+            User? currentUser,
+            bool requiresReAuthentication)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -64,7 +68,8 @@ mixin _$ChatScreenState {
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
             int? selectedIndex,
-            User? currentUser)?
+            User? currentUser,
+            bool requiresReAuthentication)?
         initial,
     required TResult orElse(),
   }) =>
@@ -107,7 +112,8 @@ abstract class $ChatScreenStateCopyWith<$Res> {
       StreamChannelListController? channelListController,
       List<ViewStoryModel>? stories,
       int? selectedIndex,
-      User? currentUser});
+      User? currentUser,
+      bool requiresReAuthentication});
 }
 
 /// @nodoc
@@ -133,6 +139,7 @@ class _$ChatScreenStateCopyWithImpl<$Res, $Val extends ChatScreenState>
     Object? stories = freezed,
     Object? selectedIndex = freezed,
     Object? currentUser = freezed,
+    Object? requiresReAuthentication = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -167,6 +174,10 @@ class _$ChatScreenStateCopyWithImpl<$Res, $Val extends ChatScreenState>
           ? _value.currentUser
           : currentUser // ignore: cast_nullable_to_non_nullable
               as User?,
+      requiresReAuthentication: null == requiresReAuthentication
+          ? _value.requiresReAuthentication
+          : requiresReAuthentication // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -187,7 +198,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       StreamChannelListController? channelListController,
       List<ViewStoryModel>? stories,
       int? selectedIndex,
-      User? currentUser});
+      User? currentUser,
+      bool requiresReAuthentication});
 }
 
 /// @nodoc
@@ -211,6 +223,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? stories = freezed,
     Object? selectedIndex = freezed,
     Object? currentUser = freezed,
+    Object? requiresReAuthentication = null,
   }) {
     return _then(_$InitialImpl(
       isLoading: null == isLoading
@@ -245,6 +258,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.currentUser
           : currentUser // ignore: cast_nullable_to_non_nullable
               as User?,
+      requiresReAuthentication: null == requiresReAuthentication
+          ? _value.requiresReAuthentication
+          : requiresReAuthentication // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -260,7 +277,8 @@ class _$InitialImpl implements _Initial {
       this.channelListController = null,
       final List<ViewStoryModel>? stories = null,
       this.selectedIndex = null,
-      this.currentUser = null})
+      this.currentUser = null,
+      this.requiresReAuthentication = false})
       : _recentMatches = recentMatches,
         _stories = stories;
 
@@ -309,10 +327,14 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final User? currentUser;
+// true when the Stream JWT has expired — UI should force re-login
+  @override
+  @JsonKey()
+  final bool requiresReAuthentication;
 
   @override
   String toString() {
-    return 'ChatScreenState.initial(isLoading: $isLoading, isChatReady: $isChatReady, error: $error, recentMatches: $recentMatches, channelListController: $channelListController, stories: $stories, selectedIndex: $selectedIndex, currentUser: $currentUser)';
+    return 'ChatScreenState.initial(isLoading: $isLoading, isChatReady: $isChatReady, error: $error, recentMatches: $recentMatches, channelListController: $channelListController, stories: $stories, selectedIndex: $selectedIndex, currentUser: $currentUser, requiresReAuthentication: $requiresReAuthentication)';
   }
 
   @override
@@ -333,7 +355,10 @@ class _$InitialImpl implements _Initial {
             (identical(other.selectedIndex, selectedIndex) ||
                 other.selectedIndex == selectedIndex) &&
             (identical(other.currentUser, currentUser) ||
-                other.currentUser == currentUser));
+                other.currentUser == currentUser) &&
+            (identical(
+                    other.requiresReAuthentication, requiresReAuthentication) ||
+                other.requiresReAuthentication == requiresReAuthentication));
   }
 
   @override
@@ -346,7 +371,8 @@ class _$InitialImpl implements _Initial {
       channelListController,
       const DeepCollectionEquality().hash(_stories),
       selectedIndex,
-      currentUser);
+      currentUser,
+      requiresReAuthentication);
 
   /// Create a copy of ChatScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -367,11 +393,20 @@ class _$InitialImpl implements _Initial {
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
             int? selectedIndex,
-            User? currentUser)
+            User? currentUser,
+            bool requiresReAuthentication)
         initial,
   }) {
-    return initial(isLoading, isChatReady, error, recentMatches,
-        channelListController, stories, selectedIndex, currentUser);
+    return initial(
+        isLoading,
+        isChatReady,
+        error,
+        recentMatches,
+        channelListController,
+        stories,
+        selectedIndex,
+        currentUser,
+        requiresReAuthentication);
   }
 
   @override
@@ -385,11 +420,20 @@ class _$InitialImpl implements _Initial {
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
             int? selectedIndex,
-            User? currentUser)?
+            User? currentUser,
+            bool requiresReAuthentication)?
         initial,
   }) {
-    return initial?.call(isLoading, isChatReady, error, recentMatches,
-        channelListController, stories, selectedIndex, currentUser);
+    return initial?.call(
+        isLoading,
+        isChatReady,
+        error,
+        recentMatches,
+        channelListController,
+        stories,
+        selectedIndex,
+        currentUser,
+        requiresReAuthentication);
   }
 
   @override
@@ -403,13 +447,22 @@ class _$InitialImpl implements _Initial {
             StreamChannelListController? channelListController,
             List<ViewStoryModel>? stories,
             int? selectedIndex,
-            User? currentUser)?
+            User? currentUser,
+            bool requiresReAuthentication)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(isLoading, isChatReady, error, recentMatches,
-          channelListController, stories, selectedIndex, currentUser);
+      return initial(
+          isLoading,
+          isChatReady,
+          error,
+          recentMatches,
+          channelListController,
+          stories,
+          selectedIndex,
+          currentUser,
+          requiresReAuthentication);
     }
     return orElse();
   }
@@ -452,7 +505,8 @@ abstract class _Initial implements ChatScreenState {
       final StreamChannelListController? channelListController,
       final List<ViewStoryModel>? stories,
       final int? selectedIndex,
-      final User? currentUser}) = _$InitialImpl;
+      final User? currentUser,
+      final bool requiresReAuthentication}) = _$InitialImpl;
 
   @override
   bool get isLoading;
@@ -469,7 +523,10 @@ abstract class _Initial implements ChatScreenState {
   @override
   int? get selectedIndex; // For Chat
   @override
-  User? get currentUser;
+  User?
+      get currentUser; // true when the Stream JWT has expired — UI should force re-login
+  @override
+  bool get requiresReAuthentication;
 
   /// Create a copy of ChatScreenState
   /// with the given fields replaced by the non-null parameter values.

@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/data/remote/model/response/auth/refresh_auth_token_response.dart';
 import 'package:glint_frontend/notifications/background/stream_background_prefs.dart';
 import 'package:glint_frontend/utils/app_config.dart';
 import 'package:glint_frontend/data/remote/model/response/chat/get_recent_matches_response.dart';
@@ -112,38 +115,38 @@ class ChatRepoImpl extends ChatRepo {
         .getString(SharedPreferenceKeys.userPrimaryPicUrlKey);
     final userStreamToken = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.streamTokenKey);
-
     final cachedFcmToken = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.deviceFcmTokenKey);
 
     try {
       if (isUserDetailsAvailable(userId, userName, userStreamToken)) {
-        await chatService.connectUser(
+        await chatService.connectUserWithProvider(
           userId: userId,
           userName: userName,
-          userToken: userStreamToken,
           profileImageUrl: userProfile,
+          tokenProvider: (id) => _getStreamToken(id),
         );
 
-        // Register device for push notifications after a successful connection.
-        // Uses the locally cached FCM token for an immediate registration and
-        // fetches a fresh one in case it has rotated.
         chatService.registerDevice(
           cachedToken: cachedFcmToken.isNotEmpty ? cachedFcmToken : null,
         );
 
-        // Persist minimal credentials for the FCM background isolate so it
-        // can authenticate with Stream and fetch message content to display
-        // in the notification banner.
+        // Update background-isolate prefs with the latest token so FCM
+        // notifications can authenticate even after a refresh.
+        final latestToken = await sharedPreferenceHelper
+            .getString(SharedPreferenceKeys.streamTokenKey);
         StreamBackgroundPrefs.save(
           apiKey: AppConfig.streamApiKey,
           userId: userId,
-          token: userStreamToken,
+          token: latestToken,
         );
 
         return const Result.success('');
       }
       return Failure(Exception(), message: "No User data found");
+    } on _StreamAuthException catch (e) {
+      debugLogger("[ChatRepo]", "Stream auth permanently failed: ${e.message}");
+      return Failure(e, message: kStreamTokenExpiredMessage);
     } on StreamChat.StreamChatError catch (streamError) {
       const errorMsg = "Stream server initialization failed";
       debugLogger("[ChatRepo]", errorMsg);
@@ -155,12 +158,97 @@ class ChatRepoImpl extends ChatRepo {
     }
   }
 
+  // Called by the TokenProvider. Returns the stored token when still valid;
+  // fetches a fresh one from the backend when expired.
+  Future<String> _getStreamToken(String userId) async {
+    final current = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.streamTokenKey);
+    if (!_isStreamTokenExpired(current)) {
+      return current;
+    }
+    debugLogger("[ChatRepo]", "Stream token expired — refreshing via backend");
+    return _refreshStreamToken();
+  }
+
+  // Calls auth/v1/refresh with a clean Dio instance (no auth interceptor) to
+  // avoid re-entrant 401 handling, saves all three tokens, and returns the
+  // new stream token.
+  Future<String> _refreshStreamToken() async {
+    final refreshToken = await sharedPreferenceHelper
+        .getString(SharedPreferenceKeys.refreshTokenKey);
+
+    if (refreshToken.isEmpty) {
+      throw const _StreamAuthException("No refresh token — user must re-login");
+    }
+
+    try {
+      final freshDio = Dio(BaseOptions(baseUrl: AppConfig.baseUrl));
+      final response = await freshDio.post(
+        'auth/v1/refresh',
+        data: {'refresh_token': refreshToken},
+      );
+
+      final body =
+          UniversalSuccessResponseBody<RefreshAuthTokenResponse>.fromJson(
+        response.data,
+        (json) => RefreshAuthTokenResponse.fromJson(json),
+      );
+
+      final newStreamToken = body.data?.streamAuthToken;
+      if (newStreamToken == null || newStreamToken.isEmpty) {
+        throw const _StreamAuthException(
+            "Refresh response missing stream_auth_token");
+      }
+
+      await sharedPreferenceHelper.saveString(
+          SharedPreferenceKeys.streamTokenKey, newStreamToken);
+      final newAccess = body.data?.accessToken;
+      if (newAccess != null && newAccess.isNotEmpty) {
+        await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.accessTokenKey, newAccess);
+      }
+      final newRefresh = body.data?.refreshToken;
+      if (newRefresh != null && newRefresh.isNotEmpty) {
+        await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.refreshTokenKey, newRefresh);
+      }
+
+      debugLogger("[ChatRepo]", "Stream token refreshed successfully");
+      return newStreamToken;
+    } on DioException catch (e) {
+      debugLogger("[ChatRepo]", "Token refresh request failed: ${e.message}");
+      throw const _StreamAuthException("Token refresh request failed");
+    }
+  }
+
   bool isUserDetailsAvailable(
       String userId, String userName, String userToken) {
     if (userId.isEmpty || userName.isEmpty || userToken.isEmpty) {
       return false;
     }
-
     return true;
   }
+
+  // Returns true when the JWT `exp` claim is in the past.
+  bool _isStreamTokenExpired(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length != 3) return false;
+      final payload = base64Url.normalize(parts[1]);
+      final claims = jsonDecode(utf8.decode(base64Url.decode(payload)))
+          as Map<String, dynamic>;
+      final exp = claims['exp'] as int?;
+      if (exp == null) return false;
+      return DateTime.now().millisecondsSinceEpoch > exp * 1000;
+    } catch (_) {
+      return false;
+    }
+  }
+}
+
+class _StreamAuthException implements Exception {
+  final String message;
+  const _StreamAuthException(this.message);
+  @override
+  String toString() => '_StreamAuthException: $message';
 }
