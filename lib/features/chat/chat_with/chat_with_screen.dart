@@ -10,6 +10,7 @@ import 'package:glint_frontend/design/components/chat/get_ticket_gradient_view.d
 import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_holder_model.dart';
 import 'package:glint_frontend/features/chat/chat_with/chat_with_cubit.dart';
 import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
+import 'package:glint_frontend/features/home/home_screen.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -50,7 +51,16 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatWithCubit, ChatWithState>(
+    return BlocConsumer<ChatWithCubit, ChatWithState>(
+      listenWhen: (previous, current) =>
+          current.navigateToProfile && !previous.navigateToProfile,
+      listener: (context, state) {
+        context.read<ChatWithCubit>().clearNavigateToProfile();
+        context.go(
+          '/${GlintMainRoutes.home.name}',
+          extra: HomeScreen.kTabProfile,
+        );
+      },
       builder: (context, state) {
         if (state.isLoading) {
           return const Center(child: CircularProgressIndicator());
@@ -126,6 +136,8 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
                         child: getMessageListView(
                           state.oppositeUserDetails?.name ?? "Chat",
                           state.chatNavArgs,
+                          state.currentUserDetails?.image ?? "",
+                          state.oppositeUserDetails?.image ?? "",
                         ),
                       ),
                       setupMessageInput(state.currentChannel),
@@ -218,6 +230,8 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
   StreamMessageListView getMessageListView(
     String oppositeUserName,
     ChatWithNavArguments? effectiveNavArgs,
+    String currentUserImageUrl,
+    String oppositeUserImageUrl,
   ) {
     return StreamMessageListView(
       loadingBuilder: (context) {
@@ -231,8 +245,10 @@ class _ChatWithScreenState extends State<ChatWithScreen> {
             isEventMatch: effectiveNavArgs?.eventId != null,
             matchUserId: effectiveNavArgs?.matchId ?? "",
             matchUserName: oppositeUserName,
+            currentUserImageUrl: currentUserImageUrl,
+            oppositeUserImageUrl: oppositeUserImageUrl,
             upgradePlanCallBack: () {
-              // Todo: Take the User to the Profile Tab of the Bottom Nav Stack
+              context.read<ChatWithCubit>().onUpgradePlanTapped();
             },
           ),
         );

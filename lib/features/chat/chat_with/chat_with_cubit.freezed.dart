@@ -24,6 +24,7 @@ mixin _$ChatWithState {
   User? get currentUserDetails => throw _privateConstructorUsedError;
   ChatWithNavArguments? get chatNavArgs => throw _privateConstructorUsedError;
   Channel? get currentChannel => throw _privateConstructorUsedError;
+  bool get navigateToProfile => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -34,7 +35,8 @@ mixin _$ChatWithState {
             User? oppositeUserDetails,
             User? currentUserDetails,
             ChatWithNavArguments? chatNavArgs,
-            Channel? currentChannel)
+            Channel? currentChannel,
+            bool navigateToProfile)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -48,7 +50,8 @@ mixin _$ChatWithState {
             User? oppositeUserDetails,
             User? currentUserDetails,
             ChatWithNavArguments? chatNavArgs,
-            Channel? currentChannel)?
+            Channel? currentChannel,
+            bool navigateToProfile)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -62,7 +65,8 @@ mixin _$ChatWithState {
             User? oppositeUserDetails,
             User? currentUserDetails,
             ChatWithNavArguments? chatNavArgs,
-            Channel? currentChannel)?
+            Channel? currentChannel,
+            bool navigateToProfile)?
         initial,
     required TResult orElse(),
   }) =>
@@ -105,7 +109,8 @@ abstract class $ChatWithStateCopyWith<$Res> {
       User? oppositeUserDetails,
       User? currentUserDetails,
       ChatWithNavArguments? chatNavArgs,
-      Channel? currentChannel});
+      Channel? currentChannel,
+      bool navigateToProfile});
 }
 
 /// @nodoc
@@ -131,6 +136,7 @@ class _$ChatWithStateCopyWithImpl<$Res, $Val extends ChatWithState>
     Object? currentUserDetails = freezed,
     Object? chatNavArgs = freezed,
     Object? currentChannel = freezed,
+    Object? navigateToProfile = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -165,6 +171,10 @@ class _$ChatWithStateCopyWithImpl<$Res, $Val extends ChatWithState>
           ? _value.currentChannel
           : currentChannel // ignore: cast_nullable_to_non_nullable
               as Channel?,
+      navigateToProfile: null == navigateToProfile
+          ? _value.navigateToProfile
+          : navigateToProfile // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -185,7 +195,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       User? oppositeUserDetails,
       User? currentUserDetails,
       ChatWithNavArguments? chatNavArgs,
-      Channel? currentChannel});
+      Channel? currentChannel,
+      bool navigateToProfile});
 }
 
 /// @nodoc
@@ -209,6 +220,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? currentUserDetails = freezed,
     Object? chatNavArgs = freezed,
     Object? currentChannel = freezed,
+    Object? navigateToProfile = null,
   }) {
     return _then(_$InitialImpl(
       isLoading: null == isLoading
@@ -243,6 +255,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.currentChannel
           : currentChannel // ignore: cast_nullable_to_non_nullable
               as Channel?,
+      navigateToProfile: null == navigateToProfile
+          ? _value.navigateToProfile
+          : navigateToProfile // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -258,7 +274,8 @@ class _$InitialImpl implements _Initial {
       this.oppositeUserDetails = null,
       this.currentUserDetails = null,
       this.chatNavArgs = null,
-      this.currentChannel = null});
+      this.currentChannel = null,
+      this.navigateToProfile = false});
 
   @override
   @JsonKey()
@@ -284,10 +301,13 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final Channel? currentChannel;
+  @override
+  @JsonKey()
+  final bool navigateToProfile;
 
   @override
   String toString() {
-    return 'ChatWithState.initial(isLoading: $isLoading, hasError: $hasError, error: $error, chatAvailable: $chatAvailable, oppositeUserDetails: $oppositeUserDetails, currentUserDetails: $currentUserDetails, chatNavArgs: $chatNavArgs, currentChannel: $currentChannel)';
+    return 'ChatWithState.initial(isLoading: $isLoading, hasError: $hasError, error: $error, chatAvailable: $chatAvailable, oppositeUserDetails: $oppositeUserDetails, currentUserDetails: $currentUserDetails, chatNavArgs: $chatNavArgs, currentChannel: $currentChannel, navigateToProfile: $navigateToProfile)';
   }
 
   @override
@@ -309,7 +329,9 @@ class _$InitialImpl implements _Initial {
             (identical(other.chatNavArgs, chatNavArgs) ||
                 other.chatNavArgs == chatNavArgs) &&
             (identical(other.currentChannel, currentChannel) ||
-                other.currentChannel == currentChannel));
+                other.currentChannel == currentChannel) &&
+            (identical(other.navigateToProfile, navigateToProfile) ||
+                other.navigateToProfile == navigateToProfile));
   }
 
   @override
@@ -322,7 +344,8 @@ class _$InitialImpl implements _Initial {
       oppositeUserDetails,
       currentUserDetails,
       chatNavArgs,
-      currentChannel);
+      currentChannel,
+      navigateToProfile);
 
   /// Create a copy of ChatWithState
   /// with the given fields replaced by the non-null parameter values.
@@ -343,11 +366,20 @@ class _$InitialImpl implements _Initial {
             User? oppositeUserDetails,
             User? currentUserDetails,
             ChatWithNavArguments? chatNavArgs,
-            Channel? currentChannel)
+            Channel? currentChannel,
+            bool navigateToProfile)
         initial,
   }) {
-    return initial(isLoading, hasError, error, chatAvailable,
-        oppositeUserDetails, currentUserDetails, chatNavArgs, currentChannel);
+    return initial(
+        isLoading,
+        hasError,
+        error,
+        chatAvailable,
+        oppositeUserDetails,
+        currentUserDetails,
+        chatNavArgs,
+        currentChannel,
+        navigateToProfile);
   }
 
   @override
@@ -361,11 +393,20 @@ class _$InitialImpl implements _Initial {
             User? oppositeUserDetails,
             User? currentUserDetails,
             ChatWithNavArguments? chatNavArgs,
-            Channel? currentChannel)?
+            Channel? currentChannel,
+            bool navigateToProfile)?
         initial,
   }) {
-    return initial?.call(isLoading, hasError, error, chatAvailable,
-        oppositeUserDetails, currentUserDetails, chatNavArgs, currentChannel);
+    return initial?.call(
+        isLoading,
+        hasError,
+        error,
+        chatAvailable,
+        oppositeUserDetails,
+        currentUserDetails,
+        chatNavArgs,
+        currentChannel,
+        navigateToProfile);
   }
 
   @override
@@ -379,13 +420,22 @@ class _$InitialImpl implements _Initial {
             User? oppositeUserDetails,
             User? currentUserDetails,
             ChatWithNavArguments? chatNavArgs,
-            Channel? currentChannel)?
+            Channel? currentChannel,
+            bool navigateToProfile)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(isLoading, hasError, error, chatAvailable,
-          oppositeUserDetails, currentUserDetails, chatNavArgs, currentChannel);
+      return initial(
+          isLoading,
+          hasError,
+          error,
+          chatAvailable,
+          oppositeUserDetails,
+          currentUserDetails,
+          chatNavArgs,
+          currentChannel,
+          navigateToProfile);
     }
     return orElse();
   }
@@ -428,7 +478,8 @@ abstract class _Initial implements ChatWithState {
       final User? oppositeUserDetails,
       final User? currentUserDetails,
       final ChatWithNavArguments? chatNavArgs,
-      final Channel? currentChannel}) = _$InitialImpl;
+      final Channel? currentChannel,
+      final bool navigateToProfile}) = _$InitialImpl;
 
   @override
   bool get isLoading;
@@ -446,6 +497,8 @@ abstract class _Initial implements ChatWithState {
   ChatWithNavArguments? get chatNavArgs;
   @override
   Channel? get currentChannel;
+  @override
+  bool get navigateToProfile;
 
   /// Create a copy of ChatWithState
   /// with the given fields replaced by the non-null parameter values.
