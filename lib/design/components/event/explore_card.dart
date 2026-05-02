@@ -39,6 +39,8 @@ class ExploreCard extends StatelessWidget {
             children: [
               Text(
                 title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: AppTheme.headingFour.copyWith(
                   color: AppColours.white,
                   fontSize: 18.0,
@@ -49,7 +51,8 @@ class ExploreCard extends StatelessWidget {
               const Gap(12.0),
               Text(
                 subtitle,
-                overflow: TextOverflow.clip,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: AppTheme.simpleText.copyWith(
                   color: AppColours.white,
                   fontSize: 12.0,

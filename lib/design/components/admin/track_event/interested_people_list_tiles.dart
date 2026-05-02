@@ -120,21 +120,31 @@ class _InterestedPeopleListTilesState extends State<InterestedPeopleListTiles> {
         const Gap(12.0),
 
         //profile name
-        Text(
-          name,
-          style: AppTheme.simpleText,
+        Flexible(
+          flex: 2,
+          child: Text(
+            name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTheme.simpleText,
+          ),
         ),
-        const Gap(12.0),
+        const Gap(4.0),
         const Text(
           ' | ',
           style: AppTheme.simpleText,
         ),
-        const Gap(8.0),
+        const Gap(4.0),
         //email
-        Text(
-          email,
-          style: AppTheme.simpleText.copyWith(
-            color: AppColours.gray,
+        Flexible(
+          flex: 3,
+          child: Text(
+            email,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTheme.simpleText.copyWith(
+              color: AppColours.gray,
+            ),
           ),
         ),
       ],

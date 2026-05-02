@@ -38,6 +38,8 @@ class EventInfoImageContainer extends StatelessWidget {
                 const Gap(20.0),
                 Text(
                   eventName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: AppTheme.headingThree.copyWith(
                     fontStyle: FontStyle.normal,
                     fontWeight: FontWeight.w900,

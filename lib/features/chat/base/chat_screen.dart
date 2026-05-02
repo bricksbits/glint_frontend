@@ -322,10 +322,16 @@ class _ChatScreenState extends State<ChatScreen>
                                       ],
                                     ),
                                     const Gap(8.0),
-                                    Text(
-                                      match.matchUserName,
-                                      style: AppTheme.simpleText.copyWith(
-                                        color: AppColours.black,
+                                    SizedBox(
+                                      width: 72.0,
+                                      child: Text(
+                                        match.matchUserName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: AppTheme.simpleText.copyWith(
+                                          color: AppColours.black,
+                                        ),
                                       ),
                                     ),
                                     const Gap(12.0),
@@ -451,10 +457,16 @@ class _ChatScreenState extends State<ChatScreen>
                             ],
                           ),
                           const Gap(12.0),
-                          Text(
-                            story.username,
-                            style: AppTheme.simpleText.copyWith(
-                              color: AppColours.black,
+                          SizedBox(
+                            width: 88.0,
+                            child: Text(
+                              story.username,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: AppTheme.simpleText.copyWith(
+                                color: AppColours.black,
+                              ),
                             ),
                           ),
                         ],

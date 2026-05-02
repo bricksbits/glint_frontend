@@ -146,12 +146,16 @@ class _TicketHistoryCard extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      ticket.eventName,
-                      style: AppTheme.headingFour.copyWith(
-                        fontStyle: FontStyle.normal,
-                        color: AppColours.black,
-                        fontWeight: FontWeight.w400,
+                    Flexible(
+                      child: Text(
+                        ticket.eventName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTheme.headingFour.copyWith(
+                          fontStyle: FontStyle.normal,
+                          color: AppColours.black,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                     if (!eventHasPassed) ...[
@@ -223,11 +227,15 @@ class _TicketHistoryCard extends StatelessWidget {
                       ),
                     ),
                     const Gap(12.0),
-                    Text(
-                      'You & ${ticket.matchedUser.username}',
-                      style: AppTheme.smallBodyText.copyWith(
-                        color: AppColours.black,
-                        fontSize: 12.5,
+                    Flexible(
+                      child: Text(
+                        'You & ${ticket.matchedUser.username}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTheme.smallBodyText.copyWith(
+                          color: AppColours.black,
+                          fontSize: 12.5,
+                        ),
                       ),
                     ),
                   ],

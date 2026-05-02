@@ -38,12 +38,15 @@ class NearbyEventCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // details
-              Column(
+              Expanded(
+                child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Event name
                   Text(
                     eventModel.eventName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: AppTheme.headingFour.copyWith(
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
@@ -79,8 +82,9 @@ class NearbyEventCard extends StatelessWidget {
                   ),
                 ],
               ),
+              ),
 
-              const Spacer(),
+              const Gap(12.0),
 
               // Event image
               _buildImage(

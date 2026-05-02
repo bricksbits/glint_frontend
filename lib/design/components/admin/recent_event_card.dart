@@ -107,7 +107,8 @@ class RecentEventCard extends StatelessWidget {
                         children: [
                           Text(
                             eventName,
-                            overflow: TextOverflow.clip,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: AppTheme.simpleBodyText,
                           ),
                           GlintIconLabel(
