@@ -115,6 +115,11 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
     _nameController.addListener(() {
       context.read<RegisterCubit>().enteredUserName(_nameController.text);
     });
+    _contactController.addListener(() {
+      context
+          .read<RegisterCubit>()
+          .enteredContactNumber(_contactController.text);
+    });
     super.initState();
   }
 
@@ -262,6 +267,13 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                             type: IconTextFieldType.email,
                             focusNode: _emailFocusNode,
                             hintText: 'Enter Email',
+                          ),
+                          const Gap(20.0),
+                          _buildTextField(
+                            controller: _contactController,
+                            type: IconTextFieldType.contact,
+                            focusNode: _contactFocusNode,
+                            hintText: 'Phone Number',
                           ),
                           const Gap(20.0),
                           _buildTextField(

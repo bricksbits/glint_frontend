@@ -139,8 +139,8 @@ DateTime _parseEventTime(String? time) {
   }
 }
 
-String _daysBetween(DateTime start, DateTime end) {
-  final diff = end.toUtc().difference(start.toUtc()).inDays;
+String _daysBetween(DateTime start) {
+  final diff = start.toUtc().difference(DateTime.now().toUtc()).inDays;
   return diff.toString();
 }
 
@@ -197,7 +197,7 @@ class EventDetailsResponseWrapper {
               r.ticketPrice?.toString() ??
               "")
           : (r.ticketPrice?.toString() ?? ""),
-      daysLeft: _daysBetween(start, end),
+      daysLeft: _daysBetween(start),
       peopleInterested: r.interestedUsersCount ?? 0,
       aboutEvent: r.eventDescription ?? "",
       location: {
@@ -231,7 +231,7 @@ class EventDetailsResponseWrapper {
               r.ticketPrice?.toString() ??
               "")
           : (r.ticketPrice?.toString() ?? ""),
-      daysLeft: _daysBetween(start, end),
+      daysLeft: _daysBetween(start),
       peopleInterested: r.interestedCount ?? 0,
       aboutEvent: r.eventDescription ?? "",
       location: {

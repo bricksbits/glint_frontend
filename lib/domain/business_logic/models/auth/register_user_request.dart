@@ -18,6 +18,7 @@ class RegisterUserRequest {
   final String? relationShipGoals;
   final List<String>? interests;
   final String? calculatedAge;
+  final String? phoneNumber;
 
   RegisterUserRequest(
     this.tempUserId,
@@ -37,6 +38,7 @@ class RegisterUserRequest {
     this.relationShipGoals,
     this.interests,
     this.calculatedAge,
+    this.phoneNumber,
   );
 
   RegisterUserRequest copyWith({
@@ -57,6 +59,7 @@ class RegisterUserRequest {
     String? relationShipGoals,
     List<String>? interests,
     String? calculatedAge,
+    String? phoneNumber,
   }) {
     return RegisterUserRequest(
       tempUserId ?? this.tempUserId,
@@ -75,7 +78,8 @@ class RegisterUserRequest {
       smokingHabit ?? this.smokingHabit,
       relationShipGoals ?? this.relationShipGoals,
       interests ?? this.interests,
-      calculatedAge = calculatedAge,
+      calculatedAge ?? this.calculatedAge,
+      phoneNumber ?? this.phoneNumber,
     );
   }
 
@@ -98,7 +102,8 @@ class RegisterUserRequest {
         'smokingHabit: $smokingHabit, '
         'relationShipGoals: $relationShipGoals, '
         'interests: $interests, '
-        'calculatedAge: $calculatedAge'
+        'calculatedAge: $calculatedAge, '
+        'phoneNumber: $phoneNumber'
         ')';
   }
 }
