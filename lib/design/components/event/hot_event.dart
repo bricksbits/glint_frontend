@@ -79,6 +79,8 @@ class HotEvent extends StatelessWidget {
                           // Event name
                           Text(
                             eventModel.eventName,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: AppTheme.headingFour.copyWith(
                               fontStyle: FontStyle.normal,
                               color: AppColours.white,

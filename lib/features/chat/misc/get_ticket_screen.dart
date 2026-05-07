@@ -24,6 +24,11 @@ class GetEventTicketScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        backgroundColor: AppColours.white,
+        scrolledUnderElevation: 0,
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Card(

@@ -72,6 +72,20 @@ class _EventsListScreenState extends State<EventsListScreen> {
                     : const SizedBox.shrink(),
               ),
 
+              // Hot Events heading
+              if (state.hotEvents.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: Text(
+                      'Hot Events',
+                      style: AppTheme.headingFour.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+
               // Hot Events List
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -117,6 +131,20 @@ class _EventsListScreenState extends State<EventsListScreen> {
 
               const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
 
+              // Events heading
+              if (state.normalEvents.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: Text(
+                      'Events',
+                      style: AppTheme.headingFour.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+
               // Nearby Events List
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -124,6 +152,14 @@ class _EventsListScreenState extends State<EventsListScreen> {
                     final event = state.normalEvents[index];
                     return NearbyEventCard(
                       eventModel: event,
+                      getEventInfo: (eventId) {
+                        GlintAnalyticService.onEventCardItemInfoClickedEvent(
+                            eventId);
+                        context.push(
+                          "/${GlintMainRoutes.event.name}/${GlintEventRoutes.eventDetails.name}",
+                          extra: int.parse(eventId),
+                        );
+                      },
                       fetchProfiles: (eventId) {
                         context
                             .read<EventBaseCubit>()

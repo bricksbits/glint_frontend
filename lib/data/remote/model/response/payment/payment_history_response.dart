@@ -245,9 +245,7 @@ class EventPaymentHistory {
 
 extension EventPaymentHistoryMapper on EventPaymentHistory {
   PaymentHistoryModel mapToDomain() {
-    final parseDate = paymentDate != null
-        ? dateFromStandardResponse(paymentDate!)
-        : DateTime.now();
+    final parseDate = dateFromBackendResponse(paymentDate) ?? DateTime.now();
     final orderStatusChecked = orderStatus == "paid"
         ? PaymentOrderStatus.PAID
         : orderStatus == "created"
@@ -267,9 +265,7 @@ extension EventPaymentHistoryMapper on EventPaymentHistory {
 
 extension MembershipPaymentHistoryMapper on MembershipPaymentHistory {
   PaymentHistoryModel mapToDomain() {
-    final parseDate = paymentDate != null
-        ? dateFromStandardResponse(paymentDate!)
-        : DateTime.now();
+    final parseDate = dateFromBackendResponse(paymentDate) ?? DateTime.now();
     final orderStatusChecked = orderStatus == "paid"
         ? PaymentOrderStatus.PAID
         : orderStatus == "created"

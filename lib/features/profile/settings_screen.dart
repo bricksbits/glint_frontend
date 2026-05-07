@@ -10,6 +10,7 @@ import 'package:glint_frontend/domain/application_logic/logout_usecase.dart';
 import 'package:glint_frontend/features/profile/settings_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileSettingsScreen extends StatelessWidget {
   const ProfileSettingsScreen({super.key});
@@ -173,8 +174,11 @@ class ProfileSettingsScreen extends StatelessWidget {
             ),
             trailing: IconButton(
               onPressed: () {
-                //Todo; Open Website with Contact as Route
                 GlintAnalyticService.onSettingContactUsEvent();
+                launchUrl(
+                  Uri.parse('https://glintapp.io'),
+                  mode: LaunchMode.externalApplication,
+                );
               },
               icon: const Icon(
                 Icons.arrow_forward_rounded,
@@ -195,16 +199,18 @@ class ProfileSettingsScreen extends StatelessWidget {
               style: AppTheme.simpleBodyText,
             ),
             trailing: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                GlintAnalyticService.onSettingFaqEvent();
+                launchUrl(
+                  Uri.parse('https://glintapp.io/#faqs'),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
               icon: const Icon(
                 Icons.arrow_forward_rounded,
               ),
               color: AppColours.black,
             ),
-            onTap: () {
-              //Todo; Open Website with FAQ as Route
-              GlintAnalyticService.onSettingFaqEvent();
-            },
           ),
         ],
       ),

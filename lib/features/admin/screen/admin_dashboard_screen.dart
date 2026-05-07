@@ -43,6 +43,8 @@ class AdminDashboardScreen extends StatelessWidget {
                               // event manager greeting
                               Text(
                                 'Hello ${state.adminUserName}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: AppTheme.headingThree.copyWith(
                                   fontStyle: FontStyle.italic,
                                 ),
@@ -68,10 +70,14 @@ class AdminDashboardScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const Gap(10.0),
-                                  Text(
-                                    state.adminOrganization,
-                                    style: AppTheme.simpleBodyText.copyWith(
-                                      fontWeight: FontWeight.w400,
+                                  Flexible(
+                                    child: Text(
+                                      state.adminOrganization,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppTheme.simpleBodyText.copyWith(
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
                                   ),
                                 ],

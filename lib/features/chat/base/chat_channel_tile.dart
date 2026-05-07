@@ -25,6 +25,9 @@ class _ChatChannelTileState extends State<ChatChannelTile> {
   User? _oppositeUser;
   bool _isResolvingUser = false;
 
+  bool get _hasEventData =>
+      widget.channel.extraData.containsKey('event_id');
+
   @override
   void initState() {
     super.initState();
@@ -92,29 +95,43 @@ class _ChatChannelTileState extends State<ChatChannelTile> {
   Widget build(BuildContext context) {
     final data = _tileData;
 
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: 6.0,
-        horizontal: 20.0,
+    return Container(
+      decoration: _hasEventData
+          ? BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  AppColours.primaryBlue.withAlpha(25),
+                  Colors.transparent,
+                ],
+              ),
+            )
+          : null,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 6.0,
+          horizontal: 20.0,
+        ),
+        leading: _AvatarWidget(imageUrl: _oppositeUser?.image),
+        title: Text(
+          _oppositeUser?.name ?? 'User',
+          style: AppTheme.simpleBodyText.copyWith(color: AppColours.black),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text(
+          data.subtitleText,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppTheme.simpleText.copyWith(color: AppColours.darkGray),
+        ),
+        trailing: _TrailingWidget(
+          showYourTurn: data.showYourTurn,
+          lastMessageDate: data.lastMessageDate,
+        ),
+        onTap: widget.onTap,
       ),
-      leading: _AvatarWidget(imageUrl: _oppositeUser?.image),
-      title: Text(
-        _oppositeUser?.name ?? 'User',
-        style: AppTheme.simpleBodyText.copyWith(color: AppColours.black),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-      subtitle: Text(
-        data.subtitleText,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppTheme.simpleText.copyWith(color: AppColours.darkGray),
-      ),
-      trailing: _TrailingWidget(
-        showYourTurn: data.showYourTurn,
-        lastMessageDate: data.lastMessageDate,
-      ),
-      onTap: widget.onTap,
     );
   }
 }

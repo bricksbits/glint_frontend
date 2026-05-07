@@ -35,6 +35,7 @@ extension GetTicketHistoryResponseMapper on GetTicketHisotryResponse {
               dateFromStandardResponse(ticketDate).toFormattedTime();
           return EventTicketHistoryDomainModel(
             eventId: ticket.eventId.toString(),
+            matchId: ticket.matchId?.toString() ?? "",
             eventName: ticket.eventName ?? "",
             eventCoverImageUrl: ticket.eventPictureUrl?.presignedUrl ?? "",
             eventdate: eventDate,

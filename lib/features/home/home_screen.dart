@@ -119,6 +119,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     _selectedIndex = widget.initialTab;
     WidgetsBinding.instance.addObserver(this);
     context.read<UserInfoManagerCubit>().getCurrentMembershipData();
+    context.read<UserInfoManagerCubit>().setupFirebaseNotification();
+    context.read<UserInfoManagerCubit>().updateUserLocationLocally();
     super.initState();
   }
 

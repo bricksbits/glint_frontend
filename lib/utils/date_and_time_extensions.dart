@@ -58,6 +58,39 @@ DateTime dateFromStandardResponse(String date) {
   return DateTime.parse(date);
 }
 
+/// Robust parser that handles all known backend date formats:
+/// - ISO8601 with Z:          "2026-03-25T19:00:00Z"
+/// - ISO8601 with offset:     "2026-03-25T19:00:00+00:00"
+/// - Space-separated + UTC:   "2026-04-25 19:30:00 +0000 UTC"
+/// - Space + UTC + microsecs: "2026-04-28 20:37:47.227472 +0000 UTC"
+///
+/// Returns null for null/empty/unparseable input instead of throwing.
+DateTime? dateFromBackendResponse(String? raw) {
+  if (raw == null || raw.trim().isEmpty) return null;
+
+  final input = raw.trim();
+
+  try {
+    return DateTime.parse(input);
+  } catch (_) {}
+
+  // Normalize " +0000 UTC" → "Z", then space-between-date-and-time → "T",
+  // then truncate microseconds to milliseconds so DateTime.parse accepts it.
+  String normalized = input
+      .replaceAll(' +0000 UTC', 'Z')
+      .replaceFirst(' ', 'T')
+      .replaceAllMapped(
+        RegExp(r'\.(\d{4,6})'),
+        (m) => '.${m.group(1)!.substring(0, 3)}',
+      );
+
+  try {
+    return DateTime.parse(normalized);
+  } catch (_) {
+    return null;
+  }
+}
+
 extension DateTimeFormatting on String {
   String toFormattedDateTime() {
     // 1. Parse the ISO 8601 string into a DateTime object.

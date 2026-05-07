@@ -128,6 +128,14 @@ class ChatWithCubit extends Cubit<ChatWithState> {
     }
   }
 
+  void onUpgradePlanTapped() {
+    emit(state.copyWith(navigateToProfile: true));
+  }
+
+  void clearNavigateToProfile() {
+    emit(state.copyWith(navigateToProfile: false));
+  }
+
   void closeChannel() {
     state.currentChannel?.dispose();
   }

@@ -158,7 +158,7 @@ extension RegisterUserRequestMapper on RegisterUserRequest {
       username: username,
       password: password,
       email: email,
-      phoneNumber: "9876543210",
+      phoneNumber: phoneNumber,
       bio: bio,
       dateOfBirth: dateOfBirthWithDateFormat,
       height: height != null ? double.tryParse(height!) : 5.6,

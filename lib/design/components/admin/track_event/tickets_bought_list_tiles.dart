@@ -147,9 +147,13 @@ class _TicketsBoughtListTilesState extends State<TicketsBoughtListTiles> {
             const Gap(24.0),
 
             //profile name
-            Text(
-              '$name1 & $name2',
-              style: AppTheme.simpleText,
+            Flexible(
+              child: Text(
+                '$name1 & $name2',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTheme.simpleText,
+              ),
             ),
             const Spacer(),
             // date and time

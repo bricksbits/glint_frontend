@@ -5,6 +5,8 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/di/injection.dart';
+import 'package:glint_frontend/domain/application_logic/logout_usecase.dart';
 import 'package:glint_frontend/features/chat/base/chat_channel_tile.dart';
 import 'package:glint_frontend/features/chat/base/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
@@ -48,7 +50,29 @@ class _ChatScreenState extends State<ChatScreen>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatScreenCubit, ChatScreenState>(
+    return BlocConsumer<ChatScreenCubit, ChatScreenState>(
+      listenWhen: (previous, current) =>
+          current.requiresReAuthentication && !previous.requiresReAuthentication,
+      listener: (context, state) {
+        showCustomSnackbar(
+          context,
+          message: "Your Security is our top priority",
+          isError: true,
+        );
+        getIt.get<LogoutUserUsecase>().perform(
+          (_) {
+            if (context.mounted) {
+              context.goNamed(GlintMainRoutes.starter.name);
+            }
+          },
+          (_) {
+            if (context.mounted) {
+              context.goNamed(GlintMainRoutes.starter.name);
+            }
+          },
+          () {},
+        );
+      },
       builder: (context, state) {
         return Scaffold(
           backgroundColor: AppColours.white,
@@ -103,10 +127,7 @@ class _ChatScreenState extends State<ChatScreen>
                 : state.isChatReady == false ||
                         state.channelListController == null
                     ? const Center(
-                        child: Text(
-                          "Chat Servers are not available",
-                          style: AppTheme.headingThree,
-                        ),
+                        child: CircularProgressIndicator(),
                       )
                     : CustomScrollView(
                         // AlwaysScrollableScrollPhysics lets the RefreshIndicator
@@ -322,10 +343,16 @@ class _ChatScreenState extends State<ChatScreen>
                                       ],
                                     ),
                                     const Gap(8.0),
-                                    Text(
-                                      match.matchUserName,
-                                      style: AppTheme.simpleText.copyWith(
-                                        color: AppColours.black,
+                                    SizedBox(
+                                      width: 72.0,
+                                      child: Text(
+                                        match.matchUserName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: AppTheme.simpleText.copyWith(
+                                          color: AppColours.black,
+                                        ),
                                       ),
                                     ),
                                     const Gap(12.0),
@@ -451,10 +478,16 @@ class _ChatScreenState extends State<ChatScreen>
                             ],
                           ),
                           const Gap(12.0),
-                          Text(
-                            story.username,
-                            style: AppTheme.simpleText.copyWith(
-                              color: AppColours.black,
+                          SizedBox(
+                            width: 88.0,
+                            child: Text(
+                              story.username,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: AppTheme.simpleText.copyWith(
+                                color: AppColours.black,
+                              ),
                             ),
                           ),
                         ],

@@ -53,7 +53,6 @@ class RegisterCubit extends Cubit<RegisterState> {
     );
   }
 
-  //Todo: Do the Verification here
   void enteredContactNumber(String contactNumber) {
     emit(
       state.copyWith(contactNumber: contactNumber),
@@ -75,7 +74,8 @@ class RegisterCubit extends Cubit<RegisterState> {
     _validateEmail();
     if (state.isEmailValid &&
         state.isPassWordValid &&
-        state.isConfirmPassword) {
+        state.isConfirmPassword &&
+        state.isPhoneNumberValid) {
       emitNewState(
         state.copyWith(
           isLoading: true,
@@ -87,6 +87,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         final updatedRequestWithCredentials = userRequestModel?.copyWith(
           email: state.email,
           password: state.password,
+          phoneNumber: state.contactNumber,
         );
         if (updatedRequestWithCredentials != null) {
           final isRegisteredResponse = await authenticationRepo.createAccount(
@@ -244,6 +245,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       "Something Casual",
       [],
       "18",
+      state.contactNumber.isNotEmpty ? state.contactNumber : null,
     );
     final response = await authenticationRepo.createAccount(
       fakeAdminRegisterModel,
@@ -328,7 +330,6 @@ class RegisterCubit extends Cubit<RegisterState> {
       error = 'Password and Confirm Password does not match';
     }
 
-    // Emit a new state ONLY if the error status has changed
     if (error != null) {
       emitNewState(
         state.copyWith(
@@ -343,6 +344,24 @@ class RegisterCubit extends Cubit<RegisterState> {
           error: "",
         ),
       );
+      _validatePhoneNumber();
+    }
+  }
+
+  void _validatePhoneNumber() {
+    final phone = state.contactNumber.trim();
+    String? error;
+
+    if (phone.isEmpty) {
+      error = 'Phone number cannot be empty.';
+    } else if (!RegExp(r'^[6-9]\d{9}$').hasMatch(phone)) {
+      error = 'Please enter a valid 10-digit mobile number.';
+    }
+
+    if (error != null) {
+      emitNewState(state.copyWith(isPhoneNumberValid: false, error: error));
+    } else {
+      emitNewState(state.copyWith(isPhoneNumberValid: true, error: ""));
     }
   }
 

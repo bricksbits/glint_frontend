@@ -2,6 +2,8 @@ import 'package:glint_frontend/features/chat/story/model/recent_matches_model.da
 import 'package:glint_frontend/features/chat/story/model/view_story_model.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 
+const String kStreamTokenExpiredMessage = "streamTokenExpired";
+
 abstract class ChatRepo {
   Future<Result<List<ViewStoryModel>>> fetchStories();
 

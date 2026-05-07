@@ -32,9 +32,13 @@ class GlintIconLabel extends StatelessWidget {
                 ),
         ),
         const Gap(10.0),
-        Text(
-          label,
-          style: style ?? AppTheme.simpleBodyText,
+        Flexible(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: style ?? AppTheme.simpleBodyText,
+          ),
         ),
       ],
     );

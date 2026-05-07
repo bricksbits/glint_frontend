@@ -43,6 +43,25 @@ class _LocationPermissionOnboardingScreenState
     }
   }
 
+  bool _isLocationAttended(OnBoardingState state) =>
+      state.locationPermissionDenied == true ||
+      state.onBoardingStatus == OnBoardingCompletedTill.COMPLETED;
+
+  bool _isNotifAttended() =>
+      _notifState == PermissionButtonState.granted ||
+      _notifState == PermissionButtonState.denied;
+
+  void _navigateToRegisterFlow(BuildContext ctx, OnBoardingState state) {
+    if (!ctx.mounted) return;
+    if (state.onBoardingStatus == OnBoardingCompletedTill.COMPLETED) {
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        const SnackBar(content: Text("Get Ready for even better experience")),
+      );
+      GlintAnalyticService.onBoardLocationPermissionEvent(true);
+    }
+    ctx.go("/${GlintMainRoutes.register.name}", extra: false);
+  }
+
   Future<void> _requestNotificationPermission() async {
     setState(() => _notifState = PermissionButtonState.inProgress);
     final isGranted =
@@ -52,6 +71,10 @@ class _LocationPermissionOnboardingScreenState
       _notifState =
           isGranted ? PermissionButtonState.granted : PermissionButtonState.denied;
     });
+    final cubitState = context.read<OnBoardingCubit>().state;
+    if (_isLocationAttended(cubitState) && _isNotifAttended()) {
+      _navigateToRegisterFlow(context, cubitState);
+    }
   }
 
   Future<void> _handleNotifDenied() async {
@@ -59,12 +82,15 @@ class _LocationPermissionOnboardingScreenState
     if (!mounted) return;
     final isGranted =
         await getIt.get<NotificationPermissionService>().isPermissionGranted();
-    if (mounted) {
-      setState(() {
-        _notifState = isGranted
-            ? PermissionButtonState.granted
-            : PermissionButtonState.denied;
-      });
+    if (!mounted) return;
+    setState(() {
+      _notifState = isGranted
+          ? PermissionButtonState.granted
+          : PermissionButtonState.denied;
+    });
+    final cubitState = context.read<OnBoardingCubit>().state;
+    if (_isLocationAttended(cubitState) && _isNotifAttended()) {
+      _navigateToRegisterFlow(context, cubitState);
     }
   }
 
@@ -115,15 +141,8 @@ class _LocationPermissionOnboardingScreenState
           GlintAnalyticService.onBoardLocationPermissionEvent(false);
         }
 
-        if (state.onBoardingStatus == OnBoardingCompletedTill.COMPLETED &&
-            state.isLocationLoading == false &&
-            state.locationPermissionDenied == false) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text("Get Ready for even better experience")),
-          );
-          GlintAnalyticService.onBoardLocationPermissionEvent(true);
-          context.go("/${GlintMainRoutes.register.name}", extra: false);
+        if (_isLocationAttended(state) && _isNotifAttended()) {
+          _navigateToRegisterFlow(context, state);
         }
       },
       builder: (context, state) {

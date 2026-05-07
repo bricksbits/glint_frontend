@@ -2,6 +2,7 @@ import 'package:glint_frontend/domain/business_logic/models/common/user_ticket_h
 
 class EventTicketHistoryDomainModel {
   final String eventId;
+  final String matchId;
   final String eventName;
   final String eventCoverImageUrl;
   final String eventdate;
@@ -16,6 +17,7 @@ class EventTicketHistoryDomainModel {
 
   EventTicketHistoryDomainModel(
       {required this.eventId,
+      required this.matchId,
       required this.eventName,
       required this.eventCoverImageUrl,
       required this.eventdate,

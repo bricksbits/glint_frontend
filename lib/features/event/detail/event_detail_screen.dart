@@ -119,7 +119,7 @@ class EventDetailScreen extends StatelessWidget {
 
           // Location map — shown when valid coordinates are available
           if (details != null &&
-              (details.googleMapUrl != null))...[
+              (details.longitude != 0.0 || details.longitude != 0.0))...[
             const Gap(20.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -265,6 +265,8 @@ class _EventTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
       style: AppTheme.headingTwo.copyWith(
         fontSize: 22.0,
         fontWeight: FontWeight.w800,
@@ -497,7 +499,12 @@ class _AdminInfoRow extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(value, style: AppTheme.simpleText),
+            child: Text(
+              value,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTheme.simpleText,
+            ),
           ),
         ],
       ),

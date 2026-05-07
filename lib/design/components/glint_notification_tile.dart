@@ -18,6 +18,7 @@ class GlintNotificationTile extends StatelessWidget {
     this.iconState,
     this.imageUrl,
     required this.date,
+    this.isRead = true,
   });
 
   final String title;
@@ -25,6 +26,7 @@ class GlintNotificationTile extends StatelessWidget {
   final NotificationTileIconState? iconState;
   final String? imageUrl;
   final DateTime date;
+  final bool isRead;
 
   @override
   Widget build(BuildContext context) {

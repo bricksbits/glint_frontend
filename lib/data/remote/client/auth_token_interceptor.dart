@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
-import 'package:glint_frontend/data/remote/client/glint_api_constants.dart';
 import 'package:glint_frontend/data/remote/model/response/auth/refresh_auth_token_response.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
+import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:glint_frontend/utils/app_config.dart';
 import 'package:go_router/go_router.dart';
@@ -86,6 +84,13 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
               SharedPreferenceKeys.refreshTokenKey,
               successResponse.data!.refreshToken!,
             );
+            final newStreamToken = successResponse.data?.streamAuthToken;
+            if (newStreamToken != null && newStreamToken.isNotEmpty) {
+              await sharedPreferenceHelper.saveString(
+                SharedPreferenceKeys.streamTokenKey,
+                newStreamToken,
+              );
+            }
           }
           final newOptions = err.requestOptions;
           newOptions.headers['Auth'] = successResponse.data!.accessToken;
@@ -108,7 +113,13 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
   //Todo: Clear the Database as well.
   void _handleLogOutAndClearCache() async {
     await sharedPreferenceHelper.clearEncryptedPrefs();
-    GoRouter.of(rootNavigatorKey.currentContext!)
-        .goNamed(GlintMainRoutes.splash.name);
+    final ctx = rootNavigatorKey.currentContext;
+    if (ctx == null || !ctx.mounted) return;
+    showCustomSnackbar(
+      ctx,
+      message: "Your Security is our top priority",
+      isError: true,
+    );
+    GoRouter.of(ctx).goNamed(GlintMainRoutes.starter.name);
   }
 }

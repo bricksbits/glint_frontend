@@ -17,5 +17,6 @@ class ChatScreenState with _$ChatScreenState {
 
     // For Chat
     @Default(null) User? currentUser,
+    @Default(false) bool requiresReAuthentication,
   }) = _Initial;
 }

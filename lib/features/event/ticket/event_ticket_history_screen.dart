@@ -4,6 +4,9 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_ticket_history_domain_model.dart';
 import 'package:glint_frontend/features/event/ticket/bloc/ticket_history_cubit.dart';
+import 'package:glint_frontend/navigation/argument_models.dart';
+import 'package:glint_frontend/navigation/glint_all_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class EventTicketHistoryScreen extends StatefulWidget {
   const EventTicketHistoryScreen({super.key});
@@ -119,7 +122,17 @@ class _TicketHistoryCard extends StatelessWidget {
       ticket.matchedUser.imageUrl,
     ].where((url) => url.isNotEmpty).toList();
 
-    return Stack(
+    return GestureDetector(
+      onTap: () => context.pushNamed(
+        GlintMainRoutes.confirmTicket.name,
+        extra: ConfirmTicketNavArguments(
+          eventId: ticket.eventId,
+          matchId: ticket.matchId,
+          matchedUser: ticket.matchedUser,
+          totalAmount: ticket.eventCurrentPrice,
+        ),
+      ),
+      child: Stack(
       children: [
         Container(
           width: double.infinity,
@@ -146,12 +159,16 @@ class _TicketHistoryCard extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      ticket.eventName,
-                      style: AppTheme.headingFour.copyWith(
-                        fontStyle: FontStyle.normal,
-                        color: AppColours.black,
-                        fontWeight: FontWeight.w400,
+                    Flexible(
+                      child: Text(
+                        ticket.eventName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTheme.headingFour.copyWith(
+                          fontStyle: FontStyle.normal,
+                          color: AppColours.black,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                     if (!eventHasPassed) ...[
@@ -223,11 +240,15 @@ class _TicketHistoryCard extends StatelessWidget {
                       ),
                     ),
                     const Gap(12.0),
-                    Text(
-                      'You & ${ticket.matchedUser.username}',
-                      style: AppTheme.smallBodyText.copyWith(
-                        color: AppColours.black,
-                        fontSize: 12.5,
+                    Flexible(
+                      child: Text(
+                        'You & ${ticket.matchedUser.username}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTheme.smallBodyText.copyWith(
+                          color: AppColours.black,
+                          fontSize: 12.5,
+                        ),
                       ),
                     ),
                   ],
@@ -269,6 +290,7 @@ class _TicketHistoryCard extends StatelessWidget {
           ),
         ),
       ],
+      ),
     );
   }
 }

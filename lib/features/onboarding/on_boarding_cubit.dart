@@ -381,6 +381,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
           null,
           null,
           null,
+          null,
         );
         emitNewState(
           state.copyWith(

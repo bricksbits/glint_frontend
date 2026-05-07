@@ -1,6 +1,7 @@
 import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
+import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/repo/notification/notification_repo.dart';
 import 'package:glint_frontend/notifications/models/notification_history_response.dart';
@@ -27,8 +28,17 @@ class NotificationRepoImpl extends NotificationRepo {
     switch (response) {
       case Success():
         try {
-          return Success(NotificationHistoryResponse.fromJson(
-              response.data as Map<String, dynamic>));
+          final notificationResponse = UniversalSuccessResponseBody.fromJson(
+            response.data,
+            (filteredJson) =>
+                NotificationHistoryResponse.fromJson(filteredJson),
+          );
+          if (notificationResponse.success == true &&
+              notificationResponse.data != null) {
+            return Success(notificationResponse.data!);
+          } else {
+            return Failure(Exception('Failed to parse notifications:'));
+          }
         } catch (e) {
           return Failure(Exception('Failed to parse notifications: $e'));
         }

@@ -46,6 +46,35 @@ class ChatService {
     );
   }
 
+  /// Connects using a token-provider callback so Stream can automatically
+  /// request a fresh JWT whenever the current one expires — no manual
+  /// reconnect loop needed on the app side.
+  ///
+  /// [tokenProvider] matches Stream's internal `TokenProvider` typedef:
+  /// `Future<String> Function(String userId)`.
+  Future<void> connectUserWithProvider({
+    required String userId,
+    required String userName,
+    required String profileImageUrl,
+    required Future<String> Function(String userId) tokenProvider,
+  }) async {
+    if (isConnected && client.state.currentUser?.id == userId) {
+      return;
+    }
+
+    client.chatPersistenceClient = persistenceClient;
+    await persistenceClient.connect(userId);
+
+    await client.connectUserWithProvider(
+      User(
+        id: userId,
+        name: userName,
+        image: profileImageUrl,
+      ),
+      tokenProvider,
+    );
+  }
+
   /// Registers the device for push notifications via Stream + FCM.
   /// Pass [cachedToken] (from SharedPreferences) for an immediate registration
   /// before Firebase returns a fresh token; both paths are tried.
