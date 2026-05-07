@@ -25,8 +25,7 @@ mixin _$ChatScreenState {
       throw _privateConstructorUsedError; // For Stories
   List<ViewStoryModel>? get stories => throw _privateConstructorUsedError;
   int? get selectedIndex => throw _privateConstructorUsedError; // For Chat
-  User? get currentUser =>
-      throw _privateConstructorUsedError; // true when the Stream JWT has expired — UI should force re-login
+  User? get currentUser => throw _privateConstructorUsedError;
   bool get requiresReAuthentication => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -327,7 +326,6 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final User? currentUser;
-// true when the Stream JWT has expired — UI should force re-login
   @override
   @JsonKey()
   final bool requiresReAuthentication;
@@ -523,8 +521,7 @@ abstract class _Initial implements ChatScreenState {
   @override
   int? get selectedIndex; // For Chat
   @override
-  User?
-      get currentUser; // true when the Stream JWT has expired — UI should force re-login
+  User? get currentUser;
   @override
   bool get requiresReAuthentication;
 

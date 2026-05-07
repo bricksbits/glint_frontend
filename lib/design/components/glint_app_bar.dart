@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
-import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
@@ -57,10 +56,6 @@ class GlintAppBar extends StatelessWidget implements PreferredSizeWidget {
         return [
           GestureDetector(
             onTap: () async {
-              showCustomSnackbar(
-                context,
-                message: "No ticket history available",
-              );
               context.pushNamed(GlintEventRoutes.tickets.name);
               GlintAnalyticService.onEventsTicketHistoryClickedEvent();
             },

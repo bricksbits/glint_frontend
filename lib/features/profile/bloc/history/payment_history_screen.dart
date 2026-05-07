@@ -26,7 +26,18 @@ class PaymentHistoryScreen extends StatelessWidget {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : CustomScrollView(
+                : state.error.isNotEmpty
+                    ? const Center(
+                        child: Text(
+                          "Due to Server Failure, please try again later.",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    : CustomScrollView(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     slivers: [

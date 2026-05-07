@@ -1,136 +1,114 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/features/notifications/notification_cubit.dart';
+import 'package:glint_frontend/features/notifications/notification_item.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColours.white,
-      body: CustomScrollView(
-        slivers: [
-          // app bar
-          const SliverGlintCustomAppBar(
-            title: 'Notifications',
-            subtitle: 'Never miss a moment that matters.',
-          ),
-
-          // banner
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20.0,
-                vertical: 24.0,
-              ),
-              child: _buildNotificationScreenBanner(),
+    return BlocProvider(
+      create: (_) => NotificationCubit(),
+      child: BlocBuilder<NotificationCubit, NotificationState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColours.white,
+            body: CustomScrollView(
+              slivers: [
+                const SliverGlintCustomAppBar(
+                  title: 'Notifications',
+                  subtitle: 'Never miss a moment that matters.',
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 24.0,
+                    ),
+                    child: _buildBanner(),
+                  ),
+                ),
+                if (state.isLoading)
+                  const SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else if (state.error.isNotEmpty)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: _buildErrorState(context),
+                  )
+                else if (state.notificationGroups.isEmpty)
+                  const SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: GlintEmptyState(
+                      svgPath: 'lib/assets/icons/empty_state_bell_icon.svg',
+                      title: 'No updates yet',
+                      subtitle:
+                          'Check out the latest events happening near you!',
+                    ),
+                  )
+                else
+                  ...state.notificationGroups.map(_buildGroupSliver),
+                const SliverGap(24.0),
+              ],
             ),
-          ),
-
-          // empty state (if no notifications)
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: _buildNotificationEmptyState(),
-          ),
-
-          //notifications
-          // SliverList(
-          //   delegate: SliverChildListDelegate(
-          //     [
-          //       _buildLabelWiseNotifications(
-          //         label: 'Today',
-          //         notifications: [
-          //           GlintNotificationTile(
-          //             title: 'New Matches Await!',
-          //             subtitle: 'Check out users in your town.',
-          //             iconState: NotificationTileIconState.match,
-          //             date: DateTime.now(),
-          //           ),
-          //           GlintNotificationTile(
-          //             title: 'Your Profile Stands Out!',
-          //             subtitle: 'You’ve received 20+ views today.',
-          //             iconState: NotificationTileIconState.stat,
-          //             date: DateTime.now(),
-          //           ),
-          //           GlintNotificationTile(
-          //             title: 'Got a match with Swati',
-          //             subtitle: 'Message to know more about her',
-          //             imageUrl:
-          //                 'https://avatars.githubusercontent.com/u/70279771?v=4',
-          //             date: DateTime.now(),
-          //           ),
-          //         ],
-          //       ),
-          //       const Gap(20.0),
-          //       _buildLabelWiseNotifications(
-          //         label: 'Yesterday',
-          //         notifications: [
-          //           GlintNotificationTile(
-          //             title: 'Event Near You!',
-          //             subtitle: 'Meet like-minded people IRL.',
-          //             iconState: NotificationTileIconState.event,
-          //             date: DateTime.now(),
-          //           ),
-          //           GlintNotificationTile(
-          //             title: 'New Matches Await!',
-          //             subtitle: 'Check out users in your town.',
-          //             iconState: NotificationTileIconState.match,
-          //             date: DateTime.now(),
-          //           ),
-          //           GlintNotificationTile(
-          //             title: 'Your Profile Stands Out!',
-          //             subtitle: 'You’ve received 20+ views today.',
-          //             iconState: NotificationTileIconState.stat,
-          //             date: DateTime.now(),
-          //           ),
-          //         ],
-          //       ),
-          //       const Gap(20.0),
-          //       _buildLabelWiseNotifications(
-          //         label: 'This Week',
-          //         notifications: [
-          //           GlintNotificationTile(
-          //             title: 'Got a match with Swati',
-          //             subtitle: 'Message to know more about her',
-          //             imageUrl:
-          //                 'https://avatars.githubusercontent.com/u/70279771?v=4',
-          //             date: DateTime.now(),
-          //           ),
-          //           GlintNotificationTile(
-          //             title: 'New Matches Await!',
-          //             subtitle: 'Check out users in your town.',
-          //             iconState: NotificationTileIconState.match,
-          //             date: DateTime.now(),
-          //           ),
-          //           GlintNotificationTile(
-          //             title: 'Your Profile Stands Out!',
-          //             subtitle: 'You’ve received 20+ views today.',
-          //             iconState: NotificationTileIconState.stat,
-          //             date: DateTime.now(),
-          //           ),
-          //         ],
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          const SliverGap(16.0),
-          // bottom padding basically
-        ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildNotificationScreenBanner() {
+  Widget _buildGroupSliver(NotificationGroup group) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(group.label, style: AppTheme.simpleBodyText),
+            const Gap(12.0),
+            ...group.items.map(
+              (item) => GlintNotificationTile(
+                title: item.title,
+                subtitle: item.body,
+                iconState: _iconState(item.type),
+                date: item.createdAt,
+                isRead: item.isRead,
+              ),
+            ),
+            const Gap(20.0),
+          ],
+        ),
+      ),
+    );
+  }
+
+  NotificationTileIconState? _iconState(NotificationType type) {
+    switch (type) {
+      case NotificationType.match:
+        return NotificationTileIconState.match;
+      case NotificationType.event:
+        return NotificationTileIconState.event;
+      case NotificationType.activity:
+      case NotificationType.reminder:
+        return NotificationTileIconState.stat;
+      case NotificationType.unknown:
+        return null;
+    }
+  }
+
+  Widget _buildBanner() {
     return Stack(
       children: [
         SizedBox(
           width: double.infinity,
           child: ClipRRect(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(20.0),
-            ),
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             child: SvgPicture.asset(
               'lib/assets/images/notification_container_illustration.svg',
               fit: BoxFit.cover,
@@ -138,10 +116,8 @@ class NotificationScreen extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 22.0,
-            vertical: 24.0,
-          ),
+          padding:
+              const EdgeInsets.symmetric(horizontal: 22.0, vertical: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -150,7 +126,6 @@ class NotificationScreen extends StatelessWidget {
                 style: AppTheme.headingFour.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
-                  fontStyle: FontStyle.normal,
                 ),
               ),
               const Gap(8.0),
@@ -169,34 +144,24 @@ class NotificationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLabelWiseNotifications({
-    required String label,
-    required List<GlintNotificationTile> notifications,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20.0,
-      ),
+  Widget _buildErrorState(BuildContext context) {
+    return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            label,
-            style: AppTheme.simpleBodyText,
+          const Text(
+            'Due to Server Failure, please try again later.',
+            style: TextStyle(fontSize: 14, color: Colors.grey),
+            textAlign: TextAlign.center,
           ),
-          const Gap(20.0),
-          ...notifications,
+          const Gap(16.0),
+          TextButton(
+            onPressed: () =>
+                context.read<NotificationCubit>().fetchNotifications(),
+            child: const Text('Retry'),
+          ),
         ],
       ),
-    );
-  }
-
-  // empty state
-  Widget _buildNotificationEmptyState() {
-    return const GlintEmptyState(
-      svgPath: 'lib/assets/icons/empty_state_bell_icon.svg',
-      title: 'No updates yet',
-      subtitle: 'Check out the latest events happening near you!',
     );
   }
 }

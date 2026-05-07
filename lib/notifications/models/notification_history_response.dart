@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:glint_frontend/utils/date_and_time_extensions.dart';
+
 class NotificationHistoryItem {
   final int id;
   final String type;
@@ -20,13 +24,26 @@ class NotificationHistoryItem {
   factory NotificationHistoryItem.fromJson(Map<String, dynamic> json) {
     return NotificationHistoryItem(
       id: json['id'] as int,
-      type: json['type'] as String? ?? '',
+      type: json['notification_type'] as String? ?? '',
       title: json['title'] as String? ?? '',
       body: json['body'] as String? ?? '',
-      data: json['data'] as Map<String, dynamic>? ?? {},
+      data: _decodeBase64Data(json['data']),
       isRead: json['is_read'] as bool? ?? false,
-      createdAt: DateTime.parse(json['created_at'] as String),
+      createdAt: dateFromBackendResponse(json['created_at'] as String?) ?? DateTime.now(),
     );
+  }
+
+  static Map<String, dynamic> _decodeBase64Data(dynamic raw) {
+    if (raw == null) return {};
+    if (raw is Map<String, dynamic>) return raw;
+    if (raw is String && raw.isNotEmpty) {
+      try {
+        final decoded = utf8.decode(base64Decode(raw));
+        final parsed = jsonDecode(decoded);
+        if (parsed is Map<String, dynamic>) return parsed;
+      } catch (_) {}
+    }
+    return {};
   }
 }
 
