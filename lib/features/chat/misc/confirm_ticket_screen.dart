@@ -26,25 +26,34 @@ class _ConfirmTicketScreenState extends State<ConfirmTicketScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<ConfirmTicketCubit, ConfirmTicketState>(
       builder: (context, state) {
+        final appBar = AppBar(
+          automaticallyImplyLeading: true,
+          backgroundColor: AppColours.white,
+          scrolledUnderElevation: 0,
+        );
+
         if (state.isLoading) {
-          return const Scaffold(
+          return Scaffold(
             backgroundColor: AppColours.white,
-            body: Center(child: CircularProgressIndicator()),
+            appBar: appBar,
+            body: const Center(child: CircularProgressIndicator()),
           );
         }
 
         if (state.error != null && state.eventDetails == null) {
           return Scaffold(
             backgroundColor: AppColours.white,
+            appBar: appBar,
             body: Center(child: Text(state.error!)),
           );
         }
 
         final eventDetails = state.eventDetails;
         if (eventDetails == null) {
-          return const Scaffold(
+          return Scaffold(
             backgroundColor: AppColours.white,
-            body: Center(child: CircularProgressIndicator()),
+            appBar: appBar,
+            body: const Center(child: CircularProgressIndicator()),
           );
         }
 
@@ -60,6 +69,7 @@ class _ConfirmTicketScreenState extends State<ConfirmTicketScreen> {
 
         return Scaffold(
           backgroundColor: AppColours.white,
+          appBar: appBar,
           body: SingleChildScrollView(
             child: EventTicketView(
               eventName: eventDetails.eventName,

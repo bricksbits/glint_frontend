@@ -89,11 +89,13 @@ class TicketDetailsComponent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GlintIconLabel(
-                  iconPath: 'lib/assets/icons/calendar_icon.svg',
-                  label: '$eventDate • $eventTime',
-                  style: AppTheme.simpleText.copyWith(color: textColor),
-                  svgColor: isDark ? AppColours.warning400 : null,
+                Flexible(
+                  child: GlintIconLabel(
+                    iconPath: 'lib/assets/icons/calendar_icon.svg',
+                    label: '$eventDate • $eventTime',
+                    style: AppTheme.simpleText.copyWith(color: textColor),
+                    svgColor: isDark ? AppColours.warning400 : null,
+                  ),
                 ),
                 if (!isDark)
                   Row(
@@ -117,11 +119,13 @@ class TicketDetailsComponent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GlintIconLabel(
-                  iconPath: 'lib/assets/icons/location_icon.svg',
-                  label: eventLocation,
-                  style: AppTheme.simpleText.copyWith(color: textColor),
-                  svgColor: isDark ? AppColours.warning400 : null,
+                Flexible(
+                  child: GlintIconLabel(
+                    iconPath: 'lib/assets/icons/location_icon.svg',
+                    label: eventLocation,
+                    style: AppTheme.simpleText.copyWith(color: textColor),
+                    svgColor: isDark ? AppColours.warning400 : null,
+                  ),
                 ),
                 if (!isDark)
                   RichText(
