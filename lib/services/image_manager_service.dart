@@ -312,6 +312,25 @@ class ImageService {
     return int.tryParse(match?.group(1) ?? '0') ?? 0;
   }
 
+  Future<ImageManagerData?> pickAndCompressForSlot(int slotIndex) async {
+    final directory = await _getProfileImagesDirectory();
+    final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage == null) return null;
+
+    final compressedBytes = await FlutterImageCompress.compressWithFile(
+      pickedImage.path,
+      quality: 75,
+    );
+    if (compressedBytes == null) return null;
+
+    final filename = 'picture_$slotIndex.jpg';
+    final filePath = p.join(directory.path, filename);
+    final file = File(filePath);
+    await file.writeAsBytes(compressedBytes);
+
+    return ImageManagerData(name: filename, file: file);
+  }
+
   Future<void> clearAllAppData() async {
     try {
       final dir = await getApplicationDocumentsDirectory();

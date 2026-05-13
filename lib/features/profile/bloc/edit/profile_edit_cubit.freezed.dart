@@ -20,22 +20,18 @@ mixin _$ProfileEditState {
       throw _privateConstructorUsedError;
   String get error => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
-  bool get isNewImagesUploaded => throw _privateConstructorUsedError;
   bool get isProfileDataChanged => throw _privateConstructorUsedError;
-  List<File?> get newlyUploadedImages => throw _privateConstructorUsedError;
+  List<ImageSlot> get imageSlots => throw _privateConstructorUsedError;
   bool get refetchProfileData => throw _privateConstructorUsedError;
-  int get currentProfileImageSize => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
             PeopleCardModel? previewProfileModel,
             String error,
             bool isLoading,
-            bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages,
-            bool refetchProfileData,
-            int currentProfileImageSize)
+            List<ImageSlot> imageSlots,
+            bool refetchProfileData)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -45,11 +41,9 @@ mixin _$ProfileEditState {
             PeopleCardModel? previewProfileModel,
             String error,
             bool isLoading,
-            bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages,
-            bool refetchProfileData,
-            int currentProfileImageSize)?
+            List<ImageSlot> imageSlots,
+            bool refetchProfileData)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -59,11 +53,9 @@ mixin _$ProfileEditState {
             PeopleCardModel? previewProfileModel,
             String error,
             bool isLoading,
-            bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages,
-            bool refetchProfileData,
-            int currentProfileImageSize)?
+            List<ImageSlot> imageSlots,
+            bool refetchProfileData)?
         initial,
     required TResult orElse(),
   }) =>
@@ -102,11 +94,9 @@ abstract class $ProfileEditStateCopyWith<$Res> {
       {PeopleCardModel? previewProfileModel,
       String error,
       bool isLoading,
-      bool isNewImagesUploaded,
       bool isProfileDataChanged,
-      List<File?> newlyUploadedImages,
-      bool refetchProfileData,
-      int currentProfileImageSize});
+      List<ImageSlot> imageSlots,
+      bool refetchProfileData});
 }
 
 /// @nodoc
@@ -127,11 +117,9 @@ class _$ProfileEditStateCopyWithImpl<$Res, $Val extends ProfileEditState>
     Object? previewProfileModel = freezed,
     Object? error = null,
     Object? isLoading = null,
-    Object? isNewImagesUploaded = null,
     Object? isProfileDataChanged = null,
-    Object? newlyUploadedImages = null,
+    Object? imageSlots = null,
     Object? refetchProfileData = null,
-    Object? currentProfileImageSize = null,
   }) {
     return _then(_value.copyWith(
       previewProfileModel: freezed == previewProfileModel
@@ -146,26 +134,18 @@ class _$ProfileEditStateCopyWithImpl<$Res, $Val extends ProfileEditState>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      isNewImagesUploaded: null == isNewImagesUploaded
-          ? _value.isNewImagesUploaded
-          : isNewImagesUploaded // ignore: cast_nullable_to_non_nullable
-              as bool,
       isProfileDataChanged: null == isProfileDataChanged
           ? _value.isProfileDataChanged
           : isProfileDataChanged // ignore: cast_nullable_to_non_nullable
               as bool,
-      newlyUploadedImages: null == newlyUploadedImages
-          ? _value.newlyUploadedImages
-          : newlyUploadedImages // ignore: cast_nullable_to_non_nullable
-              as List<File?>,
+      imageSlots: null == imageSlots
+          ? _value.imageSlots
+          : imageSlots // ignore: cast_nullable_to_non_nullable
+              as List<ImageSlot>,
       refetchProfileData: null == refetchProfileData
           ? _value.refetchProfileData
           : refetchProfileData // ignore: cast_nullable_to_non_nullable
               as bool,
-      currentProfileImageSize: null == currentProfileImageSize
-          ? _value.currentProfileImageSize
-          : currentProfileImageSize // ignore: cast_nullable_to_non_nullable
-              as int,
     ) as $Val);
   }
 }
@@ -182,11 +162,9 @@ abstract class _$$InitialImplCopyWith<$Res>
       {PeopleCardModel? previewProfileModel,
       String error,
       bool isLoading,
-      bool isNewImagesUploaded,
       bool isProfileDataChanged,
-      List<File?> newlyUploadedImages,
-      bool refetchProfileData,
-      int currentProfileImageSize});
+      List<ImageSlot> imageSlots,
+      bool refetchProfileData});
 }
 
 /// @nodoc
@@ -205,11 +183,9 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? previewProfileModel = freezed,
     Object? error = null,
     Object? isLoading = null,
-    Object? isNewImagesUploaded = null,
     Object? isProfileDataChanged = null,
-    Object? newlyUploadedImages = null,
+    Object? imageSlots = null,
     Object? refetchProfileData = null,
-    Object? currentProfileImageSize = null,
   }) {
     return _then(_$InitialImpl(
       previewProfileModel: freezed == previewProfileModel
@@ -224,26 +200,18 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      isNewImagesUploaded: null == isNewImagesUploaded
-          ? _value.isNewImagesUploaded
-          : isNewImagesUploaded // ignore: cast_nullable_to_non_nullable
-              as bool,
       isProfileDataChanged: null == isProfileDataChanged
           ? _value.isProfileDataChanged
           : isProfileDataChanged // ignore: cast_nullable_to_non_nullable
               as bool,
-      newlyUploadedImages: null == newlyUploadedImages
-          ? _value._newlyUploadedImages
-          : newlyUploadedImages // ignore: cast_nullable_to_non_nullable
-              as List<File?>,
+      imageSlots: null == imageSlots
+          ? _value._imageSlots
+          : imageSlots // ignore: cast_nullable_to_non_nullable
+              as List<ImageSlot>,
       refetchProfileData: null == refetchProfileData
           ? _value.refetchProfileData
           : refetchProfileData // ignore: cast_nullable_to_non_nullable
               as bool,
-      currentProfileImageSize: null == currentProfileImageSize
-          ? _value.currentProfileImageSize
-          : currentProfileImageSize // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
@@ -255,12 +223,10 @@ class _$InitialImpl implements _Initial {
       {this.previewProfileModel = null,
       this.error = "",
       this.isLoading = true,
-      this.isNewImagesUploaded = false,
       this.isProfileDataChanged = false,
-      final List<File?> newlyUploadedImages = const [],
-      this.refetchProfileData = true,
-      this.currentProfileImageSize = 0})
-      : _newlyUploadedImages = newlyUploadedImages;
+      final List<ImageSlot> imageSlots = const [],
+      this.refetchProfileData = true})
+      : _imageSlots = imageSlots;
 
   @override
   @JsonKey()
@@ -273,30 +239,23 @@ class _$InitialImpl implements _Initial {
   final bool isLoading;
   @override
   @JsonKey()
-  final bool isNewImagesUploaded;
-  @override
-  @JsonKey()
   final bool isProfileDataChanged;
-  final List<File?> _newlyUploadedImages;
+  final List<ImageSlot> _imageSlots;
   @override
   @JsonKey()
-  List<File?> get newlyUploadedImages {
-    if (_newlyUploadedImages is EqualUnmodifiableListView)
-      return _newlyUploadedImages;
+  List<ImageSlot> get imageSlots {
+    if (_imageSlots is EqualUnmodifiableListView) return _imageSlots;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_newlyUploadedImages);
+    return EqualUnmodifiableListView(_imageSlots);
   }
 
   @override
   @JsonKey()
   final bool refetchProfileData;
-  @override
-  @JsonKey()
-  final int currentProfileImageSize;
 
   @override
   String toString() {
-    return 'ProfileEditState.initial(previewProfileModel: $previewProfileModel, error: $error, isLoading: $isLoading, isNewImagesUploaded: $isNewImagesUploaded, isProfileDataChanged: $isProfileDataChanged, newlyUploadedImages: $newlyUploadedImages, refetchProfileData: $refetchProfileData, currentProfileImageSize: $currentProfileImageSize)';
+    return 'ProfileEditState.initial(previewProfileModel: $previewProfileModel, error: $error, isLoading: $isLoading, isProfileDataChanged: $isProfileDataChanged, imageSlots: $imageSlots, refetchProfileData: $refetchProfileData)';
   }
 
   @override
@@ -309,17 +268,12 @@ class _$InitialImpl implements _Initial {
             (identical(other.error, error) || other.error == error) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
-            (identical(other.isNewImagesUploaded, isNewImagesUploaded) ||
-                other.isNewImagesUploaded == isNewImagesUploaded) &&
             (identical(other.isProfileDataChanged, isProfileDataChanged) ||
                 other.isProfileDataChanged == isProfileDataChanged) &&
             const DeepCollectionEquality()
-                .equals(other._newlyUploadedImages, _newlyUploadedImages) &&
+                .equals(other._imageSlots, _imageSlots) &&
             (identical(other.refetchProfileData, refetchProfileData) ||
-                other.refetchProfileData == refetchProfileData) &&
-            (identical(
-                    other.currentProfileImageSize, currentProfileImageSize) ||
-                other.currentProfileImageSize == currentProfileImageSize));
+                other.refetchProfileData == refetchProfileData));
   }
 
   @override
@@ -328,11 +282,9 @@ class _$InitialImpl implements _Initial {
       previewProfileModel,
       error,
       isLoading,
-      isNewImagesUploaded,
       isProfileDataChanged,
-      const DeepCollectionEquality().hash(_newlyUploadedImages),
-      refetchProfileData,
-      currentProfileImageSize);
+      const DeepCollectionEquality().hash(_imageSlots),
+      refetchProfileData);
 
   /// Create a copy of ProfileEditState
   /// with the given fields replaced by the non-null parameter values.
@@ -349,22 +301,13 @@ class _$InitialImpl implements _Initial {
             PeopleCardModel? previewProfileModel,
             String error,
             bool isLoading,
-            bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages,
-            bool refetchProfileData,
-            int currentProfileImageSize)
+            List<ImageSlot> imageSlots,
+            bool refetchProfileData)
         initial,
   }) {
-    return initial(
-        previewProfileModel,
-        error,
-        isLoading,
-        isNewImagesUploaded,
-        isProfileDataChanged,
-        newlyUploadedImages,
-        refetchProfileData,
-        currentProfileImageSize);
+    return initial(previewProfileModel, error, isLoading, isProfileDataChanged,
+        imageSlots, refetchProfileData);
   }
 
   @override
@@ -374,22 +317,13 @@ class _$InitialImpl implements _Initial {
             PeopleCardModel? previewProfileModel,
             String error,
             bool isLoading,
-            bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages,
-            bool refetchProfileData,
-            int currentProfileImageSize)?
+            List<ImageSlot> imageSlots,
+            bool refetchProfileData)?
         initial,
   }) {
-    return initial?.call(
-        previewProfileModel,
-        error,
-        isLoading,
-        isNewImagesUploaded,
-        isProfileDataChanged,
-        newlyUploadedImages,
-        refetchProfileData,
-        currentProfileImageSize);
+    return initial?.call(previewProfileModel, error, isLoading,
+        isProfileDataChanged, imageSlots, refetchProfileData);
   }
 
   @override
@@ -399,24 +333,15 @@ class _$InitialImpl implements _Initial {
             PeopleCardModel? previewProfileModel,
             String error,
             bool isLoading,
-            bool isNewImagesUploaded,
             bool isProfileDataChanged,
-            List<File?> newlyUploadedImages,
-            bool refetchProfileData,
-            int currentProfileImageSize)?
+            List<ImageSlot> imageSlots,
+            bool refetchProfileData)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(
-          previewProfileModel,
-          error,
-          isLoading,
-          isNewImagesUploaded,
-          isProfileDataChanged,
-          newlyUploadedImages,
-          refetchProfileData,
-          currentProfileImageSize);
+      return initial(previewProfileModel, error, isLoading,
+          isProfileDataChanged, imageSlots, refetchProfileData);
     }
     return orElse();
   }
@@ -455,11 +380,9 @@ abstract class _Initial implements ProfileEditState {
       {final PeopleCardModel? previewProfileModel,
       final String error,
       final bool isLoading,
-      final bool isNewImagesUploaded,
       final bool isProfileDataChanged,
-      final List<File?> newlyUploadedImages,
-      final bool refetchProfileData,
-      final int currentProfileImageSize}) = _$InitialImpl;
+      final List<ImageSlot> imageSlots,
+      final bool refetchProfileData}) = _$InitialImpl;
 
   @override
   PeopleCardModel? get previewProfileModel;
@@ -468,15 +391,11 @@ abstract class _Initial implements ProfileEditState {
   @override
   bool get isLoading;
   @override
-  bool get isNewImagesUploaded;
-  @override
   bool get isProfileDataChanged;
   @override
-  List<File?> get newlyUploadedImages;
+  List<ImageSlot> get imageSlots;
   @override
   bool get refetchProfileData;
-  @override
-  int get currentProfileImageSize;
 
   /// Create a copy of ProfileEditState
   /// with the given fields replaced by the non-null parameter values.

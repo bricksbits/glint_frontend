@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:floor/floor.dart';
 import 'package:glint_frontend/data/local/db/database/string_type_converter.dart';
 import 'package:glint_frontend/data/remote/model/request/profile/update_profile_request_body.dart';
@@ -125,7 +127,7 @@ extension ProfileToPeopleMapper on ProfileEntity {
         lookingFor,
         interests,
         age,
-        null,
+        "9876543210",
     );
   }
 

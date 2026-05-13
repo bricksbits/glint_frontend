@@ -61,4 +61,9 @@ abstract class AdminDashboardRepo {
   Future<UsersType> getCurrentUserType();
 
   Future<PeopleCardModel?> getCurrentUserDetails();
+
+  /// ---------------------- ADMIN PROFILE  ----------------------------- *
+  Future<Result<void>> getAndCacheAdminProfile();
+
+  Future<Result<void>> updateAdminProfile(String name, String organization);
 }

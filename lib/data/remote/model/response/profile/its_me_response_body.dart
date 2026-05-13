@@ -66,7 +66,8 @@ class Data {
       this.aiMessagesRemaining, 
       this.rewindsRemaining, 
       this.superLikesLeft, 
-      this.directDmRemaining,});
+      this.directDmRemaining,
+  });
 
   Data.fromJson(dynamic json) {
     userRole = json['user_role'];

@@ -20,6 +20,9 @@ mixin _$AdminDashboardEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() fetchAdminProfile,
+    required TResult Function(String name, String organization)
+        saveAdminProfile,
+    required TResult Function() resetSaveStatus,
     required TResult Function(AdminDashboardState newState) emitNewState,
   }) =>
       throw _privateConstructorUsedError;
@@ -27,6 +30,8 @@ mixin _$AdminDashboardEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function()? fetchAdminProfile,
+    TResult? Function(String name, String organization)? saveAdminProfile,
+    TResult? Function()? resetSaveStatus,
     TResult? Function(AdminDashboardState newState)? emitNewState,
   }) =>
       throw _privateConstructorUsedError;
@@ -34,6 +39,8 @@ mixin _$AdminDashboardEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? fetchAdminProfile,
+    TResult Function(String name, String organization)? saveAdminProfile,
+    TResult Function()? resetSaveStatus,
     TResult Function(AdminDashboardState newState)? emitNewState,
     required TResult orElse(),
   }) =>
@@ -42,6 +49,8 @@ mixin _$AdminDashboardEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
     required TResult Function(_FetchAdminProfile value) fetchAdminProfile,
+    required TResult Function(_SaveAdminProfile value) saveAdminProfile,
+    required TResult Function(_ResetSaveStatus value) resetSaveStatus,
     required TResult Function(_EmitNewState value) emitNewState,
   }) =>
       throw _privateConstructorUsedError;
@@ -49,6 +58,8 @@ mixin _$AdminDashboardEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
     TResult? Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult? Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult? Function(_ResetSaveStatus value)? resetSaveStatus,
     TResult? Function(_EmitNewState value)? emitNewState,
   }) =>
       throw _privateConstructorUsedError;
@@ -56,6 +67,8 @@ mixin _$AdminDashboardEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
     TResult Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult Function(_ResetSaveStatus value)? resetSaveStatus,
     TResult Function(_EmitNewState value)? emitNewState,
     required TResult orElse(),
   }) =>
@@ -126,6 +139,9 @@ class _$StartedImpl implements _Started {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() fetchAdminProfile,
+    required TResult Function(String name, String organization)
+        saveAdminProfile,
+    required TResult Function() resetSaveStatus,
     required TResult Function(AdminDashboardState newState) emitNewState,
   }) {
     return started();
@@ -136,6 +152,8 @@ class _$StartedImpl implements _Started {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function()? fetchAdminProfile,
+    TResult? Function(String name, String organization)? saveAdminProfile,
+    TResult? Function()? resetSaveStatus,
     TResult? Function(AdminDashboardState newState)? emitNewState,
   }) {
     return started?.call();
@@ -146,6 +164,8 @@ class _$StartedImpl implements _Started {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? fetchAdminProfile,
+    TResult Function(String name, String organization)? saveAdminProfile,
+    TResult Function()? resetSaveStatus,
     TResult Function(AdminDashboardState newState)? emitNewState,
     required TResult orElse(),
   }) {
@@ -160,6 +180,8 @@ class _$StartedImpl implements _Started {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
     required TResult Function(_FetchAdminProfile value) fetchAdminProfile,
+    required TResult Function(_SaveAdminProfile value) saveAdminProfile,
+    required TResult Function(_ResetSaveStatus value) resetSaveStatus,
     required TResult Function(_EmitNewState value) emitNewState,
   }) {
     return started(this);
@@ -170,6 +192,8 @@ class _$StartedImpl implements _Started {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
     TResult? Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult? Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult? Function(_ResetSaveStatus value)? resetSaveStatus,
     TResult? Function(_EmitNewState value)? emitNewState,
   }) {
     return started?.call(this);
@@ -180,6 +204,8 @@ class _$StartedImpl implements _Started {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
     TResult Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult Function(_ResetSaveStatus value)? resetSaveStatus,
     TResult Function(_EmitNewState value)? emitNewState,
     required TResult orElse(),
   }) {
@@ -237,6 +263,9 @@ class _$FetchAdminProfileImpl implements _FetchAdminProfile {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() fetchAdminProfile,
+    required TResult Function(String name, String organization)
+        saveAdminProfile,
+    required TResult Function() resetSaveStatus,
     required TResult Function(AdminDashboardState newState) emitNewState,
   }) {
     return fetchAdminProfile();
@@ -247,6 +276,8 @@ class _$FetchAdminProfileImpl implements _FetchAdminProfile {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function()? fetchAdminProfile,
+    TResult? Function(String name, String organization)? saveAdminProfile,
+    TResult? Function()? resetSaveStatus,
     TResult? Function(AdminDashboardState newState)? emitNewState,
   }) {
     return fetchAdminProfile?.call();
@@ -257,6 +288,8 @@ class _$FetchAdminProfileImpl implements _FetchAdminProfile {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? fetchAdminProfile,
+    TResult Function(String name, String organization)? saveAdminProfile,
+    TResult Function()? resetSaveStatus,
     TResult Function(AdminDashboardState newState)? emitNewState,
     required TResult orElse(),
   }) {
@@ -271,6 +304,8 @@ class _$FetchAdminProfileImpl implements _FetchAdminProfile {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
     required TResult Function(_FetchAdminProfile value) fetchAdminProfile,
+    required TResult Function(_SaveAdminProfile value) saveAdminProfile,
+    required TResult Function(_ResetSaveStatus value) resetSaveStatus,
     required TResult Function(_EmitNewState value) emitNewState,
   }) {
     return fetchAdminProfile(this);
@@ -281,6 +316,8 @@ class _$FetchAdminProfileImpl implements _FetchAdminProfile {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
     TResult? Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult? Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult? Function(_ResetSaveStatus value)? resetSaveStatus,
     TResult? Function(_EmitNewState value)? emitNewState,
   }) {
     return fetchAdminProfile?.call(this);
@@ -291,6 +328,8 @@ class _$FetchAdminProfileImpl implements _FetchAdminProfile {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
     TResult Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult Function(_ResetSaveStatus value)? resetSaveStatus,
     TResult Function(_EmitNewState value)? emitNewState,
     required TResult orElse(),
   }) {
@@ -303,6 +342,303 @@ class _$FetchAdminProfileImpl implements _FetchAdminProfile {
 
 abstract class _FetchAdminProfile implements AdminDashboardEvent {
   const factory _FetchAdminProfile() = _$FetchAdminProfileImpl;
+}
+
+/// @nodoc
+abstract class _$$SaveAdminProfileImplCopyWith<$Res> {
+  factory _$$SaveAdminProfileImplCopyWith(_$SaveAdminProfileImpl value,
+          $Res Function(_$SaveAdminProfileImpl) then) =
+      __$$SaveAdminProfileImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String name, String organization});
+}
+
+/// @nodoc
+class __$$SaveAdminProfileImplCopyWithImpl<$Res>
+    extends _$AdminDashboardEventCopyWithImpl<$Res, _$SaveAdminProfileImpl>
+    implements _$$SaveAdminProfileImplCopyWith<$Res> {
+  __$$SaveAdminProfileImplCopyWithImpl(_$SaveAdminProfileImpl _value,
+      $Res Function(_$SaveAdminProfileImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? name = null,
+    Object? organization = null,
+  }) {
+    return _then(_$SaveAdminProfileImpl(
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      organization: null == organization
+          ? _value.organization
+          : organization // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SaveAdminProfileImpl implements _SaveAdminProfile {
+  const _$SaveAdminProfileImpl(
+      {required this.name, required this.organization});
+
+  @override
+  final String name;
+  @override
+  final String organization;
+
+  @override
+  String toString() {
+    return 'AdminDashboardEvent.saveAdminProfile(name: $name, organization: $organization)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SaveAdminProfileImpl &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.organization, organization) ||
+                other.organization == organization));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, name, organization);
+
+  /// Create a copy of AdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SaveAdminProfileImplCopyWith<_$SaveAdminProfileImpl> get copyWith =>
+      __$$SaveAdminProfileImplCopyWithImpl<_$SaveAdminProfileImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function() fetchAdminProfile,
+    required TResult Function(String name, String organization)
+        saveAdminProfile,
+    required TResult Function() resetSaveStatus,
+    required TResult Function(AdminDashboardState newState) emitNewState,
+  }) {
+    return saveAdminProfile(name, organization);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function()? fetchAdminProfile,
+    TResult? Function(String name, String organization)? saveAdminProfile,
+    TResult? Function()? resetSaveStatus,
+    TResult? Function(AdminDashboardState newState)? emitNewState,
+  }) {
+    return saveAdminProfile?.call(name, organization);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function()? fetchAdminProfile,
+    TResult Function(String name, String organization)? saveAdminProfile,
+    TResult Function()? resetSaveStatus,
+    TResult Function(AdminDashboardState newState)? emitNewState,
+    required TResult orElse(),
+  }) {
+    if (saveAdminProfile != null) {
+      return saveAdminProfile(name, organization);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) started,
+    required TResult Function(_FetchAdminProfile value) fetchAdminProfile,
+    required TResult Function(_SaveAdminProfile value) saveAdminProfile,
+    required TResult Function(_ResetSaveStatus value) resetSaveStatus,
+    required TResult Function(_EmitNewState value) emitNewState,
+  }) {
+    return saveAdminProfile(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? started,
+    TResult? Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult? Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult? Function(_ResetSaveStatus value)? resetSaveStatus,
+    TResult? Function(_EmitNewState value)? emitNewState,
+  }) {
+    return saveAdminProfile?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? started,
+    TResult Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult Function(_ResetSaveStatus value)? resetSaveStatus,
+    TResult Function(_EmitNewState value)? emitNewState,
+    required TResult orElse(),
+  }) {
+    if (saveAdminProfile != null) {
+      return saveAdminProfile(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SaveAdminProfile implements AdminDashboardEvent {
+  const factory _SaveAdminProfile(
+      {required final String name,
+      required final String organization}) = _$SaveAdminProfileImpl;
+
+  String get name;
+  String get organization;
+
+  /// Create a copy of AdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SaveAdminProfileImplCopyWith<_$SaveAdminProfileImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ResetSaveStatusImplCopyWith<$Res> {
+  factory _$$ResetSaveStatusImplCopyWith(_$ResetSaveStatusImpl value,
+          $Res Function(_$ResetSaveStatusImpl) then) =
+      __$$ResetSaveStatusImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$ResetSaveStatusImplCopyWithImpl<$Res>
+    extends _$AdminDashboardEventCopyWithImpl<$Res, _$ResetSaveStatusImpl>
+    implements _$$ResetSaveStatusImplCopyWith<$Res> {
+  __$$ResetSaveStatusImplCopyWithImpl(
+      _$ResetSaveStatusImpl _value, $Res Function(_$ResetSaveStatusImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AdminDashboardEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$ResetSaveStatusImpl implements _ResetSaveStatus {
+  const _$ResetSaveStatusImpl();
+
+  @override
+  String toString() {
+    return 'AdminDashboardEvent.resetSaveStatus()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$ResetSaveStatusImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function() fetchAdminProfile,
+    required TResult Function(String name, String organization)
+        saveAdminProfile,
+    required TResult Function() resetSaveStatus,
+    required TResult Function(AdminDashboardState newState) emitNewState,
+  }) {
+    return resetSaveStatus();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function()? fetchAdminProfile,
+    TResult? Function(String name, String organization)? saveAdminProfile,
+    TResult? Function()? resetSaveStatus,
+    TResult? Function(AdminDashboardState newState)? emitNewState,
+  }) {
+    return resetSaveStatus?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function()? fetchAdminProfile,
+    TResult Function(String name, String organization)? saveAdminProfile,
+    TResult Function()? resetSaveStatus,
+    TResult Function(AdminDashboardState newState)? emitNewState,
+    required TResult orElse(),
+  }) {
+    if (resetSaveStatus != null) {
+      return resetSaveStatus();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) started,
+    required TResult Function(_FetchAdminProfile value) fetchAdminProfile,
+    required TResult Function(_SaveAdminProfile value) saveAdminProfile,
+    required TResult Function(_ResetSaveStatus value) resetSaveStatus,
+    required TResult Function(_EmitNewState value) emitNewState,
+  }) {
+    return resetSaveStatus(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? started,
+    TResult? Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult? Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult? Function(_ResetSaveStatus value)? resetSaveStatus,
+    TResult? Function(_EmitNewState value)? emitNewState,
+  }) {
+    return resetSaveStatus?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? started,
+    TResult Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult Function(_ResetSaveStatus value)? resetSaveStatus,
+    TResult Function(_EmitNewState value)? emitNewState,
+    required TResult orElse(),
+  }) {
+    if (resetSaveStatus != null) {
+      return resetSaveStatus(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ResetSaveStatus implements AdminDashboardEvent {
+  const factory _ResetSaveStatus() = _$ResetSaveStatusImpl;
 }
 
 /// @nodoc
@@ -388,6 +724,9 @@ class _$EmitNewStateImpl implements _EmitNewState {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() fetchAdminProfile,
+    required TResult Function(String name, String organization)
+        saveAdminProfile,
+    required TResult Function() resetSaveStatus,
     required TResult Function(AdminDashboardState newState) emitNewState,
   }) {
     return emitNewState(newState);
@@ -398,6 +737,8 @@ class _$EmitNewStateImpl implements _EmitNewState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function()? fetchAdminProfile,
+    TResult? Function(String name, String organization)? saveAdminProfile,
+    TResult? Function()? resetSaveStatus,
     TResult? Function(AdminDashboardState newState)? emitNewState,
   }) {
     return emitNewState?.call(newState);
@@ -408,6 +749,8 @@ class _$EmitNewStateImpl implements _EmitNewState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? fetchAdminProfile,
+    TResult Function(String name, String organization)? saveAdminProfile,
+    TResult Function()? resetSaveStatus,
     TResult Function(AdminDashboardState newState)? emitNewState,
     required TResult orElse(),
   }) {
@@ -422,6 +765,8 @@ class _$EmitNewStateImpl implements _EmitNewState {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
     required TResult Function(_FetchAdminProfile value) fetchAdminProfile,
+    required TResult Function(_SaveAdminProfile value) saveAdminProfile,
+    required TResult Function(_ResetSaveStatus value) resetSaveStatus,
     required TResult Function(_EmitNewState value) emitNewState,
   }) {
     return emitNewState(this);
@@ -432,6 +777,8 @@ class _$EmitNewStateImpl implements _EmitNewState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
     TResult? Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult? Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult? Function(_ResetSaveStatus value)? resetSaveStatus,
     TResult? Function(_EmitNewState value)? emitNewState,
   }) {
     return emitNewState?.call(this);
@@ -442,6 +789,8 @@ class _$EmitNewStateImpl implements _EmitNewState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
     TResult Function(_FetchAdminProfile value)? fetchAdminProfile,
+    TResult Function(_SaveAdminProfile value)? saveAdminProfile,
+    TResult Function(_ResetSaveStatus value)? resetSaveStatus,
     TResult Function(_EmitNewState value)? emitNewState,
     required TResult orElse(),
   }) {
@@ -476,6 +825,9 @@ mixin _$AdminDashboardState {
   String get adminUserName => throw _privateConstructorUsedError;
   String get adminOrganization => throw _privateConstructorUsedError;
   PeopleCardModel? get currentUser => throw _privateConstructorUsedError;
+  bool get isSaving => throw _privateConstructorUsedError;
+  bool get isSaveSuccess => throw _privateConstructorUsedError;
+  bool get isSaveError => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -485,7 +837,10 @@ mixin _$AdminDashboardState {
             String error,
             String adminUserName,
             String adminOrganization,
-            PeopleCardModel? currentUser)
+            PeopleCardModel? currentUser,
+            bool isSaving,
+            bool isSaveSuccess,
+            bool isSaveError)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -498,7 +853,10 @@ mixin _$AdminDashboardState {
             String error,
             String adminUserName,
             String adminOrganization,
-            PeopleCardModel? currentUser)?
+            PeopleCardModel? currentUser,
+            bool isSaving,
+            bool isSaveSuccess,
+            bool isSaveError)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -511,7 +869,10 @@ mixin _$AdminDashboardState {
             String error,
             String adminUserName,
             String adminOrganization,
-            PeopleCardModel? currentUser)?
+            PeopleCardModel? currentUser,
+            bool isSaving,
+            bool isSaveSuccess,
+            bool isSaveError)?
         initial,
     required TResult orElse(),
   }) =>
@@ -553,7 +914,10 @@ abstract class $AdminDashboardStateCopyWith<$Res> {
       String error,
       String adminUserName,
       String adminOrganization,
-      PeopleCardModel? currentUser});
+      PeopleCardModel? currentUser,
+      bool isSaving,
+      bool isSaveSuccess,
+      bool isSaveError});
 }
 
 /// @nodoc
@@ -578,6 +942,9 @@ class _$AdminDashboardStateCopyWithImpl<$Res, $Val extends AdminDashboardState>
     Object? adminUserName = null,
     Object? adminOrganization = null,
     Object? currentUser = freezed,
+    Object? isSaving = null,
+    Object? isSaveSuccess = null,
+    Object? isSaveError = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -608,6 +975,18 @@ class _$AdminDashboardStateCopyWithImpl<$Res, $Val extends AdminDashboardState>
           ? _value.currentUser
           : currentUser // ignore: cast_nullable_to_non_nullable
               as PeopleCardModel?,
+      isSaving: null == isSaving
+          ? _value.isSaving
+          : isSaving // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSaveSuccess: null == isSaveSuccess
+          ? _value.isSaveSuccess
+          : isSaveSuccess // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSaveError: null == isSaveError
+          ? _value.isSaveError
+          : isSaveError // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -627,7 +1006,10 @@ abstract class _$$InitialImplCopyWith<$Res>
       String error,
       String adminUserName,
       String adminOrganization,
-      PeopleCardModel? currentUser});
+      PeopleCardModel? currentUser,
+      bool isSaving,
+      bool isSaveSuccess,
+      bool isSaveError});
 }
 
 /// @nodoc
@@ -650,6 +1032,9 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? adminUserName = null,
     Object? adminOrganization = null,
     Object? currentUser = freezed,
+    Object? isSaving = null,
+    Object? isSaveSuccess = null,
+    Object? isSaveError = null,
   }) {
     return _then(_$InitialImpl(
       isLoading: null == isLoading
@@ -680,6 +1065,18 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.currentUser
           : currentUser // ignore: cast_nullable_to_non_nullable
               as PeopleCardModel?,
+      isSaving: null == isSaving
+          ? _value.isSaving
+          : isSaving // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSaveSuccess: null == isSaveSuccess
+          ? _value.isSaveSuccess
+          : isSaveSuccess // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSaveError: null == isSaveError
+          ? _value.isSaveError
+          : isSaveError // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -694,7 +1091,10 @@ class _$InitialImpl implements _Initial {
       this.error = "",
       this.adminUserName = "Event Manager",
       this.adminOrganization = "For Organization",
-      this.currentUser = null})
+      this.currentUser = null,
+      this.isSaving = false,
+      this.isSaveSuccess = false,
+      this.isSaveError = false})
       : _recentEvents = recentEvents,
         _allPublishedEvents = allPublishedEvents;
 
@@ -732,10 +1132,19 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final PeopleCardModel? currentUser;
+  @override
+  @JsonKey()
+  final bool isSaving;
+  @override
+  @JsonKey()
+  final bool isSaveSuccess;
+  @override
+  @JsonKey()
+  final bool isSaveError;
 
   @override
   String toString() {
-    return 'AdminDashboardState.initial(isLoading: $isLoading, recentEvents: $recentEvents, allPublishedEvents: $allPublishedEvents, error: $error, adminUserName: $adminUserName, adminOrganization: $adminOrganization, currentUser: $currentUser)';
+    return 'AdminDashboardState.initial(isLoading: $isLoading, recentEvents: $recentEvents, allPublishedEvents: $allPublishedEvents, error: $error, adminUserName: $adminUserName, adminOrganization: $adminOrganization, currentUser: $currentUser, isSaving: $isSaving, isSaveSuccess: $isSaveSuccess, isSaveError: $isSaveError)';
   }
 
   @override
@@ -755,7 +1164,13 @@ class _$InitialImpl implements _Initial {
             (identical(other.adminOrganization, adminOrganization) ||
                 other.adminOrganization == adminOrganization) &&
             (identical(other.currentUser, currentUser) ||
-                other.currentUser == currentUser));
+                other.currentUser == currentUser) &&
+            (identical(other.isSaving, isSaving) ||
+                other.isSaving == isSaving) &&
+            (identical(other.isSaveSuccess, isSaveSuccess) ||
+                other.isSaveSuccess == isSaveSuccess) &&
+            (identical(other.isSaveError, isSaveError) ||
+                other.isSaveError == isSaveError));
   }
 
   @override
@@ -767,7 +1182,10 @@ class _$InitialImpl implements _Initial {
       error,
       adminUserName,
       adminOrganization,
-      currentUser);
+      currentUser,
+      isSaving,
+      isSaveSuccess,
+      isSaveError);
 
   /// Create a copy of AdminDashboardState
   /// with the given fields replaced by the non-null parameter values.
@@ -787,11 +1205,23 @@ class _$InitialImpl implements _Initial {
             String error,
             String adminUserName,
             String adminOrganization,
-            PeopleCardModel? currentUser)
+            PeopleCardModel? currentUser,
+            bool isSaving,
+            bool isSaveSuccess,
+            bool isSaveError)
         initial,
   }) {
-    return initial(isLoading, recentEvents, allPublishedEvents, error,
-        adminUserName, adminOrganization, currentUser);
+    return initial(
+        isLoading,
+        recentEvents,
+        allPublishedEvents,
+        error,
+        adminUserName,
+        adminOrganization,
+        currentUser,
+        isSaving,
+        isSaveSuccess,
+        isSaveError);
   }
 
   @override
@@ -804,11 +1234,23 @@ class _$InitialImpl implements _Initial {
             String error,
             String adminUserName,
             String adminOrganization,
-            PeopleCardModel? currentUser)?
+            PeopleCardModel? currentUser,
+            bool isSaving,
+            bool isSaveSuccess,
+            bool isSaveError)?
         initial,
   }) {
-    return initial?.call(isLoading, recentEvents, allPublishedEvents, error,
-        adminUserName, adminOrganization, currentUser);
+    return initial?.call(
+        isLoading,
+        recentEvents,
+        allPublishedEvents,
+        error,
+        adminUserName,
+        adminOrganization,
+        currentUser,
+        isSaving,
+        isSaveSuccess,
+        isSaveError);
   }
 
   @override
@@ -821,13 +1263,25 @@ class _$InitialImpl implements _Initial {
             String error,
             String adminUserName,
             String adminOrganization,
-            PeopleCardModel? currentUser)?
+            PeopleCardModel? currentUser,
+            bool isSaving,
+            bool isSaveSuccess,
+            bool isSaveError)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(isLoading, recentEvents, allPublishedEvents, error,
-          adminUserName, adminOrganization, currentUser);
+      return initial(
+          isLoading,
+          recentEvents,
+          allPublishedEvents,
+          error,
+          adminUserName,
+          adminOrganization,
+          currentUser,
+          isSaving,
+          isSaveSuccess,
+          isSaveError);
     }
     return orElse();
   }
@@ -869,7 +1323,10 @@ abstract class _Initial implements AdminDashboardState {
       final String error,
       final String adminUserName,
       final String adminOrganization,
-      final PeopleCardModel? currentUser}) = _$InitialImpl;
+      final PeopleCardModel? currentUser,
+      final bool isSaving,
+      final bool isSaveSuccess,
+      final bool isSaveError}) = _$InitialImpl;
 
   @override
   bool get isLoading;
@@ -885,6 +1342,12 @@ abstract class _Initial implements AdminDashboardState {
   String get adminOrganization;
   @override
   PeopleCardModel? get currentUser;
+  @override
+  bool get isSaving;
+  @override
+  bool get isSaveSuccess;
+  @override
+  bool get isSaveError;
 
   /// Create a copy of AdminDashboardState
   /// with the given fields replaced by the non-null parameter values.

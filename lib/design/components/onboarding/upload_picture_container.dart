@@ -9,17 +9,19 @@ class UploadPictureContainer extends StatelessWidget {
     super.key,
     this.isDP = false,
     this.imageFile,
-    this.imageBytes, // Uint8List for web images
+    this.imageBytes,
     this.onImagePick,
+    this.onFilledTap,
     this.onRemoveImage,
-    this.imageUrl, // New callback to remove image
+    this.imageUrl,
   });
 
   final bool isDP;
   final File? imageFile;
-  final Uint8List? imageBytes; // Web image data
+  final Uint8List? imageBytes;
   final VoidCallback? onImagePick;
-  final VoidCallback? onRemoveImage; // Callback for removing the image
+  final VoidCallback? onFilledTap;
+  final VoidCallback? onRemoveImage;
   final String? imageUrl;
 
   @override
@@ -39,7 +41,7 @@ class UploadPictureContainer extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         GestureDetector(
-          onTap: hasImage ? null : onImagePick,
+          onTap: hasImage ? onFilledTap : onImagePick,
           child: Container(
             height: kIsWeb
                 ? screenSize.width > 880
@@ -86,7 +88,7 @@ class UploadPictureContainer extends StatelessWidget {
           ),
         ),
         // icon button to remove image
-        if (hasImage)
+        if (hasImage && onRemoveImage != null)
           Positioned(
             top: 8,
             right: 8,
