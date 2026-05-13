@@ -77,7 +77,7 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                         context.read<OnBoardingCubit>().onPickImage();
                       },
                       onRemoveImage: () {
-                        context.read<OnBoardingCubit>().removeImageAt(index);
+                        context.read<OnBoardingCubit>().removeImageAt(containerIndex);
                       },
                     ),
                   ),
@@ -110,7 +110,7 @@ class UploadPicturesContainersState extends State<UploadPicturesContainers> {
                           onRemoveImage: () {
                             context
                                 .read<OnBoardingCubit>()
-                                .removeImageAt(index);
+                                .removeImageAt(containerIndex);
                           },
                         ),
                       ),

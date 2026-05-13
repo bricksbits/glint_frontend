@@ -74,8 +74,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     _validateEmail();
     if (state.isEmailValid &&
         state.isPassWordValid &&
-        state.isConfirmPassword &&
-        state.isPhoneNumberValid) {
+        state.isConfirmPassword) {
       emitNewState(
         state.copyWith(
           isLoading: true,
@@ -87,7 +86,6 @@ class RegisterCubit extends Cubit<RegisterState> {
         final updatedRequestWithCredentials = userRequestModel?.copyWith(
           email: state.email,
           password: state.password,
-          phoneNumber: state.contactNumber,
         );
         if (updatedRequestWithCredentials != null) {
           final isRegisteredResponse = await authenticationRepo.createAccount(
@@ -344,7 +342,6 @@ class RegisterCubit extends Cubit<RegisterState> {
           error: "",
         ),
       );
-      _validatePhoneNumber();
     }
   }
 

@@ -277,13 +277,6 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
                           ),
                           const Gap(20.0),
                           _buildTextField(
-                            controller: _contactController,
-                            type: IconTextFieldType.contact,
-                            focusNode: _contactFocusNode,
-                            hintText: 'Phone Number',
-                          ),
-                          const Gap(20.0),
-                          _buildTextField(
                             controller: _passwordController,
                             type: IconTextFieldType.password,
                             focusNode: _passwordFocusNode,
