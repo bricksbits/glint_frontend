@@ -10,5 +10,8 @@ class AdminDashboardState with _$AdminDashboardState {
     @Default("Event Manager") String adminUserName,
     @Default("For Organization") String adminOrganization,
     @Default(null) PeopleCardModel? currentUser,
+    @Default(false) bool isSaving,
+    @Default(false) bool isSaveSuccess,
+    @Default(false) bool isSaveError,
   }) = _Initial;
 }

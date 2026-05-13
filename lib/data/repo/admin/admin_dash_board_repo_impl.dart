@@ -9,12 +9,15 @@ import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/approve_or_reject_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/delete_event_content_request_body.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/pause_event_request_body.dart';
+import 'package:glint_frontend/data/remote/model/request/profile/update_profile_request_body.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/admin_mappers.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_event_stats_for_admin.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_interested_users_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_published_event_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_ticket_booked_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/upload_temp_images_response.dart';
+import 'package:glint_frontend/data/remote/model/response/profile/its_me_body_mapper.dart';
+import 'package:glint_frontend/data/remote/model/response/profile/its_me_response_body.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/application_logic/auth/is_user_logged_in_use_case.dart';
@@ -446,5 +449,78 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
         await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
     var currentUser = await profileDao.getProfileData(currentUserId);
     return currentUser?.mapToPeopleUiModel();
+  }
+
+  @override
+  Future<Result<void>> getAndCacheAdminProfile() async {
+    final userId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
+
+    if (userId.isNotEmpty) {
+      final existing = await profileDao.getProfileData(userId);
+      if (existing != null) {
+        return const Success(null);
+      }
+    }
+
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      endpoint: "user/profile/me",
+    );
+
+    switch (response) {
+      case Success():
+        final itsMeBody = ItsMeResponseBody.fromJson(response.data);
+        if (itsMeBody.success == true && itsMeBody.data != null) {
+          await profileDao.insertProfile(itsMeBody.mapToEntity());
+          final data = itsMeBody.data!;
+          await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.userNameKey,
+            data.username ?? "",
+          );
+          await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.adminUserOrganizationKey,
+            data.occupation ?? "",
+          );
+          await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.userIdKey,
+            data.userId?.toString() ?? "",
+          );
+          return const Success(null);
+        } else {
+          return Failure(Exception(itsMeBody.message));
+        }
+      case Failure():
+        return Failure(response.error);
+    }
+  }
+
+  @override
+  Future<Result<void>> updateAdminProfile(
+      String name, String organization) async {
+    final requestBody = UpdateProfileRequestBody(
+      username: name,
+      occupation: organization,
+    );
+
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.PUT,
+      endpoint: "user/profile",
+      requestBody: requestBody.toJson(),
+    );
+
+    switch (response) {
+      case Success():
+        final userId = await sharedPreferenceHelper
+            .getString(SharedPreferenceKeys.userIdKey);
+        if (userId.isNotEmpty) {
+          await profileDao.deleteOnBoardingProfile(userId);
+        }
+        return await getAndCacheAdminProfile();
+      case Failure():
+        return Failure(response.error);
+    }
   }
 }

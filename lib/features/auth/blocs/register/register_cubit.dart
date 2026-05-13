@@ -232,7 +232,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       state.name,
       state.email,
       state.password,
-      "A Event admin doesn't needed a bio",
+      state.contactNumber,
       calculateMockDob(),
       "6.0",
       "education",
