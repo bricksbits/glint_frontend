@@ -164,6 +164,13 @@ class _PeopleInterestedForEventScreenState
 
               final user = state.displayCards[index];
 
+              if (user.pictureUrlList.isEmpty ||
+                  user.pictureUrlList.first.isEmpty) {
+                debugPrint(
+                  '[EventPeople] Image URL is null for user: ${user.userId}',
+                );
+              }
+
               return ScrollableProfileView(
                 key: ObjectKey(user.userId),
                 peopleUiModel: user,
