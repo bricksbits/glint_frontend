@@ -16,18 +16,25 @@ import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  static const int kTabProfile = 0;
+  static const int kTabEvent   = 1;
+  static const int kTabPeople  = 2;
+  static const int kTabChat    = 3;
+
+  final int initialTab;
+
+  const HomeScreen({super.key, this.initialTab = kTabPeople});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  int _selectedIndex = 2;
+  late int _selectedIndex;
   static final List<Widget> _bottomNavScreens = [
     const ProfileScreen(),
     const EventBaseScreen(),
-    PeopleScreen(),
+    const PeopleScreen(),
     const ChatScreen(),
   ];
 
@@ -109,8 +116,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void initState() {
+    _selectedIndex = widget.initialTab;
     WidgetsBinding.instance.addObserver(this);
     context.read<UserInfoManagerCubit>().getCurrentMembershipData();
+    context.read<UserInfoManagerCubit>().setupFirebaseNotification();
+    context.read<UserInfoManagerCubit>().updateUserLocationLocally();
     super.initState();
   }
 

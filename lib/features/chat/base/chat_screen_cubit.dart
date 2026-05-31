@@ -10,16 +10,10 @@ import 'package:glint_frontend/services/chat_service.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart'
-    show
-        StreamChatClient,
-        User,
-        ConnectionStatus,
-        StreamChannelListController,
-        StreamChatError,
-        EventType;
+    show User, ConnectionStatus, StreamChannelListController, EventType;
 
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart'
-    show Filter, SortOption, Channel;
+    show Filter, SortOption;
 
 part 'chat_screen_state.dart';
 
@@ -32,14 +26,21 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   // Stream Managers and Controllers
   StreamSubscription<Result<List<RecentMatchesModel>>>?
       _recentMatchesSubscription;
-  late final StreamChannelListController? _channelListController;
-  late final StreamSubscription? _channelsEventsSubscription;
+  // Not `late final` — setupTheChannelListController() may be called more than
+  // once (e.g., after a reconnect), so we need to dispose and reassign.
+  StreamChannelListController? _channelListController;
+  StreamSubscription? _channelsEventsSubscription;
+
+  bool _streamTokenExpired = false;
 
   ChatScreenCubit() : super(const ChatScreenState.initial()) {
     chatFacade();
   }
 
   void chatFacade() async {
+    // Cancel any stale subscription before re-subscribing to avoid duplicate
+    // events when chatFacade is called again on pull-to-refresh.
+    _recentMatchesSubscription?.cancel();
     _getRecentMatches();
     _observeRecentMatches();
     _checkChatClientStatus();
@@ -78,21 +79,38 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   }
 
   Future<void> _connectToStreamClient() async {
-    if (!_isChatConnected()) {
-      chatRepo.connectToServer().then((onValue) {
-        switch (onValue) {
-          case Success<void>():
-            setupTheChannelListController();
-            updateState(state.copyWith(isLoading: false));
-            break;
-          case Failure<void>():
+    if (_streamTokenExpired || _isChatConnected()) return;
+
+    chatRepo.connectToServer().then((onValue) {
+      switch (onValue) {
+        case Success<void>():
+          setupTheChannelListController();
+          updateState(state.copyWith(isLoading: false));
+          break;
+        case Failure<void>():
+          if (onValue.message == kStreamTokenExpiredMessage) {
+            _streamTokenExpired = true;
+            updateState(state.copyWith(
+              isLoading: false,
+              isChatReady: false,
+              requiresReAuthentication: true,
+              error: "Your session has expired. Please log in again.",
+            ));
+          } else {
             updateState(state.copyWith(
               isLoading: false,
               error: onValue.message.toString(),
             ));
-            break;
-        }
-      });
+          }
+          break;
+      }
+    });
+  }
+
+  /// Called by the UI on app-resume to re-establish the Stream WS when needed.
+  void reconnectIfNeeded() {
+    if (!_isChatConnected()) {
+      _connectToStreamClient();
     }
   }
 
@@ -100,6 +118,12 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     if (!_isChatConnected()) {
       return;
     }
+
+    // Dispose existing controller and subscription before reassigning so we
+    // don't leak listeners on reconnect.
+    _channelsEventsSubscription?.cancel();
+    _channelListController?.dispose();
+
     _channelListController = StreamChannelListController(
       client: chatService.client,
       filter: Filter.and([
@@ -141,6 +165,8 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     emit(newState);
   }
 
+  Future<void> refreshStories() => _getStories();
+
   Future<void> _getStories() async {
     updateState(state.copyWith(isLoading: true));
     final response = await chatRepo.fetchStories();
@@ -167,7 +193,6 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   Future<void> close() {
     _channelListController?.dispose();
     _recentMatchesSubscription?.cancel();
-    chatRepo.disposeRecentChatStream();
     _channelsEventsSubscription?.cancel();
     return super.close();
   }
@@ -183,7 +208,9 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
             debugLogger("STREAM_CHAT_CONNECTION_STATUS", status.name);
             break;
           case ConnectionStatus.disconnected:
-            _connectToStreamClient();
+            if (!_streamTokenExpired) {
+              _connectToStreamClient();
+            }
             break;
         }
       },

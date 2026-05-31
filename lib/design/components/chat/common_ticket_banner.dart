@@ -1,19 +1,23 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:glint_frontend/design/exports.dart';
 
-//Todo: Change the Network Image URL
-//Todo: Add Error Builders
 class CommonTicketBanner extends StatelessWidget {
-  const CommonTicketBanner(
-      {super.key,
-      required this.bannerImagerUrl,
-      required this.onInfoClicked,
-      required this.onClosedClicked});
+  const CommonTicketBanner({
+    super.key,
+    required this.bannerImagerUrl,
+    required this.onInfoClicked,
+    required this.onClosedClicked,
+  });
 
   final String bannerImagerUrl;
   final VoidCallback onInfoClicked;
   final VoidCallback onClosedClicked;
+
+  bool get _isNetworkImage =>
+      bannerImagerUrl.startsWith('http://') ||
+      bannerImagerUrl.startsWith('https://');
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +28,25 @@ class CommonTicketBanner extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Container(
+          SizedBox(
             height: 108,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  bannerImagerUrl,
-                ),
-                // Replace with event image
-                fit: BoxFit.cover,
-              ),
-            ),
+            width: double.infinity,
+            child: _isNetworkImage
+                ? CachedNetworkImage(
+                    imageUrl: bannerImagerUrl,
+                    fit: BoxFit.cover,
+                    placeholder: (_, __) => Container(
+                      color: AppColours.borderGray,
+                    ),
+                    errorWidget: (_, __, ___) => Image.asset(
+                      'lib/assets/images/chat/chat_ticket_info_pace_holder.png',
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : Image.asset(
+                    bannerImagerUrl,
+                    fit: BoxFit.cover,
+                  ),
           ),
           Row(
             mainAxisSize: MainAxisSize.max,
@@ -42,27 +54,17 @@ class CommonTicketBanner extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                icon: SvgPicture.asset(
-                  'lib/assets/icons/info_icon.svg',
-                ),
-                onPressed: () {
-                  // todo - add event info popup
-                },
+                icon: SvgPicture.asset('lib/assets/icons/info_icon.svg'),
+                onPressed: onInfoClicked,
               ),
               IconButton(
                 icon: const CircleAvatar(
                   radius: 10.0,
                   backgroundColor: AppColours.white,
-                  child: Icon(
-                    Icons.close,
-                    size: 14.0,
-                    color: Colors.black,
-                  ),
+                  child: Icon(Icons.close, size: 14.0, color: Colors.black),
                 ),
-                onPressed: () {
-                  // todo - close ticket popup
-                },
-              )
+                onPressed: onClosedClicked,
+              ),
             ],
           ),
         ],

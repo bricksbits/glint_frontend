@@ -1,5 +1,7 @@
 part of 'people_cards_bloc.dart';
 
+enum PeopleScreenType { discover, interestedInEvent }
+
 @freezed
 class PeopleCardsState with _$PeopleCardsState {
   const factory PeopleCardsState({
@@ -15,6 +17,8 @@ class PeopleCardsState with _$PeopleCardsState {
     @Default(0) int lastActionWasUndo,
     @Default(0) int currentIndex,
     @Default(false) bool hasReachedEnd,
+    @Default(PeopleScreenType.discover) PeopleScreenType screenType,
+    int? activeEventId,
   }) = _PeopleCardState;
 
   const PeopleCardsState._();
@@ -23,8 +27,7 @@ class PeopleCardsState with _$PeopleCardsState {
   int get remainingCards => displayCards.length - currentIndex;
 
   /// Whether undo is available.
-  bool get canUndo =>
-      swipedHistoryCards.isNotEmpty && currentIndex > 0;
+  bool get canUndo => swipedHistoryCards.isNotEmpty && currentIndex > 0;
 }
 
 const int kMaxUndoDepth = 3;

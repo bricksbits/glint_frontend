@@ -53,7 +53,6 @@ class RegisterCubit extends Cubit<RegisterState> {
     );
   }
 
-  //Todo: Do the Verification here
   void enteredContactNumber(String contactNumber) {
     emit(
       state.copyWith(contactNumber: contactNumber),
@@ -231,7 +230,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       state.name,
       state.email,
       state.password,
-      "A Event admin doesn't needed a bio",
+      state.contactNumber,
       calculateMockDob(),
       "6.0",
       "education",
@@ -244,6 +243,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       "Something Casual",
       [],
       "18",
+      state.contactNumber.isNotEmpty ? state.contactNumber : null,
     );
     final response = await authenticationRepo.createAccount(
       fakeAdminRegisterModel,
@@ -328,7 +328,6 @@ class RegisterCubit extends Cubit<RegisterState> {
       error = 'Password and Confirm Password does not match';
     }
 
-    // Emit a new state ONLY if the error status has changed
     if (error != null) {
       emitNewState(
         state.copyWith(
@@ -343,6 +342,23 @@ class RegisterCubit extends Cubit<RegisterState> {
           error: "",
         ),
       );
+    }
+  }
+
+  void _validatePhoneNumber() {
+    final phone = state.contactNumber.trim();
+    String? error;
+
+    if (phone.isEmpty) {
+      error = 'Phone number cannot be empty.';
+    } else if (!RegExp(r'^[6-9]\d{9}$').hasMatch(phone)) {
+      error = 'Please enter a valid 10-digit mobile number.';
+    }
+
+    if (error != null) {
+      emitNewState(state.copyWith(isPhoneNumberValid: false, error: error));
+    } else {
+      emitNewState(state.copyWith(isPhoneNumberValid: true, error: ""));
     }
   }
 

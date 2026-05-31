@@ -3,71 +3,71 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/exports.dart';
 
 class EventInfoImageContainer extends StatelessWidget {
-  const EventInfoImageContainer({super.key, required this.eventName, required this.eventDate, required this.eventLocation, required this.eventTime});
+  const EventInfoImageContainer({
+    super.key,
+    required this.eventName,
+    required this.eventDate,
+    required this.eventLocation,
+    required this.eventTime,
+    this.eventImageUrl = "",
+    this.status = EventStatus.live,
+  });
 
   final String eventName;
   final String eventDate;
   final String eventLocation;
   final String eventTime;
+  final String eventImageUrl;
+  final EventStatus status;
 
   @override
   Widget build(BuildContext context) {
-    const eventImage =
-        'https://media.istockphoto.com/id/1806011581/photo/overjoyed-happy-young-people-dancing-jumping-and-singing-during-concert-of-favorite-group.jpg?s=612x612&w=0&k=20&c=cMFdhX403-yKneupEN-VWSfFdy6UWf1H0zqo6QBChP4%3D';
-
     final screenSize = MediaQuery.of(context).size;
+    final dateLabel =
+        eventTime.isEmpty ? eventDate : '$eventDate • $eventTime';
     return SizedBox(
       width: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          // details
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // event status
-              const EventStatusContainer(
-                status: EventStatus.live,
-              ),
-
-              const Gap(20.0),
-
-              // event name
-              Text(
-                eventName,
-                style: AppTheme.headingThree.copyWith(
-                  fontStyle: FontStyle.normal,
-                  fontWeight: FontWeight.w900,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                EventStatusContainer(status: status),
+                const Gap(20.0),
+                Text(
+                  eventName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.headingThree.copyWith(
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
-              ),
-
-              const Gap(24.0),
-
-              // event Location and Date
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GlintIconLabel(
-                    iconPath: 'lib/assets/icons/calendar_icon.svg',
-                    svgColor: AppColours.primaryBlue,
-                    label: '$eventDate • $eventTime',
-                    style: AppTheme.simpleText,
-                  ),
-                  const Gap(10.0),
-                  GlintIconLabel(
-                    iconPath: 'lib/assets/icons/location_icon.svg',
-                    svgColor: AppColours.primaryBlue,
-                    label: eventLocation,
-                    style: AppTheme.simpleText,
-                  ),
-                ],
-              ),
-            ],
+                const Gap(24.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GlintIconLabel(
+                      iconPath: 'lib/assets/icons/calendar_icon.svg',
+                      svgColor: AppColours.primaryBlue,
+                      label: dateLabel,
+                      style: AppTheme.simpleText,
+                    ),
+                    const Gap(10.0),
+                    GlintIconLabel(
+                      iconPath: 'lib/assets/icons/location_icon.svg',
+                      svgColor: AppColours.primaryBlue,
+                      label: eventLocation.isEmpty ? '--' : eventLocation,
+                      style: AppTheme.simpleText,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-
           const Gap(12.0),
-          const Spacer(),
-
           Container(
             height: 120.0,
             width: screenSize.width > 510
@@ -77,10 +77,13 @@ class EventInfoImageContainer extends StatelessWidget {
                     : 120.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.0),
-              image: const DecorationImage(
-                image: NetworkImage(eventImage),
-                fit: BoxFit.cover,
-              ),
+              color: AppColours.backgroundShade,
+              image: eventImageUrl.isNotEmpty
+                  ? DecorationImage(
+                      image: NetworkImage(eventImageUrl),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
             ),
           )
         ],

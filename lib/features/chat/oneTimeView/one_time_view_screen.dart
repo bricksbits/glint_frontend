@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/app_theme.dart';
-import 'package:glint_frontend/design/components/exports.dart';
 
 class OneTimeViewScreen extends StatelessWidget {
   final String? imageUrl;
@@ -17,8 +16,6 @@ class OneTimeViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height * 0.75;
-    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColours.white,
@@ -45,39 +42,54 @@ class OneTimeViewScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: Column(
           children: [
-            imageUrl != null
-                ? ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(16)),
-                    child: Image.network(
-                      imageUrl!,
-                      fit: BoxFit.cover,
-                      width: screenWidth,
-                      height: screenHeight,
-                      // loadingBuilder: (context, child, loadingProgress) {
-                      //   return loadingProgress!.cumulativeBytesLoaded <= 100 ? const Center(
-                      //     child: CircularProgressIndicator(),
-                      //   );
-                      // },
-                      errorBuilder: (context, error, stackTraces) {
-                        return const Center(
-                          child: Text("Check your internet once, please,"),
-                        );
-                      },
+            Expanded(
+              child: imageUrl != null
+                  ? ClipRRect(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(16)),
+                      child: InteractiveViewer(
+                        minScale: 0.8,
+                        maxScale: 4.0,
+                        child: Image.network(
+                          imageUrl!,
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            final loaded =
+                                loadingProgress.cumulativeBytesLoaded;
+                            final total =
+                                loadingProgress.expectedTotalBytes;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: total != null
+                                    ? loaded / total
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Text(
+                                  "Check your internet once, please."),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  : const Center(
+                      child: Text(
+                          "Invalid image — tell the sender to resend it."),
                     ),
-                  )
-                : const Center(
-                    child: Text(
-                        "Invalid Images, tell the sender\nto send it you again"),
-                  ),
-            messageWithMedia != null
-                ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      messageWithMedia!,
-                      style: AppTheme.simpleBodyText,
-                    ),
-                  )
-                : const SizedBox.shrink()
+            ),
+            if (messageWithMedia != null)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  messageWithMedia!,
+                  style: AppTheme.simpleBodyText,
+                ),
+              ),
           ],
         ),
       ),

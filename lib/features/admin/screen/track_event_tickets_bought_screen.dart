@@ -140,7 +140,7 @@ class TrackEventTicketsBoughtScreen extends StatelessWidget {
               const Expanded(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 28.0),
-                  child: TicketsBoughtListTiles(),
+                  child: TicketsBoughtListTiles(enablePagination: true),
                 ),
               ),
 

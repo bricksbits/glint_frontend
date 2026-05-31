@@ -4,12 +4,15 @@ import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/features/payment/payment_cubit.dart';
+import 'package:glint_frontend/notifications/service/fcm_background_handler.dart';
+import 'package:glint_frontend/notifications/service/glint_notification_service.dart';
 import 'package:glint_frontend/utils/app_config.dart';
 import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
 import 'package:logging/logging.dart';
@@ -21,8 +24,16 @@ Future<void> bootstrap(
   FutureOr<Widget> Function() builder,
 ) async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AppConfig.initialize();
-  await Firebase.initializeApp();
+
+  // AppConfig (env file) and Firebase have no dependency on each other — run in parallel.
+  await Future.wait([
+    AppConfig.initialize(),
+    Firebase.initializeApp(),
+  ]);
+
+  FirebaseMessaging.onBackgroundMessage(
+    glintFirebaseMessagingBackgroundHandler,
+  );
   await setupFirebaseCrashlytics();
   GlintAnalyticService.setAnalyticsEnable();
   await configureDependencies();
@@ -51,6 +62,11 @@ Future<void> bootstrap(
       child: await builder(),
     ),
   );
+
+  // Defer notification service init to after the first frame — not needed for the splash screen.
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    getIt.get<GlintNotificationService>().initialize();
+  });
 }
 
 Future<void> setupFirebaseCrashlytics() async {

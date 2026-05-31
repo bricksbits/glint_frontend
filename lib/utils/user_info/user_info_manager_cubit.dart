@@ -24,6 +24,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   final permissionService = getIt.get<LocationPermissionService>();
   final sharedPrefHelper = getIt.get<AsyncEncryptedSharedPreferenceHelper>();
   final chatWithRepo = getIt.get<ChatWithRepo>();
+  final fcmInstance = getIt.get<FirebaseMessaging>();
   StreamSubscription<ProfileMembershipEntity?>? profileMembershipPerks;
 
   UserInfoManagerCubit() : super(const UserInfoManagerState.initial()) {
@@ -213,15 +214,14 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
   }
 
   void setupFirebaseNotification() async {
-    final firebaseInstance = FirebaseMessaging.instance;
-    final notificationSettings = await firebaseInstance.requestPermission(
+    final notificationSettings = await fcmInstance.requestPermission(
       provisional: true,
     );
     if (notificationSettings.authorizationStatus ==
             AuthorizationStatus.authorized ||
         notificationSettings.authorizationStatus ==
             AuthorizationStatus.provisional) {
-      final fcmToken = await firebaseInstance.getToken();
+      final fcmToken = await fcmInstance.getToken();
       if (fcmToken != null) {
         debugLogger(
             "FIREBASE TOKEN FETCH", "Token fetched at startup: $fcmToken");
@@ -231,7 +231,7 @@ class UserInfoManagerCubit extends Cubit<UserInfoManagerState> {
             "Failed to fetch token at startup, it was null.");
       }
 
-      firebaseInstance.onTokenRefresh.listen((newToken) {
+      fcmInstance.onTokenRefresh.listen((newToken) {
         debugLogger("FIREBASE TOKEN REFRESH", "New Token generated: $newToken");
         updateTheFcmLocally(newToken);
       }).onError((error) {

@@ -6,6 +6,8 @@ class EmptyChatStateView extends StatelessWidget {
   final bool isEventMatch;
   final String matchUserId;
   final String matchUserName;
+  final String currentUserImageUrl;
+  final String oppositeUserImageUrl;
   final VoidCallback upgradePlanCallBack;
 
   const EmptyChatStateView({
@@ -13,6 +15,8 @@ class EmptyChatStateView extends StatelessWidget {
     required this.isEventMatch,
     required this.matchUserId,
     required this.matchUserName,
+    required this.currentUserImageUrl,
+    required this.oppositeUserImageUrl,
     required this.upgradePlanCallBack,
   });
 
@@ -101,26 +105,18 @@ class EmptyChatStateView extends StatelessWidget {
                   children: [
                     Transform.translate(
                       offset: const Offset(22, 0),
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         radius: 42.0,
                         backgroundColor: Colors.white,
-                        child: CircleAvatar(
-                          radius: 40.0,
-                          backgroundImage:
-                              NetworkImage('https://picsum.photos/200'),
-                        ),
+                        child: _ProfileAvatar(imageUrl: currentUserImageUrl),
                       ),
                     ),
                     Transform.translate(
                       offset: const Offset(0, 0),
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         radius: 42.0,
                         backgroundColor: Colors.white,
-                        child: CircleAvatar(
-                          radius: 40.0,
-                          backgroundImage:
-                              NetworkImage('https://picsum.photos/207'),
-                        ),
+                        child: _ProfileAvatar(imageUrl: oppositeUserImageUrl),
                       ),
                     ),
                   ],
@@ -128,41 +124,76 @@ class EmptyChatStateView extends StatelessWidget {
               ),
             ],
           ),
-          Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(20.0),
-            )),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 12.0,
-                    ),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(20.0),
+          GestureDetector(
+            onTap: upgradePlanCallBack,
+            child: Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(20.0),
+              )),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
                       ),
-                      color: AppColours.black,
-                    ),
-                    child: Text(
-                      'Or Upgrade Plan Now',
-                      textAlign: TextAlign.center,
-                      style: AppTheme.simpleText.copyWith(
-                        color: AppColours.white,
-                        fontWeight: FontWeight.w600,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0),
+                        ),
+                        color: AppColours.black,
+                      ),
+                      child: Text(
+                        'Or Upgrade Plan Now',
+                        textAlign: TextAlign.center,
+                        style: AppTheme.simpleText.copyWith(
+                          color: AppColours.white,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class _ProfileAvatar extends StatelessWidget {
+  const _ProfileAvatar({required this.imageUrl});
+
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageUrl.isEmpty) {
+      return const CircleAvatar(
+        radius: 40.0,
+        child: Icon(Icons.person, size: 32),
+      );
+    }
+    return ClipOval(
+      child: FadeInImage.assetNetwork(
+        placeholder:
+            'lib/assets/images/new_default_profile_place_holder.jpg',
+        image: imageUrl,
+        width: 80.0,
+        height: 80.0,
+        fit: BoxFit.cover,
+        imageErrorBuilder: (_, __, ___) => Image.asset(
+          'lib/assets/images/new_default_profile_place_holder.jpg',
+          width: 80.0,
+          height: 80.0,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

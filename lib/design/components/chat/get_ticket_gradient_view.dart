@@ -37,7 +37,7 @@ class GetTicketGradientView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "$eventName",
+                  eventName,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,

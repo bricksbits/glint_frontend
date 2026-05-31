@@ -16,6 +16,7 @@ import 'package:glint_frontend/features/chat/base/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/chat_with/chat_with_cubit.dart';
 import 'package:glint_frontend/features/chat/chat_with/chat_with_screen.dart';
 import 'package:glint_frontend/features/chat/misc/chat_with_video_call_screen.dart';
+import 'package:glint_frontend/features/chat/misc/confirm_ticket_cubit.dart';
 import 'package:glint_frontend/features/chat/misc/confirm_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/misc/get_ticket_screen.dart';
 import 'package:glint_frontend/features/chat/model/get_ticket_argument_model.dart';
@@ -24,6 +25,7 @@ import 'package:glint_frontend/features/chat/story/upload/upload_story_screen.da
 import 'package:glint_frontend/features/chat/story/view/view_story_screen.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
 import 'package:glint_frontend/features/event/exports.dart';
+import 'package:glint_frontend/features/event/ticket/bloc/ticket_history_cubit.dart';
 import 'package:glint_frontend/features/event/people/people_interested_for_event_screen.dart';
 import 'package:glint_frontend/features/filter/filter_preference_screen.dart';
 import 'package:glint_frontend/features/likes/likes_screen.dart';
@@ -34,7 +36,10 @@ import 'package:glint_frontend/features/payment/payment_cubit.dart';
 import 'package:glint_frontend/features/payment/payment_screen.dart';
 import 'package:glint_frontend/features/people/bloc/people_cards_bloc.dart';
 import 'package:glint_frontend/features/people/people_screen.dart';
+import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
+import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/features/profile/exports.dart';
+import 'package:glint_frontend/features/profile/settings_cubit.dart';
 import 'package:glint_frontend/features/service/service_screen.dart';
 import 'package:glint_frontend/features/splash/splash_screen.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
@@ -130,7 +135,9 @@ final glintMainRoutes = GoRouter(
             create: (_) => EventBaseCubit(),
           ),
         ],
-        child: const HomeScreen(),
+        child: HomeScreen(
+          initialTab: state.extra as int? ?? HomeScreen.kTabPeople,
+        ),
       ),
     ),
     GoRoute(
@@ -189,11 +196,6 @@ final glintMainRoutes = GoRouter(
           path: '/${GlintChatRoutes.videoCall.name}',
           name: GlintChatRoutes.videoCall.name,
           builder: (context, state) => const ChatWithVideoCallScreen(),
-        ),
-        GoRoute(
-          path: '/${GlintChatRoutes.ticket.name}',
-          name: GlintChatRoutes.ticket.name,
-          builder: (context, state) => const ConfirmTicketScreen(),
         ),
         GoRoute(
           path: '/${GlintChatRoutes.oneTimePhotoView.name}',
@@ -259,7 +261,7 @@ final glintMainRoutes = GoRouter(
           builder: (context, state) {
             return BlocProvider(
               lazy: true,
-              create: (context) => EventBaseCubit(),
+              create: (context) => TicketHistoryCubit(),
               child: const EventTicketHistoryScreen(),
             );
           },
@@ -291,7 +293,12 @@ final glintMainRoutes = GoRouter(
     GoRoute(
       path: '/${GlintMainRoutes.settings.name}',
       name: GlintMainRoutes.settings.name,
-      builder: (context, state) => const ProfileSettingsScreen(),
+      builder: (context, state) => BlocProvider(
+        create: (_) => SettingsCubit(
+          getIt.get<AsyncEncryptedSharedPreferenceHelper>(),
+        ),
+        child: const ProfileSettingsScreen(),
+      ),
     ),
     GoRoute(
       path: '/${GlintMainRoutes.notifications.name}',
@@ -321,6 +328,18 @@ final glintMainRoutes = GoRouter(
               paymentArgumentModel: paymentArgumentModel,
             ),
           ),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/${GlintMainRoutes.confirmTicket.name}',
+      name: GlintMainRoutes.confirmTicket.name,
+      builder: (context, state) {
+        final args = state.extra as ConfirmTicketNavArguments;
+        return BlocProvider(
+          lazy: true,
+          create: (_) => ConfirmTicketCubit(),
+          child: ConfirmTicketScreen(navArguments: args),
         );
       },
     ),

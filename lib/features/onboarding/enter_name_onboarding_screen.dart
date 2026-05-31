@@ -146,6 +146,7 @@ class _EnterNameOnboardingScreenState extends State<EnterNameOnboardingScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: GlintElevatedButton(
+                    key: const ValueKey('name_next_button'),
                     label: 'Next',
                     foregroundColor: Colors.white,
                     backgroundColor: AppColours.primaryBlue,

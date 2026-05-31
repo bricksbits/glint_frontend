@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:glint_frontend/data/local/db/dao/membership_dao.dart';
@@ -69,23 +69,18 @@ class ProfileRepoImpl extends ProfileRepo {
   }
 
   @override
-  Future<Result<void>> updateMedia() async {
-    final savedImages = await imageService.loadSavedImages();
-    final mediaFiles = savedImages.map((file) => file.file).toList();
+  Future<Result<void>> updateMedia(List<File> files) async {
     FormData formData = FormData();
-    for (int i = 0; i < mediaFiles.length; i++) {
-      final file = mediaFiles[i];
-      if (file != null) {
-        formData.files.add(
-          MapEntry(
-            "profile-picture",
-            await MultipartFile.fromFile(
-              file.path,
-              filename: file.path.split('/').last, // or keep your custom name
-            ),
+    for (final file in files) {
+      formData.files.add(
+        MapEntry(
+          "profile-picture",
+          await MultipartFile.fromFile(
+            file.path,
+            filename: file.path.split('/').last,
           ),
-        );
-      }
+        ),
+      );
     }
 
     final response = await apiCallHandler(

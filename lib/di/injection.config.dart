@@ -10,6 +10,9 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:dio/dio.dart' as _i361;
 import 'package:encrypt_shared_preferences/provider.dart' as _i930;
+import 'package:firebase_messaging/firebase_messaging.dart' as _i892;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'
+    as _i163;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' as _i981;
@@ -31,6 +34,7 @@ import '../data/repo/chat/chat_main/chat_repo_impl.dart' as _i651;
 import '../data/repo/chat/chat_with/chat_with_repo_impl.dart' as _i112;
 import '../data/repo/event/event_repo_impl.dart' as _i390;
 import '../data/repo/likes/likes_data_repo_impl.dart' as _i503;
+import '../data/repo/notification/notification_repo_impl.dart' as _i578;
 import '../data/repo/onBoard/on_boarding_repo_impl.dart' as _i359;
 import '../data/repo/payment/payment_repo_impl.dart' as _i854;
 import '../data/repo/people/people_repo_impl.dart' as _i955;
@@ -46,9 +50,13 @@ import '../domain/application_logic/admin/get_all_publish_events_use_case.dart'
     as _i38;
 import '../domain/application_logic/admin/get_all_ticket_bought_users_use_case.dart'
     as _i907;
+import '../domain/application_logic/admin/get_event_admin_stats_use_case.dart'
+    as _i605;
 import '../domain/application_logic/admin/publish_event_use_case.dart' as _i354;
 import '../domain/application_logic/admin/reject_published_event_usecase.dart'
     as _i579;
+import '../domain/application_logic/admin/toggle_pause_event_use_case.dart'
+    as _i804;
 import '../domain/application_logic/admin/update_publish_event_use_case.dart'
     as _i130;
 import '../domain/application_logic/auth/is_user_logged_in_use_case.dart'
@@ -57,6 +65,8 @@ import '../domain/application_logic/auth/reset_password_with_otp_use_case.dart'
     as _i804;
 import '../domain/application_logic/auth/send_otp_use_case.dart' as _i786;
 import '../domain/application_logic/auth/sign_in_user_use_case.dart' as _i972;
+import '../domain/application_logic/event/fetch_ticket_history_use_case.dart'
+    as _i668;
 import '../domain/application_logic/logout_usecase.dart' as _i789;
 import '../domain/business_logic/repo/admin/admin_dasboard_repo.dart' as _i1000;
 import '../domain/business_logic/repo/auth/authentication_repo.dart' as _i873;
@@ -68,17 +78,22 @@ import '../domain/business_logic/repo/chat/chat_repo.dart' as _i849;
 import '../domain/business_logic/repo/chat/chat_with_repo.dart' as _i38;
 import '../domain/business_logic/repo/event/events_repo.dart' as _i757;
 import '../domain/business_logic/repo/likes/likes_data_repo.dart' as _i427;
+import '../domain/business_logic/repo/notification/notification_repo.dart'
+    as _i513;
 import '../domain/business_logic/repo/payment/payment_repo.dart' as _i235;
 import '../domain/business_logic/repo/people/people_repo.dart' as _i678;
 import '../domain/business_logic/repo/profile/profile_repo.dart' as _i662;
 import '../domain/business_logic/repo/story/story_repo.dart' as _i762;
+import '../notifications/service/glint_notification_service.dart' as _i323;
 import '../services/chat_service.dart' as _i698;
 import '../services/image_manager_service.dart' as _i43;
 import '../services/location_permission_service.dart' as _i700;
+import '../services/notification_permission_service.dart' as _i82;
 import '../services/swipe_cache_manager.dart' as _i517;
 import '../utils/user_info/user_info_manager_cubit.dart' as _i141;
 import 'local_module.dart' as _i519;
 import 'network_module.dart' as _i567;
+import 'notification_module.dart' as _i288;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -92,11 +107,16 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final localModule = _$LocalModule();
+    final notificationModule = _$NotificationModule();
     final networkModule = _$NetworkModule();
     await gh.factoryAsync<_i930.EncryptedSharedPreferencesAsync>(
       () => localModule.sharedPref(),
       preResolve: true,
     );
+    gh.singleton<_i163.FlutterLocalNotificationsPlugin>(
+        () => notificationModule.flutterLocalNotificationsPlugin);
+    gh.singleton<_i892.FirebaseMessaging>(
+        () => notificationModule.firebaseMessaging);
     gh.singleton<_i361.Dio>(() => networkModule.getHttpClientInstance());
     gh.singleton<_i981.StreamChatClient>(() => networkModule.chatClient());
     gh.singleton<_i205.StreamChatPersistenceClient>(
@@ -125,6 +145,11 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i361.Dio>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
         ));
+    gh.lazySingleton<_i82.NotificationPermissionService>(
+        () => _i82.NotificationPermissionService(
+              gh<_i892.FirebaseMessaging>(),
+              gh<_i163.FlutterLocalNotificationsPlugin>(),
+            ));
     gh.factory<_i757.EventRepo>(() => _i390.EventRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i863.EventLikeDao>(),
@@ -159,6 +184,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i1011.MembershipDao>(),
           gh<_i719.ProfileDao>(),
         ));
+    gh.lazySingleton<_i513.NotificationRepo>(() => _i578.NotificationRepoImpl(
+          gh<_i368.MyDioClient>(),
+          gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+        ));
     gh.lazySingleton<_i762.StoryRepo>(() => _i946.StoryRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
@@ -170,6 +199,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
           gh<_i719.ProfileDao>(),
         ));
+    gh.lazySingleton<_i668.FetchTicketHistoryUseCase>(
+        () => _i668.FetchTicketHistoryUseCase(gh<_i757.EventRepo>()));
     gh.lazySingleton<_i38.ChatWithRepo>(() => _i112.ChatWithRepoImpl(
           gh<_i368.MyDioClient>(),
           gh<_i698.ChatService>(),
@@ -208,6 +239,8 @@ extension GetItInjectableX on _i174.GetIt {
           swipeActionDao: gh<_i1004.SwipeActionDao>(),
           chatRepo: gh<_i849.ChatRepo>(),
         ));
+    gh.lazySingleton<_i605.GetEventAdminStatsUseCase>(
+        () => _i605.GetEventAdminStatsUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i130.PublishEventUseCase>(
         () => _i130.PublishEventUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i38.GetAllPublishEventsUsecase>(
@@ -218,6 +251,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1027.GetAllEventsUsecase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i907.GetAllTicketBoughtUsersUseCase>(() =>
         _i907.GetAllTicketBoughtUsersUseCase(gh<_i1000.AdminDashboardRepo>()));
+    gh.lazySingleton<_i804.TogglePauseEventUseCase>(
+        () => _i804.TogglePauseEventUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i386.GetAllInterestedUsersUseCase>(() =>
         _i386.GetAllInterestedUsersUseCase(gh<_i1000.AdminDashboardRepo>()));
     gh.lazySingleton<_i662.ProfileRepo>(() => _i548.ProfileRepoImpl(
@@ -229,6 +264,13 @@ extension GetItInjectableX on _i174.GetIt {
           imageService: gh<_i43.ImageService>(),
           chatRepo: gh<_i849.ChatRepo>(),
         ));
+    gh.lazySingleton<_i323.GlintNotificationService>(
+        () => _i323.GlintNotificationService(
+              gh<_i163.FlutterLocalNotificationsPlugin>(),
+              gh<_i892.FirebaseMessaging>(),
+              gh<_i513.NotificationRepo>(),
+              gh<_i274.AsyncEncryptedSharedPreferenceHelper>(),
+            ));
     gh.lazySingleton<_i972.SignInUserUseCase>(() => _i972.SignInUserUseCase(
           gh<_i873.AuthenticationRepo>(),
           gh<_i662.ProfileRepo>(),
@@ -238,5 +280,7 @@ extension GetItInjectableX on _i174.GetIt {
 }
 
 class _$LocalModule extends _i519.LocalModule {}
+
+class _$NotificationModule extends _i288.NotificationModule {}
 
 class _$NetworkModule extends _i567.NetworkModule {}

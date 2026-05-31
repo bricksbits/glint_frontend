@@ -61,91 +61,132 @@ class _AdminEditProfileScreenState extends State<AdminEditProfileScreen> {
 
   @override
   void initState() {
-    var currentState = context.read<AdminDashboardBloc>().state.currentUser;
-    _nameController.text = currentState?.username ?? "";
-    _organizationController.text = currentState?.occupation ?? "";
-    _emailController.text = "Not Available, currently";
-    _contactController.text = "Not Available, currently";
     super.initState();
+    final currentUser = context.read<AdminDashboardBloc>().state.currentUser;
+    _nameController.text = currentUser?.username ?? "";
+    _organizationController.text = currentUser?.occupation ?? "";
+    _emailController.text = "Not Available, currently";
+    _contactController.text = currentUser?.bio ?? "No details available";
+  }
+
+  void _onSave() {
+    final name = _nameController.text.trim();
+    final organization = _organizationController.text.trim();
+    if (name.isEmpty || organization.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Name and Organization cannot be empty.")),
+      );
+      return;
+    }
+    context.read<AdminDashboardBloc>().add(
+          AdminDashboardEvent.saveAdminProfile(
+            name: name,
+            organization: organization,
+          ),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AdminDashboardBloc, AdminDashboardState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: AppColours.white,
-          appBar: AppBar(
-            titleSpacing: 32.0,
-            scrolledUnderElevation: 0,
-            title: const Text(
-              'Edit Profile',
-              style: AppTheme.heavyBodyText,
-            ),
-            centerTitle: false,
-            backgroundColor: AppColours.white,
-            bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(1.0),
-                child: Container(
-                  color: AppColours.gray60,
-                  height: 1.0,
-                )),
-          ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 28.0,
-              ),
-              child: Column(
-                children: [
-                  // top spacing
-                  const Gap(32.0),
-                  _buildTextField(
-                    controller: _nameController,
-                    type: IconTextFieldType.user,
-                    focusNode: _nameFocusNode,
-                    hintText: 'Enter Your Name',
-                  ),
-                  const Gap(20.0),
-                  _buildTextField(
-                    controller: _emailController,
-                    type: IconTextFieldType.email,
-                    focusNode: _emailFocusNode,
-                    hintText: 'Enter Email',
-                  ),
-                  const Gap(20.0),
-                  _buildTextField(
-                    controller: _organizationController,
-                    type: IconTextFieldType.organization,
-                    focusNode: _organizationFocusNode,
-                    hintText: 'Organization (ex: Hotel Vatsa)',
-                  ),
-                  const Gap(20.0),
-                  _buildTextField(
-                    controller: _contactController,
-                    type: IconTextFieldType.contact,
-                    focusNode: _contactFocusNode,
-                    hintText: 'Contact Number',
-                  ),
-                  const Gap(32.0),
-                  SizedBox(
-                    height: 52.0,
-                    width: double.infinity,
-                    child: GlintAuthActionButton(
-                      label: 'Save',
-                      onPressed: () {
-                        context.go(
-                          GlintAdminDasboardRoutes.adminHome.name,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
+    return BlocListener<AdminDashboardBloc, AdminDashboardState>(
+      listenWhen: (prev, curr) =>
+          curr.isSaveSuccess != prev.isSaveSuccess ||
+          curr.isSaveError != prev.isSaveError,
+      listener: (context, state) {
+        if (state.isSaveSuccess) {
+          context
+              .read<AdminDashboardBloc>()
+              .add(const AdminDashboardEvent.resetSaveStatus());
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Profile updated successfully.")),
+          );
+          context.go(GlintAdminDasboardRoutes.adminHome.name);
+        } else if (state.isSaveError) {
+          context
+              .read<AdminDashboardBloc>()
+              .add(const AdminDashboardEvent.resetSaveStatus());
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(
+                    state.error.isNotEmpty
+                        ? state.error
+                        : "Failed to update profile. Please try again.")),
+          );
+        }
       },
+      child: BlocBuilder<AdminDashboardBloc, AdminDashboardState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColours.white,
+            appBar: AppBar(
+              titleSpacing: 32.0,
+              scrolledUnderElevation: 0,
+              title: const Text(
+                'Edit Profile',
+                style: AppTheme.heavyBodyText,
+              ),
+              centerTitle: false,
+              backgroundColor: AppColours.white,
+              bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(1.0),
+                  child: Container(
+                    color: AppColours.gray60,
+                    height: 1.0,
+                  )),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28.0,
+                ),
+                child: Column(
+                  children: [
+                    const Gap(32.0),
+                    _buildTextField(
+                      controller: _nameController,
+                      type: IconTextFieldType.user,
+                      focusNode: _nameFocusNode,
+                      hintText: 'Enter Your Name',
+                    ),
+                    const Gap(20.0),
+                    _buildTextField(
+                      controller: _emailController,
+                      type: IconTextFieldType.email,
+                      focusNode: _emailFocusNode,
+                      hintText: 'Enter Email',
+                    ),
+                    const Gap(20.0),
+                    _buildTextField(
+                      controller: _organizationController,
+                      type: IconTextFieldType.organization,
+                      focusNode: _organizationFocusNode,
+                      hintText: 'Organization (ex: Hotel Vatsa)',
+                    ),
+                    const Gap(20.0),
+                    _buildTextField(
+                      controller: _contactController,
+                      type: IconTextFieldType.contact,
+                      focusNode: _contactFocusNode,
+                      hintText: 'Contact Number',
+                    ),
+                    const Gap(32.0),
+                    SizedBox(
+                      height: 52.0,
+                      width: double.infinity,
+                      child: state.isSaving
+                          ? const Center(child: CircularProgressIndicator())
+                          : GlintAuthActionButton(
+                              label: 'Save',
+                              onPressed: _onSave,
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

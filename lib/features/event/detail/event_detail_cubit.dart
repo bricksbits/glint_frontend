@@ -33,46 +33,42 @@ class EventDetailCubit extends Cubit<EventDetailState> {
           eventDetails: argument.eventDetails,
           unUploadFiles: unUploadedFiles,
           isLoading: false,
+          errorMessage: null,
         ),
       );
     }
   }
 
-  //For Usertype : Users.
   Future<void> fetchEventDetails(int? eventId) async {
-    emitNewState(state.copyWith(selectedEventId: eventId, isLoading: true));
-    var eventDetailResult = await eventRepo.getEventDetails(eventId);
-    switch (eventDetailResult) {
+    emitNewState(state.copyWith(
+      selectedEventId: eventId,
+      isLoading: true,
+      errorMessage: null,
+    ));
+    final result = await eventRepo.getEventDetails(eventId);
+    switch (result) {
       case Success<EventDetailsDomainModel>():
-        var detailsFetched = eventDetailResult.data;
-        var updatedState = EventDetailsDomainModel(
-          eventId: detailsFetched.eventId,
-          eventName: detailsFetched.eventName,
-          eventdate: detailsFetched.eventdate,
-          eventTime: detailsFetched.eventTime,
-          eventLocation: detailsFetched.eventLocation,
-          eventOldPrice: detailsFetched.eventOldPrice,
-          eventCurrentPrice: detailsFetched.eventCurrentPrice,
-          daysLeft: detailsFetched.daysLeft,
-          eventCoverImageUrl: detailsFetched.eventCoverImageUrl,
-          aboutEvent: detailsFetched.aboutEvent,
-          eventBy: detailsFetched.eventBy,
-          peopleInterested: detailsFetched.peopleInterested,
-          location: detailsFetched.location,
-        );
         emitNewState(
           state.copyWith(
-            eventDetails: updatedState,
+            eventDetails: result.data,
             selectedEventId: eventId,
             isLoading: false,
+            errorMessage: null,
           ),
         );
       case Failure<EventDetailsDomainModel>():
         emitNewState(
           state.copyWith(
             isLoading: false,
+            errorMessage: result.error.toString(),
           ),
         );
+    }
+  }
+
+  void retry() {
+    if (state.selectedEventId != null) {
+      fetchEventDetails(state.selectedEventId);
     }
   }
 

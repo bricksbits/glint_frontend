@@ -14,6 +14,7 @@ class AdminCreateEventState with _$AdminCreateEventState {
     @Default(null) UsersType? currentUserType,
     @Default(null) DateTime? selectedStartTime,
     @Default(null) DateTime? selectedEntTime,
+    @Default(null) DateTime? selectedBookByTime,
   }) = _Initial;
 
   factory AdminCreateEventState.withDefaults() {

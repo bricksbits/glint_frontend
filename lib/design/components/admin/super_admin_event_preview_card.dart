@@ -50,50 +50,54 @@ class SuperAdminEventPreviewCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // image and details.
-                Row(
-                  children: [
-                    // event image
-                    Container(
-                      width: 80.0,
-                      height: 64.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        image: const DecorationImage(
-                          image: NetworkImage(
-                            eventImage,
+                Expanded(
+                  child: Row(
+                    children: [
+                      // event image
+                      Container(
+                        width: 80.0,
+                        height: 64.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          image: const DecorationImage(
+                            image: NetworkImage(
+                              eventImage,
+                            ),
+                            fit: BoxFit.cover,
                           ),
-                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
 
-                    const Gap(12.0),
+                      const Gap(12.0),
 
-                    SizedBox(
-                      height: 64.0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            eventName,
-                            overflow: TextOverflow.clip,
-                            style: AppTheme.simpleBodyText,
+                      Expanded(
+                        child: SizedBox(
+                          height: 64.0,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                eventName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTheme.simpleBodyText,
+                              ),
+                              GlintIconLabel(
+                                iconPath: 'lib/assets/icons/calendar_icon.svg',
+                                label: eventDate,
+                                style: AppTheme.smallBodyText,
+                              ),
+                              const Gap(4.0),
+                            ],
                           ),
-                          GlintIconLabel(
-                            iconPath: 'lib/assets/icons/calendar_icon.svg',
-                            label: eventDate,
-                            style: AppTheme.smallBodyText,
-                          ),
-                          const Gap(4.0),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
 
                 Align(

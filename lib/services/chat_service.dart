@@ -1,29 +1,38 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:stream_chat_persistence/stream_chat_persistence.dart';
 
-const String chatWithEventId = "CHAT_WITH_EVENT_ID";
-const String chatWithEventName = "CHAT_WITH_EVENT_NAME";
-const String chatWithEventStartTime = "CHAT_WITH_EVENT_START_TIME";
+const String chatWithEventId = "event_id";
+const String chatWithEventName = "event_name";
+const String chatWithEventStartTime = "event_start_time";
+const String chatWithMatchId = "matched_via";
 
 class ChatService {
   final StreamChatClient client;
   final StreamChatPersistenceClient persistenceClient;
+  final String pushProviderName;
 
   ChatService({
     required this.client,
     required this.persistenceClient,
+    required this.pushProviderName,
   });
 
   /// Call this after your auth flow gives you the user data + Stream token.
   /// Works identically for login and fresh account creation.
+  /// Safe to call on every cold start — skips reconnection if the same user
+  /// is already connected.
   Future<void> connectUser({
     required String userId,
     required String userName,
     required String userToken,
     required String profileImageUrl,
   }) async {
+    // Guard: skip if already connected as this user to avoid StreamChatError.
+    if (isConnected && client.state.currentUser?.id == userId) {
+      return;
+    }
+
     client.chatPersistenceClient = persistenceClient;
     await persistenceClient.connect(userId);
 
@@ -37,16 +46,50 @@ class ChatService {
     );
   }
 
-  //Todo: Research is needed to make it work
-  // Delegate to Phase 2
-  Future<void> _registerFcmToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-    if (token != null) {
-      await client.addDevice(token, PushProvider.firebase);
+  /// Connects using a token-provider callback so Stream can automatically
+  /// request a fresh JWT whenever the current one expires — no manual
+  /// reconnect loop needed on the app side.
+  ///
+  /// [tokenProvider] matches Stream's internal `TokenProvider` typedef:
+  /// `Future<String> Function(String userId)`.
+  Future<void> connectUserWithProvider({
+    required String userId,
+    required String userName,
+    required String profileImageUrl,
+    required Future<String> Function(String userId) tokenProvider,
+  }) async {
+    if (isConnected && client.state.currentUser?.id == userId) {
+      return;
+    }
+
+    client.chatPersistenceClient = persistenceClient;
+    await persistenceClient.connect(userId);
+
+    await client.connectUserWithProvider(
+      User(
+        id: userId,
+        name: userName,
+        image: profileImageUrl,
+      ),
+      tokenProvider,
+    );
+  }
+
+  /// Registers the device for push notifications via Stream + FCM.
+  /// Pass [cachedToken] (from SharedPreferences) for an immediate registration
+  /// before Firebase returns a fresh token; both paths are tried.
+  Future<void> registerDevice({String? cachedToken}) async {
+    if (cachedToken != null && cachedToken.isNotEmpty) {
+      await client.addDevice(cachedToken, PushProvider.firebase, pushProviderName: pushProviderName);
+    }
+
+    final freshToken = await FirebaseMessaging.instance.getToken();
+    if (freshToken != null && freshToken != cachedToken) {
+      await client.addDevice(freshToken, PushProvider.firebase, pushProviderName: pushProviderName);
     }
 
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
-      client.addDevice(newToken, PushProvider.firebase);
+      client.addDevice(newToken, PushProvider.firebase, pushProviderName: pushProviderName);
     });
   }
 
@@ -57,20 +100,6 @@ class ChatService {
       'messaging',
       id: channelId,
     );
-  }
-
-  Future<Channel> setupChannelWithNavArgs(ChatWithNavArguments args) async {
-    final currentChannel = client.channel(
-      'messaging',
-      id: args.channelId,
-      extraData: {
-        chatWithEventId: args.eventId,
-        chatWithEventName: args.eventName,
-        chatWithEventStartTime: args.eventStartTime,
-      },
-    );
-    currentChannel.watch();
-    return currentChannel;
   }
 
   /// Watch a channel — this subscribes to live updates (messages, reads, etc.)

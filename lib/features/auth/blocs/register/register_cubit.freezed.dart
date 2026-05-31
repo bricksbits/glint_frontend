@@ -26,6 +26,7 @@ mixin _$RegisterState {
   bool get isEmailValid => throw _privateConstructorUsedError;
   bool get isPassWordValid => throw _privateConstructorUsedError;
   bool get isConfirmPassword => throw _privateConstructorUsedError;
+  bool get isPhoneNumberValid => throw _privateConstructorUsedError;
   bool get isRegisteredSuccessfully => throw _privateConstructorUsedError;
   String get navigateToRoute => throw _privateConstructorUsedError;
   String get error => throw _privateConstructorUsedError;
@@ -43,6 +44,7 @@ mixin _$RegisterState {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
+            bool isPhoneNumberValid,
             bool isRegisteredSuccessfully,
             String navigateToRoute,
             String error,
@@ -63,6 +65,7 @@ mixin _$RegisterState {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
+            bool isPhoneNumberValid,
             bool isRegisteredSuccessfully,
             String navigateToRoute,
             String error,
@@ -83,6 +86,7 @@ mixin _$RegisterState {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
+            bool isPhoneNumberValid,
             bool isRegisteredSuccessfully,
             String navigateToRoute,
             String error,
@@ -132,6 +136,7 @@ abstract class $RegisterStateCopyWith<$Res> {
       bool isEmailValid,
       bool isPassWordValid,
       bool isConfirmPassword,
+      bool isPhoneNumberValid,
       bool isRegisteredSuccessfully,
       String navigateToRoute,
       String error,
@@ -163,6 +168,7 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
     Object? isEmailValid = null,
     Object? isPassWordValid = null,
     Object? isConfirmPassword = null,
+    Object? isPhoneNumberValid = null,
     Object? isRegisteredSuccessfully = null,
     Object? navigateToRoute = null,
     Object? error = null,
@@ -209,6 +215,10 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
           ? _value.isConfirmPassword
           : isConfirmPassword // ignore: cast_nullable_to_non_nullable
               as bool,
+      isPhoneNumberValid: null == isPhoneNumberValid
+          ? _value.isPhoneNumberValid
+          : isPhoneNumberValid // ignore: cast_nullable_to_non_nullable
+              as bool,
       isRegisteredSuccessfully: null == isRegisteredSuccessfully
           ? _value.isRegisteredSuccessfully
           : isRegisteredSuccessfully // ignore: cast_nullable_to_non_nullable
@@ -248,6 +258,7 @@ abstract class _$$InitialImplCopyWith<$Res>
       bool isEmailValid,
       bool isPassWordValid,
       bool isConfirmPassword,
+      bool isPhoneNumberValid,
       bool isRegisteredSuccessfully,
       String navigateToRoute,
       String error,
@@ -277,6 +288,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? isEmailValid = null,
     Object? isPassWordValid = null,
     Object? isConfirmPassword = null,
+    Object? isPhoneNumberValid = null,
     Object? isRegisteredSuccessfully = null,
     Object? navigateToRoute = null,
     Object? error = null,
@@ -323,6 +335,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.isConfirmPassword
           : isConfirmPassword // ignore: cast_nullable_to_non_nullable
               as bool,
+      isPhoneNumberValid: null == isPhoneNumberValid
+          ? _value.isPhoneNumberValid
+          : isPhoneNumberValid // ignore: cast_nullable_to_non_nullable
+              as bool,
       isRegisteredSuccessfully: null == isRegisteredSuccessfully
           ? _value.isRegisteredSuccessfully
           : isRegisteredSuccessfully // ignore: cast_nullable_to_non_nullable
@@ -357,6 +373,7 @@ class _$InitialImpl implements _Initial {
       this.isEmailValid = false,
       this.isPassWordValid = false,
       this.isConfirmPassword = false,
+      this.isPhoneNumberValid = false,
       this.isRegisteredSuccessfully = false,
       this.navigateToRoute = "",
       this.error = "",
@@ -394,6 +411,9 @@ class _$InitialImpl implements _Initial {
   final bool isConfirmPassword;
   @override
   @JsonKey()
+  final bool isPhoneNumberValid;
+  @override
+  @JsonKey()
   final bool isRegisteredSuccessfully;
   @override
   @JsonKey()
@@ -407,7 +427,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'RegisterState.initial(email: $email, password: $password, name: $name, organization: $organization, contactNumber: $contactNumber, isLoading: $isLoading, confirmPassword: $confirmPassword, isEmailValid: $isEmailValid, isPassWordValid: $isPassWordValid, isConfirmPassword: $isConfirmPassword, isRegisteredSuccessfully: $isRegisteredSuccessfully, navigateToRoute: $navigateToRoute, error: $error, currentSuccessStatus: $currentSuccessStatus)';
+    return 'RegisterState.initial(email: $email, password: $password, name: $name, organization: $organization, contactNumber: $contactNumber, isLoading: $isLoading, confirmPassword: $confirmPassword, isEmailValid: $isEmailValid, isPassWordValid: $isPassWordValid, isConfirmPassword: $isConfirmPassword, isPhoneNumberValid: $isPhoneNumberValid, isRegisteredSuccessfully: $isRegisteredSuccessfully, navigateToRoute: $navigateToRoute, error: $error, currentSuccessStatus: $currentSuccessStatus)';
   }
 
   @override
@@ -433,6 +453,8 @@ class _$InitialImpl implements _Initial {
                 other.isPassWordValid == isPassWordValid) &&
             (identical(other.isConfirmPassword, isConfirmPassword) ||
                 other.isConfirmPassword == isConfirmPassword) &&
+            (identical(other.isPhoneNumberValid, isPhoneNumberValid) ||
+                other.isPhoneNumberValid == isPhoneNumberValid) &&
             (identical(
                     other.isRegisteredSuccessfully, isRegisteredSuccessfully) ||
                 other.isRegisteredSuccessfully == isRegisteredSuccessfully) &&
@@ -456,6 +478,7 @@ class _$InitialImpl implements _Initial {
       isEmailValid,
       isPassWordValid,
       isConfirmPassword,
+      isPhoneNumberValid,
       isRegisteredSuccessfully,
       navigateToRoute,
       error,
@@ -483,6 +506,7 @@ class _$InitialImpl implements _Initial {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
+            bool isPhoneNumberValid,
             bool isRegisteredSuccessfully,
             String navigateToRoute,
             String error,
@@ -500,6 +524,7 @@ class _$InitialImpl implements _Initial {
         isEmailValid,
         isPassWordValid,
         isConfirmPassword,
+        isPhoneNumberValid,
         isRegisteredSuccessfully,
         navigateToRoute,
         error,
@@ -520,6 +545,7 @@ class _$InitialImpl implements _Initial {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
+            bool isPhoneNumberValid,
             bool isRegisteredSuccessfully,
             String navigateToRoute,
             String error,
@@ -537,6 +563,7 @@ class _$InitialImpl implements _Initial {
         isEmailValid,
         isPassWordValid,
         isConfirmPassword,
+        isPhoneNumberValid,
         isRegisteredSuccessfully,
         navigateToRoute,
         error,
@@ -557,6 +584,7 @@ class _$InitialImpl implements _Initial {
             bool isEmailValid,
             bool isPassWordValid,
             bool isConfirmPassword,
+            bool isPhoneNumberValid,
             bool isRegisteredSuccessfully,
             String navigateToRoute,
             String error,
@@ -576,6 +604,7 @@ class _$InitialImpl implements _Initial {
           isEmailValid,
           isPassWordValid,
           isConfirmPassword,
+          isPhoneNumberValid,
           isRegisteredSuccessfully,
           navigateToRoute,
           error,
@@ -625,6 +654,7 @@ abstract class _Initial implements RegisterState {
       final bool isEmailValid,
       final bool isPassWordValid,
       final bool isConfirmPassword,
+      final bool isPhoneNumberValid,
       final bool isRegisteredSuccessfully,
       final String navigateToRoute,
       final String error,
@@ -650,6 +680,8 @@ abstract class _Initial implements RegisterState {
   bool get isPassWordValid;
   @override
   bool get isConfirmPassword;
+  @override
+  bool get isPhoneNumberValid;
   @override
   bool get isRegisteredSuccessfully;
   @override

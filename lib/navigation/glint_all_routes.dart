@@ -16,6 +16,7 @@ enum GlintMainRoutes {
   likes,
   filter,
   payment,
+  confirmTicket,
   subscriptions,
   settings,
   history,

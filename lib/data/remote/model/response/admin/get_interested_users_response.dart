@@ -6,9 +6,10 @@ class GetInterestedUsersResponse {
       this.response,});
 
   GetInterestedUsersResponse.fromJson(dynamic json) {
-    if (json['response'] != null) {
+    final list = json is List ? json : json['data'];
+    if (list != null) {
       response = [];
-      json['response'].forEach((v) {
+      list.forEach((v) {
         response?.add(Response.fromJson(v));
       });
     }

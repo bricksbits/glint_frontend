@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
-import 'package:glint_frontend/features/event/base/event_base_cubit.dart';
+import 'package:glint_frontend/features/event/empty_event_container.dart';
 import 'package:glint_frontend/navigation/argument_models.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -58,11 +58,33 @@ class _EventsListScreenState extends State<EventsListScreen> {
 
               // Event banner
               SliverToBoxAdapter(child: _buildEventBanner()),
+
               const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
 
               // Filter chips
               // SliverToBoxAdapter(child: _buildFilterChips()),
               const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
+
+              // If no events to list, show the empty component,
+              SliverToBoxAdapter(
+                child: state.hotEvents.isEmpty && state.normalEvents.isEmpty
+                    ? const EmptyEventContainer()
+                    : const SizedBox.shrink(),
+              ),
+
+              // Hot Events heading
+              if (state.hotEvents.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: Text(
+                      'Hot Events',
+                      style: AppTheme.headingFour.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
 
               // Hot Events List
               SliverList(
@@ -109,6 +131,20 @@ class _EventsListScreenState extends State<EventsListScreen> {
 
               const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
 
+              // Events heading
+              if (state.normalEvents.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: Text(
+                      'Events',
+                      style: AppTheme.headingFour.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+
               // Nearby Events List
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -116,6 +152,14 @@ class _EventsListScreenState extends State<EventsListScreen> {
                     final event = state.normalEvents[index];
                     return NearbyEventCard(
                       eventModel: event,
+                      getEventInfo: (eventId) {
+                        GlintAnalyticService.onEventCardItemInfoClickedEvent(
+                            eventId);
+                        context.push(
+                          "/${GlintMainRoutes.event.name}/${GlintEventRoutes.eventDetails.name}",
+                          extra: int.parse(eventId),
+                        );
+                      },
                       fetchProfiles: (eventId) {
                         context
                             .read<EventBaseCubit>()

@@ -171,7 +171,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
                                     },
                                     eventName: item.eventName,
                                     eventDate: item.eventDate,
-                                    eventOrganiser: item.eventBy,
+                                    eventOrganiser: "Tap for more info",
                                     eventId: item.eventId,
                                   ),
                                 ),

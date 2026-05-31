@@ -86,7 +86,7 @@ class LikesScreenCubit extends Cubit<LikesScreenState> {
     switch (likedProfiles) {
       case Success<List<PeopleCardModel>>():
         emitNewState(
-          state.copyWith(superLikeProfiles: likedProfiles.data),
+          state.copyWith(likeProfiles: likedProfiles.data),
         );
         break;
       case Failure<List<PeopleCardModel>>():

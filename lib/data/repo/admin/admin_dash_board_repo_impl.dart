@@ -7,16 +7,24 @@ import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/request/admin/approve_or_reject_request_body.dart';
+import 'package:glint_frontend/data/remote/model/request/admin/delete_event_content_request_body.dart';
+import 'package:glint_frontend/data/remote/model/request/admin/pause_event_request_body.dart';
+import 'package:glint_frontend/data/remote/model/request/profile/update_profile_request_body.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/admin_mappers.dart';
+import 'package:glint_frontend/data/remote/model/response/admin/get_event_stats_for_admin.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_interested_users_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_published_event_response.dart';
 import 'package:glint_frontend/data/remote/model/response/admin/get_ticket_booked_response.dart';
+import 'package:glint_frontend/data/remote/model/response/admin/upload_temp_images_response.dart';
+import 'package:glint_frontend/data/remote/model/response/profile/its_me_body_mapper.dart';
+import 'package:glint_frontend/data/remote/model/response/profile/its_me_response_body.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/application_logic/auth/is_user_logged_in_use_case.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_approve_reject_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_interested_user_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_list_domain_model.dart';
+import 'package:glint_frontend/domain/business_logic/models/admin/event_stats_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_ticket_bought_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/create_event_request.dart';
 import 'package:glint_frontend/domain/business_logic/models/common/UsersType.dart';
@@ -64,6 +72,47 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   }
 
   @override
+  Future<Result<String>> uploadTempEventImages(List<File> images) async {
+    FormData formData = FormData();
+    for (final file in images) {
+      formData.files.add(
+        MapEntry(
+          "picture",
+          await MultipartFile.fromFile(
+            file.path,
+            filename: file.path.split('/').last,
+          ),
+        ),
+      );
+    }
+
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.UPLOAD,
+      endpoint: "/event/manage/event-admin/images/temp",
+      uploadFilesFormData: formData,
+    );
+
+    switch (response) {
+      case Success():
+        final parsed =
+            UniversalSuccessResponseBody<UploadTempImagesResponse>.fromJson(
+          response.data,
+          (json) => UploadTempImagesResponse.fromJson(json),
+        );
+        if (parsed.success && parsed.data?.tempId != null) {
+          return Success(parsed.data!.tempId!);
+        } else {
+          return Failure(Exception(parsed.message));
+        }
+      case Failure():
+        return Failure(
+          Exception("Failed to upload images, please try again."),
+        );
+    }
+  }
+
+  @override
   Future<Result<void>> createEvent(
     CreateEventRequestDomainModel createEventRequest,
   ) async {
@@ -85,12 +134,12 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   @override
   Future<Result<void>> editEvent(
       CreateEventRequestDomainModel createEventRequest) async {
-    final eventRequestBody = createEventRequest.mapToRequestBody();
+    final eventRequestBody = createEventRequest.mapToUpdateRequestBody();
     final createEventRequestResponse = await apiCallHandler(
       httpClient: httpClient,
-      requestType: HttpRequestEnum.POST,
+      requestType: HttpRequestEnum.PUT,
       endpoint: "/event/manage/event-admin/edit",
-      passedQueryParameters: eventRequestBody.toJson(),
+      requestBody: eventRequestBody.toJson(),
     );
 
     switch (createEventRequestResponse) {
@@ -101,11 +150,112 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
     }
   }
 
-  /// TODO: HOW TO PASS THE QUERY PARAMETERS
+  @override
+  Future<Result<void>> deleteEventContent(
+    String eventId,
+    List<String> pictureList,
+    List<String> videoList,
+  ) async {
+    final requestBody = DeleteEventContentRequestBody(
+      pictureList: pictureList,
+      videoList: videoList,
+    );
+
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.DELETE,
+      endpoint: "/event/$eventId/content",
+      requestBody: requestBody.toJson(),
+    );
+
+    switch (response) {
+      case Success():
+        return const Success(true);
+      case Failure():
+        return Failure(response.error);
+    }
+  }
+
+  @override
+  Future<Result<void>> pauseEvent(String eventId) async {
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.PUT,
+      endpoint: "/event/$eventId/manage/event-admin/pause",
+      requestBody: PauseEventRequestBody(isPaused: true).toJson(),
+    );
+
+    switch (response) {
+      case Success():
+        return const Success(true);
+      case Failure():
+        return Failure(response.error);
+    }
+  }
+
+  @override
+  Future<Result<void>> unpauseEvent(String eventId) async {
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.PUT,
+      endpoint: "/event/$eventId/manage/event-admin/pause",
+      requestBody: PauseEventRequestBody(isPaused: false).toJson(),
+    );
+
+    switch (response) {
+      case Success():
+        return const Success(true);
+      case Failure():
+        return Failure(response.error);
+    }
+  }
+
+  @override
+  Future<Result<void>> deleteEvent(String eventId) async {
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.DELETE,
+      endpoint: "/event/$eventId/manage/event-admin",
+    );
+
+    switch (response) {
+      case Success():
+        return const Success(true);
+      case Failure():
+        return Failure(response.error);
+    }
+  }
+
+  @override
+  Future<Result<EventStatsDomainModel>> getEventAdminStats(int eventId) async {
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      endpoint: "/event/$eventId/manage/event-admin/stats",
+    );
+
+    switch (response) {
+      case Success():
+        final parsed =
+            UniversalSuccessResponseBody<GetEventStatsForAdmin>.fromJson(
+          response.data,
+          (json) => GetEventStatsForAdmin.fromJson(json),
+        );
+        if (parsed.success && parsed.data != null) {
+          return Success(parsed.data!.mapToDomain());
+        } else {
+          return Failure(Exception(parsed.message));
+        }
+      case Failure():
+        return Failure(response.error);
+    }
+  }
+
   @override
   Future<Result<List<EventTicketBoughtDomainModel>>> fetchBookedTicketList(
-    int eventId,
-  ) async {
+    int eventId, {
+    int offset = 0,
+  }) async {
     late String fetchTicketBoughtUserEndpoint;
     var currentUserKey = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.userRoleKey);
@@ -117,11 +267,11 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
         break;
       case UsersType.ADMIN:
         fetchTicketBoughtUserEndpoint =
-            "event/$eventId/manage/event-admin/booked-tickets";
+            "/event/$eventId/manage/event-admin/booked-tickets";
         break;
       case UsersType.SUPER_ADMIN:
         fetchTicketBoughtUserEndpoint =
-            "event/$eventId/manage/super-admin/booked-tickets";
+            "/event/$eventId/manage/super-admin/booked-tickets";
         break;
     }
 
@@ -129,6 +279,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       endpoint: fetchTicketBoughtUserEndpoint,
+      passedQueryParameters: {"offset": offset},
     );
 
     switch (ticketBookedUsers) {
@@ -150,7 +301,9 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
 
   @override
   Future<Result<List<EventInterestedUserDomainModel>>> fetchInterestedProfiles(
-      int eventId) async {
+    int eventId, {
+    int offset = 0,
+  }) async {
     late String fetchInterestedUserEndpoint;
     var currentUserKey = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.userRoleKey);
@@ -174,6 +327,7 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       endpoint: fetchInterestedUserEndpoint,
+      passedQueryParameters: {"offset": offset},
     );
 
     switch (interestedProfilesResponse) {
@@ -283,42 +437,6 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
   }
 
   @override
-  Future<Result<void>> uploadEventMediaFiles(
-      String eventId, List<File> event) async {
-    FormData formData = FormData();
-    for (int i = 0; i < event.length; i++) {
-      final file = event[i];
-      if (file != null) {
-        formData.files.add(
-          MapEntry(
-            "picture",
-            await MultipartFile.fromFile(
-              file.path,
-              filename: file.path.split('/').last, // or keep your custom name
-            ),
-          ),
-        );
-      }
-    }
-
-    final response = await apiCallHandler(
-      httpClient: httpClient,
-      requestType: HttpRequestEnum.UPLOAD,
-      endpoint: "event/$eventId/content",
-      uploadFilesFormData: formData,
-    );
-
-    switch (response) {
-      case Success():
-        return const Success("File Uploaded successfully");
-      case Failure():
-        return Failure(
-          Exception("Not able to upload files currently, please try again."),
-        );
-    }
-  }
-
-  @override
   Future<UsersType> getCurrentUserType() async {
     final currentUser = await sharedPreferenceHelper
         .getString(SharedPreferenceKeys.userRoleKey);
@@ -331,5 +449,78 @@ class AdminDashBoardRepoImpl extends AdminDashboardRepo {
         await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
     var currentUser = await profileDao.getProfileData(currentUserId);
     return currentUser?.mapToPeopleUiModel();
+  }
+
+  @override
+  Future<Result<void>> getAndCacheAdminProfile() async {
+    final userId =
+        await sharedPreferenceHelper.getString(SharedPreferenceKeys.userIdKey);
+
+    if (userId.isNotEmpty) {
+      final existing = await profileDao.getProfileData(userId);
+      if (existing != null) {
+        return const Success(null);
+      }
+    }
+
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      endpoint: "user/profile/me",
+    );
+
+    switch (response) {
+      case Success():
+        final itsMeBody = ItsMeResponseBody.fromJson(response.data);
+        if (itsMeBody.success == true && itsMeBody.data != null) {
+          await profileDao.insertProfile(itsMeBody.mapToEntity());
+          final data = itsMeBody.data!;
+          await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.userNameKey,
+            data.username ?? "",
+          );
+          await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.adminUserOrganizationKey,
+            data.occupation ?? "",
+          );
+          await sharedPreferenceHelper.saveString(
+            SharedPreferenceKeys.userIdKey,
+            data.userId?.toString() ?? "",
+          );
+          return const Success(null);
+        } else {
+          return Failure(Exception(itsMeBody.message));
+        }
+      case Failure():
+        return Failure(response.error);
+    }
+  }
+
+  @override
+  Future<Result<void>> updateAdminProfile(
+      String name, String organization) async {
+    final requestBody = UpdateProfileRequestBody(
+      username: name,
+      occupation: organization,
+    );
+
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.PUT,
+      endpoint: "user/profile",
+      requestBody: requestBody.toJson(),
+    );
+
+    switch (response) {
+      case Success():
+        final userId = await sharedPreferenceHelper
+            .getString(SharedPreferenceKeys.userIdKey);
+        if (userId.isNotEmpty) {
+          await profileDao.deleteOnBoardingProfile(userId);
+        }
+        return await getAndCacheAdminProfile();
+      case Failure():
+        return Failure(response.error);
+    }
   }
 }

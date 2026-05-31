@@ -5,12 +5,15 @@ import 'package:glint_frontend/data/local/persist/shared_pref_key.dart';
 import 'package:glint_frontend/data/remote/client/http_request_enum.dart';
 import 'package:glint_frontend/data/remote/client/my_dio_client.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_all_events_response.dart';
-import 'package:glint_frontend/data/remote/model/response/event/get_event_details_response.dart';
+import 'package:glint_frontend/data/remote/model/response/event/event_details_response.dart';
+import 'package:glint_frontend/data/remote/model/response/event/get_ticket_hisotry_response.dart';
 import 'package:glint_frontend/data/remote/model/response/event/get_user_interested_for_event_response.dart';
+import 'package:glint_frontend/data/remote/model/response/mapper/event_mapper.dart';
 import 'package:glint_frontend/data/remote/model/response/universal/universal_success_response_body.dart';
 import 'package:glint_frontend/data/remote/utils/api_call_handler.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_detail_domain.dart';
 import 'package:glint_frontend/domain/business_logic/models/event/event_list_domain_model.dart';
+import 'package:glint_frontend/domain/business_logic/models/event/event_ticket_history_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/repo/event/events_repo.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/utils/logger.dart';
@@ -31,15 +34,29 @@ class EventRepoImpl extends EventRepo {
 
   @override
   Future<Result<List<PeopleCardModel>>> fetchInterestedProfiles(
-      int? eventId) async {
+    int? eventId, {
+    int? minAge,
+    int? maxAge,
+    int offset = 0,
+    int? distance = 50000,
+    String? relationshipGoals,
+    String? interests,
+  }) async {
     if (eventId == null) return Result.failure(Exception("Event Id is null"));
+
+    final queryParams = <String, dynamic>{'offset': offset};
+    if (minAge != null) queryParams['min-age'] = minAge;
+    if (maxAge != null) queryParams['max-age'] = maxAge;
+    if (distance != null) queryParams['distance'] = distance;
+    if (relationshipGoals != null) queryParams['relationship-goals'] = relationshipGoals;
+    if (interests != null) queryParams['interests'] = interests;
 
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       endpoint: "/event/$eventId/profiles",
       requestBody: null,
-      passedQueryParameters: null,
+      passedQueryParameters: queryParams,
     );
 
     switch (response) {
@@ -60,13 +77,19 @@ class EventRepoImpl extends EventRepo {
   }
 
   @override
-  Future<Result<List<EventListDomainModel>>> getAllEvents() async {
+  Future<Result<List<EventListDomainModel>>> getAllEvents({
+    int offset = 0,
+    String? category,
+  }) async {
+    final queryParams = <String, dynamic>{'offset': offset};
+    if (category != null) queryParams['category'] = category;
+
     final response = await apiCallHandler(
       httpClient: httpClient,
       requestType: HttpRequestEnum.GET,
       endpoint: "/event",
       requestBody: null,
-      passedQueryParameters: null,
+      passedQueryParameters: queryParams,
     );
 
     switch (response) {
@@ -105,15 +128,14 @@ class EventRepoImpl extends EventRepo {
     switch (response) {
       case Success():
         final details =
-            UniversalSuccessResponseBody<GetEventDetailsResponse>.fromJson(
+            UniversalSuccessResponseBody<EventDetailsResponseWrapper>.fromJson(
           response.data,
-          (json) => GetEventDetailsResponse.fromJson(json),
+          (json) => EventDetailsResponseWrapper.fromJson(json),
         );
         if (details.success && details.data != null) {
           return Success(details.data!.mapToDomain());
-        } else {
-          return Failure(Exception(details.message));
         }
+        return Failure(Exception(details.message));
       case Failure():
         return Failure(Exception(response.error));
     }
@@ -157,6 +179,28 @@ class EventRepoImpl extends EventRepo {
       }
     } else {
       return const Success("User Already liked the event");
+    }
+  }
+
+  @override
+  Future<Result<List<EventTicketHistoryDomainModel>>> getEventTicketHistory({
+    int offset = 0,
+  }) async {
+    final response = await apiCallHandler(
+      httpClient: httpClient,
+      requestType: HttpRequestEnum.GET,
+      endpoint: "/event/ticket/history",
+      requestBody: null,
+      passedQueryParameters: {'offset': offset},
+    );
+
+    switch (response) {
+      case Success():
+        final historyResponse =
+            GetTicketHisotryResponse.fromJson(response.data);
+        return Success(historyResponse.mapToDomainModel());
+      case Failure():
+        return Failure(Exception(response.error));
     }
   }
 }

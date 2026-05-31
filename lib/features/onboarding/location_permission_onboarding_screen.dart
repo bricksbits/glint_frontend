@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
-import 'package:glint_frontend/data/local/persist/async_encrypted_shared_preference_helper.dart';
 import 'package:glint_frontend/design/exports.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/features/onboarding/on_boarding_cubit.dart';
 import 'package:glint_frontend/navigation/glint_all_routes.dart';
-import 'package:glint_frontend/utils/user_info/user_info_manager_cubit.dart';
+import 'package:glint_frontend/services/notification_permission_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LocationPermissionOnboardingScreen extends StatefulWidget {
   const LocationPermissionOnboardingScreen({super.key});
@@ -20,39 +20,150 @@ class LocationPermissionOnboardingScreen extends StatefulWidget {
 
 class _LocationPermissionOnboardingScreenState
     extends State<LocationPermissionOnboardingScreen> {
+  PermissionButtonState _notifState = PermissionButtonState.notRequested;
+
   @override
   void initState() {
     context
         .read<OnBoardingCubit>()
         .setUpLastBoardingState(OnBoardingCompletedTill.BIO_DONE);
+    _checkNotificationPermission();
     super.initState();
+  }
+
+  Future<void> _checkNotificationPermission() async {
+    final isGranted =
+        await getIt.get<NotificationPermissionService>().isPermissionGranted();
+    if (mounted) {
+      setState(() {
+        _notifState = isGranted
+            ? PermissionButtonState.granted
+            : PermissionButtonState.notRequested;
+      });
+    }
+  }
+
+  bool _isLocationAttended(OnBoardingState state) =>
+      state.locationPermissionDenied == true ||
+      state.onBoardingStatus == OnBoardingCompletedTill.COMPLETED;
+
+  bool _isNotifAttended() =>
+      _notifState == PermissionButtonState.granted ||
+      _notifState == PermissionButtonState.denied;
+
+  void _navigateToRegisterFlow(BuildContext ctx, OnBoardingState state) {
+    if (!ctx.mounted) return;
+    if (state.onBoardingStatus == OnBoardingCompletedTill.COMPLETED) {
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        const SnackBar(content: Text("Get Ready for even better experience")),
+      );
+      GlintAnalyticService.onBoardLocationPermissionEvent(true);
+    }
+    ctx.go("/${GlintMainRoutes.register.name}", extra: false);
+  }
+
+  Future<void> _requestNotificationPermission() async {
+    setState(() => _notifState = PermissionButtonState.inProgress);
+    final isGranted =
+        await getIt.get<NotificationPermissionService>().requestPermission();
+    if (!mounted) return;
+    setState(() {
+      _notifState =
+          isGranted ? PermissionButtonState.granted : PermissionButtonState.denied;
+    });
+    final cubitState = context.read<OnBoardingCubit>().state;
+    if (_isLocationAttended(cubitState) && _isNotifAttended()) {
+      _navigateToRegisterFlow(context, cubitState);
+    }
+  }
+
+  Future<void> _handleNotifDenied() async {
+    await getIt.get<NotificationPermissionService>().openSettings();
+    if (!mounted) return;
+    final isGranted =
+        await getIt.get<NotificationPermissionService>().isPermissionGranted();
+    if (!mounted) return;
+    setState(() {
+      _notifState = isGranted
+          ? PermissionButtonState.granted
+          : PermissionButtonState.denied;
+    });
+    final cubitState = context.read<OnBoardingCubit>().state;
+    if (_isLocationAttended(cubitState) && _isNotifAttended()) {
+      _navigateToRegisterFlow(context, cubitState);
+    }
+  }
+
+  PermissionButtonState _locationButtonState(OnBoardingState state) {
+    if (state.isLocationLoading == true) return PermissionButtonState.inProgress;
+    if (state.locationPermissionDenied == true) return PermissionButtonState.denied;
+    if (state.onBoardingStatus == OnBoardingCompletedTill.COMPLETED) {
+      return PermissionButtonState.granted;
+    }
+    return PermissionButtonState.notRequested;
+  }
+
+  VoidCallback? _locationTap(BuildContext ctx, OnBoardingState state) {
+    switch (_locationButtonState(state)) {
+      case PermissionButtonState.notRequested:
+        return () =>
+            ctx.read<OnBoardingCubit>().enableLocationAndCompleteOnboarding();
+      case PermissionButtonState.denied:
+        return () async {
+          await openAppSettings();
+          if (ctx.mounted) {
+            ctx.read<OnBoardingCubit>().resetLocationPermissionDenied();
+          }
+        };
+      case PermissionButtonState.inProgress:
+      case PermissionButtonState.granted:
+        return null;
+    }
+  }
+
+  VoidCallback? _notifTap() {
+    switch (_notifState) {
+      case PermissionButtonState.notRequested:
+        return _requestNotificationPermission;
+      case PermissionButtonState.denied:
+        return _handleNotifDenied;
+      case PermissionButtonState.inProgress:
+      case PermissionButtonState.granted:
+        return null;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OnBoardingCubit, OnBoardingState>(
+    return BlocConsumer<OnBoardingCubit, OnBoardingState>(
+      listener: (context, state) {
+        if (state.locationPermissionDenied == true) {
+          GlintAnalyticService.onBoardLocationPermissionEvent(false);
+        }
+
+        if (_isLocationAttended(state) && _isNotifAttended()) {
+          _navigateToRegisterFlow(context, state);
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           body: SizedBox(
             width: double.infinity,
             child: Stack(
               children: [
-                // Background Image
                 Positioned.fill(
                   child: Image.asset(
                     'lib/assets/images/onboarding/location_background.png',
                     fit: BoxFit.cover,
                   ),
                 ),
-
-                // Main content goes here
                 SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 48.0),
                     child: Column(
                       children: [
                         const Spacer(),
-                        _locationPermissionContainer(context),
+                        _permissionContainer(context, state),
                         const Gap(20.0),
                         Text(
                           'We value your privacy and only use your location to enhance your experience.',
@@ -75,20 +186,7 @@ class _LocationPermissionOnboardingScreenState
     );
   }
 
-  Widget _notificationPermissionContainer() {
-    return SizedBox(
-      width: double.infinity,
-      child: GlintElevatedButton(
-        label: "Enable Notifications",
-        onPressed: () {
-          final userInfoManagerCubit = getIt.get<UserInfoManagerCubit>();
-          userInfoManagerCubit.setupFirebaseNotification();
-        },
-      ),
-    );
-  }
-
-  Widget _locationPermissionContainer(BuildContext context) {
+  Widget _permissionContainer(BuildContext context, OnBoardingState state) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
@@ -103,11 +201,12 @@ class _LocationPermissionOnboardingScreenState
         children: [
           SizedBox.square(
             dimension: 72.0,
-            child: Image.asset('lib/assets/icons/location_onboarding_icon.png'),
+            child:
+                Image.asset('lib/assets/icons/location_onboarding_icon.png'),
           ),
           const Gap(24.0),
           const Text(
-            "See Who’s Close to You!",
+            "See Who's Close to You!",
             style: AppTheme.headingThree,
           ),
           const Gap(10.0),
@@ -118,13 +217,10 @@ class _LocationPermissionOnboardingScreenState
           ),
           const Gap(40.0),
           GestureDetector(
-            onTap: () {
-              final target = GlintMainRoutes.register.name;
-              context.go(
-                "/$target",
-                extra: false,
-              );
-            },
+            onTap: () => context.go(
+              "/${GlintMainRoutes.register.name}",
+              extra: false,
+            ),
             child: const Text(
               'Proceed anyway >>',
               style: AppTheme.smallBodyText,
@@ -132,54 +228,17 @@ class _LocationPermissionOnboardingScreenState
             ),
           ),
           const Gap(40.0),
-          BlocConsumer<OnBoardingCubit, OnBoardingState>(
-            listener: (context, state) {
-              if (state.locationPermissionDenied == true) {
-                GlintAnalyticService.onBoardLocationPermissionEvent(false);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text("Location permission is required")),
-                );
-              }
-
-              if (state.onBoardingStatus == OnBoardingCompletedTill.COMPLETED &&
-                  state.isLocationLoading == false &&
-                  state.locationPermissionDenied == false) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text("Get Ready for even better experience")),
-                );
-                GlintAnalyticService.onBoardLocationPermissionEvent(true);
-                final target = GlintMainRoutes.register.name;
-                context.go(
-                  "/$target",
-                  extra: false,
-                );
-              }
-            },
-            builder: (context, state) {
-              final isLoading = state.isLocationLoading ?? false;
-              return Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: GlintElevatedButton(
-                      label: isLoading ? 'Enabling...' : 'Enable Location',
-                      onPressed: isLoading
-                          ? null
-                          : () async {
-                              context
-                                  .read<OnBoardingCubit>()
-                                  .enableLocationAndCompleteOnboarding();
-                            },
-                    ),
-                  ),
-                  const Gap(16),
-                  _notificationPermissionContainer(),
-                ],
-              );
-            },
-          )
+          PermissionButton(
+            buttonState: _notifState,
+            enableLabel: 'Enable Notifications',
+            onTap: _notifTap(),
+          ),
+          const Gap(16),
+          PermissionButton(
+            buttonState: _locationButtonState(state),
+            enableLabel: 'Enable Location',
+            onTap: _locationTap(context, state),
+          ),
         ],
       ),
     );

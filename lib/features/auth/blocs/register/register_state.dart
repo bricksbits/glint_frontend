@@ -13,6 +13,7 @@ class RegisterState with _$RegisterState {
     @Default(false) bool isEmailValid,
     @Default(false) bool isPassWordValid,
     @Default(false) bool isConfirmPassword,
+    @Default(false) bool isPhoneNumberValid,
     @Default(false) bool isRegisteredSuccessfully,
     @Default("") String navigateToRoute,
     @Default("") String error,

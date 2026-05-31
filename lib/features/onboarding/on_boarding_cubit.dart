@@ -301,10 +301,13 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   Future<void> onPickImage() async {
-    final pickedImages = await imageService.pickImages();
+    final currentCount = state.uploadedFilePaths.length;
+    final pickedImages = await imageService.pickImages(currentImageCount: currentCount);
+    final updatedList = List<File?>.from(state.uploadedFilePaths)
+      ..addAll(pickedImages.map((image) => image.file));
     emitNewState(
       state.copyWith(
-        uploadedFilePaths: pickedImages.map((image) => image.file).toList(),
+        uploadedFilePaths: updatedList,
       ),
     );
     updateProfileLocally();
@@ -381,6 +384,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
           null,
           null,
           null,
+          null,
         );
         emitNewState(
           state.copyWith(
@@ -433,6 +437,10 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
         error: 'Unable to fetch location',
       ));
     }
+  }
+
+  void resetLocationPermissionDenied() {
+    emit(state.copyWith(locationPermissionDenied: null));
   }
 
   bool validateIfImageProvidedOrNot() {

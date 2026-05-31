@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:glint_frontend/domain/business_logic/models/admin/event_interested_user_domain_model.dart';
 import 'package:glint_frontend/domain/business_logic/models/admin/event_ticket_bought_domain_model.dart';
+import 'package:glint_frontend/domain/business_logic/models/common/pagination_params.dart';
 import 'package:glint_frontend/domain/business_logic/repo/admin/admin_dasboard_repo.dart';
 import 'package:glint_frontend/utils/clean_arch_use_case.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
@@ -9,18 +9,22 @@ import 'package:injectable/injectable.dart';
 
 @LazySingleton()
 class GetAllTicketBoughtUsersUseCase
-    extends UseCase<List<EventTicketBoughtDomainModel>, int> {
+    extends UseCase<List<EventTicketBoughtDomainModel>, EventPaginationParams> {
   final AdminDashboardRepo adminDashboardRepo;
 
   GetAllTicketBoughtUsersUseCase(this.adminDashboardRepo);
 
   @override
   Future<Stream<List<EventTicketBoughtDomainModel>?>> buildUseCaseStream(
-      int? params) async {
+      EventPaginationParams? params) async {
     final StreamController<List<EventTicketBoughtDomainModel>> controller =
         StreamController();
     try {
-      adminDashboardRepo.fetchBookedTicketList(params ?? 0).then((result) {
+      final eventId = params?.eventId ?? 0;
+      final offset = params?.offset ?? 0;
+      adminDashboardRepo
+          .fetchBookedTicketList(eventId, offset: offset)
+          .then((result) {
         switch (result) {
           case Success(data: var successResult):
             controller.add(successResult);

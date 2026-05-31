@@ -8,9 +8,9 @@ class EventListDomainModel {
   final String eventOldPrice;
   final String eventCurrentPrice;
   final String daysLeft;
-  final int peopleInterested;
   final bool isHotEvent;
   final Map<String, String> location;
+  final List<String> interestedProfiles;
 
   EventListDomainModel({
     required this.eventId,
@@ -22,8 +22,8 @@ class EventListDomainModel {
     required this.eventOldPrice,
     required this.eventCurrentPrice,
     required this.daysLeft,
-    required this.peopleInterested,
     required this.isHotEvent,
     required this.location,
+    this.interestedProfiles = const [],
   });
 }

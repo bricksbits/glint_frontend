@@ -64,7 +64,7 @@ class Events {
     locationLongitude = (json['location_longitude'] as num).toDouble();
     locationLatitude = (json['location_latitude'] as num).toDouble();
     timeRemaining = json['time_remaining'] != null
-        ? TimeRemaining.fromJson(json['time_remaining'])
+        ? (json['time_remaining'] as num).toInt()
         : null;
     ticketPrice = json['ticket_price'];
     pictureUrl = json['picture_url'] != null
@@ -77,7 +77,7 @@ class Events {
   bool? isHotEvent;
   double? locationLongitude;
   double? locationLatitude;
-  TimeRemaining? timeRemaining;
+  int? timeRemaining;
   int? ticketPrice;
   PictureUrl? pictureUrl;
 
@@ -87,7 +87,7 @@ class Events {
     bool? isHotEvent,
     double? locationLongitude,
     double? locationLatitude,
-    TimeRemaining? timeRemaining,
+    int? timeRemaining,
     int? ticketPrice,
     PictureUrl? pictureUrl,
   }) =>
@@ -109,9 +109,7 @@ class Events {
     map['is_hot_event'] = isHotEvent;
     map['location_longitude'] = locationLongitude;
     map['location_latitude'] = locationLatitude;
-    if (timeRemaining != null) {
-      map['time_remaining'] = timeRemaining?.toJson();
-    }
+    map['time_remaining'] = timeRemaining;
     map['ticket_price'] = ticketPrice;
     if (pictureUrl != null) {
       map['picture_url'] = pictureUrl?.toJson();
@@ -156,54 +154,6 @@ class PictureUrl {
   }
 }
 
-TimeRemaining timeRemainingFromJson(String str) =>
-    TimeRemaining.fromJson(json.decode(str));
-
-String timeRemainingToJson(TimeRemaining data) => json.encode(data.toJson());
-
-class TimeRemaining {
-  TimeRemaining({
-    this.microseconds,
-    this.days,
-    this.months,
-    this.valid,
-  });
-
-  TimeRemaining.fromJson(dynamic json) {
-    microseconds = json['Microseconds'];
-    days = json['Days'];
-    months = json['Months'];
-    valid = json['Valid'];
-  }
-
-  int? microseconds;
-  int? days;
-  int? months;
-  bool? valid;
-
-  TimeRemaining copyWith({
-    int? microseconds,
-    int? days,
-    int? months,
-    bool? valid,
-  }) =>
-      TimeRemaining(
-        microseconds: microseconds ?? this.microseconds,
-        days: days ?? this.days,
-        months: months ?? this.months,
-        valid: valid ?? this.valid,
-      );
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['Microseconds'] = microseconds;
-    map['Days'] = days;
-    map['Months'] = months;
-    map['Valid'] = valid;
-    return map;
-  }
-}
-
 extension GetEventRequestMapper on GetAllEventsResponse {
   List<EventListDomainModel> mapToDomain() {
     return events?.map((event) {
@@ -225,15 +175,15 @@ extension GetEventRequestMapper on GetAllEventsResponse {
             eventCoverImageUrl: pictureUrl ?? "",
             eventdate: eventDate,
             eventTime: eventTime,
-            eventLocation: "--",
+            eventLocation: "Tap info button",
             eventOldPrice: event.ticketPrice.toString(),
-            eventCurrentPrice: event.ticketPrice.toString() ?? "",
-            daysLeft: event.timeRemaining?.days.toString() ?? "--",
-            peopleInterested: 0,
+            eventCurrentPrice: event.ticketPrice.toString(),
+            daysLeft: event.timeRemaining?.toString() ?? "--",
+            interestedProfiles: const [],
             isHotEvent: event.isHotEvent ?? false,
             location: {
-              "lat": event.locationLatitude.toString() ?? "",
-              "long": event.locationLongitude.toString() ?? ""
+              "lat": event.locationLatitude.toString(),
+              "long": event.locationLongitude.toString()
             },
           );
         }).toList() ??
@@ -241,26 +191,6 @@ extension GetEventRequestMapper on GetAllEventsResponse {
   }
 }
 
-DateTime convertToRequiredFormatDate(TimeRemaining timeRemaining) {
-  DateTime now = DateTime.now();
-  var month = timeRemaining.months ?? 0;
-  var days = timeRemaining.days ?? 0;
-  var microSeconds = timeRemaining.microseconds ?? 0;
-  DateTime futureDateTimeWithMonths = DateTime(
-    now.year,
-    now.month + month,
-    now.day,
-    now.hour,
-    now.minute,
-    now.second,
-    now.millisecond,
-    now.microsecond,
-  );
-
-// 2. Create a Duration object for days and microseconds
-  Duration duration = Duration(days: days, microseconds: microSeconds);
-
-// 3. Add the remaining duration to the `futureDateTimeWithMonths`
-  DateTime finalFutureDateTime = futureDateTimeWithMonths.add(duration);
-  return finalFutureDateTime;
+DateTime convertToRequiredFormatDate(int daysRemaining) {
+  return DateTime.now().add(Duration(days: daysRemaining));
 }

@@ -26,7 +26,18 @@ class PaymentHistoryScreen extends StatelessWidget {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : CustomScrollView(
+                : state.error.isNotEmpty
+                    ? const Center(
+                        child: Text(
+                          "Due to Server Failure, please try again later.",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    : CustomScrollView(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     slivers: [
@@ -204,6 +215,8 @@ class PaymentHistoryScreen extends StatelessWidget {
       ),
       title: Text(
         title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 18,
@@ -211,17 +224,21 @@ class PaymentHistoryScreen extends StatelessWidget {
       ),
       subtitle: Text(
         subtitle,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: Colors.grey.shade600,
           fontSize: 14,
         ),
       ),
       trailing: Column(
-        mainAxisSize: MainAxisSize.min, // Use minimum space
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
             '₹$price',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
@@ -229,6 +246,8 @@ class PaymentHistoryScreen extends StatelessWidget {
           ),
           Text(
             'ORD ID : $orderId',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: Colors.grey.shade400,
               fontSize: 12,

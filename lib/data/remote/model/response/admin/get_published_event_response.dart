@@ -15,9 +15,9 @@ class GetPublishedEventResponse {
   });
 
   GetPublishedEventResponse.fromJson(dynamic json) {
-    if (json['response'] != null) {
+    if (json['events'] != null) {
       response = [];
-      json['response'].forEach((v) {
+      json['events'].forEach((v) {
         response?.add(Response.fromJson(v));
       });
     }

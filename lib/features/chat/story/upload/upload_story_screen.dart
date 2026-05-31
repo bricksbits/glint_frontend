@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:glint_frontend/design/common/app_colours.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/features/chat/story/upload/upload_story_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:path/path.dart';
 
-// Once Uploaded, Move to the Chat Screen.
 class UploadStoryScreen extends StatefulWidget {
   final bool isUploadStory;
 
@@ -33,7 +30,7 @@ class _UploadStoryScreenState extends State<UploadStoryScreen> {
         listenWhen: (prev, current) => prev != current,
         listener: (context, state) {
           if (state.newUserStoryUploadSuccess) {
-            context.pop();
+            context.pop(true);
             showCustomSnackbar(context, message: "Story uploaded successfully");
           }
 

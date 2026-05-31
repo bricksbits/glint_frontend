@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:glint_frontend/features/people/model/people_card_model.dart';
 import 'package:glint_frontend/di/injection.dart';
 import 'package:glint_frontend/domain/business_logic/repo/profile/profile_repo.dart';
+import 'package:glint_frontend/features/profile/bloc/edit/image_slot.dart';
 import 'package:glint_frontend/services/image_manager_service.dart';
 import 'package:glint_frontend/utils/logger.dart';
 import 'package:glint_frontend/utils/result_sealed.dart';
@@ -27,16 +26,22 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
     final currentProfile = await profileRepo.fetchUserProfile();
     switch (currentProfile) {
       case Success<PeopleCardModel>():
+        final profileModel = currentProfile.data;
+        final slots = List.generate(9, (i) {
+          final slotIndex = i + 1;
+          return i < profileModel.pictureUrlList.length
+              ? ImageSlot.existing(slotIndex, profileModel.pictureUrlList[i])
+              : ImageSlot.empty(slotIndex);
+        });
         emitNewState(
           state.copyWith(
-            previewProfileModel: currentProfile.data,
+            previewProfileModel: profileModel,
             isLoading: false,
-            currentProfileImageSize: currentProfile.data.pictureUrlList.length,
+            imageSlots: slots,
           ),
         );
         break;
       case Failure<PeopleCardModel>():
-        // A Weak mechanism to close the recursion calls,
         if (state.refetchProfileData) {
           debugLogger(logPrefix, "NoProfile Data found, re-fetching data");
           getUserProfile();
@@ -69,35 +74,38 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
     }
   }
 
+  Future<void> selectImageForSlot(int slotIndex) async {
+    final imageData = await imageService.pickAndCompressForSlot(slotIndex);
+    if (imageData?.file == null) return;
+
+    final updatedSlots = List<ImageSlot>.from(state.imageSlots);
+    updatedSlots[slotIndex - 1] = ImageSlot.local(slotIndex, imageData!.file!);
+    emitNewState(state.copyWith(imageSlots: updatedSlots));
+  }
+
   Future<void> publishChanges() async {
-    if (state.isNewImagesUploaded && state.newlyUploadedImages.isNotEmpty) {
-      uploadMedia().then((_) {
-        getUserProfile();
-      });
-    }
+    final hasNewImages =
+        state.imageSlots.any((s) => s.status == ImageSlotStatus.newLocal);
 
-    if (state.isProfileDataChanged && !state.isNewImagesUploaded) {
-      updateProfile().then((_) {
-        getUserProfile();
-      });
-    }
-
-    if (state.isNewImagesUploaded &&
-        state.newlyUploadedImages.isNotEmpty &&
-        state.isProfileDataChanged) {
+    if (hasNewImages && state.isProfileDataChanged) {
       Future.wait([uploadMedia(), updateProfile()]).then((_) {
         getUserProfile();
+      }).onError((error, _) {
         emitNewState(state.copyWith(
           isLoading: false,
-          isNewImagesUploaded: false,
-          newlyUploadedImages: [],
-          isProfileDataChanged: false,
+          error: "Not able to perform the required actions.",
         ));
-      }).onError((error, st) {
-        emitNewState(state.copyWith(
-            isLoading: false,
-            error: "Not able to perform the required actions,"));
       });
+      return;
+    }
+
+    if (hasNewImages) {
+      uploadMedia().then((_) => getUserProfile());
+      return;
+    }
+
+    if (state.isProfileDataChanged) {
+      updateProfile().then((_) => getUserProfile());
     }
   }
 
@@ -113,45 +121,41 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
         break;
       case Failure<void>():
         emitNewState(state.copyWith(
-            isLoading: false, error: "Not able to update profile,"));
+            isLoading: false, error: "Not able to update profile."));
         break;
     }
   }
 
   Future<void> updateProfileLocally(PeopleCardModel updatedModel) async {
-    emitNewState(state.copyWith(
-      isProfileDataChanged: true,
-    ));
+    emitNewState(state.copyWith(isProfileDataChanged: true));
     await profileRepo.updateProfileData(updatedModel);
   }
 
   Future<void> uploadMedia() async {
     emitNewState(state.copyWith(isLoading: true));
-    final imagesResponse = await profileRepo.updateMedia();
+    final newLocalFiles = state.imageSlots
+        .where((s) =>
+            s.status == ImageSlotStatus.newLocal && s.localFile != null)
+        .map((s) => s.localFile!)
+        .toList();
+
+    final imagesResponse = await profileRepo.updateMedia(newLocalFiles);
     switch (imagesResponse) {
       case Success<void>():
-        emitNewState(state.copyWith(
-          isLoading: false,
-        ));
+        emitNewState(state.copyWith(isLoading: false));
         clearProfileDirectory();
         break;
       case Failure<void>():
         emitNewState(state.copyWith(
-            isLoading: false, error: "Not able to upload Media,"));
+            isLoading: false, error: "Not able to upload Media."));
         break;
     }
   }
 
   void updateRelationshipGoal(String newGoal) {
-    final updatedModelWithRelationShipGoal =
-        state.previewProfileModel?.copyWith(
-      lookingFor: newGoal,
-    );
-    emitNewState(
-        state.copyWith(previewProfileModel: updatedModelWithRelationShipGoal));
-    if (updatedModelWithRelationShipGoal != null) {
-      updateProfileLocally(updatedModelWithRelationShipGoal);
-    }
+    final updatedModel = state.previewProfileModel?.copyWith(lookingFor: newGoal);
+    emitNewState(state.copyWith(previewProfileModel: updatedModel));
+    if (updatedModel != null) updateProfileLocally(updatedModel);
   }
 
   void updatePronouns(String newPronoun) {}
@@ -159,12 +163,8 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
   void updateInterests(List<String> newInterests) {}
 
   void updateBio(String newBio) {
-    final updatedModelWithBio = state.previewProfileModel?.copyWith(
-      bio: newBio,
-    );
-    if (updatedModelWithBio != null) {
-      updateProfileLocally(updatedModelWithBio);
-    }
+    final updatedModel = state.previewProfileModel?.copyWith(bio: newBio);
+    if (updatedModel != null) updateProfileLocally(updatedModel);
   }
 
   void updateOccupation(String newOccupation) {
@@ -176,11 +176,7 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
     );
     if (updatedProfile != null) {
       updateProfileLocally(updatedProfile);
-      emitNewState(
-        state.copyWith(
-          previewProfileModel: updatedProfile,
-        ),
-      );
+      emitNewState(state.copyWith(previewProfileModel: updatedProfile));
     }
   }
 
@@ -191,11 +187,7 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
         state.previewProfileModel?.copyWith(about: currentAboutMap);
     if (updatedProfile != null) {
       updateProfileLocally(updatedProfile);
-      emitNewState(
-        state.copyWith(
-          previewProfileModel: updatedProfile,
-        ),
-      );
+      emitNewState(state.copyWith(previewProfileModel: updatedProfile));
     }
   }
 
@@ -206,26 +198,18 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
         state.previewProfileModel?.copyWith(about: currentAboutMap);
     if (updatedProfile != null) {
       updateProfileLocally(updatedProfile);
-      emitNewState(
-        state.copyWith(
-          previewProfileModel: updatedProfile,
-        ),
-      );
+      emitNewState(state.copyWith(previewProfileModel: updatedProfile));
     }
   }
 
   void updateWorkoutHabits(String newWorkoutHabits) {
     final currentAboutMap = state.previewProfileModel?.about;
     currentAboutMap?.update("workout", (_) => newWorkoutHabits);
-    final updateProfile =
+    final updatedProfile =
         state.previewProfileModel?.copyWith(about: currentAboutMap);
-    if (updateProfile != null) {
-      updateProfileLocally(updateProfile);
-      emitNewState(
-        state.copyWith(
-          previewProfileModel: updateProfile,
-        ),
-      );
+    if (updatedProfile != null) {
+      updateProfileLocally(updatedProfile);
+      emitNewState(state.copyWith(previewProfileModel: updatedProfile));
     }
   }
 
@@ -236,11 +220,7 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
         state.previewProfileModel?.copyWith(about: currentAboutMap);
     if (updatedProfile != null) {
       updateProfileLocally(updatedProfile);
-      emitNewState(
-        state.copyWith(
-          previewProfileModel: updatedProfile,
-        ),
-      );
+      emitNewState(state.copyWith(previewProfileModel: updatedProfile));
     }
   }
 
@@ -251,48 +231,12 @@ class ProfileEditCubit extends Cubit<ProfileEditState> {
         state.previewProfileModel?.copyWith(about: currentAboutMap);
     if (updatedProfile != null) {
       updateProfileLocally(updatedProfile);
-      emitNewState(
-        state.copyWith(
-          previewProfileModel: updatedProfile,
-        ),
-      );
+      emitNewState(state.copyWith(previewProfileModel: updatedProfile));
     }
   }
 
   void emitNewState(ProfileEditState newState) {
     emit(newState);
-  }
-
-  Future<void> onPickImage() async {
-    final maxCountForImages = state.currentProfileImageSize;
-    final pickedImages = await imageService.pickImages(
-      currentImageCount: maxCountForImages,
-    );
-    final emptyFilesPadding = List<File?>.filled(maxCountForImages, null);
-    final newFiles = pickedImages.map((img) => img.file).toList();
-
-    emitNewState(
-      state.copyWith(
-        newlyUploadedImages: maxCountForImages != 0
-            ? [
-                ...emptyFilesPadding,
-                ...newFiles,
-              ]
-            : newFiles,
-        isNewImagesUploaded: true,
-      ),
-    );
-  }
-
-  void removeImageAt(int index) {
-    // final currentImagesList = state.uploadedFilePaths;
-    // currentImagesList.removeAt(index);
-    // emitNewState(
-    //   state.copyWith(
-    //     uploadedFilePaths: currentImagesList,
-    //   ),
-    // );
-    // updateProfileLocally();
   }
 
   void clearProfileDirectory() async {

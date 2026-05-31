@@ -37,10 +37,18 @@ Future<Result<dynamic>> apiCallHandler({
       );
       return result;
     case HttpRequestEnum.DELETE:
-      final result = httpClient.deleteFiles(
-        endpoint: endpoint,
-        formData: uploadFilesFormData,
-      );
-      return result;
+      if (uploadFilesFormData != null) {
+        final result = httpClient.deleteFiles(
+          endpoint: endpoint,
+          formData: uploadFilesFormData,
+        );
+        return result;
+      } else {
+        final result = httpClient.deleteRequest(
+          endpoint: endpoint,
+          body: requestBody,
+        );
+        return result;
+      }
   }
 }

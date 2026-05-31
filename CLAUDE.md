@@ -79,3 +79,30 @@ Three annotation processors require `build_runner`:
 3. **Injectable** — DI configuration (`di/injection.config.dart`)
 
 Always run `build_runner` after modifying annotated classes.
+
+## Rules 
+- Don't generate or add summary .md files,for any features until asked 
+- Create specific files and Follow the DRY principle 
+- Follow the SOLID Principles 
+- Don't add Documentation over the code, until explicitly said so,
+- Feel free to ask me clarity questions, if felt stuck and confused or needed more context with clarity 
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

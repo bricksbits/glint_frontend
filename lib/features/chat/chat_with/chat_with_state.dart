@@ -11,6 +11,7 @@ class ChatWithState with _$ChatWithState {
     @Default(null) User? currentUserDetails,
     @Default(null) ChatWithNavArguments? chatNavArgs,
     @Default(null) Channel? currentChannel,
+    @Default(false) bool navigateToProfile,
   }) = _Initial;
 }
 

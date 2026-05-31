@@ -115,6 +115,18 @@ class _CreateAccounScreenState extends State<CreateAccounScreen> {
     _nameController.addListener(() {
       context.read<RegisterCubit>().enteredUserName(_nameController.text);
     });
+
+    _contactController.addListener(() {
+      context
+          .read<RegisterCubit>()
+          .enteredContactNumber(_contactController.text);
+    });
+
+    _organizationController.addListener(() {
+      context
+          .read<RegisterCubit>()
+          .enteredOrganization(_organizationController.text);
+    });
     super.initState();
   }
 

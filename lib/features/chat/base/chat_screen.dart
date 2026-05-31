@@ -5,6 +5,8 @@ import 'package:gap/gap.dart';
 import 'package:glint_frontend/analytics/glint_analytics_service.dart';
 import 'package:glint_frontend/design/common/custom_snackbar.dart';
 import 'package:glint_frontend/design/exports.dart';
+import 'package:glint_frontend/di/injection.dart';
+import 'package:glint_frontend/domain/application_logic/logout_usecase.dart';
 import 'package:glint_frontend/features/chat/base/chat_channel_tile.dart';
 import 'package:glint_frontend/features/chat/base/chat_screen_cubit.dart';
 import 'package:glint_frontend/features/chat/story/model/recent_matches_model.dart';
@@ -23,10 +25,54 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// When the app returns to the foreground, trigger a reconnect if the Stream
+  /// WebSocket dropped while the app was backgrounded.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      context.read<ChatScreenCubit>().reconnectIfNeeded();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatScreenCubit, ChatScreenState>(
+    return BlocConsumer<ChatScreenCubit, ChatScreenState>(
+      listenWhen: (previous, current) =>
+          current.requiresReAuthentication && !previous.requiresReAuthentication,
+      listener: (context, state) {
+        showCustomSnackbar(
+          context,
+          message: "Your Security is our top priority",
+          isError: true,
+        );
+        getIt.get<LogoutUserUsecase>().perform(
+          (_) {
+            if (context.mounted) {
+              context.goNamed(GlintMainRoutes.starter.name);
+            }
+          },
+          (_) {
+            if (context.mounted) {
+              context.goNamed(GlintMainRoutes.starter.name);
+            }
+          },
+          () {},
+        );
+      },
       builder: (context, state) {
         return Scaffold(
           backgroundColor: AppColours.white,
@@ -46,7 +92,7 @@ class _ChatScreenState extends State<ChatScreen> {
               GestureDetector(
                 onTap: () {
                   showCustomSnackbar(context,
-                      message: "Story Likes will be available soon");
+                      message: "Story likes data will be available soon");
                   // context.pushNamed(GlintChatRoutes.stories.name);
                 },
                 child: SvgPicture.asset(
@@ -55,9 +101,13 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               const Gap(18.0),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   GlintAnalyticService.onUploadStoriesEvent();
-                  context.pushNamed(GlintChatRoutes.uploadStory.name);
+                  final bool? uploaded = await context
+                      .pushNamed<bool>(GlintChatRoutes.uploadStory.name);
+                  if (uploaded == true && mounted) {
+                    _getStories();
+                  }
                 },
                 child: SvgPicture.asset(
                   'lib/assets/icons/upload_story.svg',
@@ -77,66 +127,70 @@ class _ChatScreenState extends State<ChatScreen> {
                 : state.isChatReady == false ||
                         state.channelListController == null
                     ? const Center(
-                        child: Text(
-                          "Chat Servers are not available",
-                          style: AppTheme.headingThree,
-                        ),
+                        child: CircularProgressIndicator(),
                       )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                    : CustomScrollView(
+                        // AlwaysScrollableScrollPhysics lets the RefreshIndicator
+                        // trigger even when the header slivers alone fill the screen.
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        slivers: [
                           // ------------------------- Stories Section --------------------------- //
-                          state.stories != null &&
-                                  state.stories?.isNotEmpty == true
-                              ? _buildStoriesSection(state.stories!,
+                          if (state.stories != null &&
+                              state.stories!.isNotEmpty)
+                            SliverToBoxAdapter(
+                              child: _buildStoriesSection(state.stories!,
                                   (selectedIndex) {
-                                  context.pushNamed(
-                                    GlintChatRoutes.stories.name,
-                                    extra: (
-                                      index: selectedIndex,
-                                      stories: state.stories
-                                    ),
-                                  );
-                                })
-                              : const SizedBox.shrink(),
+                                context.pushNamed(
+                                  GlintChatRoutes.stories.name,
+                                  extra: (
+                                    index: selectedIndex,
+                                    stories: state.stories
+                                  ),
+                                );
+                              }),
+                            ),
 
                           // ------------------------- Recent Matches Section --------------------------- //
-
-                          _buildRecentMatchesSection(state.recentMatches ?? [],
+                          SliverToBoxAdapter(
+                            child: _buildRecentMatchesSection(
+                              state.recentMatches ?? [],
                               (match) {
-                            context.pushNamed(
-                              GlintChatRoutes.chatWith.name,
-                              extra: ChatWithNavArguments(
-                                channelId: match.chatChannelId,
-                                eventId: match.eventId,
-                                eventName: match.eventName,
-                                eventStartTime: match.eventStartTime,
-                                matchId: match.matchId,
-                              ),
-                            );
-                          },
+                                context.pushNamed(
+                                  GlintChatRoutes.chatWith.name,
+                                  extra: ChatWithNavArguments(
+                                    channelId: match.chatChannelId,
+                                    eventId: match.eventId,
+                                    eventName: match.eventName,
+                                    eventStartTime: match.eventStartTime,
+                                    matchId: match.matchId,
+                                  ),
+                                );
+                              },
                               noRecentMatches:
-                                  state.recentMatches?.isEmpty ?? false),
-                          const Gap(12.0),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Text(
-                              'Chats',
-                              textAlign: TextAlign.start,
-                              style: AppTheme.headingThree.copyWith(
-                                fontStyle: FontStyle.normal,
-                                fontSize: 18.0,
+                                  state.recentMatches?.isEmpty ?? false,
+                            ),
+                          ),
+
+                          const SliverToBoxAdapter(child: Gap(12.0)),
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Text(
+                                'Chats',
+                                textAlign: TextAlign.start,
+                                style: AppTheme.headingThree.copyWith(
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 18.0,
+                                ),
                               ),
                             ),
                           ),
 
                           // ------------------------- Chat Channels --------------------------- //
-
                           state.channelListController != null &&
                                   state.isChatReady
-                              ? Expanded(
+                              ? SliverFillRemaining(
                                   child: StreamChannelListView(
                                     controller: state.channelListController!,
                                     itemBuilder: (context, channels, index,
@@ -144,6 +198,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       final currentUser =
                                           StreamChat.of(context).currentUser;
                                       return ChatChannelTile(
+                                        key: ValueKey(channels[index].id),
                                         channel: channels[index],
                                         currentUserId: currentUser?.id,
                                         onTap: () => context.pushNamed(
@@ -157,10 +212,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                     },
                                   ),
                                 )
-                              : const Center(
-                                  child: Text(
-                                    "Chat Server busy,",
-                                    style: AppTheme.headingThree,
+                              : const SliverFillRemaining(
+                                  child: Center(
+                                    child: Text(
+                                      "Chat servers down, please try after sometime.",
+                                      style: AppTheme.headingThree,
+                                    ),
                                   ),
                                 ),
                         ],
@@ -286,10 +343,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                       ],
                                     ),
                                     const Gap(8.0),
-                                    Text(
-                                      match.matchUserName,
-                                      style: AppTheme.simpleText.copyWith(
-                                        color: AppColours.black,
+                                    SizedBox(
+                                      width: 72.0,
+                                      child: Text(
+                                        match.matchUserName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: AppTheme.simpleText.copyWith(
+                                          color: AppColours.black,
+                                        ),
                                       ),
                                     ),
                                     const Gap(12.0),
@@ -415,10 +478,16 @@ class _ChatScreenState extends State<ChatScreen> {
                             ],
                           ),
                           const Gap(12.0),
-                          Text(
-                            story.username,
-                            style: AppTheme.simpleText.copyWith(
-                              color: AppColours.black,
+                          SizedBox(
+                            width: 88.0,
+                            child: Text(
+                              story.username,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: AppTheme.simpleText.copyWith(
+                                color: AppColours.black,
+                              ),
                             ),
                           ),
                         ],
@@ -432,6 +501,10 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
     );
+  }
+
+  void _getStories() {
+    context.read<ChatScreenCubit>().refreshStories();
   }
 
   String formatDateTime(String isoDateString) {

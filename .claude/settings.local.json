@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__postman__getCollectionRequest",
+      "mcp__postman__getCollectionResponse",
+      "mcp__postman__getWorkspaces",
+      "mcp__postman__getWorkspace",
+      "mcp__postman__getCollection",
+      "mcp__postman__getCollectionFolder",
+      "mcp__plugin_figma_figma__get_design_context",
+      "mcp__composio__COMPOSIO_REMOTE_BASH_TOOL",
+      "mcp__composio__COMPOSIO_REMOTE_WORKBENCH",
+      "mcp__plugin_figma_figma__get_metadata",
+      "mcp__plugin_figma_figma__use_figma",
+      "Bash(fvm flutter:*)",
+      "Bash(find:*)",
+      "Bash(grep -v \"^$\")",
+      "Bash(grep -v \"^$\")",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(xargs cat:*)",
+      "Bash(grep -E \"\\\\.\\(dart\\)$\")",
+      "Bash(xargs ls *)",
+      "WebFetch(domain:getstream.io)",
+      "Bash(tee /tmp/e2e_results.txt)",
+      "Bash(adb -s emulator-5554 shell pm grant com.bricksbits.glint android.permission.ACCESS_FINE_LOCATION)",
+      "Bash(adb -s emulator-5554 shell pm grant com.bricksbits.glint android.permission.ACCESS_COARSE_LOCATION)",
+      "Bash(adb -s emulator-5554 shell pm grant com.bricksbits.glint android.permission.POST_NOTIFICATIONS)",
+      "Bash(adb -s emulator-5554 shell pm grant com.bricksbits.glint android.permission.CAMERA)",
+      "Bash(chmod +x *)",
+      "Bash(adb -s emulator-5554 shell pm clear com.bricksbits.glint)",
+      "Bash(adb devices *)",
+      "Bash(adb -s emulator-5554 shell pm list packages)",
+      "Bash(adb -s emulator-5554 shell getprop ro.build.version.sdk)",
+      "Bash(xcrun simctl *)",
+      "Bash(~/Library/Android/sdk/emulator/emulator -avd Pixel_8_Pro_API_35 -no-audio -no-window)"
+    ]
+  }
+}
