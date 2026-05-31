@@ -21,7 +21,19 @@
       "Bash(xargs cat:*)",
       "Bash(grep -E \"\\\\.\\(dart\\)$\")",
       "Bash(xargs ls *)",
-      "WebFetch(domain:getstream.io)"
+      "WebFetch(domain:getstream.io)",
+      "Bash(tee /tmp/e2e_results.txt)",
+      "Bash(adb -s emulator-5554 shell pm grant com.bricksbits.glint android.permission.ACCESS_FINE_LOCATION)",
+      "Bash(adb -s emulator-5554 shell pm grant com.bricksbits.glint android.permission.ACCESS_COARSE_LOCATION)",
+      "Bash(adb -s emulator-5554 shell pm grant com.bricksbits.glint android.permission.POST_NOTIFICATIONS)",
+      "Bash(adb -s emulator-5554 shell pm grant com.bricksbits.glint android.permission.CAMERA)",
+      "Bash(chmod +x *)",
+      "Bash(adb -s emulator-5554 shell pm clear com.bricksbits.glint)",
+      "Bash(adb devices *)",
+      "Bash(adb -s emulator-5554 shell pm list packages)",
+      "Bash(adb -s emulator-5554 shell getprop ro.build.version.sdk)",
+      "Bash(xcrun simctl *)",
+      "Bash(~/Library/Android/sdk/emulator/emulator -avd Pixel_8_Pro_API_35 -no-audio -no-window)"
     ]
   }
 }

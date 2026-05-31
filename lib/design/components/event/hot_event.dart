@@ -48,11 +48,19 @@ class HotEvent extends StatelessWidget {
                         fit: BoxFit.cover,
                         height: 200,
                       ),
-                      errorWidget: (context, url, error) => Image.asset(
-                        "lib/assets/images/event/event_banner_placeholder.png",
-                        fit: BoxFit.cover,
-                        height: 200,
-                      ),
+                      errorWidget: (context, url, error) {
+                        debugPrint(
+                          '[HotEvent] Failed to load image: $url — $error',
+                        );
+                        debugPrint(
+                          '[HotEvent] Showing default image for: ${eventModel.eventId}',
+                        );
+                        return Image.asset(
+                          "lib/assets/images/event/event_banner_placeholder.png",
+                          fit: BoxFit.cover,
+                          height: 200,
+                        );
+                      },
                     ),
                   ),
 
@@ -156,18 +164,42 @@ class HotEvent extends StatelessWidget {
                     bottomRight: Radius.circular(20.0),
                   ),
                 ),
-                child: FadeInImage.assetNetwork(
-                  placeholder:
-                      'lib/assets/images/event/event_banner_placeholder.png',
-                  // Local placeholder
-                  image: eventModel.eventCoverImageUrl,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 220,
-                  imageErrorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      'lib/assets/images/event/event_banner_placeholder.png',
+                child: Builder(
+                  builder: (context) {
+                    final url = eventModel.eventCoverImageUrl;
+                    if (url.isEmpty) {
+                      debugPrint(
+                        '[HotEvent] Image URL is null or empty for event: ${eventModel.eventId}',
+                      );
+                      debugPrint(
+                        '[HotEvent] Showing default image for: ${eventModel.eventId}',
+                      );
+                      return Image.asset(
+                        'lib/assets/images/event/event_banner_placeholder.png',
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 220,
+                      );
+                    }
+                    return FadeInImage.assetNetwork(
+                      placeholder:
+                          'lib/assets/images/event/event_banner_placeholder.png',
+                      image: url,
                       fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 220,
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        debugPrint(
+                          '[HotEvent] Failed to load image: $url — $error',
+                        );
+                        debugPrint(
+                          '[HotEvent] Showing default image for: ${eventModel.eventId}',
+                        );
+                        return Image.asset(
+                          'lib/assets/images/event/event_banner_placeholder.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
                     );
                   },
                 )),
@@ -181,12 +213,8 @@ class HotEvent extends StatelessWidget {
               onTap: () {
                 getEventInfo(eventModel.eventId);
               },
-              child: Positioned(
-                top: 12.0,
-                right: 14.0,
-                child: SvgPicture.asset(
-                  'lib/assets/icons/info_icon.svg',
-                ),
+              child: SvgPicture.asset(
+                'lib/assets/icons/info_icon.svg',
               ),
             ),
           ),
@@ -299,18 +327,32 @@ class HotEventDiscountAndInterestedProfiles extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ...interactedUsers.map(
-                  (userImage) => Align(
+                ...interactedUsers.map((userImage) {
+                  if (userImage.isEmpty) {
+                    debugPrint(
+                      '[HotEvent] Interested user image URL is null or empty',
+                    );
+                  }
+                  return Align(
                     widthFactor: 0.5,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 6),
                       child: CircleAvatar(
                         radius: 10.0,
-                        backgroundImage: NetworkImage(userImage),
+                        backgroundImage: userImage.isNotEmpty
+                            ? CachedNetworkImageProvider(
+                                userImage,
+                                errorListener: (_) => debugPrint(
+                                  '[HotEvent] Failed to load interested user image: $userImage',
+                                ),
+                              )
+                            : const AssetImage(
+                                  'lib/assets/images/temp_place_holder.png',
+                                ) as ImageProvider,
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }),
                 const Gap(20.0),
                 Text(
                   'See profiles',
